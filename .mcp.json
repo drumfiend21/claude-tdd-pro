@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "${CLAUDE_PROJECT_DIR}"],
+      "_comment": "Reference MCP git server: github.com/modelcontextprotocol/servers/tree/main/src/git. Replace 'uvx' with 'pip' / 'pipx' if you don't use uv. Falls back to plain `git` shell calls if MCP unavailable."
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "_comment": "Official GitHub MCP server (github.com/github/github-mcp-server). Requires GITHUB_TOKEN in env. Used by /pr and /review-panel for PR + review operations without shelling gh."
+    }
+  },
+  "_note": "MCP servers are OPTIONAL. The plugin's commands all have shell-out fallbacks (gh, git CLI). MCPs improve context isolation and reduce Bash calls. Comment-out any server you don't want auto-loaded."
+}

@@ -1,6 +1,6 @@
 ---
 name: tdd-feature-build
-description: Use when the user describes a feature to add or modify ("add X to Y", "implement Z", "build a feature that…", "make it possible to…"). Enforces strict test-driven development — failing test first, minimum code to pass, refactor — and refuses to ship code without a corresponding test that demonstrably catches its absence. Reads the project's QUALITY-BAR.md (or the plugin's, as fallback) for the standards to enforce.
+description: Use when the user describes a NEW feature to add ("add X to Y", "implement Z", "build a feature that…", "make it possible to…"). Enforces TDD — failing test first, minimum code to pass, refactor. Refuses to ship code without a test that demonstrably catches its absence. Does NOT trigger on bug fixes (use bug-fix-discipline) or refactors (use test-first-extract). Will ask 1-3 clarifying questions before writing any code; safe to delegate from /feature command.
 ---
 
 # TDD Feature Build

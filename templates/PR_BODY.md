@@ -29,6 +29,18 @@ The skill `pr-quality` references this file. Sections in this order.
 [What user-visible behavior changes. For refactors: explicitly say
 "no behavior change — pure relocation/restructure."]
 
+## AI involvement
+
+(Required as of late-2026 norms — Aqdas Malik / Stack Overflow
+guidance. Future engineers should be able to tell what was generated
+vs hand-authored, and from what prompt.)
+
+- **Prompt / task description**: [exact prompt or paraphrased ask]
+- **Agent / skill used**: [e.g. `tdd-feature-build`, `tdd-driver`,
+  `extract-component`, hand-written]
+- **Model**: [e.g. claude-sonnet-4.6]
+- **Author review**: I read every line before commit. ✅
+
 ## Numbers
 
 (For refactors and measurable changes only.)

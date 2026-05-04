@@ -1,6 +1,7 @@
 ---
 name: pr-quality
-description: Use when the conversation turns to creating a pull request, merging a branch, requesting review, or wrapping up a feature for delivery. Generates Meta/Google-quality PR descriptions following the format from QUALITY-BAR.md and the standards in docs/standards/google-eng-practices.md. Refuses to open PRs that violate scope rules (refactor + feature bundled, oversized, missing tests).
+description: Use when the user explicitly invokes /pr or asks to "open a PR / pull request / merge request" or "ship this feature for review." Generates Meta/Google-quality PR descriptions following the format from QUALITY-BAR.md. Refuses PRs that violate scope rules. Side-effecting (pushes branch, opens PR via gh) — explicit invocation only.
+disable-model-invocation: true
 ---
 
 # PR Quality

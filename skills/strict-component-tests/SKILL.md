@@ -1,6 +1,7 @@
 ---
 name: strict-component-tests
-description: Use when writing or reviewing test files for React/JS/TS/Python components, hooks, modules, or routes. Enforces strict assertions that actually catch regressions, in contrast to permissive tests like `queryAllByText(...).length > 0` that pass against broken UIs. References QUALITY-BAR.md for the canonical strictness rules.
+description: Use when writing or reviewing test files. Enforces strict assertions that actually catch regressions (getByRole, exact counts, jest-dom matchers) in contrast to permissive tests (queryAllByText length > 0) that pass against broken UIs. References QUALITY-BAR.md for the canonical strictness rules.
+paths: ["**/*.test.*", "**/*.spec.*", "**/__tests__/**", "**/test/**", "**/tests/**"]
 ---
 
 # Strict Component Tests

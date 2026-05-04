@@ -1,0 +1,94 @@
+# Reference pyproject.toml for Python projects.
+# Mirrors the JS/TS guardrail discipline: ruff (lint+format), pyright
+# (typecheck), pytest (test). Drop into the project root and customize
+# the `[project]` block for your package.
+
+[project]
+name = "your-package-name"
+version = "0.1.0"
+description = ""
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.6",
+  "pyright>=1.1",
+  "pytest>=8.0",
+  "pytest-cov>=4.0",
+]
+
+# ─── Ruff: lint + format (replaces flake8 + isort + black for most cases) ───
+[tool.ruff]
+line-length = 80           # Google Python Style Guide line length
+target-version = "py310"
+extend-exclude = [".venv", "build", "dist", "__pycache__"]
+
+[tool.ruff.lint]
+# Equivalent to ESLint flat-config approach: enable strong rule sets,
+# narrow exceptions per file with `# noqa: <rule>`.
+select = [
+  "E", "W",      # pycodestyle errors + warnings
+  "F",            # pyflakes (unused imports, undefined names)
+  "I",            # isort (import order)
+  "B",            # flake8-bugbear (likely bugs)
+  "C4",           # flake8-comprehensions
+  "UP",           # pyupgrade (modernize syntax)
+  "S",            # flake8-bandit (security)
+  "RUF",          # ruff-specific
+  "N",            # pep8-naming
+  "D",            # pydocstyle (Google docstring style)
+]
+ignore = [
+  "D203", "D213",   # incompatible docstring rules
+  "S101",            # `assert` is fine in tests
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"      # Google-style Args/Returns/Raises sections
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "S"]    # tests don't need full docstrings; assert ok
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# ─── Pyright (or use mypy): static type checking ───────────────
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__", "**/.venv"]
+typeCheckingMode = "basic"        # bump to "strict" once codebase is ready
+reportMissingImports = "error"
+reportMissingTypeStubs = "warning"
+
+# ─── Pytest configuration ──────────────────────────────────────
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+  "-ra",                            # short summary on all but pass
+  "--strict-markers",
+  "--strict-config",
+  "--showlocals",
+  "--tb=short",
+]
+filterwarnings = [
+  "error",                          # treat warnings as errors
+  "ignore::DeprecationWarning:typing_extensions",
+]
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 80                    # raise as coverage grows

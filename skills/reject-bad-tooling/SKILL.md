@@ -149,6 +149,71 @@ The "right reason" matters: a test that fails because of a typo or
 missing import isn't useful; fix that first, get to a real "behavior
 isn't there yet" failure, then write the code.
 
+## Rejected: deleting tests to make CI pass
+
+**Why it's bad**: this is the single most-cited 2026 AI-coding
+anti-pattern (Kent Beck calls it out explicitly in his TDD system
+prompt). When tests fail, the agent has two paths: fix the code OR
+delete the test. The wrong path makes CI green while shipping the
+bug. Worse, it removes the regression sentinel for next time.
+
+**The right thing**: if a test fails:
+1. Read the failure. Understand what the test asserts.
+2. If the test is correct: fix the code.
+3. If the test is wrong (covers behavior that intentionally changed):
+   update the test deliberately AND say so in the commit message.
+4. Never delete a test to "clean up" without an explicit rationale
+   the user has approved.
+
+**Refuse to**: any prompt asking to delete a test "because it's
+flaky" / "because the new code doesn't need it" / "to get CI green."
+Always investigate the failure first. Always require user explicit
+approval before any test deletion.
+
+## Rejected: `--dangerously-skip-permissions`
+
+**Why it's bad**: this Claude Code flag bypasses the permission
+prompts that gate destructive actions (file writes outside
+workspace, network calls to non-allowlisted hosts, etc.). It's
+explicitly documented as dangerous; Boris Cherny recommends
+pre-allowlisting via `/permissions` instead.
+
+**The right thing**: when the model asks for a permission and the
+user wants to grant it long-term, use `/permissions` to add the
+specific tool/command to the allowlist for the session or project.
+That records the consent in a reviewable place. The
+`--dangerously-skip-permissions` flag bypasses the consent
+mechanism entirely — every action thereafter is unguarded.
+
+**Refuse to**: suggest, document, or run with this flag. If a user
+asks "how do I stop the permission prompts?" the answer is
+`/permissions`, not `--dangerously-skip-permissions`.
+
+## Rejected: bypassing characterization tests on landmine files
+
+**Why it's bad**: a "landmine file" is one that the project's
+CLAUDE.md explicitly flags as fragile (high coupling, no test
+coverage, large file size, history of regressions). The discipline
+is: add characterization tests FIRST (capturing current behavior),
+THEN modify. Bypassing the test step on a landmine file means
+silent regression into the wild.
+
+**Examples** of how this comes up in prompts:
+- "Just inline this small change; we don't need a test for it."
+- "It's a 5-line change, the existing tests are enough."
+- "Refactor this whole file in one PR." (on a known landmine)
+
+**The right thing**: when CLAUDE.md flags a file as a landmine:
+1. Read its current behavior surface.
+2. Write characterization tests that lock it down.
+3. Confirm green.
+4. THEN make the change you want, scenario-by-scenario.
+5. Each commit's test must catch the corresponding behavior change.
+
+**Refuse to**: edit any file in CLAUDE.md's "known landmines" list
+without a characterization test in the same diff (or a prior commit
+on the branch).
+
 ## How to refuse without being preachy
 
 When you flag one of these, be specific and short:

@@ -1,6 +1,8 @@
 ---
 name: pr-self-reviewer
-description: Use when the parent agent has finished a feature/bugfix/refactor and is about to draft a PR description. This subagent runs an independent code review pass against the Meta/Google quality bar and returns a punch list of issues to fix BEFORE the PR is opened.
+description: Use when the parent agent has finished a feature/bugfix/refactor and is about to draft a PR. Runs an independent review pass against the Meta/Google quality bar and returns a punch list to fix BEFORE the PR opens. Read-only review (no edits, no commits, no pushes); the parent acts on the report.
+tools: Read Grep Glob Bash(git *) Bash(npm test) Bash(npm run *)
+disallowedTools: Edit Write
 ---
 
 # PR Self-Reviewer

@@ -1,6 +1,7 @@
 ---
 name: phase-0-snapshot
-description: Use on the first session in a messy codebase, or when the user says "I want to clean this up" / "before I refactor this" / "let's make this presentable." Establishes the safety net BEFORE any change — a git tag, top-level docs (README, CLAUDE.md, REMEDIATION.md), and a clean baseline from which all subsequent phases proceed. Refuses to start refactoring without this snapshot.
+description: Use ONLY when the user explicitly invokes /snapshot or asks in clear terms to "establish a Phase 0 baseline" / "snapshot before refactoring" / "tag the current state before cleanup." Do NOT auto-trigger on casual mentions of code being messy — confirm with the user first. This skill writes 3 files and creates a git tag, so explicit consent matters. Establishes the safety net BEFORE any change.
+disable-model-invocation: true
 ---
 
 # Phase 0: Snapshot
@@ -51,8 +52,20 @@ Spend ~10% of time on the survey before writing anything.
 If there are uncommitted changes:
 - Show the user `git status` + `git diff --stat`.
 - ASK whether to commit them as a snapshot or stash them.
-- If commit: stage individually (don't `git add -A` blindly — check
-  for `.env` / secrets first).
+- If commit:
+  - **MANDATORY**: run the secret-scan helper before any `git add`:
+    ```bash
+    bash "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/secret-scan.sh"
+    ```
+    Exit 2 means a secret-bearing filename or secret-shaped content
+    is in the staged set. STOP. Surface the output to the user. Do
+    not proceed until either:
+      - the offending file is moved out of git's view, OR
+      - the offending content is removed/redacted, OR
+      - the user explicitly overrides with full awareness (and you
+        document the override in the commit message).
+  - Stage individually (`git add <file>` per file from the changes
+    list); never `git add -A` blindly. Re-run secret-scan after staging.
 - If stash: stash with a descriptive message.
 
 Then:

@@ -1,6 +1,6 @@
 ---
 name: test-first-extract
-description: Use when the user asks to extract a component, split out a module, decompose a god-file, refactor inline code into its own file, or any phrase like "pull X out of Y", "move Z to its own file". Enforces the strict 9-step extraction pattern with isolated unit tests + integration regression tests as a two-tier safety net.
+description: Use when the user asks to EXTRACT or RELOCATE existing code into its own file, module, or component ("extract X", "split out Y", "pull Z into its own file", "decompose god-file"). NOT for net-new features (use tdd-feature-build) or behavior changes (use fix-bug). Enforces the 9-step extraction with isolated unit tests + integration regression tests as a two-tier safety net.
 ---
 
 # Test-First Extraction

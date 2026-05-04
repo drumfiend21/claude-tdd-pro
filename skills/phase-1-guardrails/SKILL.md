@@ -1,6 +1,7 @@
 ---
 name: phase-1-guardrails
-description: Use when the project has no ESLint / Prettier / TypeScript / Husky setup, or when the user says "set up the linter / formatter / pre-commit hook" / "set up the test framework". Installs the convergent guardrail toolchain (ESLint flat config + Prettier + tsconfig checkJs + Husky + lint-staged + vitest) using the templates from the plugin. No behavior change — just adds the safety rails so subsequent phases are bisectable and reviewable.
+description: Use when the user explicitly asks to install the toolchain (lint / format / pre-commit hook / test framework) or invokes /init-guardrails. Do NOT auto-install when only some tools are missing — first ask whether to add the missing pieces. This skill installs npm packages and writes config files; explicit consent required.
+disable-model-invocation: true
 ---
 
 # Phase 1: Guardrails

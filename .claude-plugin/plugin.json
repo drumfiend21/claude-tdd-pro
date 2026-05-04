@@ -1,12 +1,73 @@
 {
   "name": "claude-tdd-pro",
-  "version": "0.1.0",
-  "description": "TDD-first feature development + strict refactor + Meta/Google-quality PRs. Auto-triggers on feature requests, component extractions, bug fixes, and PR creation. Enforces the standards a Google/Meta reviewer would approve immediately.",
+  "version": "0.2.0",
+  "description": "TDD-first feature development + strict refactor + Meta/Google-quality PRs. Auto-triggers on feature requests, component extractions, bug fixes, and PR creation. Enforces the standards a Google/Meta reviewer would approve immediately. Hardened against prompt-injection, secret-leakage, and protected-branch commits.",
   "author": {
     "name": "Siddharth Joshi"
   },
+  "homepage": "https://github.com/YOUR_USER/claude-tdd-pro",
+  "repository": "https://github.com/YOUR_USER/claude-tdd-pro",
   "skills": "./skills/",
   "commands": "./commands/",
   "agents": "./agents/",
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "monitors": "./monitors/monitors.json",
+  "userConfig": {
+    "package_manager": {
+      "type": "string",
+      "title": "Package manager",
+      "description": "Which package manager the /pr and /init-guardrails commands should use.",
+      "default": "npm",
+      "enum": ["npm", "pnpm", "yarn", "bun"]
+    },
+    "test_command": {
+      "type": "string",
+      "title": "Test command",
+      "description": "Command to run the full test suite (e.g. 'npm test', 'pytest', 'go test ./...'). Used by pre-flight checks.",
+      "default": "npm test"
+    },
+    "lint_command": {
+      "type": "string",
+      "title": "Lint command",
+      "description": "Command to run linters (e.g. 'npm run lint', 'ruff check .'). Used by pre-flight checks.",
+      "default": "npm run lint"
+    },
+    "format_check_command": {
+      "type": "string",
+      "title": "Format-check command",
+      "description": "Read-only format check (e.g. 'npm run format:check', 'black --check .').",
+      "default": "npm run format:check"
+    },
+    "typecheck_command": {
+      "type": "string",
+      "title": "Typecheck command",
+      "description": "Type checker (e.g. 'npm run typecheck', 'mypy .'). Empty string to skip.",
+      "default": "npm run typecheck"
+    },
+    "build_command": {
+      "type": "string",
+      "title": "Build command",
+      "description": "Production build (e.g. 'npm run build'). Empty string to skip.",
+      "default": "npm run build"
+    },
+    "default_reviewer": {
+      "type": "string",
+      "title": "Default PR reviewer (GitHub handle)",
+      "description": "Optional GitHub handle to assign by default on /pr (e.g. 'octocat'). Empty = no auto-assign.",
+      "default": ""
+    },
+    "tdd_guard_default": {
+      "type": "boolean",
+      "title": "Enable TDD guard by default in new projects",
+      "description": "If true, /init-guardrails will create .claude-tdd-pro/tdd-guard.enabled, blocking source edits without a failing test. You can always toggle per-project.",
+      "default": false
+    },
+    "ai_disclosure_required": {
+      "type": "boolean",
+      "title": "Require AI involvement disclosure in PRs",
+      "description": "When true, /pr will refuse to draft a PR without an explicit 'AI involvement' section.",
+      "default": true
+    }
+  }
 }

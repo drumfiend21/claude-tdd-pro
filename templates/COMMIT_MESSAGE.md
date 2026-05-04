@@ -31,6 +31,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 | `feat` | A new user-visible feature |
 | `fix` | A bug fix (with the test that would have caught it, per `bug-fix-discipline`) |
 | `refactor` | Code change with no behavior change (extraction, rename, restructure) |
+| `tidy` | Kent Beck's "tidy first" — structural change with NO behavior change AND NO new tests (separate from refactor: tidy is smaller, lighter-weight) |
 | `test` | Adding/modifying tests without production code change |
 | `chore` | Tooling, deps, config — no production logic change |
 | `docs` | Documentation only |
@@ -38,6 +39,28 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 | `security` | Security fix or hardening |
 | `build` | Build system or external dep change |
 | `ci` | CI configuration |
+
+### TDD-cycle prefixes (when running tdd-driver or strict TDD)
+
+For mechanically-verifiable TDD compliance (pattern from `chanwit/tdg`),
+prefix the type with the cycle phase:
+
+| Prefix | Meaning |
+|---|---|
+| `red:` | This commit ADDS a failing test. No production code change yet. |
+| `green:` | This commit makes the previously-red test pass with the minimum code. No refactoring. |
+| `refactor:` | This commit restructures (with tests staying green). Same as `tidy` but explicitly post-green. |
+
+Example commit log on a TDD feature branch:
+```
+red:    add failing test for User.bookmark()
+green:  add minimum bookmark logic to User
+refactor: extract bookmark validation into helper
+```
+
+This ladder is mechanically verifiable: a `green` commit not preceded
+by a `red` on the same scenario is a process violation. The
+`pr-self-reviewer` agent flags this.
 
 ## Subject-line rules (Google eng-practices)
 

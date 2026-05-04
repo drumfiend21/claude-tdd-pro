@@ -1,6 +1,6 @@
 ---
 name: bug-fix-discipline
-description: Use when the user reports a bug, regression, broken behavior, edge case ("X breaks when Y", "this used to work", "got an error", "this is a bug"). Enforces the bug-as-failing-test pattern — capture the broken behavior in a test FIRST, confirm it fails (red), then fix the code, then confirm it passes (green). The fix never lands without the test that would have caught it.
+description: Use when the user reports a BUG (existing behavior is wrong) — phrases like "X breaks when Y", "this used to work", "got an error/exception/500", "regression", "this is a bug". NOT for new features (use tdd-feature-build). Enforces bug-as-failing-test — capture the broken behavior FIRST, confirm red, fix, confirm green. The fix never lands without the test that would have caught it.
 ---
 
 # Bug Fix Discipline

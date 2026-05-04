@@ -1,0 +1,15 @@
+{
+  "monitors": [
+    {
+      "name": "test-watcher",
+      "description": "Run vitest in watch mode and stream pass/fail to the session. Auto-starts when tdd-feature-build skill activates. Skipped if no `test:watch` script in package.json.",
+      "command": "npm",
+      "args": ["run", "test:watch"],
+      "cwd": "${CLAUDE_PROJECT_DIR}",
+      "when": "on-skill-invoke:tdd-feature-build",
+      "stop_on": "session-end",
+      "_note": "Each stdout line becomes an in-session notification. To suppress per-project, add `\"monitors\": false` to .claude-tdd-pro/config.json or remove this entry."
+    }
+  ],
+  "_doc": "Monitors are background processes whose output is streamed into the session. Pattern from claude-code spec late 2026. Optional and conservative by default — only the test-watcher above, gated on skill invocation."
+}
