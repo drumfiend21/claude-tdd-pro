@@ -1,0 +1,23 @@
+{
+  "_doc": "Plugin-shipped LSP servers (per code.claude.com/docs/en/plugins-reference §LSP servers, 2026). Provides real-time type/diagnostic information to the agent so detectors fire on actual semantic info, not regex. Both servers are optional — they activate only when the corresponding language is detected in the project. Falls back silently if the LSP binary is not on PATH.",
+  "servers": [
+    {
+      "name": "typescript-language-server",
+      "languages": ["typescript", "typescriptreact", "javascript", "javascriptreact"],
+      "command": "typescript-language-server",
+      "args": ["--stdio"],
+      "rootMarkers": ["tsconfig.json", "package.json"],
+      "optional": true,
+      "_use": "Drives g-ts-006 (no-any), g-ts-007 (strict), g-ts-005 (eqeqeq) when available with full type info."
+    },
+    {
+      "name": "pyright",
+      "languages": ["python"],
+      "command": "pyright-langserver",
+      "args": ["--stdio"],
+      "rootMarkers": ["pyproject.toml", "setup.py", "requirements.txt"],
+      "optional": true,
+      "_use": "Drives g-py-006 (type hints), g-py-007 (mypy --strict equivalent) when available."
+    }
+  ]
+}
