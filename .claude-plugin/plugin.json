@@ -1,0 +1,12 @@
+{
+  "name": "claude-tdd-pro",
+  "version": "0.1.0",
+  "description": "TDD-first feature development + strict refactor + Meta/Google-quality PRs. Auto-triggers on feature requests, component extractions, bug fixes, and PR creation. Enforces the standards a Google/Meta reviewer would approve immediately.",
+  "author": {
+    "name": "Siddharth Joshi"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json"
+}
