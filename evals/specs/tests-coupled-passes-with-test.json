@@ -1,0 +1,17 @@
+{
+  "name": "tests-coupled passes when a test file accompanies the source change",
+  "command": "RULE_ID=g-eng-003-tests-with-change SEVERITY=P0 CLAUDE_PROJECT_DIR=$PWD bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/tests-coupled.sh\" 1>&2",
+  "setup": [
+    "git init -q",
+    "git config user.email t@t.test",
+    "git config user.name t",
+    "git config commit.gpgsign false",
+    "echo 'export const greet = () => \"hi\"' > greet.ts",
+    "echo 'import {greet} from \"./greet\"; test(\"greet\", () => expect(greet()).toBe(\"hi\"))' > greet.test.ts",
+    "git add greet.ts greet.test.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_not_contains": ["g-eng-003-tests-with-change"]
+  }
+}

@@ -1,7 +1,8 @@
 {
   "name": "claude-tdd-pro",
-  "version": "0.2.0",
-  "description": "TDD-first feature development + strict refactor + Meta/Google-quality PRs. Auto-triggers on feature requests, component extractions, bug fixes, and PR creation. Enforces the standards a Google/Meta reviewer would approve immediately. Hardened against prompt-injection, secret-leakage, and protected-branch commits.",
+  "version": "0.3.0",
+  "harness_version": "0.3.0",
+  "description": "Drop-in plugin that elevates any codebase to Google's published engineering standards (eng-practices, JS/TS style, Python style). /analyze produces a citable compliance report; /remediate executes a small-CL plan that ratchets the codebase toward the bar; every greenfield prompt is gated by the same RUBRIC.yaml. Hardened against prompt-injection, secret-leakage, and protected-branch commits. Auto-disclosure via Assisted-by: trailer.",
   "author": {
     "name": "Siddharth Joshi"
   },
@@ -13,6 +14,8 @@
   "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json",
   "monitors": "./monitors/monitors.json",
+  "outputStyles": "./output-styles/",
+  "lsp": "./.lsp.json",
   "userConfig": {
     "package_manager": {
       "type": "string",
@@ -59,15 +62,29 @@
     },
     "tdd_guard_default": {
       "type": "boolean",
-      "title": "Enable TDD guard by default in new projects",
-      "description": "If true, /init-guardrails will create .claude-tdd-pro/tdd-guard.enabled, blocking source edits without a failing test. You can always toggle per-project.",
-      "default": false
+      "title": "TDD guard default-on in new projects",
+      "description": "TDD-Guard is now ON by default (matches Google eng-practices tests-with-change). Set this to false to revert to opt-in behavior; per-project override is .claude-tdd-pro/tdd-guard.disabled.",
+      "default": true
     },
     "ai_disclosure_required": {
       "type": "boolean",
       "title": "Require AI involvement disclosure in PRs",
       "description": "When true, /pr will refuse to draft a PR without an explicit 'AI involvement' section.",
       "default": true
+    },
+    "attribution_style": {
+      "type": "string",
+      "title": "AI attribution trailer style",
+      "description": "Trailer to append to commits and PR bodies. 'assisted-by' is the 2026 convention (Linux kernel, Anthropic). 'co-authored-by' is the legacy GitHub-stat-inflating convention. 'none' suppresses the trailer entirely.",
+      "default": "assisted-by",
+      "enum": ["assisted-by", "co-authored-by", "none"]
+    },
+    "rubric_severity_threshold": {
+      "type": "string",
+      "title": "Rubric severity threshold for Stop hook",
+      "description": "P0-only blocks Stop on correctness/security violations only. P0+P1 also blocks on style violations. P0+P1+P2 also blocks on doc/comment gaps. Recommended: P0 for legacy elevation, P0+P1 for greenfield.",
+      "default": "P0",
+      "enum": ["P0", "P0+P1", "P0+P1+P2"]
     }
   }
 }

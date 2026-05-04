@@ -25,10 +25,10 @@ fi
 diff_text="$(git -C "$PROJECT_DIR" diff "${diff_args[@]}" 2>/dev/null || true)"
 [[ -z "$diff_text" ]] && exit 0
 
-added="$(echo "$diff_text" | grep -E '^\+' | grep -v '^\+\+\+' || true)"
+added="$(echo "$diff_text" | grep '^+' | grep -v '^+++' || true)"
 
 for p in "${patterns[@]}"; do
-  if echo "$added" | grep -qF "$p"; then
+  if echo "$added" | grep -qF -e "$p"; then
     msg="diff introduces refused pattern: $p"
     printf '{"rule":"%s","severity":"%s","file":"","line":0,"msg":"%s"}\n' \
       "$RULE_ID" "$SEVERITY" "${msg//\"/\\\"}"

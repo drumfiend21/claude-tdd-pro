@@ -1,0 +1,16 @@
+{
+  "name": "cl-size detector passes a diff under the cap",
+  "command": "RULE_ID=g-eng-004-cl-size SEVERITY=P1 CLAUDE_PROJECT_DIR=$PWD bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/cl-size.sh\" 400 1>&2",
+  "setup": [
+    "git init -q",
+    "git config user.email t@t.test",
+    "git config user.name t",
+    "git config commit.gpgsign false",
+    "echo small >> small.txt",
+    "git add small.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_not_contains": ["g-eng-004-cl-size"]
+  }
+}

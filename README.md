@@ -1,12 +1,26 @@
 # claude-tdd-pro
 
-A Claude Code plugin that enforces test-first feature development,
-strict refactor discipline, security-hardened auto-commit pathways,
-and Meta/Google-quality PRs. You describe features; Claude builds
-them properly with TDD; your only involvement with the code itself
-is reviewing the PR.
+A Claude Code plugin that elevates any codebase to **Google's
+published engineering standards** (eng-practices, JS/TS style, Python
+style) and keeps it there. Drop the plugin into any Claude install,
+point it at any repo, run `/analyze` for a citable compliance report,
+run `/remediate` for a small-CL elevation pass. For greenfield code,
+every prompt is gated through the same RUBRIC.yaml so output is
+born-compliant.
 
-**Current version: 0.2.0** — see [CHANGELOG](#changelog) below.
+**Current version: 0.3.0** — see [CHANGELOG](#changelog) below.
+
+## The two flows
+
+**Existing repo**: install → `cd repo` → `/analyze` → review the
+generated `COMPLIANCE-REPORT.md` and `LANDMINES.md` → `/remediate`
+(token-confirmed) → land the small-CL chain → `/pr`.
+
+**Greenfield code**: install → start a session → every code-emitting
+prompt fires through paths-scoped Google-style skills (`google-style-ts`,
+`google-style-py`), TDD-Guard (default-on), the rubric runner, and
+the Stop hook (on side-effecting flows). Output is compliant before
+it lands.
 
 ## What it does
 
@@ -55,23 +69,27 @@ Restart Claude Code. The Setup hook fires on first session and
 verifies dependencies. See [INSTALL.md](INSTALL.md) for verification
 steps and troubleshooting.
 
-## Slash commands (12)
+## Slash commands (16)
 
 | Command | What it does |
 |---|---|
+| `/analyze` | Cold-start audit. Runs RUBRIC.yaml against the working tree; emits `COMPLIANCE-REPORT.md` (P0/P1/P2 findings with citations) and `LANDMINES.md` (high-risk files). Read-only. |
+| `/remediate` | Token-confirmed execution of the audit's remediation plan. Small CLs (≤400 lines, Google small-CL rule), Tidy-First split (Beck), Ralph-loop iteration, Stop-hook gated. |
 | `/feature <description>` | Build a feature TDD-first via the `tdd-feature-build` skill |
 | `/spec <description>` | Write a Markdown spec FIRST, before any code |
 | `/plan-first <description>` | Plan Mode discipline — produce a plan, get approval, then code |
 | `/extract-component <target>` | 9-step test-first refactor pattern |
 | `/fix-bug <description>` | Bug-as-failing-test pattern |
 | `/tighten-tests <file>` | Audit a test file against the strict-assertions bar |
-| `/review-panel` | 5-specialist parallel review panel with verdict |
-| `/init-guardrails` | Phase 1 setup (ESLint flat + Prettier + tsconfig + Husky + Vitest) |
+| `/review-panel` | 6-specialist parallel review panel + review-verifier filter + chair synthesis |
+| `/init-guardrails` | Phase 1 setup with Google-tuned configs (eslint-config-google, ruff.google.toml, mypy.google.ini) |
 | `/snapshot` | Phase 0 setup (tag + README + CLAUDE.md + REMEDIATION.md) |
 | `/onboard` | Codebase tour + propose CLAUDE.md from observed conventions |
 | `/adr <decision>` | Write an Architecture Decision Record (MADR format) |
 | `/sync-rules` | Generate Cursor/Copilot/Aider/Windsurf/AGENTS.md from CONVENTIONS.md |
-| `/pr` | Open a Meta/Google-quality PR (with full pre-flight + token confirm) |
+| `/remember [lesson]` | Compound Engineering loop. Pin a recurring mistake to CLAUDE.md, optionally promote to a new RUBRIC.yaml rule. |
+| `/doctor` | Smoke-test every primitive; report green/yellow/red toolchain matrix |
+| `/pr` | Open a Google-quality PR (Conventional Commits + Test Plan + AI involvement + Assisted-by trailer) |
 
 ## Skills (12 — auto-trigger when contextually relevant)
 
@@ -94,7 +112,7 @@ Side-effecting skills are locked behind `disable-model-invocation:
 true` so the model can't auto-fire them. The user invokes them via
 the corresponding slash command.
 
-## Subagents (8)
+## Subagents (11)
 
 | Agent | Purpose |
 |---|---|
@@ -107,18 +125,22 @@ the corresponding slash command.
 | `review-performance` | Specialist (performance) — used by `/review-panel` |
 | `review-observability` | Specialist (observability) — used by `/review-panel` |
 | `review-deps` | Specialist (dependency impact) — used by `/review-panel` |
+| `review-google-style` | Specialist (Google style + eng-practices judgment rules) — every finding cites a RUBRIC.yaml id |
+| `review-verifier` | Re-grounds Critical/High findings against actual code; classifies CONFIRMED / OUT-OF-DATE / MISATTRIBUTED / FALSE-POSITIVE / MITIGATED — pattern from Anthropic's March 2026 Code Review (16% → 54% coverage) |
 
 ## Hooks
 
 | Event | What runs | Why |
 |---|---|---|
 | `Setup` | `verify-deps.sh` | First-session check for `gh`, `node`, `ruff`, `gh auth status` |
-| `PreToolUse` (Edit/Write/MultiEdit) | `tdd-guard.sh` | OPT-IN: blocks source edits without a failing test |
+| `PreToolUse` (Edit/Write/MultiEdit) | `tdd-guard.sh` | DEFAULT-ON: blocks source edits without a failing test |
 | `PostToolUse` (Edit/Write/MultiEdit) | `lint-on-save.sh` | RCE-hardened: lints the just-written file |
+| `Stop` | `stop-rubric-gate.sh` | Refuses session completion on P0 rubric findings, secret leaks, or lint failures. **Narrowed**: only fires when active-flow is one of `remediate`, `pr`, `feature`, `fix-bug`, `extract-component`. Greenfield free editing rides PreToolUse + PostToolUse only. |
 
-The TDD guard is OFF by default. Enable per-project with
-`touch .claude-tdd-pro/tdd-guard.enabled` or env
-`CLAUDE_TDD_PRO_GUARD=on`. Disable per-session by removing the file.
+The TDD guard is now ON by default (matches Google eng-practices'
+tests-with-change requirement). Opt out per-project with
+`touch .claude-tdd-pro/tdd-guard.disabled` or env
+`CLAUDE_TDD_PRO_GUARD=off`.
 
 ## userConfig
 
@@ -184,8 +206,15 @@ bash evals/runner.sh -v        # verbose
 bash evals/runner.sh secret    # specs with "secret" in name
 ```
 
-Current coverage: 5 specs validating secret-scan against AWS keys,
-GitHub PATs, PEM private keys, `.env` files, and clean diffs.
+Current coverage: 12 specs validating
+- secret-scan against AWS keys, GitHub PATs, PEM private keys, `.env`
+  files, and clean diffs
+- rubric-runner emits valid JSON
+- cl-size detector blocks oversized diffs and passes small ones
+- tests-coupled detector flags source changes without paired tests
+- refused-flags detector blocks `--dangerously-skip-permissions`
+- stop-rubric-gate is a no-op without `active-flow`
+
 Pattern from `nizos/tdd-guard` + Anthropic's "Demystifying evals."
 
 Add new specs as you find new failure modes — every fix to a hook
@@ -215,6 +244,97 @@ claude-tdd-pro/
 ```
 
 ## Changelog
+
+### v0.3.0 — drop-in Google-standards elevator
+
+The plugin now answers the question: "drop into any Claude on any
+computer, point at any repo, deliver code that meets Google's
+published engineering standards." Every change in this release was
+validated twice against current Claude Code docs and against
+publicly-published principal/staff engineering practice (Boris
+Cherny, Geoffrey Huntley, Kent Beck, Birgitta Boeckeler, Anthropic
+Code Review March 2026).
+
+**Foundational:**
+- Executable `RUBRIC.yaml` (30 rules) derived from
+  `docs/standards/google-{eng-practices,js-ts-style,python-style}.md`.
+  Every rule cites upstream Google source + local anchor + detector
+  kind + remediation skill.
+- `rubric/runner.sh` dispatches per detector kind: delegates to
+  `eslint-config-google`, `ruff`, `mypy`, `tsc` where they cover the
+  rule; falls back to custom scripts only for prose-only practices.
+- `rubric/adapters/` ships Google-tuned configs:
+  `eslint.google.cjs`, `ruff.google.toml`, `mypy.google.ini`.
+- 6 custom detectors: `cl-size`, `cl-description`, `tests-coupled`,
+  `refused-flags`, `secret-scan` (adapter), `pyink-check`.
+
+**New flows:**
+- `/analyze` — read-only cold-start audit. Emits
+  `COMPLIANCE-REPORT.md` + `LANDMINES.md`.
+- `/remediate` — token-confirmed (`CONFIRM-REMEDIATE`) execution.
+  Small CLs (≤400 LOC), Tidy-First split (Beck), Ralph-loop
+  iteration over the backlog, Stop-hook gated.
+- `/remember` — Compound Engineering loop. Pin a recurring mistake
+  to CLAUDE.md and optionally promote to a new RUBRIC.yaml rule.
+- `/doctor` — green/yellow/red toolchain matrix; smoke-tests every
+  primitive in <30 seconds.
+
+**New plugin primitives (2026-native):**
+- `paths`-scoped per-language skills `google-style-ts` and
+  `google-style-py` replace UserPromptSubmit injection (which the
+  validation pass flagged as obsolete and CLAUDE.md-budget-blowing).
+- `output-styles/`: `google-strict`, `tdd-driver`, `pr-author` —
+  deterministic prose voice.
+- `.lsp.json` — declares `typescript-language-server` and `pyright`
+  as optional plugin LSP servers for real semantic info.
+- Plugin manifest: `harness_version` field surfaced in PR bodies so
+  reviewers can correlate quality regressions to plugin versions.
+- `userConfig`: new `attribution_style` (`assisted-by`/`co-authored-by`/`none`)
+  and `rubric_severity_threshold` (`P0`/`P0+P1`/`P0+P1+P2`).
+
+**Hooks:**
+- New `Stop` hook (`stop-rubric-gate.sh`) that gates session
+  completion on rubric P0 + secrets + lint. Narrowed: only fires for
+  `remediate`/`pr`/`feature`/`fix-bug`/`extract-component` flows
+  (per validation: gating every greenfield prompt is overkill —
+  Cherny/Huntley don't do this).
+- TDD-Guard flipped to default-on (matches Google eng-practices'
+  tests-with-change rule). Opt out via
+  `.claude-tdd-pro/tdd-guard.disabled` or `CLAUDE_TDD_PRO_GUARD=off`.
+
+**Review panel:**
+- Added `review-google-style` specialist (rules lint can't catch:
+  naming intent, comment "why not what", no bundled refactor+feature,
+  CL description shape, design-belongs-here, YAGNI). Every finding
+  cites a RUBRIC.yaml rule id.
+- Added `review-verifier` re-grounds every Critical/High against
+  actual code, classifies CONFIRMED / OUT-OF-DATE / MISATTRIBUTED /
+  FALSE-POSITIVE / MITIGATED. Pattern from Anthropic's March 2026
+  Code Review which raised review coverage 16% → 54%.
+
+**AI disclosure:**
+- Switched all `Co-Authored-By: Claude` trailers to
+  `Assisted-by: Claude (claude-tdd-pro 0.3.0)`. Per Linux kernel AI
+  Coding Assistants policy (April 2026), `claude-code#36105`, and
+  the May 2026 VS Code Copilot reversal.
+
+**Self-tests:**
+- Eval suite expanded from 5 → 12 specs covering rubric-runner JSON,
+  cl-size, tests-coupled, refused-flags, stop-gate.
+
+**What was deliberately NOT done:**
+- No `curl|bash` installer. Anthropic's `/plugin` Discover is the
+  documented install path; bypassing it adds attack surface for no
+  benefit.
+- No "FAANG-quality" rubric synthesizing Meta/Stripe/Google. The
+  user explicitly scoped this to Google's published standards. We
+  cite only what's in `docs/standards/google-*.md`.
+- No `UserPromptSubmit` rule injection. Validation flagged it as
+  obsolete and CLAUDE.md-token-budget-blowing; replaced with
+  `paths`-scoped skill activation.
+- Custom token gating on `/remediate` (CONFIRM-REMEDIATE) IS kept
+  even though docs offer agent-teams plan-approval — token gating
+  is the lower-coupling option that doesn't require teammate setup.
 
 ### v0.2.0 — comprehensive hardening + research-driven additions
 

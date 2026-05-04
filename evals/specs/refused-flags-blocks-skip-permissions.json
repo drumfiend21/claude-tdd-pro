@@ -1,0 +1,16 @@
+{
+  "name": "refused-flags detector blocks --dangerously-skip-permissions in diff",
+  "command": "RULE_ID=g-sec-002-no-dangerously-skip-permissions SEVERITY=P0 CLAUDE_PROJECT_DIR=$PWD bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/refused-flags.sh\" 1>&2",
+  "setup": [
+    "git init -q",
+    "git config user.email t@t.test",
+    "git config user.name t",
+    "git config commit.gpgsign false",
+    "echo 'claude --dangerously-skip-permissions run' > script.sh",
+    "git add script.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["g-sec-002", "--dangerously-skip-permissions"]
+  }
+}

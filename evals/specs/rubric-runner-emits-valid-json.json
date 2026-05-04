@@ -1,0 +1,13 @@
+{
+  "name": "rubric-runner emits a valid JSON payload in --json mode",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --full --json | python3 -c 'import json,sys; d=json.loads(sys.stdin.read()); assert d.get(\"version\")==1; assert isinstance(d.get(\"findings\"), list); print(\"ok\", file=sys.stderr)' ",
+  "setup": [
+    "git init -q",
+    "git config user.email t@t.test",
+    "git config user.name t"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
