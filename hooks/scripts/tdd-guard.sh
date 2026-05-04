@@ -8,9 +8,11 @@
 # `src/` (or equivalent) directory.
 #
 # Activation control:
-#   - Plugin-disabled by default (this is intrusive). Activate by
-#     creating `.claude-tdd-pro/tdd-guard.enabled` in the project root,
-#     OR setting CLAUDE_TDD_PRO_GUARD=on in env.
+#   - Plugin-enabled by default (Google eng-practices treats
+#     tests-with-change as mandatory; the plugin's default should match
+#     the bar it claims to enforce). Opt out per-project by creating
+#     `.claude-tdd-pro/tdd-guard.disabled`, or set
+#     CLAUDE_TDD_PRO_GUARD=off in env.
 #   - The /tdd-guard slash command toggles this.
 #
 # Detection logic:
@@ -50,11 +52,14 @@ WORKSPACE="${CLAUDE_PROJECT_DIR:-$PWD}"
 DIR=$(cd "$(dirname "$FILE")" 2>/dev/null && pwd -P) || exit 0
 WS=$(cd "$WORKSPACE" 2>/dev/null && pwd -P) || exit 0
 
-# Activation gate — guard is OFF unless explicitly enabled
-if [[ "${CLAUDE_TDD_PRO_GUARD:-}" != "on" ]]; then
-  if [[ ! -f "$WS/.claude-tdd-pro/tdd-guard.enabled" ]]; then
-    exit 0
-  fi
+# Activation gate — guard is ON by default (matches Google
+# eng-practices "tests-with-change" requirement). Opt out per-project
+# via .claude-tdd-pro/tdd-guard.disabled, or env CLAUDE_TDD_PRO_GUARD=off.
+if [[ "${CLAUDE_TDD_PRO_GUARD:-}" == "off" ]]; then
+  exit 0
+fi
+if [[ -f "$WS/.claude-tdd-pro/tdd-guard.disabled" ]]; then
+  exit 0
 fi
 
 # ─── Permitted file classes (always allow) ─────────────────────
