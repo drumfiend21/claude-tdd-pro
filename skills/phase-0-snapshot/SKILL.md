@@ -172,7 +172,7 @@ git commit -m "docs(phase0): snapshot + remediation plan
 Phase 0 baseline before remediation work. Tagged pre-remediation-YYYY-MM-DD.
 README + CLAUDE.md + REMEDIATION.md established for the cleanup process.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Assisted-by: Claude (claude-tdd-pro 0.3.0)"
 ```
 
 ### 7. Report back to the user

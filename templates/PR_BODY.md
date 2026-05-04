@@ -31,14 +31,16 @@ The skill `pr-quality` references this file. Sections in this order.
 
 ## AI involvement
 
-(Required as of late-2026 norms — Aqdas Malik / Stack Overflow
-guidance. Future engineers should be able to tell what was generated
-vs hand-authored, and from what prompt.)
+(Required as of 2026 norms — Linux kernel AI Coding Assistants policy
+April 2026, anthropics/claude-code#36105, Stack Overflow guidance. The
+`Assisted-by:` trailer in the merge commit captures this for `git log`
+durability; this section captures it for the PR record.)
 
 - **Prompt / task description**: [exact prompt or paraphrased ask]
 - **Agent / skill used**: [e.g. `tdd-feature-build`, `tdd-driver`,
   `extract-component`, hand-written]
-- **Model**: [e.g. claude-sonnet-4.6]
+- **Model**: [e.g. claude-opus-4-7]
+- **Harness version**: claude-tdd-pro 0.3.0
 - **Author review**: I read every line before commit. ✅
 
 ## Numbers
@@ -85,7 +87,7 @@ considerations, deviation from convention.]
 - [ ] Screenshots attached (if UI change)
 - [ ] Migration notes (if breaking change)
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ---

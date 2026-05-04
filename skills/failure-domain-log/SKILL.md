@@ -84,7 +84,7 @@ docs(failure-log): <short title>
 Added a failure-domain entry to CLAUDE.md after the model repeated
 the same mistake (specifics in the entry).
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ### 5. Re-read CLAUDE.md at session start

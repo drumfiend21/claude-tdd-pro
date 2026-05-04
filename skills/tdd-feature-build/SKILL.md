@@ -98,7 +98,7 @@ cycle. **Do not write multiple scenarios in one cycle.**
    Behavior: …
    Tests: +N tests covering …; suite NN/NN green.
 
-   Co-Authored-By: Claude <noreply@anthropic.com>
+   Assisted-by: Claude (claude-tdd-pro 0.3.0)
    ```
 
 Repeat for the next scenario.

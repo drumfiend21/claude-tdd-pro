@@ -139,7 +139,7 @@ Behavior: no behavior change — pure relocation.
 
 Numbers: parent file XXX → YYY lines (-N). Tests: AA → BB (+N).
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ## Common pitfalls

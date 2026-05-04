@@ -141,7 +141,7 @@ git commit -m "chore(phase1): apply prettier formatting pass
 Apply project-wide Prettier formatting per the new config. No
 behavior change. Subsequent commits are content changes only.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Assisted-by: Claude (claude-tdd-pro 0.3.0)"
 ```
 
 ### 7. Verify everything works
@@ -176,7 +176,7 @@ in Phase 3), tests NN/NN passing.
 
 No behavior change.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Assisted-by: Claude (claude-tdd-pro 0.3.0)"
 ```
 
 Update REMEDIATION.md to check off the Phase 1 items.

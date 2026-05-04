@@ -33,7 +33,7 @@ gap by adding the test that would have caught it.
 
    Tests: +1 test covering the regression. Suite NN/NN green.
 
-   Co-Authored-By: Claude <noreply@anthropic.com>
+   Assisted-by: Claude (claude-tdd-pro 0.3.0)
    ```
 
 ## Why this matters

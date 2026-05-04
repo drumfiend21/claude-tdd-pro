@@ -21,7 +21,7 @@ regression. Suite: 138 → 156 (+18). All green.">
 Numbers (refactors only): <god-file lines before/after, lint
 warnings before/after, etc.>
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ## Type vocabulary
@@ -89,7 +89,7 @@ appear at the top of the list; state persists across reloads.
 Tests: +6 strict unit tests in SavedList.test.jsx covering toggle,
 persistence, and re-ordering. Suite: 156 → 162 (+6). All green.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ### fix (with bug-as-test)
@@ -111,7 +111,7 @@ deletes the user mid-session, replays the token, and asserts 401.
 
 Tests: +1 regression test. Suite: 75 → 76 (+1). All green.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ### refactor (extraction)
@@ -133,7 +133,7 @@ Behavior: no behavior change — pure relocation.
 Numbers: god-file 9237 → 9144 lines (-93). Cumulative Phase 4: 9786
 → 9144 (-642). Tests: 138 → 155 (+17). Build clean.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ### chore (tooling)
@@ -145,7 +145,7 @@ Apply project-wide Prettier formatting per the new config from the
 preceding commit. No behavior change. Subsequent commits are content
 changes only.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Assisted-by: Claude (claude-tdd-pro 0.3.0)
 ```
 
 ## Anti-patterns
