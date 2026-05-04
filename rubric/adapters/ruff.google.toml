@@ -1,0 +1,48 @@
+# ruff.google.toml — claude-tdd-pro Google-Python baseline.
+#
+# Maps Google's pyguide rules onto ruff codes. Append to project's
+# pyproject.toml under [tool.ruff] (or copy to ruff.toml at project
+# root). The /init-guardrails command installs this automatically.
+
+target-version = "py311"
+line-length = 80                # Google pyguide §3.2
+indent-width = 4
+
+[lint]
+# Rule families — ordered to match the prose in
+# docs/standards/google-python-style.md.
+select = [
+  "E", "W",          # pycodestyle (formatting / whitespace)
+  "F",               # pyflakes (logic errors)
+  "I",               # isort (import grouping)         g-py-004
+  "N",               # pep8-naming                     g-py-001
+  "B",               # bugbear (incl. B006)            g-py-002
+  "BLE",             # blind-except                    g-py-003
+  "ANN",             # type annotations                g-py-006
+  "D",               # pydocstyle                      g-py-005
+  "UP",              # pyupgrade
+  "S",               # bandit security
+  "T20",             # flake8-print (no print)         g-py-009
+  "RUF",             # ruff-specific
+  "PLE", "PLW",      # pylint errors + warnings
+]
+
+ignore = [
+  "D100",            # missing docstring in public module — too noisy on small repos
+  "D104",            # missing docstring in public package
+  "D203",            # one-blank-line-before-class — Google uses D211 instead
+  "D213",            # multi-line-summary-second-line — Google uses D212
+  "ANN101", "ANN102", # `self` and `cls` annotations — not idiomatic in Google style
+]
+
+[lint.pydocstyle]
+convention = "google"   # Google docstring style — explicit
+
+[lint.per-file-ignores]
+"tests/**" = ["D", "ANN", "S101"]   # tests can skip docstrings + asserts
+"__init__.py" = ["F401"]            # re-exports allowed
+
+[format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true

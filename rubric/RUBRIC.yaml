@@ -1,0 +1,497 @@
+# RUBRIC.yaml — claude-tdd-pro v0.3
+#
+# Executable Google-engineering-standards rubric. Every rule cites its
+# canonical Google source AND a section anchor in the local condensed
+# extract under docs/standards/. Rules are grouped by axis. Each rule has:
+#
+#   id         — stable identifier used in PR review citations
+#   axis       — one of: design, functionality, complexity, tests, naming,
+#                comments, style, consistency, documentation, every-line,
+#                cl-shape, ts-correctness, py-correctness, security
+#   severity   — P0 (blocks correctness/security), P1 (style violation),
+#                P2 (doc/comment gap)
+#   source     — citation to the upstream Google authority + local anchor
+#   detector   — how the rule is checked. Shape:
+#                  kind: lint|tsc|mypy|ruff|pylint|script|llm
+#                  ref: identifier the runner can dispatch on
+#   remediation — how violations are fixed. Shape:
+#                  kind: skill|command|refusal|auto
+#                  ref: name of the skill/command/refusal
+#   languages  — JS|TS|PY|ANY (which adapters wire it up)
+#
+# Delegation rule: if eslint-config-google / ruff / pylint already covers
+# the rule, the detector kind is `lint` and we trust the upstream linter.
+# Custom detectors exist only for rules those tools cannot express.
+
+version: 1
+rubric_version: "0.3.0"
+default_threshold: P1   # block on P0+P1 by default; user can relax via userConfig
+
+# ---------------------------------------------------------------------------
+# DESIGN, FUNCTIONALITY, COMPLEXITY (eng-practices)
+# ---------------------------------------------------------------------------
+
+rules:
+  - id: g-eng-001-design-belongs-here
+    axis: design
+    severity: P0
+    source:
+      upstream: https://google.github.io/eng-practices/review/reviewer/looking-for.html
+      local: docs/standards/google-eng-practices.md#what-reviewers-check
+    detector:
+      kind: llm
+      ref: review-google-style
+    remediation:
+      kind: refusal
+      ref: scope-mismatch
+    languages: [ANY]
+
+  - id: g-eng-002-yagni
+    axis: complexity
+    severity: P1
+    source:
+      upstream: https://google.github.io/eng-practices/review/reviewer/looking-for.html#complexity
+      local: docs/standards/google-eng-practices.md#what-reviewers-check
+    detector:
+      kind: llm
+      ref: review-google-style
+    remediation:
+      kind: refusal
+      ref: speculative-abstraction
+    languages: [ANY]
+
+  - id: g-eng-003-tests-with-change
+    axis: tests
+    severity: P0
+    source:
+      upstream: https://google.github.io/eng-practices/review/reviewer/looking-for.html#tests
+      local: docs/standards/google-eng-practices.md#what-reviewers-check
+    detector:
+      kind: script
+      ref: tests-coupled.sh
+    remediation:
+      kind: skill
+      ref: tdd-feature-build
+    languages: [ANY]
+
+  - id: g-eng-004-cl-size
+    axis: cl-shape
+    severity: P1
+    source:
+      upstream: https://google.github.io/eng-practices/review/developer/small-cls.html
+      local: docs/standards/google-eng-practices.md#size--scope-rules
+    detector:
+      kind: script
+      ref: cl-size.sh
+      args: ["--max-lines", "400"]
+    remediation:
+      kind: refusal
+      ref: cl-too-large
+    languages: [ANY]
+
+  - id: g-eng-005-cl-description-shape
+    axis: cl-shape
+    severity: P1
+    source:
+      upstream: https://google.github.io/eng-practices/review/developer/cl-descriptions.html
+      local: docs/standards/google-eng-practices.md#clpr-description-format
+    detector:
+      kind: script
+      ref: cl-description.sh
+    remediation:
+      kind: skill
+      ref: pr-quality
+    languages: [ANY]
+
+  - id: g-eng-006-no-bundled-refactor-and-feature
+    axis: cl-shape
+    severity: P0
+    source:
+      upstream: https://google.github.io/eng-practices/review/developer/small-cls.html#splitting-by-files
+      local: docs/standards/google-eng-practices.md#size--scope-rules
+    detector:
+      kind: llm
+      ref: review-verifier
+    remediation:
+      kind: refusal
+      ref: bundled-refactor-and-feature
+    languages: [ANY]
+
+  - id: g-eng-007-no-reformat-with-logic
+    axis: cl-shape
+    severity: P1
+    source:
+      upstream: https://google.github.io/eng-practices/review/developer/small-cls.html
+      local: docs/standards/google-eng-practices.md#what-reviewers-check
+    detector:
+      kind: llm
+      ref: review-verifier
+    remediation:
+      kind: refusal
+      ref: bundled-reformat
+    languages: [ANY]
+
+  - id: g-eng-008-document-public-changes
+    axis: documentation
+    severity: P1
+    source:
+      upstream: https://google.github.io/eng-practices/review/reviewer/looking-for.html#documentation
+      local: docs/standards/google-eng-practices.md#what-reviewers-check
+    detector:
+      kind: llm
+      ref: review-google-style
+    remediation:
+      kind: skill
+      ref: pr-quality
+    languages: [ANY]
+
+# ---------------------------------------------------------------------------
+# JS / TS — naming, formatting, imports
+# (delegated to eslint-config-google + plugin-google-typescript)
+# ---------------------------------------------------------------------------
+
+  - id: g-ts-001-naming-style
+    axis: naming
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#identifiers
+      local: docs/standards/google-js-ts-style.md#naming
+    detector:
+      kind: lint
+      ref: "@typescript-eslint/naming-convention"
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [JS, TS]
+
+  - id: g-ts-002-no-default-export
+    axis: style
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#exports
+      local: docs/standards/google-js-ts-style.md#imports
+    detector:
+      kind: lint
+      ref: "import/no-default-export"
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [JS, TS]
+
+  - id: g-ts-003-no-var
+    axis: style
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/jsguide.html#features-use-const-and-let
+      local: docs/standards/google-js-ts-style.md#forbidden-patterns-must-not-do
+    detector:
+      kind: lint
+      ref: "no-var"
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [JS, TS]
+
+  - id: g-ts-004-no-eval
+    axis: security
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/jsguide.html#disallowed-features-dynamic-code-evaluation
+      local: docs/standards/google-js-ts-style.md#forbidden-patterns-must-not-do
+    detector:
+      kind: lint
+      ref: "no-eval"
+    remediation:
+      kind: refusal
+      ref: dynamic-code-eval
+    languages: [JS, TS]
+
+  - id: g-ts-005-strict-equality
+    axis: ts-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#equality-checks
+      local: docs/standards/google-js-ts-style.md#required-patterns-must-do
+    detector:
+      kind: lint
+      ref: "eqeqeq"
+      args: ["always", {"null": "ignore"}]
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [JS, TS]
+
+  - id: g-ts-006-no-any-without-justification
+    axis: ts-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#any
+      local: docs/standards/google-js-ts-style.md#types-ts-only
+    detector:
+      kind: lint
+      ref: "@typescript-eslint/no-explicit-any"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [TS]
+
+  - id: g-ts-007-strict-tsconfig
+    axis: ts-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#strict
+      local: docs/standards/google-js-ts-style.md#types-ts-only
+    detector:
+      kind: tsc
+      ref: "--strict --noUncheckedIndexedAccess --exactOptionalPropertyTypes"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [TS]
+
+  - id: g-ts-008-prefer-const
+    axis: style
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/jsguide.html#features-use-const-and-let
+      local: docs/standards/google-js-ts-style.md#required-patterns-must-do
+    detector:
+      kind: lint
+      ref: "prefer-const"
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [JS, TS]
+
+  - id: g-ts-009-throw-error-only
+    axis: ts-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#instantiate-errors-using-new
+      local: docs/standards/google-js-ts-style.md#required-patterns-must-do
+    detector:
+      kind: lint
+      ref: "@typescript-eslint/no-throw-literal"
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [TS]
+
+  - id: g-ts-010-no-debugger
+    axis: style
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#debugger-statements
+      local: docs/standards/google-js-ts-style.md#forbidden-patterns-must-not-do
+    detector:
+      kind: lint
+      ref: "no-debugger"
+    remediation:
+      kind: auto
+      ref: eslint-fix
+    languages: [JS, TS]
+
+  - id: g-ts-011-jsdoc-public-exports
+    axis: comments
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/tsguide.html#document-all-top-level-exports-of-modules
+      local: docs/standards/google-js-ts-style.md#comments--jsdoc
+    detector:
+      kind: lint
+      ref: "jsdoc/require-jsdoc"
+    remediation:
+      kind: skill
+      ref: pr-quality
+    languages: [JS, TS]
+
+  - id: g-ts-012-format-prettier
+    axis: style
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/jsguide.html#formatting
+      local: docs/standards/google-js-ts-style.md#formatting
+    detector:
+      kind: lint
+      ref: "prettier/prettier"
+    remediation:
+      kind: auto
+      ref: prettier-fix
+    languages: [JS, TS]
+
+# ---------------------------------------------------------------------------
+# PYTHON — naming, formatting, imports, types
+# (delegated to ruff's google ruleset + pylint --rcfile=google + mypy --strict)
+# ---------------------------------------------------------------------------
+
+  - id: g-py-001-naming-conventions
+    axis: naming
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#316-naming
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "N801,N802,N803,N806"
+    remediation:
+      kind: auto
+      ref: ruff-fix
+    languages: [PY]
+
+  - id: g-py-002-mutable-default-args
+    axis: py-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#212-default-argument-values
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "B006"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [PY]
+
+  - id: g-py-003-bare-except
+    axis: py-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#24-exceptions
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "E722,BLE001"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [PY]
+
+  - id: g-py-004-import-grouping
+    axis: style
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#22-imports
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "I001"
+    remediation:
+      kind: auto
+      ref: ruff-fix
+    languages: [PY]
+
+  - id: g-py-005-docstrings-public
+    axis: comments
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#383-functions-and-methods
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "D101,D102,D103"
+    remediation:
+      kind: skill
+      ref: pr-quality
+    languages: [PY]
+
+  - id: g-py-006-type-hints-public
+    axis: py-correctness
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#21931-type-annotations
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "ANN001,ANN201"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [PY]
+
+  - id: g-py-007-mypy-strict
+    axis: py-correctness
+    severity: P0
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#21931-type-annotations
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: mypy
+      ref: "--strict"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [PY]
+
+  - id: g-py-008-prefer-is-none
+    axis: py-correctness
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#2114-true-false-evaluations
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "E711"
+    remediation:
+      kind: auto
+      ref: ruff-fix
+    languages: [PY]
+
+  - id: g-py-009-no-print-prod
+    axis: style
+    severity: P1
+    source:
+      upstream: https://google.github.io/styleguide/pyguide.html#3-style-rules
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: ruff
+      ref: "T201"
+    remediation:
+      kind: skill
+      ref: bug-fix-discipline
+    languages: [PY]
+
+  - id: g-py-010-format-pyink
+    axis: style
+    severity: P1
+    source:
+      upstream: https://github.com/google/pyink
+      local: docs/standards/google-python-style.md
+    detector:
+      kind: script
+      ref: pyink-check.sh
+    remediation:
+      kind: auto
+      ref: pyink-fix
+    languages: [PY]
+
+# ---------------------------------------------------------------------------
+# SECURITY (cross-cutting)
+# ---------------------------------------------------------------------------
+
+  - id: g-sec-001-no-secrets
+    axis: security
+    severity: P0
+    source:
+      upstream: https://google.github.io/eng-practices/review/reviewer/looking-for.html
+      local: QUALITY-BAR.md
+    detector:
+      kind: script
+      ref: secret-scan.sh
+    remediation:
+      kind: refusal
+      ref: secrets-in-diff
+    languages: [ANY]
+
+  - id: g-sec-002-no-dangerously-skip-permissions
+    axis: security
+    severity: P0
+    source:
+      upstream: https://code.claude.com/docs/en/best-practices
+      local: skills/reject-bad-tooling/SKILL.md
+    detector:
+      kind: script
+      ref: refused-flags.sh
+    remediation:
+      kind: refusal
+      ref: dangerous-flag
+    languages: [ANY]
