@@ -1,6 +1,6 @@
 ---
 name: review-panel
-description: Run a specialist review panel against the current branch's diff. Five parallel subagents (correctness, security, performance, observability, dependency-impact) produce severity-tiered findings; the panel chair (this command) synthesizes into a single report with a verdict line. Pattern from HAMY's 9-agent setup and Qodo's 2026 review framework — modal pattern in the industry now.
+description: Run a specialist review panel against the current branch's diff. Six parallel subagents (correctness, security, performance, observability, dependency-impact, google-style) produce severity-tiered findings; review-verifier filters false positives by re-grounding each Critical/High against the actual code; the panel chair synthesizes into a single report with a verdict line. Pattern from HAMY's 9-agent setup, Qodo's 2026 review framework, and Anthropic's March 2026 Code Review (which raised review coverage from 16% → 54% by adding the verification pass).
 disable-model-invocation: true
 ---
 
@@ -21,7 +21,7 @@ Show the user the scope. If the diff exceeds the size guidance from
 `pr-quality` (>1000 LOC, >50 files), warn that a review panel on a
 diff this size is itself a smell — but proceed if they want.
 
-### 2. Dispatch all 5 specialist subagents in parallel
+### 2. Dispatch all 6 specialist subagents in parallel
 
 In ONE message, fire all of these via the Agent tool:
 
@@ -30,24 +30,42 @@ In ONE message, fire all of these via the Agent tool:
 - `review-performance` — algorithmic complexity, N+1 queries, bundle bloat, render churn
 - `review-observability` — logs, metrics, traces; can we debug a prod incident from this?
 - `review-deps` — dep changes (additions/removals/version bumps); license/maintenance risks
+- `review-google-style` — Google JS/TS/Python style + eng-practices judgment rules (small CL, doc shape, naming intent) — every finding cites a RUBRIC.yaml rule ID
 
 Each subagent receives:
 - the diff (`git diff $BASE...HEAD` content)
 - the change description (latest commit messages on the branch)
-- a pointer to QUALITY-BAR.md for the quality bar
+- a pointer to QUALITY-BAR.md and rubric/RUBRIC.yaml for the quality bar
+- if `${CLAUDE_PROJECT_DIR}/.claude-tdd-pro/rubric-report.json` exists, a pointer to it so they don't duplicate findings the rubric-runner already caught
 
 Each returns a structured report:
 
 ```
 Verdict: PASS | NEEDS-ATTENTION | NEEDS-WORK
-Critical: [list of issues]
+Critical: [list of issues — file:line — rule-id (if any)]
 High:     [list]
 Medium:   [list]
 Low:      [list]
 Notes:    [non-blocking observations / praise]
 ```
 
-### 3. Synthesize as panel chair
+### 3. Verification pass (review-verifier)
+
+After all 6 specialists return, fire `review-verifier` with the
+aggregated Critical + High findings as input. The verifier re-grounds
+each finding by reading the actual code and labels it CONFIRMED,
+OUT-OF-DATE, MISATTRIBUTED, FALSE-POSITIVE, or MITIGATED-BY-SIBLING-CODE.
+
+Drop FALSE-POSITIVE findings before chair synthesis. Re-route
+OUT-OF-DATE findings (re-run the originating specialist on the latest
+diff). Apply MISATTRIBUTED corrections (move to the right file:line).
+Pass CONFIRMED + MITIGATED to the chair.
+
+This pass is what separates a noisy review panel from a trusted one —
+Anthropic's own internal Code Review went from 16% → 54% effective
+coverage by adding it. ([Anthropic Code Review, March 9 2026](https://claude.com/blog/code-review))
+
+### 4. Synthesize as panel chair
 
 Combine all 5 specialist reports into ONE document the user can paste
 into a PR or share with a human reviewer:
@@ -84,9 +102,20 @@ Critical or High findings.)
 | Performance | PASS | 0 | 0 | 1 |
 | Observability | NEEDS-WORK | 1 | 0 | 0 |
 | Dependencies | PASS | 0 | 0 | 0 |
+| Google-style | NEEDS-ATTENTION | 0 | 2 | 1 |
+
+## Verification pass
+
+| Class | N |
+|---|---|
+| Confirmed | 3 |
+| Out-of-date | 0 |
+| Misattributed | 0 |
+| False positive | 1 |
+| Mitigated-by-sibling-code | 1 |
 ```
 
-### 4. Surface to the user
+### 5. Surface to the user
 
 Show the report. Suggest the natural next step:
 - If READY TO MERGE: suggest `/pr` next
