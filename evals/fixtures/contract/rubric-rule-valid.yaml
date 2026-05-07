@@ -1,0 +1,59 @@
+# Test fixture: a valid v1.9 rubric rule conforming to schemas/rubric-rule.schema.json.
+# Used by eval spec contract-rubric-rule-validates-v19-shape.json.
+
+id: g-ts-001
+name: no-any
+description: "Avoid `any` type. Use `unknown` or specific types."
+detector: rubric/detectors/no-any.sh
+remediation: "Replace `any` with `unknown` or a specific type. If unavoidable, add `// allow-any: <reason>` comment."
+source_file: generated-code-quality-standards/google/tsguide.yaml
+source_namespace: google
+type: problem
+fixable: null
+has_suggestions: false
+deprecated: false
+replaced_by: []
+docs_url: https://google.github.io/styleguide/tsguide.html#any
+requires_type_checking: false
+recommended: true
+options_schema:
+  type: array
+  items:
+    - type: object
+      properties:
+        allow_with_comment:
+          type: boolean
+          default: true
+        max_per_file:
+          type: integer
+          default: 0
+          minimum: 0
+      additionalProperties: false
+messages:
+  naked_any: "Avoid `any` type at {{location}}. Use `unknown` or a specific type."
+severity: P1
+version: 1.0.0
+semver: 1.0.0
+cost_estimate:
+  tokens_per_check: 120
+  runs_on:
+    - pre-edit
+    - review
+false_positive_log: rubric/fp-log/g-ts-001.jsonl
+provenance:
+  - source: google-tsguide
+    class: published-standard
+    section_id: "5.2"
+    url: https://google.github.io/styleguide/tsguide.html#any
+    fetched_at: 2026-05-07T08:00:00Z
+    content_hash: sha256:0000000000000000000000000000000000000000000000000000000000000000
+controls:
+  - framework: soc2-tsc
+    control_id: CC8.1
+rule_state: warn-only
+rule_state_history:
+  - state: warn-only
+    since: 2026-05-07
+    reason: "Initial canary period per O-7"
+applies_to:
+  - typescript
