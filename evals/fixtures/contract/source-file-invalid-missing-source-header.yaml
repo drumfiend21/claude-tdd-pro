@@ -1,0 +1,31 @@
+# Test fixture: source-file MISSING the required `source:` header block.
+# Used by eval spec contract-source-file-rejects-missing-source-header.json.
+# Expected behavior: validator exit 2, stderr mentions "source".
+
+rules:
+  - id: g-ts-001
+    name: no-any
+    description: "Avoid `any` type."
+    detector: rubric/detectors/no-any.sh
+    type: problem
+    fixable: null
+    has_suggestions: false
+    deprecated: false
+    replaced_by: []
+    docs_url: https://google.github.io/styleguide/tsguide.html#any
+    requires_type_checking: false
+    recommended: true
+    severity: P1
+    version: 1.0.0
+    semver: 1.0.0
+    rule_state: warn-only
+    provenance:
+      - source: google-tsguide
+        url: https://google.github.io/styleguide/tsguide.html#any
+        fetched_at: 2026-05-09T08:00:00Z
+
+recommended_set:
+  - g-ts-001
+
+all_set:
+  - g-ts-001

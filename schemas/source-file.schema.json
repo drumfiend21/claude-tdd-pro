@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-tdd-pro.dev/schemas/source-file.schema.json",
+  "title": "Claude TDD Pro v1.9 — Source-Folder File",
+  "description": "Schema for a single YAML file under generated-code-quality-standards/<namespace>/. Per architectural design v1.9 §G-2 / §2.21. Each file is a self-contained, ESLint-style rule configuration block sourced from one upstream publication. Cross-validation (rules conform to rubric-rule.schema.json; recommended_set ⊆ all_set; all_set == set of rule IDs in rules:) is performed by validate-source-file.sh in addition to this structural schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "rules", "recommended_set", "all_set"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "authoritative_publisher", "authoritative_url", "registry_link", "fetched_at", "content_hash"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Source ID matching an entry in the appropriate operator-curated registry (STANDARDS-URLS.yaml, COMPLIANCE-URLS.yaml, or PR-SOURCES.yaml).",
+          "minLength": 2
+        },
+        "authoritative_publisher": {
+          "type": "string",
+          "description": "Publishing body name (e.g., 'Google LLC', 'U.S. National Institute of Standards and Technology', 'OWASP Foundation', 'Consumer Financial Protection Bureau').",
+          "minLength": 2
+        },
+        "authoritative_url": {
+          "type": "string",
+          "pattern": "^https?://",
+          "description": "Live published URL of the upstream source."
+        },
+        "registry_link": {
+          "type": "string",
+          "enum": ["STANDARDS-URLS.yaml", "COMPLIANCE-URLS.yaml", "PR-SOURCES.yaml"],
+          "description": "Which operator-curated registry this source is registered in."
+        },
+        "registry_entry_id": {
+          "type": "string",
+          "description": "Optional explicit pointer to the registry entry id (typically equals `id`)."
+        },
+        "fetched_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of last successful fetch. Live freshness gate (S-13/S-16) consumes this."
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:",
+          "description": "SHA-256 hash of normalized source content at fetch time. Lock file pins this."
+        },
+        "fetch_frequency": {
+          "type": "string",
+          "enum": ["daily", "weekly", "monthly", "quarterly", "on-demand"],
+          "description": "Per-source fetch cadence. Default: daily for engineering standards; weekly for compliance frameworks; daily for PR-corpus."
+        },
+        "fragility_tier": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Per-tier fetcher behavior: high → silent replace; medium → prompt on >5% structure delta; low → manual fetch only."
+        },
+        "license_note": {
+          "type": "string",
+          "description": "License + citation guidance for content quoted from this source."
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 0,
+      "description": "Array of rubric rule objects. Each rule MUST conform to schemas/rubric-rule.schema.json — cross-validation enforced by validate-source-file.sh.",
+      "items": {
+        "type": "object",
+        "description": "Rubric rule per schemas/rubric-rule.schema.json. Structural validation deferred to that schema; this schema only checks the wrapper requires `id` so cross-validation can pair rules to all_set."
+      }
+    },
+    "recommended_set": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Subset of rule IDs included in this file's recommended subset. Cross-validation: MUST be subset of all_set."
+    },
+    "all_set": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Every rule ID defined in this file. Cross-validation: MUST equal exactly the set of `id` values in `rules:`."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional operator-readable description of this file's scope."
+    },
+    "migration_history": {
+      "type": "array",
+      "description": "Optional record of prior file paths if rules were moved here.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from_path": { "type": "string" },
+          "moved_at": { "type": "string" },
+          "rule_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

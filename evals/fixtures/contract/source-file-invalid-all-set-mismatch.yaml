@@ -1,0 +1,41 @@
+# Test fixture: source-file where `all_set` does NOT match the IDs declared in `rules:`.
+# rules: [g-ts-001] but all_set: [g-ts-001, g-ts-002] — declares an ID that's not actually defined.
+# Used by eval spec contract-source-file-rejects-all-set-mismatch.json.
+# Expected behavior: validator exit 2, stderr mentions "all_set".
+
+source:
+  id: google-tsguide
+  authoritative_publisher: "Google LLC"
+  authoritative_url: https://google.github.io/styleguide/tsguide.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: 2026-05-09T08:00:00Z
+  content_hash: sha256:0000000000000000000000000000000000000000000000000000000000000000
+
+rules:
+  - id: g-ts-001
+    name: no-any
+    description: "Avoid `any` type."
+    detector: rubric/detectors/no-any.sh
+    type: problem
+    fixable: null
+    has_suggestions: false
+    deprecated: false
+    replaced_by: []
+    docs_url: https://google.github.io/styleguide/tsguide.html#any
+    requires_type_checking: false
+    recommended: true
+    severity: P1
+    version: 1.0.0
+    semver: 1.0.0
+    rule_state: warn-only
+    provenance:
+      - source: google-tsguide
+        url: https://google.github.io/styleguide/tsguide.html#any
+        fetched_at: 2026-05-09T08:00:00Z
+
+recommended_set:
+  - g-ts-001
+
+all_set:
+  - g-ts-001
+  - g-ts-002    # mismatch: rules: only declares g-ts-001

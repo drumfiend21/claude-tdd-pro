@@ -1,0 +1,9 @@
+{
+  "name": "validate-source-file accepts a v1.9-conforming source-file fixture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/contract/source-file-valid.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_not_contains": ["error", "invalid"]
+  }
+}

@@ -1,0 +1,22 @@
+Running claude-tdd-pro evals...
+
+  ✓ cl-size-blocks-large-diff
+  ✓ cl-size-passes-small-diff
+  ✓ contract-rubric-rule-rejects-bad-id-pattern
+  ✓ contract-rubric-rule-rejects-missing-name
+  ✓ contract-rubric-rule-validates-v19-shape
+  ✓ contract-source-file-rejects-all-set-mismatch
+  ✓ contract-source-file-rejects-missing-source-header
+  ✓ contract-source-file-validates-shape
+  ✓ refused-flags-blocks-skip-permissions
+  ✓ rubric-runner-emits-valid-json
+  ✓ secret-scan-blocks-aws-key
+  ✓ secret-scan-blocks-env-filename
+  ✓ secret-scan-blocks-github-pat
+  ✓ secret-scan-blocks-private-key
+  ✓ secret-scan-passes-clean-diff
+  ✓ stop-gate-noop-without-active-flow
+  ✓ tests-coupled-flags-source-without-test
+  ✓ tests-coupled-passes-with-test
+
+Results: 18 passed, 0 failed
