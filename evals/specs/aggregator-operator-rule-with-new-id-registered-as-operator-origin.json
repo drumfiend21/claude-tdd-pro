@@ -1,0 +1,13 @@
+{
+  "name": "aggregator registers a new operator rule with origin=operator (no conflict)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const op=r.rules.find(x=>x.id===\"acme-001\");if(op&&op.origin===\"operator\"&&op.source_namespace===\"_operator\"&&!op.superseded_by_operator&&!op.supersedes){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: op=\"+JSON.stringify(op)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google tree/_operator/acme",
+    "cat > tree/google/g.yaml << 'EOF'\nsource:\n  id: google\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-rule\n    name: g\n    description: g rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [g-rule]\nall_set: [g-rule]\nEOF",
+    "cat > tree/_operator/acme/conventions.yaml << 'EOF'\nsource:\n  id: acme-conventions\n  authoritative_publisher: Acme Corp\n  authoritative_url: https://wiki.internal/acme\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:a\nrules:\n  - id: acme-001\n    name: request-id-required\n    description: All API responses include x-request-id.\n    detector: .claude-tdd-pro/detectors/request-id.sh\nrecommended_set: [acme-001]\nall_set: [acme-001]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

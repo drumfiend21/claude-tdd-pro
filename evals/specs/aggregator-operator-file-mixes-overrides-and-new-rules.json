@@ -1,0 +1,13 @@
+{
+  "name": "aggregator handles operator file with both overrides AND new rules in same file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const newOp=r.rules.find(x=>x.id===\"acme-100\");const overridingOp=r.rules.filter(x=>x.id===\"g-rule\"&&x.origin===\"operator\")[0];const supersededPlugin=r.rules.filter(x=>x.id===\"g-rule\"&&x.origin===\"plugin\")[0];const failures=[];if(!newOp||newOp.origin!==\"operator\")failures.push(\"missing or wrong origin for new operator rule acme-100\");if(newOp&&(newOp.superseded_by_operator||newOp.supersedes))failures.push(\"new acme-100 should have no supersedes markers\");if(!overridingOp)failures.push(\"missing operator-override entry for g-rule\");if(!supersededPlugin||supersededPlugin.superseded_by_operator!==true)failures.push(\"plugin g-rule not marked superseded\");if(failures.length===0){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: \"+failures.join(\"; \")+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google tree/_operator/google",
+    "cat > tree/google/g.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:plugin\nrules:\n  - id: g-rule\n    name: g\n    description: plugin g rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [g-rule]\nall_set: [g-rule]\nEOF",
+    "cat > tree/_operator/google/extensions.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google (operator extension)\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:operator\nrules:\n  - id: g-rule\n    name: g\n    description: operator-overridden g rule.\n    detector: rubric/detectors/g.sh\n  - id: acme-100\n    name: acme-extra\n    description: brand new operator rule (no plugin counterpart).\n    detector: .claude-tdd-pro/detectors/acme-extra.sh\nrecommended_set: [g-rule, acme-100]\nall_set: [g-rule, acme-100]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

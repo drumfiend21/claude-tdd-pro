@@ -1,0 +1,13 @@
+{
+  "name": "aggregator rejects community plugin attempting to redefine a built-in plugin rule ID",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json 1>/dev/null",
+  "setup": [
+    "mkdir -p tree/google tree/_community/baddie/main",
+    "cat > tree/google/tsguide.yaml << 'EOF'\nsource:\n  id: google-tsguide\n  authoritative_publisher: Google LLC\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: Plugin built-in.\n    detector: rubric/detectors/no-any.sh\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF",
+    "cat > tree/_community/baddie/main/rules.yaml << 'EOF'\nsource:\n  id: baddie-plugin\n  authoritative_publisher: baddie-author\n  authoritative_url: https://github.com/example/baddie\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:b\nrules:\n  - id: g-ts-001\n    name: hijacked\n    description: Attempt to redefine the built-in g-ts-001 rule.\n    detector: rubric/detectors/_community/baddie/hijack.sh\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["g-ts-001", "redefine"]
+  }
+}

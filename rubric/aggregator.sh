@@ -150,17 +150,26 @@ ruby -ryaml -rjson -e '
   # Sort by (order_index, relpath) to make alphabetical-within-folder + order-across-folders stable.
   collected.sort_by! { |entry| [entry[0], entry[1]] }
 
+  require "set"
+
   rules = []
   namespaces_seen = []
   files_processed = 0
-  errors = []
+  parse_errors = []
+  registered_built_in_ids = Set.new
+  community_redefinition_conflict = false
+
+  # Index of plugin rules by id, for operator-override marking.
+  # Populated as we go; operator-namespace files are processed LAST so this
+  # index is fully built when overrides are resolved.
+  plugin_rules_by_id = {}
 
   collected.each do |order_index, relpath, abspath, ns_name|
     begin
       data = YAML.load_file(abspath)
     rescue => e
       STDERR.puts "aggregator: yaml parse error in #{relpath}: #{e.message}"
-      errors << relpath
+      parse_errors << relpath
       next
     end
 
@@ -175,17 +184,72 @@ ruby -ryaml -rjson -e '
              else "plugin"
              end
 
+    # For community plugins, extract <plugin-id> from path
+    # relpath looks like "_community/<plugin-id>/<plugin-namespace>/file.yaml"
+    plugin_id = nil
+    if origin == "community"
+      parts = relpath.split("/")
+      if parts[0] == "_community" && parts.length >= 3
+        plugin_id = parts[1]
+      end
+    end
+
     file_rules = data["rules"]
     next unless file_rules.is_a?(Array)
 
     file_rules.each do |rule|
       next unless rule.is_a?(Hash)
+      raw_id = rule["id"]
+      next unless raw_id.is_a?(String) && !raw_id.empty?
+
+      # Community plugin redefinition rejection: BEFORE auto-prefix, check if
+      # raw_id collides with a built-in plugin rule id. This catches the case
+      # of a community plugin author writing `id: g-ts-001` literally.
+      if origin == "community" && registered_built_in_ids.include?(raw_id)
+        STDERR.puts "aggregator: community plugin [#{plugin_id}] attempts to redefine built-in rule id [#{raw_id}] (file: #{relpath}); reject"
+        community_redefinition_conflict = true
+        next
+      end
+
+      # Community plugin auto-prefix: if id does not already start with the
+      # <plugin-id>/ namespace, prepend it so every community-plugin rule
+      # lives in a namespaced id space.
+      final_id = raw_id
+      if origin == "community" && plugin_id && !raw_id.start_with?("#{plugin_id}/")
+        final_id = "#{plugin_id}/#{raw_id}"
+      end
+
       annotated = rule.dup
+      annotated["id"] = final_id
       annotated["source_file"] = relpath
       annotated["source_namespace"] = ns_name
       annotated["origin"] = origin
+      annotated["superseded_by_operator"] = false
+
+      # Track plugin (built-in) ids for community redefinition detection.
+      if origin == "plugin"
+        registered_built_in_ids.add(final_id)
+        plugin_rules_by_id[final_id] = annotated
+      end
+
+      # Operator-override marking: if an operator rule shares an id with a
+      # plugin rule already in the registry, mark the plugin rule as
+      # superseded and the operator rule as superseding.
+      if origin == "operator" && plugin_rules_by_id.key?(final_id)
+        plugin_target = plugin_rules_by_id[final_id]
+        plugin_target["superseded_by_operator"] = true
+        annotated["supersedes"] = {
+          "source_file" => plugin_target["source_file"],
+          "original_origin" => "plugin"
+        }
+      end
+
       rules << annotated
     end
+  end
+
+  if community_redefinition_conflict
+    exit 2
   end
 
   output = {
@@ -203,5 +267,7 @@ ruby -ryaml -rjson -e '
     puts JSON.generate(output)
   end
 
-  exit (errors.empty? ? 0 : 0)  # in CL-03, parse errors are non-fatal (CL-05 hardens this)
+  # Parse errors remain non-fatal in CL-04 — that hardening lands in CL-05
+  # along with malformed-YAML and missing-source-header tests.
+  exit 0
 ' "$ROOT_ABS" "$FORMAT"

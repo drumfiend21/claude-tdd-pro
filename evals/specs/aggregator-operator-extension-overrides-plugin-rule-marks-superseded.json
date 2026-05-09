@@ -1,0 +1,13 @@
+{
+  "name": "aggregator marks plugin rule superseded_by_operator when operator extension overrides same id",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const matches=r.rules.filter(x=>x.id===\"g-ts-001\");if(matches.length!==2){process.stderr.write(\"FAIL: expected 2 entries for g-ts-001, got \"+matches.length+\"\\n\");process.exit(1)}const plugin=matches.find(x=>x.origin===\"plugin\");const operator=matches.find(x=>x.origin===\"operator\");if(!plugin||!operator){process.stderr.write(\"FAIL: missing plugin or operator entry\\n\");process.exit(1)}if(plugin.superseded_by_operator!==true){process.stderr.write(\"FAIL: plugin not marked superseded_by_operator\\n\");process.exit(1)}if(!operator.supersedes||operator.supersedes.source_file!==plugin.source_file){process.stderr.write(\"FAIL: operator missing supersedes pointer\\n\");process.exit(1)}if(operator.superseded_by_operator===true){process.stderr.write(\"FAIL: operator should not be marked superseded\\n\");process.exit(1)}process.stderr.write(\"ok\\n\")});'",
+  "setup": [
+    "mkdir -p tree/google tree/_operator/google",
+    "cat > tree/google/tsguide.yaml << 'EOF'\nsource:\n  id: google-tsguide\n  authoritative_publisher: Google LLC\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:plugin\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: \"Plugin default for no-any.\"\n    detector: rubric/detectors/no-any.sh\n    severity: P1\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF",
+    "cat > tree/_operator/google/tsguide-extensions.yaml << 'EOF'\nsource:\n  id: google-tsguide\n  authoritative_publisher: Google LLC (operator override)\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:operator\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: \"Operator override: stricter no-any with zero tolerance.\"\n    detector: rubric/detectors/no-any.sh\n    severity: P0\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

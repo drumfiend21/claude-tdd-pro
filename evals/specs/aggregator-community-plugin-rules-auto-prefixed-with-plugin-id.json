@@ -1,0 +1,12 @@
+{
+  "name": "aggregator auto-prefixes community-plugin rule IDs with <plugin-id>/",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);const expected=[\"react-perf/no-inline-fn\",\"react-perf/no-array-key\"];const matched=expected.every(id=>ids.includes(id));if(matched){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/_community/react-perf/main",
+    "cat > tree/_community/react-perf/main/perf-rules.yaml << 'EOF'\nsource:\n  id: react-perf-plugin\n  authoritative_publisher: react-perf-author\n  authoritative_url: https://github.com/example/react-perf\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:rp\nrules:\n  - id: no-inline-fn\n    name: no-inline-functions\n    description: Avoid inline functions in JSX props.\n    detector: rubric/detectors/_community/react-perf/no-inline-fn.sh\n  - id: no-array-key\n    name: no-array-index-key\n    description: Avoid array index as React key.\n    detector: rubric/detectors/_community/react-perf/no-array-key.sh\nrecommended_set: [no-inline-fn, no-array-key]\nall_set: [no-inline-fn, no-array-key]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

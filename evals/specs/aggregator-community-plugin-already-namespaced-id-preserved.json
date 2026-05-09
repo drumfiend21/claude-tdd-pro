@@ -1,0 +1,12 @@
+{
+  "name": "aggregator preserves community-plugin rule ID that is already namespaced (does not double-prefix)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);if(ids.includes(\"react-perf/no-inline-fn\")&&!ids.includes(\"react-perf/react-perf/no-inline-fn\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/_community/react-perf/main",
+    "cat > tree/_community/react-perf/main/perf-rules.yaml << 'EOF'\nsource:\n  id: react-perf-plugin\n  authoritative_publisher: react-perf-author\n  authoritative_url: https://github.com/example/react-perf\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:rp\nrules:\n  - id: react-perf/no-inline-fn\n    name: no-inline-functions\n    description: Avoid inline functions in JSX props.\n    detector: rubric/detectors/_community/react-perf/no-inline-fn.sh\nrecommended_set: [react-perf/no-inline-fn]\nall_set: [react-perf/no-inline-fn]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
