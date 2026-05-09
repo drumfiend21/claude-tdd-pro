@@ -1,0 +1,14 @@
+{
+  "name": "aggregator processes plugin namespace folders alphabetically",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const namespaces=r.rules.map(x=>x.source_namespace);const expected=[\"european-union\",\"google\",\"owasp\"];if(JSON.stringify(namespaces)===JSON.stringify(expected)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: namespaces=\"+JSON.stringify(namespaces)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google tree/european-union tree/owasp",
+    "cat > tree/google/g.yaml << 'EOF'\nsource:\n  id: google\n  authoritative_publisher: Google LLC\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-rule\n    name: g\n    description: g rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [g-rule]\nall_set: [g-rule]\nEOF",
+    "cat > tree/european-union/e.yaml << 'EOF'\nsource:\n  id: eu\n  authoritative_publisher: EU\n  authoritative_url: https://example.com/e\n  registry_link: COMPLIANCE-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:e\nrules:\n  - id: e-rule\n    name: e\n    description: e rule.\n    detector: rubric/detectors/e.sh\nrecommended_set: [e-rule]\nall_set: [e-rule]\nEOF",
+    "cat > tree/owasp/o.yaml << 'EOF'\nsource:\n  id: owasp\n  authoritative_publisher: OWASP Foundation\n  authoritative_url: https://example.com/o\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:o\nrules:\n  - id: o-rule\n    name: o\n    description: o rule.\n    detector: rubric/detectors/o.sh\nrecommended_set: [o-rule]\nall_set: [o-rule]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

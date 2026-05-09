@@ -1,0 +1,12 @@
+{
+  "name": "aggregator stdout is valid JSON with required top-level fields",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const have=[\"version\",\"schema\",\"namespaces_seen\",\"files_processed\",\"rules\"].every(k=>k in r);if(have&&r.version===1&&r.schema===\"aggregator-output\"&&Array.isArray(r.rules)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: keys=\"+Object.keys(r).join(\",\")+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/g.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-rule\n    name: g\n    description: g rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [g-rule]\nall_set: [g-rule]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

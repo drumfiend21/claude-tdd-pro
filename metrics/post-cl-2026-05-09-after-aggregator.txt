@@ -1,0 +1,35 @@
+Running claude-tdd-pro evals...
+
+  ✓ aggregator-deterministic-across-runs
+  ✓ aggregator-emits-empty-registry-for-empty-directory
+  ✓ aggregator-includes-multiple-rules-from-single-file
+  ✓ aggregator-includes-single-rule-from-single-file
+  ✓ aggregator-orders-files-alphabetically-within-namespace
+  ✓ aggregator-output-is-valid-json
+  ✓ aggregator-processes-plugin-namespaces-alphabetically
+  ✓ aggregator-processes-universal-folder-before-plugin-namespaces
+  ✓ aggregator-respects-full-aggregation-order
+  ✓ aggregator-skips-dotfiles
+  ✓ aggregator-skips-gitkeep-files
+  ✓ aggregator-skips-meta-directory
+  ✓ aggregator-skips-non-yaml-files
+  ✓ cl-size-blocks-large-diff
+  ✓ cl-size-passes-small-diff
+  ✓ contract-rubric-rule-rejects-bad-id-pattern
+  ✓ contract-rubric-rule-rejects-missing-name
+  ✓ contract-rubric-rule-validates-v19-shape
+  ✓ contract-source-file-rejects-all-set-mismatch
+  ✓ contract-source-file-rejects-missing-source-header
+  ✓ contract-source-file-validates-shape
+  ✓ refused-flags-blocks-skip-permissions
+  ✓ rubric-runner-emits-valid-json
+  ✓ secret-scan-blocks-aws-key
+  ✓ secret-scan-blocks-env-filename
+  ✓ secret-scan-blocks-github-pat
+  ✓ secret-scan-blocks-private-key
+  ✓ secret-scan-passes-clean-diff
+  ✓ stop-gate-noop-without-active-flow
+  ✓ tests-coupled-flags-source-without-test
+  ✓ tests-coupled-passes-with-test
+
+Results: 31 passed, 0 failed

@@ -1,0 +1,13 @@
+{
+  "name": "aggregator processes _universal/ folder before any plugin namespace folder",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);const universalFirst=ids.indexOf(\"g-universal-cl-size\")<ids.indexOf(\"g-ts-001\");if(universalFirst&&ids.length===2){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/_universal tree/google",
+    "cat > tree/_universal/cl-discipline.yaml << 'EOF'\nsource:\n  id: claude-tdd-pro-universal\n  authoritative_publisher: claude-tdd-pro\n  authoritative_url: https://example.com/universal\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:u\nrules:\n  - id: g-universal-cl-size\n    name: cl-size\n    description: CL size limit.\n    detector: rubric/detectors/cl-size.sh\nrecommended_set: [g-universal-cl-size]\nall_set: [g-universal-cl-size]\nEOF",
+    "cat > tree/google/tsguide.yaml << 'EOF'\nsource:\n  id: google-tsguide\n  authoritative_publisher: Google LLC\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: Avoid any.\n    detector: rubric/detectors/no-any.sh\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

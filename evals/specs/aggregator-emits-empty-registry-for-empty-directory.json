@@ -1,0 +1,14 @@
+{
+  "name": "aggregator emits empty registry when directory has no source files",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/empty-tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(Array.isArray(r.rules)&&r.rules.length===0&&r.files_processed===0){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: rules=\"+JSON.stringify(r.rules)+\", files_processed=\"+r.files_processed+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p empty-tree/google",
+    "touch empty-tree/google/.gitkeep",
+    "mkdir -p empty-tree/_meta",
+    "touch empty-tree/_meta/.gitkeep"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

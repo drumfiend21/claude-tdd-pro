@@ -1,0 +1,15 @@
+{
+  "name": "aggregator follows full order: _universal then plugin then _community then _operator",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const origins=r.rules.map(x=>x.origin);const expected=[\"plugin\",\"plugin\",\"community\",\"operator\"];const ok=JSON.stringify(origins)===JSON.stringify(expected);if(ok){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: origins=\"+JSON.stringify(origins)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/_universal tree/google tree/_community/myplug/myns tree/_operator/myteam",
+    "cat > tree/_universal/u.yaml << 'EOF'\nsource:\n  id: u\n  authoritative_publisher: u\n  authoritative_url: https://example.com/u\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:u\nrules:\n  - id: u-rule\n    name: u\n    description: u rule.\n    detector: rubric/detectors/u.sh\nrecommended_set: [u-rule]\nall_set: [u-rule]\nEOF",
+    "cat > tree/google/g.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-rule\n    name: g\n    description: g rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [g-rule]\nall_set: [g-rule]\nEOF",
+    "cat > tree/_community/myplug/myns/c.yaml << 'EOF'\nsource:\n  id: c\n  authoritative_publisher: c\n  authoritative_url: https://example.com/c\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:c\nrules:\n  - id: c-rule\n    name: c\n    description: c rule.\n    detector: rubric/detectors/c.sh\nrecommended_set: [c-rule]\nall_set: [c-rule]\nEOF",
+    "cat > tree/_operator/myteam/o.yaml << 'EOF'\nsource:\n  id: o\n  authoritative_publisher: myteam\n  authoritative_url: https://example.com/o\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:o\nrules:\n  - id: o-rule\n    name: o\n    description: o rule.\n    detector: rubric/detectors/o.sh\nrecommended_set: [o-rule]\nall_set: [o-rule]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

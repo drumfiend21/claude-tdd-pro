@@ -1,0 +1,12 @@
+{
+  "name": "aggregator includes all rules in declaration order from a single file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);const ok=JSON.stringify(ids)===JSON.stringify([\"g-ts-001\",\"g-ts-002\",\"g-ts-007\"]);if(ok){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/tsguide.yaml << 'EOF'\nsource:\n  id: google-tsguide\n  authoritative_publisher: \"Google LLC\"\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:abc\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: \"Avoid any.\"\n    detector: rubric/detectors/no-any.sh\n  - id: g-ts-002\n    name: no-cast\n    description: \"Justify casts.\"\n    detector: rubric/detectors/no-cast.sh\n  - id: g-ts-007\n    name: no-empty-types\n    description: \"No empty types.\"\n    detector: rubric/detectors/no-empty-types.sh\nrecommended_set: [g-ts-001, g-ts-002, g-ts-007]\nall_set: [g-ts-001, g-ts-002, g-ts-007]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "aggregator orders files alphabetically within a namespace folder",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);const ok=JSON.stringify(ids)===JSON.stringify([\"a-rule\",\"b-rule\",\"c-rule\"]);if(ok){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/c-file.yaml << 'EOF'\nsource:\n  id: c-source\n  authoritative_publisher: c\n  authoritative_url: https://example.com/c\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:c\nrules:\n  - id: c-rule\n    name: c\n    description: c rule.\n    detector: rubric/detectors/c.sh\nrecommended_set: [c-rule]\nall_set: [c-rule]\nEOF",
+    "cat > tree/google/a-file.yaml << 'EOF'\nsource:\n  id: a-source\n  authoritative_publisher: a\n  authoritative_url: https://example.com/a\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:a\nrules:\n  - id: a-rule\n    name: a\n    description: a rule.\n    detector: rubric/detectors/a.sh\nrecommended_set: [a-rule]\nall_set: [a-rule]\nEOF",
+    "cat > tree/google/b-file.yaml << 'EOF'\nsource:\n  id: b-source\n  authoritative_publisher: b\n  authoritative_url: https://example.com/b\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:b\nrules:\n  - id: b-rule\n    name: b\n    description: b rule.\n    detector: rubric/detectors/b.sh\nrecommended_set: [b-rule]\nall_set: [b-rule]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

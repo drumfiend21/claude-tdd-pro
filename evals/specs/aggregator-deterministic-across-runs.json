@@ -1,0 +1,13 @@
+{
+  "name": "aggregator produces identical output across consecutive runs (determinism)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json > out1.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json > out2.json && node -e 'const fs=require(\"fs\");const a=JSON.parse(fs.readFileSync(\"out1.json\",\"utf8\"));const b=JSON.parse(fs.readFileSync(\"out2.json\",\"utf8\"));delete a.aggregated_at;delete b.aggregated_at;if(JSON.stringify(a)===JSON.stringify(b)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: outputs differ\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p tree/google tree/owasp",
+    "cat > tree/google/g.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: g-rule\n    name: g\n    description: g rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [g-rule]\nall_set: [g-rule]\nEOF",
+    "cat > tree/owasp/o.yaml << 'EOF'\nsource:\n  id: o\n  authoritative_publisher: OWASP\n  authoritative_url: https://example.com/o\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:o\nrules:\n  - id: o-rule\n    name: o\n    description: o rule.\n    detector: rubric/detectors/o.sh\nrecommended_set: [o-rule]\nall_set: [o-rule]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "aggregator includes a single rule from a single source file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);if(ids.length===1&&ids[0]===\"g-ts-001\"&&r.files_processed===1){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\", files_processed=\"+r.files_processed+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/tsguide.yaml << 'EOF'\nsource:\n  id: google-tsguide\n  authoritative_publisher: \"Google LLC\"\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-09T08:00:00Z\n  content_hash: sha256:abc\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: \"Avoid any type.\"\n    detector: rubric/detectors/no-any.sh\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
