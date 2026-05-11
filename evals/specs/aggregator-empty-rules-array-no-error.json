@@ -1,0 +1,13 @@
+{
+  "name": "aggregator handles file with valid source: header but empty rules: array (no error)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json 2>err.txt | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const fs=require(\"fs\");const stderr=fs.readFileSync(\"err.txt\",\"utf8\");const failures=[];if(r.rules.length!==1)failures.push(\"expected 1 rule, got \"+r.rules.length);if(r.files_processed!==2)failures.push(\"expected files_processed=2, got \"+r.files_processed);if(stderr.length>0)failures.push(\"unexpected stderr: \"+JSON.stringify(stderr));if(failures.length===0){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: \"+failures.join(\"; \")+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/with-rule.yaml << 'EOF'\nsource:\n  id: g1\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g1\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:g1\nrules:\n  - id: only-rule\n    name: only\n    description: the only rule.\n    detector: rubric/detectors/only.sh\nrecommended_set: [only-rule]\nall_set: [only-rule]\nEOF",
+    "cat > tree/google/empty-rules.yaml << 'EOF'\n# Valid file: source header present, rules array intentionally empty.\n# Common during scaffolding before any rules are authored.\nsource:\n  id: g2\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g2\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:g2\nrules: []\nrecommended_set: []\nall_set: []\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

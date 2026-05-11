@@ -1,0 +1,13 @@
+{
+  "name": "aggregator follows regular symlinks pointing to source-file YAMLs",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const ids=r.rules.map(x=>x.id);if(ids.includes(\"linked-rule\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google external",
+    "cat > external/external.yaml << 'EOF'\nsource:\n  id: ext\n  authoritative_publisher: External\n  authoritative_url: https://example.com/ext\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:ext\nrules:\n  - id: linked-rule\n    name: linked\n    description: rule reached via symlink.\n    detector: rubric/detectors/linked.sh\nrecommended_set: [linked-rule]\nall_set: [linked-rule]\nEOF",
+    "ln -s \"$PWD/external/external.yaml\" tree/google/linked.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

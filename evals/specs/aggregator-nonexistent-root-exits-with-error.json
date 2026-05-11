@@ -1,0 +1,9 @@
+{
+  "name": "aggregator exits 1 with clear error when --root path does not exist",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/does-not-exist\" --format json 1>/dev/null",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": ["does not exist"]
+  }
+}

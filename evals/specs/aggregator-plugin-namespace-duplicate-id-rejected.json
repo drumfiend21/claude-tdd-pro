@@ -1,0 +1,13 @@
+{
+  "name": "aggregator rejects two plugin-namespace files declaring the same rule id (authoring error)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json 1>/dev/null",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/first.yaml << 'EOF'\nsource:\n  id: g1\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g1\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:g1\nrules:\n  - id: g-ts-001\n    name: no-any\n    description: First declaration.\n    detector: rubric/detectors/no-any.sh\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF",
+    "cat > tree/google/second.yaml << 'EOF'\nsource:\n  id: g2\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g2\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:g2\nrules:\n  - id: g-ts-001\n    name: no-any-redux\n    description: Second declaration of same id (authoring error).\n    detector: rubric/detectors/no-any.sh\nrecommended_set: [g-ts-001]\nall_set: [g-ts-001]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["g-ts-001", "duplicate"]
+  }
+}

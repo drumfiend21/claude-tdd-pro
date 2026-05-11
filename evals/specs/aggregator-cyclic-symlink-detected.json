@@ -1,0 +1,13 @@
+{
+  "name": "aggregator detects cyclic directory symlinks (does not loop forever; reports and continues OR errors)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json 2>err.txt | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const fs=require(\"fs\");const stderr=fs.readFileSync(\"err.txt\",\"utf8\");const ids=r.rules.map(x=>x.id);if(ids.includes(\"good-rule\")&&stderr.toLowerCase().includes(\"cycle\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\", stderr=\"+JSON.stringify(stderr)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google tree/cyclic",
+    "cat > tree/google/good.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: good-rule\n    name: good\n    description: a good rule.\n    detector: rubric/detectors/g.sh\nrecommended_set: [good-rule]\nall_set: [good-rule]\nEOF",
+    "ln -s ../cyclic tree/cyclic/loop"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

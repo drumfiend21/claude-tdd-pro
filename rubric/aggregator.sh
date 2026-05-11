@@ -103,6 +103,10 @@ ruby -ryaml -rjson -e '
   # Collect files in aggregation order.
   collected = []  # [ [order_index, relpath, abspath], ... ]
 
+  # Track visited directory inodes to detect cyclic symlinks.
+  # Without this, Find.find loops forever on a directory symlinked into itself.
+  visited_dirs = {}
+
   walk_namespace = lambda do |ns_dir, ns_name, order_index|
     # Find .yaml files in this namespace folder (recursive — supports community plugin sub-namespaces).
     next unless File.directory?(ns_dir)
@@ -117,6 +121,26 @@ ruby -ryaml -rjson -e '
       if File.directory?(path) && basename == "_meta"
         Find.prune
         next
+      end
+      # Cyclic-symlink guard: for any directory we descend into, record the
+      # underlying inode (dev + ino). If we have already visited this inode,
+      # the path is a cycle (typically a directory symlinked back into itself
+      # or one of its ancestors). Prune the subtree and report.
+      if File.directory?(path)
+        begin
+          stat = File.stat(path)
+          key = [stat.dev, stat.ino]
+          if visited_dirs.key?(key)
+            STDERR.puts "aggregator: cycle detected at #{path} (already visited via #{visited_dirs[key]}); prune"
+            Find.prune
+            next
+          end
+          visited_dirs[key] = path
+        rescue Errno::ELOOP, Errno::ENOENT => e
+          STDERR.puts "aggregator: cycle detected at #{path}: #{e.class}; prune"
+          Find.prune
+          next
+        end
       end
       next unless File.file?(path)
       # Only .yaml files
@@ -174,6 +198,17 @@ ruby -ryaml -rjson -e '
     end
 
     next if data.nil?
+
+    # Source header validation: every source-folder file MUST have a `source:`
+    # block (per architecture G-2 / contract 2.21). Missing the header is a
+    # structural error; we skip the file with a warning so other files still
+    # aggregate. Strict G-12 validation (via validate-source-file.sh) catches
+    # this separately at /doctor and CI time.
+    if !data.is_a?(Hash) || !data["source"].is_a?(Hash)
+      STDERR.puts "aggregator: file missing required source: header; skipping (file: #{relpath})"
+      next
+    end
+
     files_processed += 1
 
     namespaces_seen << ns_name unless namespaces_seen.include?(ns_name)
@@ -227,7 +262,16 @@ ruby -ryaml -rjson -e '
       annotated["superseded_by_operator"] = false
 
       # Track plugin (built-in) ids for community redefinition detection.
+      # AND enforce plugin-namespace uniqueness: two plugin files declaring
+      # the same id is an authoring error (per architecture G-5 conflict
+      # handling; only operator overrides are permitted to share an id).
       if origin == "plugin"
+        if plugin_rules_by_id.key?(final_id)
+          first_seen = plugin_rules_by_id[final_id]["source_file"]
+          STDERR.puts "aggregator: duplicate plugin-namespace rule id [#{final_id}] declared in [#{relpath}] (already in [#{first_seen}])"
+          community_redefinition_conflict = true
+          next
+        end
         registered_built_in_ids.add(final_id)
         plugin_rules_by_id[final_id] = annotated
       end

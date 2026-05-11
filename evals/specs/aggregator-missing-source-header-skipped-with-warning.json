@@ -1,0 +1,13 @@
+{
+  "name": "aggregator skips file lacking required source: header (warning to stderr) but aggregates others",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json 2>err.txt | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const fs=require(\"fs\");const stderr=fs.readFileSync(\"err.txt\",\"utf8\");const ids=r.rules.map(x=>x.id);if(ids.length===1&&ids[0]===\"good-rule\"&&stderr.includes(\"no-source.yaml\")&&stderr.includes(\"source\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: ids=\"+JSON.stringify(ids)+\", stderr=\"+JSON.stringify(stderr)+\"\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p tree/google",
+    "cat > tree/google/good.yaml << 'EOF'\nsource:\n  id: g\n  authoritative_publisher: Google\n  authoritative_url: https://example.com/g\n  registry_link: STANDARDS-URLS.yaml\n  fetched_at: 2026-05-10T08:00:00Z\n  content_hash: sha256:g\nrules:\n  - id: good-rule\n    name: good\n    description: good.\n    detector: rubric/detectors/g.sh\nrecommended_set: [good-rule]\nall_set: [good-rule]\nEOF",
+    "cat > tree/google/no-source.yaml << 'EOF'\n# This file has rules but no source: header. Should be skipped with warning.\nrules:\n  - id: orphan-rule\n    name: orphan\n    description: rule without source header.\n    detector: rubric/detectors/orphan.sh\nrecommended_set: [orphan-rule]\nall_set: [orphan-rule]\nEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
