@@ -1,0 +1,59 @@
+# Test fixture: file has 2 rules — one valid, one missing the required `name` field.
+# Expected: validator exit 2; stderr identifies the offending rule via id.
+
+source:
+  id: google-tsguide
+  authoritative_publisher: "Google LLC"
+  authoritative_url: https://google.github.io/styleguide/tsguide.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: 2026-05-11T08:00:00Z
+  content_hash: sha256:abc
+
+rules:
+  - id: g-ts-001
+    name: no-any
+    description: "Avoid any."
+    detector: rubric/detectors/no-any.sh
+    type: problem
+    fixable: null
+    has_suggestions: false
+    deprecated: false
+    replaced_by: []
+    docs_url: https://google.github.io/styleguide/tsguide.html#any
+    requires_type_checking: false
+    recommended: true
+    severity: P1
+    version: 1.0.0
+    semver: 1.0.0
+    rule_state: warn-only
+    provenance:
+      - source: google-tsguide
+        url: https://google.github.io/styleguide/tsguide.html#any
+        fetched_at: 2026-05-11T08:00:00Z
+  - id: g-ts-002
+    # missing required `name` field — violation
+    description: "Justify casts."
+    detector: rubric/detectors/no-cast.sh
+    type: problem
+    fixable: null
+    has_suggestions: false
+    deprecated: false
+    replaced_by: []
+    docs_url: https://google.github.io/styleguide/tsguide.html#type-assertions
+    requires_type_checking: false
+    recommended: true
+    severity: P1
+    version: 1.0.0
+    semver: 1.0.0
+    rule_state: warn-only
+    provenance:
+      - source: google-tsguide
+        url: https://google.github.io/styleguide/tsguide.html#type-assertions
+        fetched_at: 2026-05-11T08:00:00Z
+
+recommended_set:
+  - g-ts-001
+  - g-ts-002
+all_set:
+  - g-ts-001
+  - g-ts-002

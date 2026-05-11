@@ -1,0 +1,14 @@
+# Test fixture: source.id is an empty string, violating minLength: 2.
+# Expected: validator exit 2; stderr mentions "id" and "minLength".
+
+source:
+  id: ""
+  authoritative_publisher: "Google LLC"
+  authoritative_url: https://google.github.io/styleguide/tsguide.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: 2026-05-11T08:00:00Z
+  content_hash: sha256:abc
+
+rules: []
+recommended_set: []
+all_set: []

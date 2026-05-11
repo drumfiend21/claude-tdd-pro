@@ -1,0 +1,9 @@
+{
+  "name": "validate-rubric-rule rejects rule whose `type` value is not in the enum",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-rubric-rule.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/contract/rubric-rule-invalid-bad-type-enum.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["type", "enum"]
+  }
+}

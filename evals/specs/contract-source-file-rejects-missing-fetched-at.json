@@ -1,0 +1,9 @@
+{
+  "name": "validate-source-file rejects file whose source: block is missing required `fetched_at`",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/contract/source-file-invalid-missing-fetched-at.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["fetched_at", "missing"]
+  }
+}

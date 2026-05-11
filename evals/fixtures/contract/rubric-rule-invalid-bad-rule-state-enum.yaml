@@ -1,0 +1,23 @@
+# Test fixture: rule_state field set to "broken" which is not in enum [warn-only, block, disabled].
+# Expected: validator exit 2; stderr mentions "rule_state" and "enum".
+
+id: g-ts-001
+name: no-any
+description: "Avoid `any` type."
+detector: rubric/detectors/no-any.sh
+type: problem
+fixable: null
+has_suggestions: false
+deprecated: false
+replaced_by: []
+docs_url: https://google.github.io/styleguide/tsguide.html#any
+requires_type_checking: false
+recommended: true
+severity: P1
+version: 1.0.0
+semver: 1.0.0
+rule_state: broken
+provenance:
+  - source: google-tsguide
+    url: https://google.github.io/styleguide/tsguide.html#any
+    fetched_at: 2026-05-11T08:00:00Z

@@ -1,0 +1,11 @@
+{
+  "name": "aggregator handles 200 rules across 40 files in <500ms (definition-of-done criterion)",
+  "command": "node -e 'const{execSync}=require(\"child_process\");const start=Date.now();const out=execSync(`bash ${process.env.CLAUDE_PLUGIN_ROOT}/rubric/aggregator.sh --root ${process.env.PWD}/tree --format json`,{encoding:\"utf8\"});const elapsed=Date.now()-start;const r=JSON.parse(out);const ruleCount=r.rules.length;const fileCount=r.files_processed;if(elapsed<500&&ruleCount>=200&&fileCount>=38){process.stderr.write(`ok elapsed=${elapsed}ms rules=${ruleCount} files=${fileCount}\\n`)}else{process.stderr.write(`FAIL elapsed=${elapsed}ms rules=${ruleCount} files=${fileCount}\\n`);process.exit(1)}'",
+  "setup": [
+    "mkdir -p tree/google && for i in $(seq 1 40); do f=\"tree/google/f${i}.yaml\"; { printf 'source:\\n  id: src-%d\\n  authoritative_publisher: Generated\\n  authoritative_url: https://example.com/%d\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-11T08:00:00Z\\n  content_hash: sha256:%d\\nrules:\\n' \"$i\" \"$i\" \"$i\"; for j in $(seq 1 5); do rid=$(((i-1)*5+j)); printf '  - id: r-%03d\\n    name: rule-%03d\\n    description: rule %d.\\n    detector: rubric/detectors/gen.sh\\n' \"$rid\" \"$rid\" \"$rid\"; done; printf 'recommended_set: []\\nall_set: []\\n'; } > \"$f\"; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

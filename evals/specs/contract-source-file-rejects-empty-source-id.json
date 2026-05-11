@@ -1,0 +1,9 @@
+{
+  "name": "validate-source-file rejects file whose source.id is empty (violates minLength)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/contract/source-file-invalid-empty-source-id.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["id", "minLength"]
+  }
+}

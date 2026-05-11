@@ -1,0 +1,15 @@
+# Test fixture: rules: is a string instead of an array.
+# Expected: validator exit 2; stderr mentions "rules" and "array".
+
+source:
+  id: google-tsguide
+  authoritative_publisher: "Google LLC"
+  authoritative_url: https://google.github.io/styleguide/tsguide.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: 2026-05-11T08:00:00Z
+  content_hash: sha256:abc
+
+rules: "this should be an array, not a string"
+
+recommended_set: []
+all_set: []

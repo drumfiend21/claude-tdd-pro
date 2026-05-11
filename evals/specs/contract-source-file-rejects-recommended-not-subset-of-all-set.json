@@ -1,0 +1,9 @@
+{
+  "name": "validate-source-file rejects file whose recommended_set contains an id not in all_set",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/contract/source-file-invalid-recommended-not-subset.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["recommended_set", "g-ts-002"]
+  }
+}

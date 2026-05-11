@@ -1,0 +1,23 @@
+# Test fixture: replaced_by set to a string instead of an array of strings.
+# Expected: validator exit 2; stderr mentions "replaced_by" and "array".
+
+id: g-ts-001
+name: no-any
+description: "Avoid `any` type."
+detector: rubric/detectors/no-any.sh
+type: problem
+fixable: null
+has_suggestions: false
+deprecated: false
+replaced_by: "g-ts-002"
+docs_url: https://google.github.io/styleguide/tsguide.html#any
+requires_type_checking: false
+recommended: true
+severity: P1
+version: 1.0.0
+semver: 1.0.0
+rule_state: warn-only
+provenance:
+  - source: google-tsguide
+    url: https://google.github.io/styleguide/tsguide.html#any
+    fetched_at: 2026-05-11T08:00:00Z

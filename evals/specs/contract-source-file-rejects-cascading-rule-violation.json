@@ -1,0 +1,9 @@
+{
+  "name": "validate-source-file cascades per-rule validation: one valid + one missing-name rule fails",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/contract/source-file-invalid-cascading-rule-violation.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": ["g-ts-002", "name"]
+  }
+}
