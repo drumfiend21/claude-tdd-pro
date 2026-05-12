@@ -1,0 +1,14 @@
+{
+  "name": "/agent-verify passes a commit when the verifier sub-agent returns agree",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/agree.sh\"",
+  "setup": [
+    "printf 'diff --git a/x b/x\\n--- a/x\\n+++ b/x\\n@@\\n+good\\n' > diff.patch",
+    "printf '#!/bin/bash\\necho \"verdict: agree\"\\nexit 0\\n' > agree.sh && chmod +x agree.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "agree"
+    ]
+  }
+}

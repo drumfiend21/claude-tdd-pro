@@ -1,0 +1,13 @@
+{
+  "name": "F-1 /postmortem: optionally drafts detector script skeleton at rubric/detectors/_draft/",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"novel issue type\" --draft-detector && test -f rubric/detectors/_draft/*.sh && echo ok >&2",
+  "setup": [
+    "mkdir -p rubric/detectors/_draft"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

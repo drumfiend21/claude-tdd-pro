@@ -1,0 +1,15 @@
+{
+  "name": "/agent-verify rejects a commit when the verifier sub-agent returns disagree",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/disagree.sh\"",
+  "setup": [
+    "printf 'diff --git a/x b/x\\n--- a/x\\n+++ b/x\\n@@\\n+bad\\n' > diff.patch",
+    "printf '#!/bin/bash\\necho \"verdict: disagree\" \\necho \"reason: shallow test coverage\"\\nexit 0\\n' > disagree.sh && chmod +x disagree.sh"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "disagree",
+      "shallow"
+    ]
+  }
+}

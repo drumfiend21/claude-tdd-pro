@@ -1,0 +1,14 @@
+{
+  "name": "codebase-impact tallies violation count for each candidate rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\" --format json 2>impact.txt && grep -E \"\\\"violation_count\\\":3\" impact.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && for i in 1 2 3; do printf 'console.log(%d)\\n' \"$i\" > \"tree/$i.js\"; done",
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: no-console\\n    name: no-console\\n    description: x\\n    detector: bash -c \"grep -l console.log\"\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

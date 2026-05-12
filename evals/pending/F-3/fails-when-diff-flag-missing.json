@@ -1,0 +1,14 @@
+{
+  "name": "/agent-verify exits 2 when --diff argument is missing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --verifier-stub \"$PWD/agree.sh\"",
+  "setup": [
+    "printf '#!/bin/bash\\necho \"verdict: agree\"\\nexit 0\\n' > agree.sh && chmod +x agree.sh"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "--diff",
+      "required"
+    ]
+  }
+}

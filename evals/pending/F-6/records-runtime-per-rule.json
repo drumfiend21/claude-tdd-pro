@@ -1,0 +1,14 @@
+{
+  "name": "codebase-impact reports wall-clock ms per rule for performance budgeting",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\" --format json 2>impact.txt && grep -E \"\\\"runtime_ms\\\":[0-9]+\" impact.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'x\\n' > tree/a.js",
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: r\\n    name: r\\n    description: x\\n    detector: bash -c \"grep -l x\"\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

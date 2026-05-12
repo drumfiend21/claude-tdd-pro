@@ -1,0 +1,16 @@
+{
+  "name": "drift-detect ignores yaml files that lack a `source:` block (operator overlays, _meta)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/drift-detect.sh\" --root \"$PWD/tree\" --upstream-stub \"$PWD/upstream.sh\"",
+  "setup": [
+    "mkdir -p tree",
+    "printf 'overrides: []\\n' > tree/overlay.yaml",
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-01T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/real.yaml",
+    "printf '#!/bin/bash\\necho \"sha256:S\"\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "skipped=1"
+    ]
+  }
+}

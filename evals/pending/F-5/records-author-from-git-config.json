@@ -1,0 +1,15 @@
+{
+  "name": "/incident records the git user.name as the incident author",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 \"Outage\" && grep -E \"author: Test User\" incidents/2026-05-04-001/timeline.md 1>&2 && echo ok 1>&2",
+  "setup": [
+    "git init -q .",
+    "git config user.name \"Test User\"",
+    "git config user.email \"t@e.com\""
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

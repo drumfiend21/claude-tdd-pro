@@ -1,0 +1,14 @@
+{
+  "name": "/agent-verify audit log entry includes ISO8601 timestamp and sha256 diff hash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/agree.sh\" && grep -E \"\\\"timestamp\\\":\\\"20[0-9]{2}-\" .claude-tdd-pro/agent-verify.jsonl 1>&2 && grep -E \"\\\"diff_sha256\\\":\\\"[a-f0-9]{64}\\\"\" .claude-tdd-pro/agent-verify.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'diff --git a/x b/x\\n--- a/x\\n+++ b/x\\n@@\\n+x\\n' > diff.patch",
+    "printf '#!/bin/bash\\necho \"verdict: agree\"\\nexit 0\\n' > agree.sh && chmod +x agree.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "drift-detect exits 0 when content_hash matches upstream",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/drift-detect.sh\" --rule-file \"$PWD/rule.yaml\" --upstream-stub \"$PWD/upstream.sh\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-01T00:00:00Z\\n  content_hash: sha256:CURRENT\\nrules: []\\n' > rule.yaml",
+    "printf '#!/bin/bash\\necho \"sha256:CURRENT\"\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

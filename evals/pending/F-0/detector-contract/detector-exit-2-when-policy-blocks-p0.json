@@ -1,0 +1,14 @@
+{
+  "name": "detector contract: exit 2 when a P0 (blocking) policy violation is detected (§2.2)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --severity p0 --paths \"src/**/*.ts\"",
+  "setup": [
+    "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "p0",
+      "block"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "F-2 /measure-rubric: prompts operator \"real issue? (y/n/skip)\" for each rule firing",
+  "command": "echo \"y\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --interactive --n 1 2>&1 | grep -q \"real issue?\" && echo ok >&2",
+  "setup": [
+    "git init -q && git config user.email t@t && git config user.name t && echo x>f && git add f && git commit -q -m c"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

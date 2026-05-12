@@ -1,0 +1,13 @@
+{
+  "name": "F-1 /postmortem: optionally drafts new rubric rule when no existing rule matches",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"novel issue type\" --draft-rule && test -f rubric/_draft/new-rule.yaml && echo ok >&2",
+  "setup": [
+    "mkdir -p rubric/_draft"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

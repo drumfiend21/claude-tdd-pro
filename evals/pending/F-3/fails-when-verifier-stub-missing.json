@@ -1,0 +1,15 @@
+{
+  "name": "/agent-verify exits non-zero with clear error when --verifier-stub script does not exist",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/no-such.sh\"",
+  "setup": [
+    "printf 'diff' > diff.patch"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "verifier",
+      "not",
+      "found"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "eval spec schema: rejects spec missing required `expect` field (§2.4)",
+  "command": "echo '{\"name\":\"test\",\"command\":\"echo hi\",\"setup\":[]}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"expect\" && echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

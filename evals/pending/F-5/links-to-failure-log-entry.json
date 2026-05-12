@@ -1,0 +1,13 @@
+{
+  "name": "/incident appends a one-line entry to FAILURE-LOG.md linking back to incident folder",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 \"Outage\" && grep -E \"incidents/2026-05-04-001\" FAILURE-LOG.md 1>&2 && echo ok 1>&2",
+  "setup": [
+    ":> FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "eval spec schema: accepts each category enum value (react|node|types|foundation|standards|compliance|prompt|space|hardening|security|tdd|operational|execution|pr-corpus|workflow|rule-engine|source-folder)",
+  "command": "set -e; for c in react node types foundation standards compliance prompt space hardening security tdd operational execution pr-corpus workflow rule-engine source-folder; do echo \"{\\\"name\\\":\\\"t\\\",\\\"command\\\":\\\"echo hi\\\",\\\"setup\\\":[],\\\"expect\\\":{\\\"exit_code\\\":0},\\\"category\\\":\\\"$c\\\"}\" > spec.json; bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json >/dev/null 2>&1; done; echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

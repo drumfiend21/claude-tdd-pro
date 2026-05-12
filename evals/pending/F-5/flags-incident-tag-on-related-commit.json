@@ -1,0 +1,11 @@
+{
+  "name": "/incident --link-commit <sha> tags that commit with Incident-Ref trailer in commit-msg-template",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 --link-commit deadbeef \"Outage\" && grep -E \"Incident-Ref: 2026-05-04-001\" incidents/2026-05-04-001/commit-template.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

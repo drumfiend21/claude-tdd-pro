@@ -1,0 +1,11 @@
+{
+  "name": "/incident assigns -002, -003 etc. when multiple incidents happen on same date",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 \"A\" && bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 \"B\" && test -d incidents/2026-05-04-002 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

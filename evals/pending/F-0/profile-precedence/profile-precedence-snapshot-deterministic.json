@@ -1,0 +1,13 @@
+{
+  "name": "profile precedence: profile_snapshot_hash is deterministic across runs (§2.5 + §2.7)",
+  "command": "H1=$(bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml --hash); H2=$(bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml --hash); [ \"$H1\" = \"$H2\" ] && echo ok >&2",
+  "setup": [
+    "echo \"extends: [strict]\\nrules:\\n  g-ts-001: error\" > profile.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

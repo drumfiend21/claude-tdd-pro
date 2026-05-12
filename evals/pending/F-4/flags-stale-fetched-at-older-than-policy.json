@@ -1,0 +1,14 @@
+{
+  "name": "drift-detect flags fetched_at older than --max-age-days (default 30)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/drift-detect.sh\" --rule-file \"$PWD/rule.yaml\" --max-age-days 30 --now 2026-05-01T00:00:00Z",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2025-01-01T00:00:00Z\\n  content_hash: sha256:CURRENT\\nrules: []\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "fetched_at",
+      "stale"
+    ]
+  }
+}

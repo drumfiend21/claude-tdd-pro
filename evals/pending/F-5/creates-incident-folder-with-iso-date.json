@@ -1,0 +1,11 @@
+{
+  "name": "/incident creates incidents/YYYY-MM-DD-NNN/ directory using --date or today",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 \"Outage\" && test -d incidents/2026-05-04-001 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

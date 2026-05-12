@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: completes in ≤5s on a 1000-file changeset (§2.2)",
+  "command": "START=$(date +%s); bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\" >/dev/null 2>&1; END=$(date +%s); ELAPSED=$((END-START)); if [ $ELAPSED -le 5 ]; then echo \"ok elapsed=${ELAPSED}s\" >&2; else echo \"FAIL elapsed=${ELAPSED}s exceeds 5s\" >&2; exit 1; fi",
+  "setup": [
+    "mkdir -p src && for i in $(seq 1 1000); do echo \"const x${i}: number = ${i};\" > src/f${i}.ts; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

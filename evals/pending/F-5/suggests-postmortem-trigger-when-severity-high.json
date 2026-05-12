@@ -1,0 +1,12 @@
+{
+  "name": "/incident --severity high prints reminder to run /postmortem for follow-up rubric rules",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 --severity high \"Outage\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "/postmortem",
+      "recommended"
+    ]
+  }
+}

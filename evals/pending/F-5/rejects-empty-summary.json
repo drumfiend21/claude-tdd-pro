@@ -1,0 +1,12 @@
+{
+  "name": "/incident exits 2 when no summary argument is provided",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "summary",
+      "required"
+    ]
+  }
+}

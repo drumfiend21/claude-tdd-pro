@@ -1,0 +1,13 @@
+{
+  "name": "F-2 /measure-rubric: iterates last N commits, default 50",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --dry-run 2>&1 | grep -q \"iterating 50 commits\" && echo ok >&2",
+  "setup": [
+    "git init -q && git config user.email t@t && git config user.name t && for i in $(seq 1 5); do echo \"$i\">f && git add f && git commit -q -m \"c$i\"; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

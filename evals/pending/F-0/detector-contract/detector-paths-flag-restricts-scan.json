@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: --paths <glob> restricts scan to matching files (§2.2)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/included/**\" | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const files=new Set((r.findings||[]).map(f=>f.file));const hasIncluded=Array.from(files).some(f=>f.includes(\"included\"));const hasExcluded=Array.from(files).some(f=>f.includes(\"excluded\"));if(hasIncluded&&!hasExcluded){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: paths glob not honored\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p src/included src/excluded && echo \"const x: any = 1;\" > src/included/a.ts && echo \"const y: any = 2;\" > src/excluded/b.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

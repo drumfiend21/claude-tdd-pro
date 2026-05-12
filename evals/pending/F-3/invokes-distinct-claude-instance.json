@@ -1,0 +1,14 @@
+{
+  "name": "/agent-verify uses a separate Claude invocation token from the editing instance",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/print-id.sh\" 2>verify.out && grep -q \"verifier-instance-id\" verify.out 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'diff --git a/x b/x\\n--- a/x\\n+++ b/x\\n@@\\n+x\\n' > diff.patch",
+    "printf '#!/bin/bash\\necho \"verifier-instance-id=$$\"\\necho \"verdict: agree\"\\nexit 0\\n' > print-id.sh && chmod +x print-id.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

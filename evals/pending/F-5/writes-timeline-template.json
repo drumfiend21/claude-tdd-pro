@@ -1,0 +1,11 @@
+{
+  "name": "/incident writes timeline.md scaffold inside the incident folder",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --date 2026-05-04 \"Outage\" && grep -q \"^## Timeline\" incidents/2026-05-04-001/timeline.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "/agent-verify rejects verifier output that lacks a verdict: agree|disagree line",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/bad.sh\"",
+  "setup": [
+    "printf 'diff' > diff.patch",
+    "printf '#!/bin/bash\\necho \"maybe\"\\nexit 0\\n' > bad.sh && chmod +x bad.sh"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "verdict"
+    ]
+  }
+}

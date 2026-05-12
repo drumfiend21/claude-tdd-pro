@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: --cache-key <key> enables E-12 per-rule per-file cache lookup",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --cache-key \"test-key-1\" --paths \"src/**/*.ts\" | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(typeof r.cache_status===\"string\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: missing cache_status in output\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

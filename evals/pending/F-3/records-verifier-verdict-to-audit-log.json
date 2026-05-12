@@ -1,0 +1,14 @@
+{
+  "name": "/agent-verify writes verifier verdict + reason to .claude-tdd-pro/agent-verify.jsonl",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/agree.sh\" && test -s .claude-tdd-pro/agent-verify.jsonl && grep -q \"verdict\" .claude-tdd-pro/agent-verify.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'diff --git a/x b/x\\n--- a/x\\n+++ b/x\\n@@\\n+x\\n' > diff.patch",
+    "printf '#!/bin/bash\\necho \"verdict: agree\"\\nexit 0\\n' > agree.sh && chmod +x agree.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

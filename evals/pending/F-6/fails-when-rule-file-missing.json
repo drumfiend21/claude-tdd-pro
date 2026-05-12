@@ -1,0 +1,13 @@
+{
+  "name": "codebase-impact exits 2 when --rule-file path does not exist",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-file \"$PWD/no-such.yaml\" --root \"$PWD\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "rule-file",
+      "not",
+      "found"
+    ]
+  }
+}

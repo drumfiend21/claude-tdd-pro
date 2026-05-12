@@ -1,0 +1,14 @@
+{
+  "name": "drift-detect appends a JSONL record to .claude-tdd-pro/drift-log.jsonl on drift",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/drift-detect.sh\" --rule-file \"$PWD/rule.yaml\" --upstream-stub \"$PWD/upstream.sh\"; grep -E \"\\\"source_id\\\":\\\"src-1\\\"\" .claude-tdd-pro/drift-log.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2025-01-01T00:00:00Z\\n  content_hash: sha256:OLD\\nrules: []\\n' > rule.yaml",
+    "printf '#!/bin/bash\\necho \"sha256:NEW\"\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

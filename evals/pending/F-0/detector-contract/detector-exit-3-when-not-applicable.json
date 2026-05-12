@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: exit 3 (skip) when target files do not match the rule's language (§2.2)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"**/*.go\"",
+  "setup": [
+    "mkdir -p src && echo \"package main\" > src/main.go"
+  ],
+  "expect": {
+    "exit_code": 3,
+    "stderr_contains": [
+      "skip"
+    ]
+  }
+}

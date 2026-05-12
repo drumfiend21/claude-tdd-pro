@@ -1,0 +1,15 @@
+{
+  "name": "drift-detect --root recurses through all .yaml files under generated-code-quality-standards/",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/drift-detect.sh\" --root \"$PWD/tree\" --upstream-stub \"$PWD/upstream.sh\"",
+  "setup": [
+    "mkdir -p tree/a/b tree/c",
+    "for f in tree/a/x.yaml tree/a/b/y.yaml tree/c/z.yaml; do printf 'source:\\n  id: %s\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-01T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' \"$f\" > \"$f\"; done",
+    "printf '#!/bin/bash\\necho \"sha256:S\"\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "files_scanned=3"
+    ]
+  }
+}

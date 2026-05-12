@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: --format sarif emits SARIF 2.1.0-conforming output (§2.2 + E-9)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --format sarif --paths \"src/**/*.ts\" | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(r.version===\"2.1.0\"&&Array.isArray(r.runs)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: not a valid SARIF document\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

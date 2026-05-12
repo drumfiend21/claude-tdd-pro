@@ -1,0 +1,11 @@
+{
+  "name": "/incident interactive scaffold asks \"How was this detected?\" and records answer",
+  "command": "echo \"Pagerduty alert on http_5xx\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" --interactive --date 2026-05-04 \"Outage\" && grep -q \"Pagerduty\" incidents/2026-05-04-001/timeline.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

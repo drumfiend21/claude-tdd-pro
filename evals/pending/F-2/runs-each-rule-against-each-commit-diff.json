@@ -1,0 +1,13 @@
+{
+  "name": "F-2 /measure-rubric: runs each rule against each commit diff",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 1 --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(r.runs_per_rule&&Object.keys(r.runs_per_rule).length>0){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}});'",
+  "setup": [
+    "git init -q && git config user.email t@t && git config user.name t && echo x>f && git add f && git commit -q -m c"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

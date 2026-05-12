@@ -1,0 +1,11 @@
+{
+  "name": "F-1 /postmortem: queries Standards layer (S-6 provenance enforcer) for matching upstream sections",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"missing schema validation at API boundary\" 2>&1 | grep -q \"owasp-asvs\" && echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

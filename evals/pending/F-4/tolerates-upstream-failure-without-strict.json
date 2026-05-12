@@ -1,0 +1,15 @@
+{
+  "name": "drift-detect exits 0 with a warning when upstream-stub fails and --strict is NOT set",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/drift-detect.sh\" --rule-file \"$PWD/rule.yaml\" --upstream-stub \"$PWD/fail.sh\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-01T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > rule.yaml",
+    "printf '#!/bin/bash\\nexit 7\\n' > fail.sh && chmod +x fail.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "warning",
+      "upstream"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "F-2.6 /measure-rubric: records token-cost telemetry per rule per invocation (built-in)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(r.total_cost&&typeof r.total_cost.tokens_in===\"number\"&&typeof r.total_cost.tokens_out===\"number\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}});'",
+  "setup": [
+    "git init -q && git config user.email t@t && git config user.name t && echo x>f && git add f && git commit -q -m c"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "F-1 /postmortem: appends dated entry to FAILURE-LOG.md (Huntley-style failure-domain log)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"double-charge on retry\" >/dev/null && grep -q \"double-charge\" FAILURE-LOG.md && grep -E \"^### [0-9]{4}-[0-9]{2}-[0-9]{2}\" FAILURE-LOG.md && echo ok >&2",
+  "setup": [
+    "touch FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

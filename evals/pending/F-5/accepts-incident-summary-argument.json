@@ -1,0 +1,11 @@
+{
+  "name": "/incident accepts a one-line incident summary as positional argument",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" \"Auth service returned 500 for 3 minutes\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "recorded"
+    ]
+  }
+}

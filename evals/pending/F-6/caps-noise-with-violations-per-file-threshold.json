@@ -1,0 +1,14 @@
+{
+  "name": "codebase-impact stops scanning a file after --max-per-file violations (default 50)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\" --max-per-file 50 --format json 2>impact.txt && grep -E \"\\\"truncated\\\":true\" impact.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && for i in $(seq 1 200); do echo \"console.log($i)\"; done > tree/loud.js",
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: nc\\n    name: nc\\n    description: x\\n    detector: bash -c \"grep -n console.log\"\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

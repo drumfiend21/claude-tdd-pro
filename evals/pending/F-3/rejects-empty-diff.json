@@ -1,0 +1,15 @@
+{
+  "name": "/agent-verify exits 2 when the diff file is empty (nothing to verify)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/agree.sh\"",
+  "setup": [
+    ": > diff.patch",
+    "printf '#!/bin/bash\\necho \"verdict: agree\"\\nexit 0\\n' > agree.sh && chmod +x agree.sh"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "empty",
+      "diff"
+    ]
+  }
+}

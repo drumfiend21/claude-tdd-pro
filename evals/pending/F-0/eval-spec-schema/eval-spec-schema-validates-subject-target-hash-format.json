@@ -1,0 +1,11 @@
+{
+  "name": "eval spec schema: subject_target_hash must be sha256-prefixed hex (§2.4)",
+  "command": "echo '{\"name\":\"t\",\"command\":\"echo hi\",\"setup\":[],\"expect\":{\"exit_code\":0},\"subject_target_hash\":\"not-a-hash\"}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"subject_target_hash\" && echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

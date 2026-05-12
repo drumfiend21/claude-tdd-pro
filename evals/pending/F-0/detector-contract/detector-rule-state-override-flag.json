@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: --rule-state-override bypasses canary state for testing (§2.2 + O-7)",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --rule-state-override block --paths \"src/**/*.ts\"); echo \"$OUT\" | grep -q '\"rule_state\":\"block\"' && echo ok >&2",
+  "setup": [
+    "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

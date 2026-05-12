@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: --options <json> passes JSON-validated options to detector (§2.2 + E-2)",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --options '{\"max_per_file\":0,\"allow_with_comment\":false}' --paths \"src/**/*.ts\"); echo \"$OUT\" | grep -q '\"max_per_file\":0' && echo ok >&2",
+  "setup": [
+    "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

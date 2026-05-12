@@ -1,0 +1,11 @@
+{
+  "name": "detector contract: exit 0 when target files have no violations (§2.2)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\"",
+  "setup": [
+    "mkdir -p src && echo \"const x: number = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": []
+  }
+}
