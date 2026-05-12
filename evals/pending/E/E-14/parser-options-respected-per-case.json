@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: per-case parserOptions override the harness default",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/null.js\" --tests \"$PWD/tests/parser.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"x\"}},create:()=>({})}' > rules/null.js",
+    "echo '{\"valid\":[{\"code\":\"const x = 1n;\",\"parserOptions\":{\"ecmaVersion\":2020}}],\"invalid\":[]}' > tests/parser.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "1 passed"
+    ]
+  }
+}

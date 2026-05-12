@@ -1,0 +1,13 @@
+{
+  "name": "plugin loader: short name \"acme\" resolves to package \"eslint-plugin-acme\"",
+  "command": "node -e 'const p=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/plugin-loader.js\");const path=p.resolvePluginPath(\"acme\",{cwd:process.env.PWD});if(path&&path.includes(\"eslint-plugin-acme\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL \"+path+\"\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p node_modules/eslint-plugin-acme && echo 'module.exports={rules:{}}' > node_modules/eslint-plugin-acme/index.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

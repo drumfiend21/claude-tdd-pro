@@ -1,0 +1,13 @@
+{
+  "name": "AST walker: matches selector `Program > VariableDeclaration` (top-level var)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule selector-trace --selector \"Program > VariableDeclaration\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo \"const x = 1; function f(){ const y = 2; }\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "matched"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "config cascade: unknown top-level keys are rejected with suggestion",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo 'module.exports={rulez:{\"no-eval\":\"error\"}}' > rule-engine.config.js",
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "unknown",
+      "rulez",
+      "rules"
+    ]
+  }
+}

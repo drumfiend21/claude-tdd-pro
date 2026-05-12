@@ -1,0 +1,17 @@
+{
+  "name": "config cascade: later items in extends:[] override settings from earlier items",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/file.js\" --print-effective-config 2>out.json && grep -E '\"no-eval\":\"warn\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p node_modules/eslint-config-a node_modules/eslint-config-b",
+    "echo 'module.exports={rules:{\"no-eval\":\"error\"}}' > node_modules/eslint-config-a/index.js",
+    "echo 'module.exports={rules:{\"no-eval\":\"warn\"}}' > node_modules/eslint-config-b/index.js",
+    "echo 'module.exports={extends:[\"a\",\"b\"]}' > rule-engine.config.js",
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

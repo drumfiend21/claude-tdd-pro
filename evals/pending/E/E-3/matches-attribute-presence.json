@@ -1,0 +1,13 @@
+{
+  "name": "AST walker: matches selector `FunctionDeclaration[async=true]` (async function)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule selector-trace --selector \"FunctionDeclaration[async=true]\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo \"async function f(){}\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "matched"
+    ]
+  }
+}

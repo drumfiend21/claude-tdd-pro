@@ -1,0 +1,13 @@
+{
+  "name": "suggestions: --apply-suggestions <unknown> does nothing and emits a warning",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule suggest-rename --in \"$PWD/file.js\" --apply-suggestions does-not-exist 2>out.txt && grep -E 'no suggestion' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'const x=1;' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

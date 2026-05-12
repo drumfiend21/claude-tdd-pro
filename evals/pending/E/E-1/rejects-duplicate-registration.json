@@ -1,0 +1,11 @@
+{
+  "name": "rule registry: registerRule throws when an id is already registered",
+  "command": "node -e 'const r=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/registry.js\");const stub={meta:{type:\"problem\"},create:()=>({})};r.registerRule(\"no-eval\",stub);try{r.registerRule(\"no-eval\",stub);process.stderr.write(\"FAIL no throw\\n\");process.exit(1)}catch(e){if(/duplicate/i.test(e.message)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL wrong error: \"+e.message+\"\\n\");process.exit(1)}}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

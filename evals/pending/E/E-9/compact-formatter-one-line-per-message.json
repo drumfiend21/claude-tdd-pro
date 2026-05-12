@@ -1,0 +1,13 @@
+{
+  "name": "reporter: compact formatter emits exactly one line per message in <file>:<line>:<col>: format",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format compact 2>out && grep -E '^[^:]+:[0-9]+:[0-9]+:' out 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "directives: block enable re-enables; subsequent violations fire",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2",
+  "setup": [
+    "printf \"/* eslint-disable no-eval */ /* eslint-enable no-eval */ eval(x)\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "no-eval"
+    ]
+  }
+}

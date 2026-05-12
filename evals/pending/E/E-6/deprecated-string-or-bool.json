@@ -1,0 +1,13 @@
+{
+  "name": "rule meta: rule.meta.deprecated may be boolean true or {message,replacedBy}",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --validate-meta --rule-file \"$PWD/rule.js\"",
+  "setup": [
+    "echo \"module.exports={\\\"meta\\\":{\\\"type\\\":\\\"problem\\\",\\\"deprecated\\\":42},\\\"create\\\":()=>({})}\" > rule.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "deprecated"
+    ]
+  }
+}

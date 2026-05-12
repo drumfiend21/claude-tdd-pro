@@ -1,0 +1,13 @@
+{
+  "name": "AST walker: matches selector `BinaryExpression[operator='==']` (a == b)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule selector-trace --selector \"BinaryExpression[operator='==']\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo \"const r = a == b;\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "matched"
+    ]
+  }
+}

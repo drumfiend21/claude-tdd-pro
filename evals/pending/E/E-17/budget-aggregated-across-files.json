@@ -1,0 +1,13 @@
+{
+  "name": "perf budget: total ms across all files surfaced as run.totals.ms in JSON report",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --report-format json 2>out.json && grep -E '\"totals\":\\{[^}]*\"ms\":[0-9]+' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && for i in 1 2 3; do echo 'eval(x)' > src/f${i}.js; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

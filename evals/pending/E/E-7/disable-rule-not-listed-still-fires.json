@@ -1,0 +1,13 @@
+{
+  "name": "directives: unrelated disable does not suppress other rules",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2",
+  "setup": [
+    "printf \"// eslint-disable-next-line some-other-rule\\\\neval(x)\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "no-eval"
+    ]
+  }
+}

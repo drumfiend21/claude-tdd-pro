@@ -1,0 +1,13 @@
+{
+  "name": "directives: comma list disables every named rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"/* eslint-disable no-eval, no-alert */ eval(x); alert(y);\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

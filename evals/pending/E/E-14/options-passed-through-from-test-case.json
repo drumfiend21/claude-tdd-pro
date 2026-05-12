@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: test case options array is forwarded to context.options",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/opts.js\" --tests \"$PWD/tests/opts.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"max={{m}}\"}},create:c=>({Program:n=>{c.report({node:n,messageId:\"a\",data:{m:c.options[0].max}})}})}' > rules/opts.js",
+    "echo '{\"valid\":[],\"invalid\":[{\"code\":\"x\",\"options\":[{\"max\":5}],\"errors\":[{\"message\":\"max=5\"}]}]}' > tests/opts.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "1 passed"
+    ]
+  }
+}

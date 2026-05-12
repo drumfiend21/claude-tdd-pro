@@ -1,0 +1,16 @@
+{
+  "name": "RuleTester: invalid case fails when rule produces no messages",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/silent.js\" --tests \"$PWD/tests/silent.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"x\"}},create:()=>({})}' > rules/silent.js",
+    "echo '{\"valid\":[],\"invalid\":[{\"code\":\"eval(x)\",\"errors\":[{\"messageId\":\"a\"}]}]}' > tests/silent.test.json"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "expected",
+      "none"
+    ]
+  }
+}

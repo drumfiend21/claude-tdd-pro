@@ -1,0 +1,16 @@
+{
+  "name": "RuleTester: invalid case fails when actual message count differs from errors array length",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/no-eval.js\" --tests \"$PWD/tests/wrong-count.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"x\"}},create:c=>({CallExpression:n=>{c.report({node:n,messageId:\"a\"})}})}' > rules/no-eval.js",
+    "echo '{\"valid\":[],\"invalid\":[{\"code\":\"foo(); bar();\",\"errors\":[{\"messageId\":\"a\"}]}]}' > tests/wrong-count.test.json"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "expected 1",
+      "got 2"
+    ]
+  }
+}

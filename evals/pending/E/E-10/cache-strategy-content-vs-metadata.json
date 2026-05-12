@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: --cache-strategy=metadata uses mtime+size (faster), content hashes when omitted",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/f.js\" --cache --cache-strategy metadata --cache-location \"$PWD/.cache\" --report-format json 2>out.json && grep -E '\"cache_strategy\":\"metadata\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

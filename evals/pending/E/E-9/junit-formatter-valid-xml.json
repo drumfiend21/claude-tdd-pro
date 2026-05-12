@@ -1,0 +1,13 @@
+{
+  "name": "reporter: junit formatter emits valid <testsuite> XML root",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format junit 2>out && grep -E '<testsuite' out 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

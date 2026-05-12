@@ -1,0 +1,13 @@
+{
+  "name": "messageId: {{name}} placeholders in messages template substituted from data field",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule msgid-data --in \"$PWD/file.js\" --report-format json 2>out.json && grep -E \"unexpected x\" out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'const x = 1; x;' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

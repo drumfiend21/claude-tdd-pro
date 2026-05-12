@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: --no-cache disables cache reads and writes",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/f.js\" --no-cache --cache-location \"$PWD/.cache\" 2>/dev/null; [ ! -f .cache ] && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

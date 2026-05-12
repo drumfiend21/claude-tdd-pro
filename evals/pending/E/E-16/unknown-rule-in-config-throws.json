@@ -1,0 +1,15 @@
+{
+  "name": "config cascade: a config referencing an unregistered rule id throws on load",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo 'module.exports={rules:{\"made-up-rule-xyz\":\"error\"}}' > rule-engine.config.js",
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "unknown rule",
+      "made-up-rule-xyz"
+    ]
+  }
+}

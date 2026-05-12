@@ -1,0 +1,13 @@
+{
+  "name": "plugin loader: throws when a plugin rule lacks meta or create (no partial registration)",
+  "command": "node -e 'const p=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/plugin-loader.js\");try{p.loadPlugin(\"acme\",{cwd:process.env.PWD});process.stderr.write(\"FAIL\\n\");process.exit(1)}catch(e){if(/meta|create/i.test(e.message)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: \"+e.message+\"\\n\");process.exit(1)}}'",
+  "setup": [
+    "mkdir -p node_modules/eslint-plugin-acme && echo 'module.exports={rules:{broken:{}}}' > node_modules/eslint-plugin-acme/index.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

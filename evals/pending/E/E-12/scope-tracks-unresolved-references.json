@@ -1,0 +1,13 @@
+{
+  "name": "source code analyzer: scope.through contains references to undeclared variables",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule scope-unresolved --in \"$PWD/file.js\" 2>out.txt && grep -E \"foo\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"foo()\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

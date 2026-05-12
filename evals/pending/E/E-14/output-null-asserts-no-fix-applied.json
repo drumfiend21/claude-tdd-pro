@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: output:null asserts the rule reported but applied no fix",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/no-fix.js\" --tests \"$PWD/tests/no-fix.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"x\"}},create:c=>({CallExpression:n=>{c.report({node:n,messageId:\"a\"})}})}' > rules/no-fix.js",
+    "echo '{\"valid\":[],\"invalid\":[{\"code\":\"eval(x)\",\"output\":null,\"errors\":[{\"messageId\":\"a\"}]}]}' > tests/no-fix.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "1 passed"
+    ]
+  }
+}

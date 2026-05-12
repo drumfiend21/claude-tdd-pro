@@ -1,0 +1,13 @@
+{
+  "name": "AST walker: matches selector `MemberExpression[property.name='innerHTML']` (el.innerHTML)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule selector-trace --selector \"MemberExpression[property.name='innerHTML']\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo \"el.innerHTML = x;\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "matched"
+    ]
+  }
+}

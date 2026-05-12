@@ -1,0 +1,14 @@
+{
+  "name": "config cascade: CLI --rule-config flag overrides any file-based config for that rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/file.js\" --rule no-eval --severity off --print-effective-config 2>out.json && grep -E '\"no-eval\":\"off\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'module.exports={rules:{\"no-eval\":\"error\"}}' > rule-engine.config.js",
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

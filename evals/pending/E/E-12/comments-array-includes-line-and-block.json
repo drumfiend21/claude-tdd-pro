@@ -1,0 +1,13 @@
+{
+  "name": "source code analyzer: getSourceCode().getAllComments() returns line and block comments",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule comments-trace --in \"$PWD/file.js\" 2>out.txt && grep -E \"Block\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"// hi\\\\n/* bye */ const x = 1;\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

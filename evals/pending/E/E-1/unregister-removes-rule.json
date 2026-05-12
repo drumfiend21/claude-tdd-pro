@@ -1,0 +1,11 @@
+{
+  "name": "rule registry: unregisterRule(id) removes the rule so listRules no longer includes it",
+  "command": "node -e 'const r=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/registry.js\");r.unregisterRule(\"no-eval\");if(!r.listRules().includes(\"no-eval\")&&r.loadRule(\"no-eval\")===undefined){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

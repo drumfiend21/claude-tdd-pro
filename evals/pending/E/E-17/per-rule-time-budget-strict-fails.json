@@ -1,0 +1,14 @@
+{
+  "name": "perf budget: --enforce-budget=strict converts budget violation to non-zero exit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule slow-rule --in \"$PWD/file.js\" --enforce-budget=strict",
+  "setup": [
+    "for i in $(seq 1 1000); do echo \"const x${i}=${i};\" >> file.js; done"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "budget",
+      "exceeded"
+    ]
+  }
+}

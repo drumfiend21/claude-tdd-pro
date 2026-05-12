@@ -1,0 +1,16 @@
+{
+  "name": "config cascade: nested config in subdir overrides root settings for files below it",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/pkg/a.js\" --report-format json 2>out.json && [ \"$(node -e 'console.log(JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\")).messages.length)')\" = \"0\" ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p pkg",
+    "echo 'module.exports={rules:{\"no-eval\":\"error\"}}' > rule-engine.config.js",
+    "echo 'module.exports={rules:{\"no-eval\":\"off\"}}' > pkg/rule-engine.config.js",
+    "echo 'eval(x)' > pkg/a.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

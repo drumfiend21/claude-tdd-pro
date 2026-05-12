@@ -1,0 +1,14 @@
+{
+  "name": "perf budget: meta.budget with non-numeric ms_per_kloc rejected at registration",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --validate-meta --rule-file \"$PWD/rule.js\"",
+  "setup": [
+    "echo 'module.exports={meta:{type:\"problem\",budget:{ms_per_kloc:\"fast\"}},create:()=>({})}' > rule.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "ms_per_kloc",
+      "number"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "rule registry: accepts namespaced ids of form \"<plugin>/<rule>\" with internal slash",
+  "command": "node -e 'const r=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/registry.js\");const stub={meta:{type:\"problem\"},create:()=>({})};r.registerRule(\"acme/foo-bar\",stub);if(r.loadRule(\"acme/foo-bar\")===stub){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

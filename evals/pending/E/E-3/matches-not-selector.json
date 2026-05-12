@@ -1,0 +1,13 @@
+{
+  "name": "AST walker: matches selector `CallExpression:not([callee.name='safe'])` (unsafe()",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule selector-trace --selector \"CallExpression:not([callee.name='safe'])\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo \"unsafe(x); safe(y);\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "matched"
+    ]
+  }
+}

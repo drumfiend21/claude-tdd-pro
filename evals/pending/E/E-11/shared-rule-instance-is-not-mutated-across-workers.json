@@ -1,0 +1,13 @@
+{
+  "name": "parallel runner: each worker gets a fresh rule instance; closure state does not leak across worker tasks",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule counter-rule --in \"$PWD/src/**/*.js\" --concurrency 4 --report-format json 2>out.json && node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));if(r.messages.every(m=>m.data.count===1)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p src && for i in 1 2 3 4; do echo \"const x = $i;\" > src/f${i}.js; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

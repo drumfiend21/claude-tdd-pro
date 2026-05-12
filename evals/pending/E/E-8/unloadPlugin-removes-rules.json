@@ -1,0 +1,13 @@
+{
+  "name": "plugin loader: unloadPlugin(\"acme\") removes acme/* rules from the registry",
+  "command": "node -e 'const p=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/plugin-loader.js\");const reg=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/registry.js\");p.loadPlugin(\"acme\",{cwd:process.env.PWD});p.unloadPlugin(\"acme\");if(reg.loadRule(\"acme/foo\")===undefined){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p node_modules/eslint-plugin-acme && echo 'module.exports={rules:{foo:{meta:{type:\"problem\"},create:()=>({})}}}' > node_modules/eslint-plugin-acme/index.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "AST walker: matches selector `FunctionDeclaration ReturnStatement` (return inside function)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule selector-trace --selector \"FunctionDeclaration ReturnStatement\" --in \"$PWD/file.js\"",
+  "setup": [
+    "echo \"function f(){ return 1; }\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "matched"
+    ]
+  }
+}

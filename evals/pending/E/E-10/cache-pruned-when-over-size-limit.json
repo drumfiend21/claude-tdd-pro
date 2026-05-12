@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: --cache-max-bytes prunes oldest entries to stay under limit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/big.js\" --cache --cache-location \"$PWD/.cache\" --cache-max-bytes 1024 --cache-stats 2>out.json && grep -E '\"pruned\":[1-9]' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && for i in $(seq 1 100); do echo \"const x${i}='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';\" >> big.js; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

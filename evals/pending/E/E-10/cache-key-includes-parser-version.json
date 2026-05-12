@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: parser package version is part of cache key (parser upgrade invalidates)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --parser-version 1.0 --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --parser-version 2.0 --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" --report-format json 2>out.json && grep -E '\"cache_status\":\"miss\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

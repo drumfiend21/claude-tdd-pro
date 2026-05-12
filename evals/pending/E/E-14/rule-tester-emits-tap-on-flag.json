@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: --reporter tap emits TAP-formatted output (1..N, ok/not ok lines)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/no-eval.js\" --tests \"$PWD/tests/no-eval.test.json\" --reporter tap 2>out.tap && grep -E '^(1\\.\\.|ok |not ok )' out.tap 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"x\"}},create:c=>({CallExpression:n=>{if(n.callee.name===\"eval\")c.report({node:n,messageId:\"a\"})}})}' > rules/no-eval.js",
+    "echo '{\"valid\":[{\"code\":\"const x=1;\"}],\"invalid\":[{\"code\":\"eval(x)\",\"errors\":[{\"messageId\":\"a\"}]}]}' > tests/no-eval.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

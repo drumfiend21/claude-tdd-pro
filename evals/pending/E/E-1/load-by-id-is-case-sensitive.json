@@ -1,0 +1,11 @@
+{
+  "name": "rule registry: loadRule lookup is exact-match case-sensitive (no fuzzy resolution)",
+  "command": "node -e 'const r=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/registry.js\");if(r.loadRule(\"No-Eval\")===undefined){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

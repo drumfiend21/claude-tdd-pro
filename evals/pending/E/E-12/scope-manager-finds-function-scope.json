@@ -1,0 +1,13 @@
+{
+  "name": "source code analyzer: getScope() inside a FunctionDeclaration returns scope with kind=function",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule scope-function --in \"$PWD/file.js\" 2>out.txt && grep -E \"function\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"function f(){ const x = 1; }\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

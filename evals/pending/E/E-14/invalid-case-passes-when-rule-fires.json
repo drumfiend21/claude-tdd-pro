@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: invalid case passes when rule produces matching messageId",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/no-eval.js\" --tests \"$PWD/tests/no-eval.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"x\"}},create:c=>({CallExpression:n=>{if(n.callee.name===\"eval\")c.report({node:n,messageId:\"a\"})}})}' > rules/no-eval.js",
+    "echo '{\"valid\":[],\"invalid\":[{\"code\":\"eval(x)\",\"errors\":[{\"messageId\":\"a\"}]}]}' > tests/no-eval.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "1 passed"
+    ]
+  }
+}

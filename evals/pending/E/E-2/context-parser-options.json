@@ -1,0 +1,13 @@
+{
+  "name": "rule context: context.parserOptions reflects the merged parserOptions for this file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule trace-context --in \"$PWD/file.js\" --assert parser-options",
+  "setup": [
+    "mkdir -p src && echo 'const x = 1;' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

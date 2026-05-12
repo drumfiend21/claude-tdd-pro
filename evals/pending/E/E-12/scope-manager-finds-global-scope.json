@@ -1,0 +1,13 @@
+{
+  "name": "source code analyzer: getScope() at Program node returns the global scope with kind=global",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule scope-global --in \"$PWD/file.js\" 2>out.txt && grep -E \"global\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"const x = 1;\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

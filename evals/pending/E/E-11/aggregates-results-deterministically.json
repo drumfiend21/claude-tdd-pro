@@ -1,0 +1,13 @@
+{
+  "name": "parallel runner: aggregated results are sorted by filePath (stable across runs/workers)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --concurrency 4 --format json 2>r1.json; bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --concurrency 4 --format json 2>r2.json; diff r1.json r2.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && for i in $(seq 1 20); do echo \"eval(${i});\" > src/f${i}.js; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

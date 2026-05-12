@@ -1,0 +1,13 @@
+{
+  "name": "parallel runner: --concurrency N spawns N worker threads (verifiable via --report-workers)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --concurrency 4 --report-workers 2>out.json && grep -E '\"workers_spawned\":4' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && for i in $(seq 1 40); do echo \"const x = ${i};\" > src/f${i}.js; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

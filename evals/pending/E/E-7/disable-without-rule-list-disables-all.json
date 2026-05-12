@@ -1,0 +1,13 @@
+{
+  "name": "directives: block disable without rule list disables every rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"/* eslint-disable */ eval(x); something(x)\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

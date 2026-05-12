@@ -1,0 +1,16 @@
+{
+  "name": "config cascade: extends:[\"acme/recommended\"] merges in rules from the shareable config",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/file.js\" --report-format json 2>out.json && grep -E '\"ruleId\":\"acme/foo\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p node_modules/eslint-config-acme",
+    "echo 'module.exports={rules:{\"acme/foo\":\"error\"}}' > node_modules/eslint-config-acme/recommended.js",
+    "echo 'module.exports={extends:[\"acme/recommended\"]}' > rule-engine.config.js",
+    "echo 'TARGET' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

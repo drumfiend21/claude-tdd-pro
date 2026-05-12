@@ -1,0 +1,14 @@
+{
+  "name": "severity resolver: array config with > 2 elements rejected (only [severity, options])",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --config '[\"error\",{},{\"extra\":true}]' --in \"$PWD/file.js\"",
+  "setup": [
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "too many",
+      "elements"
+    ]
+  }
+}

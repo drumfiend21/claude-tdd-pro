@@ -1,0 +1,13 @@
+{
+  "name": "rule meta: rule.meta.docs.url must be https:// URL",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --validate-meta --rule-file \"$PWD/rule.js\"",
+  "setup": [
+    "echo \"module.exports={\\\"meta\\\":{\\\"type\\\":\\\"problem\\\",\\\"docs\\\":{\\\"url\\\":\\\"http://example.com\\\"}},\\\"create\\\":()=>({})}\" > rule.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "https"
+    ]
+  }
+}

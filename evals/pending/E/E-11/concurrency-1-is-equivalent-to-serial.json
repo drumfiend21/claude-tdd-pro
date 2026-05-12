@@ -1,0 +1,13 @@
+{
+  "name": "parallel runner: --concurrency 1 produces identical output to --no-parallel",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --concurrency 1 --format json 2>par.json; bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --no-parallel --format json 2>ser.json; diff par.json ser.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && echo 'eval(1)' > src/a.js && echo 'eval(2)' > src/b.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

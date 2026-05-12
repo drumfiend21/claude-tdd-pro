@@ -1,0 +1,15 @@
+{
+  "name": "suggestions: suggestion.fix(fixer) returning non-fix-object throws",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule suggest-bad-fix --in \"$PWD/file.js\" --apply-suggestions x",
+  "setup": [
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "fix",
+      "must",
+      "return"
+    ]
+  }
+}

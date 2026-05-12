@@ -1,0 +1,13 @@
+{
+  "name": "rule context: context.filename equals the file path passed to the engine",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule trace-context --in \"$PWD/file.js\" --assert filename",
+  "setup": [
+    "mkdir -p src && echo 'const x = 1;' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

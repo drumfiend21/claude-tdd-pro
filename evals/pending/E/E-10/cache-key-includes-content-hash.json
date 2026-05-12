@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: cache key for (rule,file) includes sha256 of file content (changes invalidate)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" 2>r1.json; sha1=$(node -e 'console.log(require(\\\"crypto\\\").createHash(\\\"sha1\\\").update(require(\\\"fs\\\").readFileSync(\\\".cache\\\")).digest(\\\"hex\\\"))'); echo \"ok=true\" > f.js; bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" 2>r2.json; sha2=$(node -e 'console.log(require(\\\"crypto\\\").createHash(\\\"sha1\\\").update(require(\\\"fs\\\").readFileSync(\\\".cache\\\")).digest(\\\"hex\\\"))'); [ \"$sha1\" != \"$sha2\" ] && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

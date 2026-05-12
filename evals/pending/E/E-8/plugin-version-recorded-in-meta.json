@@ -1,0 +1,13 @@
+{
+  "name": "plugin loader: loaded plugin records its package.json version under getPluginMeta(name).version",
+  "command": "node -e 'const p=require(\"$CLAUDE_PLUGIN_ROOT/rule-engine/plugin-loader.js\");p.loadPlugin(\"acme\",{cwd:process.env.PWD});const m=p.getPluginMeta(\"acme\");if(m.version===\"1.2.3\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL \"+m.version+\"\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p node_modules/eslint-plugin-acme && echo '{\"name\":\"eslint-plugin-acme\",\"version\":\"1.2.3\",\"main\":\"index.js\"}' > node_modules/eslint-plugin-acme/package.json && echo 'module.exports={rules:{}}' > node_modules/eslint-plugin-acme/index.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

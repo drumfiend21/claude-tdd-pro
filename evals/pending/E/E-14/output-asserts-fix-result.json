@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: invalid case with output field asserts post-fix code matches exactly",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/fix-eval.js\" --tests \"$PWD/tests/fix.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",fixable:\"code\",messages:{a:\"x\"}},create:c=>({CallExpression:n=>{if(n.callee.name===\"eval\")c.report({node:n,messageId:\"a\",fix:f=>f.replaceText(n.callee,\"safe\")})}})}' > rules/fix-eval.js",
+    "echo '{\"valid\":[],\"invalid\":[{\"code\":\"eval(x)\",\"output\":\"safe(x)\",\"errors\":[{\"messageId\":\"a\"}]}]}' > tests/fix.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "1 passed"
+    ]
+  }
+}

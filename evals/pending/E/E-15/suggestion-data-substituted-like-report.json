@@ -1,0 +1,13 @@
+{
+  "name": "suggestions: suggestion.data placeholders substituted into description",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule suggest-data --in \"$PWD/file.js\" --report-format json 2>out.json && grep -E '\"desc\":\"replace foo with bar\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'foo' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

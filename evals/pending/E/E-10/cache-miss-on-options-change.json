@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: changing rule options invalidates cached entries (options part of cache key)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule trace-options --config '[\"error\",{\"max\":5}]' --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule trace-options --config '[\"error\",{\"max\":7}]' --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" --report-format json 2>out.json && grep -E '\"cache_status\":\"miss\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'x' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

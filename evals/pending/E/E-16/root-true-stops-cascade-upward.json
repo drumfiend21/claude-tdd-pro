@@ -1,0 +1,16 @@
+{
+  "name": "config cascade: root:true in a config stops upward search for ancestor configs",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/sub/file.js\" --print-effective-config 2>out.json && ! grep -E '\"no-alert\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p sub",
+    "echo 'module.exports={rules:{\"no-alert\":\"error\"}}' > rule-engine.config.js",
+    "echo 'module.exports={root:true,rules:{\"no-eval\":\"error\"}}' > sub/rule-engine.config.js",
+    "echo 'x' > sub/file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

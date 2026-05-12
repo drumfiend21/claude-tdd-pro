@@ -1,0 +1,14 @@
+{
+  "name": "severity resolver: severity value other than 0/1/2/off/warn/error throws",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity 7 --in \"$PWD/file.js\"",
+  "setup": [
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "severity",
+      "invalid"
+    ]
+  }
+}

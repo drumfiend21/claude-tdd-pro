@@ -1,0 +1,13 @@
+{
+  "name": "rule meta: rule.meta.hasSuggestions must be boolean",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --validate-meta --rule-file \"$PWD/rule.js\"",
+  "setup": [
+    "echo \"module.exports={\\\"meta\\\":{\\\"type\\\":\\\"problem\\\",\\\"hasSuggestions\\\":\\\"true\\\"},\\\"create\\\":()=>({})}\" > rule.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "hasSuggestions"
+    ]
+  }
+}

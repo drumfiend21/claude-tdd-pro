@@ -1,0 +1,13 @@
+{
+  "name": "severity resolver: numeric 2 and string \"error\" produce identical behavior and output",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity 2 --in \"$PWD/file.js\" --report-format json 2>num.json; bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --report-format json 2>str.json; diff num.json str.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

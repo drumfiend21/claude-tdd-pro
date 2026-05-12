@@ -1,0 +1,13 @@
+{
+  "name": "rule context: context.options is an array matching what was configured for this rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule trace-context --in \"$PWD/file.js\" --assert options-array",
+  "setup": [
+    "mkdir -p src && echo 'const x = 1;' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

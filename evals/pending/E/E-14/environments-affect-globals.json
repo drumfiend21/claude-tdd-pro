@@ -1,0 +1,15 @@
+{
+  "name": "RuleTester: per-case env:{node:true} makes node globals available",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/rule-tester.sh\" --rule-file \"$PWD/rules/no-undef.js\" --tests \"$PWD/tests/env.test.json\"",
+  "setup": [
+    "mkdir -p rules tests",
+    "echo 'module.exports={meta:{type:\"problem\",messages:{a:\"undef\"}},create:c=>({Identifier:n=>{const s=c.getScope();if(s.through.find(r=>r.identifier===n))c.report({node:n,messageId:\"a\"})}})}' > rules/no-undef.js",
+    "echo '{\"valid\":[{\"code\":\"process.env\",\"env\":{\"node\":true}}],\"invalid\":[]}' > tests/env.test.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "1 passed"
+    ]
+  }
+}

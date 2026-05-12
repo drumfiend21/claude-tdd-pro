@@ -1,0 +1,14 @@
+{
+  "name": "reporter: requesting an unknown formatter name throws with available list",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format does-not-exist",
+  "setup": [
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "format",
+      "available"
+    ]
+  }
+}

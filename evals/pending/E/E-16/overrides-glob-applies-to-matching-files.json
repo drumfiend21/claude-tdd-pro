@@ -1,0 +1,16 @@
+{
+  "name": "config cascade: overrides:[{files:[\"**/*.test.js\"]}] applies only to matching paths",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/src/x.test.js\" --report-format json 2>out1.json && [ \"$(node -e 'console.log(JSON.parse(require(\"fs\").readFileSync(\"out1.json\",\"utf8\")).messages.length)')\" = \"0\" ] && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --in \"$PWD/src/x.js\" --report-format json 2>out2.json; [ \"$(node -e 'console.log(JSON.parse(require(\"fs\").readFileSync(\"out2.json\",\"utf8\")).messages.length)')\" = \"1\" ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src",
+    "echo 'module.exports={rules:{\"no-eval\":\"error\"},overrides:[{files:[\"**/*.test.js\"],rules:{\"no-eval\":\"off\"}}]}' > rule-engine.config.js",
+    "echo 'eval(x)' > src/x.js",
+    "echo 'eval(x)' > src/x.test.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

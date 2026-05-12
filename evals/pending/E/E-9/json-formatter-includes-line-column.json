@@ -1,0 +1,13 @@
+{
+  "name": "reporter: json formatter messages include line, column, endLine, endColumn",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format json 2>out && grep -E '\"line\":[0-9]+.*\"column\":[0-9]+' out 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "rule meta: rule.meta.type \"layout\" requires fixable to be \"whitespace\" or null (not \"code\")",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --validate-meta --rule-file \"$PWD/rule.js\"",
+  "setup": [
+    "echo \"module.exports={\\\"meta\\\":{\\\"type\\\":\\\"layout\\\",\\\"fixable\\\":\\\"code\\\"},\\\"create\\\":()=>({})}\" > rule.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "layout"
+    ]
+  }
+}

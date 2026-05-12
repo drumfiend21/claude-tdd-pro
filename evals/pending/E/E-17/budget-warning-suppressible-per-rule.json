@@ -1,0 +1,13 @@
+{
+  "name": "perf budget: meta.budget.suppress_warnings=true opts out of the warning",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule slow-suppressed --in \"$PWD/file.js\" --enforce-budget 2>out.txt; ! grep -E 'budget exceeded' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "for i in $(seq 1 1000); do echo \"const x${i}=${i};\" >> file.js; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

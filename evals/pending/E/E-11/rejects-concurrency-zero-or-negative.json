@@ -1,0 +1,14 @@
+{
+  "name": "parallel runner: --concurrency 0 or negative rejected with clear error",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --in \"$PWD/src/**/*.js\" --concurrency 0",
+  "setup": [
+    "mkdir -p src && echo 'eval(1)' > src/a.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "concurrency",
+      "positive"
+    ]
+  }
+}

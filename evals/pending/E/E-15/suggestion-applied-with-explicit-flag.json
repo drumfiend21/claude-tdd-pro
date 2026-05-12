@@ -1,0 +1,13 @@
+{
+  "name": "suggestions: --apply-suggestions <messageId> applies the named suggestion",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule suggest-rename --in \"$PWD/file.js\" --apply-suggestions rename-to-new && grep -E 'newName' file.js 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'const oldName = 1;' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

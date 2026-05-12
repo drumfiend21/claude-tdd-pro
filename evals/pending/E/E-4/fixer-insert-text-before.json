@@ -1,0 +1,13 @@
+{
+  "name": "fixer API: fixer.insertTextBefore(node, '/* x */ ') prepends to node range",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule \"fixer-insert-before\" --in \"$PWD/file.js\" --fix && diff <(printf %s \"/* x */ foo()\") file.js 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf %s \"foo()\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

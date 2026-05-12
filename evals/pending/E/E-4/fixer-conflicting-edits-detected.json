@@ -1,0 +1,13 @@
+{
+  "name": "fixer API: overlapping fix ranges throw or skip with diagnostic",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule \"fixer-conflict\" --in \"$PWD/file.js\" --fix && diff <(printf %s \"xxx\") file.js 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf %s \"xxx\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
