@@ -1,0 +1,13 @@
+{
+  "name": "audit log: writers append (never truncate); existing lines are preserved across runs",
+  "command": "echo '{\"timestamp\":\"2026-01-01T00:00:00Z\",\"actor\":\"prior\",\"event\":\"seed\"}' > .claude-tdd-pro/audit.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" >/dev/null 2>&1 && head -1 .claude-tdd-pro/audit.jsonl | grep -E '\"actor\":\"prior\"' 1>&2 && [ \"$(wc -l < .claude-tdd-pro/audit.jsonl)\" -ge 2 ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree .claude-tdd-pro && printf 'source:\\n  id: x\\n  authoritative_publisher: A\\n  authoritative_url: https://e.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

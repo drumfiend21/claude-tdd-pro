@@ -1,0 +1,16 @@
+{
+  "name": "compliance: --check-coverage <framework> exits 1 listing controls in the framework with zero rule mappings",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/compliance-check.sh\" --compliance \"$PWD/COMPLIANCE.yaml\" --framework PCI-DSS --required-controls \"$PWD/required.txt\"",
+  "setup": [
+    "printf 'PCI-DSS:\\n  6.5.1:\\n    - r1\\n' > COMPLIANCE.yaml",
+    "printf '6.5.1\\n6.5.2\\n6.5.3\\n' > required.txt"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "6.5.2",
+      "6.5.3",
+      "no rules"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "provenance: registry_link with #anchor must point to an entry that exists in STANDARDS-URLS.yaml",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/cross-check-source-registry.sh\" --source-file \"$PWD/rule.yaml\" --registry \"$PWD/STANDARDS-URLS.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml#src-7\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > rule.yaml",
+    "printf 'src-1:\\n  publisher: A\\n  url: https://a.com\\n  license: CC-BY-4.0\\n  last_verified: 2026-05-04\\n' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "src-7",
+      "not found"
+    ]
+  }
+}

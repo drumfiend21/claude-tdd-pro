@@ -1,5 +1,5 @@
 {
-  "name": "detector contract: exit 1 when violations found (§2.2)",
+  "name": "detector contract: exit 1 when violations found",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\"",
   "setup": [
     "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"

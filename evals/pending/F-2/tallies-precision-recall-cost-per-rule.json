@@ -1,5 +1,5 @@
 {
-  "name": "F-2 /measure-rubric: reports precision/recall/cost per rule in output",
+  "name": "/measure-rubric: reports precision/recall/cost per rule in output",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --format json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const rule=Object.values(r.runs_per_rule||{})[0];if(rule&&typeof rule.precision===\"number\"&&typeof rule.recall===\"number\"&&typeof rule.cost_tokens===\"number\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}});'",
   "setup": [
     "git init -q && git config user.email t@t && git config user.name t && echo x>f && git add f && git commit -q -m c"

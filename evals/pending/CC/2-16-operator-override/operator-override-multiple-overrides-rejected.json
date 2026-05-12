@@ -1,0 +1,18 @@
+{
+  "name": "operator override: two operator files defining the same rule id is rejected (ambiguity)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json",
+  "setup": [
+    "mkdir -p tree/google tree/_operator",
+    "printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: x, detector: x}\\n' > tree/google/g.yaml",
+    "printf 'source:\\n  id: o1\\n  authoritative_publisher: O\\n  authoritative_url: https://o.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: a, detector: x}\\n' > tree/_operator/a.yaml",
+    "printf 'source:\\n  id: o2\\n  authoritative_publisher: O\\n  authoritative_url: https://o.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: b, detector: x}\\n' > tree/_operator/b.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "r1",
+      "duplicate",
+      "_operator"
+    ]
+  }
+}

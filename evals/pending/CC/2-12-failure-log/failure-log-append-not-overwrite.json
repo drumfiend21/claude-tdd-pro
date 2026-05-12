@@ -1,0 +1,13 @@
+{
+  "name": "FAILURE-LOG: append helper prepends new entry rather than overwriting (preserves history)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/append-failure-log.sh\" --file \"$PWD/FAILURE-LOG.md\" --date 2026-05-05 --summary \"new bug\" && head -5 FAILURE-LOG.md | grep -E '^## 2026-05-05' 1>&2 && grep -E 'OLDER ENTRY' FAILURE-LOG.md 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '# Failure Log\\n\\n## 2026-05-04\\n- OLDER ENTRY\\n' > FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

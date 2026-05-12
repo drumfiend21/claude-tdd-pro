@@ -1,0 +1,11 @@
+{
+  "name": "slash command: accepts positional arguments after the command name",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"off-by-one\" --dry-run 2>out.txt && grep -E 'subject=off-by-one' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

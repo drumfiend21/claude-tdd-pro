@@ -1,0 +1,13 @@
+{
+  "name": "dry-run: --dry-run prints a \"would: ...\" line for each write that would have occurred",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-output \"$PWD/out.yaml\" --dry-run 2>out.txt && grep -E 'would write: .*out.yaml' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "audit log: $CLAUDE_TDD_PRO_TRACE_ID env var, when set, propagates to every entry as `trace_id`",
+  "command": "CLAUDE_TDD_PRO_TRACE_ID=abc-123 bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" >/dev/null 2>&1 && grep -E '\"trace_id\":\"abc-123\"' .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'source:\\n  id: x\\n  authoritative_publisher: A\\n  authoritative_url: https://e.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

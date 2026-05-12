@@ -1,0 +1,13 @@
+{
+  "name": "SIRL query: --query \"rule_id=no-eval\" returns the source id(s) that define that rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/sirl-query.sh\" --sirl \"$PWD/SIRL.yaml\" --query 'rule_id=no-eval' 2>out.txt && grep -E '^src-owasp$' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'src-owasp:\\n  publisher: OWASP\\n  url: https://o.com\\n  last_verified: 2026-05-04\\n  rules:\\n    - no-eval\\n' > SIRL.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

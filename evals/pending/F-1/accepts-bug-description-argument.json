@@ -1,5 +1,5 @@
 {
-  "name": "F-1 /postmortem: accepts bug description as positional argument",
+  "name": "/postmortem: accepts bug description as positional argument",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"users see double-charge on retry\" 2>&1 | grep -q \"double-charge\" && echo ok >&2",
   "setup": [],
   "expect": {

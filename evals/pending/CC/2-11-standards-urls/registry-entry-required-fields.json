@@ -1,0 +1,15 @@
+{
+  "name": "STANDARDS-URLS: each entry requires id, publisher, url, license, last_verified",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/STANDARDS-URLS.yaml\"",
+  "setup": [
+    "printf 'src-1:\\n  publisher: Acme\\n' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "url",
+      "license",
+      "last_verified"
+    ]
+  }
+}

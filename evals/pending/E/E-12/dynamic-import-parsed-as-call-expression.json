@@ -1,0 +1,13 @@
+{
+  "name": "source code analyzer: dynamic `import(...)` is parsed as ImportExpression node, distinguishable from CallExpression",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule dynimport-trace --in \"$PWD/file.js\" 2>out.txt && grep -E 'ImportExpression' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'const m = import(\"./mod.js\");' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "STANDARDS-URLS: fetcher uses If-None-Match / If-Modified-Since when entry has etag/last_modified",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/fetch-source.sh\" --registry \"$PWD/STANDARDS-URLS.yaml\" --id src-1 --fetcher-stub \"$PWD/probe.sh\" 2>out.txt && grep -E 'If-None-Match: \"abc123\"' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'src-1:\\n  publisher: A\\n  url: https://a.com\\n  license: CC-BY-4.0\\n  last_verified: 2026-05-04\\n  etag: \"abc123\"\\n' > STANDARDS-URLS.yaml",
+    "printf '#!/bin/bash\\necho \"$@\" 1>&2\\nexit 0\\n' > probe.sh && chmod +x probe.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

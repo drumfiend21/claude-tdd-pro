@@ -1,0 +1,13 @@
+{
+  "name": "metrics: each metric event is one JSONL line with name, value, unit, timestamp",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/metrics.sh\" --emit \"rule.runtime_ms\" --value 42 --unit ms --file \"$PWD/.claude-tdd-pro/metrics.jsonl\" && grep -E '\"name\":\"rule.runtime_ms\".*\"value\":42.*\"unit\":\"ms\"' .claude-tdd-pro/metrics.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

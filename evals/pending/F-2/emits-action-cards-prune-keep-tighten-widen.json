@@ -1,5 +1,5 @@
 {
-  "name": "F-2 /measure-rubric: emits per-rule action cards: PRUNE / KEEP / TIGHTEN / WIDEN",
+  "name": "/measure-rubric: emits per-rule action cards: PRUNE / KEEP / TIGHTEN / WIDEN",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --format markdown 2>&1 | grep -E \"(PRUNE|KEEP|TIGHTEN|WIDEN)\" && echo ok >&2",
   "setup": [
     "git init -q && git config user.email t@t && git config user.name t && echo x>f && git add f && git commit -q -m c"

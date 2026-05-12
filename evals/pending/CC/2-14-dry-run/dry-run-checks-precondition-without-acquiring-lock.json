@@ -1,0 +1,13 @@
+{
+  "name": "dry-run: --dry-run validates preconditions but does not acquire write locks (no .lock file)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-output \"$PWD/out.yaml\" --dry-run >/dev/null 2>&1 && [ ! -f out.yaml.lock ] && [ ! -f .claude-tdd-pro/aggregator.lock ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

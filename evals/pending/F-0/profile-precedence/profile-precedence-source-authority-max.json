@@ -1,5 +1,5 @@
 {
-  "name": "profile precedence: source_authority_max prefers tier-1 over tier-2 sources on conflict (§2.5)",
+  "name": "profile precedence: source_authority_max prefers tier-1 over tier-2 sources on conflict (source-file format)",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(r.rules[\"g-ts-001\"].source_authority===\"1\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}});'",
   "setup": [
     "echo \"extends: [community-plugin, google:tsguide]\\nresolution_order: [source_authority_max]\" > profile.yaml"

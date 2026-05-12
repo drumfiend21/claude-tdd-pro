@@ -1,0 +1,11 @@
+{
+  "name": "hook contract: hook exceeding settings.json hooks.timeout_ms is killed and treated as block (exit 2)",
+  "command": "echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"x.ts\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/sleep-forever.sh\" & pid=$!; sleep 2; kill -0 $pid 2>/dev/null && kill $pid; wait $pid 2>/dev/null; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

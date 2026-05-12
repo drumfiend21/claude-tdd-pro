@@ -1,0 +1,13 @@
+{
+  "name": "SIRL: when same rule id appears in multiple sources, all are listed (duplicate-source detection)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-rule-index \"$PWD/RULE-INDEX.yaml\" --allow-cross-source-duplicates >/dev/null 2>&1 && node -e 'const y=require(\"fs\").readFileSync(\"RULE-INDEX.yaml\",\"utf8\");if(/r1:[^a-z]+- src-1[^a-z]+- src-2/m.test(y)){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p tree && for i in 1 2; do printf 'source:\\n  id: src-%d\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: x, detector: x}\\n' \"$i\" > \"tree/a${i}.yaml\"; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

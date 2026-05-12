@@ -1,0 +1,17 @@
+{
+  "name": "provenance: source block requires id, authoritative_publisher, authoritative_url, registry_link, fetched_at, content_hash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$PWD/rule.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\nrules: []\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "authoritative_publisher",
+      "authoritative_url",
+      "registry_link",
+      "fetched_at",
+      "content_hash"
+    ]
+  }
+}

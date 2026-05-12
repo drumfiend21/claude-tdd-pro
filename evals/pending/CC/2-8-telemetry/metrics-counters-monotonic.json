@@ -1,0 +1,14 @@
+{
+  "name": "metrics: --type counter rejects negative values (counters only increase)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/metrics.sh\" --emit \"errors.total\" --type counter --value -1 --file \"$PWD/.claude-tdd-pro/metrics.jsonl\"",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "counter",
+      "negative"
+    ]
+  }
+}

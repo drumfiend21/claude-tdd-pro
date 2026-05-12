@@ -1,0 +1,14 @@
+{
+  "name": "FAILURE-LOG: validator rejects non-UTF-8 byte sequences in the file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-failure-log.sh\" \"$PWD/FAILURE-LOG.md\"",
+  "setup": [
+    "printf '\\xff\\xfe## 2026-05-04\\n' > FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "UTF-8",
+      "encoding"
+    ]
+  }
+}

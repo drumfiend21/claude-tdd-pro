@@ -1,0 +1,14 @@
+{
+  "name": "commit format: feat: and fix: commits require a body section (≥1 non-empty line after blank)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-commit-msg.sh\" \"$PWD/msg.txt\"",
+  "setup": [
+    "echo 'feat: add thing' > msg.txt"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "body",
+      "required"
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "F-1 /postmortem: skill reproduces bug as a failing test (Vitest preferred)",
+  "name": "/postmortem: skill reproduces bug as a failing test (Vitest preferred)",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"off-by-one in retry loop\" --emit-test && test -f tests/postmortem-*.test.ts && echo ok >&2",
   "setup": [
     "mkdir -p tests"

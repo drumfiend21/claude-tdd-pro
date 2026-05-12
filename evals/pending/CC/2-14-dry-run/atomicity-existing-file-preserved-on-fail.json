@@ -1,0 +1,13 @@
+{
+  "name": "atomicity: existing target file is unchanged when the new write fails partway",
+  "command": "echo 'PRE-EXISTING' > out.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-output \"$PWD/out.yaml\" --simulate-fail-after-bytes 50 2>/dev/null && grep -E '^PRE-EXISTING$' out.yaml 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && for i in $(seq 1 10); do printf 'source:\\n  id: src-%d\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' \"$i\" > tree/a${i}.yaml; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

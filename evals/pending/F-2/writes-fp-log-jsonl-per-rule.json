@@ -1,5 +1,5 @@
 {
-  "name": "F-2 /measure-rubric: appends triage results to rubric/fp-log/<rule-id>.jsonl",
+  "name": "/measure-rubric: appends triage results to rubric/fp-log/<rule-id>.jsonl",
   "command": "echo \"y\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --interactive --n 1 >/dev/null && test -s rubric/fp-log/*.jsonl && echo ok >&2",
   "setup": [
     "mkdir -p rubric/fp-log && git init -q && git config user.email t@t && git config user.name t && echo x>f && git add f && git commit -q -m c"

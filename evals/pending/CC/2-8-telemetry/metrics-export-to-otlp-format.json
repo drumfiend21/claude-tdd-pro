@@ -1,0 +1,11 @@
+{
+  "name": "metrics: --export otlp converts JSONL into OTLP/HTTP JSON envelope on stdout",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/metrics.sh\" --emit foo.bar --value 1 --file m.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/metrics.sh\" --export otlp --file m.jsonl 2>otlp.json && grep -E '\"resourceMetrics\":\\[' otlp.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

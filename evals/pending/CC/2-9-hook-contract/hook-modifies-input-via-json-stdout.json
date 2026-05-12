@@ -1,0 +1,11 @@
+{
+  "name": "hook contract: hook may emit modified envelope on stdout; non-empty stdout replaces tool_input",
+  "command": "echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"x.ts\",\"content\":\"raw\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/normalize.sh\" 2>/dev/null > out.json && grep -E '\"content\":\"normalized\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "F-1 /postmortem: queries Compliance layer (C-9) for control coverage of identified rule",
+  "name": "/postmortem: queries Compliance layer (compliance control coverage) for control coverage of identified rule",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"audit log gap\" 2>&1 | grep -q \"soc2-tsc\" && echo ok >&2",
   "setup": [],
   "expect": {

@@ -1,0 +1,13 @@
+{
+  "name": "FAILURE-LOG: each entry has YYYY-MM-DD heading and a one-line summary",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-failure-log.sh\" \"$PWD/FAILURE-LOG.md\"",
+  "setup": [
+    "printf '# Failure Log\\n\\n## 2026-05-04\\n- Off-by-one in retry loop (caught by /postmortem)\\n' > FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

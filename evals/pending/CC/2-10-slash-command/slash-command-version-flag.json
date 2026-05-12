@@ -1,0 +1,11 @@
+{
+  "name": "slash command: --version prints the plugin version and exits 0",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --version 2>&1 | grep -E '^[0-9]+\\.[0-9]+\\.[0-9]+$' 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

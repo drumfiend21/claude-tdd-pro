@@ -1,0 +1,14 @@
+{
+  "name": "provenance: source older than --max-age-days warns but does not block (exit 1)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$PWD/rule.yaml\" --max-age-days 30 --now 2026-05-04T00:00:00Z",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2025-01-01T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "stale",
+      "fetched_at"
+    ]
+  }
+}

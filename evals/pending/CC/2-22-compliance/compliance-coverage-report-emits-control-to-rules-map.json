@@ -1,0 +1,13 @@
+{
+  "name": "compliance: aggregator --emit-compliance produces YAML mapping framework/control_id → rule ids",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-compliance \"$PWD/COMPLIANCE.yaml\" >/dev/null 2>&1 && grep -E 'PCI-DSS:' COMPLIANCE.yaml 1>&2 && grep -E '\"6.5.1\":' COMPLIANCE.yaml 1>&2 && grep -E '    - r1' COMPLIANCE.yaml 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: r1\\n    name: r1\\n    description: x\\n    detector: x\\n    controls:\\n      - {framework: PCI-DSS, id: \"6.5.1\", title: Injection, url: https://x.com}\\n' > tree/a.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

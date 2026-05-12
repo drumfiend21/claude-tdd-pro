@@ -1,0 +1,11 @@
+{
+  "name": "slash command: exit codes 0 (success), 1 (assertion failed), 2 (usage/infra error) consistently used",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --help; c1=$?; bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\"; c2=$?; bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --does-not-exist; c3=$?; [ \"$c1\" = \"0\" ] && [ \"$c2\" = \"2\" ] && [ \"$c3\" = \"2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

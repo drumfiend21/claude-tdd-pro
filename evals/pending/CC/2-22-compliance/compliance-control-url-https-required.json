@@ -1,0 +1,14 @@
+{
+  "name": "compliance: control.url must be https:// (provenance integrity)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-rubric-rule.sh\" \"$PWD/rule.yaml\"",
+  "setup": [
+    "printf 'id: no-eval\\nname: no-eval\\ndescription: x\\ndetector: x\\ntype: problem\\nfixable: null\\nhas_suggestions: false\\ndeprecated: false\\nreplaced_by: null\\ndocs_url: https://example.com\\nrequires_type_checking: false\\nrecommended: true\\nseverity: error\\nversion: 1\\nsemver: 1.0.0\\nrule_state: stable\\nprovenance: bundled\\ncontrols:\\n  - framework: PCI-DSS\\n    id: \"6.5.1\"\\n    title: x\\n    url: http://insecure.com\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "url",
+      "https"
+    ]
+  }
+}

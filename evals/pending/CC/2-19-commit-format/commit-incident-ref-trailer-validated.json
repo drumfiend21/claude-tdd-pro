@@ -1,0 +1,14 @@
+{
+  "name": "commit format: Incident-Ref: trailer must reference an existing incidents/<date>-<NNN> folder",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-commit-msg.sh\" \"$PWD/msg.txt\"",
+  "setup": [
+    "printf 'fix: x\\n\\nbody.\\n\\nIncident-Ref: 2099-01-01-001\\n' > msg.txt"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "Incident-Ref",
+      "not found"
+    ]
+  }
+}

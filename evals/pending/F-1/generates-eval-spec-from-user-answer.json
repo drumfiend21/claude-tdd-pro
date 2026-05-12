@@ -1,5 +1,5 @@
 {
-  "name": "F-1 /postmortem: generates eval spec under evals/specs/<category>-<name>.json",
+  "name": "/postmortem: generates eval spec under evals/specs/<category>-<name>.json",
   "command": "echo \"g-node-002\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"naked throw\" --interactive && ls evals/specs/postmortem-*.json | head -1 | grep -q \".json\" && echo ok >&2",
   "setup": [
     "mkdir -p evals/specs"

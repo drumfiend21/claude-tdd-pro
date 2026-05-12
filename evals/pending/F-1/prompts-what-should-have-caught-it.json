@@ -1,5 +1,5 @@
 {
-  "name": "F-1 /postmortem: prompts operator with \"what hook/rubric rule should have caught this?\"",
+  "name": "/postmortem: prompts operator with \"what hook/rubric rule should have caught this?\"",
   "command": "echo \"g-node-002\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"untyped error swallowed\" --interactive 2>&1 | grep -q \"should have caught\" && echo ok >&2",
   "setup": [],
   "expect": {

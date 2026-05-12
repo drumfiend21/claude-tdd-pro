@@ -1,5 +1,5 @@
 {
-  "name": "eval spec schema: rationale field (when present) must be non-empty string (§2.4)",
+  "name": "eval spec schema: rationale field (when present) must be non-empty string (profile precedence)",
   "command": "echo '{\"name\":\"t\",\"command\":\"echo hi\",\"setup\":[],\"expect\":{\"exit_code\":0},\"rationale\":\"\"}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"rationale\" && echo ok >&2",
   "setup": [],
   "expect": {

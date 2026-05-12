@@ -1,0 +1,14 @@
+{
+  "name": "commit format: subject line ≤72 chars (over-long subject rejected)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-commit-msg.sh\" \"$PWD/msg.txt\"",
+  "setup": [
+    "echo 'feat: '$(printf 'x%.0s' {1..80}) > msg.txt"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "72",
+      "subject"
+    ]
+  }
+}

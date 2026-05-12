@@ -1,0 +1,13 @@
+{
+  "name": "metrics: any subprocess that calls the LLM SDK records token.input/token.output metrics",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --dry-run \"test bug\" --file \"$PWD/.claude-tdd-pro/metrics.jsonl\" >/dev/null 2>&1 && grep -E '\"name\":\"token.(input|output)\"' .claude-tdd-pro/metrics.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

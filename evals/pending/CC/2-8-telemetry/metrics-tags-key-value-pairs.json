@@ -1,0 +1,13 @@
+{
+  "name": "metrics: --tag key=value attaches metadata; multiple tags allowed; key restricted to [a-z0-9_]+",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/metrics.sh\" --emit rule.runtime_ms --value 5 --tag rule=no-eval --tag phase=lint --file \"$PWD/.claude-tdd-pro/metrics.jsonl\" && grep -E '\"tags\":\\{[^}]*\"rule\":\"no-eval\"[^}]*\"phase\":\"lint\"[^}]*\\}' .claude-tdd-pro/metrics.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

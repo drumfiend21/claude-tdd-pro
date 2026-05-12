@@ -1,0 +1,12 @@
+{
+  "name": "slash command: unknown --flag rejected with exit 2 and the offending flag named",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --does-not-exist 2>&1",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "unknown",
+      "--does-not-exist"
+    ]
+  }
+}

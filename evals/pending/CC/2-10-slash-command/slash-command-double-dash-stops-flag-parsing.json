@@ -1,0 +1,11 @@
+{
+  "name": "slash command: -- stops flag parsing; subsequent args are positional even if they start with --",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --dry-run -- --not-a-flag 2>out.txt && grep -E 'subject=--not-a-flag' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

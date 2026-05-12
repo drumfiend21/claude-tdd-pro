@@ -1,5 +1,5 @@
 {
-  "name": "eval spec schema: stale_when_target_changes must be boolean (§2.4)",
+  "name": "eval spec schema: stale_when_target_changes must be boolean (profile precedence)",
   "command": "echo '{\"name\":\"t\",\"command\":\"echo hi\",\"setup\":[],\"expect\":{\"exit_code\":0},\"stale_when_target_changes\":\"yes\"}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"stale_when_target_changes\" && echo ok >&2",
   "setup": [],
   "expect": {

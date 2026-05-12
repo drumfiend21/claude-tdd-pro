@@ -1,0 +1,14 @@
+{
+  "name": "provenance: fetched_at must be ISO-8601 UTC (Z suffix); local timezones rejected",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$PWD/rule.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00-05:00\\n  content_hash: sha256:S\\nrules: []\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "UTC",
+      "Z"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "FAILURE-LOG: pre-commit detector requires a FAILURE-LOG entry referencing the new rule id",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/require-failure-log-for-new-rule.sh\" --new-rule-id no-foo --failure-log \"$PWD/FAILURE-LOG.md\"",
+  "setup": [
+    "printf '# Failure Log\\n\\n## 2026-05-04\\n- some unrelated bug\\n' > FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "no-foo",
+      "FAILURE-LOG"
+    ]
+  }
+}

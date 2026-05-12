@@ -1,0 +1,11 @@
+{
+  "name": "slash command: positional arg \"-\" reads the value from stdin",
+  "command": "echo \"from stdin bug\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" - --dry-run 2>out.txt && grep -E 'subject=from stdin bug' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "provenance: source.id must match `^[a-z][a-z0-9-]*$` (lowercase kebab)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$PWD/rule.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: Bad_ID\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "id",
+      "format"
+    ]
+  }
+}

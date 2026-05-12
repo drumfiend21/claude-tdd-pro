@@ -1,5 +1,5 @@
 {
-  "name": "F-2 /measure-rubric: --n <int> overrides default commit window",
+  "name": "/measure-rubric: --n <int> overrides default commit window",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 3 --dry-run 2>&1 | grep -q \"iterating 3 commits\" && echo ok >&2",
   "setup": [
     "git init -q && git config user.email t@t && git config user.name t && for i in $(seq 1 5); do echo \"$i\">f && git add f && git commit -q -m \"c$i\"; done"

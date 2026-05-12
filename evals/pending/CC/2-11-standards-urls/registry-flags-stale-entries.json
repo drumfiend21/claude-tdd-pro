@@ -1,0 +1,14 @@
+{
+  "name": "STANDARDS-URLS: validator flags entries with last_verified older than --max-age-days (default 365)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/STANDARDS-URLS.yaml\" --max-age-days 365 --now 2026-05-04",
+  "setup": [
+    "printf 'src-1:\\n  publisher: A\\n  url: https://a.com\\n  license: CC-BY-4.0\\n  last_verified: 2024-01-01\\n' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "src-1",
+      "stale"
+    ]
+  }
+}

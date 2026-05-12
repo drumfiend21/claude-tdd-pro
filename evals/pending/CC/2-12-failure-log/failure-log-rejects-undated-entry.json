@@ -1,0 +1,14 @@
+{
+  "name": "FAILURE-LOG: validator rejects entries lacking a YYYY-MM-DD date heading",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-failure-log.sh\" \"$PWD/FAILURE-LOG.md\"",
+  "setup": [
+    "printf '# Failure Log\\n\\n## Some bug\\n- whatever\\n' > FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "date",
+      "heading"
+    ]
+  }
+}

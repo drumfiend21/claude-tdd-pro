@@ -1,0 +1,15 @@
+{
+  "name": "FAILURE-LOG: rule-id references in entries (Caught-by: <rule-id>) must exist in the rubric",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-failure-log.sh\" \"$PWD/FAILURE-LOG.md\" --rubric \"$PWD/rubric.yaml\"",
+  "setup": [
+    "printf '# Failure Log\\n\\n## 2026-05-04\\n- bug (Caught-by: nonexistent-rule)\\n' > FAILURE-LOG.md",
+    "printf 'rules: []\\n' > rubric.yaml"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "nonexistent-rule",
+      "rubric"
+    ]
+  }
+}

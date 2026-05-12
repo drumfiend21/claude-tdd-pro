@@ -1,0 +1,15 @@
+{
+  "name": "dry-run: `append-failure-log` with --dry-run produces no filesystem writes",
+  "command": "stat -f '%m' . > before.txt 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/rubric/append-failure-log.sh\" --file FAILURE-LOG.md --date 2026-05-04 --summary x --dry-run >/dev/null 2>&1 && [ ! -e FAILURE-LOG.md ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml",
+    "printf 'src-1:\\n  publisher: A\\n  url: https://a.com\\n  license: CC-BY-4.0\\n  last_verified: 2026-05-04\\n' > STANDARDS-URLS.yaml",
+    ":> FAILURE-LOG.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

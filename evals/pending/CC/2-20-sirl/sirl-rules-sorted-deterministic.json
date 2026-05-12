@@ -1,0 +1,13 @@
+{
+  "name": "SIRL: rule ids under each source are sorted alphabetically (deterministic output)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-sirl \"$PWD/SIRL.yaml\" >/dev/null 2>&1 && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-sirl \"$PWD/SIRL2.yaml\" >/dev/null 2>&1 && diff SIRL.yaml SIRL2.yaml 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: z-rule, name: z, description: x, detector: x}\\n  - {id: a-rule, name: a, description: x, detector: x}\\n' > tree/a.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

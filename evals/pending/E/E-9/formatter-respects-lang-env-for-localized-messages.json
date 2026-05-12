@@ -1,0 +1,13 @@
+{
+  "name": "reporter: $CLAUDE_TDD_PRO_LANG=es selects Spanish-localized message templates when defined in rule.meta.messages.<id>.es",
+  "command": "CLAUDE_TDD_PRO_LANG=es bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule msgid-localized --in \"$PWD/file.js\" --report-format json 2>out.json && grep -E '\"message\":\"evita eval\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

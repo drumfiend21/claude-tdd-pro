@@ -1,0 +1,14 @@
+{
+  "name": "provenance: content_hash must match `^sha256:[a-f0-9]{64}$|^sha256:[A-Z0-9_-]+$` (hex or fixture-test placeholder)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" \"$PWD/rule.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: md5:abc\\nrules: []\\n' > rule.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "content_hash",
+      "format"
+    ]
+  }
+}

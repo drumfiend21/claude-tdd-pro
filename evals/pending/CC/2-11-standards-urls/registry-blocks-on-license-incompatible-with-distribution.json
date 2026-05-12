@@ -1,0 +1,14 @@
+{
+  "name": "STANDARDS-URLS: validator flags non-redistributable licenses (e.g., AllRightsReserved) for derivative-rule entries",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/STANDARDS-URLS.yaml\" --check-redistribution",
+  "setup": [
+    "printf 'src-1:\\n  publisher: A\\n  url: https://a.com\\n  license: AllRightsReserved\\n  derivative_rules: true\\n  last_verified: 2026-05-04\\n' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "license",
+      "redistribute"
+    ]
+  }
+}

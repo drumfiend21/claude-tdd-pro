@@ -1,0 +1,11 @@
+{
+  "name": "detector contract: --stdin reads source from stdin instead of disk; --filename labels the input",
+  "command": "echo 'const x: any = 1;' | bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --stdin --filename \"src/virtual.ts\" 2>out.json && grep -E '\"filename\":\"src/virtual.ts\"' out.json 1>&2 && grep -E '\"ruleId\":\"no-any\"' out.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

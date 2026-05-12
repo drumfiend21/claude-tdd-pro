@@ -1,0 +1,12 @@
+{
+  "name": "hook contract: exit 2 + stderr message blocks the tool call; the message is shown to the user",
+  "command": "echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\".env\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/block-secrets.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "secret",
+      "blocked"
+    ]
+  }
+}

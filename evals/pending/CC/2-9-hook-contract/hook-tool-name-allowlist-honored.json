@@ -1,0 +1,11 @@
+{
+  "name": "hook contract: hook may declare matchers.tool_name; non-matching events skip the hook (exit 0)",
+  "command": "echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Bash\",\"tool_input\":{}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/edit-only.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

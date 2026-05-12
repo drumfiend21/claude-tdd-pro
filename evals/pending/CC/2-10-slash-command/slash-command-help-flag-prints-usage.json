@@ -1,0 +1,11 @@
+{
+  "name": "slash command: --help prints a usage block to stdout and exits 0",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --help 2>&1 | grep -E 'Usage:.*postmortem' 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

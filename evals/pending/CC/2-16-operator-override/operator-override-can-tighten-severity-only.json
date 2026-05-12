@@ -1,0 +1,17 @@
+{
+  "name": "operator override: --override-mode=severity-only allows operator to change only the severity, not other fields",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --override-mode severity-only",
+  "setup": [
+    "mkdir -p tree/google tree/_operator",
+    "printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: original, detector: orig.sh}\\n' > tree/google/g.yaml",
+    "printf 'source:\\n  id: o\\n  authoritative_publisher: O\\n  authoritative_url: https://o.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: changed, detector: new.sh}\\n' > tree/_operator/o.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "severity-only",
+      "description",
+      "detector"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "dry-run: --dry-run runs do not emit audit log entries (read-only)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" --dry-run >/dev/null 2>&1 && [ ! -s .claude-tdd-pro/audit.jsonl ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree .claude-tdd-pro && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml",
+    ":> .claude-tdd-pro/audit.jsonl"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

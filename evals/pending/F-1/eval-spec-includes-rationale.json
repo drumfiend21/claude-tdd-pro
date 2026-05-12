@@ -1,5 +1,5 @@
 {
-  "name": "F-1 /postmortem: generated eval spec rationale field documents what miss it prevents (§2.4)",
+  "name": "/postmortem: generated eval spec rationale field documents what miss it prevents (profile precedence)",
   "command": "echo \"g-node-002\" | bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" \"naked throw\" --interactive >/dev/null && node -e 'const fs=require(\"fs\");const f=fs.readdirSync(\"evals/specs\").find(x=>x.startsWith(\"postmortem-\"));const j=JSON.parse(fs.readFileSync(\"evals/specs/\"+f,\"utf8\"));if(j.rationale&&j.rationale.length>=10){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
   "setup": [
     "mkdir -p evals/specs"

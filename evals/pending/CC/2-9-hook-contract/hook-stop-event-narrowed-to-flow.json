@@ -1,0 +1,11 @@
+{
+  "name": "hook contract: Stop event is dispatched only when CLAUDE_TDD_PRO_FLOW_ACTIVE=1; otherwise no-op",
+  "command": "echo '{\"hook_event_name\":\"Stop\"}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/stop-gate.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
