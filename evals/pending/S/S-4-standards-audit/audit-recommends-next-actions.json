@@ -1,0 +1,13 @@
+{
+  "name": "/standards-audit: report includes action card section recommending next promotions (e.g. \"PROMOTE: section X.Y from source Z; would add coverage for...\")",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --recommend && grep -E \"PROMOTE:\" audit.md 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro && printf '- id: google-eng-practices\\n  name: Google\\n  url: https://g.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

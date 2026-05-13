@@ -1,0 +1,12 @@
+{
+  "name": "daily-fresh fetch: per-operation gate refuses to use a source whose last fetched_at is >24h old (when fetch_frequency:daily)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2026-05-11T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/google-tsguide.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id google-tsguide --fetch-frequency daily --now 2026-05-13T00:00:00Z",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "google-tsguide",
+      "stale"
+    ]
+  }
+}

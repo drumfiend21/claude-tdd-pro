@@ -1,0 +1,11 @@
+{
+  "name": "standards catalog: each entry has the §2.6 plugin-internal fields (class, authority_tier, fragility_tier, fragility_strategy, fetcher, identifier_pattern, license_note, origin, added_by, added_at)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-catalog.sh\" \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --check plugin-internal && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /standards-add auto-creates the inferred-namespace folder and scaffolds <id>.yaml with populated source: header (per G-9)",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" --url https://my-publisher.example.com/guide --id my-publisher-guide --tier 1 --applies-to typescript --tree \"$PWD/tree\" && [ -f \"tree/my-publisher/my-publisher-guide.yaml\" ] && grep \"authoritative_url: https://my-publisher.example.com/guide\" \"tree/my-publisher/my-publisher-guide.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

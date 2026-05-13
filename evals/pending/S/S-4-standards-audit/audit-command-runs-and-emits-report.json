@@ -1,0 +1,11 @@
+{
+  "name": "/standards-audit: emits a Markdown report listing every source in standards/sources.yaml with its current coverage state",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" && grep -E \"^## Standards Audit\" audit.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

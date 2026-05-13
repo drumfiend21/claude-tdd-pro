@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /standards-remove moves the source-folder file to _archived/ rather than deleting (per G-9 \"archive folder file to _archived/\")",
+  "command": "mkdir -p tree/google && printf \"source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id g --tree \"$PWD/tree\" && [ ! -f tree/google/x.yaml ] && [ -f tree/google/_archived/x.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "/standards-audit: flags sources whose last successful fetched_at is older than fetch_frequency (e.g. daily source not fetched in >24h)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --check-freshness --now 2026-05-13T00:00:00Z 2>out.txt && grep -E \"stale\" audit.md 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro/standards-last-fetch && echo '2025-01-01T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/google-tsguide.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

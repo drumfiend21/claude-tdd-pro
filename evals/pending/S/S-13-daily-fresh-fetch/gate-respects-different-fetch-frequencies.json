@@ -1,0 +1,13 @@
+{
+  "name": "daily-fresh fetch: gate respects fetch_frequency = hourly|daily|weekly|monthly windows distinctly",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2026-05-12T11:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id x --fetch-frequency hourly --now 2026-05-13T12:00:00Z",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "x",
+      "stale",
+      "hourly"
+    ]
+  }
+}

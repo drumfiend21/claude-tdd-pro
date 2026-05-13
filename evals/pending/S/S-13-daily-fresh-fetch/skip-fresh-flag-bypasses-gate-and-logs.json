@@ -1,0 +1,11 @@
+{
+  "name": "daily-fresh fetch: --skip-fresh flag bypasses the gate per §2.17 but logs the bypass to C-4 audit log",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id x --fetch-frequency daily --now 2026-05-13T00:00:00Z --skip-fresh --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep \"skip-fresh\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

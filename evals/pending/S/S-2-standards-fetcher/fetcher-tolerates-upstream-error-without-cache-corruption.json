@@ -1,0 +1,13 @@
+{
+  "name": "standards fetcher: when upstream fetch fails, prior cached content is preserved unchanged (no partial overwrite)",
+  "command": "mkdir -p .claude-tdd-pro/standards-cache && echo \"GOOD CACHED\" > .claude-tdd-pro/standards-cache/src-1.html && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id src-1 --fragility-tier high --strategy silent-replace --upstream-stub \"$PWD/fail.sh\" --cache \"$PWD/.claude-tdd-pro/standards-cache\" 2>/dev/null && grep \"GOOD CACHED\" .claude-tdd-pro/standards-cache/src-1.html 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nexit 1\\n' > fail.sh && chmod +x fail.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

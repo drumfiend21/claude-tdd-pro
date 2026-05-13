@@ -1,0 +1,11 @@
+{
+  "name": "/standards-audit: --include-archived also surfaces sources that were removed via /standards-remove (their files moved to _archived/) so operator can review",
+  "command": "mkdir -p tree/google/_archived && printf \"source:\\n  id: removed-source\\n  authoritative_publisher: R\\n  authoritative_url: https://r.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2024-01-01T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/google/_archived/removed.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --tree \"$PWD/tree\" --emit \"$PWD/audit.md\" --include-archived && grep \"removed-source\" audit.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

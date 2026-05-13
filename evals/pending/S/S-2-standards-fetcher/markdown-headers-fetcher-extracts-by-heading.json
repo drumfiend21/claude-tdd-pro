@@ -1,0 +1,11 @@
+{
+  "name": "standards fetcher: standards/fetchers/markdown-headers.sh extracts content under a specific markdown heading",
+  "command": "printf \"# Top\\n\\n## Section A\\nA content\\n\\n## Section B\\nB content\\n\" > doc.md && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/markdown-headers.sh\" --in \"$PWD/doc.md\" --heading \"Section A\" 2>out.txt && grep \"A content\" out.txt 1>&2 && ! grep \"B content\" out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

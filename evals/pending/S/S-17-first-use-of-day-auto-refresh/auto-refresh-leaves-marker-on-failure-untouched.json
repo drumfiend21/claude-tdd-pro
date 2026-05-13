@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: failed refresh does NOT update last-fetch marker (so subsequent runs retry; status remains stale)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2025-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --source-id x --upstream-stub \"$PWD/fail.sh\" 2>/dev/null && grep \"2025-01-01\" .claude-tdd-pro/standards-last-fetch/x.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nexit 1\\n' > fail.sh && chmod +x fail.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

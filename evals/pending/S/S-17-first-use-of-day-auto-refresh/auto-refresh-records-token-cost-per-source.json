@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: emits per-source token cost line item to telemetry log (cross-ref H-1 transparency)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --emit-telemetry \"$PWD/.claude-tdd-pro/telemetry.jsonl\" && grep \"tokens_used\" .claude-tdd-pro/telemetry.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

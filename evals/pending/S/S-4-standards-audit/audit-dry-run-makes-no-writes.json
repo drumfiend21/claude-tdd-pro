@@ -1,0 +1,11 @@
+{
+  "name": "/standards-audit: --dry-run prints the report to stdout without writing audit.md",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --dry-run && [ ! -f audit.md ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

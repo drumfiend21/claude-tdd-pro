@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: --token-budget caps total tokens spent across all source refreshes; exceeding budget halts further refreshes and logs",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && for id in s1 s2 s3 s4 s5; do echo \"2026-05-11T00:00:00Z\" > \".claude-tdd-pro/standards-last-fetch/$id.txt\"; done && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --token-budget 100 --tokens-per-fetch 50 --report 2>out.txt && grep \"budget exhausted\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

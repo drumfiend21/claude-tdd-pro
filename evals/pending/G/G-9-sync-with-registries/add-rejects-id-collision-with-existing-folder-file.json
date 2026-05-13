@@ -1,0 +1,12 @@
+{
+  "name": "sync registries: /standards-add rejects an id whose target folder already has a non-archived file with that name",
+  "command": "mkdir -p tree/google && touch tree/google/existing.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" --url https://x.com --id existing --tier 1 --applies-to typescript --source-namespace google --tree \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "existing",
+      "collision"
+    ]
+  }
+}

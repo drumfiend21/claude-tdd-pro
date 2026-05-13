@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /standards-add --source-namespace <ns> overrides default id-prefix-based namespace inference",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" --url https://x.com --id x --tier 1 --applies-to typescript --source-namespace google --tree \"$PWD/tree\" && [ -f \"tree/google/x.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

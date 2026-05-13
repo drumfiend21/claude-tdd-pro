@@ -1,0 +1,14 @@
+{
+  "name": "daily-fresh fetch: --strict mode (per §2.17) blocks rule activation when source status is stale-warn-degraded (auto-demote)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id x --fetch-frequency daily --now 2026-05-13T00:00:00Z --upstream-stub \"$PWD/fail.sh\" --strict",
+  "setup": [
+    "printf '#!/bin/bash\\nexit 1\\n' > fail.sh && chmod +x fail.sh"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "stale",
+      "strict"
+    ]
+  }
+}

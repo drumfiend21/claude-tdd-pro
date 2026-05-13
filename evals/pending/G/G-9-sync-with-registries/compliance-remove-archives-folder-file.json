@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /compliance-remove archives the COMPLIANCE-URLS.yaml-mapped folder file to _archived/",
+  "command": "mkdir -p tree/us-government && printf \"source:\\n  id: nist-x\\n  authoritative_publisher: NIST\\n  authoritative_url: https://nist.gov\\n  registry_link: COMPLIANCE-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: Public Domain\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/us-government/nist-x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" --id nist-x --tree \"$PWD/tree\" && [ -f tree/us-government/_archived/nist-x.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

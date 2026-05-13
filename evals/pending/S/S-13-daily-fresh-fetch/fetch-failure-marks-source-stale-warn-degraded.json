@@ -1,0 +1,13 @@
+{
+  "name": "daily-fresh fetch: when auto-refresh fetch fails, source is marked stale-warn-degraded; subsequent rule activation prints warning but does not block (non-strict)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id x --fetch-frequency daily --now 2026-05-13T00:00:00Z --upstream-stub \"$PWD/fail.sh\" --emit-status \"$PWD/status.json\" 2>/dev/null && grep \"stale-warn-degraded\" status.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nexit 1\\n' > fail.sh && chmod +x fail.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

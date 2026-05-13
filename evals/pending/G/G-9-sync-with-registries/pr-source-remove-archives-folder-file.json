@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /pr-source-remove archives the PR-SOURCES.yaml-mapped folder file to _archived/",
+  "command": "mkdir -p tree/finance-industry && printf \"source:\\n  id: stripe-node\\n  authoritative_publisher: Stripe\\n  authoritative_url: https://github.com/stripe/stripe-node\\n  registry_link: PR-SOURCES.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/finance-industry/stripe-node.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" --id stripe-node --tree \"$PWD/tree\" && [ -f tree/finance-industry/_archived/stripe-node.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

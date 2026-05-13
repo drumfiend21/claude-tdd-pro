@@ -1,0 +1,11 @@
+{
+  "name": "daily-fresh fetch: --no-network mode marks status offline-cached when prior cached fetch exists; differs from stale-warn-degraded",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch .claude-tdd-pro/standards-cache && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && echo \"cached content\" > .claude-tdd-pro/standards-cache/x.html && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id x --fetch-frequency daily --now 2026-05-13T00:00:00Z --no-network --emit-status \"$PWD/status.json\" 2>/dev/null && grep \"offline-cached\" status.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

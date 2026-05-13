@@ -1,0 +1,11 @@
+{
+  "name": "standards catalog: each default source's fetcher field references one of the four S-2 scripts (html-anchor.sh, markdown-headers.sh, pdf-section.sh, rfc-style.sh)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-catalog.sh\" \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --check fetcher-allowlist && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

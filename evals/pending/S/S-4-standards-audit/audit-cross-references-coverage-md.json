@@ -1,0 +1,11 @@
+{
+  "name": "/standards-audit: when COVERAGE.md exists from S-3, audit links to its anchors rather than re-emitting the per-source breakdown",
+  "command": "echo \"# Coverage\" > COVERAGE.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --link-to \"$PWD/COVERAGE.md\" && grep \"COVERAGE.md\" audit.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

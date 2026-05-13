@@ -1,0 +1,13 @@
+{
+  "name": "daily-fresh fetch: once first-use-of-day refresh runs, marker file in .claude-tdd-pro/last-day-refresh.txt prevents a second refresh on same calendar day",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --check-first-use-of-day --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" >/dev/null 2>&1 && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --check-first-use-of-day --now 2026-05-13T18:00:00Z --upstream-stub \"$PWD/upstream.sh\" 2>out.txt && grep \"already refreshed today\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

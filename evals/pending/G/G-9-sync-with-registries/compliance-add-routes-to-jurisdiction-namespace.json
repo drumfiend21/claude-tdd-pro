@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /compliance-add routes US Federal jurisdiction into us-government/, EU into european-union/ (per G-9.1)",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" --url https://nist.gov/x --id nist-new --jurisdiction \"US Federal\" --tree \"$PWD/tree\" && [ -f \"tree/us-government/nist-new.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

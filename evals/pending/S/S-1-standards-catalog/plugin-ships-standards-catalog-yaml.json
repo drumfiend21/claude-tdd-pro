@@ -1,0 +1,11 @@
+{
+  "name": "standards catalog: plugin ships standards/sources.yaml at install time (the 17-source catalog per S-1)",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

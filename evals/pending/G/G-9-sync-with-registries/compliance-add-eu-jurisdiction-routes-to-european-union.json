@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /compliance-add with jurisdiction:EU routes into european-union/ folder",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" --url https://eu.gov/x --id eu-new --jurisdiction \"EU\" --tree \"$PWD/tree\" && [ -f \"tree/european-union/eu-new.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "daily-fresh fetch: per-operation gate passes a source whose last fetched_at is within fetch_frequency window",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2026-05-13T08:00:00Z\" > .claude-tdd-pro/standards-last-fetch/google-tsguide.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id google-tsguide --fetch-frequency daily --now 2026-05-13T12:00:00Z && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

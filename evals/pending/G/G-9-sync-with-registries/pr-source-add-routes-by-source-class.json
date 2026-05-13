@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /pr-source-add routes federal-financial-regulator → us-government/, financial-industry → finance-industry/, gold-standard-process → linux-foundation/ (per G-9.1 mapping)",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" --github cfpb/consumerfinance.gov --id cfpb-consumerfinance --source-class federal-financial-regulator --tree \"$PWD/tree\" && [ -f \"tree/us-government/cfpb-consumerfinance.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

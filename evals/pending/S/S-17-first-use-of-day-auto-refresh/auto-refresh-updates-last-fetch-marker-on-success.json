@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: successful refresh updates .claude-tdd-pro/standards-last-fetch/<source-id>.txt to the new timestamp",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2025-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --source-id x --upstream-stub \"$PWD/upstream.sh\" && grep \"2026-05-13\" .claude-tdd-pro/standards-last-fetch/x.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

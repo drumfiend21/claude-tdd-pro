@@ -1,0 +1,13 @@
+{
+  "name": "standards fetcher: standards/fetchers/html-anchor.sh extracts content by HTML anchor id (e.g. #5-2-types) per identifier_pattern",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/html-anchor.sh\" --in \"$PWD/page.html\" --anchor 5-2-types 2>out.txt && grep \"Type-related\" out.txt 1>&2 && ! grep \"Other content\" out.txt && echo ok 1>&2",
+  "setup": [
+    "printf '<html><body><h2 id=\"5-2-types\">Types section</h2><p>Type-related content</p><h2 id=\"5-3-other\">Other</h2><p>Other content</p></body></html>' > page.html"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

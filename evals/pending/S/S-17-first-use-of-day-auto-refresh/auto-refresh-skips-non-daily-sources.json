@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: weekly/monthly sources are not refreshed by the daily auto-refresh script (different cadence)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2026-05-11T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/weekly-source.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --report 2>out.txt && ! grep \"weekly-source refreshed\" out.txt && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

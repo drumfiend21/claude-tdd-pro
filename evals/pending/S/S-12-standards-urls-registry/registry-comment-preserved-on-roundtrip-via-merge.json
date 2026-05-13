@@ -1,0 +1,11 @@
+{
+  "name": "STANDARDS-URLS registry: yaml comments above operator entries are preserved when merge-registry.sh re-emits the merged catalog",
+  "command": "mkdir -p .claude-tdd-pro && printf \"# Why we use this source: operator-curated\\n- id: op-src\\n  name: Op\\n  url: https://op.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --operator \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" --emit \"$PWD/merged.yaml\" --preserve-comments && grep \"operator-curated\" merged.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

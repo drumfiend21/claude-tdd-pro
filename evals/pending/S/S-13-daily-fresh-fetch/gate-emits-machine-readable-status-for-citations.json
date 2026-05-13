@@ -1,0 +1,11 @@
+{
+  "name": "daily-fresh fetch: --emit-status writes JSON {fresh-within-fetch-frequency | stale-warn-degraded | offline-cached | operator-bypass} for §2.8 freshness_at_generation field",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2026-05-13T08:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id x --fetch-frequency daily --now 2026-05-13T12:00:00Z --emit-status \"$PWD/status.json\" && grep \"fresh-within-fetch-frequency\" status.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

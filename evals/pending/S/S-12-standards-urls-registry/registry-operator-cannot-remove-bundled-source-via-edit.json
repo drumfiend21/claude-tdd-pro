@@ -1,0 +1,11 @@
+{
+  "name": "STANDARDS-URLS registry: operator removes a bundled source by adding a `disable: true` marker rather than deleting; aggregator skips disabled bundled sources but they remain in audit",
+  "command": "mkdir -p .claude-tdd-pro && printf \"- id: google-tsguide\\n  disable: true\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --operator \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" --emit \"$PWD/merged.yaml\" && grep -E \"id: google-tsguide\" merged.yaml -A 5 | grep \"disable: true\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

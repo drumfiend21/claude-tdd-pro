@@ -1,0 +1,13 @@
+{
+  "name": "standards fetcher: source with fragility_tier:medium + fragility_strategy:prompt-on-change prompts when upstream structure delta exceeds 5%",
+  "command": "mkdir -p .claude-tdd-pro/standards-cache && printf \"h1\\nh2\\nh3\\nh4\\nh5\\nh6\\nh7\\nh8\\nh9\\nh10\\n\" > .claude-tdd-pro/standards-cache/src-1.html && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id src-1 --fragility-tier medium --strategy prompt-on-change --upstream-stub \"$PWD/upstream.sh\" --cache \"$PWD/.claude-tdd-pro/standards-cache\" --no-confirm-default 2>out.txt && grep \"structure delta\" out.txt 1>&2 && grep \"prompt required\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nfor i in $(seq 1 20); do echo h$i; done\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

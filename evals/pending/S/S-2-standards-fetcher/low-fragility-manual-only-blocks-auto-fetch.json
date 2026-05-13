@@ -1,0 +1,14 @@
+{
+  "name": "standards fetcher: source with fragility_tier:low + fragility_strategy:manual-only refuses automatic fetch (operator must explicitly /standards-refresh)",
+  "command": "mkdir -p .claude-tdd-pro/standards-cache && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id src-1 --fragility-tier low --strategy manual-only --upstream-stub \"$PWD/upstream.sh\" --cache \"$PWD/.claude-tdd-pro/standards-cache\" --auto",
+  "setup": [
+    "printf '#!/bin/bash\\necho NEW\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "manual-only",
+      "refused"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "standards fetcher: every fetch records sha256 content_hash of the extracted section (used for §2.21 source: header)",
+  "command": "mkdir -p .claude-tdd-pro/standards-cache && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id src-1 --fragility-tier high --strategy silent-replace --upstream-stub \"$PWD/upstream.sh\" --cache \"$PWD/.claude-tdd-pro/standards-cache\" --emit-metadata \"$PWD/meta.json\" && grep -E \"content_hash.*sha256:[a-f0-9]\" meta.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho hello\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: failure of one source does not abort refreshing the others (errors collected and reported at end)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && for id in good-source bad-source; do echo \"2026-05-11T00:00:00Z\" > \".claude-tdd-pro/standards-last-fetch/$id.txt\"; done && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/maybe-fail.sh\" --report 2>out.txt && grep \"good-source.*ok\" out.txt 1>&2 && grep \"bad-source.*failed\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nif echo \"$@\" | grep -q bad-source; then exit 1; fi; echo ok; exit 0\\n' > maybe-fail.sh && chmod +x maybe-fail.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

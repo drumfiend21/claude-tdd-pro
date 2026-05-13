@@ -1,0 +1,13 @@
+{
+  "name": "standards fetcher: every fetch records fetched_at as ISO-8601 UTC (Z-suffix) for §2.21 source header",
+  "command": "mkdir -p .claude-tdd-pro/standards-cache && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id src-1 --fragility-tier high --strategy silent-replace --upstream-stub \"$PWD/upstream.sh\" --cache \"$PWD/.claude-tdd-pro/standards-cache\" --emit-metadata \"$PWD/meta.json\" && grep -E \"fetched_at.*20[0-9]{2}-[0-9]{2}-[0-9]{2}T.*Z\" meta.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho hello\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

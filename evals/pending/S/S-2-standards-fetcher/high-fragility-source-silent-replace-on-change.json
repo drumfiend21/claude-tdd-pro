@@ -1,0 +1,13 @@
+{
+  "name": "standards fetcher: source with fragility_tier:high + fragility_strategy:silent-replace overwrites cached content without prompting on upstream change",
+  "command": "mkdir -p .claude-tdd-pro/standards-cache && echo OLD > .claude-tdd-pro/standards-cache/src-1.html && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id src-1 --fragility-tier high --strategy silent-replace --upstream-stub \"$PWD/upstream.sh\" --cache \"$PWD/.claude-tdd-pro/standards-cache\" && grep NEW .claude-tdd-pro/standards-cache/src-1.html 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho NEW\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "standards catalog: contains the 17 default source ids listed in S-1 (google-tsguide..semver)",
+  "command": "for id in google-tsguide google-jsguide google-pyguide google-eng-practices google-testing-blog react-docs react-rsc-rfc nextjs-docs typescript-handbook node-docs node-best-practices owasp-asvs owasp-top10 wcag-2-2 web-vitals slsa semver; do grep -E \"^- id: $id$\" \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" >/dev/null || { echo \"FAIL missing $id\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

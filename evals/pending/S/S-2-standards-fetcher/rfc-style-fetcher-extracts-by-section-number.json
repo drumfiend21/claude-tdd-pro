@@ -1,0 +1,11 @@
+{
+  "name": "standards fetcher: standards/fetchers/rfc-style.sh extracts numbered RFC-style sections (e.g. 3.2.1 nested numbering)",
+  "command": "printf \"1. Intro\\nbody\\n2. Main\\n2.1. Sub\\nsub content\\n2.2. Other\\nother content\\n\" > rfc.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/rfc-style.sh\" --in \"$PWD/rfc.txt\" --section \"2.1\" 2>out.txt && grep \"sub content\" out.txt 1>&2 && ! grep \"other content\" out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

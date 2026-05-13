@@ -1,0 +1,13 @@
+{
+  "name": "daily-fresh fetch: first plugin invocation each calendar day triggers an auto-refresh attempt for stale daily sources (per S-13 + S-17)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && echo \"2026-05-12T08:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --check-first-use-of-day --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" 2>out.txt && grep \"first use of day\" out.txt 1>&2 && grep \"auto-refresh\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho NEW\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

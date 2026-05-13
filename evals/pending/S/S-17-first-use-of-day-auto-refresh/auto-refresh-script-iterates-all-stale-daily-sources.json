@@ -1,0 +1,13 @@
+{
+  "name": "auto-refresh: iterates every source in catalog with fetch_frequency:daily whose last fetched_at is >24h old",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && for id in google-tsguide owasp-asvs; do echo \"2026-05-11T00:00:00Z\" > \".claude-tdd-pro/standards-last-fetch/$id.txt\"; done && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --report 2>out.txt && grep \"google-tsguide\" out.txt 1>&2 && grep \"owasp-asvs\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

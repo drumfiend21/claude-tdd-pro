@@ -1,0 +1,11 @@
+{
+  "name": "STANDARDS-URLS registry: aggregator merges operator-edited STANDARDS-URLS.yaml entries with plugin-shipped standards/sources.yaml (operator entries take precedence on id collision)",
+  "command": "mkdir -p .claude-tdd-pro && printf \"- id: google-tsguide\\n  name: Operator Override\\n  url: https://operator.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: hourly\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --operator \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" --emit \"$PWD/merged.yaml\" && grep \"Operator Override\" merged.yaml 1>&2 && grep \"fetch_frequency: hourly\" merged.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

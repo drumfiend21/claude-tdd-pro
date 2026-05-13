@@ -1,0 +1,11 @@
+{
+  "name": "sync registries: /standards-add scaffold completes within 60 seconds for a new entry (per §21 DoD criterion)",
+  "command": "start=$(date +%s) && mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" --url https://my.com/x --id my-x --tier 1 --applies-to typescript --tree \"$PWD/tree\" && end=$(date +%s) && elapsed=$((end-start)) && [ \"$elapsed\" -le 60 ] && echo \"ok elapsed=${elapsed}s\" 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
