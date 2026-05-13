@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: a source is in the trace only when its rules were actually evaluated during the commit (not for every cataloged source)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted google-tsguide --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep \"google-tsguide\" .claude-tdd-pro/provenance/abc123.json 1>&2 && ! grep \"owasp-asvs\" .claude-tdd-pro/provenance/abc123.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

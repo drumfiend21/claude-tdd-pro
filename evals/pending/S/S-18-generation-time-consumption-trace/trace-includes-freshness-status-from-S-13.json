@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: each consulted source records §2.8 freshness_at_generation status (fresh-within-fetch-frequency | stale-warn-degraded | offline-cached | operator-bypass)",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/standards-last-fetch && echo \"2026-05-13T08:00:00Z\" > .claude-tdd-pro/standards-last-fetch/google-tsguide.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted google-tsguide --now 2026-05-13T12:00:00Z --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep \"fresh-within-fetch-frequency\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

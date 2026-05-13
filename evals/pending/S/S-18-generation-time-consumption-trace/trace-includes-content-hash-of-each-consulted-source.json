@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: each consulted source records its content_hash from the cached fetch (per §2.8 standards_state.<source>.content_hash)",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/standards-cache && echo \"google body\" > .claude-tdd-pro/standards-cache/google-tsguide.html && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted google-tsguide --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep -E \"content_hash.*sha256:[a-f0-9]\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

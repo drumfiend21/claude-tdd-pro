@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: each consulted source records fetched_at from the cache marker",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/standards-last-fetch && echo \"2026-05-13T08:00:00Z\" > .claude-tdd-pro/standards-last-fetch/google-tsguide.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted google-tsguide --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep -E \"fetched_at.*2026-05-13T08:00:00Z\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

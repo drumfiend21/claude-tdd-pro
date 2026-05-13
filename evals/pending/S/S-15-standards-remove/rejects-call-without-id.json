@@ -1,0 +1,12 @@
+{
+  "name": "/standards-remove: exits 2 when --id is missing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "id",
+      "required"
+    ]
+  }
+}

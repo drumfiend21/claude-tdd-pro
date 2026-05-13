@@ -1,0 +1,14 @@
+{
+  "name": "/standards-remove: exits 2 when the supplied --id is not present in STANDARDS-URLS.yaml or plugin catalog",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id never-existed",
+  "setup": [
+    "mkdir -p .claude-tdd-pro && printf \"- id: my-source\\n  name: My\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "never-existed",
+      "not found"
+    ]
+  }
+}

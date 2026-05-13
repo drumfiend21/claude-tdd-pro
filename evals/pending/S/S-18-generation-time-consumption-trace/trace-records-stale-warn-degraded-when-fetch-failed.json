@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: when last fetch attempt failed, freshness_at_generation records stale-warn-degraded",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/standards-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/standards-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted x --now 2026-05-13T12:00:00Z --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep \"stale-warn-degraded\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/standards-add: written entry includes plugin-internal added_by:operator and added_at:<ISO-8601 UTC> per §2.6",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://x.com --id x --tier 1 --applies-to typescript && grep -E \"added_by: operator\" .claude-tdd-pro/STANDARDS-URLS.yaml 1>&2 && grep -E \"added_at: 20[0-9]{2}-[0-9]{2}-[0-9]{2}T\" .claude-tdd-pro/STANDARDS-URLS.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "/standards-add: exits 2 when no URL argument supplied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "url",
+      "required"
+    ]
+  }
+}

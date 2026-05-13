@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: §2.18 says C-3 manifest carries standards_state, pr_corpus_state, compliance_state symmetrically -- trace can populate all three blocks in one call",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc --consulted-standards google-tsguide --consulted-pr-corpus stripe-node --consulted-compliance soc2-tsc --emit \"$PWD/.claude-tdd-pro/provenance/abc.json\" && grep \"standards_state\" .claude-tdd-pro/provenance/abc.json 1>&2 && grep \"pr_corpus_state\" .claude-tdd-pro/provenance/abc.json 1>&2 && grep \"compliance_state\" .claude-tdd-pro/provenance/abc.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

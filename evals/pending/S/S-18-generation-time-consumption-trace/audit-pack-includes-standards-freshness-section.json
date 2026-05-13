@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: /audit-pack reads standards_state across all per-commit manifests and emits an aggregate Standards Freshness section (per C-10)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && for sha in abc123 def456; do printf '{\"commit\":\"%s\",\"standards_state\":{\"google-tsguide\":{\"freshness_at_generation\":\"fresh-within-fetch-frequency\"}}}' \"$sha\" > .claude-tdd-pro/provenance/$sha.json; done && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --emit \"$PWD/audit-pack.md\" --section standards-freshness && grep -E \"Standards Freshness\" audit-pack.md 1>&2 && grep -E \"google-tsguide\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

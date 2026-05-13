@@ -1,0 +1,11 @@
+{
+  "name": "/standards-add: when --id is omitted, derives id from URL host + last path segment (kebab-case)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://google.github.io/styleguide/tsguide.html --tier 1 --applies-to typescript && grep -E \"id: google-tsguide\" .claude-tdd-pro/STANDARDS-URLS.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

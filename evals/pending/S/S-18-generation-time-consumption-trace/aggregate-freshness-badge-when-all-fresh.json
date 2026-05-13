@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: when every recorded standards_state across the commit window is fresh-within-fetch-frequency, /audit-pack emits a \"Standards: all-fresh\" badge",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"commit\":\"abc\",\"standards_state\":{\"google-tsguide\":{\"freshness_at_generation\":\"fresh-within-fetch-frequency\"}}}' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --emit \"$PWD/audit-pack.md\" --section badges && grep -E \"Standards: all-fresh\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

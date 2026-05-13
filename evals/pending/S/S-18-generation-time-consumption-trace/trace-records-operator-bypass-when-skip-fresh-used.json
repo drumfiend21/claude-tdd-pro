@@ -1,0 +1,11 @@
+{
+  "name": "consumption trace: when --skip-fresh was used during generation, freshness_at_generation records operator-bypass",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted x --bypassed --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep \"operator-bypass\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

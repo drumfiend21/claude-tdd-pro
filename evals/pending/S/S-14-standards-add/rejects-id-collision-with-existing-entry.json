@@ -1,0 +1,12 @@
+{
+  "name": "/standards-add: rejects an --id that already exists in STANDARDS-URLS.yaml or in plugin-shipped catalog",
+  "command": "mkdir -p .claude-tdd-pro && printf \"- id: existing-id\\n  name: x\\n  url: https://x.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://other.com --id existing-id --tier 1 --applies-to typescript",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "existing-id",
+      "collision"
+    ]
+  }
+}

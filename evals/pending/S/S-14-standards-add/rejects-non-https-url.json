@@ -1,0 +1,12 @@
+{
+  "name": "/standards-add: rejects http:// URL (provenance integrity per S-6)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" http://insecure.example.com/guide --id x --tier 1 --applies-to typescript",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "https",
+      "required"
+    ]
+  }
+}

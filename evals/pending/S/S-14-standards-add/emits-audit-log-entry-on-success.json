@@ -1,0 +1,11 @@
+{
+  "name": "/standards-add: writes an audit-log entry to .claude-tdd-pro/audit.jsonl with event:standards-add, source_id, url",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://x.com --id x --tier 1 --applies-to typescript --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep -E \"standards-add\" .claude-tdd-pro/audit.jsonl 1>&2 && grep -E \"https://x.com\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

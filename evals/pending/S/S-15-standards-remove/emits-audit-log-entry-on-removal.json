@@ -1,0 +1,13 @@
+{
+  "name": "/standards-remove: writes an audit log entry with event:standards-remove, source_id, archived_path",
+  "command": "mkdir -p tree/my && printf \"source:\\n  id: my-source\\n  authoritative_publisher: M\\n  authoritative_url: https://my.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/my/my-source.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id my-source --tree \"$PWD/tree\" --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep \"standards-remove\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro && printf \"- id: my-source\\n  name: My\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

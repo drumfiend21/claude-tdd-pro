@@ -1,0 +1,11 @@
+{
+  "name": "/standards-add: per G-9 sync, also auto-scaffolds the source-folder file (generated-code-quality-standards/<inferred-namespace>/<id>.yaml)",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://my.com/guide --id my-guide --tier 1 --applies-to typescript --tree \"$PWD/tree\" && [ -f tree/my/my-guide.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

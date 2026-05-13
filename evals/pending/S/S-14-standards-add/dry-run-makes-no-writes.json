@@ -1,0 +1,11 @@
+{
+  "name": "/standards-add: --dry-run prints what would be written but creates no files (per §2.14 dry-run contract)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://x.com --id x --tier 1 --applies-to typescript --dry-run && [ ! -s .claude-tdd-pro/STANDARDS-URLS.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

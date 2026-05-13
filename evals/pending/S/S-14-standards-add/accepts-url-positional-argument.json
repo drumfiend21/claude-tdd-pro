@@ -1,0 +1,11 @@
+{
+  "name": "/standards-add: accepts a URL as the first positional argument and writes a STANDARDS-URLS.yaml entry",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://my-publisher.example.com/guide --id my-publisher-guide --tier 1 --applies-to typescript && grep \"https://my-publisher.example.com/guide\" .claude-tdd-pro/STANDARDS-URLS.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

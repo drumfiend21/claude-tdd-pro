@@ -1,0 +1,12 @@
+{
+  "name": "/standards-remove: refuses to remove a plugin-shipped (bundled) source without --force; suggests disable: true marker instead",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id google-tsguide",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "bundled",
+      "disable: true"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/standards-remove: --force allows removal of a plugin-shipped bundled source (operator override)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id google-tsguide --force --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep -E \"force-removed-bundled\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
