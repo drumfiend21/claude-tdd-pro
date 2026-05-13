@@ -1,0 +1,13 @@
+{
+  "name": "compliance auto-refresh: iterates every framework in COMPLIANCE-URLS.yaml whose last fetched_at is older than its fetch_frequency",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && for id in nist-csf-2 owasp-asvs; do echo \"2024-01-01T00:00:00Z\" > \".claude-tdd-pro/compliance-last-fetch/$id.txt\"; done && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --report 2>out.txt && grep \"nist-csf-2\" out.txt 1>&2 && grep \"owasp-asvs\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

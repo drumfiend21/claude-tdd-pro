@@ -1,0 +1,13 @@
+{
+  "name": "compliance fetch: when paywalled:true, fetcher issues HTTP HEAD only (records etag/last-modified/content-length without downloading body)",
+  "command": "mkdir -p .claude-tdd-pro/compliance-cache && bash \"$CLAUDE_PLUGIN_ROOT/compliance/fetcher.sh\" --framework-id iso-27001-a14 --paywalled --upstream-stub \"$PWD/upstream.sh\" --emit-metadata \"$PWD/meta.json\" && grep -E \"method.*HEAD\" meta.json 1>&2 && grep -E \"etag|last_modified\" meta.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nif echo \"$@\" | grep -q HEAD; then echo HEAD-OK; exit 0; fi; exit 1\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

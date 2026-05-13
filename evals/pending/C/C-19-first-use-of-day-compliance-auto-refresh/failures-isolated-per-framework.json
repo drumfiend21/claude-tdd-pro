@@ -1,0 +1,13 @@
+{
+  "name": "compliance auto-refresh: one framework's fetch failure does not abort others (errors collected and reported at end)",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && for id in good bad; do echo \"2024-01-01T00:00:00Z\" > \".claude-tdd-pro/compliance-last-fetch/$id.txt\"; done && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/maybe-fail.sh\" --report 2>out.txt && grep -E \"good.*ok\" out.txt 1>&2 && grep -E \"bad.*failed\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\nif echo \"$@\" | grep -q bad; then exit 1; fi; echo ok; exit 0\\n' > maybe-fail.sh && chmod +x maybe-fail.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

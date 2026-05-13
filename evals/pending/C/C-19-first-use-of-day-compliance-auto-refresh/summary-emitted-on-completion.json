@@ -1,0 +1,13 @@
+{
+  "name": "compliance auto-refresh: emits summary {frameworks_attempted, succeeded, failed, paywalled_head_only, total_tokens} at completion",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && for id in a b; do echo \"2024-01-01T00:00:00Z\" > \".claude-tdd-pro/compliance-last-fetch/$id.txt\"; done && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --report 2>out.txt && grep -E \"summary.*attempted=2.*succeeded=2\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

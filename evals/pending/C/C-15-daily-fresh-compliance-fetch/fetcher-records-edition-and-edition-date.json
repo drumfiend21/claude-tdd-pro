@@ -1,0 +1,13 @@
+{
+  "name": "compliance fetch: per §2.19 plugin-internal fields, fetch records edition + edition_date (e.g. NIST CSF 2.0 vs 1.1)",
+  "command": "mkdir -p .claude-tdd-pro/compliance-cache && bash \"$CLAUDE_PLUGIN_ROOT/compliance/fetcher.sh\" --framework-id nist-csf-2 --upstream-stub \"$PWD/upstream.sh\" --emit-metadata \"$PWD/meta.json\" && grep -E \"edition\" meta.json 1>&2 && grep -E \"edition_date\" meta.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho NIST CSF 2.0 published 2024-02-26\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

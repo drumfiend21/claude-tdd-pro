@@ -1,0 +1,11 @@
+{
+  "name": "compliance fetch: /compliance-attest records operator attestation that they hold a valid license to the paywalled framework (compliance/attestations/<framework-id>.yaml)",
+  "command": "mkdir -p .claude-tdd-pro compliance/attestations && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-attest.sh\" --framework iso-27001-a14 --license-holder \"Acme Corp\" --license-expiry 2027-01-01 && [ -f compliance/attestations/iso-27001-a14.yaml ] && grep -E \"license_holder.*Acme Corp\" compliance/attestations/iso-27001-a14.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

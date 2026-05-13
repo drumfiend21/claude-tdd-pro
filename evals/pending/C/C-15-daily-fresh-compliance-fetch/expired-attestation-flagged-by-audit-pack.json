@@ -1,0 +1,11 @@
+{
+  "name": "compliance fetch: /audit-pack flags attestations whose license_expiry has passed (operator must renew or stop citing)",
+  "command": "mkdir -p compliance/attestations && printf \"framework: iso-27001-a14\\nlicense_holder: X\\nlicense_expiry: 2020-01-01\\n\" > compliance/attestations/iso-27001-a14.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --section attestations --emit \"$PWD/audit-pack.md\" --now 2026-05-13 && grep -E \"iso-27001-a14.*expired\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

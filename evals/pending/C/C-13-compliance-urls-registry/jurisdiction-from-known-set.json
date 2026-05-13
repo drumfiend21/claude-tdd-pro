@@ -1,0 +1,11 @@
+{
+  "name": "COMPLIANCE-URLS: jurisdiction must be one of the known jurisdictions seen in C-1 catalog (US Federal, US Federal Banking, US Federal Public Co, US Federal Healthcare, EU, EU Financial, Industry-self-reg, ISO, AICPA, OTHER)",
+  "command": "mkdir -p .claude-tdd-pro && printf \"- id: x\\n  name: X\\n  url: https://x.gov\\n  authoritative_publisher: NIST\\n  jurisdiction: Mars\\n  applicable_to: [security]\\n  identifier_scheme: x\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: weekly\\n  legal_review_required: true\\n  paywalled: false\\n  document_url: https://x.gov\\n  attribution_note: x\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "jurisdiction"
+    ]
+  }
+}

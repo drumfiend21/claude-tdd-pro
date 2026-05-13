@@ -1,0 +1,11 @@
+{
+  "name": "compliance auto-refresh: when invoked via /doctor --watch, co-runs with S-17 (standards) and L-22 (PR corpus) auto-refresh per H-7",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --tick-once --now 2026-05-13T08:00:00Z --emit-runs \"$PWD/runs.txt\" && grep \"C-19\" runs.txt 1>&2 && grep \"S-17\" runs.txt 1>&2 && grep \"L-22\" runs.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

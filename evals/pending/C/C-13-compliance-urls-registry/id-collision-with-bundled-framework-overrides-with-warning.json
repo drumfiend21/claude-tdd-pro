@@ -1,0 +1,11 @@
+{
+  "name": "COMPLIANCE-URLS: operator entry whose id matches a bundled framework (e.g. nist-csf-2) overrides plugin-shipped definition with a warning",
+  "command": "mkdir -p .claude-tdd-pro && printf \"- id: nist-csf-2\\n  name: Operator Edition\\n  url: https://my-mirror.com/csf\\n  authoritative_publisher: My Mirror\\n  jurisdiction: US Federal\\n  applicable_to: [security]\\n  identifier_scheme: GV/ID\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: weekly\\n  legal_review_required: true\\n  paywalled: false\\n  document_url: https://my-mirror.com/csf\\n  attribution_note: x\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/merge-registry.sh\" --operator \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --emit \"$PWD/merged.yaml\" 2>out.txt && grep \"Operator Edition\" merged.yaml 1>&2 && grep \"overriding bundled framework\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

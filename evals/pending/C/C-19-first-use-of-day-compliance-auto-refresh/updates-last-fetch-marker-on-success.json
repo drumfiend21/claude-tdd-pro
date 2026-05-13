@@ -1,0 +1,13 @@
+{
+  "name": "compliance auto-refresh: successful refresh updates .claude-tdd-pro/compliance-last-fetch/<framework-id>.txt to new timestamp",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --framework-id x --upstream-stub \"$PWD/upstream.sh\" --now 2026-05-13T08:00:00Z && grep \"2026-05-13\" .claude-tdd-pro/compliance-last-fetch/x.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

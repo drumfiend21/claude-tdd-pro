@@ -1,0 +1,12 @@
+{
+  "name": "compliance fetch: per-operation gate refuses to cite a framework whose last fetched_at is older than its fetch_frequency window",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/nist-csf-2.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/freshness-gate.sh\" --framework-id nist-csf-2 --fetch-frequency weekly --now 2026-05-13T00:00:00Z",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "nist-csf-2",
+      "stale"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "compliance auto-refresh: framework with fetch_frequency:monthly fetched 5 days ago is not refreshed (cadence respected)",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2026-05-08T00:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/monthly-x.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-13T08:00:00Z --upstream-stub \"$PWD/upstream.sh\" --report 2>out.txt && ! grep \"monthly-x refreshed\" out.txt && echo ok 1>&2",
+  "setup": [
+    "printf '#!/bin/bash\\necho ok\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

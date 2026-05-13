@@ -1,0 +1,12 @@
+{
+  "name": "compliance fetch: /compliance-attest rejects --license-expiry in the past (cannot attest to an expired license)",
+  "command": "mkdir -p compliance/attestations && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-attest.sh\" --framework x --license-holder X --license-expiry 2020-01-01 --now 2026-05-13",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "license_expiry",
+      "past"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance fetch: --skip-fresh bypasses gate per §2.17 but writes audit log entry with event:skip-fresh and framework_id",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/x.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/freshness-gate.sh\" --framework-id x --fetch-frequency weekly --now 2026-05-13T00:00:00Z --skip-fresh --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep -E \"skip-fresh.*x\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

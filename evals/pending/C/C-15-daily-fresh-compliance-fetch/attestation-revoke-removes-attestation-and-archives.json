@@ -1,0 +1,11 @@
+{
+  "name": "compliance fetch: /compliance-attest --revoke <framework-id> moves the attestation to compliance/attestations/_archived/ (per §2.19 license_handling field)",
+  "command": "mkdir -p compliance/attestations && printf \"framework: iso-27001-a14\\nlicense_holder: X\\nlicense_expiry: 2027-01-01\\n\" > compliance/attestations/iso-27001-a14.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-attest.sh\" --revoke iso-27001-a14 && [ ! -f compliance/attestations/iso-27001-a14.yaml ] && [ -f compliance/attestations/_archived/iso-27001-a14.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

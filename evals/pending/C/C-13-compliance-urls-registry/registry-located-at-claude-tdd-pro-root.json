@@ -1,0 +1,11 @@
+{
+  "name": "COMPLIANCE-URLS registry: registry file lives at .claude-tdd-pro/COMPLIANCE-URLS.yaml (operator-editable per C-13)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --emit-empty-registries && [ -f .claude-tdd-pro/COMPLIANCE-URLS.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "compliance fetch: when a control from a paywalled framework is cited and no attestation exists, gate exits 2 (cannot cite without attestation)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/freshness-gate.sh\" --framework-id iso-27001-a14 --paywalled --require-attestation",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "attestation",
+      "iso-27001-a14",
+      "required"
+    ]
+  }
+}

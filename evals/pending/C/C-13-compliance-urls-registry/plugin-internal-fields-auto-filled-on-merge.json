@@ -1,0 +1,11 @@
+{
+  "name": "COMPLIANCE-URLS: merge with plugin catalog auto-fills §2.19 plugin-internal fields (fetcher, identifier_pattern, edition, edition_date, authority_tier, fragility_tier, origin, added_by, added_at, license_handling)",
+  "command": "mkdir -p .claude-tdd-pro && printf \"- id: my-framework\\n  name: My\\n  url: https://my.gov\\n  authoritative_publisher: My\\n  jurisdiction: OTHER\\n  applicable_to: [security]\\n  identifier_scheme: x\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: weekly\\n  legal_review_required: true\\n  paywalled: false\\n  document_url: https://my.gov\\n  attribution_note: x\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/merge-registry.sh\" --operator \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --emit \"$PWD/merged.yaml\" && grep \"origin: operator\" merged.yaml 1>&2 && grep \"added_by: operator\" merged.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
