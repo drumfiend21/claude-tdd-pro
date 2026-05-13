@@ -1,0 +1,11 @@
+{
+  "name": "validate-all: /doctor includes a `validate-all` check that runs the same validator and reports per-file pass/fail",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check validate-all --root \"$PWD/tree\" 2>out.txt && grep -E 'validate-all: ok' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

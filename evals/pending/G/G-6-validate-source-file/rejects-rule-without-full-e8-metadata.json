@@ -1,0 +1,15 @@
+{
+  "name": "validate-source-file: rule must have full E-8 metadata per §2.21 (type, fixable, has_suggestions, deprecated, replaced_by, docs_url, requires_type_checking, recommended)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/file.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - id: g-x-001\\n    name: x\\n    description: x\\n    detector: x\\n    type: problem\\nrecommended_set: []\\nall_set: [g-x-001]\\n' > file.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "fixable",
+      "has_suggestions",
+      "required"
+    ]
+  }
+}

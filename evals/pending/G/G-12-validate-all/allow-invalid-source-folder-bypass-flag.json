@@ -1,0 +1,11 @@
+{
+  "name": "validate-all: --allow-invalid-source-folder bypass flag includes failing files in aggregation but logs the bypass to audit",
+  "command": "mkdir -p tree/google .claude-tdd-pro && printf 'source:\\n  id: bad\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --validate-first --allow-invalid-source-folder --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" 2>/dev/null && grep -E '\"event\":\"bypass-allow-invalid-source-folder\"' .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

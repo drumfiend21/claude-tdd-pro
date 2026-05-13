@@ -1,0 +1,11 @@
+{
+  "name": "migration: dry-run reports a mapping plan for all 58 pre-baked rules to their primary source files",
+  "command": "mkdir -p rubric && for i in $(seq 1 58); do printf '  - id: g-r-%03d\\n    name: r-%03d\\n    description: x\\n    detector: x\\n    provenance: [{source: google-tsguide, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-04T00:00:00Z, content_hash: sha256:S}]\\n' \"$i\" \"$i\" >> /tmp/rules.yaml; done && { echo \"rules:\"; cat /tmp/rules.yaml; } > rubric/RUBRIC.yaml && rm /tmp/rules.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\" --dry-run 2>out.txt && grep -E '58 rules' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

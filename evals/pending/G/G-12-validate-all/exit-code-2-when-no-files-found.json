@@ -1,0 +1,12 @@
+{
+  "name": "validate-all: exit 2 when --root has no namespace folders or all folders are empty (catches misconfigured roots)",
+  "command": "mkdir -p tree && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "no source files",
+      "found"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "validate-all: H-11 CI self-test invokes validate-all.sh; exit non-zero gates the release",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: bad\\nrules: []\\n' > tree/google/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/.github/workflows/ci-validate-all.sh\" --root \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "validation",
+      "failed"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "migration: --dry-run prints the mapping plan but writes nothing (no tree/, no archive, no _meta record)",
+  "command": "mkdir -p rubric && echo \"rules: []\" > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\" --dry-run && [ -f rubric/RUBRIC.yaml ] && [ ! -f rubric/RUBRIC.legacy.yaml.archived ] && [ ! -d tree ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

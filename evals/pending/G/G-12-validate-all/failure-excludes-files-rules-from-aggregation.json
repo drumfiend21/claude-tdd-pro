@@ -1,0 +1,11 @@
+{
+  "name": "validate-all: when a source file fails validation its rules are excluded from the aggregator output (file flagged, rules withheld)",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: bad\\nrules: [{id: g-x-001, name: x}]\\nrecommended_set: []\\nall_set: []\\n' > tree/google/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --validate-first --format json 2>out.json && node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));const ids=r.rules.map(x=>x.id);if(!ids.includes(\"g-x-001\")){process.stderr.write(\"ok excluded\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

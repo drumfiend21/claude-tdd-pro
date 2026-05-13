@@ -1,0 +1,13 @@
+{
+  "name": "migration: rule lacking provenance[].source is rejected — cannot determine target namespace",
+  "command": "mkdir -p rubric && printf 'rules:\\n  - id: g-x-001\\n    name: x\\n    description: x\\n    detector: x\\n    provenance: []\\n' > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "provenance",
+      "source",
+      "required"
+    ]
+  }
+}

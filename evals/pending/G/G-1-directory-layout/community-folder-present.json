@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: `_community/` folder exists for community plugins per §2.20",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_community\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

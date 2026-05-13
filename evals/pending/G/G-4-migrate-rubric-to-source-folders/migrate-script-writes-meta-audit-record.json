@@ -1,0 +1,11 @@
+{
+  "name": "migration: writes _meta/migration-from-rubric-yaml.md describing the migration (date, source rules, target files)",
+  "command": "mkdir -p rubric tree && echo \"rules: []\" > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\" && [ -f tree/_meta/migration-from-rubric-yaml.md ] && grep -E '^# Migration from rubric/RUBRIC.yaml' tree/_meta/migration-from-rubric-yaml.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

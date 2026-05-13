@@ -1,0 +1,12 @@
+{
+  "name": "migration: re-running after RUBRIC.legacy.yaml.archived exists is rejected (one-time-only operation)",
+  "command": "mkdir -p rubric && touch rubric/RUBRIC.legacy.yaml.archived && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "already migrated",
+      "RUBRIC.legacy.yaml.archived"
+    ]
+  }
+}

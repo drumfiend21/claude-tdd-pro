@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: `_meta/` folder exists for INDEX.md and migration audit records",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_meta\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

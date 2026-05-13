@@ -1,0 +1,11 @@
+{
+  "name": "migration: migrate-rubric-to-source-folders.sh moves rubric/RUBRIC.yaml to RUBRIC.legacy.yaml.archived",
+  "command": "mkdir -p rubric && echo \"rules: []\" > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\" && [ -f rubric/RUBRIC.legacy.yaml.archived ] && [ ! -f rubric/RUBRIC.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

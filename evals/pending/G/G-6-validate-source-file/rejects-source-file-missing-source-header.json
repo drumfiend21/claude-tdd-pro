@@ -1,0 +1,15 @@
+{
+  "name": "validate-source-file: rejects a file that lacks the top-level `source:` block per §2.21",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/file.yaml\"",
+  "setup": [
+    "printf 'rules: []\\nrecommended_set: []\\nall_set: []\\n' > file.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "source",
+      "header",
+      "required"
+    ]
+  }
+}

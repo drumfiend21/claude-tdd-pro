@@ -1,0 +1,11 @@
+{
+  "name": "migration: each migrated rule gets a `source_file:` field pointing to its new location (per §2.1 schema)",
+  "command": "mkdir -p rubric tree && printf 'rules:\\n  - id: g-ts-001\\n    name: x\\n    description: x\\n    detector: x\\n    provenance: [{source: google-tsguide, class: published-standard, section_id: 5.2, url: https://google.github.io, fetched_at: 2026-05-04T00:00:00Z, content_hash: sha256:S}]\\n' > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\" && grep -E 'source_file: generated-code-quality-standards/google/tsguide.yaml' tree/google/tsguide.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

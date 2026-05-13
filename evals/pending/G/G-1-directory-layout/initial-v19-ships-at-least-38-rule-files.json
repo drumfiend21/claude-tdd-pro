@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: initial v1.9 ships ~38 rule files across the namespace folders",
+  "command": "count=$(find \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" -mindepth 2 -maxdepth 3 -name \"*.yaml\" -not -path \"*/_operator/*\" -not -path \"*/_community/*\" -not -path \"*/_meta/*\" 2>/dev/null | wc -l | tr -d ' '); [ \"$count\" -ge 38 ] && echo \"ok count=$count\" 1>&2 || { echo \"FAIL count=$count expected >=38\" 1>&2; exit 1; }",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

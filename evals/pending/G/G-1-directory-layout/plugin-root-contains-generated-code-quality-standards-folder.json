@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: plugin root contains a `generated-code-quality-standards/` folder at install time",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

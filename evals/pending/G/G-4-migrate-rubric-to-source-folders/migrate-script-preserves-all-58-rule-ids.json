@@ -1,0 +1,11 @@
+{
+  "name": "migration: every rule id from RUBRIC.yaml appears in some target file (no rule lost)",
+  "command": "mkdir -p rubric && for i in 1 2 3; do printf '  - id: g-r-%d\\n    name: r-%d\\n    description: x\\n    detector: x\\n    provenance: [{source: google-tsguide, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-04T00:00:00Z, content_hash: sha256:S}]\\n' \"$i\" \"$i\" >> /tmp/r.yaml; done && { echo \"rules:\"; cat /tmp/r.yaml; } > rubric/RUBRIC.yaml && rm /tmp/r.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD\" --emit-tree \"$PWD/tree\" && for i in 1 2 3; do grep -rE \"id: g-r-$i\" tree/ >/dev/null || { echo \"FAIL missing g-r-$i\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

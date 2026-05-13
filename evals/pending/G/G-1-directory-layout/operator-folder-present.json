@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: `_operator/` folder exists for operator-namespace overrides per §2.22",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_operator\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

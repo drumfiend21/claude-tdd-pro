@@ -1,0 +1,11 @@
+{
+  "name": "validate-all: emits a summary {files_total, files_passed, files_failed, files_excluded_from_aggregation}",
+  "command": "mkdir -p tree/google tree/owasp && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/ok.yaml && printf 'source:\\n  id: bad\\n' > tree/owasp/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --format json 2>out.json && grep -E '\"files_total\":2.*\"files_passed\":1.*\"files_failed\":1' out.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

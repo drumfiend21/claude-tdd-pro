@@ -1,0 +1,12 @@
+{
+  "name": "directory layout: G-12 validator rejects an unrecognized top-level folder (e.g. `random-vendor/`) not matching the 14 defaults or _operator/_community/_meta",
+  "command": "mkdir -p tree && for ns in google _operator _community _meta random-vendor; do mkdir -p tree/$ns; done && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "random-vendor",
+      "unknown"
+    ]
+  }
+}

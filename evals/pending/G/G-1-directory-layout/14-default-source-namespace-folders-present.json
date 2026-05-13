@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: all 14 default source-namespace folders exist (google, us-government, european-union, finance-industry, owasp, w3c, web-vitals, react, node, typescript, slsa, linux-foundation, industry-self-regulatory, _universal)",
+  "command": "for ns in google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory _universal; do test -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/$ns\" || { echo \"FAIL missing $ns\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

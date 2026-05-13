@@ -1,0 +1,14 @@
+{
+  "name": "validate-source-file: rejects file whose source: block lacks `registry_link` (link back to S/C/L registry per §2.21)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/file.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > file.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "registry_link",
+      "required"
+    ]
+  }
+}
