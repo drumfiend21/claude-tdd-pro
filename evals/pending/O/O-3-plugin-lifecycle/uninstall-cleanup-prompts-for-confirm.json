@@ -1,0 +1,11 @@
+{
+  "name": "plugin lifecycle: /uninstall-cleanup without --confirm yes is a dry-run preview (lists categories that would be removed without removing them)",
+  "command": "mkdir -p .claude-tdd-pro/cache && touch .claude-tdd-pro/cache/x && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category cache 2>out.txt && [ -d .claude-tdd-pro/cache ] && grep -E \"would remove\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

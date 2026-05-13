@@ -1,0 +1,11 @@
+{
+  "name": "per-source extends: exclude_sources:[google:*] removes every rule from google/ folder",
+  "command": "mkdir -p tree/google tree/owasp && printf \"source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-google, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: [{source: x, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-13T00:00:00Z, content_hash: sha256:S}]}\\nrecommended_set: [g-google]\\nall_set: [g-google]\\n\" > tree/google/x.yaml && cp tree/google/x.yaml tree/owasp/x.yaml && sed -i.bak \"s/g-google/g-owasp/\" tree/owasp/x.yaml && printf \"extends: [rubric:recommended]\\nexclude_sources: [google:*]\\n\" > profile.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml --tree \"$PWD/tree\" --emit-resolved 2>out.json && grep \"g-owasp\" out.json 1>&2 && ! grep \"g-google\" out.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

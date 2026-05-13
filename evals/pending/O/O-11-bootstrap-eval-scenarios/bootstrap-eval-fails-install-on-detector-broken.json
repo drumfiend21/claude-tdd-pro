@@ -1,0 +1,13 @@
+{
+  "name": "bootstrap eval: when any preinstalled detector exits unexpectedly on its bootstrap fixture, install fails with diagnostic",
+  "command": "CLAUDE_TDD_PRO_BOOTSTRAP_BREAK=g-ts-001 bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "g-ts-001",
+      "bootstrap",
+      "failed"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: /pr-source-add --dry-run shows planned scaffold without writing PR-SOURCES.yaml or folder file",
+  "command": "mkdir -p .claude-tdd-pro tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" --github cfpb/x --id cfpb-x --source-class federal-financial-regulator --tree \"$PWD/tree\" --dry-run && [ ! -s .claude-tdd-pro/PR-SOURCES.yaml ] && [ ! -d tree/us-government ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

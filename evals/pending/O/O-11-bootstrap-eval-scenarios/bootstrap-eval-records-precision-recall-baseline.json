@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: report includes per-rule precision and recall against bootstrap fixtures (baseline metrics for F-2 trending)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --emit-report \"$PWD/.claude-tdd-pro/bootstrap-eval-report.json\" && grep -E \"precision\" .claude-tdd-pro/bootstrap-eval-report.json 1>&2 && grep -E \"recall\" .claude-tdd-pro/bootstrap-eval-report.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

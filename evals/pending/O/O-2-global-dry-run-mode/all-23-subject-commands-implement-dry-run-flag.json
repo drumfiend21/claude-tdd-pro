@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: each command in §2.14 subject list (/remediate, /promote-standard, /pr-corpus-learn, /risk-classify, /audit-pack, /prompt-promote, /space-export, /uninstall-cleanup, /migrate, /architect, /standards-add, /standards-remove, /pr-source-add, /pr-source-remove, /compliance-add, /compliance-remove, /fix-rules, /plugin-install, /plugin-update, /plugin-remove, /import-eslint-config, /operator-namespace-init, /operator-extension-init) accepts --dry-run flag without error",
+  "command": "for cmd in remediate promote-standard pr-corpus-learn risk-classify audit-pack prompt-promote space-export uninstall-cleanup migrate architect standards-add standards-remove pr-source-add pr-source-remove compliance-add compliance-remove fix-rules plugin-install plugin-update plugin-remove import-eslint-config operator-namespace-init operator-extension-init; do bash \"$CLAUDE_PLUGIN_ROOT/commands/$cmd.sh\" --help 2>/dev/null | grep -q \"\\-\\-dry-run\" || { echo \"FAIL $cmd lacks --dry-run\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

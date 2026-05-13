@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: /promote-standard --dry-run produces no filesystem writes",
+  "command": "mkdir -p tree/google && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" --source google-tsguide --section 5.2 --tree \"$PWD/tree\" --dry-run && [ -z \"$(ls -A tree/google/ 2>/dev/null)\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: report top-level includes summary {scenarios_run, scenarios_passed, scenarios_failed, rules_with_fixtures, rules_without_fixtures}",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --emit-report \"$PWD/.claude-tdd-pro/report.json\" && for k in scenarios_run scenarios_passed scenarios_failed; do grep -E \"$k\" .claude-tdd-pro/report.json >/dev/null || { echo \"FAIL missing $k\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "progressive disclosure: /help <unknown-topic> exits 2 and lists known topics (getting-started, first-week, reference, source-folders, threat-model, eslint-migration)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/help.sh\" not-a-real-topic 2>out.txt && grep -E \"Known topics\" out.txt 1>&2 && grep -E \"getting-started\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

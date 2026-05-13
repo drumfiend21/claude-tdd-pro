@@ -1,0 +1,11 @@
+{
+  "name": "plugin lifecycle: migration script preserves user state files (FAILURE-LOG.md, decisions.jsonl, lock.json, _operator/, attestations/) across upgrade",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards/_operator/acme && echo \"user data\" > .claude-tdd-pro/lock.json && echo \"user rule\" > generated-code-quality-standards/_operator/acme/rules.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate.sh\" --from 0.3.0 --to 0.4.0 && grep \"user data\" .claude-tdd-pro/lock.json 1>&2 && grep \"user rule\" generated-code-quality-standards/_operator/acme/rules.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

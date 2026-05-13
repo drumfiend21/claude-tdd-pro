@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: /audit-pack --dry-run prints intended bundle without creating audit-pack output file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --emit \"$PWD/audit-pack.md\" --dry-run && [ ! -f audit-pack.md ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

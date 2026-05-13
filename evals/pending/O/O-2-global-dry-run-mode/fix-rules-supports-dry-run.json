@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: /fix-rules --dry-run leaves source files untouched",
+  "command": "mkdir -p src && echo \"needs-fix\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --dry-run --paths \"src/**/*.ts\" && diff <(echo \"needs-fix\") src/a.ts 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "per-source extends: profiles/government.yaml demonstrates per-source extends (e.g. extends: [us-government:*])",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/profiles/government.yaml\" && grep -E \"extends.*us-government\" \"$CLAUDE_PLUGIN_ROOT/profiles/government.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

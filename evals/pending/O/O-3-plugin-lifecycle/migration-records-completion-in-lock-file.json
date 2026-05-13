@@ -1,0 +1,11 @@
+{
+  "name": "plugin lifecycle: completed migration writes lock.json.migrations_applied:[{from, to, applied_at}] so subsequent installs can detect already-migrated state",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate.sh\" --from 0.3.0 --to 0.4.0 && grep -E \"migrations_applied\" .claude-tdd-pro/lock.json 1>&2 && grep -E \"0.3.0\" .claude-tdd-pro/lock.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

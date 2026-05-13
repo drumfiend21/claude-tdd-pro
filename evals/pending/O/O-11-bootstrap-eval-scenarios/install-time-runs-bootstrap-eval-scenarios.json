@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: /init-guardrails (install-time entry point) runs a bundled set of bootstrap eval scenarios that exercise every preinstalled detector against fixtures",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --emit-report \"$PWD/.claude-tdd-pro/bootstrap-eval-report.json\" && grep -E \"scenarios_run.*[0-9]+\" .claude-tdd-pro/bootstrap-eval-report.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

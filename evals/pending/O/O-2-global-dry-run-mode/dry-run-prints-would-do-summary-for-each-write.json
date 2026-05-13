@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: each --dry-run invocation prints \"would: <action>\" lines for every filesystem write that would have occurred",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://my.com/x --id my-x --tier 1 --applies-to typescript --dry-run 2>out.txt && grep -E \"would.*STANDARDS-URLS.yaml\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

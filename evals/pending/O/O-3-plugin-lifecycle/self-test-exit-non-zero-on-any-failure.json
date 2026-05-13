@@ -1,0 +1,12 @@
+{
+  "name": "plugin lifecycle: /self-test exits 1 when any sub-check fails (CI gate per H-11)",
+  "command": "mkdir -p .claude-tdd-pro && echo \"GARBAGE\" > .claude-tdd-pro/lock.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "lock",
+      "invalid"
+    ]
+  }
+}

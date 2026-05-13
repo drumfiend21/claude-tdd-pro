@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: baseline precision/recall hashes pinned in lock.json so subsequent runs can detect regression",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --pin-to-lock && grep -E \"bootstrap_eval_baseline_hash\" .claude-tdd-pro/lock.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

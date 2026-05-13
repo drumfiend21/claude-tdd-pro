@@ -1,0 +1,11 @@
+{
+  "name": "progressive disclosure: docs ships an \"ESLint-migration cheatsheet\" doc (per H-9 explicit mention)",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/docs/\" -iname \"*eslint*migration*\" -o -iname \"*eslint*cheatsheet*\" 2>/dev/null | grep . 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

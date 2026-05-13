@@ -1,0 +1,11 @@
+{
+  "name": "plugin lifecycle: /uninstall-cleanup emits one audit log entry per removed category {event:category-removed, category, file_count, bytes_removed}",
+  "command": "mkdir -p .claude-tdd-pro/cache && touch .claude-tdd-pro/cache/x && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category cache --confirm yes --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep \"category-removed\" .claude-tdd-pro/audit.jsonl 1>&2 && grep \"cache\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

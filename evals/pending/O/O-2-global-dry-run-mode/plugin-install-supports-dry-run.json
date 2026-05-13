@@ -1,0 +1,11 @@
+{
+  "name": "global dry-run: /plugin-install --dry-run validates manifest without cloning or registering",
+  "command": "mkdir -p .claude-tdd-pro/plugins && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" --github-org acme --repo eslint-plugin-foo --dry-run && [ -z \"$(ls -A .claude-tdd-pro/plugins/ 2>/dev/null)\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

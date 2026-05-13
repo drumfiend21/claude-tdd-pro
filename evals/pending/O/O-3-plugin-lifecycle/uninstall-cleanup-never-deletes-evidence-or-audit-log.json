@@ -1,0 +1,11 @@
+{
+  "name": "plugin lifecycle: /uninstall-cleanup NEVER auto-deletes compliance/evidence/ or compliance/audit-checkpoints/ (operator-only with explicit --i-know-what-im-doing)",
+  "command": "mkdir -p compliance/evidence compliance/audit-checkpoints && touch compliance/evidence/keep.txt compliance/audit-checkpoints/0001.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category all --confirm yes && [ -f compliance/evidence/keep.txt ] && [ -f compliance/audit-checkpoints/0001.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

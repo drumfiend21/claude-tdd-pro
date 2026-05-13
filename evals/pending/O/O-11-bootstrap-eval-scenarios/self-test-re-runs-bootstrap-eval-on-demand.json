@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: /self-test --include-bootstrap re-runs the bootstrap suite to verify nothing has degraded post-install",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\" --include-bootstrap --emit-report \"$PWD/.claude-tdd-pro/self-test.json\" && grep \"bootstrap\" .claude-tdd-pro/self-test.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "progressive disclosure: docs/threat-model.md ships at install time (cross-ref H-4 + O-8)",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/docs/threat-model.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

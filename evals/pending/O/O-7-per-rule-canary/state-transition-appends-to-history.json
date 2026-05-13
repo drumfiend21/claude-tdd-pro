@@ -1,0 +1,13 @@
+{
+  "name": "per-rule canary: every state transition appends an entry {timestamp, from, to, reason} to the rule's rule_state_history",
+  "command": "mkdir -p rubric/fp-log && : > rubric/fp-log/g-x-001.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" --rule-id g-x-001 --to block --tree \"$PWD/tree\" --now 2026-05-13T00:00:00Z && grep -E \"from: warn-only.*to: block\" tree/google/x.yaml 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-x-001, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, rule_state_history: [{timestamp: 2026-04-28T00:00:00Z, from: candidate, to: warn-only, reason: initial-promotion}], provenance: [{source: x, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-13T00:00:00Z, content_hash: sha256:S}]}\\nrecommended_set: [g-x-001]\\nall_set: [g-x-001]\\n' > tree/google/x.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

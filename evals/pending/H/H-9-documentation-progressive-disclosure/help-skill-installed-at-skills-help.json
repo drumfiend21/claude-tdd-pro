@@ -1,0 +1,11 @@
+{
+  "name": "progressive disclosure: skills/help/SKILL.md exists; supports /help <topic> per H-9",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/skills/help/SKILL.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "per-source extends: profiles/healthcare.yaml demonstrates per-source extends (e.g. extends: [us-government:hipaa, owasp:asvs])",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/profiles/healthcare.yaml\" && grep -E \"extends\" \"$CLAUDE_PLUGIN_ROOT/profiles/healthcare.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

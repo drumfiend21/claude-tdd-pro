@@ -1,0 +1,11 @@
+{
+  "name": "progressive disclosure: /help getting-started prints docs/getting-started.md content",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/help.sh\" getting-started 2>out.txt && grep -E \"Getting Started|Welcome|Quick Start\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

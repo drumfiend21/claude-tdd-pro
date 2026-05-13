@@ -1,0 +1,13 @@
+{
+  "name": "recommended sets: extends:[rubric:recommended] resolution produces byte-identical resolved-rules across runs",
+  "command": "printf \"extends: [rubric:recommended]\\n\" > profile.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml --tree \"$PWD/tree\" --emit-resolved 2>r1.json && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml --tree \"$PWD/tree\" --emit-resolved 2>r2.json && diff r1.json r2.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-rec-001, name: g-rec-001, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: [{source: x, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-13T00:00:00Z, content_hash: sha256:S}]}\\nrecommended_set: [g-rec-001]\\nall_set: [g-rec-001]\\n' > tree/google/x.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

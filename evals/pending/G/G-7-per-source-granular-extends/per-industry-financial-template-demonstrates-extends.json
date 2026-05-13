@@ -1,0 +1,11 @@
+{
+  "name": "per-source extends: profiles/financial.yaml ships demonstrating per-source extends (e.g. extends: [finance-industry:*, owasp:asvs])",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/profiles/financial.yaml\" && grep -E \"extends.*finance-industry|owasp\" \"$CLAUDE_PLUGIN_ROOT/profiles/financial.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

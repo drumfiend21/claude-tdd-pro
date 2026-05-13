@@ -1,0 +1,11 @@
+{
+  "name": "plugin lifecycle: /uninstall-cleanup category-by-category removes plugin-shipped config categories (skills, agents, hooks, detectors)",
+  "command": "mkdir -p .claude-tdd-pro/cache && touch .claude-tdd-pro/cache/x && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category cache --confirm yes && [ ! -d .claude-tdd-pro/cache ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: rules without seed/fp-examples/<rule-id>/ are skipped (logged as \"no bootstrap fixtures\") rather than failing the install",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --rule-id no-fixtures-rule 2>out.txt && grep -E \"no bootstrap fixtures\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

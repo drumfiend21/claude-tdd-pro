@@ -1,0 +1,12 @@
+{
+  "name": "plugin lifecycle: /migrate exits 2 when no migrations/<from>-to-<to>.sh exists for the requested version pair",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate.sh\" --from 9.9.9 --to 99.99.99",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "migration",
+      "not found"
+    ]
+  }
+}

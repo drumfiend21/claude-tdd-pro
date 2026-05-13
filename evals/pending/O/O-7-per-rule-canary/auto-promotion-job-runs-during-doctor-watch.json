@@ -1,0 +1,11 @@
+{
+  "name": "per-rule canary: /doctor --watch periodically scans for warn-only rules eligible for auto-promotion (14d clean)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --tick-once --now 2026-05-13T00:00:00Z --emit-runs \"$PWD/runs.txt\" && grep \"O-7\" runs.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

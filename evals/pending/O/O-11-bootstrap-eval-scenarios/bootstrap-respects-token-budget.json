@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: --bootstrap-token-budget caps total tokens spent on bootstrap eval (LLM-grading scenarios stop when exceeded)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --bootstrap-token-budget 100 --tokens-per-scenario 50 --report 2>out.txt && grep -E \"budget exhausted\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

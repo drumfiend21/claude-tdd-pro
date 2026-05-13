@@ -1,0 +1,11 @@
+{
+  "name": "per-rule canary: rule promoted via /promote-standard or /pr-corpus-learn defaults to rule_state:warn-only at first activation",
+  "command": "mkdir -p tree/google && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" --source google-tsguide --section 5.2 --tree \"$PWD/tree\" && grep -E \"rule_state: warn-only\" tree/google/tsguide.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

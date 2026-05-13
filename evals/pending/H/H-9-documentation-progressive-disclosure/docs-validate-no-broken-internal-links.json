@@ -1,0 +1,11 @@
+{
+  "name": "progressive disclosure: docs/validate-links.sh checks every internal markdown link in docs/ resolves to an existing file (no broken refs in shipped docs)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/docs/validate-links.sh\" \"$CLAUDE_PLUGIN_ROOT/docs/\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
