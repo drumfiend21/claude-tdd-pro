@@ -1,0 +1,11 @@
+{
+  "name": "sod gate: concur verdict from second verifier allows the commit through (exit 0)",
+  "command": "mkdir -p .claude-tdd-pro/verify && printf '{\"pr_sha\":\"abc123\",\"verdict\":\"concur\",\"reviewer\":\"verifier-bot\"}' > .claude-tdd-pro/verify/abc123.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verifier-output \"$PWD/.claude-tdd-pro/verify/abc123.json\" --enforce && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

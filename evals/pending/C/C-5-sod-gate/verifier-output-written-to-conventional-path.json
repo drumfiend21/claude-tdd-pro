@@ -1,0 +1,11 @@
+{
+  "name": "sod gate: verifier output is written to .claude-tdd-pro/verify/<pr-sha>.json (§2 path)",
+  "command": "mkdir -p .claude-tdd-pro/verify && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verdict concur --emit \"$PWD/.claude-tdd-pro/verify/abc123.json\" && test -f .claude-tdd-pro/verify/abc123.json && grep \"concur\" .claude-tdd-pro/verify/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

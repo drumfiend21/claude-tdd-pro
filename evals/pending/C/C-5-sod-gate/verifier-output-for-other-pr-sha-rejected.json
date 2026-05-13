@@ -1,0 +1,12 @@
+{
+  "name": "sod gate: rejects a verifier output whose embedded pr_sha does not match --pr-sha (staleness guard)",
+  "command": "mkdir -p .claude-tdd-pro/verify && printf '{\"pr_sha\":\"deadbeef\",\"verdict\":\"concur\",\"reviewer\":\"verifier-bot\"}' > .claude-tdd-pro/verify/abc123.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verifier-output \"$PWD/.claude-tdd-pro/verify/abc123.json\" --enforce",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "pr_sha",
+      "deadbeef"
+    ]
+  }
+}

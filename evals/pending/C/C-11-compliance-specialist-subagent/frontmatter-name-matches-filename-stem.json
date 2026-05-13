@@ -1,0 +1,11 @@
+{
+  "name": "compliance-specialist subagent: frontmatter name field equals review-compliance (matches filename stem so the agent is callable by name)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-subagent-frontmatter.sh\" \"$CLAUDE_PLUGIN_ROOT/agents/review-compliance.md\" --field name --equals review-compliance && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

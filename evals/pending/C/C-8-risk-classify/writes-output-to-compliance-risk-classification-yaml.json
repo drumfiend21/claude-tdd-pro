@@ -1,0 +1,11 @@
+{
+  "name": "/risk-classify: writes its classification to compliance/risk-classification.yaml on disk",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/commands/risk-classify.sh\" --use-case credit-scoring --emit \"$PWD/compliance/risk-classification.yaml\" && test -f compliance/risk-classification.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

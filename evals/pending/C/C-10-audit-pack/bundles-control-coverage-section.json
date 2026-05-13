@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack: bundles the control coverage section sourced from compliance/controls.yaml (C-2 / §2.9)",
+  "command": "mkdir -p compliance && printf \"- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: reviewed_by:legal:2026-04-01\\n- framework: eu-ai-act\\n  control_id: Article-14\\n  satisfied_by: [hook]\\n  legal_review_status: reviewed_by:legal:2026-04-01\\n\" > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --controls-file \"$PWD/compliance/controls.yaml\" --emit \"$PWD/audit-pack.md\" --section control-coverage && grep \"CC8.1\" audit-pack.md 1>&2 && grep \"Article-14\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

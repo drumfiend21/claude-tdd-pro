@@ -1,0 +1,12 @@
+{
+  "name": "sod gate: rejects verifier output whose verdict is not in {concur, diverge, abstain}",
+  "command": "mkdir -p .claude-tdd-pro/verify && printf '{\"pr_sha\":\"abc123\",\"verdict\":\"maybe\"}' > .claude-tdd-pro/verify/abc123.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verifier-output \"$PWD/.claude-tdd-pro/verify/abc123.json\" --check",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "verdict",
+      "maybe"
+    ]
+  }
+}

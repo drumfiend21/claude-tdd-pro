@@ -1,0 +1,11 @@
+{
+  "name": "sod gate: every gate decision (allow or block) is appended to the C-4 audit log",
+  "command": "mkdir -p .claude-tdd-pro/verify compliance && printf '{\"pr_sha\":\"abc123\",\"verdict\":\"concur\",\"reviewer\":\"verifier-bot\"}' > .claude-tdd-pro/verify/abc123.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verifier-output \"$PWD/.claude-tdd-pro/verify/abc123.json\" --enforce --audit-log \"$PWD/compliance/audit.jsonl\" && grep \"sod-gate\" compliance/audit.jsonl 1>&2 && grep \"abc123\" compliance/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

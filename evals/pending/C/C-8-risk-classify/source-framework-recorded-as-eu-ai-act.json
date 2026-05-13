@@ -1,0 +1,11 @@
+{
+  "name": "/risk-classify: emitted yaml records source_framework: eu-ai-act so the classification is traceable",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/commands/risk-classify.sh\" --use-case credit-scoring --emit \"$PWD/compliance/risk-classification.yaml\" && grep \"^source_framework: eu-ai-act\" compliance/risk-classification.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

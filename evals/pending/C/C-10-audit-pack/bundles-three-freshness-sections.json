@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack: bundles the three freshness sections (Standards Freshness, PR Corpus Freshness, Compliance Freshness) per §2.17",
+  "command": "mkdir -p compliance && printf '{\"standards\":\"fresh\",\"pr_corpus\":\"fresh\",\"compliance\":\"stale-warn-degraded\"}' > compliance/freshness.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --freshness-file \"$PWD/compliance/freshness.json\" --emit \"$PWD/audit-pack.md\" --section freshness && grep \"Standards Freshness\" audit-pack.md 1>&2 && grep \"PR Corpus Freshness\" audit-pack.md 1>&2 && grep \"Compliance Freshness\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/risk-classify: for a high-risk use case, obligations list is non-empty (EU AI Act Title III chapter 2 references)",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/commands/risk-classify.sh\" --use-case credit-scoring --emit \"$PWD/compliance/risk-classification.yaml\" && grep -E \"^obligations:\" compliance/risk-classification.yaml 1>&2 && grep -E \"^  - \" compliance/risk-classification.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

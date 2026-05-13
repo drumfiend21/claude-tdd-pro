@@ -1,0 +1,12 @@
+{
+  "name": "sod gate: abstain verdict blocks the commit only when changed files intersect critical-paths.txt (§2.5 sod_gate_on_critical_paths)",
+  "command": "mkdir -p .claude-tdd-pro/verify && printf '{\"pr_sha\":\"abc123\",\"verdict\":\"abstain\",\"reviewer\":\"verifier-bot\"}' > .claude-tdd-pro/verify/abc123.json && printf 'src/auth/**\\n' > critical-paths.txt && printf 'src/auth/login.ts\\n' > changed-files.txt && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verifier-output \"$PWD/.claude-tdd-pro/verify/abc123.json\" --critical-paths \"$PWD/critical-paths.txt\" --changed-files \"$PWD/changed-files.txt\" --enforce",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "abstain",
+      "critical"
+    ]
+  }
+}

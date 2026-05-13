@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack: bundles the audit log + provenance manifests sections (C-4 + C-3 / §2.8)",
+  "command": "mkdir -p compliance .claude-tdd-pro/provenance && printf '{\"event\":\"commit-signed\",\"sha\":\"abc123\"}\\n' > compliance/audit.jsonl && printf '{\"commit\":\"abc123\",\"timestamp\":\"2026-05-13T00:00:00Z\",\"ai_involvement\":{\"tier\":1}}' > .claude-tdd-pro/provenance/abc123.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log \"$PWD/compliance/audit.jsonl\" --provenance-dir \"$PWD/.claude-tdd-pro/provenance\" --emit \"$PWD/audit-pack.md\" --section audit-log,provenance && grep \"commit-signed\" audit-pack.md 1>&2 && grep \"abc123\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

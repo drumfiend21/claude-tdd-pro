@@ -1,0 +1,11 @@
+{
+  "name": "/risk-classify: prompts/walks the EU AI Act use-case category tree (Annex III / Article 5 categories)",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/commands/risk-classify.sh\" --use-case biometric-categorisation --emit \"$PWD/compliance/risk-classification.yaml\" --emit-walk \"$PWD/compliance/walk.log\" && grep -E \"Annex III|Article 5|EU AI Act\" compliance/walk.log 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "sod gate: hooks/scripts/sod-gate.sh ships and is executable",
+  "command": "test -x \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
