@@ -1,0 +1,11 @@
+{
+  "name": "compliance sync mechanism: --dry-run prints planned changes but creates no folders and archives nothing",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards && printf -- '- id: nist-ai-rmf\\n  name: NIST AI RMF\\n  url: https://example.com\\n  authoritative_publisher: NIST\\n  jurisdiction: us-government\\n  applicable_to: [ai-systems]\\n  identifier_scheme: nist-framework\\n  why_authoritative: |\\n    Federal.\\n    Authoritative.\\n    Widely adopted.\\n  fetch_frequency: weekly\\n  legal_review_required: false\\n  paywalled: false\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/sync-from-sources.sh\" --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --target \"$PWD/generated-code-quality-standards\" --dry-run && ! test -d generated-code-quality-standards/us-government/nist-ai-rmf && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

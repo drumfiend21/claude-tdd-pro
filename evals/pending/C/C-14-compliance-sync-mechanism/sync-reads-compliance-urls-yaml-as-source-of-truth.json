@@ -1,0 +1,11 @@
+{
+  "name": "compliance sync mechanism: reads COMPLIANCE-URLS.yaml as its source of truth and exits 0 on a valid catalog",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards && printf -- '- id: nist-ai-rmf\\n  name: NIST AI RMF\\n  url: https://www.nist.gov/itl/ai-risk-management-framework\\n  authoritative_publisher: NIST\\n  jurisdiction: us\\n  applicable_to: [ai-systems]\\n  identifier_scheme: nist-framework\\n  why_authoritative: |\\n    Published by NIST.\\n    Federal agency mandate.\\n    Widely adopted across US AI work.\\n  fetch_frequency: weekly\\n  legal_review_required: false\\n  paywalled: false\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/sync-from-sources.sh\" --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --target \"$PWD/generated-code-quality-standards\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

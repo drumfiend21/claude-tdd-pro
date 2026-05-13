@@ -1,5 +1,5 @@
 {
-  "name": "/audit-pack: bundles the evidence section sourced from compliance/evidence/<control>/ per-control dirs (C-9)",
+  "name": "/audit-pack: bundles the evidence section sourced from compliance/evidence/<control>/ per-control dirs",
   "command": "mkdir -p compliance/evidence/CC8.1 && printf 'evidence-screenshot.png\\n' > compliance/evidence/CC8.1/manifest.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --evidence-dir \"$PWD/compliance/evidence\" --emit \"$PWD/audit-pack.md\" --section evidence && grep \"CC8.1\" audit-pack.md 1>&2 && grep -E \"evidence|manifest\" audit-pack.md 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {

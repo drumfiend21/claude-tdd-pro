@@ -1,0 +1,11 @@
+{
+  "name": "compliance trace: per-commit AI provenance manifest section 2.8 compliance_state block lists every framework consulted during code generation",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc123 --consulted-compliance nist-csf-2 --consulted-compliance soc2-tsc --emit \"$PWD/.claude-tdd-pro/provenance/abc123.json\" && grep \"nist-csf-2\" .claude-tdd-pro/provenance/abc123.json 1>&2 && grep \"soc2-tsc\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "/compliance-add: when --paywalled is set, requires non-empty --document-url and --attribution-note (§2.19 paywalled handling)",
+  "command": "mkdir -p .claude-tdd-pro && printf '' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf 'Authoritative.\\nIndustry.\\nPaywalled.\\n' > why.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://www.iso.org/standard/x.html --id iso-27017 --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --why-authoritative-file \"$PWD/why.txt\" --paywalled",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "document_url",
+      "attribution"
+    ]
+  }
+}

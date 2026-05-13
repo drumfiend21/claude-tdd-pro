@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-add: command script ships at commands/compliance-add.sh and is executable",
+  "command": "test -x \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

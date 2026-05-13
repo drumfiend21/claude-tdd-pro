@@ -1,0 +1,11 @@
+{
+  "name": "compliance trace: /audit-pack reads compliance_state across per-commit provenance manifests and emits a Compliance Freshness section per C-10",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"commit\":\"abc\",\"compliance_state\":{\"soc2-tsc\":{\"freshness_at_generation\":\"fresh-within-fetch-frequency\",\"controls_consulted\":[\"CC8.1\"]}}}' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --emit \"$PWD/audit-pack.md\" --section compliance-freshness && grep -E \"Compliance Freshness\" audit-pack.md 1>&2 && grep \"soc2-tsc\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

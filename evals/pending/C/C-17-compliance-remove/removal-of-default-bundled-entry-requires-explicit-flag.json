@@ -1,0 +1,12 @@
+{
+  "name": "/compliance-remove: refuses to remove a default-bundled entry without an explicit --force-default flag (safety against accidental loss)",
+  "command": "mkdir -p .claude-tdd-pro && printf -- '- id: soc2-tsc\\n  name: SOC 2 TSC\\n  url: https://www.aicpa.org\\n  authoritative_publisher: AICPA\\n  jurisdiction: us\\n  applicable_to: [service-organizations]\\n  identifier_scheme: aicpa-tsc\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: monthly\\n  legal_review_required: false\\n  paywalled: false\\n  origin: bundled-default\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" soc2-tsc --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "soc2-tsc",
+      "default"
+    ]
+  }
+}

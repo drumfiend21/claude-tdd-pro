@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-add: pops $EDITOR for the operator's why_authoritative when no --why-authoritative-file is provided",
+  "command": "mkdir -p .claude-tdd-pro && printf '' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf '#!/bin/sh\\nprintf \"Authoritative.\\\\nWidely adopted.\\\\nGovernment publisher.\\\\n\" > \"$1\"\\n' > fake-editor.sh && chmod +x fake-editor.sh && EDITOR=\"$PWD/fake-editor.sh\" bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://www.nist.gov/itl/ai-risk-management-framework --id nist-ai-rmf --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && grep -E 'Authoritative' .claude-tdd-pro/COMPLIANCE-URLS.yaml 1>&2 && grep -E 'Government publisher' .claude-tdd-pro/COMPLIANCE-URLS.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

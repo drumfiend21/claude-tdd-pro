@@ -1,0 +1,12 @@
+{
+  "name": "compliance sync mechanism: rejects a malformed catalog entry (missing required §2.19 field) with exit 2 and a clear error",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards && printf -- '- id: broken-entry\\n  name: Broken\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/sync-from-sources.sh\" --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --target \"$PWD/generated-code-quality-standards\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "broken-entry",
+      "missing"
+    ]
+  }
+}

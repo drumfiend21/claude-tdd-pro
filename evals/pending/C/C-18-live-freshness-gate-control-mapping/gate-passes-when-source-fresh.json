@@ -1,0 +1,11 @@
+{
+  "name": "control-mapping freshness gate: passes (exit 0) when last fetched_at falls within the framework fetch_frequency window",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2026-05-12T08:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/nist-csf-2.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/control-mapping-gate.sh\" --framework nist-csf-2 --control-id GV.OC --fetch-frequency weekly --now 2026-05-13T08:00:00Z && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

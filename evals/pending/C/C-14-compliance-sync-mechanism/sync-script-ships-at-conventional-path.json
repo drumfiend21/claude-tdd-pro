@@ -1,0 +1,11 @@
+{
+  "name": "compliance sync mechanism: compliance/sync-from-sources.sh ships and is executable (per §5 C-14 + L-18 parallel)",
+  "command": "test -x \"$CLAUDE_PLUGIN_ROOT/compliance/sync-from-sources.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

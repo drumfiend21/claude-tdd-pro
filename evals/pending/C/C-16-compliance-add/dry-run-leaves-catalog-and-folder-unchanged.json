@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-add: --dry-run leaves both the catalog and target directory untouched",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards && printf '' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf 'Authoritative.\\nWidely adopted.\\nGovernment publisher.\\n' > why.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://www.nist.gov --id nist-ai-rmf --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --why-authoritative-file \"$PWD/why.txt\" --target \"$PWD/generated-code-quality-standards\" --dry-run && ! grep -q nist-ai-rmf .claude-tdd-pro/COMPLIANCE-URLS.yaml && ! test -d generated-code-quality-standards/us-government/nist-ai-rmf && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

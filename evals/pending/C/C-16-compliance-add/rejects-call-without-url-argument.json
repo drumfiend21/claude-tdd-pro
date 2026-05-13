@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-add: invocation with no url argument exits 2 and surfaces a usage error",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "url"
+    ]
+  }
+}

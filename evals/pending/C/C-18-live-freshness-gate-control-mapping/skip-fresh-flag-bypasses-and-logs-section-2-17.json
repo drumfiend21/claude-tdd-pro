@@ -1,0 +1,11 @@
+{
+  "name": "control-mapping freshness gate: --skip-fresh bypasses the gate per section 2.17 but writes a bypass entry to C-4 audit log naming the operator",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2024-01-01T00:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/nist-csf-2.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/control-mapping-gate.sh\" --framework nist-csf-2 --control-id GV.OC --fetch-frequency weekly --now 2026-05-13T00:00:00Z --skip-fresh --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && grep \"skip-fresh\" .claude-tdd-pro/audit.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

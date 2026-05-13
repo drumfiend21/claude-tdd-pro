@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-remove: command script ships at commands/compliance-remove.sh and is executable",
+  "command": "test -x \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

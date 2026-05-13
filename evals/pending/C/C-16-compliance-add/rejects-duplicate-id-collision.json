@@ -1,0 +1,12 @@
+{
+  "name": "/compliance-add: rejects (exit 2) when --id matches an existing entry in the catalog",
+  "command": "mkdir -p .claude-tdd-pro && printf -- '- id: nist-ai-rmf\\n  name: existing\\n  url: https://nist.gov\\n  authoritative_publisher: NIST\\n  jurisdiction: us-government\\n  applicable_to: [ai]\\n  identifier_scheme: nist\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: weekly\\n  legal_review_required: false\\n  paywalled: false\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf 'Authoritative.\\nWidely adopted.\\nGovernment publisher.\\n' > why.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://www.nist.gov --id nist-ai-rmf --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --why-authoritative-file \"$PWD/why.txt\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "nist-ai-rmf",
+      "exists"
+    ]
+  }
+}

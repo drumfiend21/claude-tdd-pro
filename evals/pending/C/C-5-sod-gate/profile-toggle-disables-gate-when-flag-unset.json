@@ -1,5 +1,5 @@
 {
-  "name": "sod gate: when profile does not require sod_gate_on_critical_paths the gate exits 0 even with no verifier output (§2.5)",
+  "name": "sod gate: when profile does not require sod_gate_on_critical_paths the gate exits 0 even with no verifier output",
   "command": "mkdir -p .claude-tdd-pro/verify && printf 'require:\\n  sod_gate_on_critical_paths: false\\n' > profile.yaml && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --pr-sha abc123 --verifier-output \"$PWD/.claude-tdd-pro/verify/abc123.json\" --profile \"$PWD/profile.yaml\" --enforce && echo ok 1>&2",
   "setup": [],
   "expect": {

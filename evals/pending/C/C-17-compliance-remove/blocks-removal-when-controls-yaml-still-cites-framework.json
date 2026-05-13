@@ -1,0 +1,12 @@
+{
+  "name": "/compliance-remove: refuses (exit 2) when compliance/controls.yaml still cites the framework being removed (preserve C-2 mapping integrity)",
+  "command": "mkdir -p .claude-tdd-pro compliance && printf -- '- id: eu-ai-act\\n  name: EU AI Act\\n  url: https://eur-lex.europa.eu\\n  authoritative_publisher: EU\\n  jurisdiction: european-union\\n  applicable_to: [ai]\\n  identifier_scheme: eu-regulation\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: weekly\\n  legal_review_required: true\\n  paywalled: false\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf -- '- framework: eu-ai-act\\n  control_id: Article-14\\n  satisfied_by: [hook]\\n  legal_review_status: pending\\n' > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" eu-ai-act --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --controls-file \"$PWD/compliance/controls.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "eu-ai-act",
+      "Article-14"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance sync mechanism: when a catalog entry is removed, the corresponding folder is archived (moved to _meta/archived/) rather than silently deleted",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards/us-government/sox-itcc generated-code-quality-standards/_meta && printf 'rule-file\\n' > generated-code-quality-standards/us-government/sox-itcc/sentinel.yaml && printf -- '' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/sync-from-sources.sh\" --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --target \"$PWD/generated-code-quality-standards\" --on-removal archive && ! test -d generated-code-quality-standards/us-government/sox-itcc && test -d generated-code-quality-standards/_meta/archived/sox-itcc && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

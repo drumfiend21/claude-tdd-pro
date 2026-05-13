@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-add: appends a new entry to .claude-tdd-pro/COMPLIANCE-URLS.yaml with the supplied id",
+  "command": "mkdir -p .claude-tdd-pro && printf '' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf 'Authoritative.\\nWidely adopted.\\nGovernment publisher.\\n' > why.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://www.nist.gov --id nist-ai-rmf --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --why-authoritative-file \"$PWD/why.txt\" && grep -E '^- id: nist-ai-rmf' .claude-tdd-pro/COMPLIANCE-URLS.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

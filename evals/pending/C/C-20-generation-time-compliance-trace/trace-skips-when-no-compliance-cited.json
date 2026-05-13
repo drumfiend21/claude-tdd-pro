@@ -1,0 +1,11 @@
+{
+  "name": "compliance trace: when generated code cites zero compliance controls, compliance_state field is empty object {} (not omitted, so consumers can distinguish \"no controls\" from \"feature unused\")",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc --emit \"$PWD/.claude-tdd-pro/provenance/abc.json\" && node -e 'const m=JSON.parse(require(\"fs\").readFileSync(\".claude-tdd-pro/provenance/abc.json\",\"utf8\"));if(m.compliance_state&&Object.keys(m.compliance_state).length===0){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: \"+JSON.stringify(m.compliance_state)+\"\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

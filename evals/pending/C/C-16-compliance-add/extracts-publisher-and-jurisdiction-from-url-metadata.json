@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-add: infers authoritative_publisher and jurisdiction from the supplied url (e.g. eur-lex.europa.eu => European Union)",
+  "command": "mkdir -p .claude-tdd-pro && printf '' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && printf 'Adopted by EU.\\nBinding on EU operators.\\nAuthoritative EU source.\\n' > why.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://eur-lex.europa.eu/eli/reg/2024/1689 --id eu-ai-act --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --why-authoritative-file \"$PWD/why.txt\" && grep -E 'authoritative_publisher:.*European' .claude-tdd-pro/COMPLIANCE-URLS.yaml 1>&2 && grep -E 'jurisdiction:.*european-union' .claude-tdd-pro/COMPLIANCE-URLS.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
