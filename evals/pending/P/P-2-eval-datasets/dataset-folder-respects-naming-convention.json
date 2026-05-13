@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: dataset files named <agent-name>.jsonl with agent-name in kebab-case (matches agent .md basename)",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents\"/*.jsonl; do basename \"$f\" .jsonl | grep -qE \"^[a-z][a-z0-9-]*$\" || { echo \"FAIL $(basename $f)\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

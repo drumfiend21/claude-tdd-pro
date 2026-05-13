@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-eval: writes JSON output to prompts/eval-history/<id>/<version>.json per P-3 path convention",
+  "command": "mkdir -p evals/datasets/agents prompts/rsc-reviewer && echo '{\"bootstrap_seed\":true,\"input\":\"x\",\"expected\":\"y\"}' > evals/datasets/agents/rsc-reviewer.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" rsc-reviewer --version 2.1.0 && [ -f prompts/eval-history/rsc-reviewer/2.1.0.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

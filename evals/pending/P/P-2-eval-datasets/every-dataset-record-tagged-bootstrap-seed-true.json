@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: every record across agents/ and skills/ has bootstrap_seed:true (origin from O-1 seed corpus)",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/evals/datasets\" -name \"*.jsonl\" | while read f; do node -e 'require(\"fs\").readFileSync(\"'\"$f\"'\",\"utf8\").trim().split(\"\\n\").forEach(l=>{const j=JSON.parse(l);if(j.bootstrap_seed!==true)throw new Error(\"FAIL: \"+process.argv[1])})' \"$f\" || exit 1; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

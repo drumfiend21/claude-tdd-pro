@@ -1,0 +1,13 @@
+{
+  "name": "/prompt-promote: rejects promotion when no prompts/eval-history/<id>/<version>.json exists (must run /prompt-eval first)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" rsc-reviewer 2.1.0",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "eval",
+      "required",
+      "prompt-eval"
+    ]
+  }
+}

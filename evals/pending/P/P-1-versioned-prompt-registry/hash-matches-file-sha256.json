@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry: version.hash matches sha256(<file content>); --check-hashes verifies",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-prompt-registry.sh\" \"$CLAUDE_PLUGIN_ROOT/prompts/registry.yaml\" --check-hashes && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

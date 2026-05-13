@@ -1,0 +1,12 @@
+{
+  "name": "/prompt-eval: exits 2 when no <agent> argument supplied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "agent",
+      "required"
+    ]
+  }
+}

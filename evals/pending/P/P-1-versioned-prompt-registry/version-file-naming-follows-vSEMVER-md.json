@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry: each version file under prompts/<id>/ named v<semver>.md (e.g. v2.1.0.md)",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/prompts\" -mindepth 2 -name \"*.md\" | while read f; do basename \"$f\" | grep -qE \"^v[0-9]+\\.[0-9]+\\.[0-9]+\\.md$\" || { echo \"FAIL $f\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

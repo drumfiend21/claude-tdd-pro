@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: each agent dataset has ~30 inputs (25-35 range per P-2)",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents\"/*.jsonl; do c=$(wc -l < \"$f\" | tr -d \" \"); [ \"$c\" -ge 25 ] && [ \"$c\" -le 35 ] || { echo \"FAIL $(basename $f) has $c\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

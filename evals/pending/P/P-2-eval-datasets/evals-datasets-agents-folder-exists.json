@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: evals/datasets/agents/ folder ships at install",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

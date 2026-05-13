@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry: each registry entry's versions[].file must point to an existing prompts/<id>/v<semver>.md file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-prompt-registry.sh\" \"$CLAUDE_PLUGIN_ROOT/prompts/registry.yaml\" --check-files && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

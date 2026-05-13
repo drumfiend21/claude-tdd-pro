@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-eval: reads the corresponding evals/datasets/agents/<agent>.jsonl as the input set",
+  "command": "mkdir -p evals/datasets/agents && echo '{\"bootstrap_seed\":true,\"input\":\"x\",\"expected\":\"y\"}' > evals/datasets/agents/review-types.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" review-types --dry-run 2>out.txt && grep \"evals/datasets/agents/review-types.jsonl\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: every dataset file is valid UTF-8 and every line parses as JSON",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/evals/datasets\" -name \"*.jsonl\" | while read f; do node -e 'require(\"fs\").readFileSync(\"'\"$f\"'\",\"utf8\").trim().split(\"\\n\").forEach(l=>JSON.parse(l))' || { echo \"FAIL $f\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

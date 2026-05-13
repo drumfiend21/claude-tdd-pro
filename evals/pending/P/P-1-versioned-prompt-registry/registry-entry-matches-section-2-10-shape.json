@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry: each entry has id + versions array per §2.10 with version, file, hash, created, eval_pass_rate, regression_from_prior, status, migration fields",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-prompt-registry.sh\" \"$CLAUDE_PLUGIN_ROOT/prompts/registry.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

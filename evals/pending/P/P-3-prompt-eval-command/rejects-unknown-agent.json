@@ -1,0 +1,12 @@
+{
+  "name": "/prompt-eval: exits 2 when the referenced agent has no dataset and no prompts/registry.yaml entry",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" nonexistent-agent",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "nonexistent-agent",
+      "not found"
+    ]
+  }
+}

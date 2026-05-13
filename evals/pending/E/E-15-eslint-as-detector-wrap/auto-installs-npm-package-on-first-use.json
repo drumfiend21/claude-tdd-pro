@@ -1,0 +1,13 @@
+{
+  "name": "eslint-wrap: on first invocation, installs the eslint_plugin_npm package into node_modules; subsequent runs cached",
+  "command": "mkdir -p node_modules && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" --rule-id g-react-002 --eslint-rule react-hooks/exhaustive-deps --eslint-plugin-npm eslint-plugin-react-hooks --eslint-plugin-version 4.6.0 --paths \"src/**/*.tsx\" 2>out.txt && grep -E \"npm install|installed\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && printf 'import {useEffect} from \"react\";\\nfunction X(){useEffect(()=>{},[])}\\n' > src/x.tsx"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

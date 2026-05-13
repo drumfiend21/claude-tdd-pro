@@ -1,0 +1,11 @@
+{
+  "name": "eslint-wrap: eslint_options object from rule.detector_config is forwarded as the second arg of ESLint config { rules:{<rule>:[\"error\", <options>]} }",
+  "command": "mkdir -p src && printf \"import {useEffect} from \\\"react\\\";\\nfunction X(){useEffect(()=>{},[])}\\n\" > src/x.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" --rule-id g-react-002 --eslint-rule react-hooks/exhaustive-deps --eslint-plugin-npm eslint-plugin-react-hooks --eslint-plugin-version 4.6.0 --eslint-options '{\"additionalHooks\":\"useCustom\"}' --paths \"src/**/*.tsx\" --trace-config 2>out.txt && grep -E \"additionalHooks.*useCustom\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

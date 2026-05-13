@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-promote: command script exists",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" --help 2>&1 | grep -E \"Usage:.*prompt-promote\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

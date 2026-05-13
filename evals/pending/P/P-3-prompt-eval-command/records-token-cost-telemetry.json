@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-eval: emits per-record token cost line items to telemetry (H-1 cross-ref)",
+  "command": "mkdir -p .claude-tdd-pro evals/datasets/agents prompts/rsc-reviewer && echo '{\"bootstrap_seed\":true,\"input\":\"x\",\"expected\":\"y\"}' > evals/datasets/agents/rsc-reviewer.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" rsc-reviewer --version 2.1.0 --emit-telemetry \"$PWD/.claude-tdd-pro/telemetry.jsonl\" && grep \"tokens_used\" .claude-tdd-pro/telemetry.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

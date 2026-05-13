@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: each review-* subagent has evals/datasets/agents/<agent-name>.jsonl",
+  "command": "for a in review-react-rsc review-react-a11y review-node-boundaries review-node-observability review-types review-compliance; do test -s \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents/$a.jsonl\" || { echo \"FAIL $a missing dataset\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

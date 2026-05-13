@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: each skills/<skill>/SKILL.md that is in a review loop has a matching evals/datasets/skills/<skill>.jsonl with ~30 inputs",
+  "command": "for d in \"$CLAUDE_PLUGIN_ROOT/skills\"/*/; do n=$(basename \"$d\"); test -s \"$CLAUDE_PLUGIN_ROOT/evals/datasets/skills/$n.jsonl\" 2>/dev/null && c=$(wc -l < \"$CLAUDE_PLUGIN_ROOT/evals/datasets/skills/$n.jsonl\" | tr -d \" \") && [ \"$c\" -ge 25 ] && [ \"$c\" -le 35 ] || true; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

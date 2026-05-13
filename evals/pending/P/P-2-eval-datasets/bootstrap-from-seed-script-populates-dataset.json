@@ -1,0 +1,11 @@
+{
+  "name": "eval datasets: P-2 bootstrap script reads O-1 seed/agent-datasets/<agent>.jsonl and copies into evals/datasets/agents/<agent>.jsonl",
+  "command": "mkdir -p evals/datasets/agents && bash \"$CLAUDE_PLUGIN_ROOT/commands/p2-bootstrap-from-seed.sh\" --agent review-types && [ -s evals/datasets/agents/review-types.jsonl ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

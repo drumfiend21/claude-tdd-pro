@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry: prompts/registry.yaml ships at install time per P-1",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/prompts/registry.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

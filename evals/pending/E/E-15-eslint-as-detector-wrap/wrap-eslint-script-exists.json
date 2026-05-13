@@ -1,0 +1,11 @@
+{
+  "name": "eslint-wrap: rubric/detectors/wrap-eslint.sh ships at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
