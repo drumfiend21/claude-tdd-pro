@@ -1,0 +1,12 @@
+{
+  "name": "rule id namespacing: rule in _community/<plugin-id>/ must use `<plugin-id>/<rule-id>` namespaced form (forward-slash delimiter)",
+  "command": "mkdir -p tree/_community/acme && echo 'maintainer: a@b.c\\nlicense: MIT' > tree/_community/acme/README.md && printf 'source:\\n  id: a\\n  authoritative_publisher: Acme\\n  authoritative_url: https://acme.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-wrong, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: [{source: x, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-04T00:00:00Z, content_hash: sha256:S}]}\\nrecommended_set: [g-wrong]\\nall_set: [g-wrong]\\n' > tree/_community/acme/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "g-wrong",
+      "acme/"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "aggregator: --pin-to-lock writes quality_standards_directory_hash to lock.json (per §2.7); subsequent run with mismatching tree hash blocks",
+  "command": "mkdir -p .claude-tdd-pro tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --pin-to-lock && grep -E '\"quality_standards_directory_hash\":\"sha256:' .claude-tdd-pro/lock.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

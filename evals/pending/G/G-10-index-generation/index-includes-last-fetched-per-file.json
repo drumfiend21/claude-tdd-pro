@@ -1,0 +1,11 @@
+{
+  "name": "index generation: INDEX.md per-file row includes last-fetched timestamp from source.fetched_at",
+  "command": "mkdir -p tree/google tree/_meta && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T08:30:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --emit-index \"$PWD/tree/_meta/INDEX.md\" && grep -E '2026-05-04T08:30:00Z' tree/_meta/INDEX.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "aggregator: --cache-location <path> uses the supplied directory; default is .claude-tdd-pro/aggregator-cache/",
+  "command": "mkdir -p tree/google /tmp/agg-cache-$$ && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --cache --cache-location \"/tmp/agg-cache-$$/c\" >/dev/null 2>&1 && [ -f \"/tmp/agg-cache-$$/c\" ] && rm -rf \"/tmp/agg-cache-$$\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

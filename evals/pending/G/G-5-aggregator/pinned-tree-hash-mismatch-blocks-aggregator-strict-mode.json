@@ -1,0 +1,12 @@
+{
+  "name": "aggregator: --strict mode refuses to run when current tree hash differs from lock-pinned quality_standards_directory_hash",
+  "command": "mkdir -p .claude-tdd-pro tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --pin-to-lock && echo \"# changed\" >> tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --strict",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "quality_standards_directory_hash",
+      "mismatch"
+    ]
+  }
+}
