@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: emitted SBOM includes the CycloneDX AI/ML extension under components[].mlModel or modelCard per the standard",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json --include-models claude-opus,claude-sonnet && grep -E \"\\\"modelCard\\\":\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

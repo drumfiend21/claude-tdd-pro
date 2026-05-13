@@ -1,0 +1,11 @@
+{
+  "name": "merkle audit log: 50 parallel appends produce 50 well-formed lines (no torn writes), and verify-chain succeeds",
+  "command": "mkdir -p .claude-tdd-pro && for i in $(seq 1 50); do bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event \"e$i\" --actor t --data {} & done; wait && [ \"$(wc -l < .claude-tdd-pro/audit.jsonl | tr -d \" \")\" = \"50\" ] && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --verify-chain && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

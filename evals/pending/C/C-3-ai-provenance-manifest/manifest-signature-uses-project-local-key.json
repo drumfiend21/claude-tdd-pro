@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: signature field is sha256:<hex> derived from canonical-JSON of the manifest body using project-local signing key",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/keys && echo \"test-signing-key\" > .claude-tdd-pro/keys/provenance.key && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 --signing-key \"$PWD/.claude-tdd-pro/keys/provenance.key\" && grep -E \"\\\"signature\\\":\\\"sha256:[a-f0-9]+\\\"\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

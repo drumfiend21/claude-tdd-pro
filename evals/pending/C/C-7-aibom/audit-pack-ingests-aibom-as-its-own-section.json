@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: /audit-pack includes AIBOM as a top-level artifact (per C-10) referenced by hash-pinned path",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --emit \"$PWD/audit-pack.md\" --include-aibom compliance/AIBOM-v0.3.0.json && grep -E \"AIBOM\" audit-pack.md 1>&2 && grep -E \"sha256:[a-f0-9]\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

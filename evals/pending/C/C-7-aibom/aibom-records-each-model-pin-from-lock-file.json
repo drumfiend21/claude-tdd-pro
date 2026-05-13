@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: components[].mlModel entries include each model id pinned in lock.json.model_pins (e.g. claude-opus-4-7)",
+  "command": "mkdir -p .claude-tdd-pro compliance && printf '{\"plugin_version\":\"0.3.0\",\"model_pins\":{\"reviewer\":\"claude-opus-4-7\",\"architect\":\"claude-sonnet-4-6\"}}' > .claude-tdd-pro/lock.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json && grep \"claude-opus-4-7\" compliance/AIBOM-v0.3.0.json 1>&2 && grep \"claude-sonnet-4-6\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

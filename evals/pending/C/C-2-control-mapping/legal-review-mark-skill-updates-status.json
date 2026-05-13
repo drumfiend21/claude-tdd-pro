@@ -1,0 +1,11 @@
+{
+  "name": "control mapping: /legal-review-mark <framework> <control_id> --reviewer <name> --date <date> updates legal_review_status to reviewed_by:<name>:<date>",
+  "command": "printf \"- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n\" > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/legal-review-mark.sh\" --framework soc2-tsc --control-id CC8.1 --reviewer legal-team --date 2026-05-13 --controls-file \"$PWD/controls.yaml\" && grep \"reviewed_by:legal-team:2026-05-13\" controls.yaml 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

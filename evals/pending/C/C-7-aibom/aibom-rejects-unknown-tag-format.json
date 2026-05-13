@@ -1,0 +1,12 @@
+{
+  "name": "AIBOM: --tag must match semver-like pattern v?[0-9]+.[0-9]+.[0-9]+ (rejects arbitrary strings)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag not-a-version --emit compliance/x.json",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "tag",
+      "semver"
+    ]
+  }
+}

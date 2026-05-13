@@ -1,0 +1,12 @@
+{
+  "name": "merkle audit log: verify-chain detects a deleted line (gap in the chain)",
+  "command": "mkdir -p .claude-tdd-pro && for i in 1 2 3; do bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event \"e$i\" --actor t --data {}; done && sed -i.bak \"2d\" .claude-tdd-pro/audit.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --verify-chain",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "chain",
+      "broken"
+    ]
+  }
+}

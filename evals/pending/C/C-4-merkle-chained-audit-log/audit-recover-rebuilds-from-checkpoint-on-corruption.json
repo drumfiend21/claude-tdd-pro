@@ -1,0 +1,11 @@
+{
+  "name": "merkle audit log: compliance/audit-recover.sh rebuilds the chain by replaying entries forward from the most recent valid checkpoint",
+  "command": "mkdir -p .claude-tdd-pro compliance/audit-checkpoints && printf '{\"seq\":1,\"last_line_number\":100,\"merkle_root\":\"sha256:GOOD\",\"signature\":\"sha256:S\",\"timestamp\":\"2026-05-13T08:00:00Z\"}' > compliance/audit-checkpoints/0001.json && for i in $(seq 1 100); do bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event \"e$i\" --actor t --data {} >/dev/null 2>&1; done && echo \"GARBAGE LINE\" >> .claude-tdd-pro/audit.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-recover.sh\" --truncate-to-last-checkpoint && [ \"$(wc -l < .claude-tdd-pro/audit.jsonl | tr -d \" \")\" = \"100\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

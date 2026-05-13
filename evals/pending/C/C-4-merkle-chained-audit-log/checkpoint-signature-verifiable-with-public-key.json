@@ -1,0 +1,11 @@
+{
+  "name": "merkle audit log: each checkpoint signature is verifiable against the corresponding public key (operator can prove integrity to auditor)",
+  "command": "mkdir -p .claude-tdd-pro/keys compliance/audit-checkpoints && echo \"key\" > .claude-tdd-pro/keys/audit.key && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event x --actor t --data {} --signing-key \"$PWD/.claude-tdd-pro/keys/audit.key\" && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --emit-checkpoint-now --signing-key \"$PWD/.claude-tdd-pro/keys/audit.key\" && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --verify-checkpoint compliance/audit-checkpoints/0001.json --pubkey \"$PWD/.claude-tdd-pro/keys/audit.key\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

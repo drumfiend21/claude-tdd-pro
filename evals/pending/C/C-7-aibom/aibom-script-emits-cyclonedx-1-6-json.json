@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: compliance/aibom.sh emits compliance/AIBOM-<tag>.json with bomFormat:CycloneDX and specVersion:1.6",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json && grep -E \"\\\"bomFormat\\\":\\\"CycloneDX\\\"\" compliance/AIBOM-v0.3.0.json 1>&2 && grep -E \"\\\"specVersion\\\":\\\"1.6\\\"\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

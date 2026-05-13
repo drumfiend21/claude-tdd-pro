@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: emitter writes .claude-tdd-pro/provenance/<commit-sha>.json per §2.8",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 && [ -f .claude-tdd-pro/provenance/abc123.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

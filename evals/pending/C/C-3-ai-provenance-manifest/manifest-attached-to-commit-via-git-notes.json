@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: emitter attaches the manifest path to the commit via `git notes add` under the refs/notes/provenance namespace",
+  "command": "git init -q . && git config user.email t@t && git config user.name t && echo x > f && git add f && git commit -q -m \"feat: x\" && sha=$(git rev-parse HEAD) && mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha $sha --git-notes && git notes --ref=refs/notes/provenance show $sha 2>note.out && grep \"provenance\" note.out 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: identical inputs produce byte-identical JSON (canonical key ordering, no timestamp drift in body unless --timestamp explicit)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 --timestamp 2026-05-13T08:00:00Z --emit \"$PWD/m1.json\" && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 --timestamp 2026-05-13T08:00:00Z --emit \"$PWD/m2.json\" && diff m1.json m2.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: --validate runs the emitted JSON through a bundled CycloneDX 1.6 schema validator; non-conformant SBOMs fail",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --validate compliance/AIBOM-v0.3.0.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

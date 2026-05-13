@@ -1,0 +1,13 @@
+{
+  "name": "merkle audit log: first line's prev_hash is GENESIS (chain root marker)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event start --actor t --data {} && head -1 .claude-tdd-pro/audit.jsonl | grep \"prev_hash.*GENESIS\" 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "merkle audit log: each entry includes prev_hash linking to the canonical hash of the previous line (Merkle chain)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event a --actor t --data {} && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event b --actor t --data {} && tail -1 .claude-tdd-pro/audit.jsonl | grep -E \"prev_hash.*sha256:[a-f0-9]+\" 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

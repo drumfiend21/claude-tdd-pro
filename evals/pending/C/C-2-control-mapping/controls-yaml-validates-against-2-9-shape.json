@@ -1,0 +1,11 @@
+{
+  "name": "control mapping: compliance/controls.yaml entries match §2.9 schema {framework, control_id, satisfied_by[], legal_review_status}",
+  "command": "printf \"- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n\" > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-controls-yaml.sh\" \"$PWD/controls.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

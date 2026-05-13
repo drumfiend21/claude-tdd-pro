@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: emitted SBOM lists each prompt registry entry (id + version) as a component (per P-1 + P-7 ingestion)",
+  "command": "mkdir -p compliance prompts && printf \"- id: rsc-reviewer\\n  versions:\\n    - version: 2.1.0\\n      file: rsc-reviewer/v2.1.0.md\\n      status: active\\n\" > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json --include-prompts && grep \"rsc-reviewer\" compliance/AIBOM-v0.3.0.json 1>&2 && grep \"2.1.0\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

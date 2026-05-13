@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: rubric_state.rubric_hash matches the G-5 aggregator output hash at generation time (per §2.7 quality_standards_directory_hash)",
+  "command": "mkdir -p .claude-tdd-pro/provenance tree/google && printf \"source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 --tree \"$PWD/tree\" && grep -E \"rubric_hash.*sha256:[a-f0-9]\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

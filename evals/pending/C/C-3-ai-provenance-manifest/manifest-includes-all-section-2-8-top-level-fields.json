@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: emitted JSON contains all top-level fields per §2.8 schema (commit, timestamp, author_human, ai_involvement, rubric_state, standards_state, pr_corpus_state, compliance_state, human_review, cost_telemetry, decision_provenance, signature)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 && for k in commit timestamp author_human ai_involvement rubric_state standards_state pr_corpus_state compliance_state human_review cost_telemetry decision_provenance signature; do grep -E \"\\\"$k\\\":\" .claude-tdd-pro/provenance/abc123.json >/dev/null || { echo \"FAIL missing $k\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

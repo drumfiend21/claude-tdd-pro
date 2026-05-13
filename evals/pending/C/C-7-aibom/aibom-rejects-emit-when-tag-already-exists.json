@@ -1,0 +1,12 @@
+{
+  "name": "AIBOM: refuses to overwrite an existing AIBOM-<tag>.json without --force (SBOM for a release should be immutable)",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "exists",
+      "--force"
+    ]
+  }
+}

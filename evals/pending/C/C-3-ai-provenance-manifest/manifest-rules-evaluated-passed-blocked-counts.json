@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: rubric_state lists rules_evaluated, rules_passed, rules_blocked as arrays of rule ids (allowing audit reconstruction)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 --rules-evaluated g-x-001,g-x-002 --rules-blocked g-x-002 && grep -E \"rules_evaluated\" .claude-tdd-pro/provenance/abc123.json 1>&2 && grep -E \"g-x-002\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

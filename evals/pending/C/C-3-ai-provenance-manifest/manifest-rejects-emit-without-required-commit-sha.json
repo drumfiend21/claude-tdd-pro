@@ -1,0 +1,12 @@
+{
+  "name": "AI provenance manifest: emitter exits 2 without --commit-sha (manifest must be addressable per-commit)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "commit-sha",
+      "required"
+    ]
+  }
+}

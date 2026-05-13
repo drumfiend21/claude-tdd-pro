@@ -1,0 +1,11 @@
+{
+  "name": "AI provenance manifest: decision_provenance.adrs lists every ADR referenced via Decision: trailer in commit message; architect_session_id linked",
+  "command": "mkdir -p .claude-tdd-pro/provenance docs/adr && touch docs/adr/2026-05-04-x.md && bash \"$CLAUDE_PLUGIN_ROOT/compliance/provenance-emit.sh\" --commit-sha abc123 --decision-trailer \"Decision: 2026-05-04-x\" && grep \"2026-05-04-x\" .claude-tdd-pro/provenance/abc123.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

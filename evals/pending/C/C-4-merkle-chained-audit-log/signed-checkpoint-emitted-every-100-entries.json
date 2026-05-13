@@ -1,0 +1,11 @@
+{
+  "name": "merkle audit log: every 100 appended entries triggers a signed checkpoint write to compliance/audit-checkpoints/<seq>.json",
+  "command": "mkdir -p .claude-tdd-pro compliance/audit-checkpoints .claude-tdd-pro/keys && echo \"test-key\" > .claude-tdd-pro/keys/audit.key && for i in $(seq 1 100); do bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event \"e$i\" --actor t --data {} --signing-key \"$PWD/.claude-tdd-pro/keys/audit.key\" >/dev/null 2>&1; done && [ -f compliance/audit-checkpoints/0001.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "merkle audit log: hash is computed over canonical JSON (sorted keys, no whitespace) so reformatting one line does not break verification",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event a --actor t --data '{\"b\":2,\"a\":1}' && node -e 'const fs=require(\"fs\");let l=fs.readFileSync(\".claude-tdd-pro/audit.jsonl\",\"utf8\").trim();const j=JSON.parse(l);const reordered=JSON.stringify(j,Object.keys(j).reverse());fs.writeFileSync(\".claude-tdd-pro/audit.jsonl\",reordered+\"\\n\")' && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --verify-chain && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

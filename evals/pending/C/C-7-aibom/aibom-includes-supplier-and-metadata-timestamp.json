@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM: top-level metadata.timestamp is ISO-8601 UTC; metadata.tools includes the plugin id+version",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json && grep -E \"\\\"timestamp\\\":\\\"20[0-9]{2}-.*Z\\\"\" compliance/AIBOM-v0.3.0.json 1>&2 && grep \"claude-tdd-pro\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "merkle audit log: verify-chain mode detects a modified line (next line's prev_hash no longer matches the canonical hash of the tampered line)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event a --actor t --data {} && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event b --actor t --data {} && node -e 'const fs=require(\"fs\");const ls=fs.readFileSync(\".claude-tdd-pro/audit.jsonl\",\"utf8\").trim().split(\"\\n\");const j=JSON.parse(ls[0]);j.event=\"tampered\";ls[0]=JSON.stringify(j);fs.writeFileSync(\".claude-tdd-pro/audit.jsonl\",ls.join(\"\\n\")+\"\\n\")' && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --verify-chain",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "chain",
+      "mismatch"
+    ]
+  }
+}
