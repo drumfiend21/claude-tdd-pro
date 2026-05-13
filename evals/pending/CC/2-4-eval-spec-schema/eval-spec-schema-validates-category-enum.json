@@ -1,0 +1,11 @@
+{
+  "name": "eval spec schema: rejects spec with category outside allowed enum",
+  "command": "echo '{\"name\":\"t\",\"command\":\"echo hi\",\"setup\":[],\"expect\":{\"exit_code\":0},\"category\":\"bogus-category\"}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"category\" && echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

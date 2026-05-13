@@ -1,0 +1,11 @@
+{
+  "name": "eval spec schema: bootstrap_seed must be boolean when present",
+  "command": "echo '{\"name\":\"t\",\"command\":\"echo hi\",\"setup\":[],\"expect\":{\"exit_code\":0},\"bootstrap_seed\":\"true\"}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"bootstrap_seed\" && echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

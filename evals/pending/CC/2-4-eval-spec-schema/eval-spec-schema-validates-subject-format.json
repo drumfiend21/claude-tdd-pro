@@ -1,0 +1,11 @@
+{
+  "name": "eval spec schema: subject must match `<kind>:<name>` where kind ∈ detector|hook|subagent|skill",
+  "command": "echo '{\"name\":\"t\",\"command\":\"echo hi\",\"setup\":[],\"expect\":{\"exit_code\":0},\"subject\":\"invalid-subject-format\"}' > spec.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-spec.sh\" spec.json 2>&1 | grep -q \"subject\" && echo ok >&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

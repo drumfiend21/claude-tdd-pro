@@ -1,0 +1,13 @@
+{
+  "name": "detector contract: each finding includes messageId and data fields",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\" | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);const f=(r.findings||[])[0];if(f&&typeof f.messageId===\"string\"&&typeof f.data===\"object\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: missing messageId/data on finding\\n\");process.exit(1)}});'",
+  "setup": [
+    "mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
