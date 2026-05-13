@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: hook reads lock.json plugin_version and refuses to run if local plugin version drifts (same invariant as X-1/X-2)",
+  "command": "grep -E \"plugin_version|lock.json\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: hook entry uses language:script + entry pointing to rubric/runner.sh so `pre-commit install` wires it correctly",
+  "command": "grep -E \"language: script|language: system\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && grep -E \"entry:.*rubric/runner.sh\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

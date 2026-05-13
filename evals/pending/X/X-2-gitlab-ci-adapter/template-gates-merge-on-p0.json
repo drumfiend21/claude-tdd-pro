@@ -1,0 +1,11 @@
+{
+  "name": "gitlab ci: template fails the pipeline (gating MR) when runner reports any P0 violation",
+  "command": "grep -E \"allow_failure: false|exit 1\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

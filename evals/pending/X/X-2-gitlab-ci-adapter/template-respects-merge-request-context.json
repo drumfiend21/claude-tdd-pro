@@ -1,0 +1,11 @@
+{
+  "name": "gitlab ci: template runs only on merge_request_event (not every push) to avoid duplicate runs",
+  "command": "grep -E \"merge_request_event\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow exits non-zero when runner reports any P0 (severity:error) violation, gating the PR",
+  "command": "grep -E \"exit 1|fail|severity.*P0|severity.*error\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

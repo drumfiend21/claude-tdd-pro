@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow runs rubric/runner.sh limited to changed files in the PR diff (not the full tree)",
+  "command": "grep -E \"rubric/runner.sh|runner\\.sh\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && grep -E \"git diff|github.event.pull_request\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

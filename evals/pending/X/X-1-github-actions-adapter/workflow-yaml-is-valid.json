@@ -1,0 +1,11 @@
+{
+  "name": "github actions: rubric-check.yml is valid YAML and passes basic actions/lint",
+  "command": "ruby -ryaml -e 'YAML.load_file(ARGV[0])' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "gitlab ci: template invokes the same rubric/runner.sh as X-1 GitHub Actions adapter (single canonical entry-point)",
+  "command": "grep -E \"rubric/runner.sh\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

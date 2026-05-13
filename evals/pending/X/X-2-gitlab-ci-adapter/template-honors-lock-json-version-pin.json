@@ -1,0 +1,11 @@
+{
+  "name": "gitlab ci: template reads lock.json plugin_version and verifies match (consistency across local/CI)",
+  "command": "grep -E \"plugin_version|lock.json\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

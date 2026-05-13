@@ -1,0 +1,11 @@
+{
+  "name": "gitlab ci: template runs the same pre-flight freshness check as X-1 for regulated/financial/government profiles",
+  "command": "grep -E \"freshness|regulated|financial|government\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: docs/getting-started.md or docs/reference.md documents `pre-commit install --config ci/pre-commit-hooks.yaml`",
+  "command": "grep -rE \"pre-commit install\" \"$CLAUDE_PLUGIN_ROOT/docs/\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

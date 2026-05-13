@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: hook runs only on files staged for commit (pass_filenames:true with files regex), not the full tree",
+  "command": "grep -E \"pass_filenames: true|files:\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: pre-commit-hooks.yaml is valid YAML and conforms to pre-commit framework schema (id, name, entry, language, files)",
+  "command": "ruby -ryaml -e 'YAML.load_file(ARGV[0])' \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" && for k in id name entry language; do grep -E \"^- $k:|^  $k:\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" >/dev/null || { echo \"FAIL $k missing\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

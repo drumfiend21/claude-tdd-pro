@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow checks out lock.json and verifies plugin_version matches the installed plugin (no version drift between local + CI)",
+  "command": "grep -E \"plugin_version\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow comments PR findings with rule_id + remediation link (per X-1)",
+  "command": "grep -E \"rule_id|remediation\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && grep -E \"actions/github-script|pull-request-comment\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

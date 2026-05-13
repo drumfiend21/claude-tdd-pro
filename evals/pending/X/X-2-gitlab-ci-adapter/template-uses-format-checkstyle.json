@@ -1,0 +1,11 @@
+{
+  "name": "gitlab ci: template invokes runner with --format checkstyle (per X-2)",
+  "command": "grep -E \"format checkstyle|--format checkstyle\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

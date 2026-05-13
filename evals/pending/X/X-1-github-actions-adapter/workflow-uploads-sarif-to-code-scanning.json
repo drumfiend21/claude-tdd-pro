@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow uploads SARIF (E-9) output to GitHub Code Scanning via github/codeql-action/upload-sarif",
+  "command": "grep -E \"github/codeql-action/upload-sarif|upload-sarif\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

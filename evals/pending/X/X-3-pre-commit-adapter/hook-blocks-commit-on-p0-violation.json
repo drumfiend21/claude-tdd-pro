@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: hook exits non-zero (blocks commit) when any P0 violation found",
+  "command": "mkdir -p src && printf \"const x: any = 1;\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --format markdown --paths \"src/**/*.ts\" --severity-floor P0",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "P0"
+    ]
+  }
+}

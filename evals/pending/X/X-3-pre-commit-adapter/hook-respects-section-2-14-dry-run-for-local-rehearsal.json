@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: hook supports --dry-run for local rehearsal (operator can preview without blocking)",
+  "command": "grep -E \"--dry-run|args:.*dry-run\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

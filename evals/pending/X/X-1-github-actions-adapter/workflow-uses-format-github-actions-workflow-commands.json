@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow invokes runner with --format github-actions (emits ::error::/::warning:: workflow commands per E-9)",
+  "command": "grep -E \"format github-actions|--format github-actions\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

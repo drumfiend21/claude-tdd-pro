@@ -1,0 +1,11 @@
+{
+  "name": "github actions: workflow reads .claude-tdd-pro/lock.json.profile_snapshot_hash before running the runner (per X-1)",
+  "command": "grep -E \"profile_snapshot_hash\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "pre-commit: ci/pre-commit-hooks.yaml ships at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
