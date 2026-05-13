@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: every default entry with paywalled:true has a non-empty document_url and attribution_note (§2.19)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-paywalled-entries.sh\" \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

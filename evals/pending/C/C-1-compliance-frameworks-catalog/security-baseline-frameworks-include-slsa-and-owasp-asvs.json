@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: security-baseline subset includes slsa, owasp-asvs, iso-27001-a14, iso-27017 (§5 C-1)",
+  "command": "j=\"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && grep -qE '^- id: slsa\\s*$' \"$j\" && grep -qE '^- id: owasp-asvs\\s*$' \"$j\" && grep -qE '^- id: iso-27001-a14\\s*$' \"$j\" && grep -qE '^- id: iso-27017\\s*$' \"$j\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

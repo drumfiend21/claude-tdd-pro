@@ -1,0 +1,11 @@
+{
+  "name": "soc2 evidence collection: evidence is organized as per-control-id subdirectories under compliance/evidence/",
+  "command": "mkdir -p compliance/evidence/CC1.1 compliance/evidence/CC8.1 && touch compliance/evidence/CC1.1/access-review.png compliance/evidence/CC8.1/change-ticket.pdf && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" --evidence-dir \"$PWD/compliance/evidence\" --layout per-control-subdir && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

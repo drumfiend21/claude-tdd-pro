@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: data-protection subset includes gdpr and hipaa-security-rule (§5 C-1)",
+  "command": "j=\"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && grep -qE '^- id: gdpr\\s*$' \"$j\" && grep -qE '^- id: hipaa-security-rule\\s*$' \"$j\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

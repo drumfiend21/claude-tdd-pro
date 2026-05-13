@@ -1,0 +1,12 @@
+{
+  "name": "soc2 evidence collection: subdirectory names follow SOC 2 TSC control-id pattern (CC#.#, A#.#, C#.#, PI#.#, P#.#)",
+  "command": "mkdir -p compliance/evidence/banana && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" --evidence-dir \"$PWD/compliance/evidence\" --check-control-id-pattern",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "banana",
+      "control-id"
+    ]
+  }
+}

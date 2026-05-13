@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: every default entry's plugin-internal fetcher field names a script that ships under compliance/fetchers/ (§2.19)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-fetchers.sh\" --catalog \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --fetchers-dir \"$CLAUDE_PLUGIN_ROOT/compliance/fetchers\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

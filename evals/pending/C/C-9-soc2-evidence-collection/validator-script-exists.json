@@ -1,0 +1,11 @@
+{
+  "name": "soc2 evidence collection: rubric/detectors/validate-evidence-folder.sh ships and is executable",
+  "command": "test -x \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: every framework id named in architecture §5 C-1 is present in the default catalog",
+  "command": "for id in nist-ai-rmf nist-800-218 nist-800-218a nist-csf-2 nist-800-53-r5 nist-800-171-r3 ffiec-its ffiec-cat occ-heightened-standards sec-cyber-disclosure sox-itcc hipaa-security-rule eu-ai-act eu-ai-act-edpb-guidance gdpr dora pci-dss-v4 slsa owasp-asvs iso-27001-a14 iso-27017 soc2-tsc fedramp-mod fedramp-high; do grep -qE \"^- id: $id\\s*$\" \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" || { echo \"MISSING: $id\" 1>&2; exit 1; }; done && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

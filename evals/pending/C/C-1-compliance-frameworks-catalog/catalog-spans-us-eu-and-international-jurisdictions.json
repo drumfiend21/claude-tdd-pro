@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: jurisdictions field across default entries spans US + EU + international",
+  "command": "j=\"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && grep -qE 'jurisdiction:\\s*(us|US|united-states)' \"$j\" && grep -qE 'jurisdiction:\\s*(eu|EU|european-union)' \"$j\" && grep -qE 'jurisdiction:\\s*(international|global)' \"$j\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

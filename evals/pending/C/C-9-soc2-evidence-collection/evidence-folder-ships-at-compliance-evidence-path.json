@@ -1,0 +1,11 @@
+{
+  "name": "soc2 evidence collection: compliance/evidence/ directory exists at install time (per §5 C-9)",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/compliance/evidence\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

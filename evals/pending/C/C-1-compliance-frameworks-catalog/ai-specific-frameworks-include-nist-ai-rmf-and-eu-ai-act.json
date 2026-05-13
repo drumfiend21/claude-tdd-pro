@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: AI-specific subset includes nist-ai-rmf, eu-ai-act, and eu-ai-act-edpb-guidance (§5 C-1)",
+  "command": "j=\"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && grep -qE '^- id: nist-ai-rmf\\s*$' \"$j\" && grep -qE '^- id: eu-ai-act\\s*$' \"$j\" && grep -qE '^- id: eu-ai-act-edpb-guidance\\s*$' \"$j\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

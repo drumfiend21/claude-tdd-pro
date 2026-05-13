@@ -1,0 +1,11 @@
+{
+  "name": "soc2 evidence collection: validator accepts mixed artifact extensions (png, pdf, txt, json, md) within a control subdir",
+  "command": "mkdir -p compliance/evidence/CC1.1 && touch compliance/evidence/CC1.1/access-review.png compliance/evidence/CC1.1/policy.pdf compliance/evidence/CC1.1/notes.txt compliance/evidence/CC1.1/report.json compliance/evidence/CC1.1/README.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" --evidence-dir \"$PWD/compliance/evidence\" --check-non-empty && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

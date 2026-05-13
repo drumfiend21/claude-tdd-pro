@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: .claude-tdd-pro/COMPLIANCE-URLS.yaml ships at install time at the conventional path",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "soc2 evidence collection: validator rejects a per-control subdir that contains zero evidence artifacts",
+  "command": "mkdir -p compliance/evidence/CC8.1 && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" --evidence-dir \"$PWD/compliance/evidence\" --check-non-empty",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "CC8.1",
+      "empty"
+    ]
+  }
+}

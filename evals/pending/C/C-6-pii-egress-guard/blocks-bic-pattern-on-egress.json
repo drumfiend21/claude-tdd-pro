@@ -1,0 +1,11 @@
+{
+  "name": "pii egress guard: blocks egress payloads containing a BIC/SWIFT code (exit 2)",
+  "command": "printf 'route via DEUTDEFFXXX for clearing\\n' > payload.txt && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/pii-egress-guard.sh\" --input \"$PWD/payload.txt\" --check",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "bic"
+    ]
+  }
+}

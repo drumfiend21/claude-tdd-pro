@@ -1,0 +1,11 @@
+{
+  "name": "pii egress guard: blocks egress payloads containing an IBAN (exit 2)",
+  "command": "printf 'wire to DE89370400440532013000 by EOD\\n' > payload.txt && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/pii-egress-guard.sh\" --input \"$PWD/payload.txt\" --check",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "iban"
+    ]
+  }
+}

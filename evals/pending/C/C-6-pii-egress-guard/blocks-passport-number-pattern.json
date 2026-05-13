@@ -1,0 +1,11 @@
+{
+  "name": "pii egress guard: blocks egress payloads containing a passport number (exit 2)",
+  "command": "printf 'passport: P12345678 holder boarding\\n' > payload.txt && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/pii-egress-guard.sh\" --input \"$PWD/payload.txt\" --check",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "passport"
+    ]
+  }
+}

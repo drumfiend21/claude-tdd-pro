@@ -1,0 +1,11 @@
+{
+  "name": "pii egress guard: allows credit-card-shaped numbers that fail Luhn (false-positive reduction per §5 C-6)",
+  "command": "printf 'order 1234 5678 9012 3456 ships tomorrow\\n' > payload.txt && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/pii-egress-guard.sh\" --input \"$PWD/payload.txt\" --check && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

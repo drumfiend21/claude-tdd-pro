@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: default registry contains at least 10 frameworks (architecture §5 C-1 baseline)",
+  "command": "n=$(grep -E '^- id: ' \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" | wc -l | tr -d ' ') && test \"$n\" -ge 10 && echo \"ok count=$n\" 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

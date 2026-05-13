@@ -1,0 +1,11 @@
+{
+  "name": "compliance catalog: financial-regulator subset includes ffiec-its, ffiec-cat, occ-heightened-standards, and sec-cyber-disclosure (§5 C-1)",
+  "command": "j=\"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && grep -qE '^- id: ffiec-its\\s*$' \"$j\" && grep -qE '^- id: ffiec-cat\\s*$' \"$j\" && grep -qE '^- id: occ-heightened-standards\\s*$' \"$j\" && grep -qE '^- id: sec-cyber-disclosure\\s*$' \"$j\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
