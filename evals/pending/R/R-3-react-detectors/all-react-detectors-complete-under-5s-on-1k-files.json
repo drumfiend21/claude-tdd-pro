@@ -1,0 +1,11 @@
+{
+  "name": "detectors: each detector completes in <=5s on a 1000-file changeset (per §2.2 detector contract perf requirement)",
+  "command": "mkdir -p src/routes && for i in $(seq 1 1000); do echo \"export const X${i} = ()=>null;\" > src/routes/f${i}.tsx; done && for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do START=$(date +%s); bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" --json --paths \"src/routes/*.tsx\" >/dev/null 2>&1; ELAPSED=$(($(date +%s)-START)); [ $ELAPSED -le 5 ] || { echo \"FAIL $d took ${ELAPSED}s\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

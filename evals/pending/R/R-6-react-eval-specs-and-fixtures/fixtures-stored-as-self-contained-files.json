@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: each positive/negative folder contains a self-contained <file>.tsx/.ts (no cross-folder imports; hermetic per Google testing best practice)",
+  "command": "for d in \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react\"/*/positive \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react\"/*/negative; do test -d \"$d\" || continue; cd \"$d\"; for f in *.tsx *.ts; do [ -f \"$f\" ] || continue; if grep -E \"^import.*from \\\"\\.\\.\" \"$f\" >/dev/null; then echo \"FAIL $d/$f has cross-folder import\" 1>&2; exit 1; fi; done; cd - >/dev/null; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

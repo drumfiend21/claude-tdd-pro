@@ -1,0 +1,11 @@
+{
+  "name": "subagents: review-react-rsc.md frontmatter declares model: sonnet",
+  "command": "grep -E \"^model: sonnet\" \"$CLAUDE_PLUGIN_ROOT/agents/review-react-rsc.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

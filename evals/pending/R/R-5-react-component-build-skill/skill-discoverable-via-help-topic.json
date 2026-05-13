@@ -1,0 +1,11 @@
+{
+  "name": "skill: /help react-component-build prints the SKILL.md body (per H-9 progressive disclosure)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/help.sh\" react-component-build 2>out.txt && grep -E \"react-component-build|TDD\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

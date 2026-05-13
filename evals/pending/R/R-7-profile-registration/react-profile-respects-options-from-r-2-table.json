@@ -1,0 +1,11 @@
+{
+  "name": "profile: react.yaml passes the R-2-table options for g-react-007 ({test_runner, allow_snapshot_only}) and g-react-008 ({budget_kb, per_route, excluded_routes})",
+  "command": "grep -E \"g-react-007.*test_runner\" \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" 1>&2 && grep -E \"g-react-008.*budget_kb\" \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

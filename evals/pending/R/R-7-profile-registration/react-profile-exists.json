@@ -1,0 +1,11 @@
+{
+  "name": "profile: profiles/react.yaml exists at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

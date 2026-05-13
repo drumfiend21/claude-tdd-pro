@@ -1,0 +1,12 @@
+{
+  "name": "detectors: rsc-boundary.sh exits 1 (violation) when a \"use client\" component imports a server-only module",
+  "command": "mkdir -p src && printf \"\\\"use client\\\";\\nimport fs from \\\"node:fs\\\";\\nexport const X = ()=>null;\\n\" > src/a.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rsc-boundary.sh\" --json --paths \"src/**/*.tsx\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rsc-boundary",
+      "node:fs"
+    ]
+  }
+}

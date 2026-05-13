@@ -1,0 +1,11 @@
+{
+  "name": "templates: vitest.react.config.ts wires up @vitejs/plugin-react and jsdom test environment",
+  "command": "grep -E \"@vitejs/plugin-react\" \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" 1>&2 && grep -E \"jsdom\" \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

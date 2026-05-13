@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md mentions the R-3 detectors (a11y-axe, bundle-budget, rsc-boundary, exhaustive-deps) so operator knows what runs",
+  "command": "for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do grep -E \"$d\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" >/dev/null || { echo \"FAIL $d unreferenced\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

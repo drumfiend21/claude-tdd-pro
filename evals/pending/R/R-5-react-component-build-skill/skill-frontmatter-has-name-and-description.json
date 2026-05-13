@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md frontmatter declares name and description",
+  "command": "grep -E \"^name: react-component-build\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && grep -E \"^description:\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

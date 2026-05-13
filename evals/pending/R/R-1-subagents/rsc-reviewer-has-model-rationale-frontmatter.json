@@ -1,0 +1,11 @@
+{
+  "name": "subagents: per §2.3 subagent contract, review-react-rsc.md frontmatter includes model_rationale field",
+  "command": "grep -E \"^model_rationale:\" \"$CLAUDE_PLUGIN_ROOT/agents/review-react-rsc.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

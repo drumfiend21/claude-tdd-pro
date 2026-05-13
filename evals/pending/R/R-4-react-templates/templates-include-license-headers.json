@@ -1,0 +1,11 @@
+{
+  "name": "templates: each template includes a short license header (MIT or operator-default) per H-8 attribution sweep",
+  "command": "for t in vitest.react.config.ts playwright.config.ts size-limit.config.js; do head -5 \"$CLAUDE_PLUGIN_ROOT/templates/$t\" | grep -iE \"license|copyright|MIT|Apache\" >/dev/null || { echo \"FAIL $t missing license header\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

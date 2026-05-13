@@ -1,0 +1,11 @@
+{
+  "name": "profile: regulated.yaml inherits from strict.yaml (extends includes strict profile-name) so React rules cascade in",
+  "command": "grep -E \"extends.*strict\" \"$CLAUDE_PLUGIN_ROOT/profiles/regulated.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md frontmatter includes budget_impact_estimate (per O-0 telemetry-first discipline)",
+  "command": "grep -E \"^budget_impact_estimate:\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md recommends Suspense for async (g-react-005) and Error Boundaries on routes (g-react-006)",
+  "command": "grep -E \"Suspense\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && grep -E \"Error Boundary|error boundary\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

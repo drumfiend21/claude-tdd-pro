@@ -1,0 +1,11 @@
+{
+  "name": "profile: react.yaml resolution byte-identical across two runs (deterministic per §2.5 resolution_order)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" --emit-resolved 2>r1.json && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" --emit-resolved 2>r2.json && diff r1.json r2.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

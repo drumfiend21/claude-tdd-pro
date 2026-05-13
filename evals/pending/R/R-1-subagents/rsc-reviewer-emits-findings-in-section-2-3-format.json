@@ -1,0 +1,13 @@
+{
+  "name": "subagents: review-react-rsc invocation produces findings in §2.3 format {severity, rule_id?, file, line, finding, suggested_fix}",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent review-react-rsc --input \"$PWD/file.tsx\" --emit-findings \"$PWD/findings.jsonl\" && grep -E \"severity.*file.*line.*finding\" findings.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'export const A = () => <div/>' > file.tsx"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

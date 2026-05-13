@@ -1,0 +1,11 @@
+{
+  "name": "templates: playwright.config.ts has baseURL set to http://localhost:3000 (Next.js default)",
+  "command": "grep -E \"baseURL\" \"$CLAUDE_PLUGIN_ROOT/templates/playwright.config.ts\" 1>&2 && grep -E \"localhost:3000\" \"$CLAUDE_PLUGIN_ROOT/templates/playwright.config.ts\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

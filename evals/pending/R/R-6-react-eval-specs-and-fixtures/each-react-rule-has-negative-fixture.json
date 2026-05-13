@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: each g-react-001..010 has a negative fixture (input expected NOT to trigger) at evals/fixtures/react/<rule-id>/negative/",
+  "command": "for i in 001 002 003 004 005 006 007 008 009 010; do test -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react/g-react-$i/negative\" || { echo \"FAIL g-react-$i negative missing\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "detectors: exhaustive-deps.sh uses E-15 ESLint-wrap pattern (delegates to eslint-plugin-react-hooks/exhaustive-deps; auto-installs npm package on first use)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/exhaustive-deps.sh\" --print-config 2>out.json && grep -E \"eslint_rule.*react-hooks/exhaustive-deps\" out.json 1>&2 && grep -E \"eslint_plugin_npm.*eslint-plugin-react-hooks\" out.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

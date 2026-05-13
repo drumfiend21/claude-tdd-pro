@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md references TDD-Guard + tdd-feature-build (red-green-refactor) for new React components",
+  "command": "grep -E \"TDD|red-green-refactor|tdd-feature-build\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md tells operator where to find R-4 templates (vitest.react.config.ts, playwright.config.ts, size-limit.config.js)",
+  "command": "for t in vitest.react.config.ts playwright.config.ts size-limit.config.js; do grep -E \"$t\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" >/dev/null || { echo \"FAIL $t unreferenced\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

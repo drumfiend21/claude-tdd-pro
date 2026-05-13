@@ -1,0 +1,11 @@
+{
+  "name": "templates: templates/vitest.react.config.ts ships at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

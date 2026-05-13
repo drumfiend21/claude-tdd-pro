@@ -1,0 +1,11 @@
+{
+  "name": "eval specs: active eval specs are tagged bootstrap_seed:true per O-1 seed corpus convention (initial baseline)",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-react-*.json; do grep -E \"\\\"bootstrap_seed\\\":true\" \"$f\" >/dev/null || { echo \"FAIL $f missing bootstrap_seed:true\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

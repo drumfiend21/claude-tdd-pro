@@ -1,0 +1,11 @@
+{
+  "name": "templates: each template passes basic syntax check (TS for .ts files, JS for .js files)",
+  "command": "node --check \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

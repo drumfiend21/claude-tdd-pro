@@ -1,0 +1,11 @@
+{
+  "name": "profile: react.yaml extends:[react:*] (activates all React-namespace rules via G-7 per-source granular extends)",
+  "command": "grep -E \"react:\\*|react:react-docs|react:rsc-rfc\" \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

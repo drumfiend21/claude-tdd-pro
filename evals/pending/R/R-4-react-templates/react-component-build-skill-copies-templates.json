@@ -1,0 +1,11 @@
+{
+  "name": "templates: skills/react-component-build (R-5) copies these three templates into a fresh project when invoked",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/_install.sh\" --target \"$PWD/proj\" --dry-run 2>out.txt && grep \"vitest.react.config.ts\" out.txt 1>&2 && grep \"playwright.config.ts\" out.txt 1>&2 && grep \"size-limit.config.js\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

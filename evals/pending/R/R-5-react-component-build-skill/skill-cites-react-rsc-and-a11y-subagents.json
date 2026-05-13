@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md notes that review-react-rsc and review-react-a11y subagents (R-1) auto-review changes",
+  "command": "grep -E \"review-react-rsc\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && grep -E \"review-react-a11y\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

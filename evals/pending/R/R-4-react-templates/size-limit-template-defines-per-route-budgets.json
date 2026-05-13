@@ -1,0 +1,11 @@
+{
+  "name": "templates: size-limit.config.js defines per-route budgets aligned with g-react-008 options (budget_kb, per_route)",
+  "command": "grep -E \"limit:\" \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" 1>&2 && grep -E \"kb|KB\" \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

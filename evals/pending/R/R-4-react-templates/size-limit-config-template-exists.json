@@ -1,0 +1,11 @@
+{
+  "name": "templates: templates/size-limit.config.js ships at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

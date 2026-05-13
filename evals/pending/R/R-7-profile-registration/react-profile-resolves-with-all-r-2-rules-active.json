@@ -1,0 +1,11 @@
+{
+  "name": "profile: profiles/react.yaml resolves to a rule set containing every g-react-001..010 with severity P0 or P1",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" --emit-resolved 2>out.json && for i in 001 002 003 004 005 006 007 008 009 010; do grep -E \"g-react-$i\" out.json >/dev/null || { echo \"FAIL g-react-$i not in react profile\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

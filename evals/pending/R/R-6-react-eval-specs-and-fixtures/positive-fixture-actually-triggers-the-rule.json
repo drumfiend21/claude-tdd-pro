@@ -1,0 +1,13 @@
+{
+  "name": "fixtures: running the rule against its positive fixture returns exit 1 (violation; the fixture is genuinely bad)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" --format json 2>/dev/null && for i in 001; do bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-react-$i --paths \"/Users/siddharthjoshi/projects/claude-tdd-pro//positive/**\" 2>/dev/null; code=$?; [ \"$code\" = \"1\" ] || { echo \"FAIL g-react-$i positive did not trigger (exit $code)\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [
+    "mkdir -p positive && echo 'placeholder' > positive/x.tsx"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

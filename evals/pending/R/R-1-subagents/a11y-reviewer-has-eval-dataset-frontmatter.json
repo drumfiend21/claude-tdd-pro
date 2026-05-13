@@ -1,0 +1,11 @@
+{
+  "name": "subagents: per §2.3 subagent contract, review-react-a11y.md frontmatter includes eval_dataset field pointing at evals/datasets/agents/review-react-a11y.jsonl",
+  "command": "grep -E \"^eval_dataset:.*review-react-a11y\" \"$CLAUDE_PLUGIN_ROOT/agents/review-react-a11y.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

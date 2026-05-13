@@ -1,0 +1,12 @@
+{
+  "name": "profile: invalid g-react-008 option (e.g. budget_kb:\"500\" as string) blocks profile activation per E-2 options-schema validation",
+  "command": "cp \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" my-profile.yaml && node -e 'let c=require(\"fs\").readFileSync(\"my-profile.yaml\",\"utf8\");c=c.replace(/budget_kb:\\s*\\d+/,\"budget_kb: \\\"five-hundred\\\"\");require(\"fs\").writeFileSync(\"my-profile.yaml\",c)' && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$PWD/my-profile.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "budget_kb",
+      "options"
+    ]
+  }
+}

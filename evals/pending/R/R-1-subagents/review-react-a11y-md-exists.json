@@ -1,0 +1,11 @@
+{
+  "name": "subagents: agents/review-react-a11y.md ships at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/agents/review-react-a11y.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill: SKILL.md guidance references at least 3 R-2 rule ids (g-react-001..010) the operator should expect to trigger",
+  "command": "count=$(grep -cE \"g-react-(00[1-9]|010)\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\") && [ \"$count\" -ge 3 ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

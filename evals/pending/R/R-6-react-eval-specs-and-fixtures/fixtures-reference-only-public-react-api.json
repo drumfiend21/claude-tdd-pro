@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: fixtures use only publicly-documented React APIs (no private/internal symbols; tests survive React minor upgrades)",
+  "command": "! grep -rE \"__SECRET_INTERNALS|react-dom/server\\.node|unstable_\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react/\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

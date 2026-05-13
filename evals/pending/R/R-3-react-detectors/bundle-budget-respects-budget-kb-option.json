@@ -1,0 +1,12 @@
+{
+  "name": "detectors: bundle-budget.sh exits 1 when a route bundle exceeds the budget_kb option (per g-react-008 options_schema)",
+  "command": "mkdir -p dist/routes && dd if=/dev/zero of=dist/routes/heavy.js bs=1024 count=300 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/bundle-budget.sh\" --json --paths \"dist/routes/*.js\" --options '{\"budget_kb\":250,\"per_route\":true}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "heavy.js",
+      "exceeded"
+    ]
+  }
+}
