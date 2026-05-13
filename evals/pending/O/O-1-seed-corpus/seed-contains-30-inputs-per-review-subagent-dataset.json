@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: seed/agent-datasets/<agent-name>.jsonl contains ~30 inputs per review subagent (>= 25, <= 35)",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/seed/agent-datasets\"/*.jsonl; do c=$(wc -l < \"$f\" | tr -d ' '); [ \"$c\" -ge 25 ] && [ \"$c\" -le 35 ] || { echo \"FAIL $(basename $f) has $c expected ~30\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

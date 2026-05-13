@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: L-5 two-pass reconciler reads seed/pr-corpus-patterns/patterns.jsonl as the held-out calibration set for threshold tuning",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/sync-from-sources.sh\" --calibrate-thresholds 2>out.txt && grep -E 'using seed corpus.*20 patterns' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

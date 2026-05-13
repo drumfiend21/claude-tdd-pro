@@ -1,0 +1,13 @@
+{
+  "name": "telemetry baseline: `/init-guardrails` records baseline tokens-per-turn for each preinstalled component (per Week-1 discipline)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --emit-baseline \"$PWD/.claude-tdd-pro/telemetry-baseline.json\" && grep -E '\"tokens_per_turn\":' .claude-tdd-pro/telemetry-baseline.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

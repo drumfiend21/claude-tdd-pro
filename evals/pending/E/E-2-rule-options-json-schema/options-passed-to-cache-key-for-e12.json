@@ -1,0 +1,13 @@
+{
+  "name": "rule options: resolved options are part of the per-rule cache key (E-12 cache invalidates on options change)",
+  "command": "mkdir -p .claude-tdd-pro/rule-cache && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule g-x-001 --in \"$PWD/f.js\" --options '{\"max\":5}' --cache --cache-location \"$PWD/.cache\" --report-format json 2>r1.json && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule g-x-001 --in \"$PWD/f.js\" --options '{\"max\":7}' --cache --cache-location \"$PWD/.cache\" --report-format json 2>r2.json && grep -E '\"cache_status\":\"miss\"' r2.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'x' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

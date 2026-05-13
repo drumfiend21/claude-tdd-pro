@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: F-2 /measure-rubric reads seed/fp-examples/<rule-id>/examples.jsonl as the initial false-positive log when no real FP log exists yet",
+  "command": "mkdir -p rubric/fp-log && bash \"$CLAUDE_PLUGIN_ROOT/commands/f2-bootstrap-from-seed.sh\" --rule g-ts-001 && [ -s rubric/fp-log/g-ts-001.jsonl ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

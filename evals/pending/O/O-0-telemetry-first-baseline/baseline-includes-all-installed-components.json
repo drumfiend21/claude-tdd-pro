@@ -1,0 +1,13 @@
+{
+  "name": "telemetry baseline: emitted baseline includes one entry per installed skill, agent, hook, detector (no component left unmeasured)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --emit-baseline \"$PWD/.claude-tdd-pro/telemetry-baseline.json\" && node -e 'const b=JSON.parse(require(\"fs\").readFileSync(\".claude-tdd-pro/telemetry-baseline.json\",\"utf8\"));if(b.skills&&b.agents&&b.hooks&&b.detectors){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

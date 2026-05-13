@@ -1,0 +1,13 @@
+{
+  "name": "lock contracts: acquiring a section lock writes `_locks.<section>.holder` and `_locks.<section>.expires` per §2.7",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rubric --holder $$ --expires-in 60 && grep -E '\"holder\":' .claude-tdd-pro/lock.json 1>&2 && grep -E '\"expires\":' .claude-tdd-pro/lock.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

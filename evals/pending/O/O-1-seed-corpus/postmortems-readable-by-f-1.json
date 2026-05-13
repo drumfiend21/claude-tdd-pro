@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: F-1 /postmortem can ingest seed/postmortems/*.jsonl as historical examples shown to the user when drafting a new postmortem",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" --show-historical 2>out.txt && grep -E '12 historical postmortems available' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

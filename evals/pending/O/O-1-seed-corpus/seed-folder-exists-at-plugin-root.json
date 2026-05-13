@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: plugin ships a `seed/` folder at the root",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/seed\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

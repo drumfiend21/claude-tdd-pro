@@ -1,0 +1,11 @@
+{
+  "name": "lock contracts: merging two lock files unions standards_versions (per §2.7 \"standards/pr_corpus by union\")",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"plugin_version\":\"1.9.0\",\"rubric_semver\":\"1.0.0\",\"standards_versions\":{\"a\":\"1\"}}' > .claude-tdd-pro/lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --merge --other-json '{\"plugin_version\":\"1.9.0\",\"rubric_semver\":\"1.0.0\",\"standards_versions\":{\"b\":\"2\"}}' && node -e 'const l=JSON.parse(require(\"fs\").readFileSync(\".claude-tdd-pro/lock.json\",\"utf8\"));if(l.standards_versions.a===\"1\"&&l.standards_versions.b===\"2\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

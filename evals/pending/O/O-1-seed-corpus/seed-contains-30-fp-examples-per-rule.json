@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: seed/fp-examples/<rule-id>/ contains exactly 30 pre-graded false-positive example JSONL records per existing rule",
+  "command": "for d in \"$CLAUDE_PLUGIN_ROOT/seed/fp-examples\"/*/; do count=$(wc -l < \"$d/examples.jsonl\" 2>/dev/null | tr -d ' '); [ \"$count\" = \"30\" ] || { echo \"FAIL $(basename $d) has $count expected 30\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

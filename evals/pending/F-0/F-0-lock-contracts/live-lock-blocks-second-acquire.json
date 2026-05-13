@@ -1,0 +1,13 @@
+{
+  "name": "lock contracts: lock-acquire on a section currently held by a live PID blocks (or fails fast with --no-wait)",
+  "command": "( bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rubric --holder $$ --expires-in 60 && sleep 5 ) & pid=$!; sleep 0.2; bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rubric --holder $$ --no-wait; code=$?; kill $pid 2>/dev/null; wait $pid 2>/dev/null; [ \"$code\" = \"1\" ] && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

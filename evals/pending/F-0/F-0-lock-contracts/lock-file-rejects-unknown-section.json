@@ -1,0 +1,12 @@
+{
+  "name": "lock contracts: lock-acquire rejects sections not in the §2.7 enum (rubric, detectors, standards, compliance, prompts, models, pr_corpus, profile, verify, workflow_state, standards_freshness, pr_corpus_freshness, compliance_freshness, rule_cache, quality_standards_directory)",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section made-up-section --holder $$",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "section",
+      "enum"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "telemetry baseline: /doctor compares current measured tokens-per-turn against pinned baseline; >20% drift surfaces a warning",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"skills\":{\"x\":{\"tokens_per_turn\":1000}}}' > .claude-tdd-pro/telemetry-baseline.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check telemetry-drift --simulate-current-tokens 1500 2>out.txt && grep -E 'drift.*50%' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

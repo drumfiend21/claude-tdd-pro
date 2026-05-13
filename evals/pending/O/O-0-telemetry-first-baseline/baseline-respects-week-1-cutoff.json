@@ -1,0 +1,13 @@
+{
+  "name": "telemetry baseline: --strict mode (week-1 discipline) refuses any rubric-runner invocation that would change `tokens_per_turn` for a baseline-pinned component without an updated baseline",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --emit-baseline \"$PWD/.claude-tdd-pro/telemetry-baseline.json\" && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --pin-baseline && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --strict --simulate-baseline-drift",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "baseline",
+      "drift",
+      "strict"
+    ]
+  }
+}

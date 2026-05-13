@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: P-2 eval-dataset bootstrap reads seed/agent-datasets/<agent>.jsonl as the initial dataset for each review subagent",
+  "command": "mkdir -p evals/datasets/agents && bash \"$CLAUDE_PLUGIN_ROOT/commands/p2-bootstrap-from-seed.sh\" --agent review-types && [ -s evals/datasets/agents/review-types.jsonl ] && grep -E '\"bootstrap_seed\":true' evals/datasets/agents/review-types.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

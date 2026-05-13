@@ -1,0 +1,13 @@
+{
+  "name": "lock contracts: lock-acquire on a section whose holder PID is dead AND whose expires has passed succeeds (expires guards crashed holders per §2.7)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rubric --holder 99999 --expires-in -1 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rubric --holder $$ --expires-in 60 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

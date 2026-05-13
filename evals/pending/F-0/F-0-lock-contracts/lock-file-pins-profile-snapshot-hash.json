@@ -1,0 +1,13 @@
+{
+  "name": "lock contracts: lock file `profile_snapshot_hash` pins resolved-profile precedence at install time",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init --profile standard && grep -E '\"profile_snapshot_hash\":\"[a-f0-9]' .claude-tdd-pro/lock.json 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

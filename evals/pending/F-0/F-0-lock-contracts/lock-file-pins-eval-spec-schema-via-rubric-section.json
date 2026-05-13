@@ -1,0 +1,13 @@
+{
+  "name": "lock contracts: lock file `rubric` section pins the eval spec schema (eval spec schema is part of rubric subsystem per §2.4)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && node -e 'const l=JSON.parse(require(\"fs\").readFileSync(\".claude-tdd-pro/lock.json\",\"utf8\"));if(typeof l.rubric===\"object\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

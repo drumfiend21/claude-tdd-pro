@@ -1,0 +1,11 @@
+{
+  "name": "seed corpus: seed/postmortems/ contains exactly 12 hand-written postmortem JSONL files (per O-1)",
+  "command": "count=$(find \"$CLAUDE_PLUGIN_ROOT/seed/postmortems\" -name \"*.jsonl\" 2>/dev/null | wc -l | tr -d ' '); [ \"$count\" = \"12\" ] && echo \"ok count=$count\" 1>&2 || { echo \"FAIL count=$count expected 12\" 1>&2; exit 1; }",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

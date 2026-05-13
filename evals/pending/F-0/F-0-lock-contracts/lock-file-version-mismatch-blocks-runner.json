@@ -1,0 +1,14 @@
+{
+  "name": "lock contracts: runner refuses to start when lock file `plugin_version` does not match installed plugin version (forces /migrate)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && node -e 'const fs=require(\"fs\");const l=JSON.parse(fs.readFileSync(\".claude-tdd-pro/lock.json\",\"utf8\"));l.plugin_version=\"0.0.1\";fs.writeFileSync(\".claude-tdd-pro/lock.json\",JSON.stringify(l))' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\"",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "plugin_version",
+      "mismatch"
+    ]
+  }
+}

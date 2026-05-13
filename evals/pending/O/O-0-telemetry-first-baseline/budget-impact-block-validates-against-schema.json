@@ -1,0 +1,12 @@
+{
+  "name": "telemetry baseline: budget_impact_estimate block must include {tokens_per_invocation, expected_invocations_per_day, monetary_estimate_usd}",
+  "command": "mkdir -p skills/x && printf 'name: x\\ndescription: x\\nbudget_impact_estimate:\\n  tokens_per_invocation: bad-not-a-number\\n' > skills/x/SKILL.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/budget-impact-required.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "tokens_per_invocation",
+      "number"
+    ]
+  }
+}

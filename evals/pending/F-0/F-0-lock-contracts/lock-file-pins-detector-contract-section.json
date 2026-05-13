@@ -1,0 +1,13 @@
+{
+  "name": "lock contracts: lock file `_meta.sections` includes \"detectors\" so detector-contract changes are pinned",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && node -e 'const l=JSON.parse(require(\"fs\").readFileSync(\".claude-tdd-pro/lock.json\",\"utf8\"));if(l._meta.sections.includes(\"detectors\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p .claude-tdd-pro"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
