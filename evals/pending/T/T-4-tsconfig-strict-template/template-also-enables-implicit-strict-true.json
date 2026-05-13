@@ -1,0 +1,11 @@
+{
+  "name": "template: tsconfig.strict.json also enables compilerOptions.strict:true (TS umbrella strict flag)",
+  "command": "node -e 'const c=JSON.parse(require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/templates/tsconfig.strict.json\",\"utf8\"));if(c.compilerOptions&&c.compilerOptions.strict===true){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

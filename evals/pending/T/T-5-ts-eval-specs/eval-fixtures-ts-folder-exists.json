@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: evals/fixtures/typescript/ (or evals/fixtures/ts/) folder exists",
+  "command": "( test -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript\" || test -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/ts\" ) && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

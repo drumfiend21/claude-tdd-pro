@@ -1,0 +1,11 @@
+{
+  "name": "profile: /init-guardrails offers to copy templates/tsconfig.strict.json into the project root when profile is strict or library",
+  "command": "mkdir -p proj && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --profile strict --target \"$PWD/proj\" --apply-templates 2>out.txt && [ -f proj/tsconfig.strict.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

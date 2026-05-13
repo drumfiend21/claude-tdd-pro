@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: each positive/negative folder contains a self-contained <file>.{js,mjs,ts} with no cross-folder imports (hermetic)",
+  "command": "for d in \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\"/*/positive \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\"/*/negative; do test -d \"$d\" || continue; cd \"$d\"; for f in *.js *.mjs *.ts; do [ -f \"$f\" ] || continue; if grep -E \"^import.*from \\\"\\.\\.\" \"$f\" >/dev/null; then echo \"FAIL $d/$f cross-folder import\" 1>&2; exit 1; fi; done; cd - >/dev/null; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

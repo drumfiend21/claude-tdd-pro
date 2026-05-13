@@ -1,0 +1,11 @@
+{
+  "name": "eval specs: per §2.4 categories enum, node-rule eval specs have category:node",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-node-*.json; do grep -E \"\\\"category\\\":\\\"node\\\"\" \"$f\" >/dev/null || { echo \"FAIL $f missing category:node\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

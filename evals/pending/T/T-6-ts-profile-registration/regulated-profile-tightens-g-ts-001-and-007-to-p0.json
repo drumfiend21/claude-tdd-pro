@@ -1,0 +1,11 @@
+{
+  "name": "profile: regulated.yaml tightens g-ts-001 (any) and g-ts-007 (no Function/object) to severity:error",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/regulated.yaml\" --emit-resolved 2>out.json && node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));for(const id of [\"g-ts-001\",\"g-ts-007\"]){const rule=r.resolved_rules[id];if(!rule||(rule.severity!==\"error\"&&rule.severity!==\"P0\")){process.stderr.write(\"FAIL \"+id+\" severity=\"+(rule&&rule.severity)+\"\\n\");process.exit(1)}}process.stderr.write(\"ok\\n\")'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "subagents: both review-node-boundaries and review-node-observability emit findings in §2.3 format {severity, rule_id?, file, line, finding, suggested_fix}",
+  "command": "mkdir -p src && echo \"x\" > src/a.js && for a in review-node-boundaries review-node-observability; do bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent $a --input \"$PWD/src/a.js\" --emit-findings \"$PWD/$a.jsonl\" 2>/dev/null && grep -E \"severity.*file.*line.*finding.*suggested_fix\" \"$PWD/$a.jsonl\" >/dev/null || { echo \"FAIL $a missing fields\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "profile: strict.yaml includes node:* (per W-5 cross-loop profile registration)",
+  "command": "grep -E \"node:\" \"$CLAUDE_PLUGIN_ROOT/profiles/strict.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

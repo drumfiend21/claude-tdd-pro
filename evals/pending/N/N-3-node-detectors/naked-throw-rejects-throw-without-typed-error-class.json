@@ -1,0 +1,12 @@
+{
+  "name": "detectors: naked-throw.sh exits 1 when `throw \"message\"` or `throw new Error(\"...\")` is used without a typed error class from the taxonomy (g-node-002)",
+  "command": "mkdir -p src && printf \"throw new Error(\\\"bad\\\");\\n\" > src/x.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/naked-throw.sh\" --json --paths \"src/**/*.js\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "naked-throw",
+      "Error"
+    ]
+  }
+}

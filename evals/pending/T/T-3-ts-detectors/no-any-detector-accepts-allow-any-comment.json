@@ -1,0 +1,11 @@
+{
+  "name": "detectors: no-any.sh exits 0 when `: any` has accompanying `// allow-any: <reason>` comment per g-ts-001 options",
+  "command": "mkdir -p src && printf \"// allow-any: legacy API\\nconst x: any = 1;\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "eval specs: each g-node-001..010 has a corresponding active eval spec at evals/specs/g-node-<id>-*.json",
+  "command": "for i in 001 002 003 004 005 006 007 008 009 010; do ls \"$CLAUDE_PLUGIN_ROOT/evals/specs/\" | grep -q \"g-node-$i\" || { echo \"FAIL g-node-$i no eval spec\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

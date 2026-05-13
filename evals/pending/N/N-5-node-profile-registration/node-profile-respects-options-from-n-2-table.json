@@ -1,0 +1,11 @@
+{
+  "name": "profile: node.yaml passes the N-2-table options for g-node-001 (schema_libs), g-node-003 (default_timeout_ms, allow_no_timeout_for), g-node-004 (allowed_loggers, cli_paths)",
+  "command": "grep -E \"g-node-001.*schema_libs\" \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" 1>&2 && grep -E \"g-node-003.*default_timeout_ms\" \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" 1>&2 && grep -E \"g-node-004.*allowed_loggers\" \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

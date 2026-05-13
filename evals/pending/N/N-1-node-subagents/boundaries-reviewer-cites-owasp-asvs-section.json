@@ -1,0 +1,11 @@
+{
+  "name": "subagents: review-node-boundaries suggested_fix references owasp-asvs §V5 schema-validation citations (matches g-node-001 provenance)",
+  "command": "mkdir -p src && printf \"app.post(\\\"/api\\\",(req,res)=>{const x=req.body.x;res.json({x})})\\n\" > src/handler.js && bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent review-node-boundaries --input \"$PWD/src/handler.js\" --emit-findings \"$PWD/findings.jsonl\" 2>/dev/null && grep -E \"owasp-asvs.*V5\" findings.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

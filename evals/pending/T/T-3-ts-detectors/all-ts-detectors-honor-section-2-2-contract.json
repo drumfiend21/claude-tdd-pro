@@ -1,0 +1,11 @@
+{
+  "name": "detectors: each TS detector honors §2.2 contract flags",
+  "command": "for d in no-any exhaustive-unions type-test-coverage; do bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" --help 2>&1 | grep -E \"\\-\\-json.*\\-\\-paths.*\\-\\-dry-run\" >/dev/null || { echo \"FAIL $d contract flags missing\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

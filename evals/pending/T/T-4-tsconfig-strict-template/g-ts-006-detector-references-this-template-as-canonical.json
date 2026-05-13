@@ -1,0 +1,11 @@
+{
+  "name": "template: g-ts-006 (Strict tsconfig flags) detector treats templates/tsconfig.strict.json as the canonical \"correct\" flag set",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-ts-006 --print-canonical 2>out.txt && grep -E \"templates/tsconfig.strict.json\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "detectors: fetch-timeout.sh exits 1 when `fetch(url)` is called without {signal: AbortSignal.timeout(...)} option (g-node-003)",
+  "command": "mkdir -p src && printf \"await fetch(\\\"https://api.example.com\\\");\\n\" > src/f.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/fetch-timeout.sh\" --json --paths \"src/**/*.js\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "fetch-timeout",
+      "signal"
+    ]
+  }
+}

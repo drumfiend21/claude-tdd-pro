@@ -1,0 +1,11 @@
+{
+  "name": "subagents: prompt_migration_status field is one of {original, migrated-zero-delta, migrated-with-delta:<reason>} per §2.3 enum",
+  "command": "for a in review-node-boundaries review-node-observability; do val=$(grep -E \"^prompt_migration_status:\" \"$CLAUDE_PLUGIN_ROOT/agents/$a.md\" | awk '{print $2}'); echo \"$val\" | grep -qE \"^(original|migrated-zero-delta|migrated-with-delta)\" || { echo \"FAIL $a has bad migration_status: $val\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

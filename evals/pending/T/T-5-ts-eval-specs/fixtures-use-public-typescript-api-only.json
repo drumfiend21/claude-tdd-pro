@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: TS fixtures avoid internal/private/experimental TS APIs (no @types/* internal imports; tests survive TS minor upgrades)",
+  "command": "! grep -rE \"typescript/lib/typescript\\.ts|@types/.*\\/private\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript/\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/ts/\" 2>/dev/null && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

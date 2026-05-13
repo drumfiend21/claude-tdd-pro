@@ -1,0 +1,12 @@
+{
+  "name": "detectors: no-any.sh respects g-ts-001 options {allow_with_comment_pattern, max_per_file} (e.g. max_per_file:3 allows up to 3 `:any` per file with comments)",
+  "command": "mkdir -p src && printf \"// allow-any: x\\nconst a: any = 1;\\n// allow-any: y\\nconst b: any = 2;\\n// allow-any: z\\nconst c: any = 3;\\n// allow-any: q\\nconst d: any = 4;\\n\" > src/x.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\" --options '{\"max_per_file\":3,\"allow_with_comment_pattern\":\"^// allow-any:\"}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "max_per_file",
+      "exceeded"
+    ]
+  }
+}

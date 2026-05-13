@@ -1,0 +1,11 @@
+{
+  "name": "subagent: review-types.md frontmatter declares prompt_id: types-reviewer",
+  "command": "grep -E \"^prompt_id: types-reviewer\" \"$CLAUDE_PLUGIN_ROOT/agents/review-types.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

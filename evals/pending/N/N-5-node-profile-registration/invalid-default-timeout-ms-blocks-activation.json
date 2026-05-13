@@ -1,0 +1,11 @@
+{
+  "name": "profile: invalid g-node-003 option (default_timeout_ms:\"not-a-number\") blocks profile activation per E-2 options-schema",
+  "command": "cp \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" my-profile.yaml && node -e 'let c=require(\"fs\").readFileSync(\"my-profile.yaml\",\"utf8\");c=c.replace(/default_timeout_ms:\\s*\\d+/,\"default_timeout_ms: \\\"not-a-number\\\"\");require(\"fs\").writeFileSync(\"my-profile.yaml\",c)' && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$PWD/my-profile.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "default_timeout_ms"
+    ]
+  }
+}

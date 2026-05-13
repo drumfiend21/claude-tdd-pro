@@ -1,0 +1,11 @@
+{
+  "name": "profile: when g-ts-006 fires, its messageId payload references templates/tsconfig.strict.json as the canonical fix",
+  "command": "mkdir -p proj && echo \"{}\" > proj/tsconfig.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-ts-006 --paths \"proj/tsconfig.json\" 2>out.txt && grep \"templates/tsconfig.strict.json\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

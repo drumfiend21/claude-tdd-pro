@@ -1,0 +1,11 @@
+{
+  "name": "profile: profiles/node.yaml resolves to a rule set including every g-node-001..010",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" --emit-resolved 2>out.json && for i in 001 002 003 004 005 006 007 008 009 010; do grep -E \"g-node-$i\" out.json >/dev/null || { echo \"FAIL g-node-$i not in node profile\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

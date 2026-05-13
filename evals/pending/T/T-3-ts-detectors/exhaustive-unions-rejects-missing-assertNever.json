@@ -1,0 +1,12 @@
+{
+  "name": "detectors: exhaustive-unions.sh exits 1 when a discriminated-union switch lacks an assertNever exit per g-ts-003",
+  "command": "mkdir -p src && printf \"type T = {k:\\\"a\\\"}|{k:\\\"b\\\"};function f(t:T){switch(t.k){case \\\"a\\\":return 1;}}\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/exhaustive-unions.sh\" --json --paths \"src/**/*.ts\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "exhaustive-unions",
+      "assertNever"
+    ]
+  }
+}

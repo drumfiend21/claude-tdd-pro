@@ -1,0 +1,11 @@
+{
+  "name": "detectors: each TS detector completes <=5s on a 1000-file changeset (§2.2 perf requirement)",
+  "command": "mkdir -p src && for i in $(seq 1 1000); do echo \"export const X${i}: number = ${i};\" > \"src/f${i}.ts\"; done && for d in no-any exhaustive-unions type-test-coverage; do START=$(date +%s); bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" --json --paths \"src/**/*.ts\" >/dev/null 2>&1; END=$(date +%s); ELAPSED=$((END-START)); [ $ELAPSED -le 5 ] || { echo \"FAIL $d took ${ELAPSED}s\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

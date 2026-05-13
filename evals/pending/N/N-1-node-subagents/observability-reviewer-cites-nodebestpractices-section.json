@@ -1,0 +1,11 @@
+{
+  "name": "subagents: review-node-observability suggested_fix references nodebestpractices §5.1 structured-logging citations (matches g-node-004 provenance)",
+  "command": "mkdir -p src && printf \"console.log(\\\"event\\\",req.body);\\n\" > src/handler.js && bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent review-node-observability --input \"$PWD/src/handler.js\" --emit-findings \"$PWD/findings.jsonl\" 2>/dev/null && grep -E \"nodebestpractices.*5\\.1\" findings.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

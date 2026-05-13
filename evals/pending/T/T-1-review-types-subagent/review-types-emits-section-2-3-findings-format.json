@@ -1,0 +1,11 @@
+{
+  "name": "subagent: review-types invocation produces findings in §2.3 format {severity, rule_id?, file, line, finding, suggested_fix}",
+  "command": "mkdir -p src && printf \"const x: any = 1;\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent review-types --input \"$PWD/src/a.ts\" --emit-findings \"$PWD/findings.jsonl\" && grep -E \"severity.*file.*line.*finding.*suggested_fix\" findings.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

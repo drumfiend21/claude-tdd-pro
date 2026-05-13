@@ -1,0 +1,11 @@
+{
+  "name": "profile: strict.yaml or library.yaml passes T-2-table options for g-ts-001 (allow_with_comment_pattern, max_per_file) and g-ts-002 (allow_with_comment_pattern, allowed_for)",
+  "command": "( grep -E \"g-ts-001.*allow_with_comment_pattern|g-ts-001.*max_per_file\" \"$CLAUDE_PLUGIN_ROOT/profiles/strict.yaml\" \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" 2>/dev/null ) && ( grep -E \"g-ts-002.*allow_with_comment_pattern|g-ts-002.*allowed_for\" \"$CLAUDE_PLUGIN_ROOT/profiles/strict.yaml\" \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" 2>/dev/null ) && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

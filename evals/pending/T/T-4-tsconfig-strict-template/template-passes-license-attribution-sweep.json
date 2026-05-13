@@ -1,0 +1,11 @@
+{
+  "name": "template: H-8 license-attribution sweep finds no secrets in tsconfig.strict.json (clean template)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/license-attribution.sh\" --scan \"$CLAUDE_PLUGIN_ROOT/templates/\" --check secrets 2>out.txt && grep -E \"no secrets found|0 findings\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

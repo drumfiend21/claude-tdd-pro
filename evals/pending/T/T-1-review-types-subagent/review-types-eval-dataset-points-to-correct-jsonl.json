@@ -1,0 +1,11 @@
+{
+  "name": "subagent: eval_dataset field points to evals/datasets/agents/review-types.jsonl (matching naming convention per P-2)",
+  "command": "grep -E \"^eval_dataset:.*evals/datasets/agents/review-types\\.jsonl\" \"$CLAUDE_PLUGIN_ROOT/agents/review-types.md\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

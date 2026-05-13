@@ -1,0 +1,12 @@
+{
+  "name": "detectors: no-any.sh exits 1 when `: any` annotation appears without `// allow-any:` comment (g-ts-001)",
+  "command": "mkdir -p src && printf \"const x: any = 1;\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"src/**/*.ts\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "no-any",
+      "any"
+    ]
+  }
+}

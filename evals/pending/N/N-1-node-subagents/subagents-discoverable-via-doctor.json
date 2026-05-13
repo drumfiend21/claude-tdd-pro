@@ -1,0 +1,11 @@
+{
+  "name": "subagents: /doctor --check agents lists both review-node-boundaries and review-node-observability among installed subagents",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check agents 2>out.txt && grep \"review-node-boundaries\" out.txt 1>&2 && grep \"review-node-observability\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

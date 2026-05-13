@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: evals/fixtures/node/ folder exists at install time",
+  "command": "test -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "detectors: boundary-schema.sh exits 1 (violation) when an Express/Fastify handler reads req.body.<field> without prior schema validation (g-node-001)",
+  "command": "mkdir -p src && printf \"app.post(\\\"/x\\\",(req,res)=>{const v=req.body.email;res.json({v})});\\n\" > src/h.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/boundary-schema.sh\" --json --paths \"src/**/*.js\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "boundary-schema",
+      "req.body"
+    ]
+  }
+}

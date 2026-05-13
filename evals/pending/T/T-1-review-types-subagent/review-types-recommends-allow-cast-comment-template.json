@@ -1,0 +1,11 @@
+{
+  "name": "subagent: when reviewer flags g-ts-002 (as), suggested_fix recommends `// allow-cast: <reason>` comment (per T-2 g-ts-002 description)",
+  "command": "mkdir -p src && printf \"const x = (1 as unknown) as string;\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent review-types --input \"$PWD/src/a.ts\" --emit-findings \"$PWD/findings.jsonl\" 2>/dev/null && grep -E \"allow-cast:\" findings.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

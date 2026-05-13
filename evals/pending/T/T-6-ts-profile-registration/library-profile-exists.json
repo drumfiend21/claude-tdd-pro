@@ -1,0 +1,11 @@
+{
+  "name": "profile: profiles/library.yaml ships at install time (TS-library-focused per architecture profile list)",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

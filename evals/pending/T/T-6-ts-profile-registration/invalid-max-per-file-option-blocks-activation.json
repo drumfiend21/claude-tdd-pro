@@ -1,0 +1,11 @@
+{
+  "name": "profile: invalid g-ts-001 option (max_per_file:\"five\") blocks profile activation per E-2 options-schema",
+  "command": "cp \"$CLAUDE_PLUGIN_ROOT/profiles/strict.yaml\" my-profile.yaml && node -e 'let c=require(\"fs\").readFileSync(\"my-profile.yaml\",\"utf8\");c=c.replace(/max_per_file:\\s*\\d+/,\"max_per_file: \\\"five\\\"\");require(\"fs\").writeFileSync(\"my-profile.yaml\",c)' && bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" \"$PWD/my-profile.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "max_per_file"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "detectors: rubric/detectors/type-test-coverage.sh exists at install time",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/type-test-coverage.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

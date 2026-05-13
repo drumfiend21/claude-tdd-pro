@@ -1,0 +1,11 @@
+{
+  "name": "profile: g-node-008 (Secrets via env) has controls including soc2-tsc CC6.1 and pci-dss-v4 §3.5 per N-2 table",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" --format json 2>out.json && node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));const rule=r.rules.find(x=>x.id===\"g-node-008\");const fws=rule.controls.map(c=>c.framework);if(fws.includes(\"soc2-tsc\")&&fws.includes(\"pci-dss-v4\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL frameworks=\"+fws+\"\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

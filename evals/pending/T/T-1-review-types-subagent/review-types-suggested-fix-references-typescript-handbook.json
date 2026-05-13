@@ -1,0 +1,11 @@
+{
+  "name": "subagent: review-types suggested_fix references typescript-handbook section ids (per T-2 provenance: handbook 2/narrowing, handbook-v2/intersection-types, handbook/tsconfig)",
+  "command": "mkdir -p src && printf \"const x = 1 as any;\\n\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/agents/_runner.sh\" --agent review-types --input \"$PWD/src/a.ts\" --emit-findings \"$PWD/findings.jsonl\" 2>/dev/null && grep -E \"typescript-handbook\" findings.jsonl 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

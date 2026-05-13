@@ -1,0 +1,11 @@
+{
+  "name": "subagents: review-node-boundaries and review-node-observability use different prompt_id values (separate prompt registry entries per P-1)",
+  "command": "b=$(grep -E \"^prompt_id:\" \"$CLAUDE_PLUGIN_ROOT/agents/review-node-boundaries.md\" | awk '{print $2}'); o=$(grep -E \"^prompt_id:\" \"$CLAUDE_PLUGIN_ROOT/agents/review-node-observability.md\" | awk '{print $2}'); [ \"$b\" != \"$o\" ] && [ -n \"$b\" ] && [ -n \"$o\" ] && echo \"ok b=$b o=$o\" 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

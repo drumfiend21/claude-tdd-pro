@@ -1,0 +1,11 @@
+{
+  "name": "profile: profiles/library.yaml or profiles/strict.yaml registers TS rules via extends:[typescript:*]",
+  "command": "grep -E \"typescript:\" \"$CLAUDE_PLUGIN_ROOT/profiles/strict.yaml\" 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

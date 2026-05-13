@@ -1,0 +1,11 @@
+{
+  "name": "subagent: /doctor --check agents lists review-types among installed subagents",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check agents 2>out.txt && grep \"review-types\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

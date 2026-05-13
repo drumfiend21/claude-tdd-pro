@@ -1,0 +1,12 @@
+{
+  "name": "detectors: type-test-coverage.sh exits 1 when a public-API .ts file in src/ lacks a corresponding *.test-d.ts type test (g-ts-004)",
+  "command": "mkdir -p src && printf \"export function add(a:number,b:number):number{return a+b;}\\n\" > src/math.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/type-test-coverage.sh\" --json --paths \"src/**/*.ts\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "type-test-coverage",
+      "test-d"
+    ]
+  }
+}

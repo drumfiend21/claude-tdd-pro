@@ -1,0 +1,12 @@
+{
+  "name": "detectors: supply-chain.sh checks for SLSA-compliant build provenance in package.json + npm shrinkwrap or pnpm-lock.yaml (g-node-010)",
+  "command": "mkdir -p proj && printf \"{\\\"name\\\":\\\"app\\\",\\\"version\\\":\\\"1.0.0\\\"}\\n\" > proj/package.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/supply-chain.sh\" --json --paths \"proj/\" --check slsa",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "slsa",
+      "build provenance"
+    ]
+  }
+}

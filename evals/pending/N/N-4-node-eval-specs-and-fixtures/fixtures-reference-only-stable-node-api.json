@@ -1,0 +1,11 @@
+{
+  "name": "fixtures: fixtures avoid Node.js experimental APIs (no node:test except --experimental, no Permission Model) to survive Node minor upgrades",
+  "command": "! grep -rE \"--experimental-|process\\.permission\" \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node/\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
