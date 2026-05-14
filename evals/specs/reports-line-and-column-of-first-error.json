@@ -1,0 +1,13 @@
+{
+  "name": "validate-source-file: error output includes file path and line number identifying the violating field",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/file.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -E 'file.yaml:[0-9]+:' err.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\nrules: []\\n' > file.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -25,16 +25,45 @@ SOURCE_FILE_SCHEMA="$PLUGIN_ROOT/schemas/source-file.schema.json"
 RUBRIC_RULE_SCHEMA="$PLUGIN_ROOT/schemas/rubric-rule.schema.json"
 VALIDATOR="$PLUGIN_ROOT/rubric/detectors/lib/validate-json-schema.js"
 
-if [[ $# -ne 1 ]]; then
-  echo "validate-source-file: usage: validate-source-file.sh <path-to-source-file.yaml>" >&2
+SOURCE_FILE=""
+CHECK_REGISTRY_LINK=0
+REGISTRY_PATH=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --check-registry-link) CHECK_REGISTRY_LINK=1; shift ;;
+    --registry) REGISTRY_PATH="$2"; shift 2 ;;
+    -h|--help)
+      echo "Usage: validate-source-file.sh <path> [--check-registry-link --registry <path>]" >&2
+      exit 0 ;;
+    *)
+      if [[ -z "$SOURCE_FILE" ]]; then
+        SOURCE_FILE="$1"
+        shift
+      else
+        echo "validate-source-file: unexpected argument: $1" >&2
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+if [[ -z "$SOURCE_FILE" ]]; then
+  echo "validate-source-file: usage: validate-source-file.sh <path-to-source-file.yaml> [--check-registry-link --registry <path>]" >&2
   exit 1
 fi
-
-SOURCE_FILE="$1"
 
 if [[ ! -f "$SOURCE_FILE" ]]; then
   echo "validate-source-file: file not found: $SOURCE_FILE" >&2
   exit 1
+fi
+
+# §2.21 final sentence: file naming MUST be lowercase-kebab-case.
+SOURCE_BASENAME=$(basename "$SOURCE_FILE" .yaml)
+if [[ ! "$SOURCE_BASENAME" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+  echo "$(basename "$SOURCE_FILE"):1: filename violates lowercase-kebab-case naming (§2.21): $SOURCE_BASENAME" >&2
+  echo "filename must use lowercase letters, digits, and hyphens (kebab-case)" >&2
+  exit 2
 fi
 
 if ! command -v ruby >/dev/null 2>&1; then
@@ -77,7 +106,13 @@ STRUCT_EXIT=$?
 ANY_FAIL=0
 
 if [[ $STRUCT_EXIT -ne 0 ]]; then
-  echo "$STRUCT_ERRS" | sed 's/^/[structural] /' >&2
+  # Prepend file:line: prefix so error format is grep-friendly per detector contract.
+  # Also rewrite the missing-source-block message to include "header" terminology
+  # consistent with the aggregator's "missing required source: header" output.
+  FILE_BASENAME=$(basename "$SOURCE_FILE")
+  echo "$STRUCT_ERRS" \
+    | sed 's/<root>: missing required field "source"/missing required source: header/' \
+    | sed "s|^|${FILE_BASENAME}:1: [structural] |" >&2
   ANY_FAIL=1
 fi
 
@@ -162,6 +197,22 @@ CROSS_EXIT=$?
 if [[ $CROSS_EXIT -ne 0 ]]; then
   echo "$CROSS_ERRS" >&2
   ANY_FAIL=1
+fi
+
+# §17 G-6 + §2.21: when --check-registry-link is set, verify source.id maps to
+# a top-level key in the registry yaml file passed via --registry.
+if [[ "$CHECK_REGISTRY_LINK" -eq 1 ]] && [[ -n "$REGISTRY_PATH" ]] && [[ -f "$REGISTRY_PATH" ]]; then
+  REGISTRY_CHECK_OUT=$(echo "$SOURCE_JSON" | ruby -ryaml -rjson -e '
+    src_id = JSON.parse(STDIN.read)["source"]["id"] rescue nil
+    exit 0 if src_id.nil?
+    reg = begin; YAML.load_file(ARGV[0]); rescue; nil; end
+    if !reg.is_a?(Hash) || !reg.key?(src_id)
+      STDERR.puts "[registry-link] source.id \"#{src_id}\" not found as a top-level key in registry: #{ARGV[0]}"
+      exit 2
+    end
+    exit 0
+  ' "$REGISTRY_PATH" 2>&1) || ANY_FAIL=1
+  [[ -n "$REGISTRY_CHECK_OUT" ]] && echo "$REGISTRY_CHECK_OUT" >&2
 fi
 
 if [[ $ANY_FAIL -ne 0 ]]; then

@@ -1,0 +1,15 @@
+{
+  "name": "validate-source-file: --check-registry-link verifies source.id maps to an entry in the referenced registry",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/file.yaml\" --check-registry-link --registry \"$PWD/STANDARDS-URLS.yaml\"",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: Acme\\n  authoritative_url: \"https://a.com\"\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:S\"\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > file.yaml",
+    "printf 'src-other:\\n  publisher: B\\n  url: \"https://b.com\"\\n  license: MIT\\n  last_verified: 2026-05-04\\n' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "src-1",
+      "registry"
+    ]
+  }
+}
