@@ -2,13 +2,28 @@
 
 ## ARCHITECTURE IS LAW
 
-**The canonical v1.9 architecture is at [docs/architecture-v1.9.md](docs/architecture-v1.9.md). It is the source of truth for every feature ID, every §2.X cross-cutting contract, every phase decomposition, and every CL plan.**
+**The canonical v1.9 architecture (plus v1.9.1 §23 and v1.10 §24 amendments) is at [docs/architecture-v1.9.md](docs/architecture-v1.9.md). It is the source of truth for every feature ID, every §2.X cross-cutting contract, every phase decomposition, and every CL plan.**
 
 **Read it at the start of every prompt.** Before naming any feature, contract, folder, spec, or commit message, extract the literal feature ID and label from this file. Do not infer from memory, ESLint domain knowledge, or "what makes sense for this layer." Do not paraphrase. Do not invent.
 
-If you find yourself reasoning "this should be E-N because…" — STOP. The architecture's E-1..E-17 are listed in §16. Look them up. The same rule applies to every other phase (F, G, S, C, P, R, N, T, Q, H, L, O, X, W) and every cross-cutting contract (§2.1..§2.22).
+If you find yourself reasoning "this should be E-N because…" — STOP. The architecture's E-1..E-17 are listed in §16. Look them up. The same rule applies to every other phase (F, G, S, C, P, R, N, T, Q, H, L, O, X, W) and every cross-cutting contract (§2.1..§2.24).
 
 This rule exists because prior CLs (CL-08, CL-09, CL-10) deviated by inventing decompositions: Phase E's rule registry / AST walker / parallel runner / source code analyzer / suggestion API / performance budget were all invented (the architecture has none of those as features); Phase H's adversarial yaml / path traversal / sandbox / secret leak / privilege boundary were all invented (the architecture's H is operator polish: token-cost transparency, SECURITY.md, /doctor --watch, etc.); cross-cutting contract labels §2.7..§2.22 were assigned plausibly-sounding-but-wrong topics. ~297 specs were deleted in CL-11 to remove the deviation.
+
+## PROJECT MEMORY — read alongside architecture every prompt
+
+The repo carries a project-memory tree at [docs/memory/](docs/memory/) that supplements the architecture text. **Read all of these at the start of every prompt**, alongside `docs/architecture-v1.9.md`:
+
+- [docs/memory/MEMORY.md](docs/memory/MEMORY.md) — index of persisted memory files (1-line hooks per entry)
+- [docs/memory/project-v19-architecture-canonical.md](docs/memory/project-v19-architecture-canonical.md) — feature-ID summary + drift-mechanism catalog (CL-08/09/10 lessons); cite by exact ID
+- [docs/memory/feedback-self-gap-check-before-commit.md](docs/memory/feedback-self-gap-check-before-commit.md) — the gap-check workflow loop (overlaps with the "Workflow loop for every CL" section below; both must stay in sync)
+- [docs/memory/architecture-backlog-conditional-gets.md](docs/memory/architecture-backlog-conditional-gets.md) — v1.8 candidate (conditional GETs prerequisite for in-use polling)
+- [docs/memory/architecture-backlog-in-use-polling.md](docs/memory/architecture-backlog-in-use-polling.md) — v1.8 candidate (millisecond in-use polling for registries)
+- [docs/memory/project-v19-architecture-text.md](docs/memory/project-v19-architecture-text.md) — pointer to `docs/architecture-v1.9.md` (canonical text not duplicated)
+
+**The repo memory at `docs/memory/` is the canonical source.** The auto-memory tree at `~/.claude/projects/-Users-siddharthjoshi-projects-claude-tdd-pro/memory/` is a per-machine, per-user mirror that should track the repo. When they diverge, the repo wins; refresh the auto-memory mirror to match.
+
+**Adding new memory** that should persist across sessions and machines: write to `docs/memory/` first (will be committed), then refresh the `~/.claude/.../memory/` mirror via copy. Don't write project memory only to `~/.claude/` — it's machine-local and will be lost on new clones.
 
 ## Workflow loop for every CL (the process)
 
