@@ -1,0 +1,11 @@
+{
+  "name": "daily-fresh gate honors the per-profile freshness window override when configured",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch profiles && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'pr_corpus_freshness_window: 1h\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-status.sh\" --source cfpb --now 2026-05-13T02:00:00Z --profile profiles/p.yaml 2>out.txt && grep -q 'window=1h' out.txt && grep -q 'is_fresh=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove error output enumerates every rule that depended on the removed source as sole evidence",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence && printf 'sources: []\\noperator_namespace: [{id: my-src}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && for r in r1 r2 r3; do printf \"rule_id: $r\\nprovenance:\\n  - {class: pr-corpus, source_id: my-src, sole_evidence: true}\\n\" > pr-corpus/evidence/$r.yaml; done && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rule=r1' err.txt && grep -q 'rule=r2' err.txt && grep -q 'rule=r3' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

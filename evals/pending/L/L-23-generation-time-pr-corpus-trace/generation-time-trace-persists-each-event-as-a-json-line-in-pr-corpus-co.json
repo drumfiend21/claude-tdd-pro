@@ -1,0 +1,11 @@
+{
+  "name": "generation-time trace persists each event as a JSON line in pr-corpus/consumption-trace.jsonl",
+  "command": "mkdir -p pr-corpus && printf '{\"event\":\"generation\",\"commit\":\"abc\"}\\n' > e1.json && printf '{\"event\":\"generation\",\"commit\":\"def\"}\\n' > e2.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event e1.json --out pr-corpus/consumption-trace.jsonl 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event e2.json --out pr-corpus/consumption-trace.jsonl 2>err.txt && [ \"$(wc -l < pr-corpus/consumption-trace.jsonl)\" = \"2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

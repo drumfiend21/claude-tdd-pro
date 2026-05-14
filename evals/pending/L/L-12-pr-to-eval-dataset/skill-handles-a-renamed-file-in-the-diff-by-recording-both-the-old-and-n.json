@@ -1,0 +1,11 @@
+{
+  "name": "skill handles a renamed file in the diff by recording both the old and new file paths",
+  "command": "mkdir -p pr && printf 'diff --git a/old.js b/new.js\\nsimilarity index 90%\\nrename from old.js\\nrename to new.js\\n--- a/old.js\\n+++ b/new.js\\n@@ -1,1 +1,1 @@\\n-eval(s)\\n+safeParse(s)\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --emit dataset --out dataset.jsonl 2>err.txt && grep -q '\"renamed_from\":\"old.js\"' dataset.jsonl && grep -q '\"renamed_to\":\"new.js\"' dataset.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

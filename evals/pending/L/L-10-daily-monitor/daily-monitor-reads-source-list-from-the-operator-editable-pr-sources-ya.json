@@ -1,0 +1,11 @@
+{
+  "name": "daily monitor reads source list from the operator-editable PR-SOURCES.yaml registry",
+  "command": "mkdir -p pr-corpus .claude-tdd-pro && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && printf 'sources: [{id: cfpb, source_class: federal-financial-regulator, tier: 1, applies_to: [node]}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources .claude-tdd-pro/PR-SOURCES.yaml 2>out.txt && grep -q 'source=cfpb' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

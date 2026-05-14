@@ -1,0 +1,11 @@
+{
+  "name": "skill extracts the after-state file content from the unified diff of a single-file PR",
+  "command": "mkdir -p pr && printf 'diff --git a/x.js b/x.js\\n--- a/x.js\\n+++ b/x.js\\n@@ -1,1 +1,1 @@\\n-const a=eval(s)\\n+const a=safeParse(s)\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --emit after --out after.txt 2>err.txt && grep -q 'safeParse(s)' after.txt && ! grep -q 'eval(s)' after.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "generation-time trace records every PR consulted during a generation event with its pr_number",
+  "command": "mkdir -p pr-corpus && printf '{\"event\":\"generation\",\"commit\":\"abc123\",\"consulted_prs\":[{\"number\":1,\"org\":\"a\"},{\"number\":2,\"org\":\"b\"}]}\\n' > event.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event event.json --out pr-corpus/consumption-trace.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"number\":1' pr-corpus/consumption-trace.jsonl && grep -q '\"number\":2' pr-corpus/consumption-trace.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

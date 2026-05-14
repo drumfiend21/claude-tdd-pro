@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn missing impact preview source blocks promotion with a specific actionable error",
+  "command": "mkdir -p pr-corpus && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1},{\"number\":2,\"org\":\"b\",\"tier\":1},{\"number\":3,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --root /nonexistent/path 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'impact_preview_failed' err.txt && grep -q 'root=/nonexistent/path' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

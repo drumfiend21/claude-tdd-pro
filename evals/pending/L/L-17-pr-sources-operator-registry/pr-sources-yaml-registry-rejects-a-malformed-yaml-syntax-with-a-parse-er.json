@@ -1,0 +1,11 @@
+{
+  "name": "PR-SOURCES.yaml registry rejects a malformed yaml syntax with a parse-error message",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: [unclosed\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-registry.sh\" --registry .claude-tdd-pro/PR-SOURCES.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -qi 'parse' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

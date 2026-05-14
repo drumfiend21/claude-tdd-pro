@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update budget tracking is per-source not aggregated across all configured sources",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"a\":{\"used_today\":50000},\"b\":{\"used_today\":50000}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source a --estimated-tokens 30000 --budget .claude-tdd-pro/pr-corpus/budget.json --dry-run 2>out.txt && grep -q 'source=a remaining=50000' out.txt && grep -q 'allowed=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

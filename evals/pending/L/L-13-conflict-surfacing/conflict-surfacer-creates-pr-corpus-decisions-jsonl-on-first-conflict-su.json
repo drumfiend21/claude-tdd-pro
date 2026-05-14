@@ -1,0 +1,11 @@
+{
+  "name": "conflict surfacer creates pr-corpus/decisions.jsonl on first conflict surfaced from the reconciler",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"matched_rule_id\":\"r-x\",\"classification\":\"conflict\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/surface-conflict.sh\" --decision decision.json --log pr-corpus/decisions.jsonl 2>err.txt && [ -f pr-corpus/decisions.jsonl ] && grep -q '\"pattern_id\":\"p1\"' pr-corpus/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

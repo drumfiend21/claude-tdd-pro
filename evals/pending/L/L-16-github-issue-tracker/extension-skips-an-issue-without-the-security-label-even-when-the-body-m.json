@@ -1,0 +1,11 @@
+{
+  "name": "extension skips an issue without the security label even when the body mentions security keywords",
+  "command": "mkdir -p fixtures && printf '{\"number\":99,\"labels\":[\"bug\"],\"body\":\"mentions sql injection\"}\\n' > fixtures/issues.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-tracker.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/issues.jsonl --emit patterns --out patterns.jsonl 2>err.txt && [ ! -s patterns.jsonl ] && grep -q 'matched=0' err.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

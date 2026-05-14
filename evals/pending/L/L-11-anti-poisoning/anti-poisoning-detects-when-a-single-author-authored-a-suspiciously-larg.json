@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning detects when a single author authored a suspiciously large fraction of the supporting PRs",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"number\":1,\"author\":\"alice\"},{\"number\":2,\"author\":\"alice\"},{\"number\":3,\"author\":\"alice\"}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --check single-author-dominance 2>out.txt && grep -q 'flag=single-author-dominance' out.txt && grep -q 'author=alice' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

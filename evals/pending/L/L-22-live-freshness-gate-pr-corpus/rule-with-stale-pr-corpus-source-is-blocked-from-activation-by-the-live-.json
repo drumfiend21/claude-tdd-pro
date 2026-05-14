@@ -1,0 +1,11 @@
+{
+  "name": "rule with stale pr-corpus source is blocked from activation by the live freshness gate",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rule_id: r1\\nprovenance:\\n  - {class: pr-corpus, source_id: cfpb}\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-gate.sh\" --rule rule.yaml --now 2026-05-13T00:00:00Z --freshness-window 24h 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rule_blocked' err.txt && grep -q 'stale_source=cfpb' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

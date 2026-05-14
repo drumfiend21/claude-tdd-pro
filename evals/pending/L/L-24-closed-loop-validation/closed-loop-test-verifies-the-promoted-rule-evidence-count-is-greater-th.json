@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test verifies the promoted rule evidence_count is greater than or equal to three",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules 2>out.txt && grep -q 'evidence_count: 3' active-rules/test-pattern.yaml && grep -q 'verify=evidence_count_at_least_3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

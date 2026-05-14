@@ -1,0 +1,11 @@
+{
+  "name": "cross-loop integration emits exactly one event per cross-loop reference rather than duplicate per consumer",
+  "command": "mkdir -p .claude-tdd-pro/cross-loop && printf '{\"rule_id\":\"no-eval\",\"origin\":\"pr-corpus\",\"consumers\":[\"standards\",\"compliance\",\"rubric\"]}\\n' > ref.json && bash \"$CLAUDE_PLUGIN_ROOT/cross-loop/emit.sh\" --reference ref.json --log .claude-tdd-pro/cross-loop/events.jsonl 2>err.txt && [ \"$(wc -l < .claude-tdd-pro/cross-loop/events.jsonl)\" = \"1\" ] && grep -q '\"consumers\":\\[\"standards\",\"compliance\",\"rubric\"\\]' .claude-tdd-pro/cross-loop/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

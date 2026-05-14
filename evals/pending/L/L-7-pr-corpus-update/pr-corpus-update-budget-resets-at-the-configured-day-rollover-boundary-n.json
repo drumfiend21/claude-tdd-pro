@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update budget resets at the configured day-rollover boundary not on each invocation",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"cfpb-consumerfinance\":{\"used_today\":99000,\"date\":\"2026-05-12\"}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --estimated-tokens 5000 --budget .claude-tdd-pro/pr-corpus/budget.json --now 2026-05-13T00:00:01Z --dry-run 2>out.txt && grep -q 'budget_reset=true' out.txt && grep -q 'used_today=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

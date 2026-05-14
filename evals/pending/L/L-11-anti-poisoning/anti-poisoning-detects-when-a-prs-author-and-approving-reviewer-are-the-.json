@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning detects when a PRs author and approving reviewer are the same person",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"number\":1,\"author\":\"alice\",\"reviewer\":\"alice\"}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --check self-approval 2>out.txt && grep -q 'flag=self-approval' out.txt && grep -q 'pr=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/doctor reports the freshness state of every pr-corpus-backed rule in the active profile",
+  "command": "mkdir -p profiles .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rules:\\n  - {id: r1, provenance: [{class: pr-corpus, source_id: cfpb}]}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --profile profiles/p.yaml --check pr-corpus-freshness --now 2026-05-13T01:00:00Z 2>out.txt && grep -q 'r1: cfpb=fresh' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

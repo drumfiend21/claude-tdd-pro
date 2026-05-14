@@ -1,0 +1,11 @@
+{
+  "name": "resolved conflict records are retained in the log for audit traceability and not deleted",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"resolved\":true,\"resolution\":\"accept\"}\\n' > pr-corpus/decisions.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/list-decisions.sh\" --log pr-corpus/decisions.jsonl --include-resolved 2>out.txt && grep -q '\"pattern_id\":\"p1\"' out.txt && grep -q 'resolved_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

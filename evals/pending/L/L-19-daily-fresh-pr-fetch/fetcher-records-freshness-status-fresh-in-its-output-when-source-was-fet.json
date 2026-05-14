@@ -1,0 +1,11 @@
+{
+  "name": "fetcher records freshness_status fresh in its output when source was fetched within the window",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch fixtures && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf '{\"number\":1,\"merged\":true}\\n' > fixtures/prs.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb --upstream-stub fixtures/prs.jsonl --now 2026-05-13T12:00:00Z --freshness-window 24h --force 2>out.txt && grep -q 'freshness_status=fresh' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

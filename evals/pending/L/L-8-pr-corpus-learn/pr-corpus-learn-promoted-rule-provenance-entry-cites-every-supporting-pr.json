@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn promoted rule provenance entry cites every supporting PR with a verbatim quote",
+  "command": "mkdir -p pr-corpus active-rules && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"avoid raw concat\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1,\"verbatim_quote\":\"avoid raw concat\"},{\"number\":2,\"org\":\"b\",\"tier\":1,\"verbatim_quote\":\"prefer params\"},{\"number\":3,\"org\":\"c\",\"tier\":1,\"verbatim_quote\":\"escape inputs\"}]}]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --rules-out active-rules 2>err.txt && grep -q 'verbatim_quote: avoid raw concat' active-rules/p1.yaml && grep -q 'verbatim_quote: escape inputs' active-rules/p1.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

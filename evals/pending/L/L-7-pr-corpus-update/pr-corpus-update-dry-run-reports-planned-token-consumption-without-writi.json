@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update dry-run reports planned token consumption without writing to the budget file",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"cfpb-consumerfinance\":{\"used_today\":1000}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --estimated-tokens 5000 --budget .claude-tdd-pro/pr-corpus/budget.json --dry-run 2>out.txt && grep -q '\"used_today\":1000' .claude-tdd-pro/pr-corpus/budget.json && grep -q 'planned_consumption=5000' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

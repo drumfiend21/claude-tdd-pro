@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn chains promotion through /promote-standard with class equal to pr-corpus on its provenance",
+  "command": "mkdir -p pr-corpus && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1},{\"number\":2,\"org\":\"b\",\"tier\":1},{\"number\":3,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --dry-run --emit promotion-plan 2>out.txt && grep -q 'chains_to=/promote-standard' out.txt && grep -q 'provenance_class=pr-corpus' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

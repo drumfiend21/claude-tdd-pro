@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test fails with a clear error when the promotion path is broken at any step",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules --simulate-failure promote 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'failed_step=promote' err.txt && grep -q 'pipeline_broken' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

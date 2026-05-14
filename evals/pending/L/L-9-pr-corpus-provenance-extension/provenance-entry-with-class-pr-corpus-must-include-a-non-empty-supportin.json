@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry with class pr-corpus must include a non-empty supporting_prs array",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[],\"evidence_count\":0,\"organizations_count\":0}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json --strict 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'supporting_prs.*empty' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

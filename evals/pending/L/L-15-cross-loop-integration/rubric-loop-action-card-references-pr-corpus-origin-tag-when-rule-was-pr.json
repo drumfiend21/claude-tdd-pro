@@ -1,0 +1,11 @@
+{
+  "name": "rubric loop action card references pr-corpus origin tag when rule was promoted from pr-corpus",
+  "command": "mkdir -p .claude-tdd-pro/rubric-runs && printf 'rule_id: no-eval\\nprovenance:\\n  - class: pr-corpus\\n    supporting_prs: [{number: 1, verbatim_quote: x, org: a, tier: 1}]\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/cross-loop-action-card.sh\" --rule rule.yaml --emit card 2>out.txt && grep -q 'origin=pr-corpus' out.txt && grep -q 'rule_id=no-eval' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

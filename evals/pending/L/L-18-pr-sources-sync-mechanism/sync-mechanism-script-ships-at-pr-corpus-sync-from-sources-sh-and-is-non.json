@@ -1,0 +1,11 @@
+{
+  "name": "sync mechanism script ships at pr-corpus/sync-from-sources.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/sync-from-sources.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

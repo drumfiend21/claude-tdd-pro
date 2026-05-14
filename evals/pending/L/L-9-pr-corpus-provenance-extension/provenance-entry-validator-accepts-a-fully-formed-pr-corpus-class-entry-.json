@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry validator accepts a fully-formed pr-corpus class entry with all required fields populated",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[{\"number\":1,\"verbatim_quote\":\"x\",\"org\":\"a\",\"tier\":1},{\"number\":2,\"verbatim_quote\":\"y\",\"org\":\"b\",\"tier\":1},{\"number\":3,\"verbatim_quote\":\"z\",\"org\":\"c\",\"tier\":1}],\"evidence_count\":3,\"organizations_count\":3}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

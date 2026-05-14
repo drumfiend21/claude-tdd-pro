@@ -1,0 +1,11 @@
+{
+  "name": "skill dataset entry includes a pattern_category field tagged from the inferred rule kind",
+  "command": "mkdir -p pr && printf 'diff --git a/x.js b/x.js\\n--- a/x.js\\n+++ b/x.js\\n@@ -1,1 +1,1 @@\\n-eval(s)\\n+safeParse(s)\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --pattern-category security --emit dataset --out dataset.jsonl 2>err.txt && grep -q '\"pattern_category\":\"security\"' dataset.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

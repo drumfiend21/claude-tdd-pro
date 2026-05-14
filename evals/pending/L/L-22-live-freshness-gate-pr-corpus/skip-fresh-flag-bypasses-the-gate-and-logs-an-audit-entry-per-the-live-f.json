@@ -1,0 +1,11 @@
+{
+  "name": "--skip-fresh flag bypasses the gate and logs an audit entry per the live-freshness contract",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch compliance && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rule_id: r1\\nprovenance:\\n  - {class: pr-corpus, source_id: cfpb}\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-gate.sh\" --rule rule.yaml --now 2026-05-13T00:00:00Z --freshness-window 24h --skip-fresh --audit-log compliance/audit.log 2>out.txt && grep -q 'gate=bypassed' out.txt && grep -q '\"event\":\"skip-fresh-bypass\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

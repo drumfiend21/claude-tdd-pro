@@ -1,0 +1,13 @@
+{
+  "name": "daily monitor honors the daily-fresh fetch guarantee and skips a source already fetched within the freshness window",
+  "command": "mkdir -p pr-corpus .claude-tdd-pro/pr-corpus/last-fetch && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'sources: [{id: cfpb, source_class: federal-financial-regulator, tier: 1, applies_to: [node]}]\\n' > fixtures/sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources fixtures/sources.yaml --now 2026-05-13T01:00:00Z 2>out.txt && grep -q 'source=cfpb status=fresh-skip' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p fixtures"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

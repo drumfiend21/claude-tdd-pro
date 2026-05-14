@@ -1,0 +1,11 @@
+{
+  "name": "generation-time trace fields include source_pr_number per consulted pattern reference",
+  "command": "mkdir -p pr-corpus && printf '{\"event\":\"generation\",\"consulted_prs\":[{\"number\":42,\"org\":\"a\"}]}\\n' > event.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event event.json --out pr-corpus/consumption-trace.jsonl 2>err.txt && grep -q '\"source_pr_number\":42' pr-corpus/consumption-trace.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

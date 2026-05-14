@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning detects when reviewer affiliation matches author organization on every supporting PR",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"number\":1,\"author_org\":\"acme\",\"reviewer_org\":\"acme\"},{\"number\":2,\"author_org\":\"acme\",\"reviewer_org\":\"acme\"}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --check intra-org-only 2>out.txt && grep -q 'flag=intra-org-only' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

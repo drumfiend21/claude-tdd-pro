@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test exits with status code zero when every pipeline step passes verification",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules 2>out.txt; rc=$?; [ \"$rc\" = \"0\" ] && grep -q 'all_steps=passed' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

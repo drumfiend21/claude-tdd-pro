@@ -1,0 +1,11 @@
+{
+  "name": "operator can mark a surfaced conflict as resolved with a justification recorded into the same log",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"existing_rule_id\":\"r-x\",\"resolved\":false}\\n' > pr-corpus/decisions.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/resolve-conflict.sh\" --pattern p1 --resolution accept-pattern --justification reviewed-manually --log pr-corpus/decisions.jsonl 2>out.txt && grep -q 'resolved=true' out.txt && grep -q '\"resolved\":true' pr-corpus/decisions.jsonl && grep -q '\"resolution\":\"accept-pattern\"' pr-corpus/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

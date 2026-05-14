@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry supporting_prs item missing the verbatim_quote field is rejected by the validator",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1}],\"evidence_count\":1,\"organizations_count\":1}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*verbatim_quote' err.txt && grep -q 'pr=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

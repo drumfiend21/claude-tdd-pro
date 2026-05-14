@@ -1,0 +1,11 @@
+{
+  "name": "first-use-of-day check triggers an automatic refresh when the last fetch was before today",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch fixtures && printf '2026-05-12T20:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf '{\"number\":1,\"merged\":true}\\n' > fixtures/prs.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/first-use-check.sh\" --source cfpb --now 2026-05-13T08:00:00Z --upstream-stub fixtures/prs.jsonl 2>out.txt && grep -q 'auto_refresh=triggered' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

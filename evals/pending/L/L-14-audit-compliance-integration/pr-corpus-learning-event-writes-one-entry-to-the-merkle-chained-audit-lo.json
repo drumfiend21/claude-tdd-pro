@@ -1,0 +1,13 @@
+{
+  "name": "pr-corpus learning event writes one entry to the merkle-chained audit log per promoted pattern",
+  "command": "mkdir -p compliance && printf '[{\"id\":\"p-test\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1},{\"number\":2,\"org\":\"b\",\"tier\":1},{\"number\":3,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --audit-log compliance/audit.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"pr-corpus-learn\"' compliance/audit.log && grep -q '\"pattern_id\":\"p-test\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [
+    "mkdir -p pr-corpus"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

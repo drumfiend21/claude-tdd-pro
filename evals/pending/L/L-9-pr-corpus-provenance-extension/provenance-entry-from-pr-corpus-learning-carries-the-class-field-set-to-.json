@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry from pr-corpus learning carries the class field set to pr-corpus literal value",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[],\"evidence_count\":0,\"organizations_count\":0}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json --check-class 2>out.txt && grep -q 'class=pr-corpus' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update rejects a budget override value that is non-numeric or negative",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --budget-override -1 --dry-run 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_budget_override' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

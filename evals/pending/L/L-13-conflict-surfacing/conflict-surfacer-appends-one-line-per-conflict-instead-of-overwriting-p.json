@@ -1,0 +1,11 @@
+{
+  "name": "conflict surfacer appends one line per conflict instead of overwriting prior entries",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"classification\":\"conflict\"}\\n' > d1.json && printf '{\"pattern_id\":\"p2\",\"classification\":\"conflict\"}\\n' > d2.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/surface-conflict.sh\" --decision d1.json --log pr-corpus/decisions.jsonl 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/surface-conflict.sh\" --decision d2.json --log pr-corpus/decisions.jsonl 2>err.txt && [ \"$(wc -l < pr-corpus/decisions.jsonl)\" = \"2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

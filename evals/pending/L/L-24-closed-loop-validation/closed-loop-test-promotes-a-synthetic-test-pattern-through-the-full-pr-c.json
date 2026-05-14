@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test promotes a synthetic test pattern through the full pr-corpus learning pipeline",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules --dry-run 2>out.txt && grep -q 'step=promote synthetic_pattern=test-pattern' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

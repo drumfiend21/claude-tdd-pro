@@ -1,0 +1,11 @@
+{
+  "name": "conflict record carries a proposed_resolution suggestion produced by the reconciler subagent",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"matched_rule_id\":\"r-x\",\"classification\":\"conflict\",\"proposed_resolution\":\"narrow-scope-of-existing\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/surface-conflict.sh\" --decision decision.json --log pr-corpus/decisions.jsonl 2>err.txt && grep -q '\"proposed_resolution\":\"narrow-scope-of-existing\"' pr-corpus/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

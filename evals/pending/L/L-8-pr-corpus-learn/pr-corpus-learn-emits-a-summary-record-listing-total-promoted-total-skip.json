@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn emits a summary record listing total promoted total skipped and total considered patterns",
+  "command": "mkdir -p pr-corpus && printf '[]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --dry-run 2>out.txt && grep -q 'considered=0' out.txt && grep -q 'promoted=0' out.txt && grep -q 'skipped=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

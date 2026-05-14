@@ -1,0 +1,11 @@
+{
+  "name": "daily auto-refresh script exists at pr-corpus/auto-refresh-daily.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/auto-refresh-daily.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

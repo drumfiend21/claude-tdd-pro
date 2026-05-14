@@ -1,0 +1,11 @@
+{
+  "name": "conflict record includes both the offending pattern id and the existing rule id it would conflict with",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"matched_rule_id\":\"r-existing\",\"classification\":\"conflict\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/surface-conflict.sh\" --decision decision.json --log pr-corpus/decisions.jsonl 2>err.txt && grep -q '\"pattern_id\":\"p1\"' pr-corpus/decisions.jsonl && grep -q '\"existing_rule_id\":\"r-existing\"' pr-corpus/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

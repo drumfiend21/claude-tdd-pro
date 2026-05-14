@@ -1,0 +1,11 @@
+{
+  "name": "freshness gate output records the last_fetch_at value per pr-corpus source on the rule",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-12T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rule_id: r1\\nprovenance:\\n  - {class: pr-corpus, source_id: cfpb}\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-gate.sh\" --rule rule.yaml --now 2026-05-13T00:00:00Z --freshness-window 24h --emit fields 2>out.txt && grep -q 'cfpb:last_fetch_at=2026-05-12T00:00:00Z' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "cross-loop integration honors profile opt-in flags and does not emit when opt-in is unset",
+  "command": "mkdir -p profiles && printf 'pr_corpus_cross_loop:\\n  enabled: false\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/cross-loop/emit.sh\" --profile profiles/p.yaml --target rubric --dry-run 2>out.txt && grep -q 'opt_in=false' out.txt && grep -q 'no_emission' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

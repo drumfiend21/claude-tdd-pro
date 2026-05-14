@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update aggregates per-source budget usage independently when invoked across multiple sources",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"a\":{\"used_today\":1000},\"b\":{\"used_today\":99500}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source a --source b --estimated-tokens 1000 --budget .claude-tdd-pro/pr-corpus/budget.json --dry-run 2>out.txt && grep -q 'a:allowed=true' out.txt && grep -q 'b:allowed=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

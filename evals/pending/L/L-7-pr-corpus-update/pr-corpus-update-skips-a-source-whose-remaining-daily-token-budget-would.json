@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update skips a source whose remaining daily token budget would be exceeded by the planned fetch",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"cfpb-consumerfinance\":{\"used_today\":99500}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --estimated-tokens 5000 --budget .claude-tdd-pro/pr-corpus/budget.json --dry-run 2>out.txt && grep -q 'skipped=token-budget' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

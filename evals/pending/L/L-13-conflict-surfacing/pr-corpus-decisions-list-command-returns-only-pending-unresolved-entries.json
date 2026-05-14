@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-decisions list command returns only pending unresolved entries by default",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"resolved\":false}\\n{\"pattern_id\":\"p2\",\"resolved\":true}\\n' > pr-corpus/decisions.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-decisions.sh\" --log pr-corpus/decisions.jsonl 2>out.txt && grep -q '\"pattern_id\":\"p1\"' out.txt && ! grep -q '\"pattern_id\":\"p2\"' out.txt && grep -q 'pending=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

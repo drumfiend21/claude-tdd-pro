@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update accepts an operator override budget for a single source via --budget-override",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --budget-override 200000 --dry-run 2>out.txt && grep -q 'effective_budget=200000' out.txt && grep -q 'override=operator' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

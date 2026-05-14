@@ -1,0 +1,11 @@
+{
+  "name": "fresh pr-corpus rules pass through the gate unaffected with no demotion or disable applied",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rule_id: r1\\nseverity: error\\nprovenance:\\n  - {class: pr-corpus, source_id: cfpb}\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-gate.sh\" --rule rule.yaml --now 2026-05-13T01:00:00Z --freshness-window 24h 2>out.txt && grep -q 'action=none' out.txt && grep -q 'severity=error' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill dataset entry references the source PR number for traceability back to upstream",
+  "command": "mkdir -p pr && printf 'diff --git a/x.js b/x.js\\n--- a/x.js\\n+++ b/x.js\\n@@ -1,1 +1,1 @@\\n-eval(s)\\n+safeParse(s)\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --pr-number 42 --emit dataset --out dataset.jsonl 2>err.txt && grep -q '\"source_pr\":42' dataset.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

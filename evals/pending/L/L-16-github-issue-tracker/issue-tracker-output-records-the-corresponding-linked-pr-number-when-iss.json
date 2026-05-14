@@ -1,0 +1,11 @@
+{
+  "name": "issue tracker output records the corresponding linked PR number when issue links to a fix PR",
+  "command": "mkdir -p fixtures && printf '{\"number\":7,\"labels\":[\"security\"],\"body\":\"Fixed in #42\",\"linked_pr\":42}\\n' > fixtures/issues.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-tracker.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/issues.jsonl --emit patterns --out patterns.jsonl 2>err.txt && grep -q '\"linked_pr\":42' patterns.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

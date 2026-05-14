@@ -1,0 +1,11 @@
+{
+  "name": "fetcher records freshness_status stale in its output when source was fetched outside the window",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-status.sh\" --source cfpb --now 2026-05-13T00:00:00Z --freshness-window 24h 2>out.txt && grep -q 'freshness_status=stale' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

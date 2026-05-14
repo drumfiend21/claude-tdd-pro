@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test is wired into the plugin self-test CI gate at .github/workflows/closed-loop.yml",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" ] && grep -q 'pr-corpus/closed-loop-test.sh' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

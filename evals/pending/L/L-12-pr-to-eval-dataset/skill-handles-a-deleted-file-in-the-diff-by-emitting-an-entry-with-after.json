@@ -1,0 +1,11 @@
+{
+  "name": "skill handles a deleted file in the diff by emitting an entry with after equal to empty string",
+  "command": "mkdir -p pr && printf 'diff --git a/x.js b/x.js\\ndeleted file mode 100644\\n--- a/x.js\\n+++ /dev/null\\n@@ -1,1 +0,0 @@\\n-eval(s)\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --emit dataset --out dataset.jsonl 2>err.txt && grep -q '\"after\":\"\"' dataset.jsonl && grep -q '\"deleted\":true' dataset.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

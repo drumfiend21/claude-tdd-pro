@@ -1,0 +1,11 @@
+{
+  "name": "cross-loop integration map document at pr-corpus/cross-loop-map.yaml lists every consumer downstream loop",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/cross-loop-map.yaml\" ] && grep -q 'consumers:' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/cross-loop-map.yaml\" && grep -q 'standards' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/cross-loop-map.yaml\" && grep -q 'compliance' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/cross-loop-map.yaml\" && grep -q 'rubric' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/cross-loop-map.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

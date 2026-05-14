@@ -1,0 +1,13 @@
+{
+  "name": "/pr-corpus-learn requires the input patterns to come from PRs that previously passed the triage filter",
+  "command": "mkdir -p pr-corpus && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":99,\"triage_decision\":\"reject\"}]}]\\n' > pr-corpus/patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval-pass.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'untriaged_pr' err.txt && grep -q 'pr=99' err.txt && echo blocked 1>&2",
+  "setup": [
+    "printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval-pass.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

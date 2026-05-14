@@ -1,0 +1,13 @@
+{
+  "name": "/pr-corpus-update writes consumed token total back to the budget file when dry-run is not set",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"cfpb-consumerfinance\":{\"used_today\":1000}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/prs.jsonl --consumed-tokens 4000 --budget .claude-tdd-pro/pr-corpus/budget.json --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"used_today\":5000' .claude-tdd-pro/pr-corpus/budget.json && echo ok 1>&2",
+  "setup": [
+    "mkdir -p fixtures && printf '{\"number\":1,\"merged\":true}\\n' > fixtures/prs.jsonl"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

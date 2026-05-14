@@ -1,0 +1,11 @@
+{
+  "name": "audit log entry from pr-corpus learning includes the source PR numbers that supported the pattern",
+  "command": "mkdir -p compliance pr-corpus && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":42,\"org\":\"a\",\"tier\":1},{\"number\":99,\"org\":\"b\",\"tier\":1},{\"number\":7,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --audit-log compliance/audit.log 2>err.txt && grep -q '\"source_prs\":\\[42,99,7\\]' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

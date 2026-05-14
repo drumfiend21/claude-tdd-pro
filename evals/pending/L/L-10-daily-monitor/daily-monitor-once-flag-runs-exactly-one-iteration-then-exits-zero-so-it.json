@@ -1,0 +1,13 @@
+{
+  "name": "daily monitor --once flag runs exactly one iteration then exits zero so it is testable in CI",
+  "command": "mkdir -p pr-corpus && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources-stub fixtures/sources.yaml 2>out.txt && grep -q 'iterations=1' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p fixtures && printf 'sources: []\\n' > fixtures/sources.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

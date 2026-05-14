@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-update message when budget exhausted includes the next reset timestamp so operator can plan",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"cfpb-consumerfinance\":{\"used_today\":100000,\"date\":\"2026-05-13\"}}\\n' > .claude-tdd-pro/pr-corpus/budget.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --estimated-tokens 1 --budget .claude-tdd-pro/pr-corpus/budget.json --now 2026-05-13T12:00:00Z --dry-run 2>out.txt && grep -q 'budget_exhausted' out.txt && grep -q 'resets_at=2026-05-14T00:00:00Z' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

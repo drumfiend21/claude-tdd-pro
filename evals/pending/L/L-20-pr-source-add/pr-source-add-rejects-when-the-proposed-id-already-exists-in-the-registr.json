@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-add rejects when the proposed id already exists in the registry as a duplicate",
+  "command": "mkdir -p stub/myorg/myrepo .claude-tdd-pro && printf '{\"name\":\"myrepo\",\"pushed_at\":\"2026-05-01T00:00:00Z\"}\\n' > stub/myorg/myrepo/repo-metadata.json && printf 'sources: []\\noperator_namespace: [{id: myrepo, source_class: financial-industry, tier: 2, applies_to: [node]}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" myorg/myrepo --gh-clone-stub stub --registry .claude-tdd-pro/PR-SOURCES.yaml --tier 2 --source-class financial-industry --now 2026-05-13T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_id=myrepo' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

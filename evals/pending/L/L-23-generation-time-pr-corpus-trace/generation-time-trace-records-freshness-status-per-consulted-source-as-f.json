@@ -1,0 +1,11 @@
+{
+  "name": "generation-time trace records freshness_status per consulted source as fresh or stale",
+  "command": "mkdir -p pr-corpus .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf '{\"event\":\"generation\",\"consulted_prs\":[{\"number\":1,\"source_id\":\"cfpb\"}]}\\n' > event.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event event.json --out pr-corpus/consumption-trace.jsonl --now 2026-05-13T01:00:00Z --freshness-window 24h 2>err.txt && grep -q '\"freshness_status\":\"fresh\"' pr-corpus/consumption-trace.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

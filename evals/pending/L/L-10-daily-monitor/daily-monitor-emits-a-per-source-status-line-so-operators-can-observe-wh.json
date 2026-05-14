@@ -1,0 +1,11 @@
+{
+  "name": "daily monitor emits a per-source status line so operators can observe which sources fetched and which failed",
+  "command": "mkdir -p pr-corpus fixtures && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && printf 'sources: [{id: a, source_class: financial-industry, tier: 1, applies_to: [node]},{id: b, source_class: financial-industry, tier: 1, applies_to: [node]}]\\n' > fixtures/sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources fixtures/sources.yaml --fetcher-stub pass 2>out.txt && grep -q 'source=a status=' out.txt && grep -q 'source=b status=' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

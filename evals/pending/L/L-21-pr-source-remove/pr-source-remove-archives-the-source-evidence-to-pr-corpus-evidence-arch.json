@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove archives the source evidence to pr-corpus/evidence/_archived/ folder before removing",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence && printf 'sources: []\\noperator_namespace: [{id: my-src}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && printf 'source_id: my-src\\nrelated_prs: [1, 2]\\n' > pr-corpus/evidence/my-src.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence --now 2026-05-13T00:00:00Z 2>err.txt && [ -f pr-corpus/evidence/_archived/my-src-2026-05-13T00-00-00Z.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

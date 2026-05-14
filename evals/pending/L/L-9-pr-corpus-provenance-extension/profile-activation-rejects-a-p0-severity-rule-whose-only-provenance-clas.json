@@ -1,0 +1,11 @@
+{
+  "name": "profile activation rejects a P0 severity rule whose only provenance class is pr-corpus and not a tier-1 published standard",
+  "command": "mkdir -p profiles && printf 'rules:\\n  - id: r1\\n    severity: P0\\n    provenance:\\n      - class: pr-corpus\\n        supporting_prs: [{number: 1, verbatim_quote: x, org: a, tier: 1}]\\n        evidence_count: 1\\n        organizations_count: 1\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-profile.sh\" --profile profiles/p.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'P0_requires_published_standard' err.txt && grep -q 'rule=r1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill emits one eval dataset entry per file in the diff with before and after fixtures",
+  "command": "mkdir -p pr && printf 'diff --git a/x.js b/x.js\\n--- a/x.js\\n+++ b/x.js\\n@@ -1,1 +1,1 @@\\n-eval(s)\\n+safeParse(s)\\ndiff --git a/y.js b/y.js\\n--- a/y.js\\n+++ b/y.js\\n@@ -1,1 +1,1 @@\\n-eval(t)\\n+safeParse(t)\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --emit dataset --out dataset.jsonl 2>err.txt && [ \"$(wc -l < dataset.jsonl)\" = \"2\" ] && grep -q '\"file\":\"x.js\"' dataset.jsonl && grep -q '\"file\":\"y.js\"' dataset.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

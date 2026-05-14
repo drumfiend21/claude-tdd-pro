@@ -1,0 +1,11 @@
+{
+  "name": "operator can filter the continuous learning evidence section by a date range argument",
+  "command": "mkdir -p compliance && printf '{\"event\":\"pr-corpus-learn\",\"pattern_id\":\"p-old\",\"at\":\"2026-04-01T00:00:00Z\"}\\n{\"event\":\"pr-corpus-learn\",\"pattern_id\":\"p-new\",\"at\":\"2026-05-13T00:00:00Z\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --since 2026-05-01T00:00:00Z --dry-run 2>out.txt && grep -q 'p-new' out.txt && ! grep -q 'p-old' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

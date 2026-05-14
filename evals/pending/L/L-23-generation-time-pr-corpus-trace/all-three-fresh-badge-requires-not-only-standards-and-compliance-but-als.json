@@ -1,0 +1,11 @@
+{
+  "name": "all-three-fresh badge requires not only standards and compliance but also pr-corpus to be fresh",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"standards\":\"fresh\",\"compliance\":\"fresh\",\"pr_corpus\":\"stale\"}\\n' > status.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/three-fresh-badge.sh\" --status status.json 2>out.txt && grep -q 'badge=not-all-fresh' out.txt && grep -q 'pr_corpus=stale' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

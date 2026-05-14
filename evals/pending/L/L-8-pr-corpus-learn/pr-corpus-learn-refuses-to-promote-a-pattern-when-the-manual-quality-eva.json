@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn refuses to promote a pattern when the manual quality-eval gate has not produced a pass result",
+  "command": "mkdir -p pr-corpus && printf '{\"gate\":\"fail\"}\\n' > pr-corpus/quality-eval.json && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[]}]\\n' > pr-corpus/patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'gate_not_passed' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

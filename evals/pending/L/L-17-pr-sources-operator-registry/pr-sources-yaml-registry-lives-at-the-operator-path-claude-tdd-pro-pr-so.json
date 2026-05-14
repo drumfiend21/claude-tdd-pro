@@ -1,0 +1,11 @@
+{
+  "name": "PR-SOURCES.yaml registry lives at the operator path .claude-tdd-pro/PR-SOURCES.yaml",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\noperator_namespace: []\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/show-registry-path.sh\" 2>out.txt && grep -q '.claude-tdd-pro/PR-SOURCES.yaml' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

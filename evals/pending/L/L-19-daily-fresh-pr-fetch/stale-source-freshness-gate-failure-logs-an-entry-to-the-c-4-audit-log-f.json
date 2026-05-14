@@ -1,0 +1,11 @@
+{
+  "name": "stale-source freshness gate failure logs an entry to the merkle-chained audit log for compliance traceability",
+  "command": "mkdir -p compliance .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-status.sh\" --source cfpb --now 2026-05-13T00:00:00Z --freshness-window 24h --enforce --audit-log compliance/audit.log 2>err.txt; rc=$?; grep -q '\"event\":\"pr-corpus-fresh-fail\"' compliance/audit.log && grep -q '\"source\":\"cfpb\"' compliance/audit.log && echo logged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "logged"
+    ]
+  }
+}
