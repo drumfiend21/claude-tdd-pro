@@ -143,7 +143,7 @@ CROSS_ERRS=$(echo "$SOURCE_JSON" | node -e '
       // recommended_set MUST be subset of all_set
       for (const id of recSet) {
         if (!allSetSet.has(id)) {
-          errs.push(`recommended_set: "${id}" is not in all_set`);
+          errs.push(`recommended_set: "${id}" is not a subset of all_set`);
         }
       }
       if (errs.length > 0) {

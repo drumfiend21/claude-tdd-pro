@@ -10,7 +10,7 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "authoritative_publisher", "authoritative_url", "registry_link", "fetched_at", "content_hash"],
+      "required": ["id", "authoritative_publisher", "authoritative_url", "registry_link", "fetched_at", "content_hash", "fetch_frequency", "fragility_tier", "license_note"],
       "properties": {
         "id": {
           "type": "string",
