@@ -1,0 +1,11 @@
+{
+  "name": "active-flow PID liveness check prunes a stack entry whose owning PID no longer exists",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"flow\":\"alive\",\"pid\":99999998}\\n{\"flow\":\"dead\",\"pid\":99999999}\\n' > .claude-tdd-pro/active-flow.stack && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-prune.sh\" --pid-liveness-stub alive=true,dead=false 2>err.txt && grep -q 'alive' .claude-tdd-pro/active-flow.stack && ! grep -q 'dead' .claude-tdd-pro/active-flow.stack && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

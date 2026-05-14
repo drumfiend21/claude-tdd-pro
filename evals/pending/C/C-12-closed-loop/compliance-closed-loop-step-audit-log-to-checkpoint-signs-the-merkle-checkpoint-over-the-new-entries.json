@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step audit-log-to-checkpoint signs the merkle checkpoint over the new entries",
+  "command": "mkdir -p compliance/audit-checkpoints && printf '{\"event\":\"e1\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step audit-to-checkpoint --audit-log compliance/audit.log --checkpoint-dir compliance/audit-checkpoints --now 2026-05-13T00:00:00Z 2>err.txt && [ -f compliance/audit-checkpoints/checkpoint-1.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

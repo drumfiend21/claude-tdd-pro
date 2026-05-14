@@ -1,0 +1,11 @@
+{
+  "name": "active-flow show-top command prints only the top-of-stack entry without modifying the file",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"flow\":\"a\"}\\n{\"flow\":\"b\"}\\n' > .claude-tdd-pro/active-flow.stack && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-show-top.sh\" 2>out.txt && grep -q '\"flow\":\"b\"' out.txt && [ \"$(wc -l < .claude-tdd-pro/active-flow.stack)\" = \"2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

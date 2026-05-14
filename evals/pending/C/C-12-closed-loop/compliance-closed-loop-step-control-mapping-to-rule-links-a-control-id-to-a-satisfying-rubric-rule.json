@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step control-mapping-to-rule links a control id to a satisfying rubric rule",
+  "command": "mkdir -p compliance && printf '- framework: nist-csf-2\\n  control_id: GV.OC\\n  satisfied_by: [rubric_rule:no-eval]\\n  legal_review_status: pending\\n' > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step mapping-to-rule --controls compliance/controls.yaml --emit links 2>out.txt && grep -q 'control=GV.OC linked_to=no-eval' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

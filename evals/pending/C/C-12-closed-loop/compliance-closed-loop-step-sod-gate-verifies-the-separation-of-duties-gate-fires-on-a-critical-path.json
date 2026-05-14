@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step sod-gate verifies the separation-of-duties gate fires on a critical-path commit",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step sod-gate --commit-stub author-equals-reviewer --critical-path-stub true 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'sod_gate=blocked' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

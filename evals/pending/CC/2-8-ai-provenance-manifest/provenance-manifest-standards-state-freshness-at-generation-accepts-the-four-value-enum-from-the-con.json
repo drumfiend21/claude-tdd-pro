@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest standards_state freshness_at_generation accepts the four-value enum from the contract",
+  "command": "printf '{\"standards_state\":{\"x\":{\"content_hash\":\"a\",\"fetched_at\":\"t\",\"freshness_at_generation\":\"fresh-within-fetch-frequency\"}}}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json --check freshness-enum 2>out.txt && grep -q 'freshness_value=fresh-within-fetch-frequency valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

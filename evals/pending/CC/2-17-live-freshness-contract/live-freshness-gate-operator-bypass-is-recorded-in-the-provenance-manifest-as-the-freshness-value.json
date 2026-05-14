@@ -1,0 +1,11 @@
+{
+  "name": "live freshness gate operator-bypass is recorded in the provenance manifest as the freshness value",
+  "command": "mkdir -p .claude-tdd-pro/standards/last-fetch .claude-tdd-pro/provenance && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/standards/last-fetch/owasp-asvs.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --operation cite --source owasp-asvs --now 2026-05-13T00:00:00Z --freshness-window 24h --skip-fresh --provenance-out .claude-tdd-pro/provenance/p1.json 2>err.txt && grep -q 'operator-bypass' .claude-tdd-pro/provenance/p1.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

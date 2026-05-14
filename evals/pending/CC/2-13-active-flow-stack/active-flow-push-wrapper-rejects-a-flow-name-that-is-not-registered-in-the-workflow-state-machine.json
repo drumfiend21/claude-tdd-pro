@@ -1,0 +1,11 @@
+{
+  "name": "active-flow push wrapper rejects a flow name that is not registered in the workflow state machine",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-push.sh\" --flow no-such-flow --pid 1 --now 2026-05-13T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_flow=no-such-flow' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

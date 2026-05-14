@@ -1,0 +1,11 @@
+{
+  "name": "active-flow push command appends a new flow record as a single NDJSON line",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-push.sh\" --flow plan-feature --pid 1234 --now 2026-05-13T00:00:00Z 2>err.txt && [ \"$(wc -l < .claude-tdd-pro/active-flow.stack)\" = \"1\" ] && grep -q '\"flow\":\"plan-feature\"' .claude-tdd-pro/active-flow.stack && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

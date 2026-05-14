@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract validator emits a structured json record for downstream tooling",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\"}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json --emit json --out result.json 2>err.txt && grep -q '\"valid\"' result.json && grep -q '\"session_id\":\"s1\"' result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

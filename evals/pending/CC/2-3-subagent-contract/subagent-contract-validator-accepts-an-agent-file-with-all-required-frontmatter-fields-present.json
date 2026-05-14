@@ -1,0 +1,11 @@
+{
+  "name": "subagent contract validator accepts an agent file with all required frontmatter fields present",
+  "command": "printf -- '---\\nname: x\\nmodel: sonnet\\nprompt_id: x\\nprompt_version: 1.0\\nmodel_rationale: cost-quality balance for triage\\neval_dataset: evals/datasets/agents/x.jsonl\\nprompt_migration_status: original\\n---\\n' > agent.md && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-contract.sh\" --agent agent.md 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

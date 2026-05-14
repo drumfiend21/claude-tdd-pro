@@ -1,0 +1,11 @@
+{
+  "name": "lock file validator accepts a fully populated lock file with the section 2.7 fields",
+  "command": "printf '{\"plugin_version\":\"1.9.0\",\"rubric_semver\":\"1.0.0\",\"_meta\":{\"schema_version\":\"1.9\",\"sections\":[\"rubric\",\"detectors\",\"standards\",\"compliance\",\"prompts\",\"models\",\"pr_corpus\",\"profile\",\"verify\",\"workflow_state\",\"standards_freshness\",\"pr_corpus_freshness\",\"compliance_freshness\",\"rule_cache\",\"quality_standards_directory\"]},\"_locks\":{},\"rubric\":{},\"detectors\":{},\"standards_versions\":{},\"compliance_versions\":{},\"pr_corpus_patterns\":{},\"prompt_registry_hash\":\"x\",\"model_pins\":{},\"profile_snapshot_hash\":\"x\",\"workflow_state_hash\":\"x\",\"quality_standards_directory_hash\":\"x\"}\\n' > lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-lock.sh\" --lock lock.json 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

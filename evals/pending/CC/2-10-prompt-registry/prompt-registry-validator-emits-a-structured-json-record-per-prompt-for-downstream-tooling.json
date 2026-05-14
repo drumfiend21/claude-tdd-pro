@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator emits a structured json record per prompt for downstream tooling",
+  "command": "mkdir -p prompts && printf 'prompts: []\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml --emit json --out result.json 2>err.txt && grep -q '\"valid\"' result.json && grep -q '\"prompts_count\":0' result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

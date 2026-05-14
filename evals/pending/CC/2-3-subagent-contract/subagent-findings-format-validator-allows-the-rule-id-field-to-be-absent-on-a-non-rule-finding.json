@@ -1,0 +1,11 @@
+{
+  "name": "subagent findings format validator allows the rule_id field to be absent on a non-rule finding",
+  "command": "printf '[{\"severity\":\"P2\",\"file\":\"x.js\",\"line\":10,\"finding\":\"general note\",\"suggested_fix\":\"y\"}]\\n' > findings.json && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-findings.sh\" --findings findings.json 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

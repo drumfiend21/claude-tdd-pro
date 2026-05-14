@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator rejects a duplicate prompt id within the same registry file",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: dup\\n    versions: []\\n  - id: dup\\n    versions: []\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_id=dup' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

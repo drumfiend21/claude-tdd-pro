@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract validator rejects when the plugin-internal fetcher field is missing",
+  "command": "mkdir -p compliance/sources && printf 'sources:\\n  - {id: x, name: x, url: x, authoritative_publisher: x, jurisdiction: x, applicable_to: [x], identifier_scheme: x, fetch_frequency: weekly, legal_review_required: false, paywalled: false, why_authoritative: \"a\\nb\\nc\"}\\n' > compliance/sources/internal.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry compliance/sources/internal.yaml --tier plugin 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*fetcher' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

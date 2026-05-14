@@ -1,0 +1,11 @@
+{
+  "name": "active-flow stack file lives at the architecture-named .claude-tdd-pro path",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-show-path.sh\" 2>out.txt && grep -q '.claude-tdd-pro/active-flow.stack' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

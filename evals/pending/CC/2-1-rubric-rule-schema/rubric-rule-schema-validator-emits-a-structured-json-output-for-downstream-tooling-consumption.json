@@ -1,0 +1,11 @@
+{
+  "name": "rubric rule schema validator emits a structured json output for downstream tooling consumption",
+  "command": "printf '{\"id\":\"r\",\"name\":\"r\",\"description\":\"x\",\"detector\":\"x\",\"severity\":\"P1\",\"semver\":\"1.0.0\"}\\n' > rule.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-rule-schema.sh\" --rule rule.json --emit json --out result.json 2>err.txt && grep -q '\"valid\"' result.json && grep -q '\"rule_id\":\"r\"' result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

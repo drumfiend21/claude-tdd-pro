@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract three consultation lists standards pr_corpus and compliance default to empty arrays",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\",\"standards_consulted\":[],\"pr_corpus_consulted\":[],\"compliance_consulted\":[]}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json --check consultations 2>out.txt && grep -q 'standards_consulted_count=0' out.txt && grep -q 'pr_corpus_consulted_count=0' out.txt && grep -q 'compliance_consulted_count=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

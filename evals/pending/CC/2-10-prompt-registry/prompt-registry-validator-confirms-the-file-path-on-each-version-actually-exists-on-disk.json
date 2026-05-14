@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator confirms the file path on each version actually exists on disk",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        file: prompts/x/missing.md\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml --check files 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'file_not_found' err.txt && grep -q 'missing.md' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

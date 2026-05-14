@@ -1,0 +1,11 @@
+{
+  "name": "pr-source contract validator rejects a source_class outside the seven-value enum from section 2.12",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources:\\n  - {id: x, name: x, github: x/y, tier: 1, source_class: random-blog, applies_to: [node], fetch_frequency: daily}\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source-contract.sh\" --registry .claude-tdd-pro/PR-SOURCES.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_source_class=random-blog' err.txt && grep -q 'federal-financial-regulator' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

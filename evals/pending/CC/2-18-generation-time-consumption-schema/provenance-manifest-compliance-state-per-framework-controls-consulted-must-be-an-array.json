@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest compliance_state per-framework controls_consulted must be an array",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"compliance_state\":{\"x\":{\"controls_consulted\":\"not-an-array\"}}}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-consumption-schema.sh\" --manifest .claude-tdd-pro/provenance/abc.json --check controls-array 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_controls_consulted_type' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

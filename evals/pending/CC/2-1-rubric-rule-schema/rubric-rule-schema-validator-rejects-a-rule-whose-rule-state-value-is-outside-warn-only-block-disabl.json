@@ -1,0 +1,11 @@
+{
+  "name": "rubric rule schema validator rejects a rule whose rule_state value is outside warn-only block disabled",
+  "command": "printf '{\"id\":\"r\",\"name\":\"r\",\"description\":\"x\",\"detector\":\"x\",\"severity\":\"P1\",\"semver\":\"1.0.0\",\"rule_state\":\"made-up\"}\\n' > rule.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-rule-schema.sh\" --rule rule.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_rule_state=made-up' err.txt && grep -q 'allowed=warn-only|block|disabled' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

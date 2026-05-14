@@ -1,0 +1,11 @@
+{
+  "name": "live freshness gate --skip-fresh flag bypasses the gate and logs the bypass to the merkle audit log",
+  "command": "mkdir -p .claude-tdd-pro/standards/last-fetch compliance && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/standards/last-fetch/owasp-asvs.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --operation cite-standard --source owasp-asvs --now 2026-05-13T00:00:00Z --freshness-window 24h --skip-fresh --audit-log compliance/audit.log 2>out.txt && grep -q 'gate=bypassed' out.txt && grep -q '\"event\":\"skip-fresh-bypass\"' compliance/audit.log && grep -q '\"source\":\"owasp-asvs\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

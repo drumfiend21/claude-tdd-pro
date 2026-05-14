@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract validator rejects an architect decision missing the required selected field",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\",\"architect_session\":{\"decisions\":[{\"id\":\"d1\",\"options_presented\":[\"a\"]}]}}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json --check architect-session 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*selected' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

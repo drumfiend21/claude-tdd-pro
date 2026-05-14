@@ -1,0 +1,11 @@
+{
+  "name": "operator namespace conventions.yaml entries are scoped to the operator org via the rule id prefix",
+  "command": "mkdir -p generated-code-quality-standards/_operator/my-org && printf 'rules:\\n  - id: my-org-rule-1\\n    detector: x\\n' > generated-code-quality-standards/_operator/my-org/conventions.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" --file generated-code-quality-standards/_operator/my-org/conventions.yaml --check id-prefix 2>out.txt && grep -q 'all_rules_have_org_prefix=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract validator rejects a fragility_tier outside high medium low enum",
+  "command": "mkdir -p compliance/sources && printf 'sources:\\n  - {id: x, name: x, url: x, authoritative_publisher: x, jurisdiction: x, applicable_to: [x], identifier_scheme: x, fetch_frequency: weekly, legal_review_required: false, paywalled: false, why_authoritative: \"a\\nb\\nc\", fetcher: x, identifier_pattern: x, edition: 2.0, edition_date: 2024-01-01, authority_tier: 1, fragility_tier: extreme}\\n' > compliance/sources/internal.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry compliance/sources/internal.yaml --tier plugin 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_fragility_tier=extreme' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

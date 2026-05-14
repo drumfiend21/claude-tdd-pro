@@ -1,0 +1,11 @@
+{
+  "name": "ADR validator confirms a context section is present with a non-trivial body per MADR",
+  "command": "mkdir -p docs/adr && printf '# 0001 D1\\nstatus: accepted\\ndeciders: [alice]\\n## Context\\nA real architectural context describing the situation we face.\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr --check context 2>out.txt && grep -q 'context_present=true' out.txt && grep -q 'context_length>=20' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

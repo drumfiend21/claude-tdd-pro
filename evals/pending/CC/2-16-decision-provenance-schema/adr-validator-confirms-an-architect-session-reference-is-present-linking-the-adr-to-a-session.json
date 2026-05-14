@@ -1,0 +1,11 @@
+{
+  "name": "ADR validator confirms an architect_session reference is present linking the ADR to a session",
+  "command": "mkdir -p docs/adr && printf '# 0001 D1\\nstatus: accepted\\ndeciders: [alice]\\narchitect_session: sess-1\\ndecision_id: d1\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr --check architect-session 2>out.txt && grep -q 'architect_session=sess-1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest pr_corpus_state contains a patterns_consulted array per the contract",
+  "command": "printf '{\"pr_corpus_state\":{\"x\":{\"patterns_consulted\":[\"p1\",\"p2\"],\"last_fetch\":\"t\",\"freshness_at_generation\":\"fresh-within-fetch-frequency\",\"evidence_count_used\":3}}}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json --check pr-corpus 2>out.txt && grep -q 'patterns_consulted_count=2' out.txt && grep -q 'evidence_count_used=3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

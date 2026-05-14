@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop step audit-pack reports per-source-folder coverage for the active rule set",
+  "command": "mkdir -p generated-code-quality-standards/google compliance && : > compliance/audit.log && printf 'source:\\n  id: google-new\\nrules:\\n  - id: g-google-new-1\\n    detector: x\\n' > generated-code-quality-standards/google/google-new.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --step audit-pack-coverage --root generated-code-quality-standards --audit-log compliance/audit.log --dry-run 2>out.txt && grep -q 'section: Per-source-folder coverage' out.txt && grep -q 'namespace=google rules=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

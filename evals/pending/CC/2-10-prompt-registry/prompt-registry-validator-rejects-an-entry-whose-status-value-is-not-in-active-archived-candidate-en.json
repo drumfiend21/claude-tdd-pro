@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator rejects an entry whose status value is not in active archived candidate enum",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        status: made-up\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_status=made-up' err.txt && grep -q 'allowed=active|archived|candidate' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

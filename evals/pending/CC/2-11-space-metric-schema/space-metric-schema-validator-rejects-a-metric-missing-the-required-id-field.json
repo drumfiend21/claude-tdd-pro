@@ -1,0 +1,11 @@
+{
+  "name": "space metric schema validator rejects a metric missing the required id field",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {dimension: performance, source: x, unit: x, reporting_window: 1d, privacy: local-only, opt_in: false}\\n' > space/metrics.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-metric-schema.sh\" --metrics space/metrics.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*id' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

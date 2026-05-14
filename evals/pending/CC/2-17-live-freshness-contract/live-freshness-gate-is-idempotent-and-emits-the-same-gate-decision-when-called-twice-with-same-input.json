@@ -1,0 +1,11 @@
+{
+  "name": "live freshness gate is idempotent and emits the same gate decision when called twice with same inputs",
+  "command": "mkdir -p .claude-tdd-pro/standards/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/standards/last-fetch/owasp-asvs.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --operation cite --source owasp-asvs --now 2026-05-13T01:00:00Z --freshness-window 24h 2>out1.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --operation cite --source owasp-asvs --now 2026-05-13T01:00:00Z --freshness-window 24h 2>out2.txt && diff out1.txt out2.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

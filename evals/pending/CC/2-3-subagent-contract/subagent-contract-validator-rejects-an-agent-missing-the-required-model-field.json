@@ -1,0 +1,11 @@
+{
+  "name": "subagent contract validator rejects an agent missing the required model field",
+  "command": "printf -- '---\\nname: x\\n---\\n' > agent.md && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-contract.sh\" --agent agent.md 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*model' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

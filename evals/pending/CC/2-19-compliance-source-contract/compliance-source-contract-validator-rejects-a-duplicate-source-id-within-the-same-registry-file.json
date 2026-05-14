@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract validator rejects a duplicate source id within the same registry file",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources:\\n  - {id: dup, name: x, url: x, authoritative_publisher: x, jurisdiction: x, applicable_to: [x], identifier_scheme: x, fetch_frequency: weekly, legal_review_required: false, paywalled: false, why_authoritative: \"a\\nb\\nc\"}\\n  - {id: dup, name: y, url: y, authoritative_publisher: y, jurisdiction: y, applicable_to: [y], identifier_scheme: y, fetch_frequency: weekly, legal_review_required: false, paywalled: false, why_authoritative: \"a\\nb\\nc\"}\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry .claude-tdd-pro/COMPLIANCE-URLS.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_id=dup' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

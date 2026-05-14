@@ -1,0 +1,11 @@
+{
+  "name": "pr-source contract plugin-internal validator confirms the additional internal fields are present",
+  "command": "mkdir -p pr-corpus/sources && printf 'sources:\\n  - {id: x, name: x, github: x/y, tier: 1, source_class: financial-industry, applies_to: [node], fetch_frequency: daily, authority_tier: 1, fragility_tier: medium, local_llm_eligible: true, filters: {}, budget: 100000, attribution: x, origin: default, added_by: plugin, added_at: 2026-05-13T00:00:00Z}\\n' > pr-corpus/sources/internal.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source-contract.sh\" --registry pr-corpus/sources/internal.yaml --tier plugin 2>out.txt && grep -q 'valid=true' out.txt && grep -q 'plugin_internal_fields_present=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

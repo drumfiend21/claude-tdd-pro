@@ -1,0 +1,11 @@
+{
+  "name": "space metric schema validator confirms reporting_window matches a recognized duration format",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: m, dimension: performance, source: x, unit: x, reporting_window: forever, privacy: local-only, opt_in: false}\\n' > space/metrics.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-metric-schema.sh\" --metrics space/metrics.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_reporting_window=forever' err.txt && grep -qE 'allowed_format=.*[0-9]+d' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

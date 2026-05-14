@@ -1,0 +1,11 @@
+{
+  "name": "ADR validator rejects a status value outside the MADR allowed enum proposed accepted deprecated superseded",
+  "command": "mkdir -p docs/adr && printf '# 0001 D1\\nstatus: made-up\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr --check status 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_status=made-up' err.txt && grep -q 'allowed=proposed|accepted|deprecated|superseded' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

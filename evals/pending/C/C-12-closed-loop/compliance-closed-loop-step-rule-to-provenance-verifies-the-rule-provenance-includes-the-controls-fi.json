@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step rule-to-provenance verifies the rule provenance includes the controls field",
+  "command": "mkdir -p active-rules && printf 'rule_id: no-eval\\ncontrols: [{framework: nist-csf-2, control_id: GV.OC}]\\n' > active-rules/no-eval.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step rule-to-provenance --rules-dir active-rules 2>out.txt && grep -q 'control=GV.OC present_on_rule=no-eval' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

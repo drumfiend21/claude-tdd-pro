@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest validator rejects a manifest missing all three consumption blocks when consumption is required",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"commit\":\"abc\"}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-consumption-schema.sh\" --manifest .claude-tdd-pro/provenance/abc.json --require-consumption 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'no_consumption_blocks_present' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

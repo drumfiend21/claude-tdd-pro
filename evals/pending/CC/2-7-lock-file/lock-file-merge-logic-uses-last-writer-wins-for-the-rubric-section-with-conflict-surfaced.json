@@ -1,0 +1,11 @@
+{
+  "name": "lock file merge logic uses last-writer-wins for the rubric section with conflict surfaced",
+  "command": "printf '{\"rubric\":{\"hash\":\"abc\"}}\\n' > a.json && printf '{\"rubric\":{\"hash\":\"xyz\"}}\\n' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/merge-lock.sh\" --a a.json --b b.json --out merged.json --emit conflicts 2>out.txt && grep -q '\"hash\":\"xyz\"' merged.json && grep -q 'conflict=rubric.hash' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest generation-time consumption block carries standards_state per the schema",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"commit\":\"abc\",\"standards_state\":{\"owasp-asvs\":{\"content_hash\":\"x\",\"fetched_at\":\"t\",\"freshness_at_generation\":\"fresh-within-fetch-frequency\"}}}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-consumption-schema.sh\" --manifest .claude-tdd-pro/provenance/abc.json --check standards-state 2>out.txt && grep -q 'standards_state_present=true' out.txt && grep -q 'sources_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

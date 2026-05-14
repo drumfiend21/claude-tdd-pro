@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator rejects a version whose hash field disagrees with the actual file hash",
+  "command": "mkdir -p prompts/x && printf 'content\\n' > prompts/x/v1.0.0.md && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        file: prompts/x/v1.0.0.md\\n        hash: deadbeef\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml --check hash 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'hash_mismatch' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

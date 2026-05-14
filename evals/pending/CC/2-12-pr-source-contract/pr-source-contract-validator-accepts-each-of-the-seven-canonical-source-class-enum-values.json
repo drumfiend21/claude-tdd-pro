@@ -1,0 +1,11 @@
+{
+  "name": "pr-source contract validator accepts each of the seven canonical source_class enum values",
+  "command": "mkdir -p .claude-tdd-pro && for cls in federal-financial-regulator fedramp-high federal-digital-services federal-infrastructure financial-industry financial-industry-consortium gold-standard-process; do printf \"sources:\\n  - {id: $cls, name: x, github: x/y, tier: 1, source_class: $cls, applies_to: [node], fetch_frequency: daily}\\n\" > .claude-tdd-pro/PR-SOURCES.yaml; bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source-contract.sh\" --registry .claude-tdd-pro/PR-SOURCES.yaml 2>err.txt > /dev/null || { echo \"FAIL: $cls\" 1>&2; exit 1; }; done && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

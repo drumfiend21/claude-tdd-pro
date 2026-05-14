@@ -1,0 +1,11 @@
+{
+  "name": "pr-source contract plugin-internal validator rejects when authority_tier field is missing",
+  "command": "mkdir -p pr-corpus/sources && printf 'sources:\\n  - {id: x, name: x, github: x/y, tier: 1, source_class: financial-industry, applies_to: [node], fetch_frequency: daily}\\n' > pr-corpus/sources/internal.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source-contract.sh\" --registry pr-corpus/sources/internal.yaml --tier plugin 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*authority_tier' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

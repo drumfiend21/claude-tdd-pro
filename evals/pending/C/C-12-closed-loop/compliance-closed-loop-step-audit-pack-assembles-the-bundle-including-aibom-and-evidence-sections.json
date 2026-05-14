@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step audit-pack assembles the bundle including AIBOM and evidence sections",
+  "command": "mkdir -p compliance && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step audit-pack --audit-log compliance/audit.log --dry-run 2>out.txt && grep -q 'section=aibom' out.txt && grep -q 'section=evidence' out.txt && grep -q 'section=risk-classification' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

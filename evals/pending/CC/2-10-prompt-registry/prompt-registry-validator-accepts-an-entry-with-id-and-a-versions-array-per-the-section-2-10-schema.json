@@ -1,0 +1,13 @@
+{
+  "name": "prompt registry validator accepts an entry with id and a versions array per the section 2.10 schema",
+  "command": "printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        file: prompts/x/v1.0.0.md\\n        hash: abc\\n        created: 2026-05-13T00:00:00Z\\n        eval_pass_rate: 0.9\\n        regression_from_prior: 0.0\\n        status: active\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml 2>out.txt && grep -q 'valid=true' out.txt && grep -q 'prompts_count=1' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p prompts"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

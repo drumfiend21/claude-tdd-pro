@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry version migration block declares delta_status as zero-delta or justified-delta with reason",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        migration:\\n          from_inline_agent: true\\n          golden_output_diff: x\\n          delta_status: justified-delta:fix-edge-case\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml --check migration 2>out.txt && grep -q 'delta_status=justified-delta' out.txt && grep -q 'reason=fix-edge-case' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "lock file merge logic uses union for the standards_versions section per the section 2.7 contract",
+  "command": "printf '{\"standards_versions\":{\"a\":\"v1\"}}\\n' > a.json && printf '{\"standards_versions\":{\"b\":\"v2\"}}\\n' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/merge-lock.sh\" --a a.json --b b.json --out merged.json 2>err.txt && grep -q '\"a\":\"v1\"' merged.json && grep -q '\"b\":\"v2\"' merged.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

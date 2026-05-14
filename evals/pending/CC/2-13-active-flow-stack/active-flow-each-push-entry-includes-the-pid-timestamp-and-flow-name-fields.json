@@ -1,0 +1,11 @@
+{
+  "name": "active-flow each push entry includes the pid timestamp and flow name fields",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-push.sh\" --flow plan-feature --pid 1234 --now 2026-05-13T00:00:00Z 2>err.txt && node -e \"const o=JSON.parse(require('fs').readFileSync('.claude-tdd-pro/active-flow.stack','utf8').trim());if(o.pid!==1234||!o.flow||!o.pushed_at)process.exit(1);\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

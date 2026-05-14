@@ -1,0 +1,11 @@
+{
+  "name": "subagent findings format validator accepts an item with all five required fields per section 2.3",
+  "command": "printf '[{\"severity\":\"P1\",\"rule_id\":\"r\",\"file\":\"x.js\",\"line\":10,\"finding\":\"x\",\"suggested_fix\":\"y\"}]\\n' > findings.json && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-findings.sh\" --findings findings.json 2>out.txt && grep -q 'valid=true' out.txt && grep -q 'count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

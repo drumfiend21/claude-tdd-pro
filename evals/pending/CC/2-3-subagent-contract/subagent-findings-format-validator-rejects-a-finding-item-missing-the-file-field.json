@@ -1,0 +1,11 @@
+{
+  "name": "subagent findings format validator rejects a finding item missing the file field",
+  "command": "printf '[{\"severity\":\"P1\",\"line\":10,\"finding\":\"x\",\"suggested_fix\":\"y\"}]\\n' > findings.json && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-findings.sh\" --findings findings.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*file' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

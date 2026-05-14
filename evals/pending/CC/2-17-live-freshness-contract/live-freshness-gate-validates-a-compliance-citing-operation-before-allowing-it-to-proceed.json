@@ -1,0 +1,11 @@
+{
+  "name": "live freshness gate validates a compliance-citing operation before allowing it to proceed",
+  "command": "mkdir -p .claude-tdd-pro/compliance/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/compliance/last-fetch/nist-csf-2.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/freshness-gate.sh\" --operation cite-control --framework nist-csf-2 --now 2026-05-13T01:00:00Z --freshness-window weekly 2>out.txt && grep -q 'gate=pass' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

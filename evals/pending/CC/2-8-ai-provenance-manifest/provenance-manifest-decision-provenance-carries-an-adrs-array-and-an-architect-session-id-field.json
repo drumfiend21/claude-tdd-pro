@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest decision_provenance carries an adrs array and an architect_session_id field",
+  "command": "printf '{\"decision_provenance\":{\"adrs\":[\"0001\"],\"architect_session_id\":\"sess-1\",\"decisions_referenced\":[\"d1\"]}}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json --check decision-provenance 2>out.txt && grep -q 'adrs_count=1' out.txt && grep -q 'architect_session_id=sess-1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

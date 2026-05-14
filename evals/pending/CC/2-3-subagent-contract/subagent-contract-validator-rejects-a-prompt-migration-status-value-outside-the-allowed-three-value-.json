@@ -1,0 +1,11 @@
+{
+  "name": "subagent contract validator rejects a prompt_migration_status value outside the allowed three-value enum",
+  "command": "printf -- '---\\nname: x\\nmodel: sonnet\\nprompt_id: x\\nprompt_version: 1.0\\nprompt_migration_status: made-up\\n---\\n' > agent.md && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-contract.sh\" --agent agent.md 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_prompt_migration_status=made-up' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest generation-time consumption block carries compliance_state per the schema",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"commit\":\"abc\",\"compliance_state\":{\"nist-csf-2\":{\"controls_consulted\":[\"GV.OC\"],\"fetched_at\":\"t\",\"edition\":\"2.0\",\"freshness_at_generation\":\"fresh-within-fetch-frequency\",\"legal_review_status_for_consulted\":[\"pending\"]}}}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-consumption-schema.sh\" --manifest .claude-tdd-pro/provenance/abc.json --check compliance-state 2>out.txt && grep -q 'compliance_state_present=true' out.txt && grep -q 'frameworks_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

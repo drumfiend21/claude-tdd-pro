@@ -1,0 +1,11 @@
+{
+  "name": "ADR validator rejects a file whose name does not match the four-digit-id slug-text pattern",
+  "command": "mkdir -p docs/adr && printf '# Bad\\n' > docs/adr/bad-name.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_name=bad-name.md' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

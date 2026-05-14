@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest is written one per commit at the architecture-named path",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/emit-provenance-manifest.sh\" --commit abc123 --out .claude-tdd-pro/provenance/abc123.json --now 2026-05-13T00:00:00Z 2>err.txt && [ -f .claude-tdd-pro/provenance/abc123.json ] && grep -q '\"commit\":\"abc123\"' .claude-tdd-pro/provenance/abc123.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

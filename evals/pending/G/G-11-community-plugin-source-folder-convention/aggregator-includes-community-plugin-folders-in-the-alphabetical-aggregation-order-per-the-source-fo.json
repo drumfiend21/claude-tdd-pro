@@ -1,0 +1,11 @@
+{
+  "name": "aggregator includes _community plugin folders in the alphabetical aggregation order per the source folder contract",
+  "command": "mkdir -p generated-code-quality-standards/_community/example/ns && printf 'source:\\n  id: example-src\\n  authoritative_publisher: example\\n  authoritative_url: https://example.com\\n  registry_link: x\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:abc\\nrules:\\n  - id: example/foo\\n    detector: x\\n' > generated-code-quality-standards/_community/example/ns/main.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --aggregate-only --root generated-code-quality-standards --rule example/foo 2>out.txt && grep -q 'rule_id=example/foo' out.txt && grep -q 'source=_community/example' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

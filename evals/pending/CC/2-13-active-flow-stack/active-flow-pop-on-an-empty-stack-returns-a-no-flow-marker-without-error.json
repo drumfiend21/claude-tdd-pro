@@ -1,0 +1,11 @@
+{
+  "name": "active-flow pop on an empty stack returns a no-flow marker without error",
+  "command": "mkdir -p .claude-tdd-pro && : > .claude-tdd-pro/active-flow.stack && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-pop.sh\" 2>out.txt && grep -q 'no_active_flow' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

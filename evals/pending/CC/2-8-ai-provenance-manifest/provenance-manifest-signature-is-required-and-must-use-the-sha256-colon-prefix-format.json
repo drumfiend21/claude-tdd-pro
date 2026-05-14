@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest signature is required and must use the sha256 colon prefix format",
+  "command": "printf '{\"commit\":\"abc\",\"signature\":\"plaintext-no-prefix\"}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json --check signature 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_signature_format' err.txt && grep -q 'expected_prefix=sha256:' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

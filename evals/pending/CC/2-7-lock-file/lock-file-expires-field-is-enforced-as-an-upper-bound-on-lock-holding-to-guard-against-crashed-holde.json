@@ -1,0 +1,11 @@
+{
+  "name": "lock file expires field is enforced as an upper bound on lock holding to guard against crashed holders",
+  "command": "printf '{\"_locks\":{\"rubric\":{\"holder\":\"pid-dead\",\"expires\":\"2026-05-13T00:00:00Z\"}}}\\n' > lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-lock.sh\" --lock lock.json --check expired-locks --now 2026-05-13T01:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'expired_lock=rubric' err.txt && grep -q 'holder=pid-dead' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract validator accepts a state file with all section 2.15 required fields",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\",\"current_phase\":\"plan\",\"feature_description\":\"x\",\"architect_session\":{\"decisions\":[]},\"spec_path\":null,\"plan_approved_at\":null,\"commits\":[],\"branch_recommendations\":[],\"standards_consulted\":[],\"pr_corpus_consulted\":[],\"compliance_consulted\":[],\"_resumable\":true}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

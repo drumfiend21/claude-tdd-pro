@@ -1,0 +1,11 @@
+{
+  "name": "pr-source contract validator rejects a missing fetch_frequency field",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources:\\n  - {id: x, name: x, github: x/y, tier: 1, source_class: financial-industry, applies_to: [node]}\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source-contract.sh\" --registry .claude-tdd-pro/PR-SOURCES.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*fetch_frequency' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

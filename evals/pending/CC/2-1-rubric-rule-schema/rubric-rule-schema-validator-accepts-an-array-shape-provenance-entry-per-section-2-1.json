@@ -1,0 +1,11 @@
+{
+  "name": "rubric rule schema validator accepts an array-shape provenance entry per section 2.1",
+  "command": "printf '{\"id\":\"r\",\"name\":\"r\",\"description\":\"x\",\"detector\":\"x\",\"severity\":\"P1\",\"semver\":\"1.0.0\",\"provenance\":[{\"source\":\"x\",\"class\":\"published-standard\",\"section_id\":\"y\",\"fetched_at\":\"2026-05-13T00:00:00Z\",\"content_hash\":\"sha256:abc\"}]}\\n' > rule.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-rule-schema.sh\" --rule rule.json --check provenance 2>out.txt && grep -q 'provenance_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

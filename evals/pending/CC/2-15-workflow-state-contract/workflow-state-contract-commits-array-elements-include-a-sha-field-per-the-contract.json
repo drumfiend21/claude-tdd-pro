@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract commits array elements include a sha field per the contract",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\",\"commits\":[{\"sha\":\"abc\",\"at\":\"2026-05-13T00:00:00Z\"}]}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json --check commits 2>out.txt && grep -q 'commits_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

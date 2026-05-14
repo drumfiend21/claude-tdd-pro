@@ -1,0 +1,11 @@
+{
+  "name": "subagent contract validator rejects an agent missing the required prompt_id field",
+  "command": "printf -- '---\\nname: x\\nmodel: sonnet\\n---\\n' > agent.md && bash \"$CLAUDE_PLUGIN_ROOT/agents/validate-contract.sh\" --agent agent.md 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*prompt_id' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

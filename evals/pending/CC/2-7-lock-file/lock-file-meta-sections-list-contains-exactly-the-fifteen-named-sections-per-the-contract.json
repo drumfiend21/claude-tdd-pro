@@ -1,0 +1,11 @@
+{
+  "name": "lock file _meta sections list contains exactly the fifteen named sections per the contract",
+  "command": "printf '{\"plugin_version\":\"1.9.0\",\"_meta\":{\"sections\":[\"rubric\",\"detectors\",\"standards\",\"compliance\",\"prompts\",\"models\",\"pr_corpus\",\"profile\",\"verify\",\"workflow_state\",\"standards_freshness\",\"pr_corpus_freshness\",\"compliance_freshness\",\"rule_cache\",\"quality_standards_directory\"]}}\\n' > lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-lock.sh\" --lock lock.json --check sections 2>out.txt && grep -q 'sections_count=15' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract validator requires a paywalled true entry to declare a document_url and attribution_note",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources:\\n  - {id: x, name: x, url: x, authoritative_publisher: x, jurisdiction: x, applicable_to: [x], identifier_scheme: x, fetch_frequency: weekly, legal_review_required: false, paywalled: true, why_authoritative: \"a\\nb\\nc\"}\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry .claude-tdd-pro/COMPLIANCE-URLS.yaml --check paywalled 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'paywalled_missing_document_url' err.txt && grep -q 'paywalled_missing_attribution_note' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

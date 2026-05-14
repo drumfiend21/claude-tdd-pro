@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest validator accepts a manifest with all top-level section 2.8 blocks",
+  "command": "printf '{\"commit\":\"abc\",\"timestamp\":\"2026-05-13T00:00:00Z\",\"author_human\":\"alice\",\"ai_involvement\":{\"tier\":\"x\",\"models_used\":[],\"agents_invoked\":[],\"skills_invoked\":[],\"prompts\":[]},\"rubric_state\":{\"rubric_hash\":\"x\",\"rules_evaluated\":[],\"rules_passed\":[],\"rules_blocked\":[]},\"standards_state\":{},\"pr_corpus_state\":{},\"compliance_state\":{},\"human_review\":{},\"cost_telemetry\":{\"tokens_in\":0,\"tokens_out\":0,\"model\":\"x\",\"duration_ms\":0,\"monetary_estimate_usd\":0},\"decision_provenance\":{\"adrs\":[],\"architect_session_id\":\"x\",\"decisions_referenced\":[]},\"signature\":\"sha256:abc\"}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

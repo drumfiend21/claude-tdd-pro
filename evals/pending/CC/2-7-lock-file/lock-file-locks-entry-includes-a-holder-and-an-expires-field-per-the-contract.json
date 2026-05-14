@@ -1,0 +1,11 @@
+{
+  "name": "lock file _locks entry includes a holder and an expires field per the contract",
+  "command": "printf '{\"_locks\":{\"rubric\":{\"holder\":\"pid-1234\",\"expires\":\"2026-05-13T01:00:00Z\"}}}\\n' > lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-lock.sh\" --lock lock.json --check locks-format 2>out.txt && grep -q 'holder=pid-1234' out.txt && grep -q 'expires=2026-05-13T01:00:00Z' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

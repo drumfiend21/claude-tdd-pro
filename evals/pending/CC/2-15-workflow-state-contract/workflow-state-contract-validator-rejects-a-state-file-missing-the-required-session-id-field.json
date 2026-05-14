@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract validator rejects a state file missing the required session_id field",
+  "command": "mkdir -p .claude-tdd-pro && printf '{}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*session_id' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

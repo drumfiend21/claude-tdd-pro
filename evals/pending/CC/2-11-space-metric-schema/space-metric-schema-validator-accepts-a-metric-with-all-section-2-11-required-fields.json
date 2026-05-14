@@ -1,0 +1,13 @@
+{
+  "name": "space metric schema validator accepts a metric with all section 2.11 required fields",
+  "command": "printf 'metrics:\\n  - id: space-perf-rubric-pass-rate\\n    dimension: performance\\n    source: rubric-runs/last.json\\n    unit: ratio\\n    reporting_window: 7d\\n    privacy: local-only\\n    opt_in: false\\n' > space/metrics.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-metric-schema.sh\" --metrics space/metrics.yaml 2>out.txt && grep -q 'valid=true' out.txt && grep -q 'metrics_count=1' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p space"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

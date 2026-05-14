@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop step profile-extends activates the new rule via per-source extends in a profile",
+  "command": "mkdir -p profiles generated-code-quality-standards/google && printf 'source:\\n  id: google-new\\n  authoritative_publisher: google\\n  authoritative_url: x\\n  registry_link: x\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:abc\\nrules:\\n  - id: g-google-new-1\\n    detector: x\\n    recommended: true\\n' > generated-code-quality-standards/google/google-new.yaml && printf 'extends: [google:google-new]\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --step profile-extends --profile profiles/p.yaml --root generated-code-quality-standards 2>out.txt && grep -q 'rule=g-google-new-1' out.txt && grep -q 'active=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

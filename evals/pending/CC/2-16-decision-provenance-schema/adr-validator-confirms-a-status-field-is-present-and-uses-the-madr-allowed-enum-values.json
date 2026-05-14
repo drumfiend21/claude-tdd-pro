@@ -1,0 +1,11 @@
+{
+  "name": "ADR validator confirms a status field is present and uses the MADR allowed enum values",
+  "command": "mkdir -p docs/adr && printf '# 0001 D1\\nstatus: proposed\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr --check status 2>out.txt && grep -q 'status=proposed valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

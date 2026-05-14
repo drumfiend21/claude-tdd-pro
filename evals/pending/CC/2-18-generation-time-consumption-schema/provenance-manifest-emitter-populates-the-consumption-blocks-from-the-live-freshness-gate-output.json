@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest emitter populates the consumption blocks from the live freshness gate output",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/standards/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/standards/last-fetch/owasp-asvs.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/emit-provenance-manifest.sh\" --commit abc --standards-cited owasp-asvs --now 2026-05-13T01:00:00Z --out .claude-tdd-pro/provenance/abc.json 2>err.txt && grep -q '\"owasp-asvs\"' .claude-tdd-pro/provenance/abc.json && grep -q '\"freshness_at_generation\":\"fresh-within-fetch-frequency\"' .claude-tdd-pro/provenance/abc.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

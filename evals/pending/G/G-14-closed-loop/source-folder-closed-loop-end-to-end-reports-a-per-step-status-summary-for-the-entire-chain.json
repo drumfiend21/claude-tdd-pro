@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop end-to-end reports a per-step status summary for the entire chain",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --end-to-end --emit summary 2>out.txt && grep -q 'step=browse' out.txt && grep -q 'step=registry-edit' out.txt && grep -q 'step=folder-auto-scaffold' out.txt && grep -q 'step=rules-authored' out.txt && grep -q 'step=aggregator-pickup' out.txt && grep -q 'step=profile-extends' out.txt && grep -q 'step=doctor-index' out.txt && grep -q 'step=audit-pack-coverage' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

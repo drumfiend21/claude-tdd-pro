@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract validator emits a structured json record for downstream tooling consumption",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry .claude-tdd-pro/COMPLIANCE-URLS.yaml --emit json --out result.json 2>err.txt && grep -q '\"valid\"' result.json && grep -q '\"sources_count\":0' result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

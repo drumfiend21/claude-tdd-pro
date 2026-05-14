@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest cost_telemetry includes tokens_in tokens_out duration_ms model fields",
+  "command": "printf '{\"cost_telemetry\":{\"tokens_in\":1000,\"tokens_out\":500,\"model\":\"sonnet\",\"duration_ms\":1200,\"monetary_estimate_usd\":0.05}}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json --check cost-telemetry 2>out.txt && grep -q 'tokens_in=1000' out.txt && grep -q 'duration_ms=1200' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest compliance_state carries a controls_consulted array and a legal_review_status_for_consulted array",
+  "command": "printf '{\"compliance_state\":{\"nist-csf-2\":{\"controls_consulted\":[\"GV.OC\"],\"fetched_at\":\"t\",\"edition\":\"2.0\",\"freshness_at_generation\":\"fresh-within-fetch-frequency\",\"legal_review_status_for_consulted\":[\"pending\"]}}}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json --check compliance 2>out.txt && grep -q 'controls_consulted_count=1' out.txt && grep -q 'legal_review_status_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

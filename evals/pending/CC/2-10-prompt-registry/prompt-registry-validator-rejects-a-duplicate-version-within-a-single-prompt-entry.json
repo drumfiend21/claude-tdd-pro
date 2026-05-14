@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator rejects a duplicate version within a single prompt entry",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n      - version: 1.0.0\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_version=1.0.0' err.txt && grep -q 'prompt_id=x' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

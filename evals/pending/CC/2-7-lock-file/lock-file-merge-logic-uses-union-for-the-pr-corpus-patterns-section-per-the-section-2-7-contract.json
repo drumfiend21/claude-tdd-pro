@@ -1,0 +1,11 @@
+{
+  "name": "lock file merge logic uses union for the pr_corpus_patterns section per the section 2.7 contract",
+  "command": "printf '{\"pr_corpus_patterns\":{\"p1\":\"x\"}}\\n' > a.json && printf '{\"pr_corpus_patterns\":{\"p2\":\"y\"}}\\n' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/merge-lock.sh\" --a a.json --b b.json --out merged.json 2>err.txt && grep -q '\"p1\":\"x\"' merged.json && grep -q '\"p2\":\"y\"' merged.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest validator rejects a manifest missing the required commit field",
+  "command": "printf '{}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-provenance-manifest.sh\" --manifest prov.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*commit' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

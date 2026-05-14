@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest standards_state per-source freshness_at_generation must be in the four-value enum",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"standards_state\":{\"x\":{\"freshness_at_generation\":\"made-up\"}}}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-consumption-schema.sh\" --manifest .claude-tdd-pro/provenance/abc.json --check freshness-enum 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_freshness=made-up' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

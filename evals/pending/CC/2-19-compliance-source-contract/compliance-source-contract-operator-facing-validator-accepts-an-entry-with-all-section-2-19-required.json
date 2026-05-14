@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract operator-facing validator accepts an entry with all section 2.19 required fields",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources:\\n  - id: nist-csf-2\\n    name: NIST CSF 2.0\\n    url: https://example.com\\n    authoritative_publisher: NIST\\n    jurisdiction: US Federal\\n    applicable_to: [federal]\\n    identifier_scheme: GV/ID/PR/DE/RS/RC\\n    why_authoritative: |\\n      Line one of why this is authoritative source.\\n      Line two giving more context for the authority.\\n      Line three completing the at-least-three-line requirement.\\n    fetch_frequency: weekly\\n    legal_review_required: false\\n    paywalled: false\\n    document_url: https://example.com\\n    attribution_note: NIST public domain\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry .claude-tdd-pro/COMPLIANCE-URLS.yaml --tier operator 2>out.txt && grep -q 'valid=true' out.txt && grep -q 'sources_count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

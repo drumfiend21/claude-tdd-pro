@@ -1,0 +1,11 @@
+{
+  "name": "active-flow stack file is created lazily on first push and not on every command invocation",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-show-top.sh\" 2>err.txt && [ ! -f .claude-tdd-pro/active-flow.stack ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

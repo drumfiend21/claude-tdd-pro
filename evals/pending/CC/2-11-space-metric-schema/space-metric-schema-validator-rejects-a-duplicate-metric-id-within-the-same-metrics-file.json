@@ -1,0 +1,11 @@
+{
+  "name": "space metric schema validator rejects a duplicate metric id within the same metrics file",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: dup, dimension: performance, source: x, unit: x, reporting_window: 1d, privacy: local-only, opt_in: false}\\n  - {id: dup, dimension: activity, source: x, unit: x, reporting_window: 1d, privacy: local-only, opt_in: true}\\n' > space/metrics.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-metric-schema.sh\" --metrics space/metrics.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_id=dup' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step risk-classify outputs the risk tier for the changed code",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step risk-classify --change-stub financial-rails --dry-run 2>out.txt && grep -q 'risk_tier=' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

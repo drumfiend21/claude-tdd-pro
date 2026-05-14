@@ -1,0 +1,11 @@
+{
+  "name": "rubric rule schema validator accepts the legal_review_status object form per section 2.1",
+  "command": "printf '{\"id\":\"r\",\"name\":\"r\",\"description\":\"x\",\"detector\":\"x\",\"severity\":\"P1\",\"semver\":\"1.0.0\",\"legal_review_status\":{\"nist-csf-2\":\"reviewed_by:alice:2026-05-13\"}}\\n' > rule.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-rule-schema.sh\" --rule rule.json --check legal-review 2>out.txt && grep -q 'legal_review_status_present=true' out.txt && grep -q 'frameworks_with_status=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator rejects a migration delta_status value outside the allowed enum",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        migration:\\n          delta_status: made-up\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml --check migration 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_delta_status=made-up' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

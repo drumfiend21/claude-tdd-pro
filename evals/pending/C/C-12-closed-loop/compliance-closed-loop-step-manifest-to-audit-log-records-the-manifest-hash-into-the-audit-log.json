@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step manifest-to-audit-log records the manifest hash into the audit log",
+  "command": "mkdir -p .claude-tdd-pro/provenance compliance && printf '{\"commit\":\"abc\",\"controls_consulted\":[\"GV.OC\"]}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step manifest-to-audit-log --provenance .claude-tdd-pro/provenance/abc.json --audit-log compliance/audit.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"provenance-manifest-emitted\"' compliance/audit.log && grep -q '\"commit\":\"abc\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract architect_session decisions array carries id decision_point options_presented selected fields",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\",\"architect_session\":{\"decisions\":[{\"id\":\"d1\",\"decision_point\":\"auth\",\"options_presented\":[\"a\",\"b\"],\"selected\":\"a\",\"rationale\":\"x\",\"adr_path\":\"docs/adr/0001-a.md\"}]}}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json --check architect-session 2>out.txt && grep -q 'decisions_count=1' out.txt && grep -q 'all_decisions_valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

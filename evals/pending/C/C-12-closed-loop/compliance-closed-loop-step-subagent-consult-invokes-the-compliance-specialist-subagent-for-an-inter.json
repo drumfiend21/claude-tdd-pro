@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step subagent-consult invokes the compliance-specialist subagent for an interpretation",
+  "command": "mkdir -p agents && printf 'name: compliance-specialist\\nmodel: opus\\nprompt_id: compliance-specialist\\nprompt_version: 1.0\\ndescription: x\\n' > agents/compliance-specialist.md && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step subagent-consult --agent-dir agents --question \"interpret control\" --dry-run 2>out.txt && grep -q 'compliance_specialist_invoked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

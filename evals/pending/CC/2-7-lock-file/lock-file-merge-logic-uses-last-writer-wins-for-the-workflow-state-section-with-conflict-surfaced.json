@@ -1,0 +1,11 @@
+{
+  "name": "lock file merge logic uses last-writer-wins for the workflow_state section with conflict surfaced",
+  "command": "printf '{\"workflow_state_hash\":\"abc\"}\\n' > a.json && printf '{\"workflow_state_hash\":\"xyz\"}\\n' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/merge-lock.sh\" --a a.json --b b.json --out merged.json --emit conflicts 2>out.txt && grep -q '\"workflow_state_hash\":\"xyz\"' merged.json && grep -q 'conflict=workflow_state_hash' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

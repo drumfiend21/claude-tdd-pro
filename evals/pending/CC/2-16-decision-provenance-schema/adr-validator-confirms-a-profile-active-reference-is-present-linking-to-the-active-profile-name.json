@@ -1,0 +1,11 @@
+{
+  "name": "ADR validator confirms a profile_active reference is present linking to the active profile name",
+  "command": "mkdir -p docs/adr && printf '# 0001 D1\\nstatus: accepted\\ndeciders: [alice]\\nprofile_active: regulated\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr --check profile 2>out.txt && grep -q 'profile_active=regulated' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

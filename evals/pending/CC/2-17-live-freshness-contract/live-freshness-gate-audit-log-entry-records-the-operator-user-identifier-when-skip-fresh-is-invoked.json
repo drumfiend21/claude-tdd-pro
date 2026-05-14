@@ -1,0 +1,11 @@
+{
+  "name": "live freshness gate audit log entry records the operator user identifier when --skip-fresh is invoked",
+  "command": "mkdir -p .claude-tdd-pro/standards/last-fetch compliance && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/standards/last-fetch/owasp-asvs.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --operation cite-standard --source owasp-asvs --now 2026-05-13T00:00:00Z --freshness-window 24h --skip-fresh --audit-log compliance/audit.log --operator alice 2>err.txt && grep -q '\"operator\":\"alice\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

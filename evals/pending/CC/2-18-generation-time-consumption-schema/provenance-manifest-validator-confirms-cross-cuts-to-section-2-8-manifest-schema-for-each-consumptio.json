@@ -1,0 +1,11 @@
+{
+  "name": "provenance manifest validator confirms cross-cuts to section 2.8 manifest schema for each consumption block",
+  "command": "mkdir -p .claude-tdd-pro/provenance && printf '{\"commit\":\"abc\",\"standards_state\":{},\"pr_corpus_state\":{},\"compliance_state\":{}}\\n' > .claude-tdd-pro/provenance/abc.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-consumption-schema.sh\" --manifest .claude-tdd-pro/provenance/abc.json --cross-check section-2-8 2>out.txt && grep -q 'cross_check_section_2_8=pass' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

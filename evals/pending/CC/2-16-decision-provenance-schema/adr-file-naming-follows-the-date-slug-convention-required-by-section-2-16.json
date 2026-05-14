@@ -1,0 +1,11 @@
+{
+  "name": "ADR file naming follows the date-slug convention required by section 2.16",
+  "command": "mkdir -p docs/adr && printf '# 0001 First decision\\nstatus: accepted\\n' > docs/adr/0001-first-decision.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-naming.sh\" --adr-dir docs/adr 2>out.txt && grep -q 'all_naming_valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

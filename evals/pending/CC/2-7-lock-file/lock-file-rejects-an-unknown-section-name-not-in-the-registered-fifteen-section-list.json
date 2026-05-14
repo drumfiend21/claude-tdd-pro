@@ -1,0 +1,11 @@
+{
+  "name": "lock file rejects an unknown section name not in the registered fifteen-section list",
+  "command": "printf '{\"_locks\":{\"made-up-section\":{\"holder\":\"x\",\"expires\":\"2026-05-13T00:00:00Z\"}}}\\n' > lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-lock.sh\" --lock lock.json --check section-names 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_section=made-up-section' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance source contract validator rejects a why_authoritative field with fewer than three lines",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources:\\n  - {id: x, name: x, url: x, authoritative_publisher: x, jurisdiction: x, applicable_to: [x], identifier_scheme: x, why_authoritative: \"single line only\", fetch_frequency: weekly, legal_review_required: false, paywalled: false}\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/validate-source-contract.sh\" --registry .claude-tdd-pro/COMPLIANCE-URLS.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'why_authoritative_too_short' err.txt && grep -q 'lines_required>=3' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

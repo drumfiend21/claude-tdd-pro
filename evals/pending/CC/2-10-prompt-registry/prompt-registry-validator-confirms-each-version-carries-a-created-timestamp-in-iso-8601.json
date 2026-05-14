@@ -1,0 +1,11 @@
+{
+  "name": "prompt registry validator confirms each version carries a created timestamp in ISO-8601",
+  "command": "mkdir -p prompts && printf 'prompts:\\n  - id: x\\n    versions:\\n      - version: 1.0.0\\n        created: not-an-iso-date\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --registry prompts/registry.yaml --check timestamps 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_iso8601=not-an-iso-date' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

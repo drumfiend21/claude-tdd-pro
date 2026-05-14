@@ -1,0 +1,11 @@
+{
+  "name": "workflow state contract validator rejects a current_phase value not in the registered phase set",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"session_id\":\"s1\",\"current_phase\":\"made-up\"}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state-contract.sh\" --state .claude-tdd-pro/workflow-state.json --check phase 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_current_phase=made-up' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

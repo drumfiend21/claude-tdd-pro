@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step framework-catalog-to-control-mapping flows a framework into the controls.yaml file",
+  "command": "mkdir -p compliance && printf 'frameworks: [nist-csf-2]\\n' > compliance/active-frameworks.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step framework-to-mapping --frameworks compliance/active-frameworks.yaml --controls compliance/controls.yaml 2>err.txt && grep -q 'framework: nist-csf-2' compliance/controls.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

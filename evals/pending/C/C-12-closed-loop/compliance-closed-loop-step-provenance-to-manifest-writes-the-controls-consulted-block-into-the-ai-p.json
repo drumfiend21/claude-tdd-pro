@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop step provenance-to-manifest writes the controls_consulted block into the AI provenance manifest",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-test.sh\" --step provenance-to-manifest --commit abc123 --controls-consulted GV.OC --frameworks nist-csf-2 --provenance-out .claude-tdd-pro/provenance/abc123.json --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"controls_consulted\":\\[\"GV.OC\"\\]' .claude-tdd-pro/provenance/abc123.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

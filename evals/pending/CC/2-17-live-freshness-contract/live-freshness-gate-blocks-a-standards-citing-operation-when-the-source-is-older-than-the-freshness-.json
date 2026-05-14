@@ -1,0 +1,11 @@
+{
+  "name": "live freshness gate blocks a standards-citing operation when the source is older than the freshness window",
+  "command": "mkdir -p .claude-tdd-pro/standards/last-fetch && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/standards/last-fetch/owasp-asvs.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --operation cite-standard --source owasp-asvs --now 2026-05-13T00:00:00Z --freshness-window 24h 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'gate=block' err.txt && grep -q 'reason=stale' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

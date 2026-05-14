@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation verifies the synthetic control mapping is present in controls.yaml",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --controls-out compliance/controls.yaml 2>out.txt && grep -q 'framework: test-fw' compliance/controls.yaml && grep -q 'verify=control_mapping_present' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

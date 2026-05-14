@@ -1,0 +1,11 @@
+{
+  "name": "lock file validator rejects a sections list with fewer than fifteen entries",
+  "command": "printf '{\"plugin_version\":\"1.9.0\",\"_meta\":{\"sections\":[\"rubric\",\"detectors\"]}}\\n' > lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-lock.sh\" --lock lock.json --check sections 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'sections_count=2' err.txt && grep -q 'expected=15' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}
