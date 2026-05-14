@@ -1,0 +1,12 @@
+{
+  "name": "rule options: nested object option validates against schema.properties.<key>.properties recursively",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: \"https://g.com\"\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:S\"\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - id: g-x-001\\n    name: x\\n    description: x\\n    detector: x\\n    type: problem\\n    fixable: null\\n    has_suggestions: false\\n    deprecated: false\\n    replaced_by: []\\n    docs_url: \"https://x.com\"\\n    requires_type_checking: false\\n    recommended: true\\n    options_schema:\\n      type: object\\n      properties:\\n        budget:\\n          type: object\\n          properties:\\n            kb:\\n              type: integer\\n          required: [kb]\\n    messages:\\n      default: x\\n    severity: P1\\n    version: 1.0.0\\n    semver: 1.0.0\\n    rule_state: warn-only\\n    provenance:\\n      - source: x\\n        class: published-standard\\n        section_id: x\\n        url: \"https://x.com\"\\n        fetched_at: \"2026-05-04T00:00:00Z\"\\n        content_hash: \"sha256:S\"\\nrecommended_set: [g-x-001]\\nall_set: [g-x-001]\\n' > tree/google/x.yaml && printf 'rules:\\n  g-x-001: [\"error\", {budget: {wrong_key: 250}}]\\n' > profile.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" profile.yaml --tree \"$PWD/tree\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "kb",
+      "required"
+    ]
+  }
+}

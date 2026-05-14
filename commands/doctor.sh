@@ -19,6 +19,7 @@ ROOT=""
 SIMULATE_CURRENT_TOKENS=""
 EXPLAIN_RULE=""
 PROFILE=""
+TREE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -27,6 +28,7 @@ while [[ $# -gt 0 ]]; do
     --simulate-current-tokens) SIMULATE_CURRENT_TOKENS="$2"; shift 2 ;;
     --explain) EXPLAIN_RULE="$2"; shift 2 ;;
     --profile) PROFILE="$2"; shift 2 ;;
+    --tree) TREE="$2"; shift 2 ;;
     -h|--help) sed -n '1,15p' "$0" | grep -E '^# ' | sed 's/^# //'; exit 0 ;;
     *) echo "doctor: unknown flag: $1" >&2; exit 2 ;;
   esac
@@ -37,9 +39,10 @@ done
 if [[ -n "$EXPLAIN_RULE" ]]; then
   [[ -z "$PROFILE" ]] && { echo "doctor --explain: --profile <path> required" >&2; exit 2; }
   [[ ! -f "$PROFILE" ]] && { echo "doctor --explain: profile not found: $PROFILE" >&2; exit 2; }
-  RULE="$EXPLAIN_RULE" PROFILE="$PROFILE" ruby -ryaml -e '
+  RULE="$EXPLAIN_RULE" PROFILE="$PROFILE" TREE="$TREE" ruby -ryaml -rjson -e '
     rule = ENV["RULE"]
     root_profile = ENV["PROFILE"]
+    tree = ENV["TREE"]
 
     ALLOWED = %w[off warn error 0 1 2].freeze
     NUM_TO_NAME = { 0 => "off", 1 => "warn", 2 => "error" }.freeze
@@ -112,6 +115,35 @@ if [[ -n "$EXPLAIN_RULE" ]]; then
     STDERR.puts "rule_will_run=#{last_name != "off"}"
     if last_opts.is_a?(Hash)
       last_opts.each { |k, v| STDERR.puts "options.#{k}=#{v}" }
+    end
+
+    # E-2: when --tree given, resolve rule.options_schema defaults + merge
+    # with profile options; emit resolved_options as compact JSON.
+    if tree && !tree.empty?
+      rdef = nil
+      Dir.glob(File.join(tree, "**", "*.yaml")).each do |rf|
+        sf = YAML.load_file(rf)
+        next unless sf.is_a?(Hash) && sf["rules"].is_a?(Array)
+        sf["rules"].each do |r|
+          if r.is_a?(Hash) && r["id"] == rule
+            rdef = r
+            break
+          end
+        end
+        break if rdef
+      end
+      if rdef
+        opts = (last_opts.is_a?(Hash) ? last_opts.dup : {})
+        schema = rdef["options_schema"]
+        if schema.is_a?(Hash) && schema["properties"].is_a?(Hash)
+          schema["properties"].each do |k, v|
+            if v.is_a?(Hash) && v.key?("default") && !opts.key?(k)
+              opts[k] = v["default"]
+            end
+          end
+        end
+        STDERR.puts "resolved_options=" + JSON.generate(opts)
+      end
     end
     exit 0
   '

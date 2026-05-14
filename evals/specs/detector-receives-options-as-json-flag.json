@@ -1,0 +1,13 @@
+{
+  "name": "rule options: detector subprocess receives --options <json> argument with the resolved options object (per E-2 final clause + §2.2 detector contract)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-x-001 --in \"$PWD/file.js\" --options '{\"max\":5}' --trace-args 2>out.txt && grep -E 'options \\{\"max\":5\\}' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
