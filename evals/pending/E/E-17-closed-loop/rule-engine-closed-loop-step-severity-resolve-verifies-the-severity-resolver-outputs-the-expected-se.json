@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step severity-resolve verifies the severity resolver outputs the expected severity",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: error\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step severity-resolve --rule-id no-eval --profile profiles/p.yaml 2>out.txt && grep -q 'effective_severity=error' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

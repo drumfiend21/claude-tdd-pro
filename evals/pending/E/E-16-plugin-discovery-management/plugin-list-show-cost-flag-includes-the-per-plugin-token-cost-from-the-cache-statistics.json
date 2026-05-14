@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-list --show-cost flag includes the per-plugin token cost from the cache statistics",
+  "command": "mkdir -p .claude-tdd-pro/plugins/registered/example && printf 'plugin_id: example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && printf '{\"plugin\":\"example\",\"tokens\":4500}\\n' > .claude-tdd-pro/plugins/registered/example/cost-stats.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-list.sh\" --show-cost 2>out.txt && grep -q 'tokens=4500' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

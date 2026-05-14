@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-remove rejects an unknown plugin id with a hint suggesting plugin-list",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-remove.sh\" no-such-plugin 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_plugin_id' err.txt && grep -q 'plugin-list' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

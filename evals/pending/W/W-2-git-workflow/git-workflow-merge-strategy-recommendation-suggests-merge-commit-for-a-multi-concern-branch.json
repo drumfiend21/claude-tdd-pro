@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow merge-strategy recommendation suggests merge-commit for a multi-concern branch",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --check merge-strategy --commits-stub 5 --concerns-stub 3 2>out.txt && grep -q 'recommendation=merge-commit' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

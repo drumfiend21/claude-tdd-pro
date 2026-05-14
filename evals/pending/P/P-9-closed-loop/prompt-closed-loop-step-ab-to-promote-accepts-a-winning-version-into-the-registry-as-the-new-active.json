@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step ab-to-promote accepts a winning version into the registry as the new active",
+  "command": "mkdir -p prompts/x && printf 'name: x\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step ab-to-promote --prompt-id x --winner v1.1.0 --dry-run 2>out.txt && grep -q 'planned: promote x@v1.1.0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

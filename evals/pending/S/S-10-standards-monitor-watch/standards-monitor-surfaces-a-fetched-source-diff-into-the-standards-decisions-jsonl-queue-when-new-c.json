@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor surfaces a fetched-source diff into the standards/decisions.jsonl queue when new content present",
+  "command": "mkdir -p .claude-tdd-pro standards && printf 'sources: [{id: owasp-asvs}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --fetcher-stub new-content --decisions standards/decisions.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"source\":\"owasp-asvs\"' standards/decisions.jsonl && grep -q '\"awaiting_decision\":true' standards/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

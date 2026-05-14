@@ -1,0 +1,11 @@
+{
+  "name": "/architect declines to present an option that lacks any S or L or C grounding source",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"novel-pattern-with-no-grounding\" --enumerate-options --grounding-stub none --dry-run 2>out.txt && grep -q 'declined: no grounding available' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

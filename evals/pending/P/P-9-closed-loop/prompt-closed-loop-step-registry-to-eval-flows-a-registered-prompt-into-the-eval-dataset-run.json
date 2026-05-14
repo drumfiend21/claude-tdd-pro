@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step registry-to-eval flows a registered prompt into the eval-dataset run",
+  "command": "mkdir -p prompts/x evals/datasets/agents && printf 'name: x\\n' > prompts/x/v1.0.0.md && printf '{\"input\":\"q\",\"expected\":\"a\"}\\n' > evals/datasets/agents/x.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step registry-to-eval --prompt prompts/x/v1.0.0.md --dataset evals/datasets/agents/x.jsonl --dry-run 2>out.txt && grep -q 'prompt=x flowed_into=eval' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

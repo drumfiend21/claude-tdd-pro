@@ -1,0 +1,11 @@
+{
+  "name": "skill performance script exits zero on a clean reporting run with no failed observations",
+  "command": "mkdir -p skills && bash \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" --out skills/PERF.md --now 2026-05-13T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" = \"0\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

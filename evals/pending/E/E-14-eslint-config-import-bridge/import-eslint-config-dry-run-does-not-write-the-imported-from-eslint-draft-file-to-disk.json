@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config dry-run does not write the imported-from-eslint draft file to disk",
+  "command": "mkdir -p profiles && printf '{\"rules\":{\"no-eval\":\"error\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" .eslintrc --out profiles/imported-from-eslint.yaml --dry-run 2>err.txt && [ ! -f profiles/imported-from-eslint.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

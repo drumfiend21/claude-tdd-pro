@@ -1,0 +1,11 @@
+{
+  "name": "/architect option enumeration cites a standards section identifier or PR url or compliance control per option",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"auth approach\" --enumerate-options --dry-run 2>out.txt && grep -qE 'option_1.*(standard:|pr:|control:)' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration unregister removes a stage from the profile yaml",
+  "command": "mkdir -p profiles && printf 'workflow_stages: [architect, build]\\nrules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --profile profiles/p.yaml --unregister-stage build 2>err.txt && ! grep -q 'build' profiles/p.yaml && grep -q 'architect' profiles/p.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

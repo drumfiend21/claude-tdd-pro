@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator output rejects an answer that contains an ungrounded claim",
+  "command": "printf '{\"answer\":\"X is true\",\"grounded_sources\":[]}\\n' > answer.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/comparator-validate.sh\" --answer answer.json --check no-hallucination 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'ungrounded_claim' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

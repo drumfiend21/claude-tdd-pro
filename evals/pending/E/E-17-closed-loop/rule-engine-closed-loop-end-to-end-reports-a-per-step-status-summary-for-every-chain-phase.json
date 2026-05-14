@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop end-to-end reports a per-step status summary for every chain phase",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --end-to-end --emit summary 2>out.txt && grep -q 'step=config-import' out.txt && grep -q 'step=plugin-install' out.txt && grep -q 'step=rule-test' out.txt && grep -q 'step=severity-resolve' out.txt && grep -q 'step=suppression' out.txt && grep -q 'step=cache-hit' out.txt && grep -q 'step=formatter' out.txt && grep -q 'step=doctor-explain' out.txt && grep -q 'step=deprecation-migration' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

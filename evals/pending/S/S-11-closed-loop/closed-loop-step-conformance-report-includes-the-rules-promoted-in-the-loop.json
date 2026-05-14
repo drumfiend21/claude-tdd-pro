@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step conformance-report includes the rules promoted in the loop",
+  "command": "mkdir -p .claude-tdd-pro active-rules && printf 'sources: [owasp-asvs]\\n' > .claude-tdd-pro/active-standards.yaml && printf 'rule_id: owasp-asvs-5-2-5\\nprovenance: [{class: published-standard, source_id: owasp-asvs, section_id: 5.2.5}]\\n' > active-rules/owasp-asvs-5-2-5.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step conformance-report --active .claude-tdd-pro/active-standards.yaml --rules-dir active-rules --out STANDARDS-CONFORMANCE.md 2>err.txt && grep -q 'rule_id: owasp-asvs-5-2-5' STANDARDS-CONFORMANCE.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

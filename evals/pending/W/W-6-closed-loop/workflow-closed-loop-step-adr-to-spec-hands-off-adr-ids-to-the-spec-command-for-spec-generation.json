@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step adr-to-spec hands off ADR ids to the /spec command for spec generation",
+  "command": "mkdir -p docs/adr && printf '# 0001 d1\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step adr-to-spec --adr-id 0001 --dry-run 2>out.txt && grep -q 'spec_invoked=true' out.txt && grep -q 'spec_input_adr=0001' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

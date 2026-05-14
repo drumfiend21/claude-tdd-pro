@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector accepts a registry-level rationale fallback when per-prompt is absent",
+  "command": "mkdir -p prompts && printf 'rationale_default: cost-quality fallback for unspecified prompts\\nentries:\\n  - {name: a, model: sonnet}\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --registry prompts/registry.yaml 2>out.txt && grep -q 'fallback_rationale_used=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

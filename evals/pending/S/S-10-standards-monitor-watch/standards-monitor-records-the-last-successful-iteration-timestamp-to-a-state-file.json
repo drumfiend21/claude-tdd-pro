@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor records the last successful iteration timestamp to a state file",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --state .claude-tdd-pro/standards-monitor-state.json --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"last_iteration_at\":\"2026-05-13T00:00:00Z\"' .claude-tdd-pro/standards-monitor-state.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration script ships at workflow/register-profile.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

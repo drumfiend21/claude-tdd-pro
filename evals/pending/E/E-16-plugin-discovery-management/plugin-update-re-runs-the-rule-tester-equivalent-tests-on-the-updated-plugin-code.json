@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-update re-runs the rule-tester equivalent tests on the updated plugin code",
+  "command": "mkdir -p stub-clones/acme/example .claude-tdd-pro/plugins/registered/example && printf 'name: example\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/example/plugin.yaml && printf 'plugin_id: example\\nsource_repo: acme/example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-update.sh\" example --gh-clone-stub stub-clones --rule-tester-stub pass --dry-run 2>out.txt && grep -q 'rule_tester_invoked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

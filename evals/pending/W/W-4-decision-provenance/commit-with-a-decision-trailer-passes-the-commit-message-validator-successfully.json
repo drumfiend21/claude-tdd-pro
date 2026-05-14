@@ -1,0 +1,11 @@
+{
+  "name": "commit with a Decision trailer passes the commit-message validator successfully",
+  "command": "mkdir -p repo && (cd repo && git init -q && touch architectural.txt && git add . && git -c user.email=x@y -c user.name=x commit -q -m \"change\\n\\nDecision: 0042\") && bash \"$CLAUDE_PLUGIN_ROOT/git/validate-commit-trailer.sh\" --root repo --require-decision-on-paths architectural.txt 2>out.txt && grep -q 'decision_trailer=0042' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

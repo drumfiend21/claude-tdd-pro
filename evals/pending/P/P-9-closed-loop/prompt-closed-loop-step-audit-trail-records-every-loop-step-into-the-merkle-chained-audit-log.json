@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step audit-trail records every loop step into the merkle-chained audit log",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step audit-trail --prompt-id x --audit-log compliance/audit.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"prompt-loop-step\"' compliance/audit.log && grep -q '\"prompt_id\":\"x\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

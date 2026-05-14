@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation reports a per-step status summary covering each pipeline phase",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std --emit summary 2>out.txt && grep -q 'step=catalog' out.txt && grep -q 'step=fetch' out.txt && grep -q 'step=coverage' out.txt && grep -q 'step=audit' out.txt && grep -q 'step=diff' out.txt && grep -q 'step=promote' out.txt && grep -q 'step=report' out.txt && grep -q 'step=monitor' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

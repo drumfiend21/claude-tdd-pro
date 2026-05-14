@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step coverage-to-audit flows coverage gaps into the standards-audit report",
+  "command": "mkdir -p standards && printf '{\"owasp-asvs\":{\"gaps\":[\"5.2.5\"]}}\\n' > standards/coverage-matrix.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step coverage-to-audit --coverage standards/coverage-matrix.json --dry-run 2>out.txt && grep -q 'coverage_gap=owasp-asvs:5.2.5 flowed_into=audit' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

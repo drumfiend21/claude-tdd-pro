@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step fetcher-to-coverage flows a fetched standard into the coverage matrix update",
+  "command": "mkdir -p standards && printf 'fetched: [owasp-asvs]\\n' > standards/fetched.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step fetcher-to-coverage --fetched standards/fetched.yaml --dry-run 2>out.txt && grep -q 'fetched_source=owasp-asvs flowed_into=coverage_matrix' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

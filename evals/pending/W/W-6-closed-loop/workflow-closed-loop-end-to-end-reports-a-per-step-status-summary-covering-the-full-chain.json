@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop end-to-end reports a per-step status summary covering the full chain",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --end-to-end --emit summary 2>out.txt && grep -q 'step=describe' out.txt && grep -q 'step=architect' out.txt && grep -q 'step=adr' out.txt && grep -q 'step=spec' out.txt && grep -q 'step=plan-first' out.txt && grep -q 'step=feature' out.txt && grep -q 'step=commit' out.txt && grep -q 'step=git-workflow' out.txt && grep -q 'step=pr' out.txt && grep -q 'step=audit-pack' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

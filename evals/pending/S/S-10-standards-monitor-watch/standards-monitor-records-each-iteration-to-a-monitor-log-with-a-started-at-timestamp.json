@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor records each iteration to a monitor.log with a started_at timestamp",
+  "command": "mkdir -p .claude-tdd-pro standards && printf 'sources: []\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --log standards/monitor.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'started_at=2026-05-13T00:00:00Z' standards/monitor.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

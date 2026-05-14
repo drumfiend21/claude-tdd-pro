@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector rejects a model_rationale that is shorter than the minimum-length threshold",
+  "command": "mkdir -p prompts/x && printf 'name: x\\nmodel: sonnet\\nmodel_rationale: nope\\n' > prompts/x/v1.0.0.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --prompt prompts/x/v1.0.0.md --min-length 20 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rationale_too_short' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

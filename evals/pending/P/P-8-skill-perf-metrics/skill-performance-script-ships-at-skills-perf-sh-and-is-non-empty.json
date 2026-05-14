@@ -1,0 +1,11 @@
+{
+  "name": "skill performance script ships at skills/perf.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

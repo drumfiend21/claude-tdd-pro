@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration honors the profile system contract precedence chain",
+  "command": "mkdir -p profiles && printf 'extends: [base.yaml]\\nrules: {}\\n' > profiles/p.yaml && printf 'workflow_stages: [architect]\\nrules: {}\\n' > profiles/base.yaml && bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --profile profiles/p.yaml --workflow-stage build --resolve 2>out.txt && grep -q 'effective_stages=architect,build' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack Decision Trail section names the EU AI Act Article 12 record-keeping satisfaction",
+  "command": "mkdir -p docs/adr compliance && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --adr-dir docs/adr --dry-run 2>out.txt && grep -q 'EU AI Act Art.12' out.txt && grep -q 'record.keeping' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

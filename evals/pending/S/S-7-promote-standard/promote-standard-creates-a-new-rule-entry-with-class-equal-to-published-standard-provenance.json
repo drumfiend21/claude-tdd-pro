@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard creates a new rule entry with class equal to published-standard provenance",
+  "command": "mkdir -p standards/snapshots active-rules && printf 'sections:\\n  5.2.4: x\\n' > standards/snapshots/owasp-asvs.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --rules-out active-rules 2>err.txt && grep -q 'class: published-standard' active-rules/owasp-asvs-5-2-4.yaml && grep -q 'source_id: owasp-asvs' active-rules/owasp-asvs-5-2-4.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

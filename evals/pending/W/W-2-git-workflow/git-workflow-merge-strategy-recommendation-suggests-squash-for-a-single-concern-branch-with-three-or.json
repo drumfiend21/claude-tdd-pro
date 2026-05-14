@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow merge-strategy recommendation suggests squash for a single-concern branch with three or fewer commits",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --check merge-strategy --commits-stub 3 --concerns-stub 1 2>out.txt && grep -q 'recommendation=squash' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

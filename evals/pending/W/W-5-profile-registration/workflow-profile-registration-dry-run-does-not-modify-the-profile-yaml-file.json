@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration dry-run does not modify the profile yaml file",
+  "command": "mkdir -p profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --profile profiles/p.yaml --workflow-stage architect --dry-run 2>out.txt && ! grep -q 'workflow_stages:' profiles/p.yaml && grep -q 'planned: register architect' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor fetcher failure on one source does not abort iteration over the remaining sources",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: [{id: a}, {id: b}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --fetcher-stub fail-a-pass-b 2>out.txt && grep -q 'a status=fail' out.txt && grep -q 'b status=ok' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

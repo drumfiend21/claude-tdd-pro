@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step architect-to-adr generates one ADR per architectural decision",
+  "command": "mkdir -p docs/adr && bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step architect-to-adr --decisions-stub d1 --adr-out docs/adr --now 2026-05-13T00:00:00Z 2>err.txt && [ -f docs/adr/0001-d1.md ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

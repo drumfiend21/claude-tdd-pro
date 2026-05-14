@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step promote-to-rationale verifies the model rationale detector passes for the promoted version",
+  "command": "mkdir -p prompts/x && printf 'name: x\\nmodel: sonnet\\nmodel_rationale: cost-quality balance for review workload\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step promote-to-rationale --prompt prompts/x/v1.1.0.md 2>out.txt && grep -q 'rationale_detector=pass' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

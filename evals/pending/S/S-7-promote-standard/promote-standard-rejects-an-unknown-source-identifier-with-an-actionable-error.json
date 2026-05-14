@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard rejects an unknown source identifier with an actionable error",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" no-such-source 5.2.4 --snapshot /nonexistent 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_source' err.txt && grep -q 'no-such-source' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

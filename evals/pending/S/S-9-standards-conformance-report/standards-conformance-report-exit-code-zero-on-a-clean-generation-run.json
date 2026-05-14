@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report exit code zero on a clean generation run",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --out STANDARDS-CONFORMANCE.md --now 2026-05-13T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" = \"0\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

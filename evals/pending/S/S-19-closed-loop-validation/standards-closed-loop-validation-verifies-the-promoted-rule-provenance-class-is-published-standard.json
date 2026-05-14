@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation verifies the promoted rule provenance class is published-standard",
+  "command": "mkdir -p active-rules && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std --rules-out active-rules 2>out.txt && grep -q 'class: published-standard' active-rules/test-std-1-1.yaml && grep -q 'verify=provenance_class_published_standard' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

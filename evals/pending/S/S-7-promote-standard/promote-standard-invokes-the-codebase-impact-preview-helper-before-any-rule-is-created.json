@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard invokes the codebase-impact preview helper before any rule is created",
+  "command": "mkdir -p standards/snapshots tree && printf 'sections:\\n  5.2.4: x\\n' > standards/snapshots/owasp-asvs.yaml && printf 'eval(s)\\n' > tree/x.js && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --root tree --dry-run 2>out.txt && grep -q 'codebase_impact_preview=invoked' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

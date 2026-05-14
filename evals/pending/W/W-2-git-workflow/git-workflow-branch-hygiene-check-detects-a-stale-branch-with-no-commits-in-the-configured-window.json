@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow branch hygiene check detects a stale branch with no commits in the configured window",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --check branch-hygiene --branch-age-stub 90d --stale-threshold 30d 2>out.txt && grep -q 'stale_branch=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

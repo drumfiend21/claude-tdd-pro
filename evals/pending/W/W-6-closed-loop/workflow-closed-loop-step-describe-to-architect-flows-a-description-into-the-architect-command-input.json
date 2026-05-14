@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step describe-to-architect flows a description into the architect command input",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step describe-to-architect --description \"build a feature\" --dry-run 2>out.txt && grep -q 'architect_invoked=true' out.txt && grep -q 'description=build a feature' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

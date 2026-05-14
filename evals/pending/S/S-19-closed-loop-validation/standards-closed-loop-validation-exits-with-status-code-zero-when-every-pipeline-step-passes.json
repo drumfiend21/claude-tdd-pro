@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation exits with status code zero when every pipeline step passes",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std 2>out.txt; rc=$?; [ \"$rc\" = \"0\" ] && grep -q 'all_steps=passed' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

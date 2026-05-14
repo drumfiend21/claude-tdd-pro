@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report references the rules promoted from each standard source by rule id",
+  "command": "mkdir -p .claude-tdd-pro active-rules && printf 'sources:\\n  - owasp-asvs\\n' > .claude-tdd-pro/active-standards.yaml && printf 'rule_id: owasp-asvs-5-2-4\\nprovenance: [{class: published-standard, source_id: owasp-asvs, section_id: 5.2.4}]\\n' > active-rules/owasp-asvs-5-2-4.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --active .claude-tdd-pro/active-standards.yaml --rules-dir active-rules --out STANDARDS-CONFORMANCE.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'rule_id: owasp-asvs-5-2-4' STANDARDS-CONFORMANCE.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

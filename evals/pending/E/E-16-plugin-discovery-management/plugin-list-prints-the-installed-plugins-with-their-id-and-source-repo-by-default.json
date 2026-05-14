@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-list prints the installed plugins with their id and source repo by default",
+  "command": "mkdir -p .claude-tdd-pro/plugins/registered/example && printf 'plugin_id: example\\nsource_repo: acme/example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-list.sh\" 2>out.txt && grep -q 'plugin_id=example' out.txt && grep -q 'source_repo=acme/example' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

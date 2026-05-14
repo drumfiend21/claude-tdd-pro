@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step plan-to-feature invokes the /feature command with TDD-Guard active",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step plan-to-feature --plan-id p1 --tdd-guard-stub active --dry-run 2>out.txt && grep -q 'feature_invoked=true' out.txt && grep -q 'tdd_guard=active' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill performance dry-run prints the planned report without writing the file to disk",
+  "command": "mkdir -p skills && bash \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" --out skills/PERF.md --dry-run 2>out.txt && [ ! -f skills/PERF.md ] && grep -q 'planned: write skills/PERF.md' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

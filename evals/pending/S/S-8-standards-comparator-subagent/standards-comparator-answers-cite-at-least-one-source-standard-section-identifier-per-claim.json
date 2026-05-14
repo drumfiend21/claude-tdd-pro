@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator answers cite at least one source standard section identifier per claim",
+  "command": "printf '{\"question\":\"how to handle eval\",\"grounded_sources\":[\"owasp-asvs:5.2.4\"]}\\n' > query.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/comparator-validate.sh\" --query query.json --check grounded 2>out.txt && grep -q 'all_claims_grounded=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

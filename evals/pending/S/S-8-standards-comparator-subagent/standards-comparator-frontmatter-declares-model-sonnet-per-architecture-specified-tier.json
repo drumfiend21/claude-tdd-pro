@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator frontmatter declares model sonnet per architecture-specified tier",
+  "command": "head -30 \"$CLAUDE_PLUGIN_ROOT/agents/standards-comparator.md\" 2>err.txt > head.txt && grep -q 'model: sonnet' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

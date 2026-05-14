@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step cache-hit verifies a re-run of the same rule on the same content reads from cache",
+  "command": "mkdir -p .claude-tdd-pro/cache && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step cache-hit --rule-id no-eval --content-hash abc --dry-run 2>out.txt && grep -q 'cache_lookup_invoked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

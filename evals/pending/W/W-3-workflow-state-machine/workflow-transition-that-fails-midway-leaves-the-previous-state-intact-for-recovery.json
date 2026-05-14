@@ -1,0 +1,11 @@
+{
+  "name": "workflow transition that fails midway leaves the previous state intact for recovery",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"current_state\":\"plan\",\"history\":[]}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/transition.sh\" --to build --simulate-failure mid-write --state-file .claude-tdd-pro/workflow-state.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q '\"current_state\":\"plan\"' .claude-tdd-pro/workflow-state.json && echo recovered 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "recovered"
+    ]
+  }
+}

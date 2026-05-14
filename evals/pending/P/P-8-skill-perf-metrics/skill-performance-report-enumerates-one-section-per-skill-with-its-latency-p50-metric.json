@@ -1,0 +1,11 @@
+{
+  "name": "skill performance report enumerates one section per skill with its latency p50 metric",
+  "command": "mkdir -p skills .claude-tdd-pro/skills && printf 'flow-guard:\\n  latency_p50_ms: 120\\nprofile-suggest:\\n  latency_p50_ms: 80\\n' > .claude-tdd-pro/skills/perf-stats.yaml && bash \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" --stats .claude-tdd-pro/skills/perf-stats.yaml --out skills/PERF.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '## flow-guard' skills/PERF.md && grep -q 'latency_p50_ms: 120' skills/PERF.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

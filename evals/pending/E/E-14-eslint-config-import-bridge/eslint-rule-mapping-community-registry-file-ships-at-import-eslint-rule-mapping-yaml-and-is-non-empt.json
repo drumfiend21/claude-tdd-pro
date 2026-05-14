@@ -1,0 +1,11 @@
+{
+  "name": "ESLint-rule-mapping community registry file ships at import/eslint-rule-mapping.yaml and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/import/eslint-rule-mapping.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

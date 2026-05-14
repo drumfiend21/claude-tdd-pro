@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry rejects two entries that share the same artifact_id within the same registry",
+  "command": "mkdir -p prompts && printf 'fine_tunes:\\n  - {artifact_id: dup, base_model: sonnet}\\n  - {artifact_id: dup, base_model: opus}\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-fine-tunes.sh\" --registry prompts/fine-tunes.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_artifact_id' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow show-state command prints the current state and its history length",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"current_state\":\"build\",\"history\":[{\"to\":\"plan\",\"at\":\"t1\"},{\"to\":\"build\",\"at\":\"t2\"}]}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/show-state.sh\" --state-file .claude-tdd-pro/workflow-state.json 2>out.txt && grep -q 'current_state=build' out.txt && grep -q 'history_length=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

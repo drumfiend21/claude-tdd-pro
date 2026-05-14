@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step git-workflow-to-pr invokes the /pr command per the recommended timing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step git-workflow-to-pr --recommendation-stub push-now --dry-run 2>out.txt && grep -q 'pr_invoked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

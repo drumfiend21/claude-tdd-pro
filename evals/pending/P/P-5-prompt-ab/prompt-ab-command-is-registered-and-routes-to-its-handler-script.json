@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-ab command is registered and routes to its handler script",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/prompt-ab.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

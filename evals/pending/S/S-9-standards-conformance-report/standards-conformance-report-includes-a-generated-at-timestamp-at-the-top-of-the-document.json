@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report includes a generated-at timestamp at the top of the document",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --out STANDARDS-CONFORMANCE.md --now 2026-05-13T00:00:00Z 2>err.txt && head -10 STANDARDS-CONFORMANCE.md | grep -q 'generated_at: 2026-05-13T00:00:00Z' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

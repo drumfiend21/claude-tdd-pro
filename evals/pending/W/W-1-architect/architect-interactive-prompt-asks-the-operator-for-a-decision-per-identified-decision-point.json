@@ -1,0 +1,11 @@
+{
+  "name": "/architect interactive prompt asks the operator for a decision per identified decision point",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"input\" --interactive-stub yes-each --dry-run 2>out.txt && grep -qE 'prompted_decisions=[1-9]' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

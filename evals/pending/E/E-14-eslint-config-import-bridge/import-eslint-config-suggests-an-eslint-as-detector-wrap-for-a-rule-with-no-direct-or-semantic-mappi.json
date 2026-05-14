@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config suggests an ESLint-as-detector wrap for a rule with no direct or semantic mapping",
+  "command": "printf '{\"rules\":{\"some-niche-rule\":\"error\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" .eslintrc --mapping-stub no-match --dry-run 2>out.txt && grep -q 'some-niche-rule: suggest-eslint-detector-wrap' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

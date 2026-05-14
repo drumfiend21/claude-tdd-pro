@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow merge-strategy recommendation warns against rebase on a shared branch",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --check merge-strategy --shared-stub true 2>out.txt && grep -q 'warning=rebase-on-shared-branch' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

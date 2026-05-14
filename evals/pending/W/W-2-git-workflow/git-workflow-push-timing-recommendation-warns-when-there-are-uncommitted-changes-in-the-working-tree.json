@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow push-timing recommendation warns when there are uncommitted changes in the working tree",
+  "command": "mkdir -p repo && (cd repo && git init -q && git -c user.email=x@y -c user.name=x commit -q --allow-empty -m init && touch dirty.txt) && bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --root repo --check push-timing 2>out.txt && grep -q 'warning=uncommitted-changes' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

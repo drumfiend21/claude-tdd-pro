@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector returns an exit code of 1 when at least one prompt fails the check",
+  "command": "mkdir -p prompts/a prompts/b && printf 'name: a\\nmodel: sonnet\\nmodel_rationale: ok\\n' > prompts/a/v1.0.0.md && printf 'name: b\\nmodel: opus\\n' > prompts/b/v1.0.0.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --prompts-dir prompts 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'prompts_failed=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

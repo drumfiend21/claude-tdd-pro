@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config attempts a semantic mapping when no direct id match is available",
+  "command": "printf '{\"rules\":{\"prefer-const\":\"error\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" .eslintrc --mapping-stub semantic-match --dry-run 2>out.txt && grep -q 'prefer-const: semantic-match' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

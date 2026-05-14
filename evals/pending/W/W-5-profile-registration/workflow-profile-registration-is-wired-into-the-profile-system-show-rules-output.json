@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration is wired into the profile system show-rules output",
+  "command": "mkdir -p profiles .claude-tdd-pro && printf 'workflow_stages: [architect]\\nrules:\\n  no-eval: warn\\nactive_profile: p\\n' > profiles/p.yaml && printf 'active_profile: p\\n' > .claude-tdd-pro/profile-state.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --show-rules --state .claude-tdd-pro/profile-state.yaml --profiles-dir profiles 2>out.txt && grep -q 'workflow_stages: architect' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-ab non-dry-run writes a structured ab-result record to prompts eval-history directory",
+  "command": "mkdir -p prompts/x prompts/eval-history/x && printf 'name: x\\n' > prompts/x/v1.0.0.md && printf 'name: x\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-ab.sh\" x v1.0.0 v1.1.0 --eval-stub n=50 --now 2026-05-13T00:00:00Z 2>err.txt && [ -f prompts/eval-history/x/ab-v1.0.0-v1.1.0.json ] && grep -q '\"run_at\":\"2026-05-13T00:00:00Z\"' prompts/eval-history/x/ab-v1.0.0-v1.1.0.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

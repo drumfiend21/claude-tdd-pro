@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator emits a structured per-question result with answer and citations array",
+  "command": "printf '{\"question\":\"q1\"}\\n' > query.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/comparator-validate.sh\" --query query.json --emit json --out result.json 2>err.txt && node -e \"const o=JSON.parse(require('fs').readFileSync('result.json','utf8'));if(typeof o.answer===undefined||!Array.isArray(o.citations))process.exit(1);\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

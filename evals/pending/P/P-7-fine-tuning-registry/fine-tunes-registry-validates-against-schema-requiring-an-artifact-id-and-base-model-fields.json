@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry validates against schema requiring an artifact_id and base_model fields",
+  "command": "mkdir -p prompts && printf 'fine_tunes:\\n  - {artifact_id: ft-1, base_model: sonnet, training_data: ds-1, license: MIT}\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-fine-tunes.sh\" --registry prompts/fine-tunes.yaml 2>out.txt && grep -q 'valid=true' out.txt && grep -q 'count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step history-to-ab compares two versions when both have eval-history entries",
+  "command": "mkdir -p prompts/eval-history/x && printf '{\"score\":0.7}\\n' > prompts/eval-history/x/v1.0.0.json && printf '{\"score\":0.8}\\n' > prompts/eval-history/x/v1.1.0.json && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step history-to-ab --prompt-id x --history-dir prompts/eval-history --dry-run 2>out.txt && grep -q 'ab_eligible=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

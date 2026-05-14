@@ -1,0 +1,11 @@
+{
+  "name": "commit message validator requires a Decision trailer when the commit touches an ADR-tracked area",
+  "command": "mkdir -p repo && (cd repo && git init -q && touch architectural.txt && git add . && git -c user.email=x@y -c user.name=x commit -q -m \"change\") && bash \"$CLAUDE_PLUGIN_ROOT/git/validate-commit-trailer.sh\" --root repo --require-decision-on-paths architectural.txt 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing_decision_trailer' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

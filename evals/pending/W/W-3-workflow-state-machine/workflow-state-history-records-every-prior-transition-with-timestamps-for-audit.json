@@ -1,0 +1,11 @@
+{
+  "name": "workflow state history records every prior transition with timestamps for audit",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/workflow/transition.sh\" --to plan --state-file .claude-tdd-pro/workflow-state.json --now 2026-05-13T00:00:00Z 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/workflow/transition.sh\" --to build --state-file .claude-tdd-pro/workflow-state.json --now 2026-05-13T01:00:00Z 2>err.txt && grep -q '\"to\":\"plan\"' .claude-tdd-pro/workflow-state.json && grep -q '\"to\":\"build\"' .claude-tdd-pro/workflow-state.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

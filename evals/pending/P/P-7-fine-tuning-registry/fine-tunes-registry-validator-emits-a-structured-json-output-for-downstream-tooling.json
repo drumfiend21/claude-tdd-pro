@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry validator emits a structured json output for downstream tooling",
+  "command": "mkdir -p prompts && printf 'fine_tunes: []\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-fine-tunes.sh\" --registry prompts/fine-tunes.yaml --emit json --out result.json 2>err.txt && node -e \"const o=JSON.parse(require('fs').readFileSync('result.json','utf8'));if(!o.valid===undefined||!Array.isArray(o.entries))process.exit(1);\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

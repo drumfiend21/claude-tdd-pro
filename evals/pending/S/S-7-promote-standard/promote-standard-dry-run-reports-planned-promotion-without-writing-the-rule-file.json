@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard dry-run reports planned promotion without writing the rule file",
+  "command": "mkdir -p standards/snapshots active-rules && printf 'sections:\\n  5.2.4: x\\n' > standards/snapshots/owasp-asvs.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --rules-out active-rules --dry-run 2>out.txt && [ ! -f active-rules/owasp-asvs-5-2-4.yaml ] && grep -q 'planned: promote owasp-asvs:5.2.4' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

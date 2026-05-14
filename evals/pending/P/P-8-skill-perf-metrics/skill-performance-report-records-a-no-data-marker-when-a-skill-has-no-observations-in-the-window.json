@@ -1,0 +1,11 @@
+{
+  "name": "skill performance report records a no-data marker when a skill has no observations in the window",
+  "command": "mkdir -p skills .claude-tdd-pro/skills && printf 'flow-guard: {}\\n' > .claude-tdd-pro/skills/perf-stats.yaml && bash \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" --stats .claude-tdd-pro/skills/perf-stats.yaml --out skills/PERF.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'no_data' skills/PERF.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

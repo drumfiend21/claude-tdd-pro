@@ -1,0 +1,11 @@
+{
+  "name": "skill performance run writes the report output to skills/PERF.md at the configured path",
+  "command": "mkdir -p skills && bash \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" --out skills/PERF.md --now 2026-05-13T00:00:00Z 2>err.txt && [ -f skills/PERF.md ] && grep -q 'generated_at: 2026-05-13' skills/PERF.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

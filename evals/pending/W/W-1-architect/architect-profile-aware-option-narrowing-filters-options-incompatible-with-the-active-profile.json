@@ -1,0 +1,11 @@
+{
+  "name": "/architect profile-aware option narrowing filters options incompatible with the active profile",
+  "command": "mkdir -p profiles && printf 'allowed_languages: [python]\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"input\" --profile profiles/p.yaml --enumerate-options --grounding-stub multi-lang --dry-run 2>out.txt && grep -q 'narrowed_to_profile=p' out.txt && grep -q 'filtered_options>=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config parses a legacy .eslintrc file and emits the rule list",
+  "command": "printf '{\"rules\":{\"no-eval\":\"error\",\"no-console\":\"warn\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" .eslintrc --dry-run 2>out.txt && grep -q 'parsed_format=eslintrc' out.txt && grep -q 'rule_count=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

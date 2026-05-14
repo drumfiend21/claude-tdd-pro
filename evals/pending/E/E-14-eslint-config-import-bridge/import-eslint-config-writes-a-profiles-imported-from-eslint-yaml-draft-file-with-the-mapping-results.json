@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config writes a profiles/imported-from-eslint.yaml draft file with the mapping results",
+  "command": "mkdir -p profiles && printf '{\"rules\":{\"no-eval\":\"error\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" .eslintrc --mapping-stub direct-match --out profiles/imported-from-eslint.yaml 2>err.txt && [ -f profiles/imported-from-eslint.yaml ] && grep -q 'no-eval' profiles/imported-from-eslint.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
