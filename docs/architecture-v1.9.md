@@ -70,9 +70,13 @@ Eleven stacked layers plus two cross-cutting layers (Operational Readiness, Exec
 │  ║                                                                     ║    │
 │  ║ EXECUTION SURFACES (X)                                             ║    │
 │  ║ GitHub Actions · GitLab CI · pre-commit · local-LLM · TUI          ║    │
+│  ║   + v1.9.1: IDE rules export (X-6) · installable hooks (X-7)       ║    │
+│  ║   + v1.10:  LSP server (X-8) · cloud devcontainer (X-9)            ║    │
 │  ╚═════════════════════════════════════════════════════════════════════╝    │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
+
+**Diagram note — v1.9.1 (§23) and v1.10 (§24) amendments not all shown above.** The diagram summarizes the v1.9 base. Amendments outside the X row that are NOT redrawn: H-12 continuous cost-telemetry rollup (Hardening row), W-10 concurrent CL gate / W-11 parallel subagent orchestrator / W-12 conversational PR review subagent (Workflow Orchestration row), P-10 runtime model router (Prompt Lifecycle row), O-12 application scaffolds (Operational Readiness cross-cut), §2.23 concurrent-CL contract / §2.24 portable audit-pack format (cross-cutting contracts). The §23 and §24 blocks at the end of this document are authoritative; the diagram is illustrative.
 
 **Architectural through-line:** every authoritative input — engineering standards, regulatory frameworks, observed peer review — is operator-curated via three top-level YAML registries at `.claude-tdd-pro/`, daily-fresh-fetched from live published sources, freshness-gated on rule activation, and traceable per-commit. Rules live in a single source-organized directory at plugin root grouped by upstream publisher (Google, US Government, EU, Finance Industry, OWASP, W3C, Web Vitals, React, Node, TypeScript, SLSA, Linux Foundation, Industry Self-Regulatory) with each file using full ESLint-style configuration. Every empirical unknown is converted into a measurable engineering discipline (telemetry-first, hand-graded eval, two-pass reconciler, golden-output diff, canary rollout, conditional GETs note for v1.8 backlog). Every closed loop has bootstrap state instead of cold-start. Every destructive operation is rehearsable via dry-run and recoverable via signed checkpoints. Every enforcement runs in three execution surfaces (Claude Code, pre-commit, CI) with the same exit-code contract. Every architectural decision is elicited interactively with grounded options, recorded as ADR provenance, and traced through full delivery from feature description to merged PR.
 
@@ -221,7 +225,7 @@ Per-commit `.claude-tdd-pro/provenance/<commit-sha>.json`:
 ```json
 {
   "commit": "...", "timestamp": "...", "author_human": "...",
-  "ai_involvement": { "tier": "...", "models_used": [], "agents_invoked": [], "skills_invoked": [], "prompts": [] },
+  "ai_involvement": { "tier": "...", "models_used": [ { "model": "...", "tier_class": "fast | balanced | deep", "router_resolved": true, "frontmatter_model": "...", "decision_reason": "..." } ], "agents_invoked": [], "skills_invoked": [], "prompts": [] },
   "rubric_state": { "rubric_hash": "...", "rules_evaluated": [], "rules_passed": [], "rules_blocked": [] },
   "standards_state": { "<source>": { "content_hash": "...", "fetched_at": "...", "freshness_at_generation": "..." } },
   "pr_corpus_state": { "<source>": { "patterns_consulted": [], "last_fetch": "...", "freshness_at_generation": "...", "evidence_count_used": 0 } },
@@ -285,11 +289,11 @@ Plugin-internal: adds `authority_tier`, `fragility_tier`, `local_llm_eligible`, 
 
 ### §2.14 Dry-run contract
 
-Subject commands (every `destructive: true`): `/remediate`, `/promote-standard`, `/pr-corpus-learn`, `/risk-classify`, `/audit-pack`, `/prompt-promote`, `/space-export`, `/uninstall-cleanup`, `/migrate`, `/architect`, `/standards-add`, `/standards-remove`, `/pr-source-add`, `/pr-source-remove`, `/compliance-add`, `/compliance-remove`, `/fix-rules`, `/plugin-install`, `/plugin-update`, `/plugin-remove`, `/import-eslint-config`, `/operator-namespace-init`, `/operator-extension-init`.
+Subject commands (every `destructive: true`): `/remediate`, `/promote-standard`, `/pr-corpus-learn`, `/risk-classify`, `/audit-pack`, `/prompt-promote`, `/space-export`, `/uninstall-cleanup`, `/migrate`, `/architect`, `/standards-add`, `/standards-remove`, `/pr-source-add`, `/pr-source-remove`, `/compliance-add`, `/compliance-remove`, `/fix-rules`, `/plugin-install`, `/plugin-update`, `/plugin-remove`, `/import-eslint-config`, `/operator-namespace-init`, `/operator-extension-init`, `/export-rules` (X-6), `/install-hooks` (X-7), `/cl-status` (W-10), `/scaffold` (O-12), `/router-set` (P-10), `tdd-pro-lsp --print-diagnostics` (X-8).
 
 ### §2.15 Workflow state contract
 
-`.claude-tdd-pro/workflow-state.json`: `session_id`, `current_phase`, `feature_description`, `architect_session: { decisions: [{id, decision_point, options_presented, selected, rationale, adr_path}] }`, `spec_path`, `plan_approved_at`, `commits`, `branch_recommendations`, `standards_consulted`, `pr_corpus_consulted`, `compliance_consulted`, `_resumable`.
+`.claude-tdd-pro/workflow-state.json`: `session_id`, `current_phase`, `feature_description`, `architect_session: { decisions: [{id, decision_point, options_presented, selected, rationale, adr_path}] }`, `spec_path`, `plan_approved_at`, `commits`, `branch_recommendations`, `standards_consulted`, `pr_corpus_consulted`, `compliance_consulted`, `_resumable`. When `userConfig.allow_concurrent_cls: true` (per §2.23 / W-10), the top-level shape becomes `{ "_concurrent": true, "sessions": { "<session_id>": { ...envelope above... } } }` — each `session_id` keys its own envelope; concurrent CLs each mutate only their own envelope.
 
 ### §2.16 Decision provenance schema (MADR ADRs auto-generated by W-1)
 
@@ -319,6 +323,14 @@ Every folder under `generated-code-quality-standards/` (excluding `_operator/`, 
 ### §2.22 Source folder operator contract
 
 `generated-code-quality-standards/_operator/<my-org>/` operator-namespace; never overwritten by plugin upgrade. Operator extensions in `_operator/<source-namespace>/<file>-extensions.yaml` override plugin defaults via cascade.
+
+### §2.23 Concurrent CL execution contract (v1.9.1 amendment — see §23)
+
+Two or more CLs MAY execute concurrently when ALL of: (a) disjoint phase set — no two CLs author specs or implementation for the same phase ID; (b) disjoint workflow-state subsections per §2.15 — each CL writes its own `session_id` envelope and does not mutate another CL's `current_phase`/`spec_path`/`commits`/`architect_session`; (c) disjoint lock sections per §2.7 — no two CLs hold concurrent writes on overlapping `_locks.<section>` names; (d) disjoint source-folder ownership — no two CLs author rules in the same `generated-code-quality-standards/<source-namespace>/<file>.yaml`; (e) disjoint commit branches — concurrency is per-branch, never on the same branch. Overlap on any condition rejects the second CL at the W-10 gate with the offending overlap reported (phase/lock/state-section/file/branch). Audit-log entries from concurrent CLs interleave through C-4's per-section Merkle chain; checkpoints (C-4 every 100 entries) tolerate interleaving without conflict because each entry is independently hash-chained against its predecessor. Concurrency is opt-in; default mode remains sequential per §20.
+
+### §2.24 Portable audit-pack export format (v1.9.1 amendment — see §23)
+
+`/audit-pack --emit <format>` writes a portable bundle to `compliance/audit-packs/<bundle-id>/` where `bundle-id = <commit-sha>-<utc-timestamp>`. Formats: `json` (machine-consumable schema), `markdown` (human review), `html` (self-contained for non-cloned review), `tarball` (all formats bundled with detached signature). JSON top-level schema: `{ bundle_schema_version: "1.0", bundle_id, generated_at, commit, profile_snapshot_hash, aibom_uri, control_coverage, evidence_set, risk_classification, audit_log_window: { first_entry, last_entry, checkpoint_uris }, provenance_manifest_uris, decision_trail, standards_freshness, pr_corpus_freshness, compliance_freshness, all_three_fresh_badge, cost_telemetry_summary, signature }`. Schema validates against `compliance/audit-pack-schema.json` (versioned via `bundle_schema_version`). Export is reproducible: same inputs at same commit produce byte-identical bundles via canonical JSON encoding (sorted keys, RFC 8785 JCS), pinned timestamps from C-4 audit log, no wall-clock-time leakage. Bundles are read-only artifacts; ingesting tools (code-review platforms, compliance pipelines, junior-onboarding viewers) consume the schema without coupling to TDD-Pro internals. No new data collected versus C-10; this is a serialization contract over existing content.
 
 ## §3. Phase F — Foundation
 
@@ -417,6 +429,7 @@ Each `COMPLIANCE-URLS.yaml` entry maps to a folder under `generated-code-quality
 - **P-7** Fine-tuning artifact registry `prompts/fine-tunes.yaml`; AIBOM ingests.
 - **P-8** Skill performance metrics `skills/perf.sh` → `skills/PERF.md`.
 - **P-9** Closed loop.
+- **P-10** Runtime model router (v1.10 amendment — see §24) `prompts/router.yaml` declares per-task-class tier defaults (`fast` → haiku, `balanced` → sonnet, `deep` → opus) and per-prompt-id overrides; runtime resolver `prompts/router.sh` consulted by every §2.3 subagent at invocation time; overrides static `model:` frontmatter when router-resolved tier differs (router decision logged with both values for §2.8 provenance manifest `models_used` block). H-1 token-cost reporting and H-12 cost rollup break down by tier in addition to model. P-4 model-rationale detector extended to verify the router decision matches the agent's `model_rationale` claim (mismatch → suggestion-level finding with the router-resolved tier as the suggested fix). Router policy is operator-editable; `prompts/router.yaml` follows §2.14 dry-run when changed via `/router-set <task-class> <tier>`.
 
 ## §7. Phase R — React specialist coverage
 
@@ -516,6 +529,7 @@ Options: `g-ts-001 { allow_with_comment_pattern, max_per_file }`; `g-ts-002 { al
 - **H-9** Documentation progressive disclosure: `docs/getting-started.md`, `docs/first-week.md`, `docs/reference.md`, `docs/source-folders.md`, `docs/threat-model.md`, ESLint-migration cheatsheet; `skills/help/SKILL.md` for `/help <topic>`.
 - **H-10** Plugin community contribution catalog: `community/sources/`, `community/frameworks/`, `community/rules/` (each with contributor identity, review status, eval evidence, license); `community/REVIEW.md` (2-reviewer required for tier-1).
 - **H-11** Plugin self-test against itself in CI: `.github/workflows/self-test.yml` runs `/analyze` on plugin's own repo; failures gate releases. Includes G-12, G-13 validators.
+- **H-12** Continuous cost telemetry rollup (v1.9.1 amendment — see §23): `cost-rollup/daily/<YYYY-MM-DD>.json` and `cost-rollup/weekly/<YYYY-Www>.json` aggregate H-1 per-call telemetry by skill, subagent, rule, profile, model; `/cost-report [--window=<period>] [--by=<dimension>] [--format=<text|json|tui>]` drill-down command; per-rule cost regression detector `rubric/detectors/rule-cost-regression.sh` flags rules whose tokens-per-check exceeds 2× their 30-day median (severity: warn); per-CL cost summary appears in `/audit-pack` Decision Trail section (tokens_in/out + monetary_estimate_usd per session_id); rollup honors §2.17 freshness state (cached rollups marked stale after profile-snapshot change). Privacy: local-only per Q-6; no upload.
 
 ## §12. Phase L — Public Engineering Corpus Learning
 
@@ -575,6 +589,7 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 - **O-9** Anonymous shared-learning opt-in `community/shared-learning/SKILL.md`: aggregate fp/tp counts only; hashed ID; no IP collection.
 - **O-10** Rubric semver: `RUBRIC.yaml` top-level version; major bumps on breaking detector contracts; lock pins; `rubric/changelog.md`.
 - **O-11** Bootstrap eval scenarios at install time.
+- **O-12** Application scaffolds (v1.10 amendment — see §24) `scaffolds/<scaffold-id>/` ships four greenfield starters: `next-saas` (Next.js + RSC + Stripe billing + auth shell), `node-api` (Fastify + zod schema-validation + structured logging per N-4), `python-fastapi` (FastAPI + Pydantic + pytest), `react-spa` (Vite + React + Vitest). `/scaffold <id> <target-dir> [--profile <name>]` writes a fully-formed project starter with the appropriate profile pre-set (e.g., `next-saas` → `react.yaml` + W-9 UI regression pinner enabled; `node-api` → `node.yaml`; `python-fastapi` → `lite.yaml` + Python detectors enabled; `react-spa` → `react.yaml`). Each scaffold's `package.json` / `pyproject.toml` is pinned to a known-good toolchain version. Scaffolds include a baseline `evals/specs/` aligned with the chosen profile so the active suite is non-empty from minute one. Distinct from R-4 / T-4 / templates/ (config templates for existing projects); O-12 is greenfield. Scaffolds are operator-extensible: `_operator/scaffolds/<my-org>-<scaffold-id>/` per §2.22 cascade. Listed in §2.14 dry-run subjects.
 
 ## §14. Phase X — Execution Surfaces
 
@@ -583,6 +598,10 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 - **X-3** pre-commit framework adapter `ci/pre-commit-hooks.yaml`: same detectors as Claude Code PreToolUse + CI; `--format markdown`.
 - **X-4** Local LLM fallback `skills/local-llm/SKILL.md`: Ollama/llama.cpp/LM Studio; cheap-operation routing (L-3 triage, L-6 affiliation parsing, L-16 issue-label filtering); ~30-50% baseline daily token cost reduction.
 - **X-5** Visualization layer `tui/`: `/space-report --tui`, `/coverage --tui`, `/audit-pack --tui` interactive views (charm.sh-style); markdown remains default.
+- **X-6** IDE rules export adapter (v1.9.1 amendment — see §23) `skills/ide-rules-export/SKILL.md` + `/export-rules <ide> [--profile <name>] [--include <source-namespace>] [--exclude <source-namespace>] [--out <dir>]`: emits read-only consumable artifacts for non-Claude-Code IDEs from active profile + resolved standards source folders (G-1 directory). Targets: `cursor` (`.cursorrules` + per-rule prompts at `.cursor/rules/<rule-id>.md`), `vscode-copilot` (`.github/copilot-instructions.md` + `.github/prompts/<rule-id>.md`), `continue` (`config.json` rules section), `aider` (`.aider.conf.yml` + `CONVENTIONS.md`), `windsurf` (`.windsurfrules`). Export is strictly one-way; no rules flow back into TDD Pro from these surfaces, because the architectural moat — provenance per §2.1, control mapping per §2.9, grounded-standards citation — cannot be reconstructed from systems that do not produce it. Output stamped with `profile_snapshot_hash` + `exported_at` + `tdd_pro_version` in artifact header comment; stale stamps emit `/doctor` warning (rebuild recommended after profile or rule changes). Freshness gate per §2.17 applies; export refuses on stale standards unless `--skip-fresh` (logged to C-4). Listed in §2.14 dry-run subjects.
+- **X-7** Installable Claude Code hooks bundle (v1.9.1 amendment — see §23) `skills/install-hooks/SKILL.md` + `/install-hooks [--scope user|project] [--include <component>...] [--dry-run]`: writes packaged hooks + slash commands + agents + detectors to target `settings.json` (user scope: `~/.claude/settings.json`; project scope: `.claude/settings.json`) with explicit uninstall metadata block `{ tdd_pro_installed_at, tdd_pro_components: [...], tdd_pro_version, tdd_pro_signature }`; refuses install when target `settings.json` already contains conflicting hook scripts unless `--force` (logged to C-4 audit log with conflict diff). Idempotent: re-running with no version change is a no-op; version change runs the appropriate `migrations/<from>-to-<to>.sh` per O-3. Install summary surfaces: hooks installed (with absolute paths), slash commands registered, agents added, permissions requested, detectors registered. `/uninstall-cleanup` (O-3) honors the metadata block to restore prior state; never auto-deletes audit-log or evidence directories per O-3 invariant. Listed in §2.14 dry-run subjects.
+- **X-8** Language Server Protocol surface (v1.10 amendment — see §24) `lsp/tdd-pro-lsp/` ships a TDD-Pro LSP server (`tdd-pro-lsp` binary) plus a thin VS Code extension (`vscode-tdd-pro/`) as packaging layer; Cursor and any LSP-compliant editor consume directly via standard LSP protocol. Server emits per-rule diagnostics as the developer types, sourced from the same aggregator (G-5) that powers `runner.sh` and CI surfaces — identical findings, same exit-code-equivalent severities, same `messageId` (E-13). Code-action provider exposes E-4 auto-fix and E-5 inline-suppression-with-justification as quick-fixes. Hover provider shows `source_file` (G-1), `docs_url` (E-8), and provenance trail (§2.1). Server reads active profile + freshness gate per §2.17; degrades to warn-only on stale standards. Closes the inline-editor agent gap (LSP is the missing surface alongside X-1 CI, X-3 pre-commit, X-5 TUI). Listed in §2.14 dry-run subjects for `--print-diagnostics` mode.
+- **X-9** Cloud devcontainer surface (v1.10 amendment — see §24) `.devcontainer/devcontainer.json` shipped at plugin root: pre-installed hooks per X-7, pre-installed LSP per X-8, pre-resolved profile per active `userConfig.profile`, pre-fetched standards / PR-corpus / compliance per S-13 / L-19 / C-15 (one-time at container build), pre-built rule cache per E-12. Codespaces-ready and Dev Containers-compatible. Identical toolchain runs locally and in Codespaces — no surface-specific behavior. Cloud-cost note in `/doctor`: standards/PR/compliance fetchers honor S-2 / L-2 / C-15 daily-fresh contract from inside the container (i.e., per-container daily refresh, not per-host). Mobile / remote-IDE workflows pass through this surface.
 
 ## §15. Phase W — Workflow Orchestration
 
@@ -611,6 +630,9 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 - **W-7** `/spec <feature-description>` writes failing tests from feature description (TDD red phase): skill `skills/spec/SKILL.md` reads (a) feature description from W-1 ADR or operator argument, (b) active profile's resolved standards source-folder set per §2.5 `extends:`, (c) applicable compliance controls per §2.9 `controls:` for active frameworks, (d) §2.4 eval spec schema; emits one `<feature-id>.test.<ext>` per testable contract; refuses to emit when active suite would already cover the contract (no duplicate tests); refuses to emit when feature description grounding lookup returns no relevant standards (declines per S-8 grounded-answer pattern); spec-writer subagent `agents/spec-writer.md` (sonnet, prompt_id `spec-writer`, prompt_version per §2.10) cites each emitted test to `source_file` (G phase) + `docs_url` (E-8); written tests categorized per §2.4 enum (`react|node|types|...`); commits emitted tests with `Test-Driven-By: <feature-id>` trailer; tests are red on commit (CI failure surfaces the red state explicitly).
 - **W-8** `/feature` semantics + TDD-Guard: skill `skills/feature/SKILL.md` reads the failing tests written by W-7 from the active suite + the active profile's resolved standards source-folder set; generates the implementation that turns red tests green; TDD-Guard hook `hooks/scripts/tdd-guard.sh` (PreToolUse on commit) refuses commit when (a) any test added in the same feature scope is still red, (b) implementation introduced regressions to any previously-green spec in the active suite, (c) implementation touches paths outside the feature scope declared by W-7's emitted tests (scope drift); emits per-commit token telemetry to F-2; logs implementation completion to W-3 workflow state machine as `feature_complete: true`; `--allow-red-test` operator bypass logged to C-4 audit log per §2.17 live-freshness contract pattern; refuses operation when standards source-folder freshness gate fails per §2.17.
 - **W-9** UI feature DOM regression pin: subagent `agents/ui-regression-pinner.md` (sonnet, prompt_id `ui-regression-pinner`) fires PostToolUse after `/feature` completes when commit diff touches UI paths (`src/components/**`, `app/**`, `pages/**`, `src/routes/**`, framework-detected per active profile's `applies_to: [react|...]`); generates Playwright DOM-based regression tests using `playwright.config.ts` template from R-4; tests pin click-state, navigation, rendered output, accessible-name (per WCAG-2.2 standards source folder); written tests added to active regression suite at `tests/e2e/<feature-id>.spec.ts` and join the suite immediately so future commits that break rendered UI fail the suite; refuses to emit when active suite already covers the rendered behavior (no duplicate DOM tests); `/feature --skip-ui-pin` operator bypass logged to C-4 audit log; UI-regression test failures gate the W-2 push-timing recommendation.
+- **W-10** Concurrent CL gate (v1.9.1 amendment — see §23) `skills/concurrent-cl/SKILL.md` + `hooks/scripts/concurrent-cl-gate.sh` (PreToolUse on `/spec`, `/feature`, and `/architect`): enforces §2.23 by reading active CL envelopes from `.claude-tdd-pro/active-sessions/<session_id>.json` (one envelope per running CL — created on CL start, removed on CL completion or abort); rejects the new CL when overlap is detected on any of §2.23 (a)-(e), printing the offending resource (phase ID / lock section / state subsection / source-folder file / branch) and the holding `session_id`; logs accepted concurrent starts to C-4 audit log with both `session_id` envelopes referenced. Companion command `/cl-status [--format=<text|json|tui>]` lists running CLs and their held resources. Concurrency is opt-in: default sequential per §20; activated via `userConfig.allow_concurrent_cls: true` OR per-invocation `--concurrent` flag (on `/spec`, `/feature`, `/architect`). W-3 workflow state machine is extended to manage N parallel `session_id` envelopes within a single `workflow-state.json` (each envelope per §2.15); H-3 sectioned locks per-session. No three-way-merge semantics — overlap is rejection, not merge. Listed in §2.14 dry-run subjects.
+- **W-11** Parallel subagent orchestrator (v1.10 amendment — see §24) `skills/parallel-subagents/SKILL.md` + coordinator subagent `agents/parallel-coordinator.md` (sonnet, prompt_id `parallel-coordinator`): orchestrates multiple §2.3 subagents within a single CL concurrently. Distinct from W-10 (W-10 is CL-level concurrency; W-11 is within-CL agent-level parallelism). Per-profile parallel-budget config `userConfig.max_parallel_subagents: <N>` (default 1 = sequential; opt-in N≥2). §2.7 sectioned-lock integration: concurrent subagents claiming overlapping lock sections (e.g., two reviewers both wanting `rubric` write) serialize via lock acquisition; non-overlapping subagents run in parallel. Per-subagent token-cost telemetry rolls into H-12 with `subagent_id` tag preserved. Coordinator emits a single consolidated finding set to W-3 workflow state (deduplication: by `rule_id + file + line`). Refuses parallel execution when total estimated tokens exceed `userConfig.parallel_budget_tokens: <N>` (default unbounded; operator sets per profile).
+- **W-12** Conversational PR review subagent (v1.10 amendment — see §24) `agents/pr-review-conversational.md` (sonnet, prompt_id `pr-review-conversational`) extends C-11 review-compliance and substrate `pr-self-reviewer.md` with a multi-turn follow-up mode: reviewer (human or another agent) asks "why was X changed?" / "what about case Y?" / "show me where Z is tested" and the subagent answers grounded in the AI Provenance Manifest (§2.8), Decision Trail (W-4), eval datasets (P-2), and the active test suite. Refuses to answer ungrounded; cites every claim to a manifest field, ADR-id, eval spec id, or test path. Conversation log writes to `.claude-tdd-pro/pr-reviews/<pr-sha>/conversation.jsonl` for audit (C-4 chain inclusion). No memory across PRs by default; opt-in cross-PR memory via `userConfig.pr_review_cross_pr_memory: true`. Token cost per turn telemetered to H-1 / H-12.
 
 ## §16. Phase E — ESLint-Parity Rule Engine
 
@@ -676,6 +698,10 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 
 **Totals at v1.9:** ~25 subagents, ~25 skills, ~62 commands, ~45 detectors/scripts, ~221 eval specs, 14 templates, 6 built-in formatters, 9 profiles + override library + per-industry templates, 17 default standards sources, 25+ default compliance frameworks, 10 default PR-corpus sources, 14 source-namespace folders containing ~38 ESLint-compliant rule files holding 58 pre-baked rules, plugin protocol for community rules, full ESLint ecosystem consumable via E-15 wrapping or E-7 plugin install.
 
+**v1.9.1 amendment deltas (§23):** +2 contracts (§2.23 concurrent CL, §2.24 portable audit-pack format), +H-12 (cost rollup), +X-6 (IDE rules export), +X-7 (installable hooks bundle), +W-10 (concurrent CL gate). +6 commands (`/cost-report`, `/export-rules`, `/install-hooks`, `/cl-status`, plus `--concurrent` flag forms on `/spec`/`/feature`/`/architect`), +3 skills (`ide-rules-export`, `install-hooks`, `concurrent-cl`), +1 hook (`concurrent-cl-gate.sh`), +1 detector (`rule-cost-regression.sh`), +1 schema (`compliance/audit-pack-schema.json`), +trees: `compliance/audit-packs/`, `cost-rollup/{daily,weekly}/`, `.claude-tdd-pro/active-sessions/`. Estimated +30 evals across the new IDs.
+
+**v1.10 amendment deltas (§24):** +X-8 (LSP surface), +X-9 (cloud devcontainer surface), +P-10 (runtime model router), +W-11 (parallel subagent orchestrator), +W-12 (conversational PR review subagent), +O-12 (application scaffolds). +5 commands (`/scaffold`, `/router-set`, plus LSP `--print-diagnostics` mode, parallel-subagents skill invocation, conversational reviewer trigger), +3 subagents (`parallel-coordinator`, `pr-review-conversational`, plus the X-8 LSP server itself is not a subagent but a runtime), +3 skills (`parallel-subagents`, scaffold runner, lsp-bootstrap), +1 binary (`tdd-pro-lsp`), +1 VS Code extension (`vscode-tdd-pro/`), +1 detector extension (P-4 router-mismatch surfacing), +trees: `lsp/tdd-pro-lsp/`, `vscode-tdd-pro/`, `.devcontainer/`, `prompts/router.yaml`, `scaffolds/{next-saas,node-api,python-fastapi,react-spa}/`, `.claude-tdd-pro/pr-reviews/<pr-sha>/`. Estimated +50 evals across the new IDs.
+
 ## §19. Out of scope — irreducible 0.15 gap to 10.0
 
 - Production telemetry from your own users (closes when you ship to real users)
@@ -721,8 +747,17 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 | 24.5 | C-21 closed-loop validation | 9.83 | Compliance loop end-to-end |
 | 25 | E-17 closed-loop validation | 9.84 | Rule engine ESLint-parity end-to-end |
 | 25.5 | G-14 closed-loop validation | 9.85 | Source-folder loop end-to-end |
+| 26 | H-12 + §2.24 (portable audit-pack schema) + C-10 emit amendment | 9.86 | Cost rollup + audit-pack becomes public interchange artifact |
+| 26.5 | X-6 (IDE rules export) | 9.87 | Discipline plugs into Cursor/Copilot/Continue/Aider/Windsurf one-way |
+| 27 | X-7 (installable hooks bundle) + O-3 amendment for X-7 uninstall metadata | 9.88 | Hooks-first packaging — TDD Pro installs as Claude Code artifact |
+| 27.5 | §2.23 (concurrent CL contract) + W-10 (concurrent CL gate) | 9.9 | Disjoint CLs run in parallel; audit trail remains coherent |
+| 28 | X-8 (LSP surface) + VS Code packaging | 9.91 | Inline-editor agent surface — Cursor/VS Code consume via standard LSP |
+| 28.5 | P-10 (runtime model router) | 9.915 | Per-task-class tier routing with H-1/H-12 cost breakdown by tier |
+| 29 | W-11 (parallel subagent orchestrator) + W-12 (conversational PR reviewer) | 9.92 | Within-CL agent parallelism + follow-up-capable grounded PR review |
+| 29.5 | X-9 (cloud devcontainer surface) | 9.925 | Codespaces / Dev Containers parity with local toolchain |
+| 30 | O-12 (application scaffolds) | 9.93 | Greenfield starters with profile pre-set — non-empty active suite from minute one |
 
-**Total CL count:** ~268. **Effort:** ~23–28 weeks part-time / ~12–14 weeks full-time.
+**Total CL count:** ~268 (v1.9) + ~12 (v1.9.1 §23) + ~18 (v1.10 §24). **Effort:** ~23–28 weeks part-time / ~12–14 weeks full-time for v1.9; +~2 weeks for v1.9.1; +~3 weeks for v1.10.
 
 **Critical sequencing rules:**
 - Week-1 telemetry baseline non-negotiable; no subsequent component approved without budget impact estimate
@@ -759,12 +794,14 @@ The plugin is at v1.9 / 9.85-of-10 (build confidence 9/10 via canonical staged p
 - G-14 closed-loop end-to-end test passes within 10 minutes
 - README v1.9 includes "Browse the rules" section pointing at `generated-code-quality-standards/`
 - Every E-1 through E-17 acceptance criterion met (severity overrides, options, glob overrides, auto-fix, inline suppression, recommended sets, plugin protocol, metadata, formatters, deprecation, RuleTester, cache, messageIds, ESLint config import, ESLint-as-detector wraps, plugin commands, closed-loop validation)
-- Every S-1 through S-19, C-1 through C-21, L-1 through L-24, F-1 through F-6, P-1 through P-9, R/N/T full coverage, Q-1 through Q-9, H-1 through H-11, O-0 through O-11, X-1 through X-5, W-1 through W-9 acceptance criterion met
+- Every S-1 through S-19, C-1 through C-21, L-1 through L-24, F-1 through F-6, P-1 through P-10, R/N/T full coverage, Q-1 through Q-9, H-1 through H-12, O-0 through O-12, X-1 through X-9, W-1 through W-12 acceptance criterion met (upper bounds include v1.9.1 §23 and v1.10 §24 amendments)
 - W-7 `/spec` writes failing tests from a feature description, grounded in the active profile's standards source folders, and refuses to emit when no relevant grounding standard is available
 - W-8 `/feature` + TDD-Guard refuses commit when any feature-scope test is still red, when implementation introduces a regression to the previously-green active suite, or when implementation drifts outside the test scope
 - W-9 UI regression pinner automatically generates Playwright DOM-based regression tests for any commit touching UI paths under the active profile's `applies_to` framework; these tests join the active suite and gate future commits that break rendered UI behavior
 - README v1.9 documents the operator workflow end-to-end
 - Symmetric documentation: STANDARDS-URLS.yaml + PR-SOURCES.yaml + COMPLIANCE-URLS.yaml all prominently referenced in `/doctor`, `/init-guardrails`, README, getting-started; `generated-code-quality-standards/` directory tree referenced as discoverability entry point
+- **v1.9.1 amendments delivered (§23):** H-12 writes `cost-rollup/daily/<YYYY-MM-DD>.json` and `cost-rollup/weekly/<YYYY-Www>.json` aggregates plus per-CL cost in `/audit-pack` Decision Trail; `/audit-pack --emit json|markdown|html|tarball` produces bundles validating against `compliance/audit-pack-schema.json` with byte-identical reproducibility on identical inputs; `/export-rules <ide>` emits valid one-way artifacts for `cursor`, `vscode-copilot`, `continue`, `aider`, `windsurf` and refuses on stale standards; `/install-hooks [--scope user|project]` writes scoped `settings.json` entries with full uninstall metadata and is honored by `/uninstall-cleanup`; `/cl-status` lists active CL envelopes; two CLs with disjoint phase/lock/state/source-folder/branch ownership (verified by §2.23 contract checker) complete `/spec`→`/feature` concurrently and merge with a coherent C-4 audit chain; W-10 rejects overlapping CLs at PreToolUse with offending-resource explanation
+- **v1.10 amendments delivered (§24):** X-8 LSP server emits per-rule diagnostics on edit in Cursor and VS Code, sourced from the same G-5 aggregator that powers CI; X-9 `.devcontainer/devcontainer.json` boots a Codespaces session with hooks + LSP + standards/PR/compliance pre-fetched; P-10 `prompts/router.yaml` resolves task-class → tier at subagent invocation and H-1 / H-12 break down cost by tier; W-11 parallel coordinator runs N subagents within a single CL with §2.7 lock serialization on overlap; W-12 conversational reviewer answers PR follow-up questions citing §2.8 manifest / W-4 ADR / P-2 eval / active suite — refuses ungrounded claims; `/scaffold {next-saas|node-api|python-fastapi|react-spa} <target-dir>` writes a greenfield project with the appropriate profile and a non-empty `evals/specs/` baseline
 
 ## §22. Confidence ranking summary
 
@@ -785,3 +822,191 @@ The plugin is at v1.9 / 9.85-of-10 (build confidence 9/10 via canonical staged p
 | W (Workflow Orchestration) | 8.5/10 |
 
 Capability ranking: 9.85/10. Build confidence: 8.5/10 for full v1.9 on timeline; 9/10 via canonical staged path.
+
+## §23. v1.9.1 — Optimization amendments
+
+Additive amendments addressing five observed gaps versus the 2026 dev-tools landscape (Cursor, GitHub Copilot, Continue, Aider, Windsurf, Codespaces agent mode, parallel agent execution): (1) single-threaded CL workflow blocks feature-level parallelism even when CLs are disjoint; (2) the discipline layer lacks an installable surface outside this repo (clone-only); (3) `/audit-pack` is bundled but not a schema'd public interchange format; (4) discipline does not plug into peer IDEs whose user base is materially larger than this plugin's; (5) cost telemetry exists per-call (H-1) but lacks aggregation surface for cost regression detection. Each amendment is non-regressive: every existing F/E/G/S/C/P/R/N/T/Q/H/L/O/X/W feature retains its v1.9 semantics; every §2.1-§2.22 contract retains its v1.9 obligations.
+
+**Authoritative IDs introduced by v1.9.1:** H-12 (Phase H, §11), W-10 (Phase W, §15), X-6 + X-7 (Phase X, §14), §2.23 + §2.24 (cross-cutting contracts, §2). All IDs are extractable verbatim from this document for use in CL plans, folder names, spec labels, and commit messages per the architecture-fidelity discipline in `CLAUDE.md`.
+
+### §23.1 Why these gaps are architecture work, not execution work
+
+(a) Concurrent CL execution requires a contract on workflow-state, lock sections, source-folder ownership, and branch ownership — these are architectural invariants, not implementation detail. Encoded as §2.23. (b) Portable audit-pack is a schema'd interchange format with reproducibility guarantees (canonical JSON, pinned timestamps) — schema and reproducibility are architectural. Encoded as §2.24. (c) IDE rules export defines what slice of discipline may leave the TDD-Pro surface and under what one-way constraint — boundary decision is architectural. Encoded as X-6. (d) Installable hooks bundle defines the uninstall contract and refuses-on-conflict semantics — reversibility is architectural. Encoded as X-7. (e) Cost rollup defines the aggregation surface (daily, weekly, by-skill/subagent/rule/profile/model) and regression-detection threshold (2× median) — aggregation semantics are architectural. Encoded as H-12.
+
+### §23.2 Boundary discipline preserved
+
+These amendments do NOT relax any v1.9 invariant. In particular:
+
+- **TDD-Guard (W-8) remains the only path from red test to green code.** W-10 concurrent-CL gate does not bypass TDD-Guard; concurrent CLs each pass through their own W-8 enforcement.
+- **`/audit-pack` portable format (§2.24) is a serialization of existing C-10 content.** No new data collected, no existing data dropped. Schema versioning (`bundle_schema_version`) ensures forward compatibility.
+- **IDE rules export (X-6) is one-way.** Rules authored in Cursor/Continue/etc. do NOT flow back into TDD Pro. The architectural moat — provenance per §2.1, control mapping per §2.9, grounded-standards citation per S-8 — cannot be reconstructed from systems that do not produce it. Importing back would degrade provenance to "unknown" — explicitly disallowed.
+- **Installable hooks (X-7) honor O-3 uninstall semantics.** Never auto-delete audit-log or evidence directories. Refuses conflict installs unless `--force` (logged).
+- **Concurrent CL execution (§2.23) requires disjoint ownership across all five dimensions.** Overlapping CLs are rejected, not merged. No three-way-merge semantics — that would require conflict resolution policy outside the architecture's scope.
+- **Cost rollup (H-12) honors Q-6 privacy posture.** Local-only; no upload; redacted on `/space-export`.
+
+### §23.3 Out of scope for §23
+
+- Pivoting any portion of the workflow to live inside Cursor / VS Code / Continue / Aider / Windsurf. Those IDEs are export targets only via X-6.
+- Cross-CL conflict resolution beyond rejection. If two CLs want overlapping resources, they serialize. No automatic merge.
+- Cost-attribution for non-Anthropic models beyond what H-1 already collects. H-12 rollup measures what H-1 measures; X-4 local-LLM calls reported with `monetary_estimate_usd: 0` and `model: <local-model-id>`.
+- Bidirectional sync with IDE-native rule systems. Cursor's `.cursorrules` evolution, Copilot custom-instruction changes, etc. do not propagate back. Operators wanting roundtrip must reauthor in TDD Pro.
+- Cloud-hosted execution of CLs. §2.23 concurrency is local-multi-session; remote orchestration is a separate concern.
+
+### §23.4 Cumulative ranking impact
+
+| Concern | v1.9 score | v1.9.1 score | Mechanism |
+|---|---|---|---|
+| Workflow concurrency | 6/10 (serial-by-design) | 8.5/10 (disjoint parallel + audit-coherent) | §2.23 + W-10 |
+| Distribution surface | 6/10 (clone-only) | 9/10 (installable hooks bundle + IDE rules export) | X-6 + X-7 |
+| Audit-pack interchange | 7/10 (bundled non-schema'd) | 9/10 (schema'd, reproducible, multi-format) | §2.24 + C-10 emit |
+| Cost observability | 7/10 (per-call only) | 8.5/10 (rollup + regression detector + per-CL summary) | H-12 |
+| **Capability ranking (overall)** | **9.85/10** | **9.9/10** | Cumulative |
+
+Build confidence preserved at 9/10 via canonical staged path; v1.9.1 amendments land in weeks 26–27.5 per §20.
+
+### §23.5 Cross-references to existing architecture
+
+- §1 (thirteen-layer model): no change; the §23 amendments slot into existing layers (H, W, X) and cross-cutting contracts (§2). No new layer.
+- §2.7 (lock file sectioned advisory locks): §2.23 (e) cites disjoint lock-section ownership.
+- §2.14 (dry-run contract): X-6 `/export-rules`, X-7 `/install-hooks`, W-10 `/cl-status` listed as dry-run subjects.
+- §2.15 (workflow state contract): §2.23 (b) extends `workflow-state.json` to manage N parallel `session_id` envelopes; W-10 enforces.
+- §2.17 (live freshness contract): X-6 applies freshness gate to export; H-12 rollup honors freshness state.
+- C-4 (audit log): C-4 Merkle chain absorbs concurrent CL entries via per-entry hash-chaining; per-section checkpoints unaffected.
+- C-10 (`/audit-pack`): extended to emit per §2.24 portable format.
+- H-1 (token-cost transparency): H-12 aggregates H-1 telemetry into daily/weekly rollups.
+- O-3 (uninstall-cleanup): honors X-7 install metadata block for reversibility.
+- Q-6 (privacy posture): H-12 rollups are local-only; X-6 export contains no telemetry.
+
+### §23.6 Anti-drift note for future CLs touching §23
+
+Per `CLAUDE.md`, every CL must extract literal feature IDs and §2.X labels from this document. The v1.9.1 IDs (H-12, W-10, X-6, X-7, §2.23, §2.24) are canonical and must be used verbatim — never paraphrased as "cost telemetry feature," "parallel-CL feature," "Cursor export feature," etc. Folder names under `evals/pending/` for these amendments must be exactly `evals/pending/h/h-12-continuous-cost-telemetry-rollup/`, `evals/pending/w/w-10-concurrent-cl-gate/`, `evals/pending/x/x-6-ide-rules-export/`, `evals/pending/x/x-7-installable-hooks-bundle/`, `evals/pending/cross-cutting/2-23-concurrent-cl-execution-contract/`, `evals/pending/cross-cutting/2-24-portable-audit-pack-format/`. Test-affordance flag invention discipline (CLAUDE.md) applies as usual for these features.
+
+### §23.7 Substrate reconciliation status (drift-audit findings, 2026-05-14)
+
+Two v1.9.1 amendments and one v1.9 amendment (W-8) have partial pre-existing substrate implementations that pre-date this document. Acknowledged here rather than papered over; reconciliation is part of the future implementation CL for each feature, not a separate work item.
+
+- **X-6 (IDE rules export) — substrate exists.** `commands/sync-rules.md` substrate already generates Cursor `.cursor/rules/`, GitHub Copilot `.github/copilot-instructions.md`, Aider `.aider.conf.yml`, Windsurf `.windsurfrules`, and AGENTS.md from `CONVENTIONS.md` + `QUALITY-BAR.md`. This pre-dates the v1.9 source-folder model (G-1). The X-6 implementation CL must: (i) decide between renaming `/sync-rules` → `/export-rules` (consistent with §14 X-6 wording) and keeping both with documented distinction (substrate convention-driven export vs G-1 source-folder-driven export); (ii) re-source the export from the resolved profile + `generated-code-quality-standards/<namespace>/*.yaml` set rather than from `CONVENTIONS.md`/`QUALITY-BAR.md` (so the moat — provenance per §2.1, controls per §2.9, grounded standards — actually rides the export); (iii) add the `profile_snapshot_hash` + `exported_at` + `tdd_pro_version` artifact stamps required by §14; (iv) add the freshness gate per §2.17; (v) add the `continue` target (currently absent from substrate's five targets). Substrate is evidence that the demand exists and the export plumbing is tractable; X-6 specifies the canonical-architecture form.
+
+- **W-8 (TDD-Guard) — substrate is active, not a stub.** `hooks/scripts/tdd-guard.sh` is a working PreToolUse hook implementing a path-mirror-based last-test-run check with allow-list (test files, config, docs, first-time creation) and disable surfaces (`.claude-tdd-pro/tdd-guard.disabled`, `CLAUDE_TDD_PRO_GUARD=off`). The architecture W-8 schema is materially different: (a) red-test refusal scoped to the feature, (b) regression refusal against the previously-green active suite, (c) scope-drift refusal based on W-7-emitted-test paths, (d) `feature_complete: true` emission to W-3 workflow state, (e) `--allow-red-test` operator bypass logged to C-4. The W-8 implementation CL must reconcile rather than overwrite: preserve substrate's path-mirror heuristic as a fallback when no W-7 scope is declared, layer the W-7-aware refusals on top, and migrate the disable surfaces to the §2.14 dry-run / §2.17 freshness contract pattern.
+
+- **W-3 / §2.15 (workflow-state.json) — no substrate envelope.** `tdd-guard.sh` currently reads `.claude-tdd-pro/last-test-run.json`; W-3 expects `.claude-tdd-pro/workflow-state.json`. Reconciliation: keep `last-test-run.json` as a session-local cache; add `workflow-state.json` as the §2.15-canonical envelope; bridge by W-8's hook reading both.
+
+- **No other v1.9.1 amendment has substrate.** H-12 (cost rollup), W-10 (concurrent CL gate), X-7 (installable hooks bundle), §2.23 (concurrent CL contract), §2.24 (portable audit-pack format) are entirely unimplemented at substrate level — their implementation CLs build from scratch.
+
+- **No substrate is mislabeled drift.** All shipped commands, skills, subagents, hooks, detectors either (a) trace to a literal architecture feature ID, (b) extend §2.X contracts in advance of their phase landing (`validate-rubric-rule.sh` for §2.1, `validate-source-file.sh` for §2.21 + G-6), or (c) are pre-architecture substrate documented by §23.8 below. No invented Phase-N decomposition of the kind CL-08/09/10 introduced.
+
+### §23.8 Substrate vs architecture phase-model glossary
+
+Two phase models coexist in this repository. They are NOT equivalent.
+
+**Substrate phase model (pre-v1.9, numeric):**
+
+| Substrate phase | Surface | Meaning |
+|---|---|---|
+| Phase 0 | `skills/phase-0-snapshot/`, `commands/snapshot.md` | Snapshot an existing untested codebase before any cleanup; tag pre-remediation; write top-level README + CLAUDE.md + REMEDIATION.md |
+| Phase 1 | `skills/phase-1-guardrails/`, `commands/init-guardrails.md` | Install bootstrap toolchain (lint / format / pre-commit / test framework) so subsequent changes can't make things worse |
+
+**Architecture phase model (v1.9 / v1.9.1, letter-coded — see §3-§17 of this document):**
+
+| Phase | Meaning |
+|---|---|
+| F | Foundation (§3) — postmortem, measure-rubric, agent-verify, incident, drift |
+| E | ESLint-Parity Rule Engine (§16) — E-1..E-17 |
+| G | Generated Quality-Standards Directory (§17) — G-1..G-14 |
+| S | Standards Ingestion & Reconciliation (§4) — S-1..S-19 |
+| C | Compliance, Audit & Provenance (§5) — C-1..C-21 |
+| P | Prompt Engineering & AI Component Lifecycle (§6) — P-1..P-9 |
+| R / N / T | React / Node / Types coverage (§7-§9) |
+| Q | SPACE Productivity Measurement (§10) — Q-1..Q-9 |
+| H | Hardening (§11) — H-1..H-12 |
+| L | Public Engineering Corpus Learning (§12) — L-1..L-24 |
+| O | Operational Readiness (§13) — O-0..O-11 |
+| X | Execution Surfaces (§14) — X-1..X-7 |
+| W | Workflow Orchestration (§15) — W-1..W-10 |
+
+**Interaction between the two:**
+
+- Substrate Phase 0 / Phase 1 is **pre-F bootstrap discipline** for cleaning up an existing untested codebase. It is NOT a prerequisite to or a subset of architecture Phase F. A repo using this plugin may have *never* needed substrate Phase 0/1 (if greenfield) and still uses every architecture phase.
+- Architecture Phase F/E/G/... is the **building order of the TDD-Pro plugin itself** (§20 execution order), regardless of whether the host repo went through Phase 0/1.
+- When the word "phase" appears without a qualifier in this document, it means the architecture letter-coded model. When the substrate's `skills/phase-0-snapshot/` or `commands/snapshot.md` say "Phase 0," they mean the numeric substrate model.
+
+**Resolution path (non-urgent; retire in v2.0 or sooner):**
+
+The numeric substrate naming is acceptable while substrate predates F. Once F-1..F-6 + O-0..O-1 implement (week 1-4 per §20), evaluate whether substrate Phase 0/1 should be: (a) renamed to architecture-neutral names (`bootstrap-snapshot`, `bootstrap-guardrails`) to remove the terminology collision; (b) retired into F-equivalent skills with provenance preserved in `_meta/migration-from-substrate-phase-numbers.md`; or (c) kept verbatim with this glossary as the sole reconciliation document. Decision belongs to the F-phase implementation CL, not §23.
+
+## §24. v1.10 — Surface expansion amendments
+
+Additive amendments that expand the **execution-surface and workflow-surface** reach of the plugin: where v1.9.1 (§23) addressed concurrency / packaging / interchange / cost-rollup, v1.10 addresses the inline-editor agent gap (LSP), the cloud-IDE workflow gap (Codespaces), the parallel-subagent gap, the multi-model-tier gap, the conversational PR-review gap, and the greenfield-starter gap. These are six new authoritative feature IDs added to existing phases.
+
+**Authoritative IDs introduced by v1.10:** P-10 (Phase P, §6), O-12 (Phase O, §13), X-8 + X-9 (Phase X, §14), W-11 + W-12 (Phase W, §15). All IDs are extractable verbatim from this document for use in CL plans, folder names, spec labels, and commit messages per `CLAUDE.md`. No collision with v1.9 (§1-§22) or v1.9.1 (§23) IDs.
+
+### §24.1 Why these gaps are architecture work
+
+(a) **LSP surface (X-8)** is architecturally distinct from X-6 (IDE rules export, one-way artifact). X-8 is *runtime diagnostic emission* via the standard LSP protocol — findings appear as the developer types, sourced from the same aggregator that powers CI. X-6 ships static rule files; X-8 ships a live server. Both are valid; the IDE ecosystem needs both. (b) **Cloud devcontainer (X-9)** is the missing execution surface alongside X-1 (GitHub Actions), X-3 (pre-commit), X-5 (TUI) — a fully pre-built container for remote/mobile dev. (c) **Runtime model router (P-10)** moves §2.3 subagent model selection from static frontmatter to a per-task-class runtime decision, integrating with H-1 / H-12 cost telemetry by tier. (d) **Parallel subagent orchestrator (W-11)** is within-CL agent concurrency, complementary to W-10 (cross-CL concurrency); requires §2.7 lock-section coordination. (e) **Conversational PR reviewer (W-12)** turns the existing C-11 review-compliance subagent + substrate review agents into a follow-up-capable conversational surface grounded in §2.8 provenance + W-4 decision trail. (f) **Application scaffolds (O-12)** ships greenfield starters with profile pre-configured — distinct from R-4 / T-4 config templates which target existing projects.
+
+### §24.2 Boundary discipline preserved
+
+These amendments do NOT relax any v1.9 or v1.9.1 invariant:
+
+- **X-8 LSP server emits the same findings as X-1 / X-3 / runner.sh** because it reads through G-5 aggregator. Identical exit-code-equivalent severities, identical `messageId` (E-13), identical fix-action semantics (E-4 auto-fix, E-5 inline suppression). No LSP-only rule semantics.
+- **X-9 Codespaces surface uses the same toolchain as local.** No surface-specific behavior; same hooks, same LSP, same freshness gate. Cloud is a host, not a fork.
+- **P-10 router overrides subagent `model:` frontmatter** but logs both values (router decision + frontmatter declaration) to §2.8 provenance manifest. P-4 model-rationale detector verifies the agent's rationale matches the router-resolved tier (mismatch surfaces as a suggestion). No silent tier shifts.
+- **W-11 parallel subagents serialize on overlapping lock sections (§2.7).** No race conditions; lock acquisition is mandatory, not advisory. Per-subagent token cost preserved with `subagent_id` tag in H-12.
+- **W-12 conversational PR reviewer refuses ungrounded answers.** Every claim cites a §2.8 manifest field, an ADR id, an eval spec id, or a test path. Hallucination → "I don't have grounding for that claim" response.
+- **O-12 scaffolds pre-configure profile but do not pre-pass active suite.** Greenfield scaffold's `evals/specs/` is non-empty so the active suite has content from minute one, but the host project still has to author its own features through W-7 / W-8 / W-9.
+- **W-10 (CL-level concurrency) and W-11 (subagent-level parallelism) are orthogonal.** A single CL with `max_parallel_subagents: 4` runs 4 subagents in parallel; two CLs each with `max_parallel_subagents: 4` (allowed by W-10 §2.23) run up to 8 subagents total, gated by per-profile parallel-budget.
+
+### §24.3 Mapping from external proposal to canonical IDs
+
+A v1.10 proposal originating outside this document used IDs that collide with v1.9.1 §23. Canonical re-IDs:
+
+| External proposal ID | Canonical ID in this document | Reason |
+|---|---|---|
+| X-6 IDE Language Server | **X-8** | X-6 in this document is IDE rules export per §23 (one-way artifact) — different feature |
+| W-10 Parallel agent orchestrator | **W-11** | W-10 in this document is concurrent CL gate per §23 — different scope |
+| P-10 Runtime model router | **P-10** (no change) | P-10 was free |
+| X-7 Codespaces devcontainer | **X-9** | X-7 in this document is installable hooks bundle per §23 — different feature |
+| X-8 Conversational PR reviewer | **W-12** | Moved from X to W: reviewer is a workflow surface (per-PR, multi-turn), not an execution surface |
+| W-11 Application scaffolds | **O-12** | Moved from W to O: scaffolds are operational-readiness / lifecycle (`/scaffold`), not workflow orchestration |
+
+This re-ID is non-controversial — the external proposal's *content* is preserved verbatim under canonical IDs; only the numbering changes to avoid collision.
+
+### §24.4 Out of scope for §24
+
+- **A TDD-Pro IDE plugin marketplace.** X-8 LSP server + VS Code extension is the entry surface; broader IDE plugin distribution (JetBrains plugin marketplace, Sublime, etc.) is downstream packaging, not architecture.
+- **A managed cloud Codespaces template registry.** X-9 ships a devcontainer.json; hosting / curation of derived templates is a GitHub-side concern.
+- **Multi-model arbitration beyond tier selection.** P-10 routes by task-class to a tier (haiku/sonnet/opus); it does NOT do A/B model arbitration within a tier (that remains P-5 `/prompt-ab` territory).
+- **Cross-PR memory by default.** W-12 conversational reviewer is per-PR by default; cross-PR memory requires explicit opt-in (`userConfig.pr_review_cross_pr_memory: true`) because cross-PR memory has privacy implications (§Q-6).
+- **Non-LSP editor surfaces.** Vim / Emacs / Neovim users consume X-8 via their respective LSP clients (built-in or coc.nvim / lsp-mode); TDD Pro does not ship editor-specific glue beyond the VS Code packaging layer.
+- **Scaffold support for languages outside JS/TS/Python.** O-12 ships four scaffolds in JS/TS + Python; Go / Rust / Ruby scaffolds are operator-extensible per §2.22 cascade, not core.
+
+### §24.5 Cumulative ranking impact
+
+| Concern | v1.9.1 score | v1.10 score | Mechanism |
+|---|---|---|---|
+| Inline-editor agent surface | 4/10 (CI / pre-commit only) | 9/10 (LSP via X-8 + VS Code packaging) | X-8 |
+| Cloud / remote dev surface | 6/10 (CI is cloud; local-only otherwise) | 8.5/10 (Codespaces parity) | X-9 |
+| Multi-model tier reasoning | 6/10 (static frontmatter + P-4 rationale check) | 8.5/10 (runtime router + tier-cost breakdown + P-4 mismatch detection) | P-10 |
+| Within-CL agent parallelism | 5/10 (sequential subagents) | 8/10 (lock-coordinated parallel subagents) | W-11 |
+| PR review depth | 7/10 (one-shot reviewer agents) | 8.5/10 (follow-up-capable conversational, grounded refusals) | W-12 |
+| Greenfield onboarding | 5/10 (templates target existing projects) | 9/10 (four scaffolds with profile pre-set + active suite non-empty) | O-12 |
+| **Capability ranking (overall)** | **9.9/10** | **9.93/10** | Cumulative |
+
+Build confidence preserved at 9/10 via canonical staged path; v1.10 amendments land in weeks 28-30 per §20.
+
+### §24.6 Cross-references to existing architecture
+
+- §2.3 (subagent contract): P-10 router consulted at subagent invocation; W-11 coordinator and W-12 conversational reviewer are §2.3-compliant subagents.
+- §2.7 (sectioned advisory locks): W-11 mandatory lock acquisition for overlapping sections.
+- §2.8 (AI provenance manifest): P-10 router decision logged in `models_used`; W-12 conversational answers cite manifest fields.
+- §2.14 (dry-run contract): X-8 `--print-diagnostics` mode, X-9 `/scaffold` (O-12), P-10 `/router-set`, W-12 conversational refresh — all dry-run subjects.
+- §2.17 (live freshness): X-8 LSP degrades to warn-only on stale standards; X-9 container per-container daily refresh.
+- E-13 (messageIds for i18n): X-8 LSP emits localized messages via existing E-13 surface.
+- H-1 / H-12 (cost telemetry): P-10 reports by tier; W-11 reports per-subagent.
+- C-4 (audit log): W-11 coordinator emissions, W-12 conversation logs both chain into C-4.
+
+### §24.7 Anti-drift note for future CLs touching §24
+
+Per `CLAUDE.md`, every CL must extract literal feature IDs and §2.X labels from this document. The v1.10 IDs (X-8, X-9, P-10, W-11, W-12, O-12) are canonical and must be used verbatim — never paraphrased as "the LSP feature," "the Codespaces feature," "the scaffolds thing," etc. Folder names under `evals/pending/` for these amendments must be exactly `evals/pending/x/x-8-language-server-protocol-surface/`, `evals/pending/x/x-9-cloud-devcontainer-surface/`, `evals/pending/p/p-10-runtime-model-router/`, `evals/pending/w/w-11-parallel-subagent-orchestrator/`, `evals/pending/w/w-12-conversational-pr-review-subagent/`, `evals/pending/o/o-12-application-scaffolds/`. Test-affordance flag invention discipline (CLAUDE.md) applies as usual.
+
+**Important — ID-collision lesson:** This block exists in part because an external proposal independently assigned X-6 / W-10 / X-7 / X-8 / W-11 to different features, conflicting with v1.9.1 §23. The defense going forward: every proposal that suggests a new architecture feature MUST first read this document end-to-end and confirm the proposed ID is free. The `next available` cursor at v1.10 is: P-11, X-10, W-13, O-13, H-13, plus any unused IDs in F/E/G/S/C/R/N/T/Q/L (which are unchanged from v1.9 base). Future v1.11+ amendments should grep this file for `^\- \*\*[A-Z]-` to enumerate taken IDs before proposing.
