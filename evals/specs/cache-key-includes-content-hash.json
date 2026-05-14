@@ -1,0 +1,13 @@
+{
+  "name": "cache layer: cache key for (rule,file) includes sha256 of file content (changes invalidate)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule no-eval --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" 2>r1.json; sha1=$(shasum -a 256 .cache | awk '{print $1}'); echo \"ok=true\" > f.js; bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule no-eval --in \"$PWD/f.js\" --cache --cache-location \"$PWD/.cache\" 2>r2.json; sha2=$(shasum -a 256 .cache | awk '{print $1}'); [ \"$sha1\" != \"$sha2\" ] && echo ok 1>&2",
+  "setup": [
+    "echo 'eval(x)' > f.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
