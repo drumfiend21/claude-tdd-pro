@@ -1,6 +1,6 @@
 {
   "name": "/agent-verify pipes the full diff to the verifier sub-agent on stdin",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/echo-stdin.sh\" 2>verify.out && grep -q \"MARKER-LINE\" verify.out 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff \"$PWD/diff.patch\" --verifier-stub \"$PWD/echo-stdin.sh\" 2>verify.out && grep \"MARKER-LINE\" verify.out 1>&2 && echo ok 1>&2",
   "setup": [
     "printf 'diff --git a/x b/x\\n--- a/x\\n+++ b/x\\n@@\\n+MARKER-LINE\\n' > diff.patch",
     "printf '#!/bin/bash\\ncat 1>&2\\necho \"verdict: agree\"\\nexit 0\\n' > echo-stdin.sh && chmod +x echo-stdin.sh"
