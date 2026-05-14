@@ -1,0 +1,11 @@
+{
+  "name": "consolidated safeguards script accepts a check name argument so the registered safeguard set is data-driven not hardcoded",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --check unknown-check-name 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_check' err.txt && grep -q 'registered_checks=' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}
