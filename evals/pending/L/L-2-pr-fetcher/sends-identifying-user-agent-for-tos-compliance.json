@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher dry-run shows it sends a user agent string identifying the plugin so requests are ToS-compliant",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run --print-headers 2>out.txt && grep -qi 'user-agent: claude-tdd-pro' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

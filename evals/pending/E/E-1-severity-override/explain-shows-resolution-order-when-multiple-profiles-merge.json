@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --explain prints the per-source resolution chain when multiple profiles merge and the last source wins",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: warn\\n' > profiles/base.yaml && printf 'extends: [profiles/base.yaml]\\nrules:\\n  no-eval: error\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>out.txt && grep -q 'profiles/base.yaml: warn' out.txt && grep -q 'profiles/p.yaml: error' out.txt && grep -q 'effective_severity=error' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

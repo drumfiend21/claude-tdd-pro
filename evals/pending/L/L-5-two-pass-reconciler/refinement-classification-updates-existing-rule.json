@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler routes a refinement classification to update the matched existing rule rather than create a new one",
+  "command": "printf '{\"pattern_id\":\"p2\",\"matched_rule_id\":\"r-existing\",\"classification\":\"refinement\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/apply-classification.sh\" --decision decision.json --dry-run 2>out.txt && grep -q 'action=update-existing' out.txt && grep -q 'rule_id=r-existing' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

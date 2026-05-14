@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install dry-run lists the planned clone, validate, test, and register actions without actually performing any of them",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --dry-run 2>out.txt && grep -q 'planned: gh clone acme/example' out.txt && grep -q 'planned: validate plugin.yaml' out.txt && grep -q 'planned: run rule-tester' out.txt && grep -q 'planned: register namespaced rule ids' out.txt && grep -q 'cloned=false' out.txt && grep -q 'registered=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

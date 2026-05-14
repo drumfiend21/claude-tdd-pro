@@ -1,0 +1,11 @@
+{
+  "name": "triage filter accepts a PR meeting the boundary case of exactly two substantive comments",
+  "command": "printf '{\"number\":7,\"merged\":true,\"author_type\":\"User\",\"docs_only\":false,\"substantive_comments\":2,\"reviewer_requested_changes\":false,\"iterative_pushes\":0}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr pr.json 2>out.txt && grep -q 'decision=accept' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

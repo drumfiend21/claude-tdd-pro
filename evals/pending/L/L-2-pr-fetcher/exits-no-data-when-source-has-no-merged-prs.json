@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher exits zero with a no_data marker when the upstream source returns zero merged PRs in the window",
+  "command": "mkdir -p fixtures && : > fixtures/prs.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/prs.jsonl --now 2026-05-13T00:00:00Z 2>out.txt && grep -q 'fetched=0' out.txt && grep -q 'status=no_data' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

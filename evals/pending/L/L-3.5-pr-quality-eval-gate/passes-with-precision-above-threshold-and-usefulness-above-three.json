@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate passes when both precision is at least 0.7 and mean usefulness is at least 3 out of 5",
+  "command": "mkdir -p pr-corpus/grades && for i in $(seq 1 16); do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && for i in $(seq 17 20); do printf '{\"pr\":%d,\"graded_useful\":false,\"usefulness\":3}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json 2>out.txt && grep -q 'gate=pass' out.txt && grep -q 'precision=0.80' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

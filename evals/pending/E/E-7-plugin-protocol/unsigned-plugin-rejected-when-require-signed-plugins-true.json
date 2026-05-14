@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install rejects an unsigned plugin when userConfig require_signed_plugins is true",
+  "command": "mkdir -p stub-clones/acme/unsigned && printf 'name: unsigned\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/unsigned/plugin.yaml && printf 'require_signed_plugins: true\\n' > userConfig.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/unsigned --gh-clone-stub stub-clones --rule-tester-stub pass --user-config userConfig.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unsigned_plugin_rejected' err.txt && grep -q 'require_signed_plugins=true' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

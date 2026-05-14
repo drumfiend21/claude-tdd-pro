@@ -1,0 +1,11 @@
+{
+  "name": "profile loader rejects a severity value that is not in the {off, warn, error, 0, 1, 2} set or a two-element array starting with one of those",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: critical\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_severity=critical' err.txt && grep -q 'allowed=off|warn|error|0|1|2' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

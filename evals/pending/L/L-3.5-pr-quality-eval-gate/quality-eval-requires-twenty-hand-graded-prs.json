@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate refuses to compute results when fewer than twenty hand-graded PRs are present in the dataset",
+  "command": "mkdir -p pr-corpus/grades && for i in 1 2 3 4 5 6 7 8 9 10; do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'graded_count=10' err.txt && grep -q 'required=20' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

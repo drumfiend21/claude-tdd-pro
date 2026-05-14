@@ -1,0 +1,11 @@
+{
+  "name": "extractor emits an empty array (not an error) when the PR has no extractable patterns from review comments",
+  "command": "printf '{\"number\":99,\"diff\":\"trivial whitespace\",\"comments\":[]}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --pr pr.json --dry-run --out patterns.json 2>out.txt && [ \"$(cat patterns.json)\" = \"[]\" ] && grep -q 'patterns=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

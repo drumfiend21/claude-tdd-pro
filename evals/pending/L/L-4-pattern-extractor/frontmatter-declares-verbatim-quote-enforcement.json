@@ -1,0 +1,11 @@
+{
+  "name": "pattern extractor subagent frontmatter declares verbatim_quote_enforcement true so emitted patterns must cite source text",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/agents/pr-pattern-extractor.md\" 2>err.txt > head.txt && grep -q 'verbatim_quote_enforcement: true' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

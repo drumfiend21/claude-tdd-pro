@@ -1,0 +1,11 @@
+{
+  "name": "catalog validator rejects two entries that share the same id within the default sources file",
+  "command": "mkdir -p sources && printf 'sources:\\n  - {id: dup, source_class: financial-industry, tier: 1, applies_to: [node]}\\n  - {id: dup, source_class: financial-industry, tier: 1, applies_to: [node]}\\n' > sources/list.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source-list.sh\" --list sources/list.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate' err.txt && grep -q 'dup' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

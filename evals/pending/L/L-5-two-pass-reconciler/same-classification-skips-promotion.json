@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler does not promote a pattern when the subagent classifies it as same as an existing rule",
+  "command": "printf '{\"pattern_id\":\"p1\",\"matched_rule_id\":\"r-existing\",\"classification\":\"same\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/apply-classification.sh\" --decision decision.json --dry-run 2>out.txt && grep -q 'action=skip-promotion' out.txt && grep -q 'matched_rule_id=r-existing' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

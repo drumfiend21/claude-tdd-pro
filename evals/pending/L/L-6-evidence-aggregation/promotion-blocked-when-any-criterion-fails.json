@@ -1,0 +1,11 @@
+{
+  "name": "evidence aggregator block decision lists every failing criterion not just the first encountered",
+  "command": "printf '{\"pattern_id\":\"p8\",\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":2}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern pat.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'evidence_count=1' err.txt && grep -q 'organizations_count=1' err.txt && grep -q 'tier1_count=0' err.txt && grep -q 'failures=3' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

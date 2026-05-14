@@ -1,0 +1,11 @@
+{
+  "name": "extractor dry-run emits a structured json array of patterns scoped to the source PR with pr_number provenance",
+  "command": "printf '{\"number\":42,\"diff\":\"diff content\",\"comments\":[{\"body\":\"avoid raw query string concatenation\"}]}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --pr pr.json --dry-run --out patterns.json 2>err.txt && node -e \"const a=JSON.parse(require('fs').readFileSync('patterns.json','utf8'));if(!Array.isArray(a))process.exit(1);if(!a.every(p=>p.pr_number===42))process.exit(2);\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler first pass narrows the candidate rule list to top-K by cosine similarity before invoking the subagent",
+  "command": "mkdir -p rules && for i in 1 2 3 4 5; do printf '{\"id\":\"r%d\",\"embedding\":[0.%d,0.%d]}\\n' \"$i\" \"$i\" \"$i\" > rules/r${i}.json; done && printf '{\"id\":\"new\",\"embedding\":[0.5,0.5]}\\n' > pattern.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile.sh\" --pattern pattern.json --rules-dir rules --shortlist-k 3 --dry-run --emit shortlist 2>out.txt && grep -q 'shortlist_size=3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

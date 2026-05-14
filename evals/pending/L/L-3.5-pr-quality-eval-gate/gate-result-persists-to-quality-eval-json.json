@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate persists its computed result to pr-corpus/quality-eval.json with timestamp and dataset hash",
+  "command": "mkdir -p pr-corpus/grades && for i in $(seq 1 20); do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json --now 2026-05-13T00:00:00Z 2>err.txt && [ -f pr-corpus/quality-eval.json ] && grep -q '\"computed_at\":\"2026-05-13T00:00:00Z\"' pr-corpus/quality-eval.json && grep -q '\"dataset_hash\"' pr-corpus/quality-eval.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

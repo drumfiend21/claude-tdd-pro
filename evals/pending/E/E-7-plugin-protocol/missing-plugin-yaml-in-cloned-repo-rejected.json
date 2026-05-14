@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install rejects the install when the cloned repo does not contain a plugin.yaml at its root",
+  "command": "mkdir -p stub-clones/acme/no-manifest && printf 'README\\n' > stub-clones/acme/no-manifest/README.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/no-manifest --gh-clone-stub stub-clones 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*plugin.yaml' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

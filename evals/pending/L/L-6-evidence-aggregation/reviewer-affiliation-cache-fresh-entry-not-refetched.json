@@ -1,0 +1,11 @@
+{
+  "name": "reviewer-affiliation cache returns a fresh entry without refetching when its age is below the cache TTL",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/affiliation-cache && printf '{\"login\":\"bob\",\"org\":\"b\",\"fetched_at\":\"2026-05-12T22:00:00Z\"}\\n' > .claude-tdd-pro/pr-corpus/affiliation-cache/bob.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/affiliation-lookup.sh\" --login bob --now 2026-05-13T00:00:00Z --cache-ttl-hours 24 2>out.txt && grep -q 'cache_status=fresh' out.txt && grep -q 'refreshed=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

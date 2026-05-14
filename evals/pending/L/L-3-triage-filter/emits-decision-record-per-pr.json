@@ -1,0 +1,11 @@
+{
+  "name": "triage filter writes one structured decision record per PR with number, decision, and reason fields",
+  "command": "printf '{\"number\":1,\"merged\":true,\"author_type\":\"User\",\"docs_only\":false,\"substantive_comments\":1,\"reviewer_requested_changes\":false,\"iterative_pushes\":0}\\n' > p1.json && printf '{\"number\":2,\"merged\":true,\"author_type\":\"User\",\"docs_only\":false,\"substantive_comments\":3,\"reviewer_requested_changes\":true,\"iterative_pushes\":1}\\n' > p2.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr p1.json --pr p2.json --out triage.jsonl 2>err.txt && [ \"$(wc -l < triage.jsonl)\" -eq 2 ] && grep -q '\"number\":1' triage.jsonl && grep -q '\"number\":2' triage.jsonl && grep -q '\"decision\":\"reject\"' triage.jsonl && grep -q '\"decision\":\"accept\"' triage.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

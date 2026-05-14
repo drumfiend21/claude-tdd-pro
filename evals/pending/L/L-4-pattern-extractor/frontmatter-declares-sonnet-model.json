@@ -1,0 +1,11 @@
+{
+  "name": "pattern extractor subagent frontmatter declares sonnet as the model per architecture-specified tier",
+  "command": "head -30 \"$CLAUDE_PLUGIN_ROOT/agents/pr-pattern-extractor.md\" 2>err.txt > head.txt && grep -q 'model: sonnet' head.txt && grep -q 'name: pr-pattern-extractor' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

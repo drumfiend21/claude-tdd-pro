@@ -1,0 +1,11 @@
+{
+  "name": "the default catalog has nine tier-1 entries and one tier-2 entry per architecture composition",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/list-default-sources.sh\" --format tier-counts 2>out.txt && grep -q 'tier_1=9' out.txt && grep -q 'tier_2=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

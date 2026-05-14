@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install records the plugin id and the source github org-slash-repo in the local plugin registry for traceability",
+  "command": "mkdir -p stub-clones/acme/example && printf 'name: example\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --gh-clone-stub stub-clones --rule-tester-stub pass 2>err.txt && [ -s .claude-tdd-pro/plugins/registered/example/source.yaml ] && grep -q 'plugin_id: example' .claude-tdd-pro/plugins/registered/example/source.yaml && grep -q 'source_repo: acme/example' .claude-tdd-pro/plugins/registered/example/source.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

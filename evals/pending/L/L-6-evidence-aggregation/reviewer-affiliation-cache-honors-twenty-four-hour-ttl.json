@@ -1,0 +1,11 @@
+{
+  "name": "reviewer-affiliation cache treats an entry older than twenty-four hours as expired and refreshes it on next lookup",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/affiliation-cache && printf '{\"login\":\"alice\",\"org\":\"a\",\"fetched_at\":\"2026-05-11T00:00:00Z\"}\\n' > .claude-tdd-pro/pr-corpus/affiliation-cache/alice.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/affiliation-lookup.sh\" --login alice --now 2026-05-13T00:00:00Z --cache-ttl-hours 24 2>out.txt && grep -q 'cache_status=expired' out.txt && grep -q 'refreshed=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

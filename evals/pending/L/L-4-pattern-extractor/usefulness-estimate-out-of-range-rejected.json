@@ -1,0 +1,11 @@
+{
+  "name": "extractor validator rejects a pattern whose usefulness_estimate is zero or six (outside the one-to-five range)",
+  "command": "printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":6}]\\n' > patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-patterns.sh\" --patterns patterns.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'usefulness_estimate' err.txt && grep -q 'p1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

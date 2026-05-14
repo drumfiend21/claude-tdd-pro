@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler routes a novel classification to a pending-rule entry awaiting evidence aggregation before promotion",
+  "command": "printf '{\"pattern_id\":\"p3\",\"matched_rule_id\":null,\"classification\":\"novel\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/apply-classification.sh\" --decision decision.json --dry-run 2>out.txt && grep -q 'action=pending-rule' out.txt && grep -q 'awaiting=evidence' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

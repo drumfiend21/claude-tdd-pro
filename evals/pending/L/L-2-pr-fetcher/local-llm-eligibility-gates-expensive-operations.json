@@ -1,0 +1,13 @@
+{
+  "name": "PR fetcher routes summarization through the local-LLM execution surface when the local-LLM eligibility check passes",
+  "command": "mkdir -p .claude-tdd-pro/local-llm && printf '{\"available\":true,\"model\":\"qwen2.5-coder-7b\"}\\n' > .claude-tdd-pro/local-llm/status.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run --upstream-stub fixtures/prs.jsonl 2>out.txt && grep -q 'summarizer=local-llm' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p fixtures && printf '{\"number\":1,\"merged\":true}\\n' > fixtures/prs.jsonl"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

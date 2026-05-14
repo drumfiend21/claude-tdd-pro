@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install rejects registration when one of the plugin's namespaced rule ids collides with a previously registered rule id from another plugin",
+  "command": "mkdir -p stub-clones/acme/clash && printf 'name: clash\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/clash/plugin.yaml && mkdir -p .claude-tdd-pro/plugins/registered/clash && printf 'foo\\n' > .claude-tdd-pro/plugins/registered/clash/rules.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/clash --gh-clone-stub stub-clones --rule-tester-stub pass 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rule_id_collision' err.txt && grep -q 'clash/foo' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher emits one JSON record per fetched PR with number, merged-at, author, and review-comment count",
+  "command": "mkdir -p fixtures && printf '{\"number\":42,\"merged\":true,\"merged_at\":\"2026-05-12T00:00:00Z\",\"author\":\"alice\",\"review_comments\":3}\\n' > fixtures/prs.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/prs.jsonl --out out.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"number\":42' out.jsonl && grep -q '\"author\":\"alice\"' out.jsonl && grep -q '\"review_comments\":3' out.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

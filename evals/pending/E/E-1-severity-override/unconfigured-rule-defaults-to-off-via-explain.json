@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --explain reports effective severity off for a rule that is defined in metadata but not present in the active profile rules block",
+  "command": "mkdir -p profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>out.txt && grep -q 'effective_severity=off' out.txt && grep -q 'source=default' out.txt && grep -q 'rule_will_run=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

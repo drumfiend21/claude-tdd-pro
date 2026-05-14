@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler rejects a subagent classification whose label is not in the allowed five-label vocabulary",
+  "command": "printf '{\"classification\":\"superseded\"}\\n' > sub.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-classification.sh\" --classification sub.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_label=superseded' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

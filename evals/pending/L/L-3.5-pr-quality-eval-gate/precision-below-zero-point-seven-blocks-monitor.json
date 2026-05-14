@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate fails when precision falls below the 0.7 threshold required before the daily monitor activates",
+  "command": "mkdir -p pr-corpus/grades && for i in $(seq 1 10); do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && for i in $(seq 11 20); do printf '{\"pr\":%d,\"graded_useful\":false,\"usefulness\":2}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'precision=0.50' err.txt && grep -q 'required>=0.70' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

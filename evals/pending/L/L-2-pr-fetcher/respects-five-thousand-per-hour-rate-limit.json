@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher pauses or aborts when remaining rate-limit budget would be exhausted by the next batch (5000/hr GitHub default)",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"remaining\":3,\"reset_at\":\"2026-05-13T01:00:00Z\"}\\n' > .claude-tdd-pro/pr-corpus/rate-budget.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --batch-size 50 --rate-budget-stub .claude-tdd-pro/pr-corpus/rate-budget.json --now 2026-05-13T00:30:00Z 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rate_limit_exceeded' err.txt && grep -q 'remaining=3' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

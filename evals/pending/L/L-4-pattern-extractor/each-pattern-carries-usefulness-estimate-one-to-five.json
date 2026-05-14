@@ -1,0 +1,11 @@
+{
+  "name": "extractor validator requires every emitted pattern record to carry a usefulness_estimate integer in the inclusive range one to five",
+  "command": "printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4}]\\n' > patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-patterns.sh\" --patterns patterns.json 2>out.txt && grep -q 'all_valid=true' out.txt && grep -q 'count=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "extractor validator rejects a pattern that is missing the verbatim_quote field required by the verbatim-quote enforcement rule",
+  "command": "printf '[{\"id\":\"p1\",\"usefulness_estimate\":4}]\\n' > patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-patterns.sh\" --patterns patterns.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*verbatim_quote' err.txt && grep -q 'p1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

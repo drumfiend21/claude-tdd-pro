@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate dry-run computes the metrics but does not write quality-eval.json to disk",
+  "command": "mkdir -p pr-corpus/grades && for i in $(seq 1 20); do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json --dry-run 2>out.txt && [ ! -f pr-corpus/quality-eval.json ] && grep -q 'gate=pass' out.txt && grep -q 'dry_run=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

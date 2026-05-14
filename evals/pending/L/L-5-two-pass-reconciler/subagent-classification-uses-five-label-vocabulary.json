@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler subagent output is restricted to the five labels same / refinement / adjacent / novel / conflict",
+  "command": "printf '{\"classification\":\"refinement\"}\\n' > sub.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-classification.sh\" --classification sub.json 2>out.txt && grep -q 'label_valid=true' out.txt && grep -q 'label=refinement' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler appends a conflict classification to the conflict-surfacing decisions log for human resolution",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p4\",\"matched_rule_id\":\"r-existing\",\"classification\":\"conflict\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/apply-classification.sh\" --decision decision.json --decisions-log pr-corpus/decisions.jsonl 2>err.txt && grep -q '\"classification\":\"conflict\"' pr-corpus/decisions.jsonl && grep -q '\"pattern_id\":\"p4\"' pr-corpus/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

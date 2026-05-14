@@ -1,0 +1,11 @@
+{
+  "name": "triage filter classification treats LGTM and similar boilerplate comments as non-substantive when computing the threshold",
+  "command": "printf '{\"number\":8,\"merged\":true,\"author_type\":\"User\",\"docs_only\":false,\"comments\":[{\"body\":\"LGTM\"},{\"body\":\"+1\"},{\"body\":\"thanks\"}],\"reviewer_requested_changes\":false,\"iterative_pushes\":0}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr pr.json --classify-comments 2>out.txt && grep -q 'substantive_comments=0' out.txt && grep -q 'decision=reject' out.txt && grep -q 'reason=insufficient-comments' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

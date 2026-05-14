@@ -1,0 +1,11 @@
+{
+  "name": "evidence aggregator blocks promotion when none of the supporting PRs come from a tier-1 source",
+  "command": "printf '{\"pattern_id\":\"p3\",\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":2},{\"number\":2,\"org\":\"b\",\"tier\":2},{\"number\":3,\"org\":\"c\",\"tier\":2}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern pat.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'tier1_count=0' err.txt && grep -q 'required>=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

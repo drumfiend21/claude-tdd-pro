@@ -1,0 +1,11 @@
+{
+  "name": "control mapping with legal_review_status pending triggers a warning when /audit-pack runs over the controls file",
+  "command": "mkdir -p compliance && printf '- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n' > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --controls compliance/controls.yaml --dry-run 2>out.txt && grep -q 'warning' out.txt && grep -q 'CC8.1' out.txt && grep -q 'legal_review_status=pending' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

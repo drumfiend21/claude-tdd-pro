@@ -1,0 +1,11 @@
+{
+  "name": "catalog validator rejects an entry whose tier value is anything other than 1 or 2",
+  "command": "mkdir -p sources && printf 'id: bad\\nsource_class: financial-industry\\ntier: 3\\napplies_to: [node]\\n' > sources/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source.sh\" --source sources/bad.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'tier' err.txt && grep -q '3' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

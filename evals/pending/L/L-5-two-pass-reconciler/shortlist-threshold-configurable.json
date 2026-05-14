@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler honors a configurable cosine-similarity threshold below which candidates are excluded from the shortlist",
+  "command": "mkdir -p rules && printf '{\"id\":\"close\",\"embedding\":[0.99,0.01]}\\n' > rules/close.json && printf '{\"id\":\"far\",\"embedding\":[0.0,1.0]}\\n' > rules/far.json && printf '{\"id\":\"new\",\"embedding\":[1.0,0.0]}\\n' > pattern.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile.sh\" --pattern pattern.json --rules-dir rules --min-cosine 0.9 --dry-run --emit shortlist 2>out.txt && grep -q 'close' out.txt && ! grep -q '\"id\":\"far\"' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

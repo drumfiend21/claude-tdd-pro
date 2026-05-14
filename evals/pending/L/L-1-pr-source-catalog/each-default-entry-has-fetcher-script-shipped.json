@@ -1,0 +1,11 @@
+{
+  "name": "every default catalog entry maps to a shipped fetcher script under pr-corpus/fetchers/ keyed by source id",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/list-default-sources.sh\" --format ids 2>out.txt && missing=0 && for id in $(cat out.txt); do [ -f \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetchers/${id}.sh\" ] || { echo \"missing: $id\" 1>&2; missing=1; }; done && [ \"$missing\" = \"0\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

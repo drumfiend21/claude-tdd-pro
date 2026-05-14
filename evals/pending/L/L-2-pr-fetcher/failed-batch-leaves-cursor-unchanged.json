@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher does not advance the cursor when a batch fails so the next run can re-attempt from the same point",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/cursors && printf '{\"last_pr_number\":5}\\n' > .claude-tdd-pro/pr-corpus/cursors/cfpb-consumerfinance.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --upstream-stub /nonexistent/file --now 2026-05-13T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'last_pr_number\":5' .claude-tdd-pro/pr-corpus/cursors/cfpb-consumerfinance.json && echo preserved 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "preserved"
+    ]
+  }
+}

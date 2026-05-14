@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler ships a threshold calibration config file that records the held-out seed-corpus baseline used for tuning",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile-thresholds.yaml\" ] && grep -q 'cosine_min:' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile-thresholds.yaml\" && grep -q 'calibrated_against: seed-corpus' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile-thresholds.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

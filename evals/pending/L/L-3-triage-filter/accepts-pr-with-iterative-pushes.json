@@ -1,0 +1,11 @@
+{
+  "name": "triage filter accepts a PR with iterative pushes after review (signal that author responded to review feedback)",
+  "command": "printf '{\"number\":3,\"merged\":true,\"author_type\":\"User\",\"docs_only\":false,\"substantive_comments\":2,\"reviewer_requested_changes\":false,\"iterative_pushes\":2}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr pr.json 2>out.txt && grep -q 'decision=accept' out.txt && grep -q 'signals=.*iterative-pushes' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

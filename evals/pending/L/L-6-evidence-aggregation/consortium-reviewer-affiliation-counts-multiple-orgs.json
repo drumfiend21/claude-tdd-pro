@@ -1,0 +1,11 @@
+{
+  "name": "evidence aggregator counts a consortium reviewer affiliation as the consortium's member organizations rather than as a single org",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/affiliation-cache && printf '{\"login\":\"finos-reviewer\",\"consortium\":\"finos\",\"member_orgs\":[\"jpmc\",\"goldman\",\"stripe\"],\"fetched_at\":\"2026-05-13T00:00:00Z\"}\\n' > .claude-tdd-pro/pr-corpus/affiliation-cache/finos-reviewer.json && printf '{\"pattern_id\":\"p5\",\"supporting_prs\":[{\"number\":1,\"reviewer\":\"finos-reviewer\",\"tier\":1}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern pat.json --resolve-consortia --now 2026-05-13T00:00:00Z 2>out.txt && grep -q 'organizations_count=3' out.txt && grep -q 'jpmc' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

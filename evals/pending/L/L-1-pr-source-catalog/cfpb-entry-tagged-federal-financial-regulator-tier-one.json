@@ -1,0 +1,11 @@
+{
+  "name": "the cfpb-consumerfinance default entry carries source_class federal-financial-regulator at tier 1 applied to react and node",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/list-default-sources.sh\" --id cfpb-consumerfinance 2>out.txt && grep -q 'source_class=federal-financial-regulator' out.txt && grep -q 'tier=1' out.txt && grep -q 'applies_to=.*react' out.txt && grep -q 'applies_to=.*node' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

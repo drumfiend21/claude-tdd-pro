@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --explain reports severity error when the profile sets the rule to the string error",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: error\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>out.txt && grep -q 'effective_severity=error' out.txt && grep -q 'rule_will_run=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

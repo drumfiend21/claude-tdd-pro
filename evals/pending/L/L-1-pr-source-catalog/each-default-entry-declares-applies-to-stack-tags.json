@@ -1,0 +1,11 @@
+{
+  "name": "every default catalog entry declares a non-empty applies_to list of stack tags",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/list-default-sources.sh\" --format applies-to-check 2>out.txt && [ \"$(grep -c 'applies_to=$' out.txt)\" = \"0\" ] && [ \"$(grep -c 'applies_to=' out.txt)\" = \"10\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

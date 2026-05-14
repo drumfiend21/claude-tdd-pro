@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler logs an adjacent classification without auto-promoting (related but not the same scope)",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p5\",\"matched_rule_id\":\"r-existing\",\"classification\":\"adjacent\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/apply-classification.sh\" --decision decision.json --dry-run --log pr-corpus/adjacent.jsonl 2>out.txt && grep -q 'action=log-only' out.txt && grep -q 'auto_promote=false' out.txt && grep -q '\"classification\":\"adjacent\"' pr-corpus/adjacent.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

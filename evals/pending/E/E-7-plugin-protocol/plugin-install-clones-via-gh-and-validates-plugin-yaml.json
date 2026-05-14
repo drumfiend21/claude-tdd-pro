@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install clones the github org slash repo via gh and validates the plugin.yaml manifest before any registration occurs",
+  "command": "mkdir -p stub-clones/acme/example && printf 'name: example\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --gh-clone-stub stub-clones --dry-run 2>out.txt && grep -q 'gh_clone=acme/example' out.txt && grep -q 'plugin_yaml_validated=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

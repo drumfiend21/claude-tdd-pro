@@ -1,0 +1,11 @@
+{
+  "name": "the pattern extractor subagent file ships at agents/pr-pattern-extractor.md and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/pr-pattern-extractor.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

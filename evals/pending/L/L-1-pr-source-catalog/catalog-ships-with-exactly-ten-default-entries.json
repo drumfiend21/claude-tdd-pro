@@ -1,0 +1,11 @@
+{
+  "name": "PR source catalog ships with exactly ten default entries as enumerated in the architecture text",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/list-default-sources.sh\" 2>out.txt && [ \"$(grep -c '^id=' out.txt)\" = \"10\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

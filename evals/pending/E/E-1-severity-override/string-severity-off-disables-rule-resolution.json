@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --explain reports severity off as disabled when the profile sets the rule to the string off",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: off\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>out.txt && grep -q 'effective_severity=off' out.txt && grep -q 'rule_will_run=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

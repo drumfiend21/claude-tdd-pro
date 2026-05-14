@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --explain treats numeric severity 1 as equivalent to the string warn in the resolved severity output",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: 1\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>out.txt && grep -q 'effective_severity=warn' out.txt && grep -q 'source_value=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

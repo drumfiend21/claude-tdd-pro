@@ -1,0 +1,11 @@
+{
+  "name": "triage filter rejects a docs-only PR (no code changes) regardless of review activity",
+  "command": "printf '{\"number\":6,\"merged\":true,\"author_type\":\"User\",\"docs_only\":true,\"substantive_comments\":4,\"reviewer_requested_changes\":true,\"iterative_pushes\":2}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr pr.json 2>out.txt && grep -q 'decision=reject' out.txt && grep -q 'reason=docs-only' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher dry-run mode shows it uses gh api commands rather than raw http requests",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run 2>out.txt && grep -q 'tool=gh-api' out.txt && ! grep -qE '(curl|wget) https?://' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

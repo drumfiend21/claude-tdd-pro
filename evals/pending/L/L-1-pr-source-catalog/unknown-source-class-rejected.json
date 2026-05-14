@@ -1,0 +1,11 @@
+{
+  "name": "catalog validator rejects a source_class that is not in the known taxonomy used by the namespace mapping",
+  "command": "mkdir -p sources && printf 'id: bad\\nsource_class: random-blog\\ntier: 1\\napplies_to: [node]\\n' > sources/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source.sh\" --source sources/bad.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'source_class' err.txt && grep -q 'random-blog' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

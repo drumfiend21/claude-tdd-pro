@@ -1,0 +1,13 @@
+{
+  "name": "PR fetcher resumes from existing cursor and does not re-fetch PRs already recorded as processed",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/cursors && printf '{\"last_pr_number\":5}\\n' > .claude-tdd-pro/pr-corpus/cursors/cfpb-consumerfinance.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/prs.jsonl --max-batches 1 --now 2026-05-13T00:00:00Z 2>out.txt && grep -q 'resumed_from=5' out.txt && grep -q 'fetched=5' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p fixtures && for i in 1 2 3 4 5 6 7 8 9 10; do printf '{\"number\":%d,\"merged\":true}\\n' \"$i\" >> fixtures/prs.jsonl; done"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

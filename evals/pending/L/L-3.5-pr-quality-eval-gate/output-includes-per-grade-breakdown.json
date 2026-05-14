@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate output includes a per-PR breakdown listing each grade's usefulness rating and useful boolean",
+  "command": "mkdir -p pr-corpus/grades && for i in $(seq 1 20); do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json --include-breakdown 2>err.txt && grep -q '\"per_pr\"' pr-corpus/quality-eval.json && [ \"$(grep -o '\"pr\":' pr-corpus/quality-eval.json | wc -l | tr -d ' ')\" = \"20\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

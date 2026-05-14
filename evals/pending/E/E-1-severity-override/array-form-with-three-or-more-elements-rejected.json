@@ -1,0 +1,11 @@
+{
+  "name": "profile loader rejects a rule configured with a three-element array (the architecture array form is exactly two elements: severity and options)",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval:\\n    - error\\n    - {allowGlobal: true}\\n    - extra\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain no-eval --profile profiles/p.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'array_length=3' err.txt && grep -q 'expected_length=2' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

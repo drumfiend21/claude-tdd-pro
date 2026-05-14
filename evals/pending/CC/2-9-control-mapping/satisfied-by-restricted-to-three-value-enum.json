@@ -1,0 +1,11 @@
+{
+  "name": "control mapping satisfied_by entries are restricted to the three-value enum rubric_rule, hook, or artifact and any other value is rejected",
+  "command": "mkdir -p compliance && printf '- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [external_audit]\\n  legal_review_status: not-applicable\\n' > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-control-mapping.sh\" --controls compliance/controls.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'satisfied_by' err.txt && grep -q 'external_audit' err.txt && grep -q 'rubric_rule|hook|artifact' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

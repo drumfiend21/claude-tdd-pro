@@ -1,0 +1,11 @@
+{
+  "name": "catalog validator rejects an applies_to entry that uses a stack tag outside the supported set (react/node/typescript/python/security/infrastructure/library/performance)",
+  "command": "mkdir -p sources && printf 'id: bad\\nsource_class: financial-industry\\ntier: 1\\napplies_to: [cobol]\\n' > sources/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-source.sh\" --source sources/bad.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'applies_to' err.txt && grep -q 'cobol' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

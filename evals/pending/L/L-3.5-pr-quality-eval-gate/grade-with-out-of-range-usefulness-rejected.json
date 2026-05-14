@@ -1,0 +1,11 @@
+{
+  "name": "PR-quality eval gate rejects a grade record whose usefulness value is outside the 1-5 inclusive range",
+  "command": "mkdir -p pr-corpus/grades && printf '{\"pr\":1,\"graded_useful\":true,\"usefulness\":7}\\n' > pr-corpus/grades/p1.json && for i in $(seq 2 20); do printf '{\"pr\":%d,\"graded_useful\":true,\"usefulness\":4}\\n' \"$i\" > pr-corpus/grades/p${i}.json; done && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/quality-eval.sh\" --grades-dir pr-corpus/grades --out pr-corpus/quality-eval.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid usefulness=7' err.txt && grep -q 'pr=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "PR fetcher dry-run lists the planned gh api calls without making any network request and writes nothing to the cursor",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/cursors && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run 2>out.txt && grep -q 'planned_calls=' out.txt && grep -q 'no_network=true' out.txt && [ ! -f .claude-tdd-pro/pr-corpus/cursors/cfpb-consumerfinance.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "triage filter rejects a PR with fewer than two substantive review comments per architecture threshold",
+  "command": "printf '{\"number\":1,\"merged\":true,\"author_type\":\"User\",\"docs_only\":false,\"substantive_comments\":1,\"reviewer_requested_changes\":false,\"iterative_pushes\":0}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr pr.json 2>out.txt && grep -q 'decision=reject' out.txt && grep -q 'reason=insufficient-comments' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

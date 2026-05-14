@@ -1,0 +1,11 @@
+{
+  "name": "rules registered by /plugin-install are stored under namespaced ids of the form plugin-id-slash-rule-id",
+  "command": "mkdir -p stub-clones/acme/example && printf 'name: example\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n  - id: bar\\n    detector: rubric/detectors/bar.sh\\n' > stub-clones/acme/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --gh-clone-stub stub-clones --rule-tester-stub pass --registry-out registry.txt 2>err.txt && grep -qE '^example/foo$' registry.txt && grep -qE '^example/bar$' registry.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

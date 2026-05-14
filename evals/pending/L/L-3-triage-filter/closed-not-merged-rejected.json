@@ -1,0 +1,11 @@
+{
+  "name": "triage filter rejects a PR with state closed but merged false (closed without merging)",
+  "command": "printf '{\"number\":9,\"state\":\"closed\",\"merged\":false,\"author_type\":\"User\",\"docs_only\":false,\"substantive_comments\":3,\"reviewer_requested_changes\":true,\"iterative_pushes\":0}\\n' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --pr pr.json 2>out.txt && grep -q 'decision=reject' out.txt && grep -q 'reason=not-merged' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

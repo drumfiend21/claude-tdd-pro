@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install runs the bundled RuleTester-equivalent test suite over the plugin and refuses registration when any test fails",
+  "command": "mkdir -p stub-clones/acme/badtests && printf 'name: badtests\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/badtests/plugin.yaml && mkdir -p stub-clones/acme/badtests/tests/foo/invalid && printf '{\"code\":\"x\",\"errors\":[{\"messageId\":\"m1\"}]}\\n' > stub-clones/acme/badtests/tests/foo/invalid/case.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/badtests --gh-clone-stub stub-clones --rule-tester-stub fail 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rule_tester_failed' err.txt && grep -q 'registration_blocked' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}
