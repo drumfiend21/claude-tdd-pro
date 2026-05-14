@@ -1,0 +1,11 @@
+{
+  "name": "/spec declines to emit tests when no standards source-folder grounds the feature description",
+  "command": "mkdir -p profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"completely unknown feature with no precedent\" --profile profiles/p.yaml --grounding-stub none 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'declined' err.txt && grep -q 'reason=no_grounding_standard_available' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

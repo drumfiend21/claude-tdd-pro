@@ -1,0 +1,11 @@
+{
+  "name": "/feature emits per-commit token telemetry for downstream cost-transparency reporting",
+  "command": "mkdir -p .claude-tdd-pro/feature-runs profiles evals/specs && printf 'rules: {}\\n' > profiles/p.yaml && printf '{\"name\":\"r\",\"command\":\"true\",\"feature_id\":\"feat-x\"}\\n' > evals/specs/feat-x.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/feature.sh\" --feature-id feat-x --profile profiles/p.yaml --tokens-out .claude-tdd-pro/feature-runs/feat-x.json --dry-run 2>err.txt && [ -f .claude-tdd-pro/feature-runs/feat-x.json ] && grep -q '\"tokens_in\"' .claude-tdd-pro/feature-runs/feat-x.json && grep -q '\"tokens_out\"' .claude-tdd-pro/feature-runs/feat-x.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/spec emitted tests are red on commit and CI surfaces the red state explicitly via runner output",
+  "command": "mkdir -p tests profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"feature x\" --profile profiles/p.yaml --tests-out tests --feature-id feat-x 2>err.txt && bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --tests-dir tests --feature feat-x 2>out.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'red_tests=' out.txt && grep -q 'feature=feat-x' out.txt && echo red 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "red"
+    ]
+  }
+}

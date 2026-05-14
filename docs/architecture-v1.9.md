@@ -608,6 +608,9 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 - **W-4** Decision provenance trail: `docs/adr/` registry; `INDEX.md` auto-maintained; ADR superseding chain; commits include `Decision: <adr-id>` trailer; surfaces in `/audit-pack` "Decision Trail" section as EU AI Act Art. 12 record-keeping evidence.
 - **W-5** Profile registration.
 - **W-6** Closed loop: describe → architect → ADR → spec → plan-first → feature (TDD-Guard) → per-CL commits with Decision trailer → git-workflow → `/pr` → `/audit-pack` with Decision Trail.
+- **W-7** `/spec <feature-description>` writes failing tests from feature description (TDD red phase): skill `skills/spec/SKILL.md` reads (a) feature description from W-1 ADR or operator argument, (b) active profile's resolved standards source-folder set per §2.5 `extends:`, (c) applicable compliance controls per §2.9 `controls:` for active frameworks, (d) §2.4 eval spec schema; emits one `<feature-id>.test.<ext>` per testable contract; refuses to emit when active suite would already cover the contract (no duplicate tests); refuses to emit when feature description grounding lookup returns no relevant standards (declines per S-8 grounded-answer pattern); spec-writer subagent `agents/spec-writer.md` (sonnet, prompt_id `spec-writer`, prompt_version per §2.10) cites each emitted test to `source_file` (G phase) + `docs_url` (E-8); written tests categorized per §2.4 enum (`react|node|types|...`); commits emitted tests with `Test-Driven-By: <feature-id>` trailer; tests are red on commit (CI failure surfaces the red state explicitly).
+- **W-8** `/feature` semantics + TDD-Guard: skill `skills/feature/SKILL.md` reads the failing tests written by W-7 from the active suite + the active profile's resolved standards source-folder set; generates the implementation that turns red tests green; TDD-Guard hook `hooks/scripts/tdd-guard.sh` (PreToolUse on commit) refuses commit when (a) any test added in the same feature scope is still red, (b) implementation introduced regressions to any previously-green spec in the active suite, (c) implementation touches paths outside the feature scope declared by W-7's emitted tests (scope drift); emits per-commit token telemetry to F-2; logs implementation completion to W-3 workflow state machine as `feature_complete: true`; `--allow-red-test` operator bypass logged to C-4 audit log per §2.17 live-freshness contract pattern; refuses operation when standards source-folder freshness gate fails per §2.17.
+- **W-9** UI feature DOM regression pin: subagent `agents/ui-regression-pinner.md` (sonnet, prompt_id `ui-regression-pinner`) fires PostToolUse after `/feature` completes when commit diff touches UI paths (`src/components/**`, `app/**`, `pages/**`, `src/routes/**`, framework-detected per active profile's `applies_to: [react|...]`); generates Playwright DOM-based regression tests using `playwright.config.ts` template from R-4; tests pin click-state, navigation, rendered output, accessible-name (per WCAG-2.2 standards source folder); written tests added to active regression suite at `tests/e2e/<feature-id>.spec.ts` and join the suite immediately so future commits that break rendered UI fail the suite; refuses to emit when active suite already covers the rendered behavior (no duplicate DOM tests); `/feature --skip-ui-pin` operator bypass logged to C-4 audit log; UI-regression test failures gate the W-2 push-timing recommendation.
 
 ## §16. Phase E — ESLint-Parity Rule Engine
 
@@ -709,7 +712,9 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 | 19 | L-10, O-6, O-9 + E-7, E-16 + G-8, G-11 | 9.65 | Continuous learning + community plugin convention |
 | 20 | X-4, X-5, H-10, O-8, O-10, H-11 + E-13, E-14 | 9.7 | Polish, i18n, ESLint config import |
 | 21 | W-1 | 9.75 | Architect |
-| 22 | W-2, W-3 | 9.78 | Git workflow + state machine |
+| 21.5 | W-7 | 9.76 | /spec writes failing tests from feature description |
+| 22 | W-2, W-3, W-8 | 9.78 | Git workflow + state machine + /feature TDD-Guard |
+| 22.5 | W-9 | 9.79 | UI feature DOM regression pin |
 | 23 | W-4, W-5, W-6 | 9.8 | Decision provenance trail |
 | 23.5 | S-19 closed-loop validation | 9.8 | Standards loop end-to-end |
 | 24 | L-24 closed-loop validation | 9.82 | PR-corpus loop end-to-end |
@@ -717,7 +722,7 @@ Each `PR-SOURCES.yaml` entry maps to a folder under `generated-code-quality-stan
 | 25 | E-17 closed-loop validation | 9.84 | Rule engine ESLint-parity end-to-end |
 | 25.5 | G-14 closed-loop validation | 9.85 | Source-folder loop end-to-end |
 
-**Total CL count:** ~265. **Effort:** ~23–28 weeks part-time / ~12–14 weeks full-time.
+**Total CL count:** ~268. **Effort:** ~23–28 weeks part-time / ~12–14 weeks full-time.
 
 **Critical sequencing rules:**
 - Week-1 telemetry baseline non-negotiable; no subsequent component approved without budget impact estimate
@@ -754,7 +759,10 @@ The plugin is at v1.9 / 9.85-of-10 (build confidence 9/10 via canonical staged p
 - G-14 closed-loop end-to-end test passes within 10 minutes
 - README v1.9 includes "Browse the rules" section pointing at `generated-code-quality-standards/`
 - Every E-1 through E-17 acceptance criterion met (severity overrides, options, glob overrides, auto-fix, inline suppression, recommended sets, plugin protocol, metadata, formatters, deprecation, RuleTester, cache, messageIds, ESLint config import, ESLint-as-detector wraps, plugin commands, closed-loop validation)
-- Every S-1 through S-19, C-1 through C-21, L-1 through L-24, F-1 through F-6, P-1 through P-9, R/N/T full coverage, Q-1 through Q-9, H-1 through H-11, O-0 through O-11, X-1 through X-5, W-1 through W-6 acceptance criterion met
+- Every S-1 through S-19, C-1 through C-21, L-1 through L-24, F-1 through F-6, P-1 through P-9, R/N/T full coverage, Q-1 through Q-9, H-1 through H-11, O-0 through O-11, X-1 through X-5, W-1 through W-9 acceptance criterion met
+- W-7 `/spec` writes failing tests from a feature description, grounded in the active profile's standards source folders, and refuses to emit when no relevant grounding standard is available
+- W-8 `/feature` + TDD-Guard refuses commit when any feature-scope test is still red, when implementation introduces a regression to the previously-green active suite, or when implementation drifts outside the test scope
+- W-9 UI regression pinner automatically generates Playwright DOM-based regression tests for any commit touching UI paths under the active profile's `applies_to` framework; these tests join the active suite and gate future commits that break rendered UI behavior
 - README v1.9 documents the operator workflow end-to-end
 - Symmetric documentation: STANDARDS-URLS.yaml + PR-SOURCES.yaml + COMPLIANCE-URLS.yaml all prominently referenced in `/doctor`, `/init-guardrails`, README, getting-started; `generated-code-quality-standards/` directory tree referenced as discoverability entry point
 

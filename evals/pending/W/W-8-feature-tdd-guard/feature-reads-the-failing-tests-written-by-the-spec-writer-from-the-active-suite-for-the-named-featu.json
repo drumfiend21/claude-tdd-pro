@@ -1,0 +1,11 @@
+{
+  "name": "/feature reads the failing tests written by the spec-writer from the active suite for the named feature",
+  "command": "mkdir -p evals/specs profiles && printf '{\"name\":\"red test\",\"command\":\"false\",\"setup\":[],\"expect\":{\"exit_code\":0,\"stderr_contains\":[\"ok\"]},\"feature_id\":\"feat-x\"}\\n' > evals/specs/feat-x.json && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/feature.sh\" --feature-id feat-x --profile profiles/p.yaml --dry-run 2>out.txt && grep -q 'red_tests_found=1' out.txt && grep -q 'feature_id=feat-x' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

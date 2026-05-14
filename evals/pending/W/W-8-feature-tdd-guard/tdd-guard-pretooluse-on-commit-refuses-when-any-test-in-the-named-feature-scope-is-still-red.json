@@ -1,0 +1,11 @@
+{
+  "name": "tdd-guard PreToolUse on commit refuses when any test in the named feature scope is still red",
+  "command": "mkdir -p repo && (cd repo && git init -q) && printf '{\"feature_id\":\"feat-x\",\"red_tests\":[\"t1\",\"t2\"]}\\n' > tdd-state.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/tdd-guard.sh\" --root repo --feature-id feat-x --tdd-state tdd-state.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'commit_blocked' err.txt && grep -q 'red_tests_remaining=2' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

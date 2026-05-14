@@ -1,0 +1,11 @@
+{
+  "name": "/feature reads the active profile standards source-folder set to inform the implementation it generates",
+  "command": "mkdir -p generated-code-quality-standards/google profiles evals/specs && printf 'source:\\n  id: google-tsguide\\nrules: []\\n' > generated-code-quality-standards/google/tsguide.yaml && printf 'extends: [google:tsguide]\\n' > profiles/p.yaml && printf '{\"name\":\"r\",\"command\":\"true\",\"feature_id\":\"feat-x\"}\\n' > evals/specs/feat-x.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/feature.sh\" --feature-id feat-x --profile profiles/p.yaml --root generated-code-quality-standards --emit-grounding --dry-run 2>out.txt && grep -q 'consulted_source=google/tsguide.yaml' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

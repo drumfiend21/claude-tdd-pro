@@ -1,0 +1,11 @@
+{
+  "name": "/feature command is registered and routes to its handler script for the feature-implementer skill",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/feature/SKILL.md\" ] && [ -s \"$CLAUDE_PLUGIN_ROOT/commands/feature.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

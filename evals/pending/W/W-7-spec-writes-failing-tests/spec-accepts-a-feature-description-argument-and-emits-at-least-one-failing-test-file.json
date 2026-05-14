@@ -1,0 +1,11 @@
+{
+  "name": "/spec accepts a feature description argument and emits at least one failing test file",
+  "command": "mkdir -p tests profiles && printf 'extends: [google:tsguide]\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"user can log in with email and password\" --profile profiles/p.yaml --tests-out tests --dry-run 2>out.txt && grep -q 'planned_tests>=1' out.txt && grep -q 'feature_description=user can log in' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

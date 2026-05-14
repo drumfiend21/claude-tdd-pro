@@ -1,0 +1,11 @@
+{
+  "name": "/spec emitted tests cite their grounding source_file and docs_url in the test header comment",
+  "command": "mkdir -p tests profiles generated-code-quality-standards/google && printf 'source:\\n  id: google-tsguide\\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\\nrules:\\n  - id: g-ts-001\\n    detector: x\\n    docs_url: https://google.github.io/styleguide/tsguide.html#x\\n' > generated-code-quality-standards/google/tsguide.yaml && printf 'extends: [google:tsguide]\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"feature x\" --profile profiles/p.yaml --root generated-code-quality-standards --tests-out tests --feature-id feat-x 2>err.txt && grep -q 'source_file: google/tsguide.yaml' tests/feat-x.test.* && grep -q 'docs_url: https://google.github.io' tests/feat-x.test.* && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/spec reads the active profile resolved standards source-folder set when generating tests",
+  "command": "mkdir -p generated-code-quality-standards/google profiles && printf 'source:\\n  id: google-tsguide\\nrules:\\n  - id: g-ts-001\\n    detector: x\\n' > generated-code-quality-standards/google/tsguide.yaml && printf 'extends: [google:tsguide]\\nrules:\\n  g-ts-001: error\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"feature x\" --profile profiles/p.yaml --root generated-code-quality-standards --emit-grounding 2>out.txt && grep -q 'consulted_source=google/tsguide.yaml' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/feature --skip-ui-pin operator bypass is logged to the merkle-chained audit log per the operator bypass pattern",
+  "command": "mkdir -p compliance repo/src/components && (cd repo && git init -q && printf 'export const Button=()=>1\\n' > src/components/Button.tsx) && bash \"$CLAUDE_PLUGIN_ROOT/commands/feature.sh\" --feature-id feat-x --skip-ui-pin --diff-stub touched=src/components/Button.tsx --audit-log compliance/audit.log --operator alice --now 2026-05-14T00:00:00Z 2>err.txt && grep -q '\"event\":\"ui-pin-bypass\"' compliance/audit.log && grep -q '\"operator\":\"alice\"' compliance/audit.log && grep -q '\"feature_id\":\"feat-x\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

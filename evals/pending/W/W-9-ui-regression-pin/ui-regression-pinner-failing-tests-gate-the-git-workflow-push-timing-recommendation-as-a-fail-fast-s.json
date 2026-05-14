@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner failing tests gate the git-workflow push-timing recommendation as a fail-fast signal",
+  "command": "mkdir -p repo/tests/e2e && (cd repo && git init -q && git -c user.email=x@y -c user.name=x commit -q --allow-empty -m init) && printf 'test(\"broken\", async ({page})=>{ throw new Error(\"ui broke\") })\\n' > repo/tests/e2e/feat-x.spec.ts && bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --root repo --check push-timing --ui-test-status-stub failing 2>out.txt && grep -q 'warning=ui-regression-tests-failing' out.txt && grep -q 'push_blocked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

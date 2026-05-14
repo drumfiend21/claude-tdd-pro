@@ -1,0 +1,11 @@
+{
+  "name": "/spec spec-writer subagent file ships at agents/spec-writer.md with model sonnet and required prompt fields",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/agents/spec-writer.md\" 2>err.txt > head.txt && grep -q '^name: spec-writer$' head.txt && grep -q 'model: sonnet' head.txt && grep -q 'prompt_id: spec-writer' head.txt && grep -q 'prompt_version:' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

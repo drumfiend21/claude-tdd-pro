@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner fires PostToolUse after /feature completes when the commit diff touches a UI components path",
+  "command": "mkdir -p repo/src/components && (cd repo && git init -q && printf 'export const Button=()=>1\\n' > src/components/Button.tsx && git add . && git -c user.email=x@y -c user.name=x commit -q -m c) && bash \"$CLAUDE_PLUGIN_ROOT/agents/ui-regression-pinner-trigger.sh\" --root repo --diff-stub touched=src/components/Button.tsx --dry-run 2>out.txt && grep -q 'pinner_fires=true' out.txt && grep -q 'matched_path=src/components/Button.tsx' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
