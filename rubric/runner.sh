@@ -33,6 +33,18 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 RUBRIC="${PLUGIN_ROOT}/rubric/RUBRIC.yaml"
 
+# F-0 lock-version pre-check (per §2.7): if a lock file exists, refuse to
+# run when its plugin_version disagrees with the installed plugin. Forces
+# the operator to /migrate before continuing. No-op when no lock file
+# exists (back-compat with installs predating CL-45).
+LOCK_FILE="$PROJECT_DIR/.claude-tdd-pro/lock.json"
+if [[ -f "$LOCK_FILE" ]] && command -v node >/dev/null 2>&1; then
+  if ! bash "$PLUGIN_ROOT/rubric/lock.sh" --check --lock-path "$LOCK_FILE" >&2 2>&1; then
+    echo "rubric/runner: refusing to start due to lock plugin_version mismatch" >&2
+    exit 2
+  fi
+fi
+
 MODE="full"
 RULE_FILTER=""
 SEVERITY_MIN="P1"
