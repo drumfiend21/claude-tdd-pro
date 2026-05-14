@@ -1,6 +1,6 @@
 {
   "name": "codebase-impact accepts --rule-dir and aggregates results across all .yaml files in the directory",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-dir \"$PWD/rules\" --root \"$PWD/tree\" --format json 2>impact.txt && grep -cE \"\\\"rule_id\\\":\\\"r[0-9]\\\"\" impact.txt > count.txt && [ \"$(cat count.txt)\" = \"3\" ] && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-dir \"$PWD/rules\" --root \"$PWD/tree\" --format json 2>impact.txt && grep -oE \"\\\"rule_id\\\":\\\"r[0-9]\\\"\" impact.txt | wc -l | tr -d ' ' > count.txt && [ \"$(cat count.txt)\" = \"3\" ] && echo ok 1>&2",
   "setup": [
     "mkdir -p tree rules && printf 'x\\n' > tree/a.js",
     "for i in 1 2 3; do printf 'source:\\n  id: src-%d\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: r%d\\n    name: r%d\\n    description: x\\n    detector: bash -c \"grep -l x\"\\n' \"$i\" \"$i\" \"$i\" > \"rules/r${i}.yaml\"; done"

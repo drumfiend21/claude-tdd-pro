@@ -1,6 +1,6 @@
 {
   "name": "codebase-impact warns when a candidate rule matches 0 files (likely shallow or stale)",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\"",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\"",
   "setup": [
     "mkdir -p tree && printf 'innocent\\n' > tree/x.js",
     "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: rare\\n    name: rare\\n    description: x\\n    detector: bash -c \"grep -l NEVER_MATCHES\"\\n' > rule.yaml"

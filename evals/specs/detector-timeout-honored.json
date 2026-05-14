@@ -1,6 +1,6 @@
 {
   "name": "codebase-impact terminates a detector that exceeds --per-rule-timeout-seconds and records timeout=true",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/codebase-impact.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\" --per-rule-timeout-seconds 1 --format json 2>impact.txt && grep -E \"\\\"timeout\\\":true\" impact.txt 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file \"$PWD/rule.yaml\" --root \"$PWD/tree\" --per-rule-timeout-seconds 1 --format json 2>impact.txt && grep -E \"\\\"timeout\\\":true\" impact.txt 1>&2 && echo ok 1>&2",
   "setup": [
     "mkdir -p tree && printf 'x\\n' > tree/a.js",
     "printf 'source:\\n  id: src-1\\n  authoritative_publisher: X\\n  authoritative_url: https://example.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - id: slow\\n    name: slow\\n    description: x\\n    detector: bash -c \"sleep 10\"\\n' > rule.yaml"
