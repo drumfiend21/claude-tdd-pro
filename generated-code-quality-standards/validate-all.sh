@@ -49,6 +49,23 @@ VALIDATE_SOURCE_FILE="$PLUGIN_ROOT/rubric/detectors/validate-source-file.sh"
   echo "validate-all: validate-source-file.sh missing at $VALIDATE_SOURCE_FILE" >&2; exit 2;
 }
 
+# G-1: reject unknown top-level folders. Operator-added namespaces live under
+# _operator/<my-org>/, community plugins under _community/<plugin-id>/. Any
+# other unrecognized top-level folder is an authoring error.
+KNOWN_NAMESPACES=(google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory _universal _operator _community _meta)
+for ns_dir in "$ROOT"/*/; do
+  [[ -d "$ns_dir" ]] || continue
+  ns_name=$(basename "$ns_dir")
+  is_known=0
+  for known in "${KNOWN_NAMESPACES[@]}"; do
+    [[ "$ns_name" == "$known" ]] && { is_known=1; break; }
+  done
+  if [[ "$is_known" -eq 0 ]]; then
+    echo "validate-all: unknown top-level folder: $ns_name (not in 14 defaults + _operator/_community/_meta substrate)" >&2
+    exit 2
+  fi
+done
+
 # Collect source files: any *.yaml under <root> at depth >=2 (i.e. inside a namespace folder),
 # excluding paths containing /_meta/ or /_archived/.
 # Portable to bash 3.2 (macOS) — no mapfile.

@@ -39,6 +39,22 @@ case "$CHECK" in
       exit 1
     fi
     ;;
+  directory-layout)
+    # G-1: verify the 14 default namespace folders + _operator/_community/_meta exist
+    [[ -z "$ROOT" ]] && ROOT="$PLUGIN_ROOT/generated-code-quality-standards"
+    REQUIRED=(google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory _universal _operator _community _meta)
+    MISSING=()
+    for ns in "${REQUIRED[@]}"; do
+      [[ -d "$ROOT/$ns" ]] || MISSING+=("$ns")
+    done
+    if [[ ${#MISSING[@]} -eq 0 ]]; then
+      echo "directory-layout: ok" >&2
+      exit 0
+    else
+      echo "directory-layout: fail (missing: ${MISSING[*]})" >&2
+      exit 1
+    fi
+    ;;
   *)
     echo "doctor: unknown check: $CHECK" >&2
     exit 2
