@@ -1,0 +1,11 @@
+{
+  "name": "space config activity dimension defaults to opt-in (off until enabled) per privacy posture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/show-defaults.sh\" --dimension activity 2>out.txt && grep -q 'activity=opt_in' out.txt && grep -q 'enabled=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

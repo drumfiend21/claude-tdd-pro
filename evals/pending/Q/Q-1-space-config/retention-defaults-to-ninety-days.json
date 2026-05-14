@@ -1,0 +1,11 @@
+{
+  "name": "space config retention_days defaults to 90 when no value is provided",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/show-defaults.sh\" --field retention_days 2>out.txt && grep -q 'retention_days=90' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

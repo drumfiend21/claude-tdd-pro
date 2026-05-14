@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker writes one JSON-line per event so downstream consumers can parse without state-machine awareness",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-block --hook x --decision deny --at 2026-05-13T00:00:00Z 2>err.txt && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-block --hook y --decision deny --at 2026-05-13T00:00:01Z 2>err.txt && [ \"$(wc -l < .claude-tdd-pro/friction/events.jsonl)\" -eq 2 ] && node -e \"JSON.parse(require('fs').readFileSync('.claude-tdd-pro/friction/events.jsonl','utf8').split('\\n')[0])\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

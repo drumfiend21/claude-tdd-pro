@@ -1,0 +1,11 @@
+{
+  "name": "/space-export converts absolute file paths in metric records to repo-relative paths to avoid leaking home directory layout",
+  "command": "mkdir -p .claude-tdd-pro/space repo && cd repo && printf '{\"id\":\"m1\",\"file\":\"%s/repo/src/x.js\"}\\n' \"$PWD/..\" > ../.claude-tdd-pro/space/collected.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected ../.claude-tdd-pro/space/collected.jsonl --out ../export.json --root \"$PWD\" 2>err.txt && cd .. && ! grep -q \"$PWD\" export.json && grep -q '\"file\":\"src/x.js\"' export.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

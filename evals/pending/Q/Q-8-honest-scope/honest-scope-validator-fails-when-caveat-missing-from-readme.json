@@ -1,0 +1,11 @@
+{
+  "name": "honest-scope validator fails when SPACE README is missing the self-observation caveat sentence",
+  "command": "mkdir -p tmp-readme && printf '# SPACE\\nA dashboard\\n' > tmp-readme/README.md && bash \"$CLAUDE_PLUGIN_ROOT/space/honest-scope-validate.sh\" --readme tmp-readme/README.md 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*self-observation' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

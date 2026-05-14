@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest flags a government signal when README mentions FedRAMP, NIST 800-53, or FISMA",
+  "command": "mkdir -p repo && printf '# Agency Tools\\nThis system targets FedRAMP Moderate and NIST 800-53 Rev5 controls.\\n' > repo/README.md && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo 2>out.txt && grep -q 'government=detected' out.txt && grep -q 'fedramp' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

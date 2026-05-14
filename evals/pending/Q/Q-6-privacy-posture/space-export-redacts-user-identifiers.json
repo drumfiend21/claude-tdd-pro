@@ -1,0 +1,11 @@
+{
+  "name": "/space-export redacts user identifier fields (email, username, hostname) from exported metric records",
+  "command": "mkdir -p .claude-tdd-pro/space && printf '{\"id\":\"m1\",\"value\":1,\"user\":\"alice@example.com\",\"hostname\":\"laptop-1\"}\\n' > .claude-tdd-pro/space/collected.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected .claude-tdd-pro/space/collected.jsonl --out export.json 2>err.txt && ! grep -q 'alice@example.com' export.json && ! grep -q 'laptop-1' export.json && grep -q '\"id\":\"m1\"' export.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

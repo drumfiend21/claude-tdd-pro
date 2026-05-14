@@ -1,0 +1,11 @@
+{
+  "name": "/space-export writes to a local file only and never opens any network socket during export",
+  "command": "mkdir -p .claude-tdd-pro/space space && printf '{\"id\":\"m1\",\"value\":1}\\n' > .claude-tdd-pro/space/collected.jsonl && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected .claude-tdd-pro/space/collected.jsonl --out export.json --config space/config.yaml 2>err.txt && [ -f export.json ] && grep -q 'network=disabled' err.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

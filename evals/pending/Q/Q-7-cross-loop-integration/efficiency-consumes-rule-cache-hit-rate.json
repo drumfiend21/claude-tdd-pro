@@ -1,0 +1,11 @@
+{
+  "name": "Efficiency-and-Flow consumes the rule-cache hit-rate as a separate signal tagged source_loop=rule-engine",
+  "command": "mkdir -p .claude-tdd-pro/cache space && printf '{\"hits\":90,\"misses\":10}\\n' > .claude-tdd-pro/cache/stats.json && printf 'dimensions: {efficiency_and_flow: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric cache-hit-rate --config space/config.yaml --out space/metrics.yaml 2>err.txt && grep -q 'source_loop: rule-engine' space/metrics.yaml && grep -q 'dimension: efficiency_and_flow' space/metrics.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

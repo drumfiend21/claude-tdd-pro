@@ -1,0 +1,11 @@
+{
+  "name": "flow-guard issues a soft warning (exit 0) rather than blocking the tool when context thrash threshold is exceeded",
+  "command": "mkdir -p .claude-tdd-pro/flow-guard && printf '{\"tool\":\"Bash\",\"at\":\"2026-05-13T00:00:00Z\"}\\n{\"tool\":\"Read\",\"at\":\"2026-05-13T00:00:10Z\"}\\n{\"tool\":\"Bash\",\"at\":\"2026-05-13T00:00:20Z\"}\\n{\"tool\":\"Read\",\"at\":\"2026-05-13T00:00:30Z\"}\\n{\"tool\":\"Bash\",\"at\":\"2026-05-13T00:00:40Z\"}\\n{\"tool\":\"Read\",\"at\":\"2026-05-13T00:00:50Z\"}\\n' > .claude-tdd-pro/flow-guard/recent.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/check.sh\" --window-min 5 --threshold 5 --now 2026-05-13T00:01:00Z 2>out.txt && grep -q 'warning' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

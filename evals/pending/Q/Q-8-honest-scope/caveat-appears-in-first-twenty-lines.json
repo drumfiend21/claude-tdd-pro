@@ -1,0 +1,11 @@
+{
+  "name": "the honest-scope caveat appears within the first twenty lines of /space-report output (not buried at the end)",
+  "command": "mkdir -p space && printf 'metrics: []\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml > out.txt 2>err.txt && head -20 out.txt | grep -q 'solo-scale self-observation' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

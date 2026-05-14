@@ -1,0 +1,11 @@
+{
+  "name": "/space-report defaults to plain text output (no html or json envelopes) per architecture text-dashboard requirement",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: m1, dimension: performance}\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml > out.txt 2>err.txt && ! grep -q '<html' out.txt && ! head -c1 out.txt | grep -q '{' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

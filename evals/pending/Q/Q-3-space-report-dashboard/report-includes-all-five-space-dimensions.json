@@ -1,0 +1,11 @@
+{
+  "name": "/space-report dashboard prints a section header for each of the five SPACE dimensions when all dimensions are enabled",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: m1, dimension: satisfaction}\\n  - {id: m2, dimension: performance}\\n  - {id: m3, dimension: activity}\\n  - {id: m4, dimension: collaboration}\\n  - {id: m5, dimension: efficiency_and_flow}\\n' > space/metrics.yaml && printf 'dimensions:\\n  satisfaction: {opt_in: true, enabled: true}\\n  performance: {enabled: true}\\n  activity: {opt_in: true, enabled: true}\\n  collaboration: {opt_in: true, enabled: true}\\n  efficiency_and_flow: {enabled: true}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml 2>out.txt && grep -q '## Satisfaction' out.txt && grep -q '## Performance' out.txt && grep -q '## Activity' out.txt && grep -q '## Collaboration' out.txt && grep -q '## Efficiency' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

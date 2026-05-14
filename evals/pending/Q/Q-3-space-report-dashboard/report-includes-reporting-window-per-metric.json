@@ -1,0 +1,11 @@
+{
+  "name": "/space-report prints the reporting_window declared in space/metrics.yaml beside each metric value",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: m1, dimension: performance, reporting_window: 7d}\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml 2>out.txt && grep -q 'window=7d' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

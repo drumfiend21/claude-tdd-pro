@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker records hook latency in milliseconds per hook so slow hooks can be surfaced",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-latency --hook lock-acquire --duration-ms 420 --at 2026-05-13T00:00:00Z 2>err.txt && grep -q 'event=hook-latency' .claude-tdd-pro/friction/events.jsonl && grep -q 'duration_ms=420' .claude-tdd-pro/friction/events.jsonl && grep -q 'hook=lock-acquire' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

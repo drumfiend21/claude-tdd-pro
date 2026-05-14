@@ -1,0 +1,11 @@
+{
+  "name": "the SPACE README documents that this is self-observation rather than productivity science",
+  "command": "grep -l 'self-observation' \"$CLAUDE_PLUGIN_ROOT/space/README.md\" 2>err.txt > out.txt && [ -s out.txt ] && grep -q 'not productivity science' \"$CLAUDE_PLUGIN_ROOT/space/README.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

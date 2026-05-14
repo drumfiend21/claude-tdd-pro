@@ -1,0 +1,11 @@
+{
+  "name": "/space-report rejects an --aggregate-users flag because solo-scale honest scope forbids multi-user aggregation",
+  "command": "mkdir -p space && printf 'metrics: []\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml --aggregate-users 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'aggregate-users' err.txt && grep -q 'solo-scale' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest detects a JavaScript or TypeScript stack from a package.json present at the repo root",
+  "command": "mkdir -p repo && printf '{\"name\":\"x\",\"dependencies\":{\"react\":\"^18\"}}\\n' > repo/package.json && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo 2>out.txt && grep -q 'stack=javascript' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

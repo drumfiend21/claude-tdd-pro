@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker logs an event when a hook blocks a tool invocation, capturing hook name and decision",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-block --hook lock-acquire --decision deny --at 2026-05-13T00:00:00Z 2>err.txt && grep -q 'event=hook-block' .claude-tdd-pro/friction/events.jsonl && grep -q 'hook=lock-acquire' .claude-tdd-pro/friction/events.jsonl && grep -q 'decision=deny' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the plugin does not ship a /space-team-rollup or equivalent team aggregation command",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/commands\" -maxdepth 2 -name 'space-team*' -o -name 'space-rollup*' 2>err.txt > out.txt && [ ! -s out.txt ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

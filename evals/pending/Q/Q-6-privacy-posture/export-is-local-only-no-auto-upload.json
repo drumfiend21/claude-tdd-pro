@@ -1,0 +1,11 @@
+{
+  "name": "/space-export does not auto-upload after writing the local file (operator must explicitly run an upload command)",
+  "command": "mkdir -p .claude-tdd-pro/space space && printf '{\"id\":\"m1\"}\\n' > .claude-tdd-pro/space/collected.jsonl && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected .claude-tdd-pro/space/collected.jsonl --out export.json --config space/config.yaml 2>err.txt && [ -f export.json ] && ! grep -qi 'upload' err.txt && grep -q 'wrote=export.json' err.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

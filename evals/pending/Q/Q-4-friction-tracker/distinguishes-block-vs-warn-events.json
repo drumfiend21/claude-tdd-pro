@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker tags hook events with severity (block vs warn) so dashboards can separate hard vs soft friction",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-block --hook x --decision deny --severity block --at 2026-05-13T00:00:00Z 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-warn --hook y --decision soft --severity warn --at 2026-05-13T00:00:01Z 2>/dev/null && grep -q 'severity=block' .claude-tdd-pro/friction/events.jsonl && grep -q 'severity=warn' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "collector reads PostToolUse hook logs to compute feedback loop time as a Performance metric",
+  "command": "mkdir -p .claude-tdd-pro/posttooluse && printf '{\"tool\":\"Bash\",\"started_at\":\"2026-05-13T00:00:00Z\",\"finished_at\":\"2026-05-13T00:00:02Z\"}\\n' > .claude-tdd-pro/posttooluse/log.jsonl && printf '{\"tool\":\"Bash\",\"started_at\":\"2026-05-13T00:01:00Z\",\"finished_at\":\"2026-05-13T00:01:04Z\"}\\n' >> .claude-tdd-pro/posttooluse/log.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric feedback-loop-time --since 1d 2>out.txt && grep -q 'feedback_loop_seconds_p50=3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

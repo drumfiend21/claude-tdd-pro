@@ -1,0 +1,11 @@
+{
+  "name": "/space-report counter-Goodhart guard warns when only pass rate trends up while suppression count also trends up",
+  "command": "mkdir -p space .claude-tdd-pro/space && printf 'collected:\\n  - {id: space-perf-rubric-pass-rate, value: 0.95, prev: 0.80}\\n  - {id: space-friction-suppressions, value: 50, prev: 10}\\n' > .claude-tdd-pro/space/collected.yaml && printf 'metrics:\\n  - {id: space-perf-rubric-pass-rate, dimension: performance}\\n  - {id: space-friction-suppressions, dimension: efficiency_and_flow}\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}, efficiency_and_flow: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --collected .claude-tdd-pro/space/collected.yaml --config space/config.yaml 2>out.txt && grep -q 'counter-goodhart' out.txt && grep -q 'pass_rate_up_with_suppression_up' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

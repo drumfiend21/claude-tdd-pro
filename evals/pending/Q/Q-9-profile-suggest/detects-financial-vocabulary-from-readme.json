@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest flags a financial-vocabulary signal when README contains finance terms (PCI, ledger, transaction)",
+  "command": "mkdir -p repo && printf '# Project\\nWe handle PCI ledger transactions for clients.\\n' > repo/README.md && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo 2>out.txt && grep -q 'financial_vocab=detected' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

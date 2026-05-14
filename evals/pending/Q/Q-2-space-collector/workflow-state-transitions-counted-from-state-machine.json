@@ -1,0 +1,11 @@
+{
+  "name": "collector counts workflow state-machine transitions from the transitions log as a Collaboration metric",
+  "command": "mkdir -p .claude-tdd-pro/workflow && printf '{\"from\":\"plan\",\"to\":\"build\",\"at\":\"2026-05-13T00:00:00Z\"}\\n{\"from\":\"build\",\"to\":\"review\",\"at\":\"2026-05-13T01:00:00Z\"}\\n' > .claude-tdd-pro/workflow/transitions.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric workflow-transitions --since 1d 2>out.txt && grep -q 'dimension=collaboration' out.txt && grep -q 'transitions=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

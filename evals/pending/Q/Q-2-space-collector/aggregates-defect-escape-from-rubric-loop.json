@@ -1,0 +1,11 @@
+{
+  "name": "collector aggregates defect escape rate from the rubric loop (defects discovered after promotion) as a Performance metric",
+  "command": "mkdir -p .claude-tdd-pro/rubric-runs && printf '{\"defects_post_promote\": 1, \"promotions\": 10}\\n' > .claude-tdd-pro/rubric-runs/escape.json && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric defect-escape --since 30d 2>out.txt && grep -q 'dimension=performance' out.txt && grep -q 'defect_escape=0.10' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

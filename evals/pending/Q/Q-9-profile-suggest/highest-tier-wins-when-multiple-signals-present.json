@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest selects the highest-risk tier when stack, compliance, and government signals are all present",
+  "command": "mkdir -p repo/compliance && printf '{\"name\":\"x\"}\\n' > repo/package.json && printf 'framework: nist-csf-2\\n' > repo/compliance/nist.yaml && printf '# FedRAMP system\\nA FISMA compliant ledger application.\\n' > repo/README.md && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo 2>out.txt && grep -q 'suggested_profile=high-risk' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

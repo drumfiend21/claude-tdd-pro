@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker omits user identifier fields when activity opt-in is unset to honor SPACE privacy posture",
+  "command": "mkdir -p .claude-tdd-pro/friction space && printf 'dimensions:\\n  activity: {opt_in: true, enabled: false}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-block --hook x --decision deny --user me --at 2026-05-13T00:00:00Z --config space/config.yaml 2>err.txt && ! grep -q 'user=me' .claude-tdd-pro/friction/events.jsonl && grep -q 'event=hook-block' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

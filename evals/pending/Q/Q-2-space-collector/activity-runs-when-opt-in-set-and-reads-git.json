@@ -1,0 +1,11 @@
+{
+  "name": "collector reads git commit count for Activity dimension when activity opt-in is enabled",
+  "command": "mkdir -p space repo && (cd repo && git init -q && git -c user.email=x@y -c user.name=x commit -q --allow-empty -m one && git -c user.email=x@y -c user.name=x commit -q --allow-empty -m two) && printf 'dimensions:\\n  activity: {opt_in: true, enabled: true}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric activity-commits --git-root repo --config space/config.yaml --since 30d 2>out.txt && grep -q 'dimension=activity' out.txt && grep -q 'commits=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

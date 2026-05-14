@@ -1,0 +1,11 @@
+{
+  "name": "flow-guard resets the rolling thrash count after a sustained focus window with no tool switches",
+  "command": "mkdir -p .claude-tdd-pro/flow-guard && for i in 1 2 3 4 5 6; do printf '{\"tool\":\"Bash\",\"at\":\"2026-05-13T00:00:0%dZ\"}\\n' \"$i\" >> .claude-tdd-pro/flow-guard/recent.jsonl; done && printf '{\"tool\":\"Bash\",\"at\":\"2026-05-13T01:00:00Z\"}\\n' >> .claude-tdd-pro/flow-guard/recent.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/check.sh\" --window-min 5 --threshold 5 --now 2026-05-13T01:01:00Z 2>out.txt && grep -q 'thrash_count=1' out.txt && ! grep -q 'warning' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "collector aggregates suppression counts combining the rule-loop suppression log and the inline-suppression log",
+  "command": "mkdir -p .claude-tdd-pro/suppressions && printf 'rule-a\\nrule-b\\n' > .claude-tdd-pro/suppressions/rule-loop.log && printf 'rule-a\\n' > .claude-tdd-pro/suppressions/inline.log && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric suppression-count --since 30d 2>out.txt && grep -q 'suppression_total=3' out.txt && grep -q 'rule_loop=2' out.txt && grep -q 'inline=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

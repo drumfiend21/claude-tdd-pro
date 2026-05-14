@@ -1,0 +1,11 @@
+{
+  "name": "collector emits no_data and exits zero when the rubric loop source file is absent (no crash on cross-loop unavailability)",
+  "command": "mkdir -p space && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric rubric-pass-rate --config space/config.yaml 2>out.txt && grep -q 'rubric_pass_rate=no_data' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

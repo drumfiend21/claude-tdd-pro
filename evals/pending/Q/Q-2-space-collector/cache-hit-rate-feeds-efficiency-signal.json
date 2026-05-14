@@ -1,0 +1,11 @@
+{
+  "name": "collector reads rule-cache hit-rate as an Efficiency-and-Flow signal",
+  "command": "mkdir -p .claude-tdd-pro/cache && printf '{\"hits\":80,\"misses\":20}\\n' > .claude-tdd-pro/cache/stats.json && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric cache-hit-rate --since 7d 2>out.txt && grep -q 'dimension=efficiency_and_flow' out.txt && grep -q 'cache_hit_rate=0.80' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

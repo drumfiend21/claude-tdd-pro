@@ -1,0 +1,11 @@
+{
+  "name": "/space-import refuses to merge a bundle whose privacy header lists more than one distinct user identity",
+  "command": "mkdir -p .claude-tdd-pro/space space && printf '{\"included_users\":[\"u1\",\"u2\"],\"records\":[]}\\n' > bundle.json && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-import.sh\" --bundle bundle.json --config space/config.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'multi-user' err.txt && grep -q 'solo-scale' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

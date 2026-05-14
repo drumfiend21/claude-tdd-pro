@@ -1,0 +1,11 @@
+{
+  "name": "flow-guard warning text includes the actual thrash count and the configured threshold so operator can calibrate",
+  "command": "mkdir -p .claude-tdd-pro/flow-guard && for i in 1 2 3 4 5 6 7; do printf '{\"tool\":\"Bash\",\"at\":\"2026-05-13T00:00:0%dZ\"}\\n' \"$i\" >> .claude-tdd-pro/flow-guard/recent.jsonl; done && bash \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/check.sh\" --window-min 5 --threshold 5 --now 2026-05-13T00:01:00Z 2>out.txt && grep -q 'thrash_count=7' out.txt && grep -q 'threshold=5' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/space-report --share flag returns an explicit error citing the share=never default rather than silently honoring it",
+  "command": "mkdir -p space && printf 'metrics: []\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml --share https://example.com 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'share=never' err.txt && grep -q 'change config to share' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

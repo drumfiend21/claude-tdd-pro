@@ -1,0 +1,11 @@
+{
+  "name": "flow-guard skill SKILL.md frontmatter declares a PreToolUse trigger so it runs before each tool invocation",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/SKILL.md\" 2>err.txt > head.txt && grep -q 'trigger: PreToolUse' head.txt && grep -q 'name: flow-guard' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

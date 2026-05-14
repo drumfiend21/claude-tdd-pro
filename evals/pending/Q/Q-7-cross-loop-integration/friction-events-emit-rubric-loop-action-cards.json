@@ -1,0 +1,11 @@
+{
+  "name": "high friction event count for a rule produces an action card consumed by the rubric loop's improvement queue",
+  "command": "mkdir -p .claude-tdd-pro/friction .claude-tdd-pro/rubric-runs && for i in 1 2 3 4 5; do printf '{\"event\":\"inline-suppression\",\"rule_id\":\"no-eval\",\"at\":\"2026-05-13T00:00:0%dZ\"}\\n' \"$i\" >> .claude-tdd-pro/friction/events.jsonl; done && bash \"$CLAUDE_PLUGIN_ROOT/space/cross-loop-emit.sh\" --target rubric-action-cards --threshold 5 --since 1d 2>err.txt && [ -f .claude-tdd-pro/rubric-runs/action-cards.yaml ] && grep -q 'rule_id: no-eval' .claude-tdd-pro/rubric-runs/action-cards.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

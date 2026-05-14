@@ -1,0 +1,11 @@
+{
+  "name": "/space-export omits Activity dimension records from the output bundle when activity opt-in is disabled",
+  "command": "mkdir -p .claude-tdd-pro/space space && printf '{\"id\":\"m-act\",\"dimension\":\"activity\",\"value\":1}\\n{\"id\":\"m-perf\",\"dimension\":\"performance\",\"value\":2}\\n' > .claude-tdd-pro/space/collected.jsonl && printf 'dimensions:\\n  activity: {opt_in: true, enabled: false}\\n  performance: {enabled: true}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected .claude-tdd-pro/space/collected.jsonl --out export.json --config space/config.yaml 2>err.txt && ! grep -q 'm-act' export.json && grep -q 'm-perf' export.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

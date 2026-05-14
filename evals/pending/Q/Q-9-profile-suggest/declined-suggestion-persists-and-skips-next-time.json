@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest persists an operator decline so the next session does not re-prompt with the same suggestion",
+  "command": "mkdir -p repo && printf '{\"name\":\"x\"}\\n' > repo/package.json && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo --decline --state .claude-tdd-pro/profile-suggest-state.json 2>err.txt && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo --state .claude-tdd-pro/profile-suggest-state.json 2>out.txt && grep -q 'declined=true' out.txt && grep -q 'no_prompt' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

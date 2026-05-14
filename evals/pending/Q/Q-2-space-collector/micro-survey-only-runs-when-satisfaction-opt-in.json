@@ -1,0 +1,11 @@
+{
+  "name": "collector skips in-terminal micro-survey for Satisfaction when satisfaction opt-in is not enabled",
+  "command": "mkdir -p space && printf 'dimensions:\\n  satisfaction: {opt_in: true, enabled: false}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric satisfaction-survey --config space/config.yaml 2>out.txt && grep -q 'satisfaction_skipped=opt_in_not_set' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

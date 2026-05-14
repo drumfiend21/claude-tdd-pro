@@ -1,0 +1,11 @@
+{
+  "name": "/space-export output begins with a privacy posture summary header listing share value and which dimensions were included",
+  "command": "mkdir -p .claude-tdd-pro/space space && printf '{\"id\":\"m1\",\"dimension\":\"performance\"}\\n' > .claude-tdd-pro/space/collected.jsonl && printf 'dimensions: {performance: {enabled: true}}\\nretention_days: 90\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected .claude-tdd-pro/space/collected.jsonl --out export.json --config space/config.yaml 2>err.txt && grep -q '\"share\":\"never\"' export.json && grep -q '\"included_dimensions\":\\[\"performance\"\\]' export.json && grep -q '\"retention_days\":90' export.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

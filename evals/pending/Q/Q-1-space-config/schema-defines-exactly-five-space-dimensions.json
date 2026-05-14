@@ -1,0 +1,13 @@
+{
+  "name": "space config schema declares exactly the five SPACE dimensions and rejects any other dimension key",
+  "command": "printf 'dimensions:\\n  satisfaction: {opt_in: true}\\n  performance: {enabled: true}\\n  activity: {opt_in: true}\\n  collaboration: {opt_in: true}\\n  efficiency_and_flow: {enabled: true}\\nretention_days: 90\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-config.sh\" --config space/config.yaml 2>out.txt && grep -q 'dimensions=5' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p space"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

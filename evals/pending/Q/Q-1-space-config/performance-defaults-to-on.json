@@ -1,0 +1,11 @@
+{
+  "name": "space config performance dimension is enabled by default with no opt-in required",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/show-defaults.sh\" --dimension performance 2>out.txt && grep -q 'performance=on' out.txt && grep -q 'enabled=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

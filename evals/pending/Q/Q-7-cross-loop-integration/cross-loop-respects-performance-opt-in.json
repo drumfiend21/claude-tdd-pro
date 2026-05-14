@@ -1,0 +1,11 @@
+{
+  "name": "cross-loop integration refuses to read rubric loop source when Performance dimension is somehow disabled (defense in depth)",
+  "command": "mkdir -p space .claude-tdd-pro/rubric-runs && printf '{\"pass\":1,\"fail\":1}\\n' > .claude-tdd-pro/rubric-runs/last.json && printf 'dimensions: {performance: {enabled: false}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric rubric-pass-rate --config space/config.yaml 2>out.txt && grep -q 'performance_disabled=skipped' out.txt && ! grep -q 'rubric_pass_rate=0.5' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

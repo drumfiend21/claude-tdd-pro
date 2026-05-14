@@ -1,0 +1,11 @@
+{
+  "name": "every cross-loop metric in space/metrics.yaml carries an explicit source_loop tag (rubric, prompt, rule-engine, workflow, friction)",
+  "command": "mkdir -p .claude-tdd-pro/rubric-runs .claude-tdd-pro/cache .claude-tdd-pro/workflow space && printf '{\"pass\":1,\"fail\":1}\\n' > .claude-tdd-pro/rubric-runs/last.json && printf '{\"hits\":1,\"misses\":1}\\n' > .claude-tdd-pro/cache/stats.json && printf '{\"from\":\"a\",\"to\":\"b\",\"at\":\"2026-05-13T00:00:00Z\"}\\n' > .claude-tdd-pro/workflow/transitions.jsonl && printf 'dimensions: {performance: {enabled: true}, efficiency_and_flow: {enabled: true}, collaboration: {opt_in: true, enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --all --config space/config.yaml --out space/metrics.yaml 2>err.txt && [ \"$(grep -c 'source_loop:' space/metrics.yaml)\" -ge 3 ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

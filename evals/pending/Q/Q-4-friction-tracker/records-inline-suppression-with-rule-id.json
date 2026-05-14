@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker records each inline suppression event with the rule id being suppressed",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event inline-suppression --rule-id no-eval --justification migration-temp --at 2026-05-13T00:00:00Z 2>err.txt && grep -q 'event=inline-suppression' .claude-tdd-pro/friction/events.jsonl && grep -q 'rule_id=no-eval' .claude-tdd-pro/friction/events.jsonl && grep -q 'justification=migration-temp' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

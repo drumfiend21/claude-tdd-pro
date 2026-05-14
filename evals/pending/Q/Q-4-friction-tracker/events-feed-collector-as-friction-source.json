@@ -1,0 +1,11 @@
+{
+  "name": "space collector reads friction tracker events as a Flow-and-Efficiency signal source",
+  "command": "mkdir -p .claude-tdd-pro/friction && for i in 1 2 3; do bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event hook-block --hook lock-acquire --decision deny --at 2026-05-13T00:00:0${i}Z 2>/dev/null; done && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric friction-events --since 1d 2>out.txt && grep -q 'dimension=efficiency_and_flow' out.txt && grep -q 'friction_events=3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

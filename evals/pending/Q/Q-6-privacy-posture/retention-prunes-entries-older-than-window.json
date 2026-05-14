@@ -1,0 +1,11 @@
+{
+  "name": "space retention sweep deletes collected entries older than the configured retention_days window",
+  "command": "mkdir -p .claude-tdd-pro/space space && printf '{\"id\":\"m1\",\"at\":\"2025-01-01T00:00:00Z\"}\\n{\"id\":\"m2\",\"at\":\"2026-05-12T00:00:00Z\"}\\n' > .claude-tdd-pro/space/collected.jsonl && printf 'dimensions: {performance: {enabled: true}}\\nretention_days: 90\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/retention-sweep.sh\" --config space/config.yaml --now 2026-05-13T00:00:00Z 2>out.txt && ! grep -q 'm1' .claude-tdd-pro/space/collected.jsonl && grep -q 'm2' .claude-tdd-pro/space/collected.jsonl && grep -q 'pruned=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

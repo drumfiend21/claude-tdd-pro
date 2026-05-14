@@ -1,0 +1,11 @@
+{
+  "name": "the space/ data folder is listed in .gitignore so SPACE measurements never leave the local repo via git",
+  "command": "grep -E '^space/?' \"$CLAUDE_PLUGIN_ROOT/.gitignore\" 2>err.txt > out.txt && [ -s out.txt ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "collector aggregates rubric pass rate from rubric scoring loop output as a Performance metric",
+  "command": "mkdir -p .claude-tdd-pro/rubric-runs && printf '{\"pass\": 8, \"fail\": 2}\\n' > .claude-tdd-pro/rubric-runs/last.json && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric rubric-pass-rate --since 7d 2>out.txt && grep -q 'dimension=performance' out.txt && grep -q 'rubric_pass_rate=0.80' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest defaults to the baseline tier when no stack, compliance, financial, or government signals are detected",
+  "command": "mkdir -p repo && printf '# Empty Project\\nNothing here.\\n' > repo/README.md && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo 2>out.txt && grep -q 'suggested_profile=baseline' out.txt && grep -q 'signals=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

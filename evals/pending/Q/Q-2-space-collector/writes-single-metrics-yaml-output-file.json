@@ -1,0 +1,11 @@
+{
+  "name": "collector emits a single space/metrics.yaml file with one entry per collected metric and its dimension tag",
+  "command": "mkdir -p space .claude-tdd-pro/rubric-runs && printf '{\"pass\":5,\"fail\":5}\\n' > .claude-tdd-pro/rubric-runs/last.json && printf 'dimensions:\\n  performance: {enabled: true}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --all --config space/config.yaml --out space/metrics.yaml 2>err.txt && [ -f space/metrics.yaml ] && grep -q 'dimension: performance' space/metrics.yaml && grep -q 'id: space-perf-rubric-pass-rate' space/metrics.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

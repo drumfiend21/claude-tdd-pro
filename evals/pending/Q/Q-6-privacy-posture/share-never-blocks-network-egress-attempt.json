@@ -1,0 +1,11 @@
+{
+  "name": "any space command refuses to make outbound network calls when share field is set to never",
+  "command": "mkdir -p space && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --share-to https://telemetry.example.com --config space/config.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'share=never' err.txt && grep -q 'blocked' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

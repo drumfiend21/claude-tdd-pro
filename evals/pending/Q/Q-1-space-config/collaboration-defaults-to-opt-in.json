@@ -1,0 +1,11 @@
+{
+  "name": "space config collaboration dimension defaults to opt-in (off until enabled)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/show-defaults.sh\" --dimension collaboration 2>out.txt && grep -q 'collaboration=opt_in' out.txt && grep -q 'enabled=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

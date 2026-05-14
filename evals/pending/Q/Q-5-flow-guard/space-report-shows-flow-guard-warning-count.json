@@ -1,0 +1,11 @@
+{
+  "name": "/space-report Efficiency-and-Flow section displays the count of flow-guard warnings in the reporting window",
+  "command": "mkdir -p space .claude-tdd-pro/friction && for i in 1 2 3; do printf '{\"event\":\"flow-guard-warning\",\"at\":\"2026-05-13T00:00:0%dZ\"}\\n' \"$i\" >> .claude-tdd-pro/friction/events.jsonl; done && printf 'metrics:\\n  - {id: space-flow-guard-warnings, dimension: efficiency_and_flow}\\n' > space/metrics.yaml && printf 'dimensions: {efficiency_and_flow: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml --since 1d 2>out.txt && grep -q 'space-flow-guard-warnings' out.txt && grep -q '3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest skill SKILL.md frontmatter declares it triggers on first-session SessionStart only",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/SKILL.md\" 2>err.txt > head.txt && grep -q 'trigger: SessionStart' head.txt && grep -q 'first_session_only: true' head.txt && grep -q 'name: profile-suggest' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

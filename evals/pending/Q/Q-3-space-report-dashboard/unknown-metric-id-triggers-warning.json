@@ -1,0 +1,11 @@
+{
+  "name": "/space-report warns when collected metric references an id not present in space/metrics.yaml registry",
+  "command": "mkdir -p space .claude-tdd-pro/space && printf 'metrics:\\n  - {id: space-perf-rubric-pass-rate, dimension: performance}\\n' > space/metrics.yaml && printf 'collected:\\n  - {id: space-unknown-metric, value: 0.5}\\n' > .claude-tdd-pro/space/collected.yaml && printf 'dimensions:\\n  performance: {enabled: true}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --collected .claude-tdd-pro/space/collected.yaml --config space/config.yaml 2>out.txt && grep -q 'warning' out.txt && grep -q 'space-unknown-metric' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

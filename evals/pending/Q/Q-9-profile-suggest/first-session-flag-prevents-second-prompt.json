@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest writes a first-session marker after running so subsequent sessions do not re-prompt the operator",
+  "command": "mkdir -p repo && printf '{\"name\":\"x\"}\\n' > repo/package.json && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo --state .claude-tdd-pro/profile-suggest-state.json 2>err.txt && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo --state .claude-tdd-pro/profile-suggest-state.json 2>out.txt && grep -q 'already_ran=true' out.txt && grep -q 'skipped' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

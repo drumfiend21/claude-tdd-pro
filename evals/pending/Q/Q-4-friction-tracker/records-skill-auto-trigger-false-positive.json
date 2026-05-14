@@ -1,0 +1,11 @@
+{
+  "name": "friction tracker records a skill auto-trigger false positive when operator dismisses an auto-suggested skill",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event skill-auto-trigger-fp --skill flow-guard --reason dismissed --at 2026-05-13T00:00:00Z 2>err.txt && grep -q 'event=skill-auto-trigger-fp' .claude-tdd-pro/friction/events.jsonl && grep -q 'skill=flow-guard' .claude-tdd-pro/friction/events.jsonl && grep -q 'reason=dismissed' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

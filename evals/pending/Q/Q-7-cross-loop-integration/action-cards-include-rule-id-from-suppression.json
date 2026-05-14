@@ -1,0 +1,11 @@
+{
+  "name": "rubric loop action card emitted from friction events includes the offending rule_id and the suppression count that triggered it",
+  "command": "mkdir -p .claude-tdd-pro/friction .claude-tdd-pro/rubric-runs && for i in 1 2 3 4 5 6; do printf '{\"event\":\"inline-suppression\",\"rule_id\":\"no-console\",\"at\":\"2026-05-13T00:00:0%dZ\"}\\n' \"$i\" >> .claude-tdd-pro/friction/events.jsonl; done && bash \"$CLAUDE_PLUGIN_ROOT/space/cross-loop-emit.sh\" --target rubric-action-cards --threshold 5 --since 1d 2>err.txt && grep -q 'rule_id: no-console' .claude-tdd-pro/rubric-runs/action-cards.yaml && grep -q 'suppression_count: 6' .claude-tdd-pro/rubric-runs/action-cards.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

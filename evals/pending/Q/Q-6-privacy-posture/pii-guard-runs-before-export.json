@@ -1,0 +1,11 @@
+{
+  "name": "/space-export invokes the PII guard on every record before writing the output file",
+  "command": "mkdir -p .claude-tdd-pro/space && printf '{\"id\":\"m1\",\"note\":\"contact me at alice@example.com or 555-123-4567\"}\\n' > .claude-tdd-pro/space/collected.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --collected .claude-tdd-pro/space/collected.jsonl --out export.json 2>err.txt && grep -q 'pii_guard=invoked' err.txt && ! grep -q 'alice@example.com' export.json && ! grep -q '555-123-4567' export.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

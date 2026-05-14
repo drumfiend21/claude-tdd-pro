@@ -1,0 +1,11 @@
+{
+  "name": "space/metrics.yaml documents the upstream loop reference for each cross-loop metric for operator transparency",
+  "command": "mkdir -p .claude-tdd-pro/rubric-runs space && printf '{\"pass\":1,\"fail\":1}\\n' > .claude-tdd-pro/rubric-runs/last.json && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric rubric-pass-rate --config space/config.yaml --out space/metrics.yaml 2>err.txt && grep -q 'upstream_doc:' space/metrics.yaml && grep -q 'rubric loop' space/metrics.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

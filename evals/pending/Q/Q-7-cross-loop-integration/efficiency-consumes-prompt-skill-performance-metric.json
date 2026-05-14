@@ -1,0 +1,11 @@
+{
+  "name": "Efficiency-and-Flow consumes the prompt-skill performance metric (skill latency, success rate) as a flow signal",
+  "command": "mkdir -p .claude-tdd-pro/prompts space && printf '{\"skill\":\"flow-guard\",\"latency_p50_ms\":120,\"success_rate\":0.92}\\n' > .claude-tdd-pro/prompts/skill-perf.jsonl && printf 'dimensions: {efficiency_and_flow: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric skill-perf --config space/config.yaml 2>out.txt && grep -q 'dimension=efficiency_and_flow' out.txt && grep -q 'source_loop=prompt' out.txt && grep -q 'flow-guard' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

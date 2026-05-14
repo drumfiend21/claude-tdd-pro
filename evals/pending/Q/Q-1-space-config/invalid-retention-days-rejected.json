@@ -1,0 +1,13 @@
+{
+  "name": "space config validator rejects retention_days of zero or negative integers",
+  "command": "printf 'dimensions:\\n  performance: {enabled: true}\\nretention_days: -1\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-config.sh\" --config space/config.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'retention_days' err.txt && echo blocked 1>&2",
+  "setup": [
+    "mkdir -p space"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/space-report exits zero when only the two ON-by-default dimensions (performance and efficiency_and_flow) are enabled",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: m1, dimension: performance}\\n  - {id: m2, dimension: efficiency_and_flow}\\n' > space/metrics.yaml && printf 'dimensions:\\n  performance: {enabled: true}\\n  efficiency_and_flow: {enabled: true}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml 2>out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

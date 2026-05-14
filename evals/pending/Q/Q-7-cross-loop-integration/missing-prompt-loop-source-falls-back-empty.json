@@ -1,0 +1,11 @@
+{
+  "name": "Efficiency-and-Flow signal degrades to empty rather than crashing when prompt-skill performance source is missing",
+  "command": "mkdir -p space && printf 'dimensions: {efficiency_and_flow: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --metric skill-perf --config space/config.yaml 2>out.txt && grep -q 'skill_perf=no_data' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

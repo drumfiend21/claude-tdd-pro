@@ -1,0 +1,11 @@
+{
+  "name": "profile-suggest output enumerates each detected signal so the operator can verify the suggestion's basis",
+  "command": "mkdir -p repo/compliance && printf '{\"name\":\"x\"}\\n' > repo/package.json && printf 'framework: nist-csf-2\\n' > repo/compliance/nist.yaml && bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root repo 2>out.txt && grep -q 'signals=' out.txt && grep -q 'stack=javascript' out.txt && grep -q 'compliance=present' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
