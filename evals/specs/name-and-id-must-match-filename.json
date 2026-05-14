@@ -1,0 +1,14 @@
+{
+  "name": "rule meta: rule.id must match the basename of the rule yaml file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" \"$PWD/expected-id.yaml\"",
+  "setup": [
+    "printf 'id: mismatched-id\\nname: bad\\ndescription: x\\ndetector: rubric/detectors/x.sh\\ntype: problem\\nfixable: null\\n' > expected-id.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "id",
+      "filename"
+    ]
+  }
+}

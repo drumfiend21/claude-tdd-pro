@@ -1,0 +1,14 @@
+{
+  "name": "rule meta: rule.replaced_by must be an array of rule-id strings",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" \"$PWD/g-bad-001.yaml\"",
+  "setup": [
+    "printf 'id: g-bad-001\\nname: bad\\ndescription: x\\ndetector: rubric/detectors/x.sh\\ntype: problem\\nfixable: null\\nreplaced_by: not-an-array\\n' > g-bad-001.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "replaced_by",
+      "array"
+    ]
+  }
+}

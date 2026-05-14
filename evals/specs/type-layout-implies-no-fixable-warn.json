@@ -1,0 +1,13 @@
+{
+  "name": "rule meta: rule.type \"layout\" requires fixable to be \"whitespace\" or null (not \"code\")",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" \"$PWD/g-bad-001.yaml\"",
+  "setup": [
+    "printf 'id: g-bad-001\\nname: bad\\ndescription: x\\ndetector: rubric/detectors/x.sh\\ntype: layout\\nfixable: code\\n' > g-bad-001.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "layout"
+    ]
+  }
+}
