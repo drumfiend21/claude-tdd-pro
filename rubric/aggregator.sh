@@ -44,6 +44,9 @@ set -uo pipefail
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 ROOT="$PLUGIN_ROOT/generated-code-quality-standards"
 FORMAT="json"
+VALIDATE_FIRST=0
+ALLOW_INVALID_SOURCE_FOLDER=0
+EMIT_AUDIT=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -63,6 +66,22 @@ while [[ $# -gt 0 ]]; do
       FORMAT="$2"
       shift 2
       ;;
+    --validate-first)
+      VALIDATE_FIRST=1
+      shift
+      ;;
+    --allow-invalid-source-folder)
+      ALLOW_INVALID_SOURCE_FOLDER=1
+      shift
+      ;;
+    --emit-audit)
+      if [[ $# -lt 2 ]]; then
+        echo "aggregator: --emit-audit requires an argument" >&2
+        exit 1
+      fi
+      EMIT_AUDIT="$2"
+      shift 2
+      ;;
     -h|--help)
       sed -n '1,40p' "$0" | grep -E '^# ' | sed 's/^# //'
       exit 0
@@ -73,6 +92,36 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+# G-12 composition: when --validate-first is set, run validate-all over
+# the tree first. Files that fail validation are skipped from aggregation
+# unless --allow-invalid-source-folder bypass is set, in which case they
+# are included AND the bypass is logged to --emit-audit (per §17 G-12).
+INVALID_FILES=""
+if [[ "$VALIDATE_FIRST" -eq 1 ]] && [[ -d "$ROOT" ]]; then
+  VALIDATE_SOURCE_FILE="$PLUGIN_ROOT/rubric/detectors/validate-source-file.sh"
+  if [[ -f "$VALIDATE_SOURCE_FILE" ]]; then
+    # Use realpath-resolved root so paths match Ruby Find.find output (handles
+    # macOS /tmp → /private/tmp symlink and other symlink prefixes).
+    ROOT_ABS_FOR_VALIDATION=$(cd "$ROOT" && pwd -P)
+    while IFS= read -r f; do
+      [[ -z "$f" ]] && continue
+      if ! bash "$VALIDATE_SOURCE_FILE" "$f" >/dev/null 2>&1; then
+        INVALID_FILES="$INVALID_FILES${INVALID_FILES:+|}$f"
+      fi
+    done < <(find "$ROOT_ABS_FOR_VALIDATION" -mindepth 2 -name "*.yaml" -type f 2>/dev/null \
+      | grep -v -E "(^|/)_meta/|(^|/)_archived/")
+
+    if [[ -n "$INVALID_FILES" ]] && [[ "$ALLOW_INVALID_SOURCE_FOLDER" -eq 1 ]] && [[ -n "$EMIT_AUDIT" ]]; then
+      mkdir -p "$(dirname "$EMIT_AUDIT")"
+      ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      IFS='|' read -ra _bypass_files <<< "$INVALID_FILES"
+      for _bf in "${_bypass_files[@]}"; do
+        echo "{\"event\":\"bypass-allow-invalid-source-folder\",\"file\":\"$_bf\",\"at\":\"$ts\"}" >> "$EMIT_AUDIT"
+      done
+    fi
+  fi
+fi
 
 if [[ ! -d "$ROOT" ]]; then
   echo "aggregator: root directory does not exist: $ROOT" >&2
@@ -96,9 +145,15 @@ ROOT_ABS=$(cd "$ROOT" && pwd -P)
 ruby -ryaml -rjson -e '
   require "find"
   require "pathname"
+  require "set"
 
   root = ARGV[0]
   format = ARGV[1]
+  invalid_files_csv = ARGV[2] || ""
+  allow_invalid = (ARGV[3] == "1")
+  output_to_stderr = (ARGV[4] == "1")
+
+  invalid_files = invalid_files_csv.split("|").reject(&:empty?).to_set
 
   # Collect files in aggregation order.
   collected = []  # [ [order_index, relpath, abspath], ... ]
@@ -189,6 +244,12 @@ ruby -ryaml -rjson -e '
   plugin_rules_by_id = {}
 
   collected.each do |order_index, relpath, abspath, ns_name|
+    # G-12 composition: skip files that failed validation (when --validate-first
+    # was set) unless --allow-invalid-source-folder bypass is also set.
+    if invalid_files.include?(abspath) && !allow_invalid
+      next
+    end
+
     begin
       data = YAML.load_file(abspath)
     rescue => e
@@ -305,13 +366,14 @@ ruby -ryaml -rjson -e '
     "rules" => rules
   }
 
-  if format == "yaml"
-    puts output.to_yaml
+  rendered = (format == "yaml") ? output.to_yaml : JSON.generate(output)
+  if output_to_stderr
+    STDERR.puts rendered
   else
-    puts JSON.generate(output)
+    puts rendered
   end
 
   # Parse errors remain non-fatal in CL-04 — that hardening lands in CL-05
   # along with malformed-YAML and missing-source-header tests.
   exit 0
-' "$ROOT_ABS" "$FORMAT"
+' "$ROOT_ABS" "$FORMAT" "$INVALID_FILES" "$ALLOW_INVALID_SOURCE_FOLDER" "$VALIDATE_FIRST"
