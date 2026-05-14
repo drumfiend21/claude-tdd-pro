@@ -1,0 +1,11 @@
+{
+  "name": "the tui visualization layer renders using a charm.sh-style framework declared in the tui directory",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/tui/README.md\" ] && grep -qiE 'charm|bubbletea|huh' \"$CLAUDE_PLUGIN_ROOT/tui/README.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

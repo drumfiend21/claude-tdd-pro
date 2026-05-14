@@ -1,0 +1,11 @@
+{
+  "name": "checkpoint verifier rejects a checkpoint whose signature does not verify against the signing key",
+  "command": "mkdir -p compliance/audit-checkpoints && printf '{\"merkle_root\":\"abc\",\"signature\":\"tampered\",\"included_events\":1}\\n' > compliance/audit-checkpoints/checkpoint-1.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/checkpoint-verify.sh\" --checkpoint compliance/audit-checkpoints/checkpoint-1.json --signing-stub valid 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'signature_invalid' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

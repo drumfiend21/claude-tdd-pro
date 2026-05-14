@@ -1,0 +1,11 @@
+{
+  "name": "rubric/RUBRIC.yaml has a top-level version field that follows semver format",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/RUBRIC.yaml\" ] && grep -qE '^version: [0-9]+\\.[0-9]+\\.[0-9]+' \"$CLAUDE_PLUGIN_ROOT/rubric/RUBRIC.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep validates that a paywalled compliance attestation has its license recorded",
+  "command": "mkdir -p compliance/attestations && printf 'framework: pci-dss-v4\\nattested_by: vendor\\nlicense: proprietary\\n' > compliance/attestations/pci-dss-v4.yaml && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/license-attribution.sh\" --check-attestations 2>out.txt && grep -q 'attestation=pci-dss-v4 license=proprietary valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

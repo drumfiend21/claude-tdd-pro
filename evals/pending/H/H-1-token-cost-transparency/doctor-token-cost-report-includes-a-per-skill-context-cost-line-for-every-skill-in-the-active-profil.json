@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost report includes a per-skill context-cost line for every skill in the active profile",
+  "command": "mkdir -p .claude-tdd-pro/skills && printf '{\"skill\":\"flow-guard\",\"tokens\":1200}\\n{\"skill\":\"profile-suggest\",\"tokens\":800}\\n' > .claude-tdd-pro/skills/cost-stats.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --by skill 2>out.txt && grep -q 'skill=flow-guard tokens=1200' out.txt && grep -q 'skill=profile-suggest tokens=800' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh prints the resolved rule set for the active profile when invoked with show-rules",
+  "command": "mkdir -p profiles .claude-tdd-pro && printf 'active_profile: p\\n' > .claude-tdd-pro/profile-state.yaml && printf 'rules:\\n  no-eval: error\\n  no-console: warn\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --show-rules --state .claude-tdd-pro/profile-state.yaml --profiles-dir profiles 2>out.txt && grep -q 'no-eval: error' out.txt && grep -q 'no-console: warn' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

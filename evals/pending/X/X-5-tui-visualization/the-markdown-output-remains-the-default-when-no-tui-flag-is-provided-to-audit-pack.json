@@ -1,0 +1,11 @@
+{
+  "name": "the markdown output remains the default when no tui flag is provided to audit-pack",
+  "command": "mkdir -p compliance && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --dry-run 2>out.txt && grep -q 'view=markdown' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

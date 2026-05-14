@@ -1,0 +1,11 @@
+{
+  "name": "the markdown output remains the default when no tui flag is provided to coverage",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/coverage.sh\" 2>out.txt && grep -q 'view=markdown' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

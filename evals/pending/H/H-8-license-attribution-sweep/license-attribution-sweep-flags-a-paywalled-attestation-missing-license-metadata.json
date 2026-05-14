@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep flags a paywalled attestation missing license metadata",
+  "command": "mkdir -p compliance/attestations && printf 'framework: pci-dss-v4\\n' > compliance/attestations/pci-dss-v4.yaml && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/license-attribution.sh\" --check-attestations 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'attestation=pci-dss-v4 missing_license' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "community/rules/ folder exists at the plugin root for community-contributed rules",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/community/rules\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

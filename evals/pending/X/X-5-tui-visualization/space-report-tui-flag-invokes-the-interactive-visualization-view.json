@@ -1,0 +1,11 @@
+{
+  "name": "/space-report --tui flag invokes the interactive visualization view",
+  "command": "mkdir -p space && printf 'metrics: []\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml --tui --dry-run 2>out.txt && grep -q 'view=tui' out.txt && grep -q 'interactive=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "rubric semver bumper increments the patch version on a bugfix change",
+  "command": "mkdir -p rubric && printf 'version: 1.5.3\\n' > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/version-bump.sh\" --rubric rubric/RUBRIC.yaml --change bugfix --dry-run 2>out.txt && grep -q 'planned: 1.5.3 -> 1.5.4' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

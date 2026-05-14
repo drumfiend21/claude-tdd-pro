@@ -1,0 +1,11 @@
+{
+  "name": "lock-acquire on the rule_cache section creates the corresponding lockfile entry",
+  "command": "mkdir -p .claude-tdd-pro/locks && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rule_cache --owner pid-1234 --lock-dir .claude-tdd-pro/locks 2>err.txt && [ -f .claude-tdd-pro/locks/rule_cache.lock ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

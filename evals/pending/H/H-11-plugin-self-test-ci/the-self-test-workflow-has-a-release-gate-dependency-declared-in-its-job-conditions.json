@@ -1,0 +1,11 @@
+{
+  "name": "the self-test workflow has a release-gate dependency declared in its job conditions",
+  "command": "grep -qE 'needs:|release|gate' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

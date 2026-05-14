@@ -1,0 +1,11 @@
+{
+  "name": "local-llm cost report includes a baseline reduction percentage in the 30 to 50 percent target band",
+  "command": "mkdir -p .claude-tdd-pro/local-llm && printf '{\"baseline_daily_tokens\":10000,\"avoided_daily_tokens\":4000}\\n' > .claude-tdd-pro/local-llm/stats.json && bash \"$CLAUDE_PLUGIN_ROOT/skills/local-llm/cost-report.sh\" --stats .claude-tdd-pro/local-llm/stats.json 2>out.txt && grep -q 'reduction_pct=40' out.txt && grep -q 'target_band=30-50' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

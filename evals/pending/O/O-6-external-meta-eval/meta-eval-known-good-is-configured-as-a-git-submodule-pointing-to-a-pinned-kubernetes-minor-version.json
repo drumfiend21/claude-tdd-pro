@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval/known-good is configured as a git submodule pointing to a pinned Kubernetes minor version",
+  "command": "[ -f \"$CLAUDE_PLUGIN_ROOT/.gitmodules\" ] && grep -q 'known-good' \"$CLAUDE_PLUGIN_ROOT/.gitmodules\" && grep -qE 'kubernetes' \"$CLAUDE_PLUGIN_ROOT/.gitmodules\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

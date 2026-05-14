@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document includes a paywalled-attestation integrity section",
+  "command": "grep -qE 'paywalled.attestation integrity' \"$CLAUDE_PLUGIN_ROOT/docs/threat-model.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "SECURITY.md threat model document includes the three fetcher trust models for standards PR and compliance",
+  "command": "grep -q 'standards.*fetcher.*trust' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && grep -q 'PR.*fetcher.*trust' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && grep -q 'compliance.*fetcher.*trust' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

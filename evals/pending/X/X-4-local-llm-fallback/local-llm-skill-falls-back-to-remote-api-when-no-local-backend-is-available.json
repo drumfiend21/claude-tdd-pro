@@ -1,0 +1,11 @@
+{
+  "name": "local-llm skill falls back to remote API when no local backend is available",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/local-llm/route.sh\" --operation triage --availability-stub unavailable 2>out.txt && grep -q 'route=remote-api' out.txt && grep -q 'fallback=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

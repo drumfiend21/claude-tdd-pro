@@ -1,0 +1,11 @@
+{
+  "name": "command registry verifies no two registered commands collide on the same name",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/list-reconciled.sh\" --check-collisions 2>out.txt && grep -q 'collisions=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

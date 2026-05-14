@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning is opt-in and is disabled by default in the shipped configuration",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/show-defaults.sh\" 2>out.txt && grep -q 'enabled=false' out.txt && grep -q 'opt_in=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

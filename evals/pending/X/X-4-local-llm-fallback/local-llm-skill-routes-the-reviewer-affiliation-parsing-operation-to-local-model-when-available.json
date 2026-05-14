@@ -1,0 +1,11 @@
+{
+  "name": "local-llm skill routes the reviewer-affiliation parsing operation to local model when available",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/local-llm/route.sh\" --operation affiliation-parsing --availability-stub available 2>out.txt && grep -q 'route=local-llm' out.txt && grep -q 'operation=affiliation-parsing' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

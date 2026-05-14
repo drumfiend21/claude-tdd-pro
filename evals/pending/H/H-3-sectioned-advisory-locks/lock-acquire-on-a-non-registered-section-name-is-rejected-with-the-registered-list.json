@@ -1,0 +1,11 @@
+{
+  "name": "lock-acquire on a non-registered section name is rejected with the registered list",
+  "command": "mkdir -p .claude-tdd-pro/locks && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section made-up-section --owner pid-1234 --lock-dir .claude-tdd-pro/locks 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_section' err.txt && grep -q 'registered_sections=' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

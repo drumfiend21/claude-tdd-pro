@@ -1,0 +1,11 @@
+{
+  "name": "rubric semver bumper appends a changelog entry when applied non-dry-run",
+  "command": "mkdir -p rubric && printf 'version: 1.5.3\\n' > rubric/RUBRIC.yaml && : > rubric/changelog.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/version-bump.sh\" --rubric rubric/RUBRIC.yaml --change bugfix --apply --changelog rubric/changelog.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '## 1.5.4' rubric/changelog.md && grep -q '2026-05-13' rubric/changelog.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "SECURITY.md threat model document includes an audit log integrity section",
+  "command": "grep -q 'audit.log integrity' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

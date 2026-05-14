@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval run on known-good calibration enforces the at-most-5-P0-findings ceiling",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/meta-eval/run.sh\" --target known-good --findings-stub p0=6 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'p0_count=6' err.txt && grep -q 'p0_max=5' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

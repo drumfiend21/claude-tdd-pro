@@ -1,0 +1,11 @@
+{
+  "name": "signed-checkpoint cadence is configurable via interval flag overriding the 100-entry default",
+  "command": "mkdir -p compliance/audit-checkpoints && for i in $(seq 1 50); do printf '{\"event\":\"e%d\"}\\n' \"$i\" >> compliance/audit.log; done && bash \"$CLAUDE_PLUGIN_ROOT/compliance/checkpoint.sh\" --audit-log compliance/audit.log --checkpoint-dir compliance/audit-checkpoints --interval 50 --now 2026-05-13T00:00:00Z 2>err.txt && [ -f compliance/audit-checkpoints/checkpoint-50.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

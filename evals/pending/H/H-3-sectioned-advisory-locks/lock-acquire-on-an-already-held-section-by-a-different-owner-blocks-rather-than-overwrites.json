@@ -1,0 +1,11 @@
+{
+  "name": "lock-acquire on an already-held section by a different owner blocks rather than overwrites",
+  "command": "mkdir -p .claude-tdd-pro/locks && printf 'owner=pid-1\\nacquired_at=2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/locks/rule_cache.lock && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section rule_cache --owner pid-2 --lock-dir .claude-tdd-pro/locks --no-wait 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'lock_held_by=pid-1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

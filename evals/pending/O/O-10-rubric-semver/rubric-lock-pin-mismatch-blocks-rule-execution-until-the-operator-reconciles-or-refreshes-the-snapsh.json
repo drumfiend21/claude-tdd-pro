@@ -1,0 +1,11 @@
+{
+  "name": "rubric lock pin mismatch blocks rule execution until the operator reconciles or refreshes the snapshot",
+  "command": "mkdir -p rubric .claude-tdd-pro && printf 'version: 2.0.0\\n' > rubric/RUBRIC.yaml && printf '{\"rubric_version\":\"1.5.3\"}\\n' > .claude-tdd-pro/lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/version-check.sh\" --rubric rubric/RUBRIC.yaml --lock .claude-tdd-pro/lock.json --enforce 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'lock_mismatch' err.txt && grep -q 'lock=1.5.3' err.txt && grep -q 'current=2.0.0' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

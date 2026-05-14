@@ -1,0 +1,11 @@
+{
+  "name": "/analyze output includes a coverage caveat block when run on a multi-language repo",
+  "command": "mkdir -p repo && printf 'const x=1\\n' > repo/x.js && printf 'package main\\n' > repo/main.go && bash \"$CLAUDE_PLUGIN_ROOT/commands/analyze.sh\" --root repo --dry-run 2>out.txt && grep -q 'coverage_caveat:' out.txt && grep -q 'go: partial' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

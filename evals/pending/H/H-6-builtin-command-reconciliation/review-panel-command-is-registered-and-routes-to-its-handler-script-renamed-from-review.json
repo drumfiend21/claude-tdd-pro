@@ -1,0 +1,11 @@
+{
+  "name": "/review-panel command is registered and routes to its handler script (renamed from /review)",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/review-panel.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

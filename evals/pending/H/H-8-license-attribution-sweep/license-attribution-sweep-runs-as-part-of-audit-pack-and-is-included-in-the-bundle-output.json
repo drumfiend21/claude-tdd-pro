@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep runs as part of /audit-pack and is included in the bundle output",
+  "command": "mkdir -p compliance && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --dry-run 2>out.txt && grep -q 'section=license-attribution' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

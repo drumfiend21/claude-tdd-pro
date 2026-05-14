@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document includes an insider-threat section",
+  "command": "grep -qE 'insider.threat' \"$CLAUDE_PLUGIN_ROOT/docs/threat-model.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

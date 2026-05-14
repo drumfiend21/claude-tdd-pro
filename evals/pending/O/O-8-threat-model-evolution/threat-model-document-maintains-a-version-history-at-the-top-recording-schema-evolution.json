@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document maintains a version history at the top recording schema evolution",
+  "command": "head -30 \"$CLAUDE_PLUGIN_ROOT/docs/threat-model.md\" 2>err.txt > head.txt && grep -qiE 'version|revision' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

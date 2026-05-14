@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep validates that a community-installed plugin honors its declared license metadata",
+  "command": "mkdir -p .claude-tdd-pro/plugins/registered/example && printf 'name: example\\nlicense: MIT\\n' > .claude-tdd-pro/plugins/registered/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/license-attribution.sh\" --check-plugins 2>out.txt && grep -q 'plugin=example license=MIT valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

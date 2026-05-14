@@ -1,0 +1,11 @@
+{
+  "name": "community contribution promotion to tier-1 succeeds when the entry has the required two reviewers and all fields",
+  "command": "mkdir -p community/sources && printf 'id: x\\ncontributor: alice\\nreview_status: approved\\neval_evidence: passing\\nlicense: MIT\\nreviewers: [bob, carol]\\nproposed_tier: 1\\n' > community/sources/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/community/promote.sh\" --entry community/sources/x.yaml 2>out.txt && grep -q 'promoted=true' out.txt && grep -q 'tier=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

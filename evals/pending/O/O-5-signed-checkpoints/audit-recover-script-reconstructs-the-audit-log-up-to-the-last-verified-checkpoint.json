@@ -1,0 +1,11 @@
+{
+  "name": "audit-recover script reconstructs the audit log up to the last verified checkpoint",
+  "command": "mkdir -p compliance/audit-checkpoints && printf '{\"merkle_root\":\"abc\",\"signature\":\"valid\",\"included_events\":2,\"events\":[{\"event\":\"e1\"},{\"event\":\"e2\"}]}\\n' > compliance/audit-checkpoints/checkpoint-2.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-recover.sh\" --checkpoint-dir compliance/audit-checkpoints --signing-stub valid --out recovered.log 2>err.txt && grep -q 'e1' recovered.log && grep -q 'e2' recovered.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "community/frameworks/ folder exists at the plugin root for community-contributed compliance frameworks",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/community/frameworks\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

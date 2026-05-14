@@ -1,0 +1,11 @@
+{
+  "name": "rubric/changelog.md ships at the architecture-named path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/changelog.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

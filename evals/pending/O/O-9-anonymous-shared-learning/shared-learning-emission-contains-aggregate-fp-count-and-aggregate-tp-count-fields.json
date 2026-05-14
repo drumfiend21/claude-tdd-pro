@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning emission contains aggregate fp count and aggregate tp count fields",
+  "command": "mkdir -p community/shared-learning && printf '{\"fp\":12,\"tp\":88}\\n' > community/shared-learning/counts.json && bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --counts community/shared-learning/counts.json --opt-in --dry-run 2>out.txt && grep -q '\"fp\":12' out.txt && grep -q '\"tp\":88' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

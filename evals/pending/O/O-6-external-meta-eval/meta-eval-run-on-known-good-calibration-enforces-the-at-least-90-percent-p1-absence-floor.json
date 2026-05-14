@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval run on known-good calibration enforces the at-least-90-percent-P1-absence floor",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/meta-eval/run.sh\" --target known-good --findings-stub p1_absence=0.85 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'p1_absence=0.85' err.txt && grep -q 'p1_absence_min=0.90' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

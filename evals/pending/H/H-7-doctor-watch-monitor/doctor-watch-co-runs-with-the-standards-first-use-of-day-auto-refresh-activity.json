@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --watch co-runs with the standards first-use-of-day auto-refresh activity",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --once --emit co-runs 2>out.txt && grep -q 'co_run=standards-auto-refresh' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

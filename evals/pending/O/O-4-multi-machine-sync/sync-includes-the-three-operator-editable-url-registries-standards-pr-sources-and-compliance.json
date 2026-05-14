@@ -1,0 +1,11 @@
+{
+  "name": "sync includes the three operator-editable url registries STANDARDS PR-SOURCES and COMPLIANCE",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/sync/list-contents.sh\" 2>out.txt && grep -q 'STANDARDS-URLS.yaml' out.txt && grep -q 'PR-SOURCES.yaml' out.txt && grep -q 'COMPLIANCE-URLS.yaml' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

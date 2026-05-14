@@ -1,0 +1,11 @@
+{
+  "name": "local-llm skill emits a token-cost reduction estimate when reporting on routed operations",
+  "command": "mkdir -p .claude-tdd-pro/local-llm && printf '{\"routed_operations\":[{\"op\":\"triage\",\"tokens_avoided\":1500},{\"op\":\"affiliation-parsing\",\"tokens_avoided\":900}]}\\n' > .claude-tdd-pro/local-llm/stats.json && bash \"$CLAUDE_PLUGIN_ROOT/skills/local-llm/cost-report.sh\" --stats .claude-tdd-pro/local-llm/stats.json 2>out.txt && grep -qE 'tokens_avoided=2400' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

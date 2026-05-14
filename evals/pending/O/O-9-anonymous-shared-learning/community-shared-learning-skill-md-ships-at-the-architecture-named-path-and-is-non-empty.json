@@ -1,0 +1,11 @@
+{
+  "name": "community/shared-learning/SKILL.md ships at the architecture-named path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

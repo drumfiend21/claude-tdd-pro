@@ -1,0 +1,11 @@
+{
+  "name": "sync includes the FAILURE-LOG in the synced contents listing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/sync/list-contents.sh\" 2>out.txt && grep -q 'FAILURE-LOG' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --watch co-runs with the standards monitor activity in the same iteration",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --once --emit co-runs 2>out.txt && grep -q 'co_run=standards-monitor' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

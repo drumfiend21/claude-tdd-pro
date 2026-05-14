@@ -1,0 +1,11 @@
+{
+  "name": "lock-release removes the lockfile entry for the specified section",
+  "command": "mkdir -p .claude-tdd-pro/locks && printf 'owner=pid-1234\\nacquired_at=2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/locks/rule_cache.lock && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-release.sh\" --section rule_cache --owner pid-1234 --lock-dir .claude-tdd-pro/locks 2>err.txt && [ ! -f .claude-tdd-pro/locks/rule_cache.lock ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

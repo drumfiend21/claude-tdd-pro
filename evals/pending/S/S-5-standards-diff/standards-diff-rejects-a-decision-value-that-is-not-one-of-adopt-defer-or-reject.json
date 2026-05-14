@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff rejects a decision value that is not one of Adopt Defer or Reject",
+  "command": "mkdir -p standards/snapshots && printf 'r: a\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'r: b\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml --decide ignore --change r --decisions standards/decisions.jsonl 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_decision' err.txt && grep -q 'allowed=adopt|defer|reject' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

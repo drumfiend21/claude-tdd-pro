@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning SKILL.md frontmatter declares opt-in trigger and aggregate-only privacy posture",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/SKILL.md\" 2>err.txt > head.txt && grep -q 'opt_in: true' head.txt && grep -q 'privacy: aggregate-only' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

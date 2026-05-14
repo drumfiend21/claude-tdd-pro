@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost reports a daily auto-refresh cost line item for the pr-corpus auto-refresh activity",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"date\":\"2026-05-13\",\"tokens_consumed\":3800}\\n' > .claude-tdd-pro/pr-corpus/auto-refresh-cost.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --include daily-auto-refresh 2>out.txt && grep -q 'auto_refresh=pr-corpus date=2026-05-13 tokens=3800' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

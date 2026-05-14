@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning emission excludes any per-rule detail beyond the aggregate counts",
+  "command": "mkdir -p community/shared-learning && printf '{\"per_rule\":{\"no-eval\":{\"fp\":1,\"tp\":2}},\"aggregate\":{\"fp\":1,\"tp\":2}}\\n' > community/shared-learning/counts.json && bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --counts community/shared-learning/counts.json --opt-in --dry-run 2>out.txt && ! grep -q 'no-eval' out.txt && grep -q 'aggregate_only=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval/HISTORY.md ships at the architecture-named path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/meta-eval/HISTORY.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

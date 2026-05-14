@@ -1,0 +1,11 @@
+{
+  "name": "README marks JavaScript as a first-class supported language",
+  "command": "grep -qiE 'first.class.*JavaScript|JavaScript.*first.class' \"$CLAUDE_PLUGIN_ROOT/README.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

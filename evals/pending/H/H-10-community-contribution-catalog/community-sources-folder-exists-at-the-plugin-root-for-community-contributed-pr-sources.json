@@ -1,0 +1,11 @@
+{
+  "name": "community/sources/ folder exists at the plugin root for community-contributed PR sources",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/community/sources\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

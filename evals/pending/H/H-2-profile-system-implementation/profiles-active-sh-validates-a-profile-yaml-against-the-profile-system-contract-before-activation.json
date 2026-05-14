@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh validates a profile yaml against the profile system contract before activation",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: invalid-severity\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --validate profiles/p.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_severity' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "signed-checkpoint contains the merkle root over the included audit log entries",
+  "command": "mkdir -p compliance/audit-checkpoints && printf '{\"event\":\"e1\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/compliance/checkpoint.sh\" --audit-log compliance/audit.log --checkpoint-dir compliance/audit-checkpoints --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"merkle_root\"' compliance/audit-checkpoints/checkpoint-1.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

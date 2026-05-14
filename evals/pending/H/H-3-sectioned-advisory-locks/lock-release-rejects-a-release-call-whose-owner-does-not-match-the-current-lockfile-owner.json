@@ -1,0 +1,11 @@
+{
+  "name": "lock-release rejects a release call whose owner does not match the current lockfile owner",
+  "command": "mkdir -p .claude-tdd-pro/locks && printf 'owner=pid-1\\n' > .claude-tdd-pro/locks/rule_cache.lock && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-release.sh\" --section rule_cache --owner pid-2 --lock-dir .claude-tdd-pro/locks 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'owner_mismatch' err.txt && [ -f .claude-tdd-pro/locks/rule_cache.lock ] && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

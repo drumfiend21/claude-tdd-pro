@@ -1,0 +1,11 @@
+{
+  "name": "/doctor exits zero when only first-class languages are present in the repo",
+  "command": "mkdir -p repo && printf '{}\\n' > repo/package.json && printf 'const x=1\\n' > repo/x.js && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check coverage --root repo 2>out.txt; rc=$?; [ \"$rc\" = \"0\" ] && grep -q 'all_first_class=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff prints a diff between the current standard snapshot and the upstream fetched version",
+  "command": "mkdir -p standards/snapshots && printf 'rule-1: keep\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'rule-1: keep\\nrule-2: new\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml 2>out.txt && grep -q 'added: rule-2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

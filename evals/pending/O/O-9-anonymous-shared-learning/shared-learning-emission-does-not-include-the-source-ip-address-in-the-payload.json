@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning emission does not include the source IP address in the payload",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --opt-in --simulate-egress --dry-run 2>out.txt && ! grep -qE 'ip_addr|client_ip|source_ip' out.txt && grep -q 'no_ip_collection=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

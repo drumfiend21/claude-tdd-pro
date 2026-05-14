@@ -1,0 +1,11 @@
+{
+  "name": "signed-checkpoint emission records the checkpoint in the audit log itself for traceability",
+  "command": "mkdir -p compliance/audit-checkpoints && printf '{\"event\":\"e1\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/compliance/checkpoint.sh\" --audit-log compliance/audit.log --checkpoint-dir compliance/audit-checkpoints --record-in-log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"checkpoint\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

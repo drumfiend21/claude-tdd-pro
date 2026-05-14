@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff appends a decision record without overwriting existing entries in decisions.jsonl",
+  "command": "mkdir -p standards && printf '{\"decision\":\"adopt\",\"change\":\"r1\"}\\n' > standards/decisions.jsonl && mkdir -p standards/snapshots && printf 'r2: a\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'r2: b\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml --decide reject --change r2 --decisions standards/decisions.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && [ \"$(wc -l < standards/decisions.jsonl)\" = \"2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

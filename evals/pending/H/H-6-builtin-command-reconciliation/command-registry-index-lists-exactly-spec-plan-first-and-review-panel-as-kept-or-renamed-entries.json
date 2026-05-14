@@ -1,0 +1,11 @@
+{
+  "name": "command registry index lists exactly /spec /plan-first and /review-panel as kept-or-renamed entries",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/list-reconciled.sh\" 2>out.txt && grep -q '^/spec' out.txt && grep -q '^/plan-first' out.txt && grep -q '^/review-panel' out.txt && ! grep -qE '^/review$' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

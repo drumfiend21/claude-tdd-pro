@@ -1,0 +1,11 @@
+{
+  "name": "/spec command help text shows the kept-as-is reconciliation marker in its description",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" --help 2>out.txt && grep -qi 'kept' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

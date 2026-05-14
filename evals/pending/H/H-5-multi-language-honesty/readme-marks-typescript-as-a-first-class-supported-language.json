@@ -1,0 +1,11 @@
+{
+  "name": "README marks TypeScript as a first-class supported language",
+  "command": "grep -qiE 'first.class.*TypeScript|TypeScript.*first.class' \"$CLAUDE_PLUGIN_ROOT/README.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

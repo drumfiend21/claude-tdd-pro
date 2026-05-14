@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep runs as part of /analyze and writes a report section",
+  "command": "mkdir -p repo && bash \"$CLAUDE_PLUGIN_ROOT/commands/analyze.sh\" --root repo --emit sections 2>out.txt && grep -q 'section=license-attribution' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval run is triggered on a major release tag in addition to the quarterly schedule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/meta-eval/run.sh\" --trigger major-release --release-tag v2.0.0 --findings-stub p0=0 2>out.txt && grep -q 'trigger=major-release' out.txt && grep -q 'release_tag=v2.0.0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

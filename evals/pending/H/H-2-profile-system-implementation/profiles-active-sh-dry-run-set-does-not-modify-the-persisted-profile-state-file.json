@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh dry-run set does not modify the persisted profile state file",
+  "command": "mkdir -p .claude-tdd-pro profiles && printf 'active_profile: baseline\\n' > .claude-tdd-pro/profile-state.yaml && printf 'rules: {}\\n' > profiles/high-risk.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --set high-risk --state .claude-tdd-pro/profile-state.yaml --profiles-dir profiles --dry-run 2>out.txt && grep -q 'active_profile: baseline' .claude-tdd-pro/profile-state.yaml && grep -q 'planned: switch baseline -> high-risk' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

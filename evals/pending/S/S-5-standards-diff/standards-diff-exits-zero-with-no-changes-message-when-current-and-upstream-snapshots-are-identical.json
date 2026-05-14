@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff exits zero with no_changes message when current and upstream snapshots are identical",
+  "command": "mkdir -p standards/snapshots && printf 'r: same\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'r: same\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml 2>out.txt; rc=$?; [ \"$rc\" = \"0\" ] && grep -q 'no_changes' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

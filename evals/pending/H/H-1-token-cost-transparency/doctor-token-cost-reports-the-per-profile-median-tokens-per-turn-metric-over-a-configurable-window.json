@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost reports the per-profile median tokens per turn metric over a configurable window",
+  "command": "mkdir -p .claude-tdd-pro/turns && printf '{\"profile\":\"baseline\",\"tokens\":1000}\\n{\"profile\":\"baseline\",\"tokens\":2000}\\n{\"profile\":\"baseline\",\"tokens\":3000}\\n' > .claude-tdd-pro/turns/log.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --by profile --window 7d 2>out.txt && grep -q 'profile=baseline median_tokens_per_turn=2000' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

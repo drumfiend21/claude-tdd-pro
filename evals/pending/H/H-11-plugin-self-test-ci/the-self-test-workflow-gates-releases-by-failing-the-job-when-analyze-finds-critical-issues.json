@@ -1,0 +1,11 @@
+{
+  "name": "the self-test workflow gates releases by failing the job when /analyze finds critical issues",
+  "command": "grep -qE 'fail|exit 1|failure' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

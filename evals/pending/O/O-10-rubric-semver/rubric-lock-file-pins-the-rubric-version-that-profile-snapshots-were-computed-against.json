@@ -1,0 +1,11 @@
+{
+  "name": "rubric lock file pins the rubric version that profile snapshots were computed against",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"profile_snapshot_hash\":\"abc\",\"rubric_version\":\"1.5.3\"}\\n' > .claude-tdd-pro/lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/version-check.sh\" --lock .claude-tdd-pro/lock.json 2>out.txt && grep -q 'lock_rubric_version=1.5.3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

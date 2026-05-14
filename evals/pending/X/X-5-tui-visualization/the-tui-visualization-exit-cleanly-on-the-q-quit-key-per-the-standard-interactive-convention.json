@@ -1,0 +1,11 @@
+{
+  "name": "the tui visualization exit cleanly on the q quit key per the standard interactive convention",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/coverage.sh\" --tui --simulate-key q 2>out.txt && grep -q 'exit=user-quit' out.txt && grep -q 'exit_code=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

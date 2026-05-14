@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep emits a structured per-component license record for downstream parsing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/license-attribution.sh\" --emit json --out licenses.json 2>err.txt && [ -f licenses.json ] && node -e \"const a=JSON.parse(require('fs').readFileSync('licenses.json','utf8'));if(!Array.isArray(a))process.exit(1);\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

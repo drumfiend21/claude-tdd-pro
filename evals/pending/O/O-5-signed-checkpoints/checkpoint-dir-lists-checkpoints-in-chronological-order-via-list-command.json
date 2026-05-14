@@ -1,0 +1,11 @@
+{
+  "name": "checkpoint dir lists checkpoints in chronological order via list command",
+  "command": "mkdir -p compliance/audit-checkpoints && printf '{\"interval\":1}\\n' > compliance/audit-checkpoints/checkpoint-1.json && printf '{\"interval\":2}\\n' > compliance/audit-checkpoints/checkpoint-2.json && bash \"$CLAUDE_PLUGIN_ROOT/compliance/checkpoint-list.sh\" --checkpoint-dir compliance/audit-checkpoints 2>out.txt && [ \"$(grep -cE '^checkpoint=' out.txt)\" = \"2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
