@@ -1,0 +1,13 @@
+{
+  "name": "directives: unrelated disable does not suppress other rules",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2",
+  "setup": [
+    "printf \"// rubric-disable-next-line some-other-rule -- unrelated\\\\neval(x)\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "no-eval"
+    ]
+  }
+}

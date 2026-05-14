@@ -1,0 +1,13 @@
+{
+  "name": "directives: trailing directive disables current line",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf \"eval(x); // rubric-disable-line no-eval -- legacy\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

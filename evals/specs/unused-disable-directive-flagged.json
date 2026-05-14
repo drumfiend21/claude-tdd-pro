@@ -1,0 +1,13 @@
+{
+  "name": "directives: unused disable comment is reported when --report-unused-disable-directives",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --report-unused-disable-directives --in \"$PWD/file.js\" 1>&2",
+  "setup": [
+    "printf \"// rubric-disable-next-line no-eval -- placeholder\\\\nconst x = 1;\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "unused"
+    ]
+  }
+}
