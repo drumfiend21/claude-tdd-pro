@@ -1,5 +1,5 @@
 {
-  "name": "pre-commit: hook invokes runner with --format markdown for human-readable terminal output (per X-3)",
+  "name": "pre-commit: hook invokes runner with --format markdown for human-readable terminal output",
   "command": "grep -E \"format markdown|--format markdown\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {

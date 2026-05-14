@@ -1,5 +1,5 @@
 {
-  "name": "progressive disclosure: docs/reference.md ships at install time (full reference per H-9)",
+  "name": "progressive disclosure: docs/reference.md ships at install time",
   "command": "test -f \"$CLAUDE_PLUGIN_ROOT/docs/reference.md\" && echo ok 1>&2",
   "setup": [],
   "expect": {

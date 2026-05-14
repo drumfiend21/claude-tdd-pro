@@ -1,5 +1,5 @@
 {
-  "name": "gitlab ci: template invokes runner with --format checkstyle (per X-2)",
+  "name": "gitlab ci: template invokes runner with --format checkstyle",
   "command": "grep -E \"format checkstyle|--format checkstyle\" \"$CLAUDE_PLUGIN_ROOT/ci/.gitlab-ci.template.yml\" 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {

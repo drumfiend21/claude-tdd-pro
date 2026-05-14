@@ -1,5 +1,5 @@
 {
-  "name": "telemetry baseline: detector that adds a new component (skill, agent, hook) MUST declare a `budget_impact_estimate:` block; absence rejected per O-0",
+  "name": "telemetry baseline: detector that adds a new component (skill, agent, hook) MUST declare a budget_impact_estimate block; absence rejected",
   "command": "mkdir -p skills/my-new-skill && printf 'name: my-new-skill\\ndescription: x\\n' > skills/my-new-skill/SKILL.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/budget-impact-required.sh\"",
   "setup": [],
   "expect": {

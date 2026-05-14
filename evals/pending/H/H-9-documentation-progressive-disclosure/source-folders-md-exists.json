@@ -1,5 +1,5 @@
 {
-  "name": "progressive disclosure: docs/source-folders.md ships at install time (G-phase orientation per H-9)",
+  "name": "progressive disclosure: docs/source-folders.md ships at install time",
   "command": "test -f \"$CLAUDE_PLUGIN_ROOT/docs/source-folders.md\" && echo ok 1>&2",
   "setup": [],
   "expect": {

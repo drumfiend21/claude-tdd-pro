@@ -1,5 +1,5 @@
 {
-  "name": "seed corpus: every JSONL record under seed/ has bootstrap_seed:true (per O-1 final sentence; allows P-2 etc. to distinguish seed from real-world data)",
+  "name": "seed corpus: every JSONL record under seed/ has bootstrap_seed:true",
   "command": "find \"$CLAUDE_PLUGIN_ROOT/seed\" -name \"*.jsonl\" | while read f; do node -e 'require(\"fs\").readFileSync(\"'\"$f\"'\",\"utf8\").trim().split(\"\\n\").forEach(l=>{const j=JSON.parse(l);if(j.bootstrap_seed!==true)throw new Error(\"missing bootstrap_seed in \"+process.argv[1])})' \"$f\" || exit 1; done; echo ok 1>&2",
   "setup": [],
   "expect": {

@@ -1,5 +1,5 @@
 {
-  "name": "github actions: workflow runs pre-flight standards/PR/compliance freshness check when profile is regulated, financial, or government (per X-1)",
+  "name": "github actions: workflow runs pre-flight standards/PR/compliance freshness check when profile is regulated, financial, or government",
   "command": "grep -E \"freshness|skip-fresh|fresh-check\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && grep -E \"regulated|financial|government\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {

@@ -1,5 +1,5 @@
 {
-  "name": "global dry-run: --dry-run runs do NOT write audit log entries (read-only invariant per §2.17 contract)",
+  "name": "global dry-run: --dry-run runs do NOT write audit log entries",
   "command": "mkdir -p .claude-tdd-pro && : > .claude-tdd-pro/audit.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://x.com --id x --tier 1 --applies-to typescript --dry-run --emit-audit \"$PWD/.claude-tdd-pro/audit.jsonl\" && [ ! -s .claude-tdd-pro/audit.jsonl ] && echo ok 1>&2",
   "setup": [],
   "expect": {

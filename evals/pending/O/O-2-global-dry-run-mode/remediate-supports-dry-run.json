@@ -1,5 +1,5 @@
 {
-  "name": "global dry-run: /remediate --dry-run produces no filesystem writes (per §2.14 subject command list)",
+  "name": "global dry-run: /remediate --dry-run produces no filesystem writes",
   "command": "mkdir -p src && echo \"any\" > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/commands/remediate.sh\" --dry-run --paths \"src/**/*.ts\" && diff <(echo \"any\") src/a.ts 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {

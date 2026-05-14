@@ -1,5 +1,5 @@
 {
-  "name": "progressive disclosure: docs ships an \"ESLint-migration cheatsheet\" doc (per H-9 explicit mention)",
+  "name": "progressive disclosure: docs ships an \"ESLint-migration cheatsheet\" doc",
   "command": "find \"$CLAUDE_PLUGIN_ROOT/docs/\" -iname \"*eslint*migration*\" -o -iname \"*eslint*cheatsheet*\" 2>/dev/null | grep . 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {

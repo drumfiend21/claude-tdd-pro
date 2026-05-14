@@ -1,5 +1,5 @@
 {
-  "name": "telemetry baseline: baseline includes a `daily_auto_refresh_cost` line item summing S-17 + L-22 + C-19 estimated tokens (cross-ref H-1)",
+  "name": "telemetry baseline: baseline includes a `daily_auto_refresh_cost` line item summing S-17 + L-22 + C-19 estimated tokens",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --emit-baseline \"$PWD/.claude-tdd-pro/telemetry-baseline.json\" && grep -E '\"daily_auto_refresh_cost\":' .claude-tdd-pro/telemetry-baseline.json 1>&2 && echo ok 1>&2",
   "setup": [
     "mkdir -p .claude-tdd-pro"

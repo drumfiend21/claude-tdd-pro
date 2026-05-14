@@ -1,5 +1,5 @@
 {
-  "name": "progressive disclosure: docs/first-week.md ships at install time (week-1 walk-through per H-9)",
+  "name": "progressive disclosure: docs/first-week.md ships at install time",
   "command": "test -f \"$CLAUDE_PLUGIN_ROOT/docs/first-week.md\" && echo ok 1>&2",
   "setup": [],
   "expect": {

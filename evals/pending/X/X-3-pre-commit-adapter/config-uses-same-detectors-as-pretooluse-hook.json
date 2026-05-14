@@ -1,5 +1,5 @@
 {
-  "name": "pre-commit: same detectors as Claude Code PreToolUse hook (per X-3 -- consistency between Claude/local/CI surfaces)",
+  "name": "pre-commit: same detectors as Claude Code PreToolUse hook",
   "command": "grep -E \"rubric/runner.sh|rubric/detectors\" \"$CLAUDE_PLUGIN_ROOT/ci/pre-commit-hooks.yaml\" 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {
