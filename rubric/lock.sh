@@ -35,6 +35,7 @@ while [[ $# -gt 0 ]]; do
     --init) ACTION="init"; shift ;;
     --check) ACTION="check"; shift ;;
     --merge) ACTION="merge"; shift ;;
+    --pin-baseline) ACTION="pin-baseline"; shift ;;
     --profile) PROFILE="$2"; shift 2 ;;
     --other-json) OTHER_JSON="$2"; shift 2 ;;
     --lock-path) LOCK_PATH="$2"; shift 2 ;;
@@ -116,6 +117,20 @@ case "$ACTION" in
       fs.writeFileSync('$LOCK_PATH', JSON.stringify(local) + '\n');
     "
     echo "lock: merged" >&2
+    exit 0
+    ;;
+  pin-baseline)
+    BASELINE_PATH="${BASELINE_PATH:-$PWD/.claude-tdd-pro/telemetry-baseline.json}"
+    [[ ! -f "$BASELINE_PATH" ]] && { echo "lock: baseline not found at $BASELINE_PATH (run /init-guardrails --emit-baseline first)" >&2; exit 1; }
+    [[ ! -f "$LOCK_PATH" ]] && { echo "lock: no lock file at $LOCK_PATH (run lock.sh --init first)" >&2; exit 1; }
+    BASELINE_HASH=$(shasum -a 256 "$BASELINE_PATH" | cut -d' ' -f1)
+    BASELINE_HASH="sha256:$BASELINE_HASH" node -e "
+      const fs = require('fs');
+      const lock = JSON.parse(fs.readFileSync('$LOCK_PATH', 'utf8'));
+      lock.telemetry_baseline_hash = process.env.BASELINE_HASH;
+      fs.writeFileSync('$LOCK_PATH', JSON.stringify(lock) + '\n');
+    "
+    echo "lock: pinned baseline hash $BASELINE_HASH" >&2
     exit 0
     ;;
 esac

@@ -1,0 +1,12 @@
+{
+  "name": "telemetry baseline: pre-commit hook blocks adding a skill/agent file lacking budget_impact_estimate when project has telemetry-baseline pinned",
+  "command": "mkdir -p .claude-tdd-pro skills/new && printf 'name: new\\ndescription: x\\n' > skills/new/SKILL.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --init && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --emit-baseline \"$PWD/.claude-tdd-pro/telemetry-baseline.json\" && bash \"$CLAUDE_PLUGIN_ROOT/rubric/lock.sh\" --pin-baseline && echo '{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"skills/new/SKILL.md\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/budget-impact-gate.sh\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "budget_impact_estimate",
+      "required"
+    ]
+  }
+}

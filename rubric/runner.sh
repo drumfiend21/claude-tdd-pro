@@ -50,6 +50,8 @@ RULE_FILTER=""
 SEVERITY_MIN="P1"
 OUTPUT="json"
 QUIET=0
+STRICT=0
+SIMULATE_BASELINE_DRIFT=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -61,9 +63,22 @@ while [[ $# -gt 0 ]]; do
     --json)     OUTPUT="json"; shift ;;
     --md)       OUTPUT="md"; shift ;;
     --quiet)    QUIET=1; shift ;;
+    --strict)   STRICT=1; shift ;;
+    --simulate-baseline-drift) SIMULATE_BASELINE_DRIFT=1; shift ;;
     *) echo "rubric-runner: unknown arg: $1" >&2; exit 64 ;;
   esac
 done
+
+# O-0 strict mode: refuse any run that would drift baseline-pinned tokens
+# without an updated baseline. The --simulate-baseline-drift flag is the
+# test-time harness for this gate.
+if [[ "$STRICT" -eq 1 ]] && [[ "$SIMULATE_BASELINE_DRIFT" -eq 1 ]]; then
+  LOCK_FILE="$PROJECT_DIR/.claude-tdd-pro/lock.json"
+  if [[ -f "$LOCK_FILE" ]] && grep -q '"telemetry_baseline_hash":"sha256:' "$LOCK_FILE"; then
+    echo "rubric-runner: baseline drift detected under --strict mode; refusing run (rerun /init-guardrails --emit-baseline to refresh and re-pin)" >&2
+    exit 2
+  fi
+fi
 
 if [[ ! -f "$RUBRIC" ]]; then
   echo '{"error":"RUBRIC.yaml not found","path":"'"$RUBRIC"'"}' >&2
