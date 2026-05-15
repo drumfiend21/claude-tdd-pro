@@ -31,6 +31,11 @@ rules:
     version: "1.0.0"
     semver: "0.1.0"
     rule_state: stable
+    detector_config:
+      eslint_rule: "react-hooks/exhaustive-deps"
+      eslint_plugin_npm: "eslint-plugin-react-hooks"
+      eslint_plugin_version_min: "5.0.0"
+      wrap_method: "E-15"
     provenance:
       - source: react-docs
         section: "synchronizing-with-effects"
