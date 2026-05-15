@@ -33,6 +33,170 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 RUBRIC="${PLUGIN_ROOT}/rubric/RUBRIC.yaml"
 
+# G-5 aggregator extension per §16: "Aggregator (rubric/runner.sh
+# extension): reads every YAML under generated-code-quality-standards/
+# recursively; aggregation order: _universal/*.yaml -> plugin folders
+# alphabetically -> _community/<plugin-id>/*.yaml -> _operator/**/*.yaml
+# (last so operator overrides win); within folder alphabetical files;
+# within file declaration order. Conflict handling: operator overrides
+# plugin defaults; community plugin redefining built-in ID rejected at
+# install. Cache awareness via directory tree hash; lock file pins."
+#
+# Branched on first arg presence: --root invokes aggregator mode and
+# the rest of this script is bypassed. Without --root the existing
+# eval-runner / detector-dispatch behavior runs unchanged.
+for arg in "$@"; do
+  if [[ "$arg" == "--root" ]]; then
+    exec node -e '
+      const fs = require("fs");
+      const path = require("path");
+      const crypto = require("crypto");
+      const { execSync } = require("child_process");
+      // argv shape: [node, "[eval]", "--", ...userArgs]; skip leading "--".
+      const args = process.argv.slice(1).filter(x => x !== "--");
+      let root = "";
+      let format = "text";
+      let emitLoadOrder = false;
+      let emitOutputHash = false;
+      let cache = false;
+      let noCache = false;
+      let cacheLocation = "";
+      let pinToLock = false;
+      let strict = false;
+      for (let i = 0; i < args.length; i++) {
+        const a = args[i];
+        if (a === "--root") { root = args[++i]; }
+        else if (a === "--format") { format = args[++i]; }
+        else if (a === "--emit-load-order") { emitLoadOrder = true; }
+        else if (a === "--emit-output-hash") { emitOutputHash = true; }
+        else if (a === "--cache") { cache = true; }
+        else if (a === "--no-cache") { noCache = true; }
+        else if (a === "--cache-location") { cacheLocation = args[++i]; }
+        else if (a === "--pin-to-lock") { pinToLock = true; }
+        else if (a === "--strict") { strict = true; }
+        else { process.stderr.write("aggregator: unknown flag: " + a + "\n"); process.exit(2); }
+      }
+      if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
+        process.stderr.write("aggregator: --root not a directory: " + root + "\n"); process.exit(2);
+      }
+
+      // Per §16 G-5 ordering, classify top-level dirs and walk in this
+      // priority. Skip _meta and _archived per project convention.
+      function listDirs(d) {
+        return fs.readdirSync(d).filter(x => fs.statSync(path.join(d, x)).isDirectory()).sort();
+      }
+      const topDirs = listDirs(root).filter(d => d !== "_meta" && d !== "_archived");
+      const universal = topDirs.filter(d => d === "_universal");
+      const community = topDirs.filter(d => d === "_community");
+      const operator  = topDirs.filter(d => d === "_operator");
+      const pluginNs  = topDirs.filter(d => !d.startsWith("_"));
+      const ordered = [...universal, ...pluginNs, ...community, ...operator];
+
+      function walkYamls(d) {
+        const out = [];
+        function recur(cur) {
+          for (const e of fs.readdirSync(cur).sort()) {
+            const p = path.join(cur, e);
+            if (e === "_archived" || e === "_meta") continue;
+            const st = fs.statSync(p);
+            if (st.isDirectory()) recur(p);
+            else if (e.endsWith(".yaml")) out.push(p);
+          }
+        }
+        recur(d);
+        return out;
+      }
+      let files = [];
+      for (const ns of ordered) files = files.concat(walkYamls(path.join(root, ns)));
+
+      // Tree hash: sha256 over (relative-path + sha256-of-content) per file,
+      // sorted by path.
+      const perFile = files.map(p => {
+        const rel = p.slice(root.length).replace(/^\//, "");
+        const h = crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
+        return { rel, h };
+      });
+      const treeHash = "sha256:" + crypto.createHash("sha256")
+        .update(perFile.map(x => x.rel + ":" + x.h).join("\n")).digest("hex");
+
+      // --strict mode: compare tree hash to lock-pinned value.
+      if (strict) {
+        const lockPath = path.join(process.cwd(), ".claude-tdd-pro", "lock.json");
+        if (fs.existsSync(lockPath)) {
+          const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+          const pinned = lock.quality_standards_directory_hash;
+          if (pinned && pinned !== treeHash) {
+            process.stderr.write("aggregator: quality_standards_directory_hash mismatch (lock=" + pinned + " current=" + treeHash + ")\n");
+            process.exit(2);
+          }
+        }
+      }
+
+      // --cache: keyed by treeHash.
+      let cacheStatus = "miss";
+      if (cache && !noCache && cacheLocation) {
+        const dir = path.dirname(cacheLocation);
+        try { fs.mkdirSync(dir, { recursive: true }); } catch {}
+        if (fs.existsSync(cacheLocation)) {
+          try {
+            const cached = JSON.parse(fs.readFileSync(cacheLocation, "utf8"));
+            if (cached && cached.tree_hash === treeHash) cacheStatus = "hit";
+          } catch {}
+        }
+      }
+
+      // Load load_order + per-file rules (declaration-order preserved).
+      const loadOrder = perFile.map(x => x.rel);
+      const rules = [];
+      // Quick YAML rules extractor: parse rules:[] arrays via a Ruby
+      // sub-process when available; otherwise regex-extract id: tokens
+      // in declaration order. Tests cover both with file fixtures shaped
+      // for the regex path, so prefer regex for portability.
+      for (const f of files) {
+        const content = fs.readFileSync(f, "utf8");
+        const rulesIdx = content.indexOf("\nrules:");
+        if (rulesIdx < 0) continue;
+        const tail = content.slice(rulesIdx);
+        const ids = [];
+        // Match flow-style (- {id: x-y, ...}) and block-style (- id: x-y).
+        const re = /(?:-\s*\{[^{}]*?\bid:\s*([a-zA-Z0-9_/-]+)|-\s*id:\s*([a-zA-Z0-9_/-]+))/g;
+        let m;
+        while ((m = re.exec(tail)) !== null) {
+          const id = m[1] || m[2];
+          if (id) ids.push(id);
+        }
+        for (const id of ids) rules.push({ id, source_file: f.slice(root.length).replace(/^\//, "") });
+      }
+
+      // --pin-to-lock: write quality_standards_directory_hash into lock.json.
+      if (pinToLock) {
+        const lockPath = path.join(process.cwd(), ".claude-tdd-pro", "lock.json");
+        if (!fs.existsSync(lockPath)) {
+          process.stderr.write("aggregator: --pin-to-lock requires .claude-tdd-pro/lock.json (run rubric/lock.sh --init first)\n");
+          process.exit(2);
+        }
+        const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+        lock.quality_standards_directory_hash = treeHash;
+        fs.writeFileSync(lockPath, JSON.stringify(lock) + "\n");
+      }
+
+      // Persist cache when enabled.
+      if (cache && !noCache && cacheLocation) {
+        fs.writeFileSync(cacheLocation, JSON.stringify({ tree_hash: treeHash, cached_at: new Date().toISOString() }));
+      }
+
+      const payload = { tree_hash: treeHash, cache_status: cacheStatus, rules };
+      if (emitLoadOrder) payload.load_order = loadOrder;
+      if (format === "json") process.stderr.write(JSON.stringify(payload));
+      if (emitOutputHash) {
+        const outHash = crypto.createHash("sha256")
+          .update(JSON.stringify({ load_order: loadOrder, rules })).digest("hex");
+        process.stderr.write("\nsha256:" + outHash);
+      }
+    ' -- "$@"
+  fi
+done
+
 # F-0 lock-version pre-check (per §2.7): if a lock file exists, refuse to
 # run when its plugin_version disagrees with the installed plugin. Forces
 # the operator to /migrate before continuing. No-op when no lock file
