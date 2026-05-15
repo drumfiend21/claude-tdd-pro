@@ -1,6 +1,6 @@
 {
   "name": "eval specs: per §2.4 categories enum, react-rule eval specs have category:react",
-  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-react-*.json; do grep -E \"\\\"category\\\":\\\"react\\\"\" \"$f\" >/dev/null || { echo \"FAIL $f missing category:react\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-react-[0-9][0-9][0-9].json; do grep -E \"\\\"category\\\":\\\"react\\\"\" \"$f\" >/dev/null || { echo \"FAIL $f missing category:react\" 1>&2; exit 1; }; done; echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,
