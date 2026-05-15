@@ -1,17 +1,45 @@
 #!/usr/bin/env bash
 # Q-3 SPACE text dashboard with metric IDs + counter-Goodhart guards.
 set -uo pipefail
-METRICS=""; COLLECTED=""; CONFIG=""
+METRICS=""; COLLECTED=""; CONFIG=""; SINCE=""; SHARE_TO=""; AGGREGATE_USERS=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --metrics) METRICS="$2"; shift 2 ;;
     --collected) COLLECTED="$2"; shift 2 ;;
     --config) CONFIG="$2"; shift 2 ;;
-    -h|--help) echo "Usage: space-report.sh --metrics <yaml> [--collected <yaml>] --config <yaml>"; exit 0 ;;
+    --since) SINCE="$2"; shift 2 ;;
+    --share) SHARE_TO="$2"; shift 2 ;;
+    --aggregate-users) AGGREGATE_USERS=1; shift ;;
+    -h|--help) echo "Usage: space-report.sh --metrics <yaml> [--collected <yaml>] --config <yaml> [--since <window>]"; exit 0 ;;
     *) shift ;;
   esac
 done
 [[ -z "$METRICS" || -z "$CONFIG" ]] && { echo "space-report: --metrics and --config required" >&2; exit 2; }
+
+# Reject --aggregate-users: this dashboard is solo-scale.
+if [[ "$AGGREGATE_USERS" -eq 1 ]]; then
+  echo "space-report: --aggregate-users rejected; this dashboard is solo-scale only (no team-rollup, no benchmarking)" >&2
+  exit 2
+fi
+
+# Reject --share when share=never in config.
+if [[ -n "$SHARE_TO" ]]; then
+  SHARE_VAL=$(grep -E '^share:' "$CONFIG" | sed -E 's/share:[[:space:]]*//' | tr -d '"' | tr -d ' ')
+  if [[ "$SHARE_VAL" == "never" ]]; then
+    echo "space-report: --share $SHARE_TO blocked: share=never in config; change config to share before retrying" >&2
+    exit 2
+  fi
+fi
+
+# Solo-scale caveat to STDOUT (first 20 lines).
+cat <<EOF
+# SPACE Report (solo-scale self-observation)
+
+> **Scope caveat**: this is solo-scale self-observation, not
+> productivity science. Limitations: no causality, no benchmarking,
+> no performance review. Single-developer, local-only, retention-bounded.
+
+EOF
 
 METRICS="$METRICS" COLLECTED="$COLLECTED" CONFIG="$CONFIG" \
 LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -rset -e '# coding: utf-8

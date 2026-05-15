@@ -60,6 +60,7 @@ emit_yaml() {
       workflow)    echo "    upstream_doc: 'reads from .claude-tdd-pro/workflow/ — see workflow loop documentation'" ;;
       prompt)     echo "    upstream_doc: 'reads from .claude-tdd-pro/prompts/ — see prompt loop documentation'" ;;
     esac
+    echo "    scope: solo"
   } >> "$OUT"
 }
 
