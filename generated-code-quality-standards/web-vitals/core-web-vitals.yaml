@@ -1,0 +1,82 @@
+source:
+  id: web-vitals
+  authoritative_publisher: Google Chrome team (web.dev / web-vitals)
+  authoritative_url: "https://web.dev/articles/vitals"
+  registry_link: "_meta/STANDARDS-URLS.yaml"
+  fetched_at: "2026-05-04T00:00:00Z"
+  content_hash: "sha256:web-vitals-placeholder-content-hash-for-bootstrap"
+  fetch_frequency: weekly
+  fragility_tier: medium
+  license_note: "CC-BY-4.0 (web.dev)"
+rules:
+  - id: g-react-008
+    name: bundle-size-budget-per-route
+    description: "Each route must keep its first-load JS bundle under the configured budget (default 250KB compressed) so LCP and INP stay healthy. Operators tune budget_kb / per_route / excluded_routes per profile."
+    detector: bundle-budget.sh
+    type: problem
+    fixable: null
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://web.dev/articles/lcp"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+      properties:
+        budget_kb:
+          type: integer
+          minimum: 1
+        per_route:
+          type: object
+          additionalProperties:
+            type: integer
+        excluded_routes:
+          type: array
+          items:
+            type: string
+    messages:
+      overBudget: "route {{route}} first-load bundle {{actual}}KB exceeds budget {{budget}}KB"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: web-vitals
+        section: "LCP"
+      - source: web-vitals
+        section: "INP"
+  - id: g-react-010
+    name: image-and-font-optimization
+    description: "Images and fonts must use platform-optimized loaders (next/image, next/font, equivalent) so largest contentful paint and cumulative layout shift stay healthy."
+    detector: bundle-budget.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://web.dev/articles/optimize-lcp"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      rawImg: "raw img element {{src}}; use next/image (or platform equivalent)"
+      unoptimizedFont: "font {{family}} loaded without optimization; use next/font"
+    severity: P2
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: web-vitals
+        section: "core-web-vitals-overview"
+      - source: nextjs-docs
+        section: "optimizing"
+recommended_set:
+  - g-react-008
+  - g-react-010
+all_set:
+  - g-react-008
+  - g-react-010

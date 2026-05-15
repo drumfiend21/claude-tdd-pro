@@ -1,0 +1,118 @@
+source:
+  id: react-docs
+  authoritative_publisher: React core team (react.dev)
+  authoritative_url: "https://react.dev"
+  registry_link: "_meta/STANDARDS-URLS.yaml"
+  fetched_at: "2026-05-04T00:00:00Z"
+  content_hash: "sha256:react-docs-placeholder-content-hash-for-bootstrap"
+  fetch_frequency: weekly
+  fragility_tier: low
+  license_note: "CC-BY-4.0 (react.dev documentation)"
+rules:
+  - id: g-react-002
+    name: exhaustive-deps
+    description: "Effects, callbacks, and memos must list every reactive value they read in the dependency array. Wraps the canonical eslint-plugin-react-hooks/exhaustive-deps via E-15 ESLint integration."
+    detector: exhaustive-deps.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://react.dev/learn/synchronizing-with-effects"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingDep: "react hook {{hook}} has missing dependency: {{dep}}"
+      unnecessaryDep: "react hook {{hook}} has unnecessary dependency: {{dep}}"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: react-docs
+        section: "synchronizing-with-effects"
+  - id: g-react-004
+    name: no-effect-for-derived-state
+    description: "Derived state (values computable from props or state) must not be stored in useState + synchronized via useEffect; compute it during render instead."
+    detector: rsc-boundary.sh
+    type: suggestion
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://react.dev/learn/you-might-not-need-an-effect"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      derivedStateInEffect: "{{name}} is derived state synchronized via useEffect; compute it during render instead"
+    severity: P2
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: react-docs
+        section: "you-might-not-need-an-effect"
+  - id: g-react-005
+    name: suspense-around-async
+    description: "Every async server component must be wrapped in a Suspense boundary at a sensible UI boundary; missing boundaries cascade to the nearest ancestor and produce poor UX."
+    detector: rsc-boundary.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://react.dev/reference/react/Suspense"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingSuspense: "async component {{component}} is not wrapped in a Suspense boundary"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: react-docs
+        section: "Suspense"
+  - id: g-react-006
+    name: error-boundary-on-routes
+    description: "Every route segment must have an error boundary so unhandled errors do not collapse the whole app; pairs with route-level Suspense."
+    detector: rsc-boundary.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://react.dev/reference/react/Component#errors"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingErrorBoundary: "route segment {{route}} lacks an error boundary"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: react-docs
+        section: "Component#errors"
+recommended_set:
+  - g-react-002
+  - g-react-004
+  - g-react-005
+  - g-react-006
+all_set:
+  - g-react-002
+  - g-react-004
+  - g-react-005
+  - g-react-006
