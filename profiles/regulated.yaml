@@ -59,3 +59,11 @@ rules:
   g-node-008: P0
   g-node-009: error
   g-node-010: P0
+  g-ts-001: P0
+  g-ts-002: error
+  g-ts-003: error
+  g-ts-004: error
+  g-ts-005: error
+  g-ts-006: error
+  g-ts-007: P0
+  g-ts-008: error

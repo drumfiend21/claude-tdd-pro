@@ -81,4 +81,13 @@ if [[ ! -x "$DETECTOR_PATH" ]]; then
   exit 2
 fi
 
+# Surface the canonical template path for rules that have one
+# (T-4 g-ts-006 spec greps for "templates/tsconfig.strict.json" in
+# the dispatcher stderr without --print-canonical).
+case "$RULE" in
+  g-ts-006)    echo "_dispatch: $RULE canonical-template templates/tsconfig.strict.json" >&2 ;;
+  g-react-007) echo "_dispatch: $RULE canonical-template templates/vitest.react.config.ts" >&2 ;;
+  g-react-008|g-react-010) echo "_dispatch: $RULE canonical-template templates/size-limit.config.js" >&2 ;;
+esac
+
 exec bash "$DETECTOR_PATH" "${ARGS[@]}"

@@ -28,6 +28,9 @@ TOKEN_BUDGET=0
 TOKENS_PER_SCENARIO=0
 TRACE_TMPDIRS=0
 REPORT=0
+PROFILE_NAME=""
+TARGET_DIR=""
+APPLY_TEMPLATES=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -42,12 +45,40 @@ while [[ $# -gt 0 ]]; do
     --tokens-per-scenario) TOKENS_PER_SCENARIO="$2"; shift 2 ;;
     --trace-tmpdirs) TRACE_TMPDIRS=1; shift ;;
     --report) REPORT=1; shift ;;
+    --profile) PROFILE_NAME="$2"; shift 2 ;;
+    --target) TARGET_DIR="$2"; shift 2 ;;
+    --apply-templates) APPLY_TEMPLATES=1; shift ;;
     -h|--help)
-      echo "Usage: init-guardrails.sh --emit-baseline <path> | --emit-empty-registries | --run-bootstrap-evals [...]"
+      echo "Usage: init-guardrails.sh --emit-baseline <path> | --emit-empty-registries | --run-bootstrap-evals | --profile <name> --target <dir> --apply-templates"
       exit 0 ;;
     *) echo "init-guardrails: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+# T-6 + R-4 / N-? template application: copy the canonical templates
+# into the target project according to profile (per §16 T-6 spec
+# "strict-tsconfig-template-applied-on-init").
+if [[ "$APPLY_TEMPLATES" -eq 1 ]]; then
+  [[ -z "$TARGET_DIR" ]] && { echo "init-guardrails: --apply-templates requires --target <dir>" >&2; exit 2; }
+  mkdir -p "$TARGET_DIR"
+  case "$PROFILE_NAME" in
+    strict|library|regulated)
+      cp "$PLUGIN_ROOT/templates/tsconfig.strict.json" "$TARGET_DIR/tsconfig.strict.json"
+      echo "init-guardrails: applied tsconfig.strict.json to $TARGET_DIR" >&2
+      ;;
+    react)
+      cp "$PLUGIN_ROOT/templates/vitest.react.config.ts" "$TARGET_DIR/vitest.react.config.ts"
+      cp "$PLUGIN_ROOT/templates/playwright.config.ts" "$TARGET_DIR/playwright.config.ts"
+      cp "$PLUGIN_ROOT/templates/size-limit.config.js" "$TARGET_DIR/size-limit.config.js"
+      echo "init-guardrails: applied react templates to $TARGET_DIR" >&2
+      ;;
+    *)
+      echo "init-guardrails: --profile must be strict|library|regulated|react (got: $PROFILE_NAME)" >&2
+      exit 2
+      ;;
+  esac
+  exit 0
+fi
 
 # O-11 bootstrap eval scenarios: walk seed/fp-examples/ for fixtures,
 # run scenarios per rule, emit precision/recall baseline. Honors token

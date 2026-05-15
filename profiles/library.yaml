@@ -1,0 +1,36 @@
+name: library
+description: "Library author profile. Tightens g-ts-005 (branded types) and g-ts-008 (export type) since published library APIs need stronger boundary discipline. Per architecture section 16 T-6."
+
+extends:
+  - typescript:handbook
+  - google:tsguide
+  - google:testing-blog
+  - node:node-docs
+  - node:node-best-practices
+
+include:
+  detectors:
+    - no-any.sh
+    - exhaustive-unions.sh
+    - type-test-coverage.sh
+  agents:
+    - review-types
+  rubric_rules:
+    - g-ts-001
+    - g-ts-002
+    - g-ts-003
+    - g-ts-004
+    - g-ts-005
+    - g-ts-006
+    - g-ts-007
+    - g-ts-008
+
+rules:
+  g-ts-001: ["error", { allow_with_comment_pattern: "^// allow-any: .+$", max_per_file: 0 }]
+  g-ts-002: ["error", { allow_with_comment_pattern: "^// allow-cast: .+$", allowed_for: ["unknown"] }]
+  g-ts-003: error
+  g-ts-004: error
+  g-ts-005: error
+  g-ts-006: error
+  g-ts-007: error
+  g-ts-008: error

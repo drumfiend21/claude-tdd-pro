@@ -50,3 +50,11 @@ rules:
   g-react-008: ["error", { budget_kb: 200, per_route: {}, excluded_routes: [] }]
   g-react-009: error
   g-react-010: error
+  g-ts-001: ["error", { allow_with_comment_pattern: "^// allow-any: .+$", max_per_file: 5 }]
+  g-ts-002: ["error", { allow_with_comment_pattern: "^// allow-cast: .+$", allowed_for: ["unknown", "JSON.parse"] }]
+  g-ts-003: error
+  g-ts-004: error
+  g-ts-005: warn
+  g-ts-006: error
+  g-ts-007: warn
+  g-ts-008: error
