@@ -1,0 +1,57 @@
+# X-2 GitLab CI adapter per architecture section 16 X-2.
+# Drop into a GitLab project that uses the rubric. Reads
+# .claude-tdd-pro/lock.json for plugin_version pin and runs the
+# rubric runner with --format checkstyle, uploads checkstyle as a
+# CodeQuality artifact, and posts MR comments via gitlab-cli (glab).
+# Pre-flight freshness check runs for regulated|financial|government
+# profiles per section 2.17.
+stages:
+  - rubric
+
+variables:
+  RUBRIC_PROFILE: "$CI_RUBRIC_PROFILE"
+
+rubric-check:
+  stage: rubric
+  image: ubuntu:22.04
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  before_script:
+    - apt-get update && apt-get install -y bash jq ruby curl
+    - curl -fsSL https://gitlab.com/gitlab-org/cli/-/releases/permalink/latest/downloads/glab_linux_amd64.tar.gz | tar -xz -C /usr/local/bin glab
+    # honor section 2.7 lock.json plugin_version pin
+    - PLUGIN_VERSION=$(jq -r '.plugin_version // ""' .claude-tdd-pro/lock.json 2>/dev/null || echo "")
+    - PROFILE_SNAPSHOT_HASH=$(jq -r '.profile_snapshot_hash // ""' .claude-tdd-pro/lock.json 2>/dev/null || echo "")
+    - echo "rubric-check plugin_version=$PLUGIN_VERSION profile_snapshot_hash=$PROFILE_SNAPSHOT_HASH"
+  script:
+    # pre-flight freshness check for regulated|financial|government profiles
+    - |
+      if [ "$RUBRIC_PROFILE" = "regulated" ] || [ "$RUBRIC_PROFILE" = "financial" ] || [ "$RUBRIC_PROFILE" = "government" ]; then
+        bash commands/doctor.sh --check freshness || { echo "freshness gate failed for profile=$RUBRIC_PROFILE"; exit 1; }
+      fi
+    # collect MR diff file list
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git diff "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME...HEAD" --name-only > /tmp/mr-changed-files.txt
+    # invoke rubric runner with --format checkstyle for CodeQuality
+    - bash rubric/runner.sh --paths "$(cat /tmp/mr-changed-files.txt | tr '\n' ',' | sed 's/,$//')" --format checkstyle --emit-checkstyle /tmp/rubric-checkstyle.xml > /tmp/rubric-stdout.txt 2> /tmp/rubric-stderr.txt
+    - cat /tmp/rubric-stderr.txt
+    # post MR comment via glab (gitlab-cli) with rule_ids and remediation links
+    - |
+      if [ -s /tmp/rubric-checkstyle.xml ]; then
+        BODY="## rubric-check findings (plugin_version=$PLUGIN_VERSION)\n\n$(cat /tmp/rubric-stderr.txt)"
+        glab mr note "$CI_MERGE_REQUEST_IID" --message "$BODY" || echo "glab note failed (non-fatal)"
+      fi
+    # gate merge on P0 or severity=error per spec template-gates-merge-on-p0
+    - |
+      if grep -E 'severity="error"|"severity":"P0"' /tmp/rubric-checkstyle.xml >/dev/null 2>&1; then
+        echo "rubric-check: P0 / severity=error findings present; failing the job (allow_failure: false)"
+        exit 1
+      fi
+  allow_failure: false
+  artifacts:
+    when: always
+    reports:
+      codequality: /tmp/rubric-checkstyle.xml
+    paths:
+      - /tmp/rubric-checkstyle.xml
+      - /tmp/rubric-stderr.txt
