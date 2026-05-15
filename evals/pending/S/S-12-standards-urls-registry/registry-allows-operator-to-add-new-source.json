@@ -1,6 +1,6 @@
 {
   "name": "STANDARDS-URLS registry: operator can add an entry with a new id; merged catalog includes both plugin-shipped and operator-added",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: operator-only-source\\n  name: Operator Only\\n  url: https://op.com\\n  tier: 2\\n  applies_to: [python]\\n  fetch_frequency: weekly\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --operator \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" --emit \"$PWD/merged.yaml\" && grep \"operator-only-source\" merged.yaml 1>&2 && grep \"google-tsguide\" merged.yaml 1>&2 && echo ok 1>&2",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: operator-only-source\\n  name: Operator Only\\n  url: https://op.com\\n  tier: 2\\n  applies_to: [python]\\n  fetch_frequency: weekly\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" --operator \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" --emit \"$PWD/merged.yaml\" && grep \"operator-only-source\" merged.yaml 1>&2 && grep \"google-tsguide\" merged.yaml 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

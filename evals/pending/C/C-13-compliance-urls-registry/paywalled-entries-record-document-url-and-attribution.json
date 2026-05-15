@@ -1,6 +1,6 @@
 {
   "name": "COMPLIANCE-URLS: when paywalled:true, document_url (citation pointer) and attribution_note are required (cannot fetch full text but can cite)",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: iso-27001-a14\\n  name: ISO 27001\\n  url: https://iso.org/27001\\n  authoritative_publisher: ISO\\n  jurisdiction: ISO\\n  applicable_to: [security]\\n  identifier_scheme: A.<n>\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: monthly\\n  legal_review_required: true\\n  paywalled: true\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: iso-27001-a14\\n  name: ISO 27001\\n  url: https://iso.org/27001\\n  authoritative_publisher: ISO\\n  jurisdiction: ISO\\n  applicable_to: [security]\\n  identifier_scheme: A.<n>\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: monthly\\n  legal_review_required: true\\n  paywalled: true\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

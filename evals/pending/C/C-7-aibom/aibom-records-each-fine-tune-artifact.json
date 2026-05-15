@@ -1,6 +1,6 @@
 {
   "name": "AIBOM: per P-7, fine-tunes.yaml entries are ingested into AIBOM as components with type:fine-tune-artifact",
-  "command": "mkdir -p compliance prompts && printf \"- id: my-finetune\\n  base_model: claude-opus\\n  artifact_uri: https://x.com/ft.bin\\n  hash: sha256:S\\n\" > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json --include-fine-tunes && grep \"my-finetune\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
+  "command": "mkdir -p compliance prompts && printf -- \"- id: my-finetune\\n  base_model: claude-opus\\n  artifact_uri: https://x.com/ft.bin\\n  hash: sha256:S\\n\" > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag v0.3.0 --emit compliance/AIBOM-v0.3.0.json --include-fine-tunes && grep \"my-finetune\" compliance/AIBOM-v0.3.0.json 1>&2 && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

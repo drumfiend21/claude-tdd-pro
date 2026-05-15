@@ -1,6 +1,6 @@
 {
   "name": "soc2 evidence collection: when controls.yaml entries from non-soc2 frameworks coexist, the validator only enforces coverage for framework: soc2-tsc",
-  "command": "mkdir -p compliance/evidence/CC1.1 && touch compliance/evidence/CC1.1/x.txt && printf \"- framework: soc2-tsc\\n  control_id: CC1.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n- framework: eu-ai-act\\n  control_id: Article-14\\n  satisfied_by: [hook]\\n  legal_review_status: pending\\n\" > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" --evidence-dir \"$PWD/compliance/evidence\" --controls-file \"$PWD/compliance/controls.yaml\" --check-coverage --framework soc2-tsc && echo ok 1>&2",
+  "command": "mkdir -p compliance/evidence/CC1.1 && touch compliance/evidence/CC1.1/x.txt && printf -- \"- framework: soc2-tsc\\n  control_id: CC1.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n- framework: eu-ai-act\\n  control_id: Article-14\\n  satisfied_by: [hook]\\n  legal_review_status: pending\\n\" > compliance/controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-evidence-folder.sh\" --evidence-dir \"$PWD/compliance/evidence\" --controls-file \"$PWD/compliance/controls.yaml\" --check-coverage --framework soc2-tsc && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

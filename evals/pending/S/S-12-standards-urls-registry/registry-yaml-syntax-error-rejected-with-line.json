@@ -1,6 +1,6 @@
 {
   "name": "STANDARDS-URLS registry: malformed YAML reports parse error with line number",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: x\\n  name: bad\\n    bad-indent: y\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\"",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: x\\n  name: bad\\n    bad-indent: y\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

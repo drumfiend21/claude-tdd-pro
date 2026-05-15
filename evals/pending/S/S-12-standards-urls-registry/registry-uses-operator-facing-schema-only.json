@@ -1,6 +1,6 @@
 {
   "name": "STANDARDS-URLS registry: operator-facing entries use only §2.6 operator-facing fields (id, name, url, tier, applies_to, fetch_frequency); plugin-internal fields not required",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: my-source\\n  name: My Source\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" && echo ok 1>&2",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: my-source\\n  name: My Source\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\" && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

@@ -2,7 +2,7 @@
   "name": "/standards-remove: per G-9 chains to folder archival -- the source-folder file moves to _archived/",
   "command": "mkdir -p tree/my && printf \"source:\\n  id: my-source\\n  authoritative_publisher: M\\n  authoritative_url: https://my.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n\" > tree/my/my-source.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id my-source --tree \"$PWD/tree\" && [ -f tree/my/_archived/my-source.yaml ] && [ ! -f tree/my/my-source.yaml ] && echo ok 1>&2",
   "setup": [
-    "mkdir -p .claude-tdd-pro && printf \"- id: my-source\\n  name: My\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml"
+    "mkdir -p .claude-tdd-pro && printf -- \"- id: my-source\\n  name: My\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml"
   ],
   "expect": {
     "exit_code": 0,

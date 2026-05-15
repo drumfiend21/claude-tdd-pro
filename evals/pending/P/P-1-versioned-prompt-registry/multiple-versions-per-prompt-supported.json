@@ -2,7 +2,7 @@
   "name": "prompt registry: a single id may have multiple versions in the versions array; latest version wins for active resolution",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-prompt-registry.sh\" \"$PWD/registry.yaml\" && echo ok 1>&2",
   "setup": [
-    "printf '- id: rsc-reviewer\\n  versions:\\n    - version: 2.1.0\\n      file: prompts/rsc-reviewer/v2.1.0.md\\n      hash: sha256:S1\\n      created: 2026-05-12T00:00:00Z\\n      eval_pass_rate: 0.85\\n      regression_from_prior: 0\\n      status: archived\\n    - version: 2.2.0\\n      file: prompts/rsc-reviewer/v2.2.0.md\\n      hash: sha256:S2\\n      created: 2026-05-13T00:00:00Z\\n      eval_pass_rate: 0.92\\n      regression_from_prior: 0\\n      status: active\\n' > registry.yaml"
+    "printf -- '- id: rsc-reviewer\\n  versions:\\n    - version: 2.1.0\\n      file: prompts/rsc-reviewer/v2.1.0.md\\n      hash: sha256:S1\\n      created: 2026-05-12T00:00:00Z\\n      eval_pass_rate: 0.85\\n      regression_from_prior: 0\\n      status: archived\\n    - version: 2.2.0\\n      file: prompts/rsc-reviewer/v2.2.0.md\\n      hash: sha256:S2\\n      created: 2026-05-13T00:00:00Z\\n      eval_pass_rate: 0.92\\n      regression_from_prior: 0\\n      status: active\\n' > registry.yaml"
   ],
   "expect": {
     "exit_code": 0,

@@ -1,6 +1,6 @@
 {
   "name": "COMPLIANCE-URLS: why_authoritative field must be multi-line with at least 3 lines (per §2.19 explicit requirement)",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: x\\n  name: X\\n  url: https://x.gov\\n  authoritative_publisher: NIST\\n  jurisdiction: US Federal\\n  applicable_to: [security]\\n  identifier_scheme: GV/ID\\n  why_authoritative: \\\"single line\\\"\\n  fetch_frequency: weekly\\n  legal_review_required: true\\n  paywalled: false\\n  document_url: https://x.gov\\n  attribution_note: x\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: x\\n  name: X\\n  url: https://x.gov\\n  authoritative_publisher: NIST\\n  jurisdiction: US Federal\\n  applicable_to: [security]\\n  identifier_scheme: GV/ID\\n  why_authoritative: \\\"single line\\\"\\n  fetch_frequency: weekly\\n  legal_review_required: true\\n  paywalled: false\\n  document_url: https://x.gov\\n  attribution_note: x\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

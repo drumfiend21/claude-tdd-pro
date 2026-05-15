@@ -1,6 +1,6 @@
 {
   "name": "COMPLIANCE-URLS: each entry requires id, name, url, authoritative_publisher, jurisdiction, applicable_to, identifier_scheme, why_authoritative, fetch_frequency, legal_review_required, paywalled, document_url, attribution_note (per §2.19 operator-facing schema)",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: nist-csf-2\\n  name: NIST CSF 2.0\\n  url: https://nist.gov/csf\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: nist-csf-2\\n  name: NIST CSF 2.0\\n  url: https://nist.gov/csf\\n\" > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-compliance-urls.sh\" \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

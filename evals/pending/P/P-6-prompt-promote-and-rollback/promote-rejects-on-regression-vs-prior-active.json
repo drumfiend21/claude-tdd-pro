@@ -1,6 +1,6 @@
 {
   "name": "/prompt-promote: rejects when version's eval_pass_rate is lower than the currently-active version's (regression gate)",
-  "command": "mkdir -p prompts/eval-history/rsc-reviewer prompts/registry && printf '- id: rsc-reviewer\\n  versions:\\n    - {version: 2.0.0, file: prompts/rsc-reviewer/v2.0.0.md, hash: sha256:S, created: 2026-05-12T00:00:00Z, eval_pass_rate: 0.95, regression_from_prior: 0, status: active}\\n' > prompts/registry.yaml && printf '{\"version\":\"2.1.0\",\"eval_pass_rate\":0.85,\"records\":[]}' > prompts/eval-history/rsc-reviewer/2.1.0.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" rsc-reviewer 2.1.0",
+  "command": "mkdir -p prompts/eval-history/rsc-reviewer prompts/registry && printf -- '- id: rsc-reviewer\\n  versions:\\n    - {version: 2.0.0, file: prompts/rsc-reviewer/v2.0.0.md, hash: sha256:S, created: 2026-05-12T00:00:00Z, eval_pass_rate: 0.95, regression_from_prior: 0, status: active}\\n' > prompts/registry.yaml && printf '{\"version\":\"2.1.0\",\"eval_pass_rate\":0.85,\"records\":[]}' > prompts/eval-history/rsc-reviewer/2.1.0.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" rsc-reviewer 2.1.0",
   "setup": [],
   "expect": {
     "exit_code": 2,

@@ -1,6 +1,6 @@
 {
   "name": "prompt registry: when from_inline_agent:true, golden_output_diff field must be non-empty (operator can review)",
-  "command": "printf \"- id: test\\n  versions:\\n    - version: 1.0.0\\n      file: prompts/test/v1.0.0.md\\n      hash: sha256:S\\n      created: 2026-05-13T00:00:00Z\\n      eval_pass_rate: 0.9\\n      regression_from_prior: 0\\n      status: active\\n      migration:\\n        from_inline_agent: true\\n        golden_output_diff: \\\"\\\"\\n        delta_status: zero-delta\\n\" > registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-prompt-registry.sh\" \"$PWD/registry.yaml\"",
+  "command": "printf -- \"- id: test\\n  versions:\\n    - version: 1.0.0\\n      file: prompts/test/v1.0.0.md\\n      hash: sha256:S\\n      created: 2026-05-13T00:00:00Z\\n      eval_pass_rate: 0.9\\n      regression_from_prior: 0\\n      status: active\\n      migration:\\n        from_inline_agent: true\\n        golden_output_diff: \\\"\\\"\\n        delta_status: zero-delta\\n\" > registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-prompt-registry.sh\" \"$PWD/registry.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

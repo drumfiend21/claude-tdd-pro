@@ -1,6 +1,6 @@
 {
   "name": "control mapping: validator rejects entry lacking framework field",
-  "command": "printf \"- control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n\" > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-controls-yaml.sh\" \"$PWD/controls.yaml\"",
+  "command": "printf -- \"- control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending\\n\" > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-controls-yaml.sh\" \"$PWD/controls.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

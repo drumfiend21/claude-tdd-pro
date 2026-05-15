@@ -2,7 +2,7 @@
   "name": "/standards-remove: warns when removed source is the sole provenance entry for >=1 active rule (orphans those rules; suggests S-7 promote alternative)",
   "command": "mkdir -p tree/google && printf \"source:\\n  id: my-source\\n  authoritative_publisher: M\\n  authoritative_url: https://my.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-x-001, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: [{source: my-source, class: published-standard, section_id: 1, url: https://x.com, fetched_at: 2026-05-04T00:00:00Z, content_hash: sha256:S}]}\\nrecommended_set: [g-x-001]\\nall_set: [g-x-001]\\n\" > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id my-source --tree \"$PWD/tree\" --check-orphan-rules 2>out.txt && grep -E \"g-x-001.*orphaned\" out.txt 1>&2 && echo ok 1>&2",
   "setup": [
-    "mkdir -p .claude-tdd-pro && printf \"- id: my-source\\n  name: My\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml"
+    "mkdir -p .claude-tdd-pro && printf -- \"- id: my-source\\n  name: My\\n  url: https://my.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml"
   ],
   "expect": {
     "exit_code": 0,

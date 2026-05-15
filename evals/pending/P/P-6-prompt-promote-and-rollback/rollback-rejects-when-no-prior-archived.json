@@ -1,6 +1,6 @@
 {
   "name": "/prompt-rollback: rejects when only one version exists (nothing to roll back to)",
-  "command": "mkdir -p prompts && printf '- id: rsc-reviewer\\n  versions:\\n    - {version: 2.0.0, file: prompts/rsc-reviewer/v2.0.0.md, hash: sha256:S, created: 2026-05-13T00:00:00Z, eval_pass_rate: 0.9, regression_from_prior: 0, status: active}\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-rollback.sh\" rsc-reviewer",
+  "command": "mkdir -p prompts && printf -- '- id: rsc-reviewer\\n  versions:\\n    - {version: 2.0.0, file: prompts/rsc-reviewer/v2.0.0.md, hash: sha256:S, created: 2026-05-13T00:00:00Z, eval_pass_rate: 0.9, regression_from_prior: 0, status: active}\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-rollback.sh\" rsc-reviewer",
   "setup": [],
   "expect": {
     "exit_code": 2,

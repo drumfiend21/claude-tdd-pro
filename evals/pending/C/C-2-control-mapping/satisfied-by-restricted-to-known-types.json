@@ -1,6 +1,6 @@
 {
   "name": "control mapping: satisfied_by entries must be one of {rubric_rule, hook, artifact} per §2.9 enum",
-  "command": "printf \"- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [made-up-thing]\\n  legal_review_status: pending\\n\" > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-controls-yaml.sh\" \"$PWD/controls.yaml\"",
+  "command": "printf -- \"- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [made-up-thing]\\n  legal_review_status: pending\\n\" > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-controls-yaml.sh\" \"$PWD/controls.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,

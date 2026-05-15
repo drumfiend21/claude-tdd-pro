@@ -1,6 +1,6 @@
 {
   "name": "STANDARDS-URLS registry: fetch_frequency must be one of {hourly, daily, weekly, monthly} (predictable cadence)",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: x\\n  name: X\\n  url: https://x.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: every-other-fortnight\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\"",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: x\\n  name: X\\n  url: https://x.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: every-other-fortnight\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/.claude-tdd-pro/STANDARDS-URLS.yaml\"",
   "setup": [],
   "expect": {
     "exit_code": 2,
