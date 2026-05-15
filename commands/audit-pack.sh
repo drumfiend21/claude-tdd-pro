@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
-# /audit-pack — emits a Markdown audit pack assembling per-commit
-# provenance records under .claude-tdd-pro/provenance/. Sections:
-#   --section badges            top-line freshness/coverage badges
-#   --section standards-freshness   per-source freshness across commits
+# audit-pack.sh — C-10 substrate. Bundles AIBOM + control coverage +
+# evidence + risk classification + audit log + provenance + Decision
+# Trail + 3 Freshness sections + "all-three-fresh" badge per commit.
+#
+# Per architecture section 16 C-10: "/audit-pack bundles AIBOM + control
+# coverage + evidence + risk classification + audit log + provenance
+# manifests + Decision Trail + Standards Freshness + PR Corpus Freshness
+# + Compliance Freshness sections + 'all-three-fresh' badge per commit."
 #
 # Usage:
 #   audit-pack.sh --emit <path> --section <name>
+#                 [--aibom-file <path>] [--controls-file <path>]
+#                 [--evidence-dir <path>] [--risk-file <path>]
+#                 [--audit-log <path>] [--provenance-dir <path>]
+#                 [--decision-trail-dir <path>] [--freshness-file <path>]
+#                 [--commit-sha <sha>] [--now <iso>] [--dry-run]
 
 set -uo pipefail
 
@@ -13,6 +22,13 @@ EMIT=""
 SECTION=""
 CONTROLS_FILE=""
 AIBOM_FILE=""
+EVIDENCE_DIR=""
+RISK_FILE=""
+AUDIT_LOG_FILE=""
+PROVENANCE_DIR=""
+DECISION_TRAIL_DIR=""
+FRESHNESS_FILE=""
+COMMIT_SHA=""
 NOW_ISO=""
 DRY_RUN=0
 
@@ -21,105 +37,282 @@ while [[ $# -gt 0 ]]; do
     --emit) EMIT="$2"; shift 2 ;;
     --section) SECTION="$2"; shift 2 ;;
     --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
-    --aibom|--include-aibom) AIBOM_FILE="$2"; SECTION="${SECTION:-aibom}"; shift 2 ;;
+    --aibom-file|--aibom|--include-aibom) AIBOM_FILE="$2"; shift 2 ;;
+    --evidence-dir) EVIDENCE_DIR="$2"; shift 2 ;;
+    --risk-file) RISK_FILE="$2"; shift 2 ;;
+    --audit-log) AUDIT_LOG_FILE="$2"; shift 2 ;;
+    --provenance-dir) PROVENANCE_DIR="$2"; shift 2 ;;
+    --decision-trail-dir) DECISION_TRAIL_DIR="$2"; shift 2 ;;
+    --freshness-file) FRESHNESS_FILE="$2"; shift 2 ;;
+    --commit-sha) COMMIT_SHA="$2"; shift 2 ;;
     --now) NOW_ISO="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
-    -h|--help) echo "Usage: audit-pack.sh --emit <path> --section <name> [--dry-run]"; exit 0 ;;
-    *) echo "audit-pack: unknown flag: $1" >&2; exit 2 ;;
+    -h|--help) echo "Usage: audit-pack.sh --emit <path> --section <name> [--<artifact>-file <path>] [--dry-run]"; exit 0 ;;
+    *) shift ;;
   esac
 done
+
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "audit-pack: dry-run; would emit section=${SECTION:-(default)} to ${EMIT:-(default)} (no writes)" >&2
   exit 0
 fi
+
 [[ -z "$EMIT" || -z "$SECTION" ]] && { echo "audit-pack: --emit and --section required" >&2; exit 2; }
 
-EMIT="$EMIT" SECTION="$SECTION" CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBOM_FILE" NOW_ISO="$NOW_ISO" node -e '
-  const fs = require("fs");
-  const path = require("path");
-  const provDir = ".claude-tdd-pro/provenance";
-  const records = [];
-  if (fs.existsSync(provDir)) {
-    for (const f of fs.readdirSync(provDir)) {
-      if (!f.endsWith(".json")) continue;
-      try { records.push(JSON.parse(fs.readFileSync(path.join(provDir, f), "utf8"))); } catch {}
-    }
-  }
-  const lines = [];
-  if (process.env.SECTION === "badges") {
-    let allFresh = true;
-    for (const r of records) {
-      const st = r.standards_state || {};
-      for (const id of Object.keys(st)) {
-        if (st[id].freshness_at_generation !== "fresh-within-fetch-frequency") allFresh = false;
-      }
-    }
-    lines.push("# Audit Pack Badges");
-    lines.push("");
-    lines.push(`- Standards: ${allFresh ? "all-fresh" : "mixed-freshness"}`);
-  } else if (process.env.SECTION === "standards-freshness") {
-    lines.push("# Standards Freshness");
-    lines.push("");
-    const aggregated = {};
-    for (const r of records) {
-      const st = r.standards_state || {};
-      for (const id of Object.keys(st)) {
-        aggregated[id] = aggregated[id] || [];
-        aggregated[id].push({ commit: r.commit, status: st[id].freshness_at_generation });
-      }
-    }
-    for (const id of Object.keys(aggregated).sort()) {
-      lines.push(`## ${id}`);
-      for (const r of aggregated[id]) {
-        lines.push(`- commit ${r.commit}: ${r.status}`);
+EMIT="$EMIT" SECTION="$SECTION" \
+CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBOM_FILE" \
+EVIDENCE_DIR="$EVIDENCE_DIR" RISK_FILE="$RISK_FILE" \
+AUDIT_LOG_FILE="$AUDIT_LOG_FILE" PROVENANCE_DIR="$PROVENANCE_DIR" \
+DECISION_TRAIL_DIR="$DECISION_TRAIL_DIR" FRESHNESS_FILE="$FRESHNESS_FILE" \
+COMMIT_SHA="$COMMIT_SHA" NOW_ISO="$NOW_ISO" node -e '
+const fs = require("fs");
+const path = require("path");
+
+const section = process.env.SECTION;
+const sections = section.split(",").map(s => s.trim());
+const emit = process.env.EMIT;
+const lines = [];
+
+function bundleSection(s) {
+  switch (s) {
+    case "aibom": {
+      lines.push("# AIBOM");
+      lines.push("");
+      const af = process.env.AIBOM_FILE;
+      if (af && fs.existsSync(af)) {
+        lines.push("```json");
+        lines.push(fs.readFileSync(af, "utf8"));
+        lines.push("```");
       }
       lines.push("");
+      break;
     }
-  } else if (process.env.SECTION === "legal-review-status") {
-    lines.push("# Pending legal review");
-    lines.push("");
-    const cf = process.env.CONTROLS_FILE;
-    if (cf && fs.existsSync(cf)) {
-      const content = fs.readFileSync(cf, "utf8");
-      const blocks = content.split(/^- /m).slice(1);
-      for (const blk of blocks) {
-        const fwMatch = blk.match(/framework:\s*([\w-]+)/);
-        const cidMatch = blk.match(/control_id:\s*([\w.-]+)/);
-        const stMatch = blk.match(/legal_review_status:\s*(\S+)/);
-        if (stMatch && stMatch[1] === "pending" && fwMatch && cidMatch) {
-          lines.push(`- ${fwMatch[1]} ${cidMatch[1]}: pending`);
+    case "control-coverage": {
+      lines.push("# Control Coverage");
+      lines.push("");
+      const cf = process.env.CONTROLS_FILE;
+      if (cf && fs.existsSync(cf)) {
+        lines.push("```yaml");
+        lines.push(fs.readFileSync(cf, "utf8"));
+        lines.push("```");
+      }
+      lines.push("");
+      break;
+    }
+    case "evidence": {
+      lines.push("# Evidence");
+      lines.push("");
+      const ed = process.env.EVIDENCE_DIR;
+      if (ed && fs.existsSync(ed)) {
+        const walk = (d) => {
+          for (const e of fs.readdirSync(d)) {
+            const p = path.join(d, e);
+            const st = fs.statSync(p);
+            if (st.isDirectory()) {
+              lines.push(`## ${e}`);
+              walk(p);
+            } else {
+              const rel = path.relative(ed, p);
+              lines.push(`- evidence file: ${rel}`);
+              if (e === "manifest.txt") {
+                lines.push("```");
+                lines.push(fs.readFileSync(p, "utf8"));
+                lines.push("```");
+              }
+            }
+          }
+        };
+        walk(ed);
+      }
+      lines.push("");
+      break;
+    }
+    case "risk-classification": {
+      lines.push("# Risk Classification");
+      lines.push("");
+      const rf = process.env.RISK_FILE;
+      if (rf && fs.existsSync(rf)) {
+        lines.push("```yaml");
+        lines.push(fs.readFileSync(rf, "utf8"));
+        lines.push("```");
+      }
+      lines.push("");
+      break;
+    }
+    case "audit-log": {
+      lines.push("# Audit Log");
+      lines.push("");
+      const af = process.env.AUDIT_LOG_FILE;
+      if (af && fs.existsSync(af)) {
+        lines.push("```jsonl");
+        lines.push(fs.readFileSync(af, "utf8"));
+        lines.push("```");
+      }
+      lines.push("");
+      break;
+    }
+    case "provenance": {
+      lines.push("# Provenance Manifests");
+      lines.push("");
+      const pd = process.env.PROVENANCE_DIR;
+      if (pd && fs.existsSync(pd)) {
+        for (const f of fs.readdirSync(pd).sort()) {
+          if (!f.endsWith(".json")) continue;
+          lines.push(`## ${f}`);
+          lines.push("```json");
+          lines.push(fs.readFileSync(path.join(pd, f), "utf8"));
+          lines.push("```");
         }
       }
+      lines.push("");
+      break;
     }
-  } else if (process.env.SECTION === "attestations") {
-    lines.push("# Attestations");
-    lines.push("");
-    const dir = "compliance/attestations";
-    const nowDate = (process.env.NOW_ISO || new Date().toISOString()).slice(0, 10);
-    if (fs.existsSync(dir)) {
-      for (const f of fs.readdirSync(dir).sort()) {
-        if (!f.endsWith(".yaml")) continue;
-        const content = fs.readFileSync(path.join(dir, f), "utf8");
-        const fwMatch = content.match(/framework:\s*(\S+)/);
-        const expMatch = content.match(/license_expiry:\s*(\S+)/);
-        if (fwMatch && expMatch) {
-          const status = expMatch[1] < nowDate ? "expired" : "active";
-          lines.push(`- ${fwMatch[1]}: ${status} (expires ${expMatch[1]})`);
+    case "decision-trail": {
+      lines.push("# Decision Trail");
+      lines.push("");
+      const dt = process.env.DECISION_TRAIL_DIR;
+      if (dt && fs.existsSync(dt)) {
+        for (const f of fs.readdirSync(dt).sort()) {
+          if (!f.endsWith(".md")) continue;
+          const body = fs.readFileSync(path.join(dt, f), "utf8");
+          const idMatch = body.match(/decision_id:\s*(\S+)/);
+          const id = idMatch ? idMatch[1] : f.replace(/\.md$/, "");
+          lines.push(`- decision ${id} (${f})`);
         }
       }
+      lines.push("");
+      break;
     }
-  } else if (process.env.SECTION === "aibom") {
-    lines.push("# AIBOM");
-    lines.push("");
-    const af = process.env.AIBOM_FILE;
-    if (af && fs.existsSync(af)) {
-      lines.push("```json");
-      lines.push(fs.readFileSync(af, "utf8"));
-      lines.push("```");
+    case "freshness": {
+      const ff = process.env.FRESHNESS_FILE;
+      let data = {};
+      if (ff && fs.existsSync(ff)) {
+        try { data = JSON.parse(fs.readFileSync(ff, "utf8")); } catch {}
+      }
+      lines.push("# Standards Freshness");
+      lines.push(`- status: ${data.standards || "unknown"}`);
+      lines.push("");
+      lines.push("# PR Corpus Freshness");
+      lines.push(`- status: ${data.pr_corpus || "unknown"}`);
+      lines.push("");
+      lines.push("# Compliance Freshness");
+      lines.push(`- status: ${data.compliance || "unknown"}`);
+      lines.push("");
+      break;
     }
-  } else {
-    process.stderr.write(`audit-pack: unknown section "${process.env.SECTION}"\n`);
-    process.exit(2);
+    case "freshness-badge": {
+      const ff = process.env.FRESHNESS_FILE;
+      const sha = process.env.COMMIT_SHA || "unknown";
+      let data = {};
+      if (ff && fs.existsSync(ff)) {
+        try { data = JSON.parse(fs.readFileSync(ff, "utf8")); } catch {}
+      }
+      const allFresh = (data.standards || "").startsWith("fresh") &&
+                       (data.pr_corpus || "").startsWith("fresh") &&
+                       (data.compliance || "").startsWith("fresh");
+      lines.push("# Freshness Badge");
+      lines.push("");
+      lines.push(`- commit: ${sha}`);
+      lines.push(`- badge: ${allFresh ? "all-three-fresh" : "mixed-freshness"}`);
+      lines.push(`- standards: ${data.standards || "unknown"}`);
+      lines.push(`- pr_corpus: ${data.pr_corpus || "unknown"}`);
+      lines.push(`- compliance: ${data.compliance || "unknown"}`);
+      lines.push("");
+      break;
+    }
+    case "badges": {
+      lines.push("# Audit Pack Badges");
+      lines.push("");
+      const provDir = ".claude-tdd-pro/provenance";
+      const records = [];
+      if (fs.existsSync(provDir)) {
+        for (const f of fs.readdirSync(provDir)) {
+          if (!f.endsWith(".json")) continue;
+          try { records.push(JSON.parse(fs.readFileSync(path.join(provDir, f), "utf8"))); } catch {}
+        }
+      }
+      let allFresh = true;
+      for (const r of records) {
+        const st = r.standards_state || {};
+        for (const id of Object.keys(st)) {
+          if (st[id].freshness_at_generation !== "fresh-within-fetch-frequency") allFresh = false;
+        }
+      }
+      lines.push(`- Standards: ${allFresh ? "all-fresh" : "mixed-freshness"}`);
+      break;
+    }
+    case "standards-freshness": {
+      lines.push("# Standards Freshness");
+      lines.push("");
+      const provDir = ".claude-tdd-pro/provenance";
+      const records = [];
+      if (fs.existsSync(provDir)) {
+        for (const f of fs.readdirSync(provDir)) {
+          if (!f.endsWith(".json")) continue;
+          try { records.push(JSON.parse(fs.readFileSync(path.join(provDir, f), "utf8"))); } catch {}
+        }
+      }
+      const aggregated = {};
+      for (const r of records) {
+        const st = r.standards_state || {};
+        for (const id of Object.keys(st)) {
+          aggregated[id] = aggregated[id] || [];
+          aggregated[id].push({ commit: r.commit, status: st[id].freshness_at_generation });
+        }
+      }
+      for (const id of Object.keys(aggregated).sort()) {
+        lines.push(`## ${id}`);
+        for (const r of aggregated[id]) {
+          lines.push(`- commit ${r.commit}: ${r.status}`);
+        }
+        lines.push("");
+      }
+      break;
+    }
+    case "legal-review-status": {
+      lines.push("# Pending legal review");
+      lines.push("");
+      const cf = process.env.CONTROLS_FILE;
+      if (cf && fs.existsSync(cf)) {
+        const content = fs.readFileSync(cf, "utf8");
+        const blocks = content.split(/^- /m).slice(1);
+        for (const blk of blocks) {
+          const fwMatch = blk.match(/framework:\s*([\w-]+)/);
+          const cidMatch = blk.match(/control_id:\s*([\w.-]+)/);
+          const stMatch = blk.match(/legal_review_status:\s*(\S+)/);
+          if (stMatch && stMatch[1] === "pending" && fwMatch && cidMatch) {
+            lines.push(`- ${fwMatch[1]} ${cidMatch[1]}: pending`);
+          }
+        }
+      }
+      break;
+    }
+    case "attestations": {
+      lines.push("# Attestations");
+      lines.push("");
+      const dir = "compliance/attestations";
+      const nowDate = (process.env.NOW_ISO || new Date().toISOString()).slice(0, 10);
+      if (fs.existsSync(dir)) {
+        for (const f of fs.readdirSync(dir).sort()) {
+          if (!f.endsWith(".yaml")) continue;
+          const content = fs.readFileSync(path.join(dir, f), "utf8");
+          const fwMatch = content.match(/framework:\s*(\S+)/);
+          const expMatch = content.match(/license_expiry:\s*(\S+)/);
+          if (fwMatch && expMatch) {
+            const status = expMatch[1] < nowDate ? "expired" : "active";
+            lines.push(`- ${fwMatch[1]}: ${status} (expires ${expMatch[1]})`);
+          }
+        }
+      }
+      break;
+    }
+    default:
+      process.stderr.write(`audit-pack: unknown section "${s}"\n`);
+      process.exit(2);
   }
-  fs.writeFileSync(process.env.EMIT, lines.join("\n"));
+}
+
+for (const s of sections) bundleSection(s);
+fs.writeFileSync(emit, lines.join("\n"));
+process.stderr.write(`audit-pack: emitted ${sections.length} section(s) to ${emit}\n`);
 '

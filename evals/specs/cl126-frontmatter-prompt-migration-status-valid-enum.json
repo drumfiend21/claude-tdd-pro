@@ -1,0 +1,12 @@
+{
+  "name": "compliance-specialist subagent: rejects a frontmatter whose prompt_migration_status is outside {original, migrated-zero-delta, migrated-with-delta:<reason>}",
+  "command": "mkdir -p fixture && printf -- '---\\nname: review-compliance\\nmodel: sonnet\\nprompt_id: review-compliance\\nprompt_version: 1.0.0\\nmodel_rationale: complex compliance reasoning needs sonnet\\neval_dataset: evals/datasets/agents/review-compliance.jsonl\\nprompt_migration_status: experimental\\n---\\nbody\\n' > fixture/bad.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-subagent-frontmatter.sh\" \"$PWD/fixture/bad.md\" --field prompt_migration_status --enum",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "prompt_migration_status",
+      "experimental"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/risk-classify: command script ships and is executable",
+  "command": "test -x \"$CLAUDE_PLUGIN_ROOT/commands/risk-classify.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

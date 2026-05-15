@@ -1,0 +1,11 @@
+{
+  "name": "compliance-specialist subagent: every record in evals/datasets/agents/review-compliance.jsonl has §2.4 input and expected fields",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-eval-dataset-jsonl.sh\" \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents/review-compliance.jsonl\" --require-fields input,expected && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

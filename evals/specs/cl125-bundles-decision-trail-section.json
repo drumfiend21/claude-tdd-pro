@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack: bundles the Decision Trail section sourced from docs/adr/ MADR registry (W-1 / W-4)",
+  "command": "mkdir -p docs/adr && printf '# 0001-choose-cyclonedx\\nstatus: accepted\\ndecision_id: 0001\\n' > docs/adr/2026-04-01-choose-cyclonedx.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --decision-trail-dir \"$PWD/docs/adr\" --emit \"$PWD/audit-pack.md\" --section decision-trail && grep -E \"Decision Trail|0001\" audit-pack.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
