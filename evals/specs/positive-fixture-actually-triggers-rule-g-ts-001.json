@@ -1,6 +1,6 @@
 {
   "name": "fixtures: positive fixture for g-ts-001 (any-without-allow-any-comment) triggers the rule (exit 1)",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-ts-001 --paths \"\"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript/g-ts-001/positive/**\"",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-ts-001 --paths \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript/g-ts-001/positive/**\"",
   "setup": [],
   "expect": {
     "exit_code": 1,

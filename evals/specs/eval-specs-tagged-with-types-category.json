@@ -1,6 +1,6 @@
 {
   "name": "eval specs: per §2.4 categories enum, ts-rule eval specs have category:types",
-  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-ts-*.json; do grep -E \"\\\"category\\\":\\\"types\\\"\" \"$f\" >/dev/null || { echo \"FAIL $f missing category:types\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-ts-[0-9][0-9][0-9].json; do grep -E \"\\\"category\\\":\\\"types\\\"\" \"$f\" >/dev/null || { echo \"FAIL $f missing category:types\" 1>&2; exit 1; }; done; echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

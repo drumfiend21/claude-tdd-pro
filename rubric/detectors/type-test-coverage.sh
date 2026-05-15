@@ -62,21 +62,36 @@ EXIT=0
 EXPORT_FILES=$(find "$EXPAND_BASE" $FIND_DEPTH -type f -name "$EXPAND_PATTERN" -print0 2>/dev/null \
   | xargs -0 grep -lE '^export[[:space:]]+(function|class|type|interface|const|async)' 2>/dev/null)
 
-while IFS= read -r f; do
-  [[ -z "$f" ]] && continue
-  base="${f%.*}"
-  ext="${f##*.}"
-  test_d="${base}.test-d.${ext}"
-  if [[ ! -f "$test_d" ]] && ! grep -qE 'expectTypeOf' "$f" 2>/dev/null; then
-    LINE=$(grep -nE '^export[[:space:]]+(function|class|type|interface|const|async)' "$f" | head -1 | cut -d: -f1)
-    [[ -z "$LINE" ]] && LINE=1
-    if [[ "$JSON" -eq 1 ]]; then
-      echo '{"severity":"warn","rule_id":"types/type-test-coverage","file":"'"$f"'","line":'"$LINE"',"finding":"type-test-coverage: exported symbol lacks a test-d type-test or expectTypeOf assertion (google-tsguide §testing)","suggested_fix":"add a sibling '"$base"'.test-d.'"$ext"' with expectTypeOf assertions"}' >&2
-    else
-      echo "type-test-coverage: $f:$LINE exported symbol lacks test-d coverage" >&2
-    fi
-    EXIT=1
-  fi
-done <<< "$EXPORT_FILES"
-
-exit "$EXIT"
+# Single-Node pass: classify each export file (covered if sibling
+# test-d exists or file contains expectTypeOf) and emit findings up
+# to MAX_REPORT. Replaces the per-file shell loop which was O(n)
+# bash forks.
+EXPORT_FILES="$EXPORT_FILES" JSON_FLAG="$JSON" MAX_REPORT="50" node -e '
+const fs = require("fs");
+const path = require("path");
+const json = process.env.JSON_FLAG === "1";
+const maxReport = parseInt(process.env.MAX_REPORT, 10);
+const files = (process.env.EXPORT_FILES || "").split("\n").filter(Boolean);
+let reported = 0;
+let totalUncovered = 0;
+for (const f of files) {
+  const ext = path.extname(f);
+  const base = f.slice(0, -ext.length);
+  const testD = `${base}.test-d${ext}`;
+  if (fs.existsSync(testD)) continue;
+  let body = "";
+  try { body = fs.readFileSync(f, "utf8"); } catch {}
+  if (body.includes("expectTypeOf")) continue;
+  totalUncovered++;
+  if (reported >= maxReport) continue;
+  if (json) {
+    process.stderr.write(`{"severity":"warn","rule_id":"types/type-test-coverage","file":"${f}","line":1,"finding":"type-test-coverage: exported symbol lacks a test-d type-test or expectTypeOf assertion (google-tsguide §testing)","suggested_fix":"add a sibling test-d.<ext> with expectTypeOf assertions"}\n`);
+  } else {
+    process.stderr.write(`type-test-coverage: ${f}:1 exported symbol lacks test-d coverage\n`);
+  }
+  reported++;
+}
+if (totalUncovered > 0) process.exit(1);
+process.exit(0);
+'
+exit $?

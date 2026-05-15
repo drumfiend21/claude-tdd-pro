@@ -1,6 +1,6 @@
 {
   "name": "fixtures: running g-node-003 against its negative fixture returns exit 0",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-node-003 --paths \"\"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node/g-node-003/negative/**\" && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-node-003 --paths \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node/g-node-003/negative/**\" && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

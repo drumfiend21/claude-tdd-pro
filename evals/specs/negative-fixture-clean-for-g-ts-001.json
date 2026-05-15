@@ -1,6 +1,6 @@
 {
   "name": "fixtures: negative fixture for g-ts-001 returns exit 0 (clean code with allow-any comment)",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-ts-001 --paths \"\"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript/g-ts-001/negative/**\" && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-ts-001 --paths \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript/g-ts-001/negative/**\" && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

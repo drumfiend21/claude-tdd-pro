@@ -1,6 +1,6 @@
 {
   "name": "reporter: sarif formatter emits SARIF 2.1.0 with runs[].results[]",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format sarif 2>out && grep -E '\"version\":\"2.1.0\"' out && grep -E '\"runs\":' out 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/formatters/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format sarif 2>out && grep -E '\"version\":\"2.1.0\"' out && grep -E '\"runs\":' out 1>&2 && echo ok 1>&2",
   "setup": [
     "echo 'eval(x)' > file.js"
   ],

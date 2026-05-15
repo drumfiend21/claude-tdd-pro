@@ -1,6 +1,6 @@
 {
   "name": "reporter: --format ./formatters/custom.js loads a local formatter module",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format \"$PWD/formatters/custom.js\" 2>out && grep -E 'CUSTOM-OK' out 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/formatters/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format \"$PWD/formatters/custom.js\" 2>out && grep -E 'CUSTOM-OK' out 1>&2 && echo ok 1>&2",
   "setup": [
     "mkdir -p formatters && echo 'module.exports=function(results){return \"CUSTOM-OK\"}' > formatters/custom.js",
     "echo 'eval(x)' > file.js"

@@ -1,6 +1,6 @@
 {
   "name": "fixtures: running g-node-003 (fetch-timeout) against its positive fixture returns exit 1",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-node-003 --paths \"\"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node/g-node-003/positive/**\"",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-node-003 --paths \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node/g-node-003/positive/**\"",
   "setup": [],
   "expect": {
     "exit_code": 1,

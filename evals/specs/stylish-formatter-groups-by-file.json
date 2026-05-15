@@ -1,6 +1,6 @@
 {
   "name": "reporter: stylish formatter prints filename then indented messages then trailing summary",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format stylish 2>out && grep -E '✖|problem' out 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/formatters/cli.sh\" --rule no-eval --severity error --in \"$PWD/file.js\" --format stylish 2>out && grep -E '✖|problem' out 1>&2 && echo ok 1>&2",
   "setup": [
     "echo 'eval(x)' > file.js"
   ],

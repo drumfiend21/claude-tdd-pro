@@ -1,6 +1,6 @@
 {
   "name": "reporter: --format json --relative-paths emits filePath as repo-relative (not absolute)",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule no-eval --severity error --in \"$PWD/src/a.js\" --format json --relative-paths 2>out && grep -E '\"filePath\":\"src/a.js\"' out 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/formatters/cli.sh\" --rule no-eval --severity error --in \"$PWD/src/a.js\" --format json --relative-paths 2>out && grep -E '\"filePath\":\"src/a.js\"' out 1>&2 && echo ok 1>&2",
   "setup": [
     "mkdir -p src && echo 'eval(x)' > src/a.js"
   ],
