@@ -63,11 +63,29 @@ Generates a new detector script at `rubric/detectors/<name>.sh` with all the §2
 
 Effort: ~20 min. Payback: ~5-8 min × every new detector × ~10 detectors remaining in §16 = 1-2 hours.
 
-## Process change (zero effort, immediate savings)
+## Process changes (zero effort, immediate savings)
 
-**Tiered active suite during iteration.** During iteration on a CL, run `bash evals/runner.sh -v cl<N>` (the staged 10 specs only) for the fast loop. Reserve the full `bash evals/runner.sh` (~750+ specs) for the **final pre-commit verify** only.
+**1. Tiered active suite during iteration.** During iteration on a CL, run `bash evals/runner.sh -v cl<N>` (the staged 10 specs only) for the fast loop. Reserve the full `bash evals/runner.sh` (~750+ specs) for the **final pre-commit verify** only.
 
 CLAUDE.md requires active-suite-green AT COMMIT TIME, not on every iteration. Saves ~2 min × ~5 iterations per CL = ~10 min per CL.
+
+**2. Pipelined CLs — start next CL's substrate while current CL's full suite runs.** When you kick off `bash evals/runner.sh > /tmp/runner-out.txt 2>&1` in background for CL-N's pre-commit verify, the same turn should:
+- Issue the bash with `run_in_background`
+- IMMEDIATELY (in the same response) start CL-(N+1) substrate work: spec survey, substrate writing, even staging cl<N+1>-* copies
+- Defer the ScheduleWakeup until you've made meaningful progress on CL-(N+1)
+
+When the wakeup fires:
+- Commit CL-N (1 min)
+- Continue CL-(N+1) substrate (already in progress)
+- Kick off targeted suite for CL-(N+1)
+
+This collapses ~2 min of "waiting on suite while doing nothing" into "writing next CL's code". **Saving: 1-2 min per CL × remaining CLs = 1-2 hours total.**
+
+**Why it's safe:** the substrate work for CL-(N+1) doesn't touch the active suite directly (no `git add` or commit), so an in-flight suite run for CL-N isn't disturbed. CL-N's commit still gates on its own suite result. The discipline order (1 feature per CL, audit, etc.) is unchanged.
+
+**3. Drop redundant polling loops.** When `bash ... > /tmp/x 2>&1` is launched with `run_in_background`, the harness sends a task-notification when the bash exits. Do NOT add a separate `until grep -qE '^Results' /tmp/x; do sleep 3; done` polling loop — that's a redundant turn that adds context cost and gives no information beyond what the notification already carries. **Saving: ~1 turn per occurrence × ~20 occurrences over the remaining work = ~5 min context-overhead.**
+
+**4. Multi-feature pre-flight at checkpoints.** At natural checkpoints (start of a §20 weekly batch, end of a phase) survey the next 3-4 features in one batched bash call rather than one feature at a time. The cost is small (~30 spec reads instead of 10) and gives you a forward look that helps decide whether any of the 4 optimization scripts cross their lazy-build threshold. **Saving: ~30s per checkpoint × ~10 checkpoints = ~5 min** (small but compounds with #2).
 
 ## What is NOT in this plan (deliberately rejected)
 
