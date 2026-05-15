@@ -3,3 +3,8 @@ node_modules/
 *.log
 .env
 .env.local
+
+# Q-6 SPACE local data — gitignored by default per privacy posture
+.claude-tdd-pro/space/
+space/.local/
+space/
