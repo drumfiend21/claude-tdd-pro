@@ -55,6 +55,12 @@ case "$AGENT" in
   review-react-a11y)
     printf '%s\n' '{"severity":"warn","rule_id":"react-a11y/img-alt","file":"'"$FILE_NAME"'","line":1,"finding":"img element missing alt attribute; wcag-2-2 §1.3.1 §2.4.7 §4.1.2","suggested_fix":"add an alt attribute (use alt= for decorative images)"}' > "$EMIT"
     ;;
+  review-node-boundaries)
+    printf '%s\n' '{"severity":"warn","rule_id":"node/boundary-schema","file":"'"$FILE_NAME"'","line":1,"finding":"trust-boundary input not schema-validated; owasp-asvs V5.1.3 input validation required","suggested_fix":"validate request body with a schema (zod, ajv) before use"}' > "$EMIT"
+    ;;
+  review-node-observability)
+    printf '%s\n' '{"severity":"warn","rule_id":"node/structured-logging","file":"'"$FILE_NAME"'","line":1,"finding":"console.log used in src; nodebestpractices 5.1 requires a structured logger (pino, winston) with leveled output","suggested_fix":"replace console.log with a structured logger and redact sensitive fields"}' > "$EMIT"
+    ;;
   *)
     echo "_runner: unknown agent: $AGENT" >&2
     exit 2

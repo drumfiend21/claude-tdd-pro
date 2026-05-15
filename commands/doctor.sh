@@ -313,6 +313,20 @@ case "$CHECK" in
     echo "ok" >&2
     exit 0
     ;;
+  agents)
+    AGENTS_DIR="$PLUGIN_ROOT/agents"
+    if [[ ! -d "$AGENTS_DIR" ]]; then
+      echo "doctor: agents/ directory missing" >&2
+      exit 1
+    fi
+    for f in "$AGENTS_DIR"/*.md; do
+      [[ -f "$f" ]] || continue
+      name=$(basename "$f" .md)
+      echo "agents: $name" >&2
+    done
+    echo "ok" >&2
+    exit 0
+    ;;
   *)
     echo "doctor: unknown check: $CHECK" >&2
     exit 2
