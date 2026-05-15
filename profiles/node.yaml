@@ -1,0 +1,43 @@
+name: node
+description: "Node.js backend profile. Activates all 10 g-node-* rules (N-2) at recommended severity, with N-2-table options for g-node-001/003/004. Per architecture section 16 N-5."
+
+extends:
+  - node:node-docs
+  - node:node-best-practices
+  - owasp:asvs
+  - google:eng-practices
+  - slsa:slsa-v1
+
+include:
+  detectors:
+    - boundary-schema.sh
+    - console-in-src.sh
+    - fetch-timeout.sh
+    - naked-throw.sh
+    - supply-chain.sh
+  agents:
+    - review-node-boundaries
+    - review-node-observability
+  rubric_rules:
+    - g-node-001
+    - g-node-002
+    - g-node-003
+    - g-node-004
+    - g-node-005
+    - g-node-006
+    - g-node-007
+    - g-node-008
+    - g-node-009
+    - g-node-010
+
+rules:
+  g-node-001: ["error", { schema_libs: ["zod", "ajv", "joi", "valibot"] }]
+  g-node-002: warn
+  g-node-003: ["error", { default_timeout_ms: 5000, allow_no_timeout_for: [] }]
+  g-node-004: ["error", { allowed_loggers: ["pino", "winston"], cli_paths: ["bin/", "scripts/"] }]
+  g-node-005: warn
+  g-node-006: error
+  g-node-007: error
+  g-node-008: error
+  g-node-009: error
+  g-node-010: error

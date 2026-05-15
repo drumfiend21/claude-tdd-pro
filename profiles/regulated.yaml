@@ -49,3 +49,13 @@ rules:
   g-react-008: ["error", { budget_kb: 175, per_route: {}, excluded_routes: [] }]
   g-react-009: error
   g-react-010: error
+  g-node-001: P0
+  g-node-002: warn
+  g-node-003: error
+  g-node-004: error
+  g-node-005: warn
+  g-node-006: error
+  g-node-007: error
+  g-node-008: P0
+  g-node-009: error
+  g-node-010: P0

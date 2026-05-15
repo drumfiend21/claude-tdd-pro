@@ -11,6 +11,11 @@ extends:
   - typescript:*
   - google:*
   - web-vitals:core-web-vitals
+  - node:*
+  - node:node-docs
+  - node:node-best-practices
+  - owasp:asvs
+  - slsa:slsa-v1
 
 include:
   detectors:

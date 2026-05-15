@@ -38,6 +38,11 @@ rules:
     provenance:
       - source: owasp-asvs
         section: "V5.1"
+    controls:
+      - framework: soc2-tsc
+        section: "PI1.1"
+      - framework: pci-dss-v4
+        section: "§6.2"
   - id: g-node-008
     name: secrets-via-env
     description: "Secrets (API keys, DB passwords, signing keys) must come from environment variables or a secrets manager, never hardcoded in source. The detector flags string literals matching common secret patterns."
@@ -62,6 +67,11 @@ rules:
     provenance:
       - source: owasp-asvs
         section: "V2.10"
+    controls:
+      - framework: soc2-tsc
+        section: "CC6.1"
+      - framework: pci-dss-v4
+        section: "§3.5"
 recommended_set:
   - g-node-001
   - g-node-008
