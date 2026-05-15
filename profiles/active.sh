@@ -47,7 +47,9 @@ done
 [[ -z "$TREE" ]] && { echo "profiles/active: --tree <dir> required" >&2; exit 2; }
 [[ ! -d "$TREE" ]] && { echo "profiles/active: tree not found: $TREE" >&2; exit 2; }
 
-PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FILE" ruby -ryaml -rjson -rdigest -e '
+PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FILE" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -rjson -rdigest -e '# coding: utf-8
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
   profile_path = ENV["PROFILE"]
   tree         = ENV["TREE"]
   emit         = ENV["EMIT_RESOLVED"] == "1"

@@ -1,0 +1,51 @@
+name: regulated
+description: "Regulated profile: extends strict.yaml and tightens accessibility (g-react-003) to P0 because EU AI Act art.16 / WCAG 2.2 conformance is required for regulated industries. Per architecture section 16 R-7."
+
+extends:
+  - strict.yaml
+  - react:rsc-rfc
+  - react:react-docs
+  - react:nextjs-docs
+  - w3c:wcag-2-2
+  - google:testing-blog
+  - web-vitals:core-web-vitals
+
+include:
+  detectors:
+    - rsc-boundary.sh
+    - a11y-axe.sh
+    - exhaustive-deps.sh
+    - bundle-budget.sh
+  agents:
+    - review-react-rsc
+    - review-react-a11y
+    - review-security
+    - review-google-style
+  rubric_rules:
+    - g-react-001
+    - g-react-002
+    - g-react-003
+    - g-react-004
+    - g-react-005
+    - g-react-006
+    - g-react-007
+    - g-react-008
+    - g-react-009
+    - g-react-010
+  require:
+    aibom: true
+    sod_gate_on_critical_paths: true
+    audit_log_signing: true
+    pii_egress_block: true
+
+rules:
+  g-react-001: P0
+  g-react-002: error
+  g-react-003: P0
+  g-react-004: warn
+  g-react-005: error
+  g-react-006: error
+  g-react-007: ["error", { test_runner: "vitest", allow_snapshot_only: false }]
+  g-react-008: ["error", { budget_kb: 175, per_route: {}, excluded_routes: [] }]
+  g-react-009: error
+  g-react-010: error
