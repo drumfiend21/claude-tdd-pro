@@ -28,13 +28,15 @@ VALIDATOR="$PLUGIN_ROOT/rubric/detectors/lib/validate-json-schema.js"
 SOURCE_FILE=""
 CHECK_REGISTRY_LINK=0
 REGISTRY_PATH=""
+CHECK_RECOMMENDED_CONSISTENCY=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --check-registry-link) CHECK_REGISTRY_LINK=1; shift ;;
     --registry) REGISTRY_PATH="$2"; shift 2 ;;
+    --check-recommended-consistency) CHECK_RECOMMENDED_CONSISTENCY=1; shift ;;
     -h|--help)
-      echo "Usage: validate-source-file.sh <path> [--check-registry-link --registry <path>]" >&2
+      echo "Usage: validate-source-file.sh <path> [--check-registry-link --registry <path>] [--check-recommended-consistency]" >&2
       exit 0 ;;
     *)
       if [[ -z "$SOURCE_FILE" ]]; then
@@ -56,6 +58,31 @@ fi
 if [[ ! -f "$SOURCE_FILE" ]]; then
   echo "validate-source-file: file not found: $SOURCE_FILE" >&2
   exit 1
+fi
+
+# E-6: --check-recommended-consistency verifies that recommended_set
+# matches exactly the set of rule ids with recommended:true.
+if [[ "$CHECK_RECOMMENDED_CONSISTENCY" -eq 1 ]]; then
+  SOURCE_FILE="$SOURCE_FILE" node -e '
+    const fs = require("fs");
+    const c = fs.readFileSync(process.env.SOURCE_FILE, "utf8");
+    const recMatch = c.match(/^recommended_set:\s*\[([^\]]*)\]/m);
+    const recDeclared = new Set((recMatch ? recMatch[1].split(",") : []).map(s => s.trim()).filter(Boolean));
+    const recActual = new Set();
+    const ruleRe = /\bid:\s*([a-zA-Z0-9_/-]+)[\s\S]*?(?=\n\s*-\s+\{|\n\s*-\s+id:|\nrecommended_set:|\nall_set:|$)/g;
+    let m;
+    while ((m = ruleRe.exec(c)) !== null) {
+      const id = m[1];
+      if (/\brecommended:\s*true/.test(m[0])) recActual.add(id);
+    }
+    const errs = [];
+    for (const id of recActual) if (!recDeclared.has(id)) errs.push(`recommended_set inconsistent: rule ${id} has recommended: true but is not in recommended_set`);
+    for (const id of recDeclared) if (!recActual.has(id)) errs.push(`recommended_set inconsistent: ${id} listed in recommended_set but rule does not have recommended: true`);
+    if (errs.length === 0) process.exit(0);
+    errs.forEach(e => process.stderr.write(e + "\n"));
+    process.exit(2);
+  '
+  exit $?
 fi
 
 # §2.21 final sentence: file naming MUST be lowercase-kebab-case.

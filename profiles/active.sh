@@ -54,16 +54,48 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
   for_file     = ENV["FOR_FILE"]
 
   # Walk profile.extends depth-first; merge rules + overrides; rightmost wins.
+  # Source-folder selectors (E-6 / G-7) are stashed for resolution after the
+  # rule-defs catalog has been loaded.
   visited = {}
   merged_rules     = {}
   merged_overrides = []
+  ns_selectors     = []
   walk = lambda do |path|
     next if visited[path]
     visited[path] = true
-    doc = YAML.load_file(path)
+    doc = begin
+      YAML.load_file(path)
+    rescue Psych::SyntaxError
+      # Fallback regex parse for the common case of unquoted ns:selector
+      # entries in extends: arrays (Psych chokes on bare colons in flow
+      # scalars). Extract extends + rules: { id: scalar } only.
+      content = File.read(path)
+      d = {}
+      ext_match = content.match(/^extends:\s*\[(.*?)\]/m)
+      if ext_match
+        d["extends"] = ext_match[1].split(",").map { |s| s.strip.gsub(/\A"|"\z/, "") }.reject(&:empty?)
+      end
+      rules_match = content.match(/^rules:\s*\n((?:\s+\S.*\n?)+)/m)
+      if rules_match
+        d["rules"] = {}
+        rules_match[1].each_line do |line|
+          if (m = line.match(/^\s+([a-zA-Z0-9_\/-]+):\s*(.+?)\s*$/))
+            d["rules"][m[1]] = m[2].gsub(/\A"|"\z/, "")
+          end
+        end
+      end
+      d
+    end
     doc = {} unless doc.is_a?(Hash)
     if doc["extends"].is_a?(Array)
-      doc["extends"].each { |e| walk.call(e) if e.is_a?(String) && File.file?(e) }
+      doc["extends"].each do |e|
+        next unless e.is_a?(String)
+        if File.file?(e)
+          walk.call(e)
+        elsif e =~ /\A[a-zA-Z0-9_-]+:[a-zA-Z0-9_*-]+(:all)?\z/
+          ns_selectors << e
+        end
+      end
     end
     if doc["rules"].is_a?(Hash)
       doc["rules"].each { |k, v| merged_rules[k] = v }
@@ -76,13 +108,71 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
 
   # Load all rule definitions from --tree (G-1 source folders); each YAML
   # file has rules:[] each with id + options_schema + ... per §2.1.
+  # Falls back to regex extraction when YAML.load_file fails (flow-style
+  # YAML with bare URLs that Psych chokes on).
   rule_defs = {}
+  ns_index_recommended = {} # ns_key => [rule_id, ...]
+  ns_index_all = {}         # ns_key => [rule_id, ...]
   Dir.glob(File.join(tree, "**", "*.yaml")).each do |rf|
-    sf = YAML.load_file(rf)
-    next unless sf.is_a?(Hash) && sf["rules"].is_a?(Array)
-    sf["rules"].each do |r|
-      next unless r.is_a?(Hash) && r["id"]
-      rule_defs[r["id"]] = r
+    rel = rf.sub(/\A#{Regexp.escape(tree)}\/?/, "")
+    parts = rel.split("/")
+    top = parts.first
+    ns_key = if top == "_community" || top == "_operator" then parts[1] else top end
+    sf = begin
+      YAML.load_file(rf)
+    rescue
+      nil
+    end
+    if sf.is_a?(Hash) && sf["rules"].is_a?(Array)
+      rec_set = (sf["recommended_set"].is_a?(Array) ? sf["recommended_set"].map(&:to_s) : [])
+      sf["rules"].each do |r|
+        next unless r.is_a?(Hash) && r["id"]
+        rid = r["id"]
+        rule_defs[rid] = r
+        is_rec = (r["recommended"] == true) || rec_set.include?(rid)
+        (ns_index_recommended[ns_key] ||= []) << rid if is_rec
+        (ns_index_all[ns_key] ||= []) << rid
+      end
+    else
+      # Regex fallback: extract id + severity + recommended from raw text.
+      content = File.read(rf)
+      rec_match = content.match(/^recommended_set:\s*\[([^\]]*)\]/)
+      all_match = content.match(/^all_set:\s*\[([^\]]*)\]/)
+      rec_ids = rec_match ? rec_match[1].split(",").map { |s| s.strip } : []
+      all_ids = all_match ? all_match[1].split(",").map { |s| s.strip } : []
+      all_ids.each do |rid|
+        # Find this rules block; extract severity + recommended.
+        rid_re = Regexp.escape(rid)
+        blk = (content.match(/\bid:\s*#{rid_re}\b[\s\S]*?(?=\n\s*-\s+\{|\n\s*-\s+id:|\nrecommended_set:|\nall_set:|\z)/) || [""])[0]
+        sev = (blk.match(/\bseverity:\s*(P[0-9]|warn|error|off)/) || [])[1]
+        is_rec = rec_ids.include?(rid) || /\brecommended:\s*true/.match?(blk)
+        rule_defs[rid] = { "id" => rid, "severity" => sev, "recommended" => is_rec }
+        (ns_index_recommended[ns_key] ||= []) << rid if is_rec
+        (ns_index_all[ns_key] ||= []) << rid
+      end
+    end
+  end
+
+  # Resolve namespace-selector extends (E-6 / G-7) into merged_rules.
+  # Default severity = the rule severity field (P0/P1/P2) so the E-6
+  # specs see the rule-declared severity. Profile-explicit rules
+  # (already in merged_rules) win on collision.
+  default_sev_for = lambda do |rid|
+    (rule_defs[rid] && rule_defs[rid]["severity"]) || "warn"
+  end
+  ns_selectors.each do |sel|
+    parts = sel.split(":")
+    ns = parts[0]
+    scope = parts[1]
+    case
+    when ns == "rubric" && scope == "recommended"
+      rule_defs.each { |rid, r| merged_rules[rid] ||= default_sev_for.call(rid) if r["recommended"] == true }
+    when ns == "rubric" && scope == "all"
+      rule_defs.each { |rid, _| merged_rules[rid] ||= default_sev_for.call(rid) }
+    when scope == "recommended"
+      (ns_index_recommended[ns] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
+    when scope == "*"
+      (ns_index_all[ns] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
     end
   end
 

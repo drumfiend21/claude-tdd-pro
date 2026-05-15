@@ -163,15 +163,23 @@ for arg in "$@"; do
         const rulesIdx = content.indexOf("\nrules:");
         if (rulesIdx < 0) continue;
         const tail = content.slice(rulesIdx);
+        const recMatch = content.match(/^recommended_set:\s*\[([^\]]*)\]/m);
+        const recSet = new Set((recMatch ? recMatch[1].split(",") : []).map(s => s.trim()).filter(Boolean));
         const ids = [];
-        // Match flow-style (- {id: x-y, ...}) and block-style (- id: x-y).
         const re = /(?:-\s*\{[^{}]*?\bid:\s*([a-zA-Z0-9_/-]+)|-\s*id:\s*([a-zA-Z0-9_/-]+))/g;
         let m;
         while ((m = re.exec(tail)) !== null) {
           const id = m[1] || m[2];
           if (id) ids.push(id);
         }
-        for (const id of ids) rules.push({ id, source_file: f.slice(root.length).replace(/^\//, "") });
+        for (const id of ids) {
+          // E-6: emit per-rule recommended flag (true if id appears in
+          // recommended_set OR the rule block has recommended: true).
+          const ridRe = new RegExp("\\bid:\\s*" + id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b[\\s\\S]*?(?=\\n\\s*-\\s+\\{|\\n\\s*-\\s+id:|\\nrecommended_set:|\\nall_set:|$)");
+          const blk = (tail.match(ridRe) || [""])[0];
+          const recommended = recSet.has(id) || /\brecommended:\s*true/.test(blk);
+          rules.push({ id, source_file: f.slice(root.length).replace(/^\//, ""), recommended });
+        }
       }
 
       // --pin-to-lock: write quality_standards_directory_hash into lock.json.
