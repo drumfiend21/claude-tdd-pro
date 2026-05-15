@@ -1,0 +1,11 @@
+{
+  "name": "rule id namespacing: moving a rule between files within the same namespace folder preserves the id (lock file pins prior file path; warns but does not rename)",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: \"https://g.com\"\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:S\"\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - id: \"g-ts-001\"\\n    name: x\\n    description: x\\n    detector: x\\n    type: problem\\n    fixable: null\\n    has_suggestions: false\\n    deprecated: false\\n    replaced_by: []\\n    docs_url: \"https://x.com\"\\n    requires_type_checking: false\\n    recommended: true\\n    options_schema: {}\\n    messages:\\n      default: x\\n    severity: P1\\n    version: 1.0.0\\n    semver: 1.0.0\\n    rule_state: warn-only\\n    provenance:\\n      - source: x\\n        class: published-standard\\n        section_id: x\\n        url: \"https://x.com\"\\n        fetched_at: \"2026-05-04T00:00:00Z\"\\n        content_hash: \"sha256:S\"\\nrecommended_set: [\"g-ts-001\"]\\nall_set: [\"g-ts-001\"]\\n' > tree/google/tsguide.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --emit-id-locations 2>map1.json && mv tree/google/tsguide.yaml tree/google/tsguide-renamed.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --emit-id-locations 2>map2.json && grep -E '\"g-ts-001\"' map1.json 1>&2 && grep -E '\"g-ts-001\"' map2.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

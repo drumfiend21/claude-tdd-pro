@@ -29,6 +29,10 @@ ROOT=""
 FORMAT="text"
 CHECK_CROSS_FILE_COLLISIONS=0
 CHECK_EMPTY_NAMESPACES=0
+CHECK_ID_NAMESPACING=0
+EMIT_ID_LOCATIONS=0
+CHECK_REPLACED_BY_REFERENCES=0
+INCLUDE_RULES=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -36,6 +40,10 @@ while [[ $# -gt 0 ]]; do
     --format) FORMAT="$2"; shift 2 ;;
     --check-cross-file-collisions) CHECK_CROSS_FILE_COLLISIONS=1; shift ;;
     --check-empty-namespaces) CHECK_EMPTY_NAMESPACES=1; shift ;;
+    --check-id-namespacing) CHECK_ID_NAMESPACING=1; shift ;;
+    --emit-id-locations) EMIT_ID_LOCATIONS=1; shift ;;
+    --check-replaced-by-references) CHECK_REPLACED_BY_REFERENCES=1; shift ;;
+    --include-rules) INCLUDE_RULES=1; shift ;;
     -h|--help) sed -n '1,30p' "$0" | grep -E '^# ' | sed 's/^# //'; exit 0 ;;
     *) echo "validate-all: unknown flag: $1" >&2; exit 2 ;;
   esac
@@ -135,21 +143,166 @@ if [[ "$CHECK_EMPTY_NAMESPACES" -eq 1 ]]; then
   done
 fi
 
+# G-3 rule-id namespacing check: enforce per-folder prefix discipline per
+# §16 G-3 verbatim. Default folders use "g-" (not "g-universal-"),
+# _universal/ uses "g-universal-", _operator/<my-org>/ uses "<my-org>-",
+# _community/<plugin-id>/ uses "<plugin-id>/<rule-id>" namespaced form.
+# Rule IDs must match ^[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)?$ (lowercase
+# kebab; optional plugin/ namespace).
+NAMESPACING_FAIL=0
+if [[ "$CHECK_ID_NAMESPACING" -eq 1 ]] && command -v ruby >/dev/null 2>&1; then
+  ROOT_ABS=$(cd "$ROOT" && pwd)
+  ROOT_ABS="$ROOT_ABS" ruby -ryaml -e '
+    root = ENV["ROOT_ABS"]
+    pattern = /\A[a-z][a-z0-9-]*(\/[a-z][a-z0-9-]*)?\z/
+    fail_count = 0
+    ARGV.each do |path|
+      doc = begin; YAML.load_file(path); rescue; nil; end
+      next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
+      rel = path.sub(/\A#{Regexp.escape(root)}\/?/, "")
+      parts = rel.split("/")
+      ns = parts.first
+      doc["rules"].each do |r|
+        next unless r.is_a?(Hash) && r["id"].is_a?(String)
+        id = r["id"]
+        unless id =~ pattern
+          STDERR.puts "id-namespacing: rule id \"#{id}\" in #{rel}: must match kebab-case pattern ^[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)?$"
+          fail_count += 1
+          next
+        end
+        if ns == "_universal"
+          unless id.start_with?("g-universal-")
+            STDERR.puts "id-namespacing: rule id \"#{id}\" in #{rel}: rules under _universal/ must use g-universal- prefix"
+            fail_count += 1
+          end
+        elsif ns == "_operator"
+          org = parts[1]
+          unless org && id.start_with?("#{org}-")
+            STDERR.puts "id-namespacing: rule id \"#{id}\" in #{rel}: rules under _operator/#{org}/ must start with #{org}- prefix"
+            fail_count += 1
+          end
+        elsif ns == "_community"
+          plugin = parts[1]
+          unless plugin && id.start_with?("#{plugin}/")
+            STDERR.puts "id-namespacing: rule id \"#{id}\" in #{rel}: rules under _community/#{plugin}/ must use #{plugin}/<rule-id> namespaced form"
+            fail_count += 1
+          end
+        else
+          # Default plugin-shipped namespace folder.
+          if id.start_with?("g-universal-")
+            STDERR.puts "id-namespacing: rule id \"#{id}\" in #{rel}: g-universal- prefix is reserved for _universal/ folder"
+            fail_count += 1
+          elsif !id.start_with?("g-")
+            STDERR.puts "id-namespacing: rule id \"#{id}\" in #{rel}: plugin-shipped rules must start with g- prefix"
+            fail_count += 1
+          end
+        end
+      end
+    end
+    exit(fail_count > 0 ? 2 : 0)
+  ' "${FILES[@]}" || NAMESPACING_FAIL=$?
+fi
+if [[ "$NAMESPACING_FAIL" -ne 0 ]]; then
+  exit 2
+fi
+
+# G-3 emit-id-locations: emit per-rule {id => relative_path} map so callers
+# can verify ID stability across file moves.
+if [[ "$EMIT_ID_LOCATIONS" -eq 1 ]] && command -v ruby >/dev/null 2>&1; then
+  ROOT_ABS=$(cd "$ROOT" && pwd)
+  ROOT_ABS="$ROOT_ABS" ruby -ryaml -rjson -e '
+    root = ENV["ROOT_ABS"]
+    out = {}
+    ARGV.each do |path|
+      doc = begin; YAML.load_file(path); rescue; nil; end
+      next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
+      rel = path.sub(/\A#{Regexp.escape(root)}\/?/, "")
+      doc["rules"].each do |r|
+        next unless r.is_a?(Hash) && r["id"].is_a?(String)
+        out[r["id"]] = rel
+      end
+    end
+    STDERR.puts JSON.generate(out)
+  ' "${FILES[@]}"
+fi
+
+# G-3 check-replaced-by-references: validate that deprecated rules'
+# replaced_by entries point to ids present in the active rule set.
+if [[ "$CHECK_REPLACED_BY_REFERENCES" -eq 1 ]] && command -v ruby >/dev/null 2>&1; then
+  ROOT_ABS=$(cd "$ROOT" && pwd)
+  REPLACED_BY_FAIL=$(ROOT_ABS="$ROOT_ABS" ruby -ryaml -e '
+    seen = {}
+    refs = []
+    ARGV.each do |path|
+      doc = begin; YAML.load_file(path); rescue; nil; end
+      next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
+      doc["rules"].each do |r|
+        next unless r.is_a?(Hash) && r["id"].is_a?(String)
+        seen[r["id"]] = true
+        if r["replaced_by"].is_a?(Array)
+          r["replaced_by"].each { |rb| refs << [rb, r["id"], path] if rb.is_a?(String) }
+        end
+      end
+    end
+    dangling = refs.reject { |rb, _, _| seen[rb] }
+    dangling.each { |rb, src, p| STDERR.puts "replaced_by: rule \"#{src}\" replaced_by [\"#{rb}\"] dangling - \"#{rb}\" not present in active rule set" }
+    exit(dangling.empty? ? 0 : 2)
+  ' "${FILES[@]}" 2>&1) && REPLACED_BY_RC=0 || REPLACED_BY_RC=$?
+  [[ -n "$REPLACED_BY_FAIL" ]] && echo "$REPLACED_BY_FAIL" >&2
+  [[ "$REPLACED_BY_RC" -ne 0 ]] && exit 2
+fi
+
+# G-3 include-rules: when --format json --include-rules, emit per-rule
+# fields (id, deprecated, replaced_by) alongside the file summary so
+# callers can assert on rule-level metadata in a single pass.
+if [[ "$INCLUDE_RULES" -eq 1 && "$FORMAT" == "json" ]] && command -v ruby >/dev/null 2>&1; then
+  ROOT_ABS=$(cd "$ROOT" && pwd)
+  ROOT_ABS="$ROOT_ABS" ruby -ryaml -rjson -e '
+    rules = []
+    ARGV.each do |path|
+      doc = begin; YAML.load_file(path); rescue; nil; end
+      next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
+      doc["rules"].each do |r|
+        next unless r.is_a?(Hash) && r["id"].is_a?(String)
+        rules << { "id" => r["id"], "deprecated" => r["deprecated"] == true, "replaced_by" => r["replaced_by"] || [] }
+      end
+    end
+    STDERR.puts JSON.generate({ "rules" => rules })
+  ' "${FILES[@]}"
+fi
+
+# Data-mode flags suppress the text-mode CI-gate exit. When the caller is
+# asking for data (--emit-id-locations, --check-replaced-by-references,
+# --include-rules, --check-id-namespacing), unrelated per-file shape
+# failures shouldn't cause exit 1 - the namespacing/replaced-by checks
+# already exit 2 above on their own violations, and the data emission
+# above happened before this point.
+DATA_MODE=0
+[[ "$EMIT_ID_LOCATIONS" -eq 1 ]] && DATA_MODE=1
+[[ "$CHECK_REPLACED_BY_REFERENCES" -eq 1 ]] && DATA_MODE=1
+[[ "$INCLUDE_RULES" -eq 1 ]] && DATA_MODE=1
+[[ "$CHECK_ID_NAMESPACING" -eq 1 ]] && DATA_MODE=1
+
 # Summary output (always to stderr per project convention; spec assertions read 2>out.txt)
-if [[ "$FORMAT" == "json" ]]; then
-  echo "{\"files_total\":${#FILES[@]},\"files_passed\":$PASSED,\"files_failed\":$FAILED,\"files_excluded_from_aggregation\":$FAILED}" >&2
-else
-  echo "${#FILES[@]} files validated" >&2
-  echo "passed: $PASSED" >&2
-  echo "failed: $FAILED" >&2
-  for ff in "${FAILED_FILES[@]:-}"; do
-    [[ -n "$ff" ]] && echo "  failed: $ff" >&2
-  done
+if [[ "$DATA_MODE" -eq 0 ]]; then
+  if [[ "$FORMAT" == "json" ]]; then
+    echo "{\"files_total\":${#FILES[@]},\"files_passed\":$PASSED,\"files_failed\":$FAILED,\"files_excluded_from_aggregation\":$FAILED}" >&2
+  else
+    echo "${#FILES[@]} files validated" >&2
+    echo "passed: $PASSED" >&2
+    echo "failed: $FAILED" >&2
+    for ff in "${FAILED_FILES[@]:-}"; do
+      [[ -n "$ff" ]] && echo "  failed: $ff" >&2
+    done
+  fi
 fi
 
 # Exit-code discipline: text mode (CI gate path) exits 1 on any failure;
-# JSON mode (data-output path) exits 0 always — the summary itself tells
-# the consumer about failures (files_failed > 0).
+# JSON mode (data-output path) exits 0 always; data-mode exits 0 (the
+# specific data-checks already exited 2 above on their own violations).
+if [[ "$DATA_MODE" -eq 1 ]]; then
+  exit 0
+fi
 if [[ "$FORMAT" == "json" ]]; then
   exit 0
 fi
