@@ -18,18 +18,36 @@ set -uo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 EMIT_PATH=""
+EMIT_EMPTY_REGISTRIES=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --emit-baseline) EMIT_PATH="$2"; shift 2 ;;
+    --emit-empty-registries) EMIT_EMPTY_REGISTRIES=1; shift ;;
     -h|--help)
-      echo "Usage: init-guardrails.sh --emit-baseline <path>" >&2
+      echo "Usage: init-guardrails.sh --emit-baseline <path> | --emit-empty-registries" >&2
       exit 0 ;;
     *) echo "init-guardrails: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
 
-[[ -z "$EMIT_PATH" ]] && { echo "init-guardrails: --emit-baseline <path> required" >&2; exit 2; }
+# S-12 / C-13 / L-19: scaffold the three operator-editable registries
+# at .claude-tdd-pro/ root with empty (commented) headers.
+if [[ "$EMIT_EMPTY_REGISTRIES" -eq 1 ]]; then
+  mkdir -p .claude-tdd-pro
+  for f in STANDARDS-URLS.yaml COMPLIANCE-URLS.yaml PR-SOURCES.yaml; do
+    if [[ ! -f ".claude-tdd-pro/$f" ]]; then
+      cat > ".claude-tdd-pro/$f" <<HEADER
+# .claude-tdd-pro/$f — operator-editable registry (operator-facing schema only).
+# Add entries below; init-guardrails leaves existing entries untouched.
+HEADER
+    fi
+  done
+  echo "init-guardrails: scaffolded operator registries at .claude-tdd-pro/" >&2
+  exit 0
+fi
+
+[[ -z "$EMIT_PATH" ]] && { echo "init-guardrails: --emit-baseline <path> or --emit-empty-registries required" >&2; exit 2; }
 
 mkdir -p "$(dirname "$EMIT_PATH")"
 
