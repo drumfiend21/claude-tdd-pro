@@ -37,11 +37,23 @@ case "$RULE" in
   g-react-008) DETECTOR="bundle-budget.sh" ;;
   g-react-009) DETECTOR="rsc-boundary.sh" ;;
   g-react-010) DETECTOR="bundle-budget.sh" ;;
+  g-node-001)  DETECTOR="boundary-schema.sh" ;;
+  g-node-002)  DETECTOR="naked-throw.sh" ;;
+  g-node-003)  DETECTOR="fetch-timeout.sh" ;;
+  g-node-004)  DETECTOR="console-in-src.sh" ;;
+  g-node-005)  DETECTOR="naked-throw.sh" ;;
+  g-node-006)  DETECTOR="naked-throw.sh" ;;
+  g-node-007)  DETECTOR="naked-throw.sh" ;;
+  g-node-008)  DETECTOR="boundary-schema.sh" ;;
+  g-node-009)  DETECTOR="naked-throw.sh" ;;
+  g-node-010)  DETECTOR="supply-chain.sh" ;;
   *)
     echo "_dispatch: no detector mapping for rule $RULE" >&2
     exit 2
     ;;
 esac
+
+echo "_dispatch: $RULE -> $DETECTOR" >&2
 
 DETECTOR_PATH="$PLUGIN_ROOT/rubric/detectors/$DETECTOR"
 if [[ ! -x "$DETECTOR_PATH" ]]; then
