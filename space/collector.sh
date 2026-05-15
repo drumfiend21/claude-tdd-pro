@@ -42,6 +42,27 @@ emit_metric() {
   echo "id=$id dimension=$dim $rest" >&2
 }
 
+emit_yaml() {
+  local id="$1" dim="$2" loop="$3" val="${4:-}"
+  [[ -z "$OUT" ]] && return 0
+  mkdir -p "$(dirname "$OUT")"
+  if [[ ! -f "$OUT" ]]; then
+    echo "metrics:" > "$OUT"
+  fi
+  {
+    echo "  - id: $id"
+    echo "    dimension: $dim"
+    echo "    source_loop: $loop"
+    [[ -n "$val" ]] && echo "    value: $val"
+    case "$loop" in
+      rubric)      echo "    upstream_doc: 'reads from .claude-tdd-pro/rubric-runs/ — see rubric loop documentation'" ;;
+      rule-engine) echo "    upstream_doc: 'reads from .claude-tdd-pro/cache/ — see rule-engine loop documentation'" ;;
+      workflow)    echo "    upstream_doc: 'reads from .claude-tdd-pro/workflow/ — see workflow loop documentation'" ;;
+      prompt)     echo "    upstream_doc: 'reads from .claude-tdd-pro/prompts/ — see prompt loop documentation'" ;;
+    esac
+  } >> "$OUT"
+}
+
 run_metric() {
   local m="$1"
   case "$m" in
@@ -55,14 +76,19 @@ run_metric() {
       emit_metric "space-act-commits" "activity" "commits=$count"
       ;;
     rubric-pass-rate)
+      if ! dim_enabled performance && [[ -n "$CONFIG" ]]; then
+        echo "performance_disabled=skipped" >&2
+        return 0
+      fi
       local f=".claude-tdd-pro/rubric-runs/last.json"
-      [[ ! -f "$f" ]] && { echo "id=space-perf-rubric-pass-rate dimension=performance no_data=true" >&2; return 0; }
+      [[ ! -f "$f" ]] && { echo "id=space-perf-rubric-pass-rate dimension=performance rubric_pass_rate=no_data" >&2; emit_yaml "space-perf-rubric-pass-rate" "performance" "rubric"; return 0; }
       local pass=$(node -e "const j=JSON.parse(require('fs').readFileSync('$f','utf8'));process.stdout.write(String(j.pass||0))")
       local fail=$(node -e "const j=JSON.parse(require('fs').readFileSync('$f','utf8'));process.stdout.write(String(j.fail||0))")
       local total=$((pass + fail))
       [[ "$total" -eq 0 ]] && total=1
       local rate=$(node -e "process.stdout.write(($pass/$total).toFixed(2))")
-      emit_metric "space-perf-rubric-pass-rate" "performance" "rubric_pass_rate=$rate"
+      emit_metric "space-perf-rubric-pass-rate" "performance" "rubric_pass_rate=$rate source_loop=rubric"
+      emit_yaml "space-perf-rubric-pass-rate" "performance" "rubric" "$rate"
       ;;
     defect-escape)
       local f=".claude-tdd-pro/rubric-runs/escape.json"
@@ -80,7 +106,8 @@ run_metric() {
       local f=".claude-tdd-pro/cache/stats.json"
       [[ ! -f "$f" ]] && { echo "id=space-eff-cache-hit-rate dimension=efficiency_and_flow no_data=true" >&2; return 0; }
       local rate=$(node -e "const j=JSON.parse(require('fs').readFileSync('$f','utf8'));const h=j.hits||0;const m=j.misses||0;const t=h+m||1;process.stdout.write((h/t).toFixed(2))")
-      emit_metric "space-eff-cache-hit-rate" "efficiency_and_flow" "cache_hit_rate=$rate"
+      emit_metric "space-eff-cache-hit-rate" "efficiency_and_flow" "cache_hit_rate=$rate source_loop=rule-engine"
+      emit_yaml "space-eff-cache-hit-rate" "efficiency_and_flow" "rule-engine" "$rate"
       ;;
     feedback-loop-time)
       local f=".claude-tdd-pro/posttooluse/log.jsonl"
@@ -100,7 +127,8 @@ run_metric() {
       local f=".claude-tdd-pro/workflow/transitions.jsonl"
       [[ ! -f "$f" ]] && { echo "id=space-collab-transitions dimension=collaboration no_data=true" >&2; return 0; }
       local count=$(wc -l < "$f" | tr -d ' ')
-      emit_metric "space-collab-transitions" "collaboration" "transitions=$count"
+      emit_metric "space-collab-transitions" "collaboration" "transitions=$count source_loop=workflow"
+      emit_yaml "space-collab-transitions" "collaboration" "workflow" "$count"
       ;;
     satisfaction-survey)
       if ! dim_enabled satisfaction; then
@@ -117,8 +145,9 @@ run_metric() {
       ;;
     skill-perf|skill-performance)
       local f=".claude-tdd-pro/prompts/skill-perf.jsonl"
-      [[ ! -f "$f" ]] && { echo "id=space-eff-skill-perf dimension=efficiency_and_flow no_data=true" >&2; return 0; }
-      emit_metric "space-eff-skill-perf" "efficiency_and_flow" "skill_perf_present=true"
+      [[ ! -f "$f" ]] && { echo "id=space-eff-skill-perf dimension=efficiency_and_flow skill_perf=no_data" >&2; return 0; }
+      local skill=$(node -e "const j=JSON.parse(require('fs').readFileSync('$f','utf8').trim().split('\n')[0]);process.stdout.write(j.skill||'unknown')")
+      emit_metric "space-eff-skill-perf" "efficiency_and_flow" "skill_perf_present=true source_loop=prompt skill=$skill"
       ;;
     *)
       echo "collector: unknown metric: $m (valid: activity-commits, rubric-pass-rate, defect-escape, suppression-count, cache-hit-rate, feedback-loop-time, workflow-transitions, satisfaction-survey, skill-perf)" >&2
@@ -130,16 +159,10 @@ run_metric() {
 if [[ "$ALL" -eq 1 ]]; then
   [[ -z "$OUT" ]] && { echo "collector: --all requires --out" >&2; exit 2; }
   mkdir -p "$(dirname "$OUT")"
-  {
-    echo "metrics:"
-    for m in rubric-pass-rate defect-escape suppression-count cache-hit-rate feedback-loop-time workflow-transitions; do
-      run_metric "$m" 2> /tmp/.collector_line
-      LINE=$(cat /tmp/.collector_line)
-      ID=$(echo "$LINE" | sed -n 's/^id=\([^ ]*\).*/\1/p')
-      DIM=$(echo "$LINE" | sed -n 's/.*dimension=\([^ ]*\).*/\1/p')
-      [[ -n "$ID" ]] && echo "  - {id: $ID, dimension: $DIM}"
-    done
-  } > "$OUT"
+  : > "$OUT"
+  for m in rubric-pass-rate defect-escape suppression-count cache-hit-rate feedback-loop-time workflow-transitions; do
+    run_metric "$m" 2>/dev/null
+  done
   echo "collector: wrote $OUT" >&2
   exit 0
 fi
