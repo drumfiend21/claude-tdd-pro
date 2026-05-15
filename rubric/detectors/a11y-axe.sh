@@ -42,9 +42,11 @@ EXPAND_BASE=""
 EXPAND_PATTERN=""
 EXPAND_RECURSIVE=0
 case "$PATHS" in
-  *"**"*)
+  *"/**"*)
     EXPAND_BASE="${PATHS%%/\*\*/*}"
+    [[ "$EXPAND_BASE" == "$PATHS" ]] && EXPAND_BASE="${PATHS%/\*\*}"
     EXPAND_PATTERN="${PATHS##*/}"
+    [[ "$EXPAND_PATTERN" == "**" ]] && EXPAND_PATTERN="*"
     EXPAND_RECURSIVE=1
     ;;
   */*)
