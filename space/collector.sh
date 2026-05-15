@@ -109,6 +109,12 @@ run_metric() {
       fi
       emit_metric "space-sat-micro-survey" "satisfaction" "survey_runs=1"
       ;;
+    friction-events)
+      local f=".claude-tdd-pro/friction/events.jsonl"
+      [[ ! -f "$f" ]] && { echo "id=space-eff-friction-events dimension=efficiency_and_flow no_data=true" >&2; return 0; }
+      local count=$(wc -l < "$f" | tr -d ' ')
+      emit_metric "space-eff-friction-events" "efficiency_and_flow" "friction_events=$count"
+      ;;
     skill-perf|skill-performance)
       local f=".claude-tdd-pro/prompts/skill-perf.jsonl"
       [[ ! -f "$f" ]] && { echo "id=space-eff-skill-perf dimension=efficiency_and_flow no_data=true" >&2; return 0; }
