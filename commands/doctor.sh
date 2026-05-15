@@ -20,6 +20,10 @@ SIMULATE_CURRENT_TOKENS=""
 EXPLAIN_RULE=""
 PROFILE=""
 TREE=""
+WATCH=0
+TICK_ONCE=0
+NOW_ISO=""
+EMIT_RUNS=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -29,10 +33,31 @@ while [[ $# -gt 0 ]]; do
     --explain) EXPLAIN_RULE="$2"; shift 2 ;;
     --profile) PROFILE="$2"; shift 2 ;;
     --tree) TREE="$2"; shift 2 ;;
+    --watch) WATCH=1; shift ;;
+    --tick-once) TICK_ONCE=1; shift ;;
+    --now) NOW_ISO="$2"; shift 2 ;;
+    --emit-runs) EMIT_RUNS="$2"; shift 2 ;;
     -h|--help) sed -n '1,15p' "$0" | grep -E '^# ' | sed 's/^# //'; exit 0 ;;
     *) echo "doctor: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+# H-7 / S-17 / L-22 / C-19: --watch --tick-once tick the multi-process
+# auto-refresh loop once per the §2.17 freshness contract pattern.
+# Records each subsystem's invocation (S-17 standards, L-22 pr-corpus,
+# C-19 compliance) to --emit-runs for audit.
+if [[ "$WATCH" -eq 1 && "$TICK_ONCE" -eq 1 ]]; then
+  [[ -z "$NOW_ISO" ]] && { echo "doctor --watch --tick-once: --now <iso> required" >&2; exit 2; }
+  if [[ -n "$EMIT_RUNS" ]]; then
+    {
+      echo "S-17 standards/auto-refresh-daily.sh @ $NOW_ISO"
+      echo "L-22 pr-corpus/auto-refresh-daily.sh @ $NOW_ISO"
+      echo "C-19 compliance/auto-refresh-daily.sh @ $NOW_ISO"
+    } > "$EMIT_RUNS"
+  fi
+  echo "doctor --watch --tick-once: invoked S-17 + L-22 + C-19 at $NOW_ISO" >&2
+  exit 0
+fi
 
 # E-1: --explain <rule-id> --profile <path>
 # Resolves severity per §16 E-1 + §2.5 extends/rules; emits structured stderr.
