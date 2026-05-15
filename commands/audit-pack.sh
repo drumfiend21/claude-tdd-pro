@@ -37,7 +37,8 @@ while [[ $# -gt 0 ]]; do
     --emit) EMIT="$2"; shift 2 ;;
     --section) SECTION="$2"; shift 2 ;;
     --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
-    --aibom-file|--aibom|--include-aibom) AIBOM_FILE="$2"; shift 2 ;;
+    --aibom-file) AIBOM_FILE="$2"; shift 2 ;;
+    --aibom|--include-aibom) AIBOM_FILE="$2"; SECTION="${SECTION:-aibom}"; shift 2 ;;
     --evidence-dir) EVIDENCE_DIR="$2"; shift 2 ;;
     --risk-file) RISK_FILE="$2"; shift 2 ;;
     --audit-log) AUDIT_LOG_FILE="$2"; shift 2 ;;
