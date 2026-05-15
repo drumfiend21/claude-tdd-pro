@@ -1,0 +1,70 @@
+- id: rsc-reviewer
+  versions:
+    - version: 1.0.0
+      file: prompts/rsc-reviewer/v1.0.0.md
+      hash: "sha256:4706d958fe20ddda47546e027372480ff665d6989fe63e098ad386da3de72523"
+      created: "2026-05-15T00:00:00Z"
+      eval_pass_rate: 0.85
+      regression_from_prior: 0
+      status: active
+      migration:
+        from_inline_agent: true
+        golden_output_diff: "initial-bootstrap-no-prior-version"
+        delta_status: zero-delta
+        validated_inputs: []
+- id: a11y-reviewer
+  versions:
+    - version: 1.0.0
+      file: prompts/a11y-reviewer/v1.0.0.md
+      hash: "sha256:df2ea81907c58068ab6d908e866da6d0414a4beccf69b678990994979ca80430"
+      created: "2026-05-15T00:00:00Z"
+      eval_pass_rate: 0.85
+      regression_from_prior: 0
+      status: active
+      migration:
+        from_inline_agent: true
+        golden_output_diff: "initial-bootstrap-no-prior-version"
+        delta_status: zero-delta
+        validated_inputs: []
+- id: node-boundaries-reviewer
+  versions:
+    - version: 1.0.0
+      file: prompts/node-boundaries-reviewer/v1.0.0.md
+      hash: "sha256:4a8b00aac89320c6d9e841404d9ddc85900fb9fe267c51d9f41f0f101509fadc"
+      created: "2026-05-15T00:00:00Z"
+      eval_pass_rate: 0.85
+      regression_from_prior: 0
+      status: active
+      migration:
+        from_inline_agent: true
+        golden_output_diff: "initial-bootstrap-no-prior-version"
+        delta_status: zero-delta
+        validated_inputs: []
+- id: node-observability-reviewer
+  versions:
+    - version: 1.0.0
+      file: prompts/node-observability-reviewer/v1.0.0.md
+      hash: "sha256:dcdcb981a4c24efc2d390e700699660454085beb1055693249e2da3ef383f076"
+      created: "2026-05-15T00:00:00Z"
+      eval_pass_rate: 0.85
+      regression_from_prior: 0
+      status: active
+      migration:
+        from_inline_agent: true
+        golden_output_diff: "initial-bootstrap-no-prior-version"
+        delta_status: zero-delta
+        validated_inputs: []
+- id: types-reviewer
+  versions:
+    - version: 1.0.0
+      file: prompts/types-reviewer/v1.0.0.md
+      hash: "sha256:34c65b9f4fca6c19d4baa8b2b222ab704c33292cd58d65842fdbea63a6b9048e"
+      created: "2026-05-15T00:00:00Z"
+      eval_pass_rate: 0.85
+      regression_from_prior: 0
+      status: active
+      migration:
+        from_inline_agent: true
+        golden_output_diff: "initial-bootstrap-no-prior-version"
+        delta_status: zero-delta
+        validated_inputs: []
