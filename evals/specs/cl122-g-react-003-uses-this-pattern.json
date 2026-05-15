@@ -1,0 +1,11 @@
+{
+  "name": "eslint-wrap: existing g-react-003 (a11y P1) has detector_config wrapping an a11y eslint plugin per E-15",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" --format json >out.json 2>err.txt && node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));const rule=r.rules.find(x=>x.id===\"g-react-003\");if(rule&&rule.detector_config&&rule.detector_config.eslint_plugin_npm){process.stderr.write(\"ok \"+rule.detector_config.eslint_plugin_npm+\"\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

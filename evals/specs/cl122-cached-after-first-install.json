@@ -1,0 +1,13 @@
+{
+  "name": "eslint-wrap: second invocation skips npm install when node_modules/<plugin>/package.json already pinned to requested version",
+  "command": "mkdir -p node_modules/eslint-plugin-react-hooks && printf '{\"version\":\"4.6.0\"}' > node_modules/eslint-plugin-react-hooks/package.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" --rule-id g-react-002 --eslint-rule react-hooks/exhaustive-deps --eslint-plugin-npm eslint-plugin-react-hooks --eslint-plugin-version 4.6.0 --paths \"src/**/*.tsx\" 2>out.txt && ! grep -E \"npm install\" out.txt && grep -E \"cached\" out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p src && echo 'x' > src/x.tsx"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

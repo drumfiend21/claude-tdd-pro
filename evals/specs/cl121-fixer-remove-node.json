@@ -1,0 +1,13 @@
+{
+  "name": "fixer API: fixer.remove(node) deletes the node's full range",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --rule \"fixer-remove-node\" --in \"$PWD/file.js\" --fix && diff <(printf %s \"let a = 1;\") file.js 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf %s \"let a = 1; let b = 2;\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

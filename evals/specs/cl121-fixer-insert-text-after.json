@@ -1,0 +1,13 @@
+{
+  "name": "fixer API: fixer.insertTextAfter(node, ';') appends to end of node range",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --rule \"fixer-insert-after\" --in \"$PWD/file.js\" --fix && diff <(printf %s \"foo();\") file.js 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf %s \"foo()\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

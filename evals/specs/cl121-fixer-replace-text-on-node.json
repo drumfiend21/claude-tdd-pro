@@ -1,0 +1,13 @@
+{
+  "name": "fixer API: fixer.replaceText(node, 'NEW') replaces the node's full source range",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --rule \"fixer-replace-node\" --in \"$PWD/file.js\" --fix && diff <(printf %s \"NEW\") file.js 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf %s \"foo()\" > file.js"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

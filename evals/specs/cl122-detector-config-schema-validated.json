@@ -1,0 +1,12 @@
+{
+  "name": "eslint-wrap: rule.detector_config must contain {eslint_rule, eslint_plugin_npm, eslint_plugin_version, eslint_options}",
+  "command": "mkdir -p tree/google && printf \"source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-wrap-001, name: x, description: x, detector: wrap-eslint.sh, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: [{source: x, class: published-standard, section_id: x, url: https://x.com, fetched_at: 2026-05-13T00:00:00Z, content_hash: sha256:S}], detector_config: {eslint_rule: react-hooks/exhaustive-deps}}\\nrecommended_set: [g-wrap-001]\\nall_set: [g-wrap-001]\\n\" > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" --rule-id g-wrap-001 --tree \"$PWD/tree\" --validate-config",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "eslint_plugin_npm",
+      "eslint_plugin_version"
+    ]
+  }
+}
