@@ -1,0 +1,117 @@
+source:
+  id: typescript-handbook
+  authoritative_publisher: Microsoft (typescriptlang.org)
+  authoritative_url: "https://www.typescriptlang.org/docs/handbook/"
+  registry_link: "_meta/STANDARDS-URLS.yaml"
+  fetched_at: "2026-05-04T00:00:00Z"
+  content_hash: "sha256:typescript-handbook-placeholder-content-hash-for-bootstrap"
+  fetch_frequency: monthly
+  fragility_tier: low
+  license_note: "Apache-2.0 (TypeScript handbook)"
+rules:
+  - id: g-ts-003
+    name: discriminated-unions-exit-through-assertNever
+    description: "Switch and if/else chains over a discriminated union must end with an assertNever exhaustiveness assertion. Without it, a new union member added later silently breaks all callers."
+    detector: exhaustive-unions.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#exhaustiveness-checking"
+    requires_type_checking: true
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingAssertNever: "switch over discriminated union at {{location}} missing assertNever default branch (typescript-handbook 2/narrowing#exhaustiveness)"
+    severity: P0
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: typescript-handbook
+        section: "2/narrowing#exhaustiveness"
+  - id: g-ts-005
+    name: library-boundaries-use-branded-types
+    description: "Library API boundaries should use branded types (e.g. UserId = string and { readonly __brand: \"UserId\" }) so callers cannot accidentally pass a raw string."
+    detector: type-test-coverage.sh
+    type: suggestion
+    fixable: null
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://www.typescriptlang.org/docs/handbook/2/objects.html#intersection-types"
+    requires_type_checking: true
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      noBrandedType: "exported function {{name}} accepts string parameter that should be a branded type (typescript-handbook handbook-v2/intersection-types)"
+    severity: P2
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: typescript-handbook
+        section: "handbook-v2/intersection-types"
+  - id: g-ts-006
+    name: strict-tsconfig-flags
+    description: "tsconfig.json must enable noUncheckedIndexedAccess, exactOptionalPropertyTypes, isolatedModules, noPropertyAccessFromIndexSignature, verbatimModuleSyntax (the strict 2026 baseline)."
+    detector: type-test-coverage.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://www.typescriptlang.org/tsconfig/"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingFlag: "tsconfig.json missing strict flag {{flag}} (typescript-handbook/tsconfig)"
+    severity: P0
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: typescript-handbook
+        section: "tsconfig"
+  - id: g-ts-008
+    name: re-exports-use-export-type
+    description: "Re-exporting a type using `export { Foo }` rather than `export type { Foo }` breaks isolatedModules / verbatimModuleSyntax. Always use `export type` for type-only re-exports."
+    detector: type-test-coverage.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export"
+    requires_type_checking: true
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingExportType: "type-only re-export of {{name}} at {{location}} missing `export type` (typescript-handbook 3-8 type-only)"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: typescript-handbook
+        section: "3-8 type-only"
+recommended_set:
+  - g-ts-003
+  - g-ts-005
+  - g-ts-006
+  - g-ts-008
+all_set:
+  - g-ts-003
+  - g-ts-005
+  - g-ts-006
+  - g-ts-008

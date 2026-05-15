@@ -42,7 +42,33 @@ rules:
         section: "cheap-tests-vs-good-tests"
       - source: google-tsguide
         section: "§testing"
+  - id: g-ts-004
+    name: public-api-types-have-type-tests
+    description: "Every exported function or type from a library must have at least one compile-time type test (expectTypeOf or tsd) so callers cannot silently break when types change."
+    detector: type-test-coverage.sh
+    type: problem
+    fixable: null
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://google.github.io/styleguide/tsguide.html#testing"
+    requires_type_checking: true
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      missingTypeTest: "exported {{kind}} {{name}} has no type test (google-tsguide §testing)"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: google-tsguide
+        section: "§testing"
 recommended_set:
   - g-react-007
+  - g-ts-004
 all_set:
   - g-react-007
+  - g-ts-004
