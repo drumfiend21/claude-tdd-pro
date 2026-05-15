@@ -60,22 +60,21 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
   merged_rules     = {}
   merged_overrides = []
   ns_selectors     = []
+  exclude_selectors = []
+  include_operator_ns_only = nil
   walk = lambda do |path|
     next if visited[path]
     visited[path] = true
     doc = begin
       YAML.load_file(path)
     rescue Psych::SyntaxError
-      # Fallback regex parse for the common case of unquoted ns:selector
-      # entries in extends: arrays (Psych chokes on bare colons in flow
-      # scalars). Extract extends + rules: { id: scalar } only.
       content = File.read(path)
       d = {}
       ext_match = content.match(/^extends:\s*\[(.*?)\]/m)
       if ext_match
         d["extends"] = ext_match[1].split(",").map { |s| s.strip.gsub(/\A"|"\z/, "") }.reject(&:empty?)
       end
-      rules_match = content.match(/^rules:\s*\n((?:\s+\S.*\n?)+)/m)
+      rules_match = content.match(/^rules:\s*\n((?:\s+\S.*\n?)+?)(?=^[a-z_]|\z)/m)
       if rules_match
         d["rules"] = {}
         rules_match[1].each_line do |line|
@@ -83,6 +82,14 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
             d["rules"][m[1]] = m[2].gsub(/\A"|"\z/, "")
           end
         end
+      end
+      ex_match = content.match(/^exclude_sources:\s*\[(.*?)\]/m)
+      if ex_match
+        d["exclude_sources"] = ex_match[1].split(",").map { |s| s.strip.gsub(/\A"|"\z/, "") }.reject(&:empty?)
+      end
+      inc_match = content.match(/^include:\s*\n\s+operator_namespaces:\s*\[(.*?)\]/m)
+      if inc_match
+        d["include"] = { "operator_namespaces" => inc_match[1].split(",").map { |s| s.strip.gsub(/\A"|"\z/, "") }.reject(&:empty?) }
       end
       d
     end
@@ -103,6 +110,12 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
     if doc["overrides"].is_a?(Array)
       merged_overrides.concat(doc["overrides"])
     end
+    if doc["exclude_sources"].is_a?(Array)
+      exclude_selectors.concat(doc["exclude_sources"])
+    end
+    if doc["include"].is_a?(Hash) && doc["include"]["operator_namespaces"].is_a?(Array)
+      include_operator_ns_only = doc["include"]["operator_namespaces"]
+    end
   end
   walk.call(profile_path)
 
@@ -113,11 +126,15 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
   rule_defs = {}
   ns_index_recommended = {} # ns_key => [rule_id, ...]
   ns_index_all = {}         # ns_key => [rule_id, ...]
+  ns_index_file_recommended = {}  # "<ns>:<file>" => [rule_id]
+  ns_index_file_all = {}          # "<ns>:<file>" => [rule_id]
+  rule_origin = {}          # rule_id => { ns_top, ns_key, file, is_operator }
   Dir.glob(File.join(tree, "**", "*.yaml")).each do |rf|
     rel = rf.sub(/\A#{Regexp.escape(tree)}\/?/, "")
     parts = rel.split("/")
     top = parts.first
     ns_key = if top == "_community" || top == "_operator" then parts[1] else top end
+    file_base = File.basename(rel, ".yaml")
     sf = begin
       YAML.load_file(rf)
     rescue
@@ -132,6 +149,9 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
         is_rec = (r["recommended"] == true) || rec_set.include?(rid)
         (ns_index_recommended[ns_key] ||= []) << rid if is_rec
         (ns_index_all[ns_key] ||= []) << rid
+        (ns_index_file_recommended["#{ns_key}:#{file_base}"] ||= []) << rid if is_rec
+        (ns_index_file_all["#{ns_key}:#{file_base}"] ||= []) << rid
+        rule_origin[rid] = { ns_top: top, ns_key: ns_key, file: file_base, is_operator: top == "_operator" }
       end
     else
       # Regex fallback: extract id + severity + recommended from raw text.
@@ -141,7 +161,6 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
       rec_ids = rec_match ? rec_match[1].split(",").map { |s| s.strip } : []
       all_ids = all_match ? all_match[1].split(",").map { |s| s.strip } : []
       all_ids.each do |rid|
-        # Find this rules block; extract severity + recommended.
         rid_re = Regexp.escape(rid)
         blk = (content.match(/\bid:\s*#{rid_re}\b[\s\S]*?(?=\n\s*-\s+\{|\n\s*-\s+id:|\nrecommended_set:|\nall_set:|\z)/) || [""])[0]
         sev = (blk.match(/\bseverity:\s*(P[0-9]|warn|error|off)/) || [])[1]
@@ -149,6 +168,9 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
         rule_defs[rid] = { "id" => rid, "severity" => sev, "recommended" => is_rec }
         (ns_index_recommended[ns_key] ||= []) << rid if is_rec
         (ns_index_all[ns_key] ||= []) << rid
+        (ns_index_file_recommended["#{ns_key}:#{file_base}"] ||= []) << rid if is_rec
+        (ns_index_file_all["#{ns_key}:#{file_base}"] ||= []) << rid
+        rule_origin[rid] = { ns_top: top, ns_key: ns_key, file: file_base, is_operator: top == "_operator" }
       end
     end
   end
@@ -169,10 +191,48 @@ PROFILE="$PROFILE" TREE="$TREE" EMIT_RESOLVED="$EMIT_RESOLVED" FOR_FILE="$FOR_FI
       rule_defs.each { |rid, r| merged_rules[rid] ||= default_sev_for.call(rid) if r["recommended"] == true }
     when ns == "rubric" && scope == "all"
       rule_defs.each { |rid, _| merged_rules[rid] ||= default_sev_for.call(rid) }
-    when scope == "recommended"
+    when scope == "recommended" && parts.length == 2
       (ns_index_recommended[ns] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
-    when scope == "*"
+    when scope == "*" && parts.length == 2
       (ns_index_all[ns] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
+    when scope == "*" && parts.length == 3 && parts[2] == "all"
+      # <ns>:*:all per §2.5 — same as <ns>:* (whole-namespace, all rules)
+      (ns_index_all[ns] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
+    when parts.length == 3 && parts[2] == "all"
+      # <ns>:<file>:all per §2.5 — all rules from named file
+      file = parts[1]
+      (ns_index_file_all["#{ns}:#{file}"] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
+    else
+      # <ns>:<file> per §2.5 — recommended subset of named file
+      file = parts[1]
+      (ns_index_file_recommended["#{ns}:#{file}"] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
+    end
+  end
+
+  # G-7 exclude_sources: prune rules whose origin matches any exclude
+  # selector (<ns>:* or <ns>:<file>).
+  exclude_selectors.each do |sel|
+    parts = sel.split(":")
+    ns = parts[0]; scope = parts[1]
+    merged_rules.delete_if do |rid, _|
+      o = rule_origin[rid]
+      next false unless o
+      next true if scope == "*" && (o[:ns_key] == ns || o[:ns_top] == ns)
+      next true if scope == o[:file] && (o[:ns_key] == ns || o[:ns_top] == ns)
+      false
+    end
+  end
+
+  # G-7 include.operator_namespaces: when set, restrict operator
+  # namespace rules to only the named orgs, AND include all rules
+  # from each named org all_set.
+  if include_operator_ns_only
+    merged_rules.delete_if do |rid, _|
+      o = rule_origin[rid]
+      o && o[:is_operator] && !include_operator_ns_only.include?(o[:ns_key])
+    end
+    include_operator_ns_only.each do |org|
+      (ns_index_all[org] || []).each { |rid| merged_rules[rid] ||= default_sev_for.call(rid) }
     end
   end
 

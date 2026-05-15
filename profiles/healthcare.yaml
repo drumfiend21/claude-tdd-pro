@@ -1,0 +1,4 @@
+# profiles/healthcare.yaml — G-7 per-industry template per §16.
+extends: ["rubric:recommended", "us-government:*", "owasp:recommended"]
+include:
+  compliance_frameworks: ["hipaa", "hitech"]

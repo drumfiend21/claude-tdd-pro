@@ -1,0 +1,5 @@
+# profiles/government.yaml — G-7 per-industry template per §16:
+# Demonstrates per-source extends for US-Federal government contexts.
+extends: ["rubric:recommended", "us-government:*", "owasp:recommended"]
+include:
+  compliance_frameworks: ["nist-csf-2", "fedramp"]

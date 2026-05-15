@@ -1,0 +1,9 @@
+# profiles/eu-financial.yaml — G-7 per-industry template per §16:
+# Demonstrates per-source extends for EU-financial contexts.
+extends:
+  - "rubric:recommended"
+  - "european-union:*"
+  - "finance-industry:*"
+  - "owasp:recommended"
+include:
+  compliance_frameworks: ["gdpr", "dora"]

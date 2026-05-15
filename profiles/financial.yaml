@@ -1,0 +1,4 @@
+# profiles/financial.yaml — G-7 per-industry template per §16.
+extends: ["rubric:recommended", "finance-industry:*", "owasp:recommended", "us-government:recommended"]
+include:
+  compliance_frameworks: ["soc2-tsc", "pci-dss"]
