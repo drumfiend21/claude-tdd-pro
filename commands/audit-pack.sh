@@ -13,6 +13,7 @@ EMIT=""
 SECTION=""
 CONTROLS_FILE=""
 AIBOM_FILE=""
+NOW_ISO=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -20,12 +21,13 @@ while [[ $# -gt 0 ]]; do
     --section) SECTION="$2"; shift 2 ;;
     --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
     --aibom|--include-aibom) AIBOM_FILE="$2"; SECTION="${SECTION:-aibom}"; shift 2 ;;
+    --now) NOW_ISO="$2"; shift 2 ;;
     *) echo "audit-pack: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
 [[ -z "$EMIT" || -z "$SECTION" ]] && { echo "audit-pack: --emit and --section required" >&2; exit 2; }
 
-EMIT="$EMIT" SECTION="$SECTION" CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBOM_FILE" node -e '
+EMIT="$EMIT" SECTION="$SECTION" CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBOM_FILE" NOW_ISO="$NOW_ISO" node -e '
   const fs = require("fs");
   const path = require("path");
   const provDir = ".claude-tdd-pro/provenance";
@@ -79,6 +81,23 @@ EMIT="$EMIT" SECTION="$SECTION" CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBO
         const stMatch = blk.match(/legal_review_status:\s*(\S+)/);
         if (stMatch && stMatch[1] === "pending" && fwMatch && cidMatch) {
           lines.push(`- ${fwMatch[1]} ${cidMatch[1]}: pending`);
+        }
+      }
+    }
+  } else if (process.env.SECTION === "attestations") {
+    lines.push("# Attestations");
+    lines.push("");
+    const dir = "compliance/attestations";
+    const nowDate = (process.env.NOW_ISO || new Date().toISOString()).slice(0, 10);
+    if (fs.existsSync(dir)) {
+      for (const f of fs.readdirSync(dir).sort()) {
+        if (!f.endsWith(".yaml")) continue;
+        const content = fs.readFileSync(path.join(dir, f), "utf8");
+        const fwMatch = content.match(/framework:\s*(\S+)/);
+        const expMatch = content.match(/license_expiry:\s*(\S+)/);
+        if (fwMatch && expMatch) {
+          const status = expMatch[1] < nowDate ? "expired" : "active";
+          lines.push(`- ${fwMatch[1]}: ${status} (expires ${expMatch[1]})`);
         }
       }
     }
