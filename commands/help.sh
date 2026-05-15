@@ -10,5 +10,12 @@ for k in "${KNOWN[@]}"; do
     exit 0
   fi
 done
+
+SKILL_PATH="$PLUGIN_ROOT/skills/$TOPIC/SKILL.md"
+if [[ -f "$SKILL_PATH" ]]; then
+  cat "$SKILL_PATH" >&2
+  exit 0
+fi
+
 echo "help: unknown topic \"$TOPIC\". Known topics: ${KNOWN[*]}" >&2
 exit 0
