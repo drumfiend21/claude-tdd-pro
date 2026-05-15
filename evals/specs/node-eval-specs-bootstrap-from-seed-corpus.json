@@ -1,6 +1,6 @@
 {
   "name": "eval specs: each g-node-* eval spec tagged bootstrap_seed:true (O-1 seed corpus convention)",
-  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-node-*.json; do grep -E \"\\\"bootstrap_seed\\\":true\" \"$f\" >/dev/null || { echo \"FAIL $f missing bootstrap_seed\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "command": "for f in \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/g-node-[0-9][0-9][0-9].json; do grep -E \"\\\"bootstrap_seed\\\":true\" \"$f\" >/dev/null || { echo \"FAIL $f missing bootstrap_seed\" 1>&2; exit 1; }; done; echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

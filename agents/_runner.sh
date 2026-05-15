@@ -61,6 +61,18 @@ case "$AGENT" in
   review-node-observability)
     printf '%s\n' '{"severity":"warn","rule_id":"node/structured-logging","file":"'"$FILE_NAME"'","line":1,"finding":"console.log used in src; nodebestpractices 5.1 requires a structured logger (pino, winston) with leveled output","suggested_fix":"replace console.log with a structured logger and redact sensitive fields"}' > "$EMIT"
     ;;
+  review-types)
+    > "$EMIT"
+    if [[ -f "$INPUT" ]] && grep -qE 'as[[:space:]]+(unknown|any)|as[[:space:]]+[A-Z]' "$INPUT" 2>/dev/null; then
+      printf '%s\n' '{"severity":"warn","rule_id":"types/no-cast","file":"'"$FILE_NAME"'","line":1,"finding":"unsafe type cast (typescript-handbook §narrowing); prefer schema-validated parse","suggested_fix":"// allow-cast: <reason>"}' >> "$EMIT"
+    fi
+    if [[ -f "$INPUT" ]] && grep -qE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' "$INPUT" 2>/dev/null; then
+      printf '%s\n' '{"severity":"warn","rule_id":"types/no-any","file":"'"$FILE_NAME"'","line":1,"finding":"any-typed value (typescript-handbook §narrowing recommends unknown plus refinement)","suggested_fix":"// allow-any: <reason>"}' >> "$EMIT"
+    fi
+    if [[ ! -s "$EMIT" ]]; then
+      printf '%s\n' '{"severity":"info","rule_id":"types/clean","file":"'"$FILE_NAME"'","line":1,"finding":"no any or cast detected (typescript-handbook clean)","suggested_fix":"none"}' >> "$EMIT"
+    fi
+    ;;
   *)
     echo "_runner: unknown agent: $AGENT" >&2
     exit 2
