@@ -2,7 +2,7 @@
   "name": "/standards-audit: gap analyzer identifies sources with zero citing rules and lists them as gaps",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --include-gaps && grep \"Gaps\" audit.md 1>&2 && grep \"uncovered-source\" audit.md 1>&2 && echo ok 1>&2",
   "setup": [
-    "mkdir -p .claude-tdd-pro && printf '- id: uncovered-source\\n  name: U\\n  url: https://u.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml"
+    "mkdir -p .claude-tdd-pro && printf -- '- id: uncovered-source\\n  name: U\\n  url: https://u.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml"
   ],
   "expect": {
     "exit_code": 0,

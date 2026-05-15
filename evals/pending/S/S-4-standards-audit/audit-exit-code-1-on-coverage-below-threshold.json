@@ -1,6 +1,6 @@
 {
   "name": "/standards-audit: --threshold 80 exits 1 when overall coverage percentage is below the threshold (CI gate)",
-  "command": "mkdir -p .claude-tdd-pro && printf \"- id: a\\n  name: A\\n  url: https://a.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n- id: b\\n  name: B\\n  url: https://b.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --threshold 80",
+  "command": "mkdir -p .claude-tdd-pro && printf -- \"- id: a\\n  name: A\\n  url: https://a.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n- id: b\\n  name: B\\n  url: https://b.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n\" > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit \"$PWD/audit.md\" --threshold 80",
   "setup": [],
   "expect": {
     "exit_code": 1,
