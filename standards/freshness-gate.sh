@@ -33,6 +33,11 @@ SKIP_FRESH=0
 EMIT_STATUS=""
 EMIT_AUDIT=""
 CHECK_FUOD=0
+APPLY_TO_RULES=0
+TREE=""
+EMIT_APPLIED=""
+DRY_RUN=0
+UPDATE_SOURCE_FILES=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -46,9 +51,133 @@ while [[ $# -gt 0 ]]; do
     --emit-status) EMIT_STATUS="$2"; shift 2 ;;
     --emit-audit) EMIT_AUDIT="$2"; shift 2 ;;
     --check-first-use-of-day) CHECK_FUOD=1; shift ;;
+    --apply-to-rules) APPLY_TO_RULES=1; shift ;;
+    --tree) TREE="$2"; shift 2 ;;
+    --emit-applied) EMIT_APPLIED="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    --update-source-files) UPDATE_SOURCE_FILES=1; shift ;;
     *) echo "freshness-gate: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+# S-16 apply-to-rules mode: walk tree, demote/restore rules based on
+# their provenance sources freshness.
+if [[ "$APPLY_TO_RULES" -eq 1 ]]; then
+  [[ -z "$TREE" ]] && { echo "freshness-gate --apply-to-rules: --tree required" >&2; exit 2; }
+  [[ -z "$NOW_ISO" ]] && { echo "freshness-gate --apply-to-rules: --now required" >&2; exit 2; }
+  mkdir -p .claude-tdd-pro/standards-last-fetch
+  TREE="$TREE" NOW_ISO="$NOW_ISO" STRICT="$STRICT" EMIT_APPLIED="$EMIT_APPLIED" \
+  EMIT_AUDIT="$EMIT_AUDIT" DRY_RUN="$DRY_RUN" UPDATE_SOURCE_FILES="$UPDATE_SOURCE_FILES" node -e '
+    const fs = require("fs");
+    const path = require("path");
+    const tree = process.env.TREE;
+    const now = new Date(process.env.NOW_ISO).getTime();
+    const strict = process.env.STRICT === "1";
+    const emitApplied = process.env.EMIT_APPLIED;
+    const emitAudit = process.env.EMIT_AUDIT;
+    const dryRun = process.env.DRY_RUN === "1";
+    const updateSourceFiles = process.env.UPDATE_SOURCE_FILES === "1";
+
+    function walk(d) {
+      const out = [];
+      if (!fs.existsSync(d)) return out;
+      for (const e of fs.readdirSync(d).sort()) {
+        const p = path.join(d, e);
+        if (e === "_meta" || e === "_archived") continue;
+        const st = fs.statSync(p);
+        if (st.isDirectory()) out.push(...walk(p));
+        else if (e.endsWith(".yaml")) out.push(p);
+      }
+      return out;
+    }
+    const files = walk(tree);
+
+    const demoStatePath = ".claude-tdd-pro/freshness-demotions.json";
+    let demoState = {};
+    if (fs.existsSync(demoStatePath)) {
+      try { demoState = JSON.parse(fs.readFileSync(demoStatePath, "utf8")); } catch {}
+    }
+
+    function checkSourceFresh(srcId) {
+      const m = `.claude-tdd-pro/standards-last-fetch/${srcId}.txt`;
+      if (!fs.existsSync(m)) return false;
+      const t = new Date(fs.readFileSync(m, "utf8").trim()).getTime();
+      const ageHours = (now - t) / 3600000;
+      return ageHours <= 24;
+    }
+
+    const applied = {};
+    for (const f of files) {
+      const c = fs.readFileSync(f, "utf8");
+      const rulesIdx = c.indexOf("\nrules:");
+      if (rulesIdx < 0) continue;
+      const tail = c.slice(rulesIdx);
+      const ruleRe = /\bid:\s*([a-zA-Z0-9_/-]+)[\s\S]*?\bprovenance:\s*\[([\s\S]*?)\](?=\s*\}|\s*\n\s*-\s+id:|\s*\Z)/g;
+      let m;
+      while ((m = ruleRe.exec(tail)) !== null) {
+        const rid = m[1];
+        const provBody = m[2];
+        const ruleStateMatch = m[0].match(/\brule_state:\s*([a-zA-Z_-]+)/);
+        const ruleState = ruleStateMatch ? ruleStateMatch[1] : "block";
+        const histMatch = m[0].match(/\brule_state_history:\s*\[([\s\S]*?)\]/);
+        const operatorExplicit = histMatch && /reason:\s*operator-explicit/.test(histMatch[1]);
+
+        const provEntries = [];
+        const entryRe = /\{([^{}]*)\}/g;
+        let em;
+        while ((em = entryRe.exec(provBody)) !== null) {
+          const cm = em[1].match(/\bclass:\s*([a-zA-Z-]+)/);
+          const sm = em[1].match(/\bsource:\s*([a-zA-Z0-9_-]+)/);
+          if (cm && sm) provEntries.push({ class: cm[1], source: sm[1] });
+        }
+        const standardsEntries = provEntries.filter(p => p.class !== "pr-corpus" && p.class !== "community-plugin");
+        if (standardsEntries.length === 0) continue;
+
+        const allStale = standardsEntries.every(p => !checkSourceFresh(p.source));
+
+        if (allStale) {
+          if (operatorExplicit) continue;
+          const newState = strict ? "disabled" : "warn-only";
+          if (dryRun) {
+            applied[rid] = { action: "would demote", from: ruleState, to: newState };
+          } else {
+            applied[rid] = { action: strict ? "disabled" : "auto-demoted", from: ruleState, to: newState };
+            demoState[rid] = { original: ruleState, demoted: newState, reason: "freshness-stale" };
+            if (updateSourceFiles) {
+              const updated = c.replace(`id: ${rid}`, `id: ${rid}, status_note: freshness-stale`);
+              fs.writeFileSync(f, updated);
+            }
+          }
+        } else if (demoState[rid] && !operatorExplicit) {
+          applied[rid] = { action: "auto-restored", from: ruleState, to: demoState[rid].original };
+          if (!dryRun) delete demoState[rid];
+        }
+      }
+    }
+
+    if (!dryRun) {
+      fs.writeFileSync(demoStatePath, JSON.stringify(demoState, null, 2));
+    }
+    if (emitApplied) {
+      fs.mkdirSync(path.dirname(emitApplied) || ".", { recursive: true });
+      fs.writeFileSync(emitApplied, JSON.stringify(applied, null, 2));
+    }
+    if (emitAudit) {
+      fs.mkdirSync(path.dirname(emitAudit), { recursive: true });
+      for (const rid of Object.keys(applied)) {
+        const a = applied[rid];
+        const action = a.action === "auto-demoted" ? "rule-auto-demoted" : (a.action === "auto-restored" ? "rule-auto-restored" : "rule-state-change");
+        fs.appendFileSync(emitAudit, JSON.stringify({ rule_id: rid, action, from: a.from, to: a.to, ts: process.env.NOW_ISO }) + "\n");
+      }
+    }
+    for (const rid of Object.keys(applied)) {
+      const a = applied[rid];
+      process.stderr.write(`freshness-gate: ${a.action} ${rid} (${a.from} -> ${a.to})\n`);
+    }
+    process.exit(0);
+  '
+  exit $?
+fi
 
 [[ -z "$NOW_ISO" ]] && { echo "freshness-gate: --now <iso> required" >&2; exit 2; }
 mkdir -p .claude-tdd-pro/standards-last-fetch .claude-tdd-pro/standards-last-fuod
