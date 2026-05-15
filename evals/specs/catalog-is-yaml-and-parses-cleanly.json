@@ -1,0 +1,11 @@
+{
+  "name": "the default PR sources catalog is valid YAML that parses without error and contains a sources array",
+  "command": "ruby -ryaml -e \"d=YAML.load_file(ENV[\\\"CLAUDE_PLUGIN_ROOT\\\"]+\\\"/pr-corpus/sources/PR-SOURCES.defaults.yaml\\\");raise unless d[\\\"sources\\\"].is_a?(Array)&&d[\\\"sources\\\"].length==10;STDERR.puts \\\"ok\\\"\" 2>err.txt && grep -q ok err.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

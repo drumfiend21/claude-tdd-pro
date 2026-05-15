@@ -1,0 +1,61 @@
+sources:
+  - id: cfpb-consumerfinance
+    name: "CFPB consumerfinance.gov"
+    source_class: federal-financial-regulator
+    tier: 1
+    url: "https://github.com/cfpb"
+    applies_to: [react, node]
+  - id: 18f-identity-idp
+    name: "18F login.gov identity-idp"
+    source_class: federal-government
+    tier: 1
+    url: "https://github.com/18F"
+    applies_to: [node, ruby]
+  - id: aws-aws-cdk
+    name: "AWS CDK"
+    source_class: cloud-platform-vendor
+    tier: 1
+    url: "https://github.com/aws/aws-cdk"
+    applies_to: [node, typescript]
+  - id: vercel-next-js
+    name: "Vercel Next.js"
+    source_class: framework-maintainer
+    tier: 1
+    url: "https://github.com/vercel/next.js"
+    applies_to: [react, node, typescript]
+  - id: facebook-react
+    name: "Meta React"
+    source_class: framework-maintainer
+    tier: 1
+    url: "https://github.com/facebook/react"
+    applies_to: [react]
+  - id: kubernetes-kubernetes
+    name: "Kubernetes"
+    source_class: open-source-foundation
+    tier: 1
+    url: "https://github.com/kubernetes/kubernetes"
+    applies_to: [go, node]
+  - id: prometheus-prometheus
+    name: "Prometheus"
+    source_class: open-source-foundation
+    tier: 1
+    url: "https://github.com/prometheus/prometheus"
+    applies_to: [go, node]
+  - id: openssf-best-practices
+    name: "OpenSSF best-practices badge program"
+    source_class: security-foundation
+    tier: 1
+    url: "https://github.com/coreinfrastructure/best-practices-badge"
+    applies_to: [node, ruby]
+  - id: w3c-respec
+    name: "W3C ReSpec"
+    source_class: standards-body
+    tier: 1
+    url: "https://github.com/w3c/respec"
+    applies_to: [node, javascript]
+  - id: community-cncf-buildpacks
+    name: "CNCF Cloud Native Buildpacks"
+    source_class: community-curated
+    tier: 2
+    url: "https://github.com/buildpacks/spec"
+    applies_to: [go, node]
