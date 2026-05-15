@@ -11,17 +11,21 @@ set -uo pipefail
 
 EMIT=""
 SECTION=""
+CONTROLS_FILE=""
+AIBOM_FILE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --emit) EMIT="$2"; shift 2 ;;
     --section) SECTION="$2"; shift 2 ;;
+    --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
+    --aibom) AIBOM_FILE="$2"; shift 2 ;;
     *) echo "audit-pack: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
 [[ -z "$EMIT" || -z "$SECTION" ]] && { echo "audit-pack: --emit and --section required" >&2; exit 2; }
 
-EMIT="$EMIT" SECTION="$SECTION" node -e '
+EMIT="$EMIT" SECTION="$SECTION" CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBOM_FILE" node -e '
   const fs = require("fs");
   const path = require("path");
   const provDir = ".claude-tdd-pro/provenance";
@@ -61,6 +65,31 @@ EMIT="$EMIT" SECTION="$SECTION" node -e '
         lines.push(`- commit ${r.commit}: ${r.status}`);
       }
       lines.push("");
+    }
+  } else if (process.env.SECTION === "legal-review-status") {
+    lines.push("# Pending legal review");
+    lines.push("");
+    const cf = process.env.CONTROLS_FILE;
+    if (cf && fs.existsSync(cf)) {
+      const content = fs.readFileSync(cf, "utf8");
+      const blocks = content.split(/^- /m).slice(1);
+      for (const blk of blocks) {
+        const fwMatch = blk.match(/framework:\s*([\w-]+)/);
+        const cidMatch = blk.match(/control_id:\s*([\w.-]+)/);
+        const stMatch = blk.match(/legal_review_status:\s*(\S+)/);
+        if (stMatch && stMatch[1] === "pending" && fwMatch && cidMatch) {
+          lines.push(`- ${fwMatch[1]} ${cidMatch[1]}: pending`);
+        }
+      }
+    }
+  } else if (process.env.SECTION === "aibom") {
+    lines.push("# AIBOM");
+    lines.push("");
+    const af = process.env.AIBOM_FILE;
+    if (af && fs.existsSync(af)) {
+      lines.push("```json");
+      lines.push(fs.readFileSync(af, "utf8"));
+      lines.push("```");
     }
   } else {
     process.stderr.write(`audit-pack: unknown section "${process.env.SECTION}"\n`);
