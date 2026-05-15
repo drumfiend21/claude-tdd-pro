@@ -6,6 +6,8 @@ type: feedback
 
 **Reference this list before any new substrate Write/Edit during architecture implementation.**
 
+**Companion file:** `feedback-implementation-optimization-plan.md` — load it alongside this checklist at the start of every implementation CL. The plan specifies 4 small scripts that AUTOMATE several rules in this checklist (spec patching, naming-collision rename, detector scaffolding, shared glob library) plus a tiered-active-suite process change. Build the scripts lazily — when an upcoming CL would benefit from one, pause to build it first.
+
 **Why:** User-directed in 2026-05-15 session after observing repeated iteration cycles caused by the same gotchas across CL-66 through CL-90. Every item here is a friction this implementer hit 2+ times in one session. Adoption cost is zero — these are behavioral commitments, not artifact changes. Preserves all CLAUDE.md audit discipline (Step 0 architecture quote, self-audit, active-suite-green, flag disclosure, verbatim path tracing, 1 feature per CL).
 
 **How to apply:** at the start of every CL, do pre-flight (architecture quote + spec survey) THEN scan this list. Before any substrate `Write` or `Edit`, mentally check items 1, 9, 10. Before iterating against staged specs, check items 2, 5. When committing, apply item 4. When discovering drift, apply item 6.
