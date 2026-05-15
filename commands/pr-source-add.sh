@@ -6,16 +6,24 @@
 #   gold-standard-process       → linux-foundation/
 set -uo pipefail
 
-GITHUB=""; ID=""; SOURCE_CLASS=""; TREE=""
+GITHUB=""; ID=""; SOURCE_CLASS=""; TREE=""; DRY_RUN=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --github) GITHUB="$2"; shift 2 ;;
     --id) ID="$2"; shift 2 ;;
     --source-class) SOURCE_CLASS="$2"; shift 2 ;;
     --tree) TREE="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    -h|--help) echo "Usage: pr-source-add.sh --github <gh> --id <id> --source-class <c> [--tree <dir>] [--dry-run]"; exit 0 ;;
     *) echo "pr-source-add: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo "pr-source-add: dry-run; would add id=$ID github=$GITHUB class=$SOURCE_CLASS (no writes)" >&2
+  exit 0
+fi
+
 [[ -z "$GITHUB" || -z "$ID" || -z "$SOURCE_CLASS" || -z "$TREE" ]] && {
   echo "pr-source-add: --github, --id, --source-class, --tree required" >&2; exit 2; }
 

@@ -14,6 +14,7 @@ SECTION=""
 CONTROLS_FILE=""
 AIBOM_FILE=""
 NOW_ISO=""
+DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -22,9 +23,15 @@ while [[ $# -gt 0 ]]; do
     --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
     --aibom|--include-aibom) AIBOM_FILE="$2"; SECTION="${SECTION:-aibom}"; shift 2 ;;
     --now) NOW_ISO="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    -h|--help) echo "Usage: audit-pack.sh --emit <path> --section <name> [--dry-run]"; exit 0 ;;
     *) echo "audit-pack: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo "audit-pack: dry-run; would emit section=${SECTION:-(default)} to ${EMIT:-(default)} (no writes)" >&2
+  exit 0
+fi
 [[ -z "$EMIT" || -z "$SECTION" ]] && { echo "audit-pack: --emit and --section required" >&2; exit 2; }
 
 EMIT="$EMIT" SECTION="$SECTION" CONTROLS_FILE="$CONTROLS_FILE" AIBOM_FILE="$AIBOM_FILE" NOW_ISO="$NOW_ISO" node -e '

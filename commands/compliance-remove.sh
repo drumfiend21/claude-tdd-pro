@@ -7,6 +7,8 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --id) ID="$2"; shift 2 ;;
     --tree) TREE="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    -h|--help) echo "Usage: compliance-remove.sh ... [--dry-run]"; exit 0 ;;
     *) echo "compliance-remove: unknown flag: $1" >&2; exit 2 ;;
   esac
 done

@@ -30,6 +30,7 @@ while [[ $# -gt 0 ]]; do
     --tree) TREE="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
     --emit-audit) EMIT_AUDIT="$2"; shift 2 ;;
+    -h|--help) echo "Usage: standards-add.sh <url> [--id <id>] [--tier 1|2] [--applies-to <lang>] [--source-namespace <ns>] [--tree <dir>] [--dry-run] [--emit-audit <jsonl>]"; exit 0 ;;
     -*) echo "standards-add: unknown flag: $1" >&2; exit 2 ;;
     *) [[ -z "$URL" ]] && URL="$1" || { echo "standards-add: unexpected arg: $1" >&2; exit 2; }; shift ;;
   esac
@@ -54,7 +55,7 @@ if [[ -f "$REGISTRY" ]] && grep -qE "^- id: ${ID}\$" "$REGISTRY"; then
 fi
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
-  echo "standards-add: dry-run; would append id=$ID url=$URL" >&2
+  echo "standards-add: dry-run; would append id=$ID url=$URL to .claude-tdd-pro/STANDARDS-URLS.yaml (no writes)" >&2
   exit 0
 fi
 

@@ -4,16 +4,24 @@
 # EU → european-union).
 set -uo pipefail
 
-URL=""; ID=""; JURISDICTION=""; TREE=""
+URL=""; ID=""; JURISDICTION=""; TREE=""; DRY_RUN=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --url) URL="$2"; shift 2 ;;
     --id) ID="$2"; shift 2 ;;
     --jurisdiction) JURISDICTION="$2"; shift 2 ;;
     --tree) TREE="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    -h|--help) echo "Usage: compliance-add.sh --url <u> --id <id> --jurisdiction <j> [--tree <dir>] [--dry-run]"; exit 0 ;;
     *) echo "compliance-add: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo "compliance-add: dry-run; would add id=$ID url=$URL jurisdiction=$JURISDICTION (no writes)" >&2
+  exit 0
+fi
+
 [[ -z "$URL" || -z "$ID" || -z "$JURISDICTION" || -z "$TREE" ]] && {
   echo "compliance-add: --url, --id, --jurisdiction, --tree required" >&2; exit 2; }
 

@@ -26,6 +26,8 @@ while [[ $# -gt 0 ]]; do
     --force-orphan) FORCE_ORPHAN=1; shift ;;
     --check-orphan-rules) CHECK_ORPHAN=1; shift ;;
     --emit-audit) EMIT_AUDIT="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    -h|--help) echo "Usage: standards-remove.sh ... [--dry-run]"; exit 0 ;;
     *) echo "standards-remove: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
