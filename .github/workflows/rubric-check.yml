@@ -1,0 +1,113 @@
+# X-1 GitHub Actions adapter per §16 X-1 + §2.7 lock + E-9 SARIF reporter.
+# Reads lock.json.profile_snapshot_hash and plugin_version, runs the
+# rubric runner against the PR diff, uploads SARIF to GitHub Code
+# Scanning, comments findings with rule_id and remediation links,
+# and runs a pre-flight standards/PR/compliance freshness check
+# for regulated/financial/government profiles.
+name: rubric-check
+
+on:
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+  rubric-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read lock.json profile_snapshot_hash and plugin_version
+        id: lock
+        run: |
+          if [ -f .claude-tdd-pro/lock.json ]; then
+            PROFILE_SNAPSHOT_HASH=$(jq -r '.profile_snapshot_hash // ""' .claude-tdd-pro/lock.json)
+            PLUGIN_VERSION=$(jq -r '.plugin_version // ""' .claude-tdd-pro/lock.json)
+            echo "profile_snapshot_hash=$PROFILE_SNAPSHOT_HASH" >> "$GITHUB_OUTPUT"
+            echo "plugin_version=$PLUGIN_VERSION" >> "$GITHUB_OUTPUT"
+            echo "::notice::lock profile_snapshot_hash=$PROFILE_SNAPSHOT_HASH plugin_version=$PLUGIN_VERSION"
+          else
+            echo "::warning::no .claude-tdd-pro/lock.json found"
+          fi
+
+      - name: Pre-flight freshness check for regulated profiles
+        if: ${{ contains(fromJSON('["regulated","financial","government"]'), env.PROFILE_NAME) }}
+        env:
+          PROFILE_NAME: ${{ env.PROFILE_NAME }}
+        run: |
+          # Per §2.17 freshness contract: regulated/financial/government
+          # profiles MUST run --check fresh-check before any other gate
+          # so a stale standards/PR-corpus/compliance source blocks CI.
+          if [ -x commands/doctor.sh ]; then
+            bash commands/doctor.sh --check freshness || {
+              echo "::error::freshness check failed for profile=$PROFILE_NAME (regulated|financial|government); skip-fresh requires audit-logged justification"
+              exit 1
+            }
+          fi
+
+      - name: Run rubric runner against PR diff
+        id: runner
+        env:
+          GITHUB_DIFF_BASE: ${{ github.event.pull_request.base.sha }}
+          GITHUB_DIFF_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff "$GITHUB_DIFF_BASE...$GITHUB_DIFF_HEAD" --name-only > /tmp/pr-changed-files.txt
+          bash rubric/runner.sh --paths "$(cat /tmp/pr-changed-files.txt | tr '\n' ',' | sed 's/,$//')" --format github-actions --emit-sarif /tmp/rubric.sarif > /tmp/rubric-stdout.txt 2> /tmp/rubric-stderr.txt
+          RUNNER_EXIT=$?
+          # Surface every finding as a workflow-command annotation so the GitHub PR UI
+          # links each finding to its rule_id and remediation link.
+          if [ -f /tmp/rubric.sarif ]; then
+            jq -r '.runs[0].results[]? | "::error file=" + (.locations[0].physicalLocation.artifactLocation.uri // "") + ",line=" + ((.locations[0].physicalLocation.region.startLine // 1) | tostring) + "::rule_id=" + (.ruleId // "") + " " + (.message.text // "") + " | remediation: " + (.properties.remediation // "")' /tmp/rubric.sarif >&2 || true
+          fi
+          # Per spec: exit 1 (non-zero) on any P0 / severity=error finding.
+          if grep -E '"severity":\s*"P0"|severity.*error' /tmp/rubric.sarif >/dev/null 2>&1; then
+            echo "::error::rubric-check found P0 / severity=error findings; failing the build"
+            exit 1
+          fi
+          exit "$RUNNER_EXIT"
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: /tmp/rubric.sarif
+
+      - name: Comment findings on PR with rule_ids and remediation links
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            if (!fs.existsSync("/tmp/rubric.sarif")) return;
+            const sarif = JSON.parse(fs.readFileSync("/tmp/rubric.sarif", "utf8"));
+            const results = (sarif.runs?.[0]?.results) || [];
+            if (results.length === 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: "rubric-check: no findings against this PR.",
+              });
+              return;
+            }
+            const lines = results.map(r => {
+              const loc = r.locations?.[0]?.physicalLocation;
+              const path = loc?.artifactLocation?.uri || "";
+              const line = loc?.region?.startLine || 1;
+              const remediation = r.properties?.remediation || "(none)";
+              return `- **${r.ruleId}** — ${path}:${line} — ${r.message?.text || ""} — remediation: ${remediation}`;
+            });
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## rubric-check findings\n\nlock profile_snapshot_hash=${{ steps.lock.outputs.profile_snapshot_hash }} plugin_version=${{ steps.lock.outputs.plugin_version }}\n\n${lines.join("\n")}`,
+            });
