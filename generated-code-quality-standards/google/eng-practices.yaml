@@ -1,0 +1,39 @@
+source:
+  id: google-eng-practices
+  authoritative_publisher: Google (eng-practices.googlesource.com)
+  authoritative_url: "https://google.github.io/eng-practices/"
+  registry_link: "_meta/STANDARDS-URLS.yaml"
+  fetched_at: "2026-05-04T00:00:00Z"
+  content_hash: "sha256:google-eng-practices-placeholder-content-hash-for-bootstrap"
+  fetch_frequency: monthly
+  fragility_tier: low
+  license_note: "CC-BY 3.0 (Google engineering practices)"
+rules:
+  - id: g-node-007
+    name: db-transaction-boundaries
+    description: "Database mutations that span multiple statements must be inside an explicit transaction. Implicit auto-commit boundaries lead to partial writes under failure."
+    detector: naked-throw.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://google.github.io/eng-practices/review/reviewer/looking-for.html"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      multiStmtNoTx: "{{count}} mutating statements at {{location}} not wrapped in a transaction"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: google-eng-practices
+        section: "review/reviewer"
+recommended_set:
+  - g-node-007
+all_set:
+  - g-node-007

@@ -1,6 +1,6 @@
 {
   "name": "fixtures: running the rule against its negative fixture returns exit 0 (no violation; the fixture is genuinely clean)",
-  "command": "mkdir -p negative && echo \"const X = () => null; export default X;\" > negative/x.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-react-002 --paths \"/Users/siddharthjoshi/projects/claude-tdd-pro/negative/**\" 2>/dev/null && echo ok 1>&2",
+  "command": "mkdir -p negative && echo \"const X = () => null; export default X;\" > negative/x.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/_dispatch.sh\" --rule g-react-002 --paths \"$PWD/negative/**\" 2>/dev/null && echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

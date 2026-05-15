@@ -1,0 +1,129 @@
+source:
+  id: node-docs
+  authoritative_publisher: Node.js project (nodejs.org)
+  authoritative_url: "https://nodejs.org/api/"
+  registry_link: "_meta/STANDARDS-URLS.yaml"
+  fetched_at: "2026-05-04T00:00:00Z"
+  content_hash: "sha256:node-docs-placeholder-content-hash-for-bootstrap"
+  fetch_frequency: weekly
+  fragility_tier: low
+  license_note: "MIT (nodejs.org documentation)"
+rules:
+  - id: g-node-003
+    name: fetch-timeout-and-retry
+    description: "Outbound fetch / http.request / undici dispatch calls must specify a timeout (default 5s) and a retry policy. No-timeout fetches stall workers forever under upstream failure."
+    detector: fetch-timeout.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://nodejs.org/api/globals.html#fetch"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+      properties:
+        default_timeout_ms:
+          type: integer
+          minimum: 1
+        allow_no_timeout_for:
+          type: array
+          items:
+            type: string
+    messages:
+      noTimeout: "fetch at {{location}} has no timeout (default {{ms}}ms required)"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: node-docs
+        section: "fetch"
+      - source: google-eng-practices
+        section: "reliability"
+  - id: g-node-005
+    name: using-for-disposables
+    description: "TypeScript 5.2 introduced `using` and `await using` for explicit disposal. Resources implementing Symbol.dispose / Symbol.asyncDispose must be acquired with `using` so cleanup is guaranteed."
+    detector: naked-throw.sh
+    type: suggestion
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://nodejs.org/api/util.html#util-types"
+    requires_type_checking: true
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      manualDispose: "{{kind}} resource manually disposed at {{location}}; use using/await-using"
+    severity: P2
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: node-docs
+        section: "disposable"
+      - source: typescript-handbook
+        section: "5.2"
+  - id: g-node-006
+    name: stream-backpressure
+    description: "Producers writing to a Node.js Writable must respect backpressure (check write() return, await drain) so memory does not grow unbounded under slow consumers."
+    detector: naked-throw.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://nodejs.org/api/stream.html#backpressuring-in-streams"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      ignoredBackpressure: "stream write at {{location}} ignores backpressure (write returns false; await drain)"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: node-docs
+        section: "stream"
+  - id: g-node-009
+    name: no-process-exit-outside-main
+    description: "process.exit() in library code prevents callers from cleaning up; only the main entry module may call it. Internal modules should throw or return."
+    detector: naked-throw.sh
+    type: problem
+    fixable: code
+    has_suggestions: true
+    deprecated: false
+    replaced_by: []
+    docs_url: "https://nodejs.org/api/process.html#processexitcode"
+    requires_type_checking: false
+    recommended: true
+    options_schema:
+      type: object
+      additionalProperties: false
+    messages:
+      processExitInLib: "process.exit at {{location}} outside main entry; throw or return instead"
+    severity: P1
+    version: "1.0.0"
+    semver: "0.1.0"
+    rule_state: stable
+    provenance:
+      - source: node-docs
+        section: "process"
+recommended_set:
+  - g-node-003
+  - g-node-005
+  - g-node-006
+  - g-node-009
+all_set:
+  - g-node-003
+  - g-node-005
+  - g-node-006
+  - g-node-009

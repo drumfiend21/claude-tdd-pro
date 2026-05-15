@@ -1,6 +1,6 @@
 {
   "name": "detectors: each detector conforms to §2.2 detector contract (--json, --paths, --dry-run, exit codes 0/1/2/3, set -euo pipefail)",
-  "command": "for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" --help 2>&1 | grep -E \"--json.*--paths.*--dry-run\" >/dev/null || { echo \"FAIL $d missing contract flags\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "command": "for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" --help 2>&1 | grep -E -- \"--json.*--paths.*--dry-run\" >/dev/null || { echo \"FAIL $d missing contract flags\" 1>&2; exit 1; }; done; echo ok 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,
