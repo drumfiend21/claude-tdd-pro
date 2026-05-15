@@ -207,6 +207,25 @@ function bundleSection(s) {
       let data = {};
       if (ff && fs.existsSync(ff)) {
         try { data = JSON.parse(fs.readFileSync(ff, "utf8")); } catch {}
+      } else {
+        // Fall back to provenance-record aggregation: read .claude-tdd-pro/provenance/*.json
+        // and check standards_state, pr_corpus_state, compliance_state freshness fields.
+        const provDir = ".claude-tdd-pro/provenance";
+        if (fs.existsSync(provDir)) {
+          const prov = {};
+          for (const f of fs.readdirSync(provDir)) {
+            if (!f.endsWith(".json")) continue;
+            let p;
+            try { p = JSON.parse(fs.readFileSync(path.join(provDir, f), "utf8")); } catch { continue; }
+            for (const [stateKey, prefix] of [["standards_state", "standards"], ["pr_corpus_state", "pr_corpus"], ["compliance_state", "compliance"]]) {
+              const st = p[stateKey] || {};
+              for (const id of Object.keys(st)) {
+                if ((st[id].freshness_at_generation || "").startsWith("fresh")) prov[prefix] = "fresh-within-fetch-frequency";
+              }
+            }
+          }
+          data = { ...data, ...prov };
+        }
       }
       const allFresh = (data.standards || "").startsWith("fresh") &&
                        (data.pr_corpus || "").startsWith("fresh") &&
@@ -221,6 +240,27 @@ function bundleSection(s) {
       lines.push("");
       break;
     }
+    case "compliance-freshness": {
+      lines.push("# Compliance Freshness");
+      lines.push("");
+      const provDir = ".claude-tdd-pro/provenance";
+      if (fs.existsSync(provDir)) {
+        for (const f of fs.readdirSync(provDir).sort()) {
+          if (!f.endsWith(".json")) continue;
+          let p;
+          try { p = JSON.parse(fs.readFileSync(path.join(provDir, f), "utf8")); } catch { continue; }
+          const cs = p.compliance_state || {};
+          for (const fw of Object.keys(cs)) {
+            lines.push(`- ${fw}: ${cs[fw].freshness_at_generation || "unknown"} (commit ${p.commit || f})`);
+            if (cs[fw].controls_consulted && cs[fw].controls_consulted.length) {
+              lines.push(`  controls: ${cs[fw].controls_consulted.join(", ")}`);
+            }
+          }
+        }
+      }
+      lines.push("");
+      break;
+    }
     case "badges": {
       lines.push("# Audit Pack Badges");
       lines.push("");
@@ -232,14 +272,27 @@ function bundleSection(s) {
           try { records.push(JSON.parse(fs.readFileSync(path.join(provDir, f), "utf8"))); } catch {}
         }
       }
-      let allFresh = true;
+      // Aggregate freshness across all three state buckets (standards, pr_corpus, compliance).
+      const groups = { standards: true, pr_corpus: true, compliance: true };
+      const groupKeys = { standards: "standards_state", pr_corpus: "pr_corpus_state", compliance: "compliance_state" };
+      const groupSeen = { standards: false, pr_corpus: false, compliance: false };
       for (const r of records) {
-        const st = r.standards_state || {};
-        for (const id of Object.keys(st)) {
-          if (st[id].freshness_at_generation !== "fresh-within-fetch-frequency") allFresh = false;
+        for (const g of Object.keys(groups)) {
+          const st = r[groupKeys[g]] || {};
+          for (const id of Object.keys(st)) {
+            groupSeen[g] = true;
+            if ((st[id].freshness_at_generation || "") !== "fresh-within-fetch-frequency") groups[g] = false;
+          }
         }
       }
-      lines.push(`- Standards: ${allFresh ? "all-fresh" : "mixed-freshness"}`);
+      const standardsFresh = groupSeen.standards && groups.standards;
+      const prFresh = groupSeen.pr_corpus && groups.pr_corpus;
+      const complFresh = groupSeen.compliance && groups.compliance;
+      const allThreeFresh = standardsFresh && prFresh && complFresh;
+      lines.push(`- Standards: ${groupSeen.standards ? (groups.standards ? "all-fresh" : "mixed-freshness") : "n/a"}`);
+      lines.push(`- PR Corpus: ${groupSeen.pr_corpus ? (groups.pr_corpus ? "all-fresh" : "mixed-freshness") : "n/a"}`);
+      lines.push(`- Compliance: ${groupSeen.compliance ? (groups.compliance ? "all-fresh" : "mixed-freshness") : "n/a"}`);
+      lines.push(`- Badge: ${allThreeFresh ? "all-three-fresh" : "mixed-freshness"}`);
       break;
     }
     case "standards-freshness": {

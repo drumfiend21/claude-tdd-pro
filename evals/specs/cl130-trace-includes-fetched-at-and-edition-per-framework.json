@@ -1,0 +1,11 @@
+{
+  "name": "compliance trace: each framework entry records fetched_at + edition (e.g. NIST CSF 2.0 vs 1.1) per section 2.8 compliance_state schema",
+  "command": "mkdir -p .claude-tdd-pro/provenance .claude-tdd-pro/compliance-last-fetch && echo \"2026-05-13T08:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/nist-csf-2.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc --consulted-compliance nist-csf-2 --edition \"NIST CSF 2.0\" --emit \"$PWD/.claude-tdd-pro/provenance/abc.json\" && grep \"2026-05-13T08:00:00Z\" .claude-tdd-pro/provenance/abc.json 1>&2 && grep \"NIST CSF 2.0\" .claude-tdd-pro/provenance/abc.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "control-mapping freshness gate: control referencing a paywalled framework requires an attestation under compliance/attestations/ (per C-15) before activation",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && echo \"2026-05-12T08:00:00Z\" > .claude-tdd-pro/compliance-last-fetch/iso-27001-a14.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/control-mapping-gate.sh\" --framework iso-27001-a14 --control-id A.14.1 --paywalled --now 2026-05-13T08:00:00Z",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "attestation",
+      "iso-27001-a14"
+    ]
+  }
+}

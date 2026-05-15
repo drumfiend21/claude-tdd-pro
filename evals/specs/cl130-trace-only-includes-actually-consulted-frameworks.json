@@ -1,0 +1,11 @@
+{
+  "name": "compliance trace: a framework appears in compliance_state ONLY when at least one rule from the generated code cited it (no padding from the full catalog)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc --consulted-compliance soc2-tsc --emit \"$PWD/.claude-tdd-pro/provenance/abc.json\" && grep \"soc2-tsc\" .claude-tdd-pro/provenance/abc.json 1>&2 && ! grep \"nist-csf-2\" .claude-tdd-pro/provenance/abc.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

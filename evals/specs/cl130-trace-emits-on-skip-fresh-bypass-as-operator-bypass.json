@@ -1,0 +1,11 @@
+{
+  "name": "compliance trace: when control mapping was activated via --skip-fresh, freshness_at_generation is recorded as operator-bypass (audit trail of the bypass)",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc --consulted-compliance nist-csf-2 --bypassed --emit \"$PWD/.claude-tdd-pro/provenance/abc.json\" && grep \"operator-bypass\" .claude-tdd-pro/provenance/abc.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

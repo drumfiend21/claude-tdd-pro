@@ -1,0 +1,11 @@
+{
+  "name": "/compliance-remove: after removing entry, triggers C-14 sync to archive the corresponding generated-code-quality-standards/<jurisdiction>/<id>/ folder",
+  "command": "mkdir -p .claude-tdd-pro generated-code-quality-standards/us-government/nist-ai-rmf generated-code-quality-standards/_meta && printf 'rule-file\\n' > generated-code-quality-standards/us-government/nist-ai-rmf/sentinel.yaml && printf -- '- id: nist-ai-rmf\\n  name: NIST AI RMF\\n  url: https://nist.gov\\n  authoritative_publisher: NIST\\n  jurisdiction: us-government\\n  applicable_to: [ai]\\n  identifier_scheme: nist\\n  why_authoritative: |\\n    a\\n    b\\n    c\\n  fetch_frequency: weekly\\n  legal_review_required: false\\n  paywalled: false\\n' > .claude-tdd-pro/COMPLIANCE-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" nist-ai-rmf --catalog \"$PWD/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" --target \"$PWD/generated-code-quality-standards\" --force && ! test -d generated-code-quality-standards/us-government/nist-ai-rmf && test -d generated-code-quality-standards/_meta/archived/nist-ai-rmf && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
