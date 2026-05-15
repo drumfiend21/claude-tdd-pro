@@ -47,6 +47,14 @@ collected.each { |c| coll_by_id[c["id"]] = c }
     id = m["id"]
     coll = coll_by_id[id]
     val = coll ? coll["value"] : (m["value"] || nil)
+    # Auto-derive flow-guard-warnings from friction events when no value supplied.
+    if val.nil? && id == "space-flow-guard-warnings"
+      events_path = ".claude-tdd-pro/friction/events.jsonl"
+      if File.file?(events_path)
+        marker = %q{"event":"flow-guard-warning"}
+        val = File.readlines(events_path).count { |l| l.include?(marker) }
+      end
+    end
     line = "- #{id}"
     line += ": #{val}" unless val.nil?
     line += " (window=#{m["reporting_window"]})" if m["reporting_window"]
