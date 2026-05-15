@@ -1,0 +1,12 @@
+{
+  "name": "standards catalog: fragility_strategy must be one of {silent-replace, prompt-on-change, manual-only} per §2.6",
+  "command": "printf -- \"- id: bad\\n  name: B\\n  url: https://x.com\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n  class: published-standard\\n  authority_tier: 1\\n  fragility_tier: low\\n  fragility_strategy: ignore\\n  fetcher: html-anchor.sh\\n  identifier_pattern: x\\n  license_note: x\\n  origin: bundled\\n  added_by: plugin\\n  added_at: 2026-05-04\\n\" > sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-catalog.sh\" \"$PWD/sources.yaml\"",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "fragility_strategy",
+      "enum"
+    ]
+  }
+}

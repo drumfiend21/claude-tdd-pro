@@ -1,0 +1,297 @@
+# standards/sources.yaml — S-1 standards catalog (plugin-shipped per §2.6
+# plugin-internal schema). Each entry merges the operator-facing fields
+# (id, name, url, tier, applies_to, fetch_frequency) with the plugin-
+# internal fields (class, authority_tier, fragility_tier,
+# fragility_strategy, fetcher, identifier_pattern, license_note, origin,
+# added_by, added_at).
+#
+# Per §16 S-1: 17 default sources.
+
+- id: google-tsguide
+  name: "Google TypeScript Style Guide"
+  url: "https://google.github.io/styleguide/tsguide.html"
+  tier: 1
+  applies_to: [typescript, react]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: high
+  fragility_strategy: silent-replace
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Apache-2.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: google-jsguide
+  name: "Google JavaScript Style Guide"
+  url: "https://google.github.io/styleguide/jsguide.html"
+  tier: 1
+  applies_to: [javascript]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: high
+  fragility_strategy: silent-replace
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Apache-2.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: google-pyguide
+  name: "Google Python Style Guide"
+  url: "https://google.github.io/styleguide/pyguide.html"
+  tier: 1
+  applies_to: [python]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: high
+  fragility_strategy: silent-replace
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Apache-2.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: google-eng-practices
+  name: "Google Engineering Practices Documentation"
+  url: "https://google.github.io/eng-practices/"
+  tier: 1
+  applies_to: [universal]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: markdown-headers.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "CC-BY-3.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: google-testing-blog
+  name: "Google Testing Blog"
+  url: "https://testing.googleblog.com/"
+  tier: 2
+  applies_to: [universal, testing]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 2
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "blog-fair-use"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: react-docs
+  name: "React Documentation"
+  url: "https://react.dev/"
+  tier: 1
+  applies_to: [react]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: high
+  fragility_strategy: silent-replace
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "MIT"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: react-rsc-rfc
+  name: "React Server Components RFC"
+  url: "https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md"
+  tier: 1
+  applies_to: [react]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: markdown-headers.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "MIT"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: nextjs-docs
+  name: "Next.js Documentation"
+  url: "https://nextjs.org/docs"
+  tier: 1
+  applies_to: [react, nextjs]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: high
+  fragility_strategy: silent-replace
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "MIT"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: typescript-handbook
+  name: "TypeScript Handbook"
+  url: "https://www.typescriptlang.org/docs/handbook/"
+  tier: 1
+  applies_to: [typescript]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Apache-2.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: node-docs
+  name: "Node.js Documentation"
+  url: "https://nodejs.org/api/"
+  tier: 1
+  applies_to: [node]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: high
+  fragility_strategy: silent-replace
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "MIT"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: node-best-practices
+  name: "Node.js Best Practices (Goldbergyoni)"
+  url: "https://github.com/goldbergyoni/nodebestpractices"
+  tier: 2
+  applies_to: [node]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 2
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: markdown-headers.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "CC-BY-SA-4.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: owasp-asvs
+  name: "OWASP Application Security Verification Standard"
+  url: "https://owasp.org/www-project-application-security-verification-standard/"
+  tier: 1
+  applies_to: [universal, security]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: pdf-section.sh
+  identifier_pattern: "^V[0-9.]+$"
+  license_note: "CC-BY-SA-4.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: owasp-top10
+  name: "OWASP Top 10"
+  url: "https://owasp.org/www-project-top-ten/"
+  tier: 1
+  applies_to: [universal, security]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: html-anchor.sh
+  identifier_pattern: "^A[0-9]+$"
+  license_note: "CC-BY-SA-4.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: wcag-2-2
+  name: "Web Content Accessibility Guidelines 2.2"
+  url: "https://www.w3.org/TR/WCAG22/"
+  tier: 1
+  applies_to: [universal, accessibility]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[0-9.]+$"
+  license_note: "W3C-Document"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: web-vitals
+  name: "Web Vitals"
+  url: "https://web.dev/articles/vitals"
+  tier: 1
+  applies_to: [universal, performance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[A-Z]+$"
+  license_note: "Apache-2.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: slsa
+  name: "SLSA Supply-chain Levels for Software Artifacts"
+  url: "https://slsa.dev/spec/v1.0/"
+  tier: 1
+  applies_to: [universal, supply-chain]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: markdown-headers.sh
+  identifier_pattern: "^L[0-9]+$"
+  license_note: "Apache-2.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
+
+- id: semver
+  name: "Semantic Versioning 2.0.0"
+  url: "https://semver.org/"
+  tier: 1
+  applies_to: [universal, versioning]
+  fetch_frequency: weekly
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[0-9.]+$"
+  license_note: "CC-BY-3.0"
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-01-01"
