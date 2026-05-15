@@ -59,6 +59,14 @@ case "$RULE" in
   g-node-008)  DETECTOR="boundary-schema.sh" ;;
   g-node-009)  DETECTOR="naked-throw.sh" ;;
   g-node-010)  DETECTOR="supply-chain.sh" ;;
+  g-ts-001)    DETECTOR="no-any.sh" ;;
+  g-ts-002)    DETECTOR="no-any.sh" ;;
+  g-ts-003)    DETECTOR="exhaustive-unions.sh" ;;
+  g-ts-004)    DETECTOR="type-test-coverage.sh" ;;
+  g-ts-005)    DETECTOR="type-test-coverage.sh" ;;
+  g-ts-006)    DETECTOR="type-test-coverage.sh" ;;
+  g-ts-007)    DETECTOR="no-any.sh" ;;
+  g-ts-008)    DETECTOR="type-test-coverage.sh" ;;
   *)
     echo "_dispatch: no detector mapping for rule $RULE" >&2
     exit 2
