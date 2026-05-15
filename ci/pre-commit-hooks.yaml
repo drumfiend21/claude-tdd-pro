@@ -1,0 +1,17 @@
+# X-3 pre-commit framework adapter per architecture section 16 X-3.
+# Drop into a project alongside .pre-commit-config.yaml; install via
+# `pre-commit install` to wire as a local commit-time gate.
+# Same detectors as the Claude Code PreToolUse hook + CI; --format
+# markdown so output renders cleanly in the terminal.
+- id: rubric-check
+  name: rubric-check (Claude TDD Pro)
+  description: "Runs the rubric runner against staged files and blocks the commit on any P0 / severity=error finding. Honors lock.json plugin_version pin per section 2.7."
+  entry: bash rubric/runner.sh --format markdown --severity-floor P0
+  language: system
+  pass_filenames: true
+  files: '\.(ts|tsx|js|jsx|mts|cts|mjs|cjs|py)$'
+  args:
+    - --dry-run
+  stages: [commit]
+  # honors lock.json: rubric/runner.sh internally reads
+  # .claude-tdd-pro/lock.json plugin_version for pin enforcement.

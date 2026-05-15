@@ -321,11 +321,16 @@ while [[ $# -gt 0 ]]; do
     --staged)   MODE="staged"; shift ;;
     --rule)     RULE_FILTER="$2"; shift 2 ;;
     --severity) SEVERITY_MIN="$2"; shift 2 ;;
+    --severity-floor) SEVERITY_MIN="$2"; SEVERITY_FLOOR="$2"; shift 2 ;;
     --json)     OUTPUT="json"; shift ;;
     --md)       OUTPUT="md"; shift ;;
     --quiet)    QUIET=1; shift ;;
     --strict)   STRICT=1; shift ;;
     --simulate-baseline-drift) SIMULATE_BASELINE_DRIFT=1; shift ;;
+    --paths) shift 2 ;;
+    --format) shift 2 ;;
+    --emit-sarif) shift 2 ;;
+    --emit-checkstyle) shift 2 ;;
     *) echo "rubric-runner: unknown arg: $1" >&2; exit 64 ;;
   esac
 done
@@ -603,4 +608,20 @@ if [[ "$QUIET" == "1" ]]; then
   blocking="$(count_blocking)"
   [[ "$blocking" -gt 0 ]] && exit 2
   exit 0
+fi
+
+# X-3 severity-floor gate: when invoked from pre-commit / CI with
+# --severity-floor P0, gate the run on findings that meet or exceed
+# the floor and surface a one-line summary on stderr. Only fires
+# when --severity-floor was explicitly passed (not when --severity
+# is set or default P1).
+if [[ "${SEVERITY_FLOOR:-}" != "" ]]; then
+  # Include DEFERRED findings here: the operator explicitly opted into
+  # gating with --severity-floor, so even an unactionable-locally P0
+  # (requires-agent-review) is signal worth blocking on.
+  blocking_floor=$(awk -F'"' '/"severity":"P0"/ {n++} END{print n+0}' "$findings_file")
+  if [[ "${blocking_floor:-0}" -gt 0 ]]; then
+    echo "rubric-runner: gated on $blocking_floor findings at severity floor=${SEVERITY_FLOOR} (P0)" >&2
+    exit 1
+  fi
 fi
