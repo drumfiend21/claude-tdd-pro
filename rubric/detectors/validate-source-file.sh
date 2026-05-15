@@ -29,14 +29,16 @@ SOURCE_FILE=""
 CHECK_REGISTRY_LINK=0
 REGISTRY_PATH=""
 CHECK_RECOMMENDED_CONSISTENCY=0
+CHECK_HISTORY_APPEND_ONLY=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --check-registry-link) CHECK_REGISTRY_LINK=1; shift ;;
     --registry) REGISTRY_PATH="$2"; shift 2 ;;
     --check-recommended-consistency) CHECK_RECOMMENDED_CONSISTENCY=1; shift ;;
+    --check-history-append-only) CHECK_HISTORY_APPEND_ONLY=1; shift ;;
     -h|--help)
-      echo "Usage: validate-source-file.sh <path> [--check-registry-link --registry <path>] [--check-recommended-consistency]" >&2
+      echo "Usage: validate-source-file.sh <path> [--check-registry-link --registry <path>] [--check-recommended-consistency] [--check-history-append-only]" >&2
       exit 0 ;;
     *)
       if [[ -z "$SOURCE_FILE" ]]; then
@@ -58,6 +60,38 @@ fi
 if [[ ! -f "$SOURCE_FILE" ]]; then
   echo "validate-source-file: file not found: $SOURCE_FILE" >&2
   exit 1
+fi
+
+# O-7: --check-history-append-only verifies rule_state_history is
+# consistent with current rule_state (history.last.to must equal
+# current rule_state) AND timestamps are monotonically increasing.
+if [[ "$CHECK_HISTORY_APPEND_ONLY" -eq 1 ]]; then
+  SOURCE_FILE="$SOURCE_FILE" node -e '
+    const fs = require("fs");
+    const c = fs.readFileSync(process.env.SOURCE_FILE, "utf8");
+    let bad = false;
+    const ruleRe = /\bid:\s*([a-zA-Z0-9_/-]+)[\s\S]*?\brule_state:\s*([a-zA-Z_-]+)[\s\S]*?\brule_state_history:\s*\[([^\]]*)\]/g;
+    let m;
+    while ((m = ruleRe.exec(c)) !== null) {
+      const rid = m[1];
+      const currentState = m[2];
+      const histBody = m[3];
+      const tsList = (histBody.match(/timestamp:\s*([0-9T:Z-]+)/g) || []).map(s => s.replace(/timestamp:\s*/, ""));
+      for (let i = 1; i < tsList.length; i++) {
+        if (new Date(tsList[i]).getTime() < new Date(tsList[i-1]).getTime()) {
+          process.stderr.write(`${rid}: rule_state_history non-monotonic timestamps (${tsList[i-1]} > ${tsList[i]})\n`);
+          bad = true;
+        }
+      }
+      const toList = (histBody.match(/to:\s*([a-zA-Z_-]+)/g) || []).map(s => s.replace(/to:\s*/, ""));
+      if (toList.length > 0 && toList[toList.length - 1] !== currentState) {
+        process.stderr.write(`${rid}: rule_state_history non-monotonic - last entry says "to: ${toList[toList.length - 1]}" but current rule_state is "${currentState}"\n`);
+        bad = true;
+      }
+    }
+    process.exit(bad ? 2 : 0);
+  '
+  exit $?
 fi
 
 # E-6: --check-recommended-consistency verifies that recommended_set

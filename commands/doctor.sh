@@ -53,9 +53,10 @@ if [[ "$WATCH" -eq 1 && "$TICK_ONCE" -eq 1 ]]; then
       echo "S-17 standards/auto-refresh-daily.sh @ $NOW_ISO"
       echo "L-22 pr-corpus/auto-refresh-daily.sh @ $NOW_ISO"
       echo "C-19 compliance/auto-refresh-daily.sh @ $NOW_ISO"
+      echo "O-7 rubric/canary-promote.sh @ $NOW_ISO"
     } > "$EMIT_RUNS"
   fi
-  echo "doctor --watch --tick-once: invoked S-17 + L-22 + C-19 at $NOW_ISO" >&2
+  echo "doctor --watch --tick-once: invoked S-17 + L-22 + C-19 + O-7 at $NOW_ISO" >&2
   exit 0
 fi
 
@@ -187,6 +188,51 @@ case "$CHECK" in
       echo "validate-all: fail" >&2
       exit 1
     fi
+    ;;
+  canary)
+    # O-7: list rules in canary state (warn-only) with days remaining
+    # before they could be auto-promoted to block.
+    [[ -z "$TREE" ]] && TREE="generated-code-quality-standards"
+    [[ -z "$NOW_ISO" ]] && NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    TREE="$TREE" NOW_ISO="$NOW_ISO" node -e '
+      const fs = require("fs");
+      const path = require("path");
+      const tree = process.env.TREE;
+      const nowMs = new Date(process.env.NOW_ISO).getTime();
+      function walk(d) {
+        const out = [];
+        if (!fs.existsSync(d)) return out;
+        for (const e of fs.readdirSync(d)) {
+          const p = path.join(d, e);
+          const st = fs.statSync(p);
+          if (st.isDirectory() && e !== "_meta" && e !== "_archived") out.push(...walk(p));
+          else if (e.endsWith(".yaml")) out.push(p);
+        }
+        return out;
+      }
+      const lines = [];
+      for (const f of walk(tree)) {
+        const fc = fs.readFileSync(f, "utf8");
+        // Anchor extraction to rules: section so source.id is not
+        // mismatched as a rule id.
+        const rulesIdx = fc.indexOf("\nrules:");
+        if (rulesIdx < 0) continue;
+        const c = fc.slice(rulesIdx);
+        const ruleRe = /\bid:\s*([a-zA-Z0-9_/-]+)[\s\S]*?\brule_state:\s*([a-zA-Z_-]+)/g;
+        let m;
+        while ((m = ruleRe.exec(c)) !== null) {
+          if (m[2] !== "warn-only") continue;
+          const blk = c.slice(m.index, m.index + 600);
+          const tsMatch = blk.match(/timestamp:\s*(20[0-9]{2}-[0-9]{2}-[0-9]{2})/);
+          const lastMs = tsMatch ? new Date(tsMatch[1]).getTime() : (nowMs - 14 * 86400000);
+          const elapsedDays = Math.floor((nowMs - lastMs) / 86400000);
+          const remaining = Math.max(0, 14 - elapsedDays);
+          lines.push(`canary: ${m[1]} ${remaining} days remaining`);
+        }
+      }
+      for (const l of lines) process.stderr.write(l + "\n");
+    '
+    exit 0
     ;;
   directory-layout)
     # G-1: verify the 14 default namespace folders + _operator/_community/_meta exist
