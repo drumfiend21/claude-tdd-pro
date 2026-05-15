@@ -6,8 +6,31 @@ set -uo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 fail=0
+INCLUDE_BOOTSTRAP=0
+EMIT_REPORT=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --include-bootstrap) INCLUDE_BOOTSTRAP=1; shift ;;
+    --emit-report) EMIT_REPORT="$2"; shift 2 ;;
+    -h|--help) echo "Usage: self-test.sh [--include-bootstrap] [--emit-report <path>]"; exit 0 ;;
+    *) shift ;;
+  esac
+done
 
 echo "self-test: starting" >&2
+
+if [[ "$INCLUDE_BOOTSTRAP" -eq 1 && -n "$EMIT_REPORT" ]]; then
+  bash "$PLUGIN_ROOT/commands/init-guardrails.sh" --run-bootstrap-evals --emit-report "$EMIT_REPORT" >&2 2>&1 || fail=1
+  if [[ -f "$EMIT_REPORT" ]]; then
+    EMIT_REPORT="$EMIT_REPORT" node -e '
+      const fs = require("fs");
+      const j = JSON.parse(fs.readFileSync(process.env.EMIT_REPORT, "utf8"));
+      const wrapped = { bootstrap: j };
+      fs.writeFileSync(process.env.EMIT_REPORT, JSON.stringify(wrapped, null, 2));
+    '
+  fi
+fi
 
 echo "doctor: invoking /doctor --check directory-layout" >&2
 if [[ -d generated-code-quality-standards ]]; then

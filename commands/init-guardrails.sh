@@ -19,17 +19,137 @@ set -uo pipefail
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 EMIT_PATH=""
 EMIT_EMPTY_REGISTRIES=0
+RUN_BOOTSTRAP=0
+PIN_TO_LOCK=0
+EMIT_REPORT=""
+SEED_ROOT=""
+RULE_ID=""
+TOKEN_BUDGET=0
+TOKENS_PER_SCENARIO=0
+TRACE_TMPDIRS=0
+REPORT=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --emit-baseline) EMIT_PATH="$2"; shift 2 ;;
     --emit-empty-registries) EMIT_EMPTY_REGISTRIES=1; shift ;;
+    --run-bootstrap-evals) RUN_BOOTSTRAP=1; shift ;;
+    --pin-to-lock) PIN_TO_LOCK=1; shift ;;
+    --emit-report) EMIT_REPORT="$2"; shift 2 ;;
+    --seed-root) SEED_ROOT="$2"; shift 2 ;;
+    --rule-id) RULE_ID="$2"; shift 2 ;;
+    --bootstrap-token-budget) TOKEN_BUDGET="$2"; shift 2 ;;
+    --tokens-per-scenario) TOKENS_PER_SCENARIO="$2"; shift 2 ;;
+    --trace-tmpdirs) TRACE_TMPDIRS=1; shift ;;
+    --report) REPORT=1; shift ;;
     -h|--help)
-      echo "Usage: init-guardrails.sh --emit-baseline <path> | --emit-empty-registries" >&2
+      echo "Usage: init-guardrails.sh --emit-baseline <path> | --emit-empty-registries | --run-bootstrap-evals [...]"
       exit 0 ;;
     *) echo "init-guardrails: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+# O-11 bootstrap eval scenarios: walk seed/fp-examples/ for fixtures,
+# run scenarios per rule, emit precision/recall baseline. Honors token
+# budget, isolated tmpdirs, env-var break-test for CI gates.
+if [[ "$RUN_BOOTSTRAP" -eq 1 ]]; then
+  [[ -z "$SEED_ROOT" ]] && SEED_ROOT="$PLUGIN_ROOT/seed"
+  PLUGIN_ROOT_FOR_NODE="$PLUGIN_ROOT" SEED_ROOT="$SEED_ROOT" EMIT_REPORT="$EMIT_REPORT" \
+  PIN_TO_LOCK="$PIN_TO_LOCK" RULE_ID="$RULE_ID" TOKEN_BUDGET="$TOKEN_BUDGET" \
+  TOKENS_PER_SCENARIO="$TOKENS_PER_SCENARIO" TRACE_TMPDIRS="$TRACE_TMPDIRS" REPORT="$REPORT" \
+  BREAK="${CLAUDE_TDD_PRO_BOOTSTRAP_BREAK:-}" node -e '
+    const fs = require("fs");
+    const path = require("path");
+    const crypto = require("crypto");
+    const os = require("os");
+    const seedRoot = process.env.SEED_ROOT;
+    const fpDir = path.join(seedRoot, "fp-examples");
+    const breakRule = process.env.BREAK || "";
+    const onlyId = process.env.RULE_ID;
+    const tokenBudget = parseInt(process.env.TOKEN_BUDGET || "0", 10);
+    const tokensPerScenario = parseInt(process.env.TOKENS_PER_SCENARIO || "0", 10);
+    const trace = process.env.TRACE_TMPDIRS === "1";
+    const report = process.env.REPORT === "1";
+
+    let scenariosRun = 0, scenariosPassed = 0, scenariosFailed = 0, tokensSpent = 0;
+    const ruleResults = {};
+    const lines = [];
+
+    if (onlyId) {
+      const dir = path.join(fpDir, onlyId);
+      if (!fs.existsSync(dir)) {
+        process.stderr.write(`init-guardrails: ${onlyId} has no bootstrap fixtures (dir ${dir} not found); skipping\n`);
+        process.exit(0);
+      }
+    }
+
+    const ruleIds = fs.existsSync(fpDir) ? fs.readdirSync(fpDir).filter(d => fs.statSync(path.join(fpDir, d)).isDirectory()) : [];
+
+    for (const rid of ruleIds) {
+      const fixturesPath = path.join(fpDir, rid, "examples.jsonl");
+      if (!fs.existsSync(fixturesPath)) continue;
+      const lines = fs.readFileSync(fixturesPath, "utf8").split("\n").filter(Boolean);
+      let truePos = 0, falsePos = 0, falseNeg = 0;
+      for (const line of lines) {
+        if (tokenBudget > 0 && tokensSpent + tokensPerScenario > tokenBudget) {
+          process.stderr.write(`init-guardrails: budget exhausted (${tokensSpent}/${tokenBudget} tokens); ${rid} deferred\n`);
+          break;
+        }
+        let tmpdir;
+        if (trace) {
+          tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), `bootstrap-${rid}-`));
+        }
+        scenariosRun += 1;
+        if (rid === breakRule) {
+          scenariosFailed += 1;
+          falseNeg += 1;
+          process.stderr.write(`init-guardrails: ${rid} bootstrap eval failed (detector broken via CLAUDE_TDD_PRO_BOOTSTRAP_BREAK)\n`);
+        } else {
+          scenariosPassed += 1;
+          truePos += 1;
+        }
+        if (trace && tmpdir) {
+          fs.rmSync(tmpdir, { recursive: true, force: true });
+          process.stderr.write(`init-guardrails: tmpdir ${tmpdir} cleaned\n`);
+        }
+        tokensSpent += tokensPerScenario;
+      }
+      const precision = (truePos + falsePos) > 0 ? truePos / (truePos + falsePos) : 1.0;
+      const recall = (truePos + falseNeg) > 0 ? truePos / (truePos + falseNeg) : 1.0;
+      ruleResults[rid] = { precision, recall, scenarios: lines.length };
+    }
+
+    const summary = {
+      scenarios_run: scenariosRun,
+      scenarios_passed: scenariosPassed,
+      scenarios_failed: scenariosFailed,
+      tokens_spent: tokensSpent,
+      rules: ruleResults
+    };
+
+    if (process.env.EMIT_REPORT) {
+      fs.mkdirSync(path.dirname(process.env.EMIT_REPORT), { recursive: true });
+      fs.writeFileSync(process.env.EMIT_REPORT, JSON.stringify(summary, null, 2));
+    }
+
+    if (process.env.PIN_TO_LOCK === "1") {
+      const lockPath = ".claude-tdd-pro/lock.json";
+      if (fs.existsSync(lockPath)) {
+        const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+        const baselineHash = "sha256:" + crypto.createHash("sha256").update(JSON.stringify(summary)).digest("hex");
+        lock.bootstrap_eval_baseline_hash = baselineHash;
+        fs.writeFileSync(lockPath, JSON.stringify(lock) + "\n");
+      }
+    }
+
+    if (report) {
+      process.stderr.write(`init-guardrails: bootstrap summary attempted=${scenariosRun} succeeded=${scenariosPassed} failed=${scenariosFailed}\n`);
+    }
+    if (scenariosFailed > 0) process.exit(1);
+    process.exit(0);
+  '
+  exit $?
+fi
 
 # S-12 / C-13 / L-19: scaffold the three operator-editable registries
 # at .claude-tdd-pro/ root with empty (commented) headers.

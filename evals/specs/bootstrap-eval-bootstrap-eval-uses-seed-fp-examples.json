@@ -1,0 +1,11 @@
+{
+  "name": "bootstrap eval: bootstrap scenarios consume seed/fp-examples/<rule-id>/examples.jsonl as expected-fail inputs",
+  "command": "mkdir -p \"$PWD/seed-test/seed/fp-examples/g-ts-001\" && echo '{\"bootstrap_seed\":true,\"input\":\"any\",\"expected\":\"fail\"}' > \"$PWD/seed-test/seed/fp-examples/g-ts-001/examples.jsonl\" && bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --seed-root \"$PWD/seed-test/seed\" --emit-report \"$PWD/report.json\" && grep \"g-ts-001\" report.json 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
