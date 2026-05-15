@@ -63,6 +63,8 @@ If pre-flight reveals invented script paths, wrong-domain syntax (ESLint vs rubr
 
 **11. Run existing hygiene preprocessor in pre-flight.** As part of pre-flight (item 5), if any spec under `evals/pending/` has been touched since last `node scripts/lint-pending-specs.js` invocation, run it. Idempotent. Already committed in CL-83. Catches printf-leading-dash and em-dash patterns.
 
+**12. Commit spec patches in the SAME CL that introduces them.** When you patch an `evals/pending/...json` spec to fix a stream-redirect, hardcoded path, or content bug — and then `git mv` the patched file into `evals/specs/` — make sure the patched form is what gets committed. The active suite will pass on the working tree even when HEAD's blob is unpatched (because subsequent runs use the patched WT). To verify before commit: `git stash push <patched file> && bash evals/runner.sh -v <spec-name>`; if HEAD's form fails the same spec that WT's form passes, the patch is unstaged and must be `git add`'d. **Why:** discovered in CL-100 self-audit — CL-93 + CL-94 + CL-97 each shipped 10/1/2 spec patches that were applied to WT but never committed; HEAD's form would have failed for any fresh checkout. **How to apply:** before every `git commit`, scan `git status` for `M evals/specs/*.json` entries that were not in your add list and stage them.
+
 ## What this preserves (do NOT relax these)
 
 - Step 0 pre-flight read of `docs/architecture-v1.9.md` per CL
