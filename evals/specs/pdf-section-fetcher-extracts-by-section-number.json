@@ -2,7 +2,7 @@
   "name": "standards fetcher: standards/fetchers/pdf-section.sh extracts a numbered section from a PDF (e.g. V14.3 from OWASP ASVS PDF)",
   "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/pdf-section.sh\" --in \"$PWD/asvs.pdf\" --section \"V14.3\" 2>out.txt && grep \"V14.3\" out.txt 1>&2 && echo ok 1>&2",
   "setup": [
-    "printf '%PDF-1.4 stub\\nV14.3 Build content\\nV14.4 Other content\\n' > asvs.pdf"
+    "printf '%%PDF-1.4 stub\\nV14.3 Build content\\nV14.4 Other content\\n' > asvs.pdf"
   ],
   "expect": {
     "exit_code": 0,
