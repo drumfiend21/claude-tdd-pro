@@ -1,0 +1,11 @@
+{
+  "name": "index generation: INDEX.md includes _operator/ and _community/ subfolders as their own sections (alongside default namespaces)",
+  "command": "mkdir -p tree/google tree/_operator/acme tree/_community/contoso tree/_meta && echo 'maintainer: a\\nlicense: MIT' > tree/_community/contoso/README.md && for d in google _operator/acme _community/contoso; do printf 'source:\\n  id: s\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > \"tree/$d/x.yaml\"; done && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --emit-index \"$PWD/tree/_meta/INDEX.md\" && grep -E '^## _operator/acme' tree/_meta/INDEX.md 1>&2 && grep -E '^## _community/contoso' tree/_meta/INDEX.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

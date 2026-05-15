@@ -1,0 +1,11 @@
+{
+  "name": "index generation: INDEX.md per-file row includes title (from source.authoritative_publisher + file name)",
+  "command": "mkdir -p tree/google tree/_meta && printf 'source:\\n  id: g\\n  authoritative_publisher: Google\\n  authoritative_url: https://google.github.io/styleguide/tsguide.html\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: Apache-2.0\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/tsguide.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --emit-index \"$PWD/tree/_meta/INDEX.md\" && grep -E 'Google.*tsguide' tree/_meta/INDEX.md 1>&2 && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

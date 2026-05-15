@@ -63,6 +63,9 @@ for arg in "$@"; do
       let cacheLocation = "";
       let pinToLock = false;
       let strict = false;
+      let emitIndex = "";
+      let checkIndexStale = false;
+      let indexPath = "";
       for (let i = 0; i < args.length; i++) {
         const a = args[i];
         if (a === "--root") { root = args[++i]; }
@@ -74,6 +77,9 @@ for arg in "$@"; do
         else if (a === "--cache-location") { cacheLocation = args[++i]; }
         else if (a === "--pin-to-lock") { pinToLock = true; }
         else if (a === "--strict") { strict = true; }
+        else if (a === "--emit-index") { emitIndex = args[++i]; }
+        else if (a === "--check-index-stale") { checkIndexStale = true; }
+        else if (a === "--index-path") { indexPath = args[++i]; }
         else { process.stderr.write("aggregator: unknown flag: " + a + "\n"); process.exit(2); }
       }
       if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
@@ -192,6 +198,89 @@ for arg in "$@"; do
         const outHash = crypto.createHash("sha256")
           .update(JSON.stringify({ load_order: loadOrder, rules })).digest("hex");
         process.stderr.write("\nsha256:" + outHash);
+      }
+
+      // G-10 _meta/INDEX.md generation per §16:
+      //   "Index generation: _meta/INDEX.md auto-regenerated per source folder
+      //    file change; per-namespace counts (files, rules, recommended);
+      //    per-file metadata (title, last-fetched, rule count, link);
+      //    operator-readable."
+      function buildIndex() {
+        // Per-namespace breakdown: classify each file by its namespace
+        // (top dir for plugin folders; "<top>/<sub>" for _operator and
+        // _community).
+        const byNs = {};
+        for (const rel of loadOrder) {
+          const parts = rel.split("/");
+          let ns;
+          if (parts[0] === "_operator" || parts[0] === "_community") {
+            ns = parts.slice(0, 2).join("/");
+          } else {
+            ns = parts[0];
+          }
+          (byNs[ns] = byNs[ns] || []).push(rel);
+        }
+        const lines = ["# Generated Code Quality Standards Index", ""];
+        const sortedNs = Object.keys(byNs).sort();
+        for (const ns of sortedNs) {
+          const files = byNs[ns];
+          let totalRules = 0;
+          let totalRecommended = 0;
+          const rows = [];
+          for (const rel of files) {
+            const abs = path.join(root, rel);
+            const content = fs.readFileSync(abs, "utf8");
+            // Pull source.authoritative_publisher + source.fetched_at.
+            const pubMatch = content.match(/^\s*authoritative_publisher:\s*"?([^"\n]+?)"?\s*$/m);
+            const fetchedMatch = content.match(/^\s*fetched_at:\s*"?([^"\n]+?)"?\s*$/m);
+            const recommendedMatch = content.match(/^recommended_set:\s*\[(.*?)\]/m);
+            const ruleIdRe = /(?:-\s*\{[^{}]*?\bid:\s*([a-zA-Z0-9_/-]+)|-\s*id:\s*([a-zA-Z0-9_/-]+))/g;
+            let m;
+            let ruleCount = 0;
+            const rulesIdx = content.indexOf("\nrules:");
+            if (rulesIdx >= 0) {
+              const tail = content.slice(rulesIdx);
+              while ((m = ruleIdRe.exec(tail)) !== null) ruleCount += 1;
+            }
+            const recommendedCount = recommendedMatch && recommendedMatch[1].trim().length > 0
+              ? recommendedMatch[1].split(",").filter(s => s.trim().length > 0).length
+              : 0;
+            totalRules += ruleCount;
+            totalRecommended += recommendedCount;
+            const baseName = path.basename(rel, ".yaml");
+            const title = (pubMatch ? pubMatch[1].trim() : baseName) + " - " + baseName;
+            const link = "../" + rel;
+            const fetched = fetchedMatch ? fetchedMatch[1].trim() : "(unknown)";
+            rows.push("| " + title + " | [" + path.basename(rel) + "](" + link + ") | " + ruleCount + " | " + fetched + " |");
+          }
+          lines.push("## " + ns);
+          lines.push("");
+          lines.push(ns + ": files: " + files.length + ", rules: " + totalRules + ", recommended: " + totalRecommended);
+          lines.push("");
+          lines.push("| Title | File | Rules | Last fetched |");
+          lines.push("|---|---|---|---|");
+          lines.push.apply(lines, rows);
+          lines.push("");
+        }
+        return lines.join("\n");
+      }
+
+      if (emitIndex) {
+        const out = buildIndex();
+        try { fs.mkdirSync(path.dirname(emitIndex), { recursive: true }); } catch {}
+        fs.writeFileSync(emitIndex, out);
+      }
+      if (checkIndexStale) {
+        if (!indexPath) {
+          process.stderr.write("aggregator: --check-index-stale requires --index-path <path>\n");
+          process.exit(2);
+        }
+        const expected = buildIndex();
+        const actual = fs.existsSync(indexPath) ? fs.readFileSync(indexPath, "utf8") : "";
+        if (expected !== actual) {
+          process.stderr.write("aggregator: INDEX.md stale at " + indexPath + " (regenerate via --emit-index)\n");
+          process.exit(1);
+        }
       }
     ' -- "$@"
   fi
