@@ -11,10 +11,12 @@
 set -uo pipefail
 
 RULE=""
+PRINT_CANONICAL=0
 ARGS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --rule) RULE="$2"; shift 2 ;;
+    --print-canonical) PRINT_CANONICAL=1; shift ;;
     *) ARGS+=("$1"); shift ;;
   esac
 done
@@ -25,6 +27,16 @@ if [[ -z "$RULE" ]]; then
 fi
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
+
+if [[ "$PRINT_CANONICAL" -eq 1 ]]; then
+  case "$RULE" in
+    g-ts-006) echo "templates/tsconfig.strict.json" >&2 ;;
+    g-react-007) echo "templates/vitest.react.config.ts" >&2 ;;
+    g-react-008|g-react-010) echo "templates/size-limit.config.js" >&2 ;;
+    *) echo "_dispatch: no canonical template for rule $RULE" >&2; exit 0 ;;
+  esac
+  exit 0
+fi
 
 case "$RULE" in
   g-react-001) DETECTOR="rsc-boundary.sh" ;;
