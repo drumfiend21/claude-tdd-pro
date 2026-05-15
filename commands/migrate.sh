@@ -1,27 +1,46 @@
 #!/usr/bin/env bash
-# /migrate — substrate stub. Implements only --help and --dry-run
-# semantics until the full feature CL lands. Per O-2: every subject
-# command supports global --dry-run mode (§2.14 dry-run subjects).
-#
-# Usage:
-#   migrate.sh [--dry-run] ...
-
+# /migrate — O-3 plugin lifecycle migration runner per §16:
+# "migrations/<from>-to-<to>.sh per-version (preserve user state)".
+# Records completion in .claude-tdd-pro/lock.json migrations_applied.
 set -uo pipefail
 
-DRY_RUN=0
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+FROM=""; TO=""; DRY_RUN=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --from) FROM="$2"; shift 2 ;;
+    --to) TO="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
-    -h|--help) echo "Usage: migrate.sh [--dry-run] ..."; exit 0 ;;
-    *) shift ;;
+    -h|--help) echo "Usage: migrate.sh --from <semver> --to <semver> [--dry-run]"; exit 0 ;;
+    *) echo "migrate: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+[[ -z "$FROM" || -z "$TO" ]] && { echo "migrate: --from and --to required" >&2; exit 2; }
+
+SCRIPT_NAME="${FROM}-to-${TO}.sh"
+SCRIPT="$PLUGIN_ROOT/migrations/$SCRIPT_NAME"
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
-  echo "migrate: dry-run; would perform migrate actions (no writes)" >&2
+  echo "migrate: dry-run; would invoke migrations/${SCRIPT_NAME} (no writes)" >&2
   exit 0
 fi
 
-# Substrate stage: real implementation lands in a later CL.
-echo "migrate: substrate stub; only --dry-run + --help implemented" >&2
-exit 0
+if [[ ! -f "$SCRIPT" ]]; then
+  echo "migrate: migration script not found: migrations/${SCRIPT_NAME}" >&2
+  exit 2
+fi
+
+bash "$SCRIPT" || { echo "migrate: migration script failed" >&2; exit 1; }
+
+LOCK=".claude-tdd-pro/lock.json"
+if [[ -f "$LOCK" ]]; then
+  FROM="$FROM" TO="$TO" LOCK="$LOCK" node -e '
+    const fs = require("fs");
+    const p = process.env.LOCK;
+    const j = JSON.parse(fs.readFileSync(p, "utf8"));
+    j.migrations_applied = j.migrations_applied || [];
+    j.migrations_applied.push({ from: process.env.FROM, to: process.env.TO, ts: new Date().toISOString() });
+    fs.writeFileSync(p, JSON.stringify(j) + "\n");
+  '
+fi
+echo "migrate: applied $FROM -> $TO" >&2
