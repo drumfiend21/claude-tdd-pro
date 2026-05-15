@@ -189,6 +189,39 @@ case "$CHECK" in
       exit 1
     fi
     ;;
+  deprecations)
+    # E-10: list deprecated rules with replaced_by.
+    [[ -z "$TREE" ]] && TREE="generated-code-quality-standards"
+    TREE="$TREE" node -e '
+      const fs = require("fs");
+      const path = require("path");
+      const tree = process.env.TREE;
+      function walk(d) {
+        const out = [];
+        if (!fs.existsSync(d)) return out;
+        for (const e of fs.readdirSync(d)) {
+          const p = path.join(d, e);
+          const st = fs.statSync(p);
+          if (st.isDirectory() && e !== "_meta" && e !== "_archived") out.push(...walk(p));
+          else if (e.endsWith(".yaml")) out.push(p);
+        }
+        return out;
+      }
+      for (const f of walk(tree)) {
+        const fc = fs.readFileSync(f, "utf8");
+        const rulesIdx = fc.indexOf("\nrules:");
+        if (rulesIdx < 0) continue;
+        const c = fc.slice(rulesIdx);
+        const ruleRe = /\bid:\s*([a-zA-Z0-9_/-]+)[\s\S]*?\bdeprecated:\s*true[\s\S]*?\breplaced_by:\s*\[([^\]]*)\]/g;
+        let m;
+        while ((m = ruleRe.exec(c)) !== null) {
+          const repl = m[2].split(",").map(s => s.trim().replace(/^"|"$/g, "")).filter(Boolean);
+          process.stderr.write(`deprecations: ${m[1]} deprecated, replaced_by [${repl.join(", ")}]\n`);
+        }
+      }
+    '
+    exit 0
+    ;;
   canary)
     # O-7: list rules in canary state (warn-only) with days remaining
     # before they could be auto-promoted to block.

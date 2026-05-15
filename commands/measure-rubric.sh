@@ -24,6 +24,8 @@ N=50
 DRY_RUN=0
 INTERACTIVE=0
 FORMAT="json"
+TREE=""
+ACTION_CARDS=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -31,9 +33,45 @@ while [[ $# -gt 0 ]]; do
     --dry-run) DRY_RUN=1; shift ;;
     --interactive) INTERACTIVE=1; shift ;;
     --format) FORMAT="$2"; shift 2 ;;
+    --tree) TREE="$2"; shift 2 ;;
+    --action-cards) ACTION_CARDS=1; shift ;;
     *) echo "measure-rubric: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+# E-10: --action-cards emits REPLACE: <old> -> <new> for each
+# deprecated rule with replaced_by populated.
+if [[ "$ACTION_CARDS" -eq 1 && -n "$TREE" ]]; then
+  TREE="$TREE" node -e '
+    const fs = require("fs");
+    const path = require("path");
+    const tree = process.env.TREE;
+    function walk(d) {
+      const out = [];
+      if (!fs.existsSync(d)) return out;
+      for (const e of fs.readdirSync(d)) {
+        const p = path.join(d, e);
+        const st = fs.statSync(p);
+        if (st.isDirectory() && e !== "_meta" && e !== "_archived") out.push(...walk(p));
+        else if (e.endsWith(".yaml")) out.push(p);
+      }
+      return out;
+    }
+    for (const f of walk(tree)) {
+      const fc = fs.readFileSync(f, "utf8");
+      const rulesIdx = fc.indexOf("\nrules:");
+      if (rulesIdx < 0) continue;
+      const c = fc.slice(rulesIdx);
+      const ruleRe = /\bid:\s*([a-zA-Z0-9_/-]+)[\s\S]*?\bdeprecated:\s*true[\s\S]*?\breplaced_by:\s*\[([^\]]*)\]/g;
+      let m;
+      while ((m = ruleRe.exec(c)) !== null) {
+        const replacement = (m[2].split(",").map(s => s.trim()).filter(Boolean)[0] || "").replace(/^"|"$/g, "");
+        if (replacement) process.stderr.write(`measure-rubric: REPLACE: ${m[1]} -> ${replacement}\n`);
+      }
+    }
+  '
+  exit 0
+fi
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "measure-rubric: iterating $N commits (dry-run; no detector invocation)" >&2

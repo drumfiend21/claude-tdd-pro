@@ -234,13 +234,25 @@ if [[ "$CHECK_REPLACED_BY_REFERENCES" -eq 1 ]] && command -v ruby >/dev/null 2>&
     seen = {}
     refs = []
     ARGV.each do |path|
+      content = File.read(path)
       doc = begin; YAML.load_file(path); rescue; nil; end
-      next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
-      doc["rules"].each do |r|
-        next unless r.is_a?(Hash) && r["id"].is_a?(String)
-        seen[r["id"]] = true
-        if r["replaced_by"].is_a?(Array)
-          r["replaced_by"].each { |rb| refs << [rb, r["id"], path] if rb.is_a?(String) }
+      if doc.is_a?(Hash) && doc["rules"].is_a?(Array)
+        doc["rules"].each do |r|
+          next unless r.is_a?(Hash) && r["id"].is_a?(String)
+          seen[r["id"]] = true
+          if r["replaced_by"].is_a?(Array)
+            r["replaced_by"].each { |rb| refs << [rb, r["id"], path] if rb.is_a?(String) }
+          end
+        end
+      else
+        # Regex fallback for flow-style YAML with bare URLs.
+        content.scan(/\bid:\s*([a-zA-Z0-9_\/-]+)/) { |m| seen[m[0]] = true }
+        content.scan(/\bid:\s*([a-zA-Z0-9_\/-]+)[^}\n]*\breplaced_by:\s*\[([^\]]*)\]/) do |rid, body|
+          body.split(",").each do |s|
+            s = s.strip
+            next if s.empty?
+            refs << [s, rid, path]
+          end
         end
       end
     end

@@ -32,16 +32,39 @@ fi
 
 SOURCE_FILE="$1"
 EMIT_CONFIG=0
+CHECK_DEPRECATION_WINDOW=0
+PLUGIN_VERSION=""
+RULE_DEPRECATED_SINCE=""
 shift
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --emit-eslint-config) EMIT_CONFIG=1; shift ;;
+    --check-deprecation-window) CHECK_DEPRECATION_WINDOW=1; shift ;;
+    --plugin-version) PLUGIN_VERSION="$2"; shift 2 ;;
+    --rule-deprecated-since) RULE_DEPRECATED_SINCE="$2"; shift 2 ;;
     *)
       echo "validate-eslint-compliance: unknown arg: $1" >&2
       exit 1
       ;;
   esac
 done
+
+# E-10: --check-deprecation-window enforces "deprecated >=1 minor version
+# before removal". Removal allowed only when plugin_version >=
+# rule_deprecated_since's minor + 1.
+if [[ "$CHECK_DEPRECATION_WINDOW" -eq 1 ]]; then
+  PLUGIN_VERSION="$PLUGIN_VERSION" RULE_DEPRECATED_SINCE="$RULE_DEPRECATED_SINCE" node -e '
+    const pv = (process.env.PLUGIN_VERSION || "0.0.0").split(".").map(Number);
+    const rs = (process.env.RULE_DEPRECATED_SINCE || "0.0.0").split(".").map(Number);
+    // Required minor delta: pv.minor must be >= rs.minor + 1 (when major equal).
+    if (pv[0] === rs[0] && pv[1] < rs[1] + 1) {
+      process.stderr.write(`deprecation window: rule deprecated since ${rs.join(".")} but plugin_version ${pv.join(".")} has not advanced by 1 minor version yet\n`);
+      process.exit(2);
+    }
+    process.exit(0);
+  '
+  exit $?
+fi
 
 if [[ ! -f "$SOURCE_FILE" ]]; then
   echo "validate-eslint-compliance: file not found: $SOURCE_FILE" >&2
