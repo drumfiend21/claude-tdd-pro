@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry validator rejects when organizations_count integer disagrees with distinct orgs in supporting_prs",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[{\"number\":1,\"verbatim_quote\":\"x\",\"org\":\"a\",\"tier\":1},{\"number\":2,\"verbatim_quote\":\"y\",\"org\":\"a\",\"tier\":1}],\"evidence_count\":2,\"organizations_count\":5}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json --check-counts 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'organizations_count_mismatch' err.txt && grep -q 'declared=5' err.txt && grep -q 'actual=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

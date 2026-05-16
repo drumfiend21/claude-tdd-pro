@@ -1,0 +1,11 @@
+{
+  "name": "skill SKILL.md frontmatter declares a trigger that fires after a pattern extraction completes successfully",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/SKILL.md\" 2>err.txt > head.txt && grep -q 'trigger: after-pattern-extraction' head.txt && grep -q 'name: pr-to-eval-dataset' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance loop cites pr-corpus when control coverage evidence comes from a learned PR pattern",
+  "command": "mkdir -p pr-corpus compliance && printf 'controls:\\n  - control_id: CC8.1\\n    satisfied_by: [pr-corpus:no-eval]\\n' > compliance/coverage.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/cross-loop-cite.sh\" --coverage compliance/coverage.yaml --emit citations 2>out.txt && grep -q 'control=CC8.1' out.txt && grep -q 'evidence=pr-corpus:no-eval' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

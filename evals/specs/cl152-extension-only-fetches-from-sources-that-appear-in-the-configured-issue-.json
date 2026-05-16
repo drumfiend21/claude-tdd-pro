@@ -1,0 +1,11 @@
+{
+  "name": "extension only fetches from sources that appear in the configured issue-tracker source list",
+  "command": "printf 'sources: [cfpb-consumerfinance, kubernetes]\\n' > issue-sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-tracker.sh\" --sources issue-sources.yaml --source random-other --dry-run 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'source_not_configured' err.txt && grep -q 'random-other' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

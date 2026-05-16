@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove removes the source id from the operator_namespace block in the registry",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence && printf 'sources: []\\noperator_namespace: [{id: my-src}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence --now 2026-05-13T00:00:00Z 2>err.txt && ! grep -q 'my-src' .claude-tdd-pro/PR-SOURCES.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

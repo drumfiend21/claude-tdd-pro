@@ -1,0 +1,11 @@
+{
+  "name": "rule with fresh pr-corpus source passes the live freshness gate cleanly",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-13T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rule_id: r1\\nprovenance:\\n  - {class: pr-corpus, source_id: cfpb}\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-gate.sh\" --rule rule.yaml --now 2026-05-13T01:00:00Z --freshness-window 24h 2>out.txt && grep -q 'gate=pass' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning blocks pattern promotion when any consolidated safeguard check raises a flag",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"number\":1,\"author\":\"alice\",\"reviewer\":\"alice\"}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --all-checks --enforce 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'promotion_blocked=true' err.txt && grep -q 'flag=self-approval' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

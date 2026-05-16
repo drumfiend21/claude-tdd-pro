@@ -1,0 +1,11 @@
+{
+  "name": "audit log entry from pr-corpus learning is included in the merkle chain hash next checkpoint",
+  "command": "mkdir -p compliance pr-corpus && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1},{\"number\":2,\"org\":\"b\",\"tier\":1},{\"number\":3,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --audit-log compliance/audit.log 2>err.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/checkpoint.sh\" --audit-log compliance/audit.log --out compliance/checkpoint.json 2>err.txt && grep -q '\"merkle_root\"' compliance/checkpoint.json && grep -q '\"included_events\":1' compliance/checkpoint.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

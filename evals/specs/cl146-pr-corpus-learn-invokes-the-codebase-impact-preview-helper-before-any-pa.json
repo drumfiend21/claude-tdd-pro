@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn invokes the codebase-impact preview helper before any pattern is promoted",
+  "command": "mkdir -p pr-corpus tree && printf 'x\\n' > tree/a.js && printf '[{\"id\":\"p1\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1},{\"number\":2,\"org\":\"b\",\"tier\":1},{\"number\":3,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --root tree --dry-run 2>out.txt && grep -q 'codebase_impact_preview=invoked' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

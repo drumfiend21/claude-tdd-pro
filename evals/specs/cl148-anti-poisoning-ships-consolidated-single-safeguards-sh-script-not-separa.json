@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning ships consolidated single safeguards.sh script not separate per-check binaries",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" ] && [ ! -e \"$CLAUDE_PLUGIN_ROOT/pr-corpus/check-single-author.sh\" ] && [ ! -e \"$CLAUDE_PLUGIN_ROOT/pr-corpus/check-self-approval.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

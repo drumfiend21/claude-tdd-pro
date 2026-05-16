@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack output contains a continuous learning evidence section when pr-corpus learning events exist",
+  "command": "mkdir -p compliance && printf '{\"event\":\"pr-corpus-learn\",\"pattern_id\":\"p1\",\"at\":\"2026-05-13T00:00:00Z\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --dry-run 2>out.txt && grep -q 'section: Continuous learning evidence' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

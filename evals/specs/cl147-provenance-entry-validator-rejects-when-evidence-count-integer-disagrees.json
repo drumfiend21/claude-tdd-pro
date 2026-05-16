@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry validator rejects when evidence_count integer disagrees with the supporting_prs array length",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[{\"number\":1,\"verbatim_quote\":\"x\",\"org\":\"a\",\"tier\":1}],\"evidence_count\":5,\"organizations_count\":1}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json --check-counts 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'evidence_count_mismatch' err.txt && grep -q 'declared=5' err.txt && grep -q 'actual=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

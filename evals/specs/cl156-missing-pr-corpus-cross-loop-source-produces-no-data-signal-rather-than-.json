@@ -1,0 +1,11 @@
+{
+  "name": "missing pr-corpus cross-loop source produces no_data signal rather than crashing the consumer",
+  "command": "mkdir -p space && printf 'metrics:\\n  - {id: space-pr-corpus-learn-rate, dimension: performance}\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml 2>out.txt && grep -q 'space-pr-corpus-learn-rate' out.txt && grep -q 'no_data' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

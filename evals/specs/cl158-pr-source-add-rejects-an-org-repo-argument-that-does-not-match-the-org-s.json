@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-add rejects an org/repo argument that does not match the org-slash-repo format",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" not-a-valid-format --tier 2 --source-class financial-industry 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_format' err.txt && grep -q 'expected: <org>/<repo>' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

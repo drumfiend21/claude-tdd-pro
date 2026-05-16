@@ -1,0 +1,11 @@
+{
+  "name": "extension includes a closed-not-resolved security issue when the resolution status field is unresolved",
+  "command": "mkdir -p fixtures && printf '{\"number\":7,\"state\":\"closed\",\"labels\":[\"security\"],\"resolution\":\"wont_fix\",\"body\":\"x\"}\\n' > fixtures/issues.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-tracker.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/issues.jsonl --emit patterns --out patterns.jsonl 2>err.txt && grep -q '\"number\":7' patterns.jsonl && grep -q '\"resolution\":\"wont_fix\"' patterns.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/pr-corpus-learn dry-run prints the patterns that would be promoted without actually persisting them",
+  "command": "mkdir -p pr-corpus active-rules && printf '[{\"id\":\"p-test\",\"verbatim_quote\":\"x\",\"usefulness_estimate\":4,\"supporting_prs\":[{\"number\":1,\"org\":\"a\",\"tier\":1},{\"number\":2,\"org\":\"b\",\"tier\":1},{\"number\":3,\"org\":\"c\",\"tier\":1}]}]\\n' > pr-corpus/patterns.json && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-learn.sh\" --patterns pr-corpus/patterns.json --gate-result pr-corpus/quality-eval.json --rules-out active-rules --dry-run 2>out.txt && grep -q 'would_promote=p-test' out.txt && [ ! -f active-rules/p-test.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

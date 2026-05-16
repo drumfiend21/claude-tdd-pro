@@ -1,0 +1,11 @@
+{
+  "name": "cross-loop reference always carries an explicit class equal to pr-corpus tag for downstream filtering",
+  "command": "mkdir -p pr-corpus && printf 'rule_id: no-eval\\norigin_loop: pr-corpus\\n' > rule-card.yaml && bash \"$CLAUDE_PLUGIN_ROOT/cross-loop/validate-tag.sh\" --card rule-card.yaml 2>out.txt && grep -q 'class=pr-corpus' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

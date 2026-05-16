@@ -1,0 +1,11 @@
+{
+  "name": "daily monitor appends each run record to monitor.log for audit traceability",
+  "command": "mkdir -p pr-corpus fixtures && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && printf 'sources: []\\n' > fixtures/sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources fixtures/sources.yaml --log pr-corpus/monitor.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'started_at=2026-05-13T00:00:00Z' pr-corpus/monitor.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

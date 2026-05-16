@@ -1,0 +1,11 @@
+{
+  "name": "cfpb default issue-tracker source is enabled by default in the shipped issue-sources configuration",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-sources.defaults.yaml\" ] && grep -q 'cfpb-consumerfinance' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-sources.defaults.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

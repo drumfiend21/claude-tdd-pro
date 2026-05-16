@@ -1,0 +1,15 @@
+# L-16 default issue-tracker sources for security pattern mining.
+# Operator may override via pr-corpus/issue-sources.yaml at the project root.
+sources:
+  - id: 18f-identity-idp
+    repo: 18F/identity-idp
+    description: 18F federated login service (security-labeled issues)
+    label: security
+  - id: cfpb-consumerfinance
+    repo: cfpb/consumerfinance.gov
+    description: CFPB consumer-finance gov site (security-labeled issues)
+    label: security
+  - id: kubernetes-kubernetes
+    repo: kubernetes/kubernetes
+    description: Kubernetes core (kind/security label)
+    label: security

@@ -1,0 +1,11 @@
+{
+  "name": "skill handles a binary diff hunk by emitting a skip record rather than crashing",
+  "command": "mkdir -p pr && printf 'diff --git a/img.png b/img.png\\nBinary files a/img.png and b/img.png differ\\n' > pr/diff.patch && bash \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/extract.sh\" --diff pr/diff.patch --emit dataset --out dataset.jsonl 2>err.txt && grep -q '\"skipped\":\"binary\"' dataset.jsonl && grep -q '\"file\":\"img.png\"' dataset.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

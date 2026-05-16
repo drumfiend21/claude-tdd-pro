@@ -1,0 +1,11 @@
+{
+  "name": "18F identity idp default issue-tracker source is enabled by default in the shipped configuration",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-sources.defaults.yaml\" ] && grep -q '18f-identity-idp' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-sources.defaults.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

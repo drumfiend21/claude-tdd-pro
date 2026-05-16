@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove --force operation logs a warning entry to the merkle-chained audit log for traceability",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence compliance && printf 'sources: []\\noperator_namespace: [{id: my-src}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && printf 'rule_id: r1\\nprovenance:\\n  - {source_id: my-src, sole_evidence: true}\\n' > pr-corpus/evidence/r1.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence --force --audit-log compliance/audit.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"force-remove-pr-source\"' compliance/audit.log && grep -q '\"source\":\"my-src\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

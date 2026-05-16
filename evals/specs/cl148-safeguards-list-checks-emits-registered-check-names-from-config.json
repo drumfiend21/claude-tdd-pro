@@ -1,0 +1,11 @@
+{
+  "name": "consolidated safeguards script --list-checks prints the registered safeguard names so operator can audit which checks ship",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --list-checks 2>out.txt && grep -qE 'check=[a-z][a-z0-9-]+' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "strict mode disables a rule whose pr-corpus source is stale rather than auto-demoting",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-04-01T00:00:00Z\\n' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb.txt && printf 'rule_id: r1\\nseverity: error\\nprovenance:\\n  - {class: pr-corpus, source_id: cfpb}\\n' > rule.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/freshness-gate.sh\" --rule rule.yaml --now 2026-05-13T00:00:00Z --freshness-window 24h --strict 2>out.txt && grep -q 'action=disable' out.txt && grep -q 'mode=strict' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

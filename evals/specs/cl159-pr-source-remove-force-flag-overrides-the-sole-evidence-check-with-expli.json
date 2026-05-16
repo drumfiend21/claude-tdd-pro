@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove --force flag overrides the sole-evidence check with explicit operator confirmation",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence && printf 'sources: []\\noperator_namespace: [{id: my-src}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && printf 'rule_id: r1\\nprovenance:\\n  - {source_id: my-src, sole_evidence: true}\\n' > pr-corpus/evidence/r1.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence --force --now 2026-05-13T00:00:00Z 2>out.txt && ! grep -q 'my-src' .claude-tdd-pro/PR-SOURCES.yaml && grep -q 'force=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

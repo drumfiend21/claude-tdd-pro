@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove refuses to remove a source that is the sole evidence for any active rule",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence && printf 'sources: []\\noperator_namespace: [{id: my-src, source_class: financial-industry, tier: 2, applies_to: [node]}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && printf 'rule_id: r1\\nprovenance:\\n  - {class: pr-corpus, source_id: my-src, sole_evidence: true}\\n' > pr-corpus/evidence/r1.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'sole_evidence' err.txt && grep -q 'rule=r1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

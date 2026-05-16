@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning operator can manually clear a flag and have the pattern re-evaluated",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"flag\":\"self-approval\",\"cleared\":false}\\n' > pr-corpus/poison-flags.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards-clear.sh\" --pattern p1 --flag self-approval --justification reviewed-manually --log pr-corpus/poison-flags.jsonl 2>out.txt && grep -q 'cleared=true' out.txt && grep -q '\"cleared\":true' pr-corpus/poison-flags.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

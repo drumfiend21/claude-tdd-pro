@@ -1,0 +1,11 @@
+{
+  "name": "conflict record includes an ISO-8601 timestamp at which the conflict was surfaced",
+  "command": "mkdir -p pr-corpus && printf '{\"pattern_id\":\"p1\",\"matched_rule_id\":\"r-x\",\"classification\":\"conflict\"}\\n' > decision.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/surface-conflict.sh\" --decision decision.json --log pr-corpus/decisions.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"surfaced_at\":\"2026-05-13T00:00:00Z\"' pr-corpus/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

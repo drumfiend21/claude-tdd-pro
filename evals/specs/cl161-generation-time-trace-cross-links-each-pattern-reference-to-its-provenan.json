@@ -1,0 +1,11 @@
+{
+  "name": "generation-time trace cross-links each pattern reference to its provenance entry from the pr-corpus provenance contract",
+  "command": "mkdir -p pr-corpus && printf '{\"event\":\"generation\",\"patterns_referenced\":[\"p1\"]}\\n' > event.json && printf 'patterns:\\n  - {id: p1, provenance_class: pr-corpus, supporting_prs: [{number: 1, org: a, tier: 1}]}\\n' > pr-corpus/patterns-index.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event event.json --patterns-index pr-corpus/patterns-index.yaml --out pr-corpus/consumption-trace.jsonl 2>err.txt && grep -q '\"provenance_class\":\"pr-corpus\"' pr-corpus/consumption-trace.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

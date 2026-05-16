@@ -1,0 +1,11 @@
+{
+  "name": "daily monitor records the last successful run timestamp to a state file for the next-iteration freshness check",
+  "command": "mkdir -p pr-corpus fixtures && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && printf 'sources: []\\n' > fixtures/sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources fixtures/sources.yaml --now 2026-05-13T00:00:00Z --state pr-corpus/monitor-state.json 2>err.txt && grep -q '\"last_run_at\":\"2026-05-13T00:00:00Z\"' pr-corpus/monitor-state.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

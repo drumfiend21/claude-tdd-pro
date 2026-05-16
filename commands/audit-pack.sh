@@ -31,6 +31,8 @@ FRESHNESS_FILE=""
 COMMIT_SHA=""
 NOW_ISO=""
 DRY_RUN=0
+BUNDLE_OUT=""
+SINCE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -47,14 +49,44 @@ while [[ $# -gt 0 ]]; do
     --freshness-file) FRESHNESS_FILE="$2"; shift 2 ;;
     --commit-sha) COMMIT_SHA="$2"; shift 2 ;;
     --now) NOW_ISO="$2"; shift 2 ;;
+    --bundle-out) BUNDLE_OUT="$2"; shift 2 ;;
+    --since) SINCE="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
-    -h|--help) echo "Usage: audit-pack.sh --emit <path> --section <name> [--<artifact>-file <path>] [--dry-run]"; exit 0 ;;
+    -h|--help) echo "Usage: audit-pack.sh --emit <path> --section <name> [--<artifact>-file <path>] [--audit-log <jsonl>] [--bundle-out <zip>] [--since <iso>] [--dry-run]"; exit 0 ;;
     *) shift ;;
   esac
 done
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "audit-pack: dry-run; would emit section=${SECTION:-(default)} to ${EMIT:-(default)} (no writes)" >&2
+  echo "audit-pack: dry_run=true bundle_out=${BUNDLE_OUT:-(none)}" >&2
+  if [[ -n "$AUDIT_LOG_FILE" && -f "$AUDIT_LOG_FILE" ]]; then
+    AUDIT_LOG_FILE="$AUDIT_LOG_FILE" SINCE="$SINCE" node -e '
+      const fs = require("fs");
+      const lines = fs.readFileSync(process.env.AUDIT_LOG_FILE, "utf8").trim().split("\n").filter(Boolean);
+      const since = process.env.SINCE || "";
+      const events = [];
+      for (const l of lines) {
+        let o; try { o = JSON.parse(l); } catch { continue; }
+        if (o.event !== "pr-corpus-learn") continue;
+        if (since && o.at && o.at < since) continue;
+        events.push(o);
+      }
+      if (events.length === 0) {
+        process.stderr.write("audit-pack: pr_corpus_events=0\n");
+      } else {
+        process.stderr.write("audit-pack: section: Continuous learning evidence\n");
+        process.stderr.write("audit-pack: SOC 2 CC4.1 (continuous monitoring): satisfied by per-pattern audit-log entry per promoted rule\n");
+        process.stderr.write("audit-pack: EU AI Act Art.12 (record-keeping): satisfied by JSONL retention of pr-corpus-learn events\n");
+        for (const e of events) {
+          const ec = e.evidence_count !== undefined ? `evidence_count=${e.evidence_count}` : "";
+          const oc = e.organizations_count !== undefined ? `organizations_count=${e.organizations_count}` : "";
+          process.stderr.write(`audit-pack: pattern_id=${e.pattern_id} ${ec} ${oc}\n`.replace(/\s+\n/, "\n"));
+        }
+        process.stderr.write(`audit-pack: pr_corpus_events=${events.length}\n`);
+      }
+    '
+  fi
   exit 0
 fi
 

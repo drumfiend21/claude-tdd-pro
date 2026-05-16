@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning runs as a gate before pattern extraction is committed to the corpus",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"number\":1,\"author\":\"alice\"}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-pipeline.sh\" --pattern pat.json --dry-run --emit pipeline 2>out.txt && grep -q 'step1=safeguards' out.txt && grep -q 'step2=extract' out.txt && grep -q 'order=safeguards-before-extract' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

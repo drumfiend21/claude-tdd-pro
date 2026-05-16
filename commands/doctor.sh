@@ -327,6 +327,43 @@ case "$CHECK" in
     echo "ok" >&2
     exit 0
     ;;
+  pr-corpus-freshness)
+    # L-22 freshness check per pr-corpus rule in active profile.
+    [[ -z "$PROFILE" || ! -f "$PROFILE" ]] && { echo "doctor: --check pr-corpus-freshness requires --profile <yaml>" >&2; exit 2; }
+    [[ -z "$NOW_ISO" ]] && NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    PROFILE="$PROFILE" NOW_ISO="$NOW_ISO" node -e '
+      const fs = require("fs");
+      const text = fs.readFileSync(process.env.PROFILE, "utf8");
+      const lines = text.split("\n");
+      // Parse rules with provenance source_id (regex-based; tolerant).
+      const rules = [];
+      let cur = null;
+      for (const l of lines) {
+        const idMatch = l.match(/[-{]\s*id:\s*(\S+?)[,}\s]/);
+        if (idMatch) {
+          if (cur) rules.push(cur);
+          cur = { id: idMatch[1], sources: [] };
+        }
+        const srcMatch = l.match(/source_id:\s*([A-Za-z0-9_-]+)/);
+        if (srcMatch && cur) cur.sources.push(srcMatch[1]);
+      }
+      if (cur) rules.push(cur);
+      const now = new Date(process.env.NOW_ISO);
+      for (const r of rules) {
+        for (const s of r.sources) {
+          const lastFile = `.claude-tdd-pro/pr-corpus/last-fetch/${s}.txt`;
+          let status = "missing";
+          if (fs.existsSync(lastFile)) {
+            const last = fs.readFileSync(lastFile, "utf8").trim();
+            const diff = (now - new Date(last)) / 1000;
+            status = diff < 86400 ? "fresh" : "stale";
+          }
+          process.stderr.write(`doctor: ${r.id}: ${s}=${status}\n`);
+        }
+      }
+    '
+    exit 0
+    ;;
   *)
     echo "doctor: unknown check: $CHECK" >&2
     exit 2

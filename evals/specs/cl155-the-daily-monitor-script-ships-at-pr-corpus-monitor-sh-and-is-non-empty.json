@@ -1,0 +1,11 @@
+{
+  "name": "the daily monitor script ships at pr-corpus/monitor.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

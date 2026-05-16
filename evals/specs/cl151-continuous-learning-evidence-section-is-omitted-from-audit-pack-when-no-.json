@@ -1,0 +1,11 @@
+{
+  "name": "continuous learning evidence section is omitted from /audit-pack when no pr-corpus learning events exist",
+  "command": "mkdir -p compliance && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --dry-run 2>out.txt && ! grep -q 'section: Continuous learning evidence' out.txt && grep -q 'pr_corpus_events=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

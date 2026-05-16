@@ -1,0 +1,11 @@
+{
+  "name": "daily monitor exits cleanly when given a SIGTERM-like termination signal between iterations",
+  "command": "mkdir -p pr-corpus fixtures && printf '{\"gate\":\"pass\"}\\n' > pr-corpus/quality-eval.json && printf 'sources: []\\n' > fixtures/sources.yaml && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources fixtures/sources.yaml --simulate-shutdown 2>out.txt && grep -q 'shutdown=clean' out.txt && grep -q 'exit=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

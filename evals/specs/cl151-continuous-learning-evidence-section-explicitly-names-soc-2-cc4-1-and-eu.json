@@ -1,0 +1,11 @@
+{
+  "name": "continuous learning evidence section explicitly names SOC 2 CC4.1 and EU AI Act Article 12 satisfaction",
+  "command": "mkdir -p compliance && printf '{\"event\":\"pr-corpus-learn\",\"pattern_id\":\"p1\",\"at\":\"2026-05-13T00:00:00Z\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --dry-run 2>out.txt && grep -q 'SOC 2 CC4.1' out.txt && grep -q 'EU AI Act Art.12' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

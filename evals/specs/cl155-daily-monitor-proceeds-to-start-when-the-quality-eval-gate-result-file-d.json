@@ -1,0 +1,13 @@
+{
+  "name": "daily monitor proceeds to start when the quality-eval gate result file declares pass",
+  "command": "mkdir -p pr-corpus && printf '{\"gate\":\"pass\",\"precision\":0.85,\"mean_usefulness\":4.0}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once --sources-stub fixtures/sources.yaml 2>out.txt && grep -q 'monitor_started' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p fixtures && printf 'sources: []\\n' > fixtures/sources.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

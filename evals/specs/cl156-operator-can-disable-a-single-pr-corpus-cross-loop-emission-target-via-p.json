@@ -1,0 +1,11 @@
+{
+  "name": "operator can disable a single pr-corpus cross-loop emission target via profile config",
+  "command": "mkdir -p profiles && printf 'pr_corpus_cross_loop:\\n  emit_to: [standards, rubric]\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/cross-loop/emit.sh\" --profile profiles/p.yaml --target compliance --dry-run 2>out.txt && grep -q 'target=compliance disabled=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

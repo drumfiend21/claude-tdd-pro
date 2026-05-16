@@ -1,0 +1,11 @@
+{
+  "name": "daily monitor refuses to start when the manual quality-eval gate result file declares fail",
+  "command": "mkdir -p pr-corpus && printf '{\"gate\":\"fail\",\"precision\":0.5,\"mean_usefulness\":2.5}\\n' > pr-corpus/quality-eval.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/monitor.sh\" --gate-result pr-corpus/quality-eval.json --once 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'monitor_blocked' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "generation-time trace skips emission when no pr-corpus pattern was referenced in the event",
+  "command": "mkdir -p pr-corpus && printf '{\"event\":\"generation\",\"patterns_referenced\":[],\"consulted_prs\":[]}\\n' > event.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/consumption-trace.sh\" --event event.json --out pr-corpus/consumption-trace.jsonl 2>out.txt && [ ! -s pr-corpus/consumption-trace.jsonl ] && grep -q 'no_pr_corpus_referenced' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

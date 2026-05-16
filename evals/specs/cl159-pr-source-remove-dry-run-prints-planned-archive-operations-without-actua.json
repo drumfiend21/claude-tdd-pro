@@ -1,0 +1,11 @@
+{
+  "name": "/pr-source-remove dry-run prints planned archive operations without actually moving any files",
+  "command": "mkdir -p .claude-tdd-pro pr-corpus/evidence && printf 'sources: []\\noperator_namespace: [{id: my-src}]\\n' > .claude-tdd-pro/PR-SOURCES.yaml && printf 'source_id: my-src\\n' > pr-corpus/evidence/my-src.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-remove.sh\" my-src --registry .claude-tdd-pro/PR-SOURCES.yaml --evidence-dir pr-corpus/evidence --dry-run 2>out.txt && grep -q 'planned: archive my-src' out.txt && [ -f pr-corpus/evidence/my-src.yaml ] && [ ! -d pr-corpus/evidence/_archived ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

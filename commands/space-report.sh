@@ -83,6 +83,15 @@ collected.each { |c| coll_by_id[c["id"]] = c }
         val = File.readlines(events_path).count { |l| l.include?(marker) }
       end
     end
+    # L-15 auto-derive pr-corpus learn rate from learn-stats.json.
+    if val.nil? && id == "space-pr-corpus-learn-rate"
+      stats_path = ".claude-tdd-pro/pr-corpus/learn-stats.json"
+      if File.file?(stats_path)
+        require "json"
+        j = JSON.parse(File.read(stats_path)) rescue {}
+        val = j["learn_events_30d"]
+      end
+    end
     line = "- #{id}"
     line += ": #{val}" unless val.nil?
     line += " (window=#{m["reporting_window"]})" if m["reporting_window"]

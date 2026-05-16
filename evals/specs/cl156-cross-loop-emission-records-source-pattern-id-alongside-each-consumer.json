@@ -1,0 +1,11 @@
+{
+  "name": "cross-loop emission record carries the source pr-corpus pattern id alongside each downstream consumer event so origin is always traceable",
+  "command": "mkdir -p .claude-tdd-pro/cross-loop && printf '{\"source_pattern_id\":\"no-eval\",\"origin\":\"pr-corpus\",\"consumers\":[\"standards\",\"compliance\",\"rubric\"]}\\n' > ref.json && bash \"$CLAUDE_PLUGIN_ROOT/cross-loop/emit.sh\" --reference ref.json --log .claude-tdd-pro/cross-loop/events.jsonl 2>err.txt && grep -q '\"source_pattern_id\":\"no-eval\"' .claude-tdd-pro/cross-loop/events.jsonl && grep -q '\"origin\":\"pr-corpus\"' .claude-tdd-pro/cross-loop/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

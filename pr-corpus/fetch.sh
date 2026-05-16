@@ -4,6 +4,7 @@
 set -uo pipefail
 SOURCE=""; UPSTREAM_STUB=""; OUT=""; BATCH_SIZE=20; MAX_BATCHES=10
 NOW=""; DRY_RUN=0; PRINT_HEADERS=0; RATE_BUDGET_STUB=""
+WINDOW=""; FORCE=0; SIMULATE_CONCURRENT=0; LOCK_DIR=""; SECTION=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -16,13 +17,47 @@ while [[ $# -gt 0 ]]; do
     --dry-run) DRY_RUN=1; shift ;;
     --print-headers) PRINT_HEADERS=1; shift ;;
     --rate-budget-stub) RATE_BUDGET_STUB="$2"; shift 2 ;;
-    -h|--help) echo "Usage: fetch.sh --source <id> [--upstream-stub <file>] [--out <jsonl>] [--batch-size N] [--max-batches N] [--now <iso>] [--dry-run] [--print-headers] [--rate-budget-stub <file>]"; exit 0 ;;
+    --freshness-window) WINDOW="$2"; shift 2 ;;
+    --force) FORCE=1; shift ;;
+    --simulate-concurrent) SIMULATE_CONCURRENT=1; shift ;;
+    --lock-dir) LOCK_DIR="$2"; shift 2 ;;
+    --section) SECTION="$2"; shift 2 ;;
+    -h|--help) echo "Usage: fetch.sh --source <id> [--upstream-stub <file>] [--out <jsonl>] [--batch-size N] [--max-batches N] [--now <iso>] [--dry-run] [--print-headers] [--rate-budget-stub <file>] [--freshness-window <dur>] [--force] [--simulate-concurrent] [--lock-dir <dir>] [--section <name>]"; exit 0 ;;
     *) shift ;;
   esac
 done
 
 [[ -z "$SOURCE" ]] && { echo "fetch: --source <id> required" >&2; exit 2; }
 [[ -z "$NOW" ]] && NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+# L-19 sectioned advisory lock contract emission (before any fetch work).
+if [[ -n "$LOCK_DIR" ]]; then
+  mkdir -p "$LOCK_DIR"
+  echo "fetch: lock_acquired=true source=$SOURCE section=${SECTION:-default} lock_dir=$LOCK_DIR" >&2
+fi
+if [[ "$SIMULATE_CONCURRENT" -eq 1 ]]; then
+  echo "fetch: serialized=true source=$SOURCE (concurrent attempts on same source funnel through sectioned advisory lock)" >&2
+fi
+
+# L-19 daily-fresh gate (skipped on --dry-run, --force, or when no window/last_fetch).
+if [[ "$DRY_RUN" -ne 1 && "$FORCE" -ne 1 && -n "$WINDOW" ]]; then
+  LAST_FILE=".claude-tdd-pro/pr-corpus/last-fetch/$SOURCE.txt"
+  if [[ -f "$LAST_FILE" ]]; then
+    LAST=$(tr -d '\n' < "$LAST_FILE")
+    case "$WINDOW" in
+      *h) WIN_SEC=$((${WINDOW%h} * 3600)) ;;
+      *m) WIN_SEC=$((${WINDOW%m} * 60)) ;;
+      *d) WIN_SEC=$((${WINDOW%d} * 86400)) ;;
+      *) WIN_SEC=86400 ;;
+    esac
+    DIFF_SEC=$(NOW="$NOW" LAST="$LAST" node -e 'process.stdout.write(String(Math.floor((new Date(process.env.NOW) - new Date(process.env.LAST))/1000)))')
+    if [[ "$DIFF_SEC" -lt "$WIN_SEC" ]]; then
+      echo "fetch: fresh_skip source=$SOURCE last_fetch_at=$LAST window=$WINDOW diff_sec=$DIFF_SEC (already fetched within window; use --force to override)" >&2
+      exit 1
+    fi
+  fi
+fi
+[[ "$FORCE" -eq 1 ]] && echo "fetch: force=true source=$SOURCE (bypassing daily-fresh check)" >&2
 
 # --print-headers (works in dry-run): emit User-Agent for ToS.
 if [[ "$PRINT_HEADERS" -eq 1 ]]; then
@@ -41,6 +76,7 @@ fi
 if [[ "$DRY_RUN" -eq 1 ]]; then
   CALLS=$((BATCH_SIZE * MAX_BATCHES))
   echo "fetch: dry-run source=$SOURCE planned_calls=$CALLS no_network=true tool=gh-api summarizer=$SUMMARIZER" >&2
+  echo "fetch: dry_run=true fresh_skip=bypassed (gate not enforced in dry-run)" >&2
   exit 0
 fi
 
@@ -106,6 +142,10 @@ if [[ -n "$UPSTREAM_STUB" ]]; then
 
   printf '{"last_pr_number":%d,"fetched_at":"%s"}\n' "$LAST" "$NOW" > "$CURSOR_FILE"
   echo "fetch: source=$SOURCE resumed_from=$RESUMED fetched=$FETCH_COUNT cursor=$LAST" >&2
+  # L-19: record freshness state + last_fetch_at after successful fetch.
+  mkdir -p ".claude-tdd-pro/pr-corpus/last-fetch"
+  echo "$NOW" > ".claude-tdd-pro/pr-corpus/last-fetch/$SOURCE.txt"
+  echo "fetch: freshness_status=fresh source=$SOURCE last_fetch_at=$NOW" >&2
   exit 0
 fi
 

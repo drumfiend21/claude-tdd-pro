@@ -1,0 +1,11 @@
+{
+  "name": "extension parses issue body text for security-pattern markers like CWE or CVE references",
+  "command": "mkdir -p fixtures && printf '{\"number\":42,\"title\":\"CVE-2025-001 vuln\",\"body\":\"Affects CWE-89 SQL injection\",\"labels\":[\"security\"]}\\n' > fixtures/issues.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-tracker.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/issues.jsonl --emit patterns --out patterns.jsonl 2>err.txt && grep -q '\"cve\":\"CVE-2025-001\"' patterns.jsonl && grep -q '\"cwe\":\"CWE-89\"' patterns.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

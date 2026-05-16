@@ -1,0 +1,11 @@
+{
+  "name": "profile activation accepts a P0 rule whose provenance includes a tier-1 published-standard alongside pr-corpus",
+  "command": "mkdir -p profiles && printf 'rules:\\n  - id: r1\\n    severity: P0\\n    provenance:\\n      - class: published-standard\\n        tier: 1\\n        source_id: owasp-asvs\\n      - class: pr-corpus\\n        supporting_prs: [{number: 1, verbatim_quote: x, org: a, tier: 1}]\\n        evidence_count: 1\\n        organizations_count: 1\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-profile.sh\" --profile profiles/p.yaml 2>out.txt && grep -q 'rule=r1 valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

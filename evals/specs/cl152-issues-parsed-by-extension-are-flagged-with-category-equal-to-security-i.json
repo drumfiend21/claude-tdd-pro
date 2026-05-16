@@ -1,0 +1,11 @@
+{
+  "name": "issues parsed by extension are flagged with category equal to security in the resulting pattern record",
+  "command": "mkdir -p fixtures && printf '{\"number\":1,\"labels\":[\"security\"],\"body\":\"x\"}\\n' > fixtures/issues.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/issue-tracker.sh\" --source cfpb-consumerfinance --upstream-stub fixtures/issues.jsonl --emit patterns --out patterns.jsonl 2>err.txt && grep -q '\"category\":\"security\"' patterns.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

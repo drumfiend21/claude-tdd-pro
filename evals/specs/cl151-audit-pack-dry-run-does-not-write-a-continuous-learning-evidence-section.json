@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack dry-run does not write a continuous learning evidence section to disk only previews it",
+  "command": "mkdir -p compliance && printf '{\"event\":\"pr-corpus-learn\",\"pattern_id\":\"p1\",\"at\":\"2026-05-13T00:00:00Z\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --dry-run --bundle-out bundle.zip 2>out.txt && [ ! -f bundle.zip ] && grep -q 'dry_run=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

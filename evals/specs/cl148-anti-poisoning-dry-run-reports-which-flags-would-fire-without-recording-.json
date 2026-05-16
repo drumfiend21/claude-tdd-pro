@@ -1,0 +1,11 @@
+{
+  "name": "anti-poisoning dry-run reports which flags would fire without recording or blocking",
+  "command": "printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"number\":1,\"author\":\"alice\",\"reviewer\":\"alice\"}]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --all-checks --dry-run 2>out.txt && grep -q 'would_flag=self-approval' out.txt && grep -q 'recorded=false' out.txt && grep -q 'blocked=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

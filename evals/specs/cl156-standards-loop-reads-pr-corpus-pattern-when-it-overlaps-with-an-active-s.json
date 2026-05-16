@@ -1,0 +1,11 @@
+{
+  "name": "standards loop reads pr-corpus pattern when it overlaps with an active standard for cross-citation",
+  "command": "mkdir -p pr-corpus standards && printf 'patterns:\\n  - id: no-eval\\n    overlaps_standard: owasp-asvs:5.2.4\\n' > pr-corpus/patterns-index.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/cross-loop-link.sh\" --patterns pr-corpus/patterns-index.yaml --emit links 2>out.txt && grep -q 'standard=owasp-asvs:5.2.4' out.txt && grep -q 'pr_corpus_pattern=no-eval' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "consolidated safeguards script emits one structured JSON Lines record per fired flag for downstream parsing",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus && printf '{\"pattern_id\":\"p1\",\"supporting_prs\":[]}\\n' > pat.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/safeguards.sh\" --pattern pat.json --all-checks --log .claude-tdd-pro/pr-corpus/poison-flags.jsonl 2>err.txt && [ -f .claude-tdd-pro/pr-corpus/poison-flags.jsonl ] && node -e \"const lines=require('fs').readFileSync('.claude-tdd-pro/pr-corpus/poison-flags.jsonl','utf8').trim().split('\\n').filter(Boolean);for(const l of lines){const o=JSON.parse(l);if(!o.flag||!o.pattern_id)process.exit(1);}\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

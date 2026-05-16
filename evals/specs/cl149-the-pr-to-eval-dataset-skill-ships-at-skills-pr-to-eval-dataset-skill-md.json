@@ -1,0 +1,11 @@
+{
+  "name": "the pr-to-eval-dataset skill ships at skills/pr-to-eval-dataset/SKILL.md and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/pr-to-eval-dataset/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

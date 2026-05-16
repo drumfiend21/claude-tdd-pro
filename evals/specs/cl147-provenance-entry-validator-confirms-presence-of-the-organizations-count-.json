@@ -1,0 +1,11 @@
+{
+  "name": "provenance entry validator confirms presence of the organizations_count integer field",
+  "command": "printf '{\"class\":\"pr-corpus\",\"supporting_prs\":[{\"number\":1,\"verbatim_quote\":\"x\",\"org\":\"a\",\"tier\":1}],\"evidence_count\":1}\\n' > prov.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/validate-provenance.sh\" --provenance prov.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*organizations_count' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}
