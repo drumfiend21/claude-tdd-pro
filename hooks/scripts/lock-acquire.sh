@@ -26,16 +26,18 @@ HOLDER=""
 EXPIRES_IN=""
 NO_WAIT=0
 LOCK_PATH="$PWD/.claude-tdd-pro/lock.json"
+LOCK_DIR=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --section) SECTION="$2"; shift 2 ;;
-    --holder) HOLDER="$2"; shift 2 ;;
+    --holder|--owner) HOLDER="$2"; shift 2 ;;
     --expires-in) EXPIRES_IN="$2"; shift 2 ;;
     --no-wait) NO_WAIT=1; shift ;;
     --lock-path) LOCK_PATH="$2"; shift 2 ;;
+    --lock-dir) LOCK_DIR="$2"; shift 2 ;;
     --list-sections)
-      printf 'section=%s\n' "${KNOWN_SECTIONS[@]}"
+      printf 'section=%s\n' "${KNOWN_SECTIONS[@]}" >&2
       exit 0
       ;;
     *) echo "lock-acquire: unknown flag: $1" >&2; exit 2 ;;
@@ -43,7 +45,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -z "$SECTION" ]] && { echo "lock-acquire: --section <name> required" >&2; exit 2; }
-[[ -z "$HOLDER" ]] && { echo "lock-acquire: --holder <pid> required" >&2; exit 2; }
+[[ -z "$HOLDER" ]] && { echo "lock-acquire: --holder/--owner <pid> required" >&2; exit 2; }
 [[ -z "$EXPIRES_IN" ]] && EXPIRES_IN=60
 
 # Verify section is in the §2.7 15-section enum.
@@ -52,9 +54,32 @@ for known in "${KNOWN_SECTIONS[@]}"; do
   [[ "$SECTION" == "$known" ]] && { is_known=1; break; }
 done
 if [[ "$is_known" -eq 0 ]]; then
-  echo "lock-acquire: section \"$SECTION\" not in registered enum (§2.7 15-section list)" >&2
-  echo "valid sections: ${KNOWN_SECTIONS[*]}" >&2
+  echo "lock-acquire: unknown_section $SECTION not in §2.7 section enum registered_sections=${KNOWN_SECTIONS[*]}" >&2
   exit 2
+fi
+
+# H-3 --lock-dir mode: per-section <dir>/<section>.lock files.
+if [[ -n "$LOCK_DIR" ]]; then
+  mkdir -p "$LOCK_DIR"
+  LOCK_FILE="$LOCK_DIR/$SECTION.lock"
+  if [[ -f "$LOCK_FILE" ]]; then
+    CURRENT_OWNER=$(grep -E '^owner=' "$LOCK_FILE" | head -1 | sed -E 's/owner=//')
+    if [[ -n "$CURRENT_OWNER" && "$CURRENT_OWNER" != "$HOLDER" ]]; then
+      if [[ "$NO_WAIT" -eq 1 ]]; then
+        echo "lock-acquire: lock_held_by=$CURRENT_OWNER section=$SECTION (use --no-wait already in effect; reject)" >&2
+        exit 1
+      fi
+      echo "lock-acquire: lock_held_by=$CURRENT_OWNER section=$SECTION would-block (use --no-wait to fail-fast)" >&2
+      exit 1
+    fi
+  fi
+  {
+    echo "owner=$HOLDER"
+    echo "acquired_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "section=$SECTION"
+  } > "$LOCK_FILE"
+  echo "lock-acquire: acquired section=$SECTION owner=$HOLDER file=$LOCK_FILE" >&2
+  exit 0
 fi
 
 [[ ! -f "$LOCK_PATH" ]] && { echo "lock-acquire: no lock file at $LOCK_PATH (run rubric/lock.sh --init first)" >&2; exit 2; }

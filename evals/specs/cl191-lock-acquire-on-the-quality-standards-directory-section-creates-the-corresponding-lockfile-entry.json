@@ -1,0 +1,11 @@
+{
+  "name": "lock-acquire on the quality_standards_directory section creates the corresponding lockfile entry",
+  "command": "mkdir -p .claude-tdd-pro/locks && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/lock-acquire.sh\" --section quality_standards_directory --owner pid-1234 --lock-dir .claude-tdd-pro/locks 2>err.txt && [ -f .claude-tdd-pro/locks/quality_standards_directory.lock ] && grep -q 'owner=pid-1234' .claude-tdd-pro/locks/quality_standards_directory.lock && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
