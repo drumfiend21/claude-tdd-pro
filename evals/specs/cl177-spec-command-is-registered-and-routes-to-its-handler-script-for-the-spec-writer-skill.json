@@ -1,0 +1,11 @@
+{
+  "name": "/spec command is registered and routes to its handler script for the spec-writer skill",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/spec/SKILL.md\" ] && [ -s \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

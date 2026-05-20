@@ -1,0 +1,11 @@
+{
+  "name": "/spec emitted tests carry a Test-Driven-By trailer naming the feature id for traceability",
+  "command": "mkdir -p tests profiles repo && (cd repo && git init -q) && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"feature x\" --profile profiles/p.yaml --tests-out tests --root repo --feature-id feat-x --commit 2>err.txt && (cd repo && git log -1 --format=%B 2>/dev/null | grep -q 'Test-Driven-By: feat-x') && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

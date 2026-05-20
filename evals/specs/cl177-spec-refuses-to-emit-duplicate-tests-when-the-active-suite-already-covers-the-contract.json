@@ -1,0 +1,11 @@
+{
+  "name": "/spec refuses to emit duplicate tests when the active suite already covers the contract",
+  "command": "mkdir -p tests profiles evals/specs && printf '{\"name\":\"user can log in\",\"command\":\"true\",\"setup\":[],\"expect\":{\"exit_code\":0,\"stderr_contains\":[]}}\\n' > evals/specs/user-can-log-in.json && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"user can log in\" --profile profiles/p.yaml --tests-out tests --active-suite evals/specs --feature-id feat-x 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_coverage' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

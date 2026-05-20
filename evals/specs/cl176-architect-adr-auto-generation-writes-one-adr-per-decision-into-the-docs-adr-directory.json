@@ -1,0 +1,11 @@
+{
+  "name": "/architect ADR auto-generation writes one ADR per decision into the docs/adr directory",
+  "command": "mkdir -p docs/adr && bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"input\" --decisions-stub d1,d2 --adr-out docs/adr --now 2026-05-13T00:00:00Z 2>err.txt && [ -f docs/adr/0001-d1.md ] && [ -f docs/adr/0002-d2.md ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

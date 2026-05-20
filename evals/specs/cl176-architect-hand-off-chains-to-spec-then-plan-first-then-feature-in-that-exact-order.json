@@ -1,0 +1,11 @@
+{
+  "name": "/architect hand-off chains to /spec then /plan-first then /feature in that exact order",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"input\" --handoff --dry-run 2>out.txt && grep -q 'handoff_chain=spec->plan-first->feature' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

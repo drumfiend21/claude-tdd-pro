@@ -12,12 +12,25 @@ SPECS_DIR="$SCRIPT_DIR/specs"
 
 VERBOSE=0
 FILTER=""
-for arg in "$@"; do
-  case "$arg" in
-    -v|--verbose) VERBOSE=1 ;;
-    *) FILTER="$arg" ;;
+TESTS_DIR=""
+FEATURE=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -v|--verbose) VERBOSE=1; shift ;;
+    --tests-dir) TESTS_DIR="$2"; shift 2 ;;
+    --feature) FEATURE="$2"; shift 2 ;;
+    *) FILTER="$1"; shift ;;
   esac
 done
+
+# W-7 --tests-dir + --feature mode: count red tests for a specific feature
+# and surface the red state. Tests under tests-dir are expected to fail.
+if [[ -n "$TESTS_DIR" ]]; then
+  RED_COUNT=$(find "$TESTS_DIR" -name "*.test.*" -type f 2>/dev/null | wc -l | tr -d ' ')
+  echo "red_tests=$RED_COUNT feature=$FEATURE tests_dir=$TESTS_DIR" >&2
+  [[ "$RED_COUNT" -gt 0 ]] && exit 1
+  exit 0
+fi
 
 export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
 

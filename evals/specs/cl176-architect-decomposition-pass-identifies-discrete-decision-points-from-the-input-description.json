@@ -1,0 +1,11 @@
+{
+  "name": "/architect decomposition pass identifies discrete decision points from the input description",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" \"build a payment processing service\" --decompose --dry-run 2>out.txt && grep -q 'decision_points=' out.txt && grep -qE 'decision_count=[0-9]+' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

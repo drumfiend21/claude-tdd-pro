@@ -1,0 +1,11 @@
+{
+  "name": "/spec emitted tests are categorized per the section 2.4 eval spec schema enum",
+  "command": "mkdir -p tests profiles && printf 'extends: [react:react-docs]\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/spec.sh\" \"user component renders\" --profile profiles/p.yaml --tests-out tests --feature-id feat-x --emit-categories 2>out.txt && grep -qE 'category=(react|node|types|foundation|standards|compliance|prompt|space|hardening|security|tdd|operational|execution|pr-corpus|workflow|rule-engine|source-folder)' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
