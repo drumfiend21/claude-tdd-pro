@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost report includes a per-subagent context-cost line for every active subagent",
+  "command": "mkdir -p .claude-tdd-pro/agents && printf '{\"agent\":\"pr-pattern-extractor\",\"tokens\":3500}\\n{\"agent\":\"compliance-specialist\",\"tokens\":2800}\\n' > .claude-tdd-pro/agents/cost-stats.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --by subagent 2>out.txt && grep -q 'agent=pr-pattern-extractor tokens=3500' out.txt && grep -q 'agent=compliance-specialist tokens=2800' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

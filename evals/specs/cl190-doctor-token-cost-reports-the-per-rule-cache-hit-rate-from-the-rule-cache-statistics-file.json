@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost reports the per-rule cache hit rate from the rule-cache statistics file",
+  "command": "mkdir -p .claude-tdd-pro/cache && printf '{\"rule\":\"no-eval\",\"hits\":80,\"misses\":20}\\n{\"rule\":\"no-console\",\"hits\":50,\"misses\":50}\\n' > .claude-tdd-pro/cache/stats.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --by rule-cache 2>out.txt && grep -q 'rule=no-eval cache_hit_rate=0.80' out.txt && grep -q 'rule=no-console cache_hit_rate=0.50' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

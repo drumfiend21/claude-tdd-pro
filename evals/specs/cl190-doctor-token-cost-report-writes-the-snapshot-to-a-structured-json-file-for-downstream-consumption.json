@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost report writes the snapshot to a structured JSON file for downstream consumption",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --out .claude-tdd-pro/token-cost-snapshot.json 2>err.txt && [ -f .claude-tdd-pro/token-cost-snapshot.json ] && node -e \"JSON.parse(require('fs').readFileSync('.claude-tdd-pro/token-cost-snapshot.json','utf8'))\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

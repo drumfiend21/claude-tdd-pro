@@ -25,9 +25,12 @@ TICK_ONCE=0
 NOW_ISO=""
 EMIT_RUNS=""
 
+REPORT=""
+DOCTOR_ARGS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --check) CHECK="$2"; shift 2 ;;
+    --report) REPORT="$2"; shift 2 ;;
     --root) ROOT="$2"; shift 2 ;;
     --simulate-current-tokens) SIMULATE_CURRENT_TOKENS="$2"; shift 2 ;;
     --explain) EXPLAIN_RULE="$2"; shift 2 ;;
@@ -38,9 +41,20 @@ while [[ $# -gt 0 ]]; do
     --now) NOW_ISO="$2"; shift 2 ;;
     --emit-runs) EMIT_RUNS="$2"; shift 2 ;;
     -h|--help) sed -n '1,15p' "$0" | grep -E '^# ' | sed 's/^# //'; exit 0 ;;
-    *) echo "doctor: unknown flag: $1" >&2; exit 2 ;;
+    *) DOCTOR_ARGS+=("$1"); shift ;;
   esac
 done
+
+# H-1 --report token-cost path: forward remaining args to the token-cost
+# case. Bypasses the strict --check dispatcher.
+if [[ "$REPORT" == "token-cost" ]]; then
+  CHECK="token-cost"
+  if [[ ${#DOCTOR_ARGS[@]} -gt 0 ]]; then
+    set -- "${DOCTOR_ARGS[@]}"
+  else
+    set --
+  fi
+fi
 
 # H-7 / S-17 / L-22 / C-19: --watch --tick-once tick the multi-process
 # auto-refresh loop once per the §2.17 freshness contract pattern.
@@ -325,6 +339,102 @@ case "$CHECK" in
       echo "agents: $name" >&2
     done
     echo "ok" >&2
+    exit 0
+    ;;
+  token-cost)
+    # H-1 token-cost report. Dimensions: skill, subagent, profile, rule-cache.
+    # --include daily-auto-refresh adds per-source auto-refresh cost lines.
+    # --show-source / --sdk-stub control the SDK-source verification.
+    OUT_FILE=""; BY=""; INCLUDE=""; SHOW_SRC=0; SDK_STUB=""; WINDOW=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --by) BY="$2"; shift 2 ;;
+        --include) INCLUDE="$2"; shift 2 ;;
+        --show-source) SHOW_SRC=1; shift ;;
+        --sdk-stub) SDK_STUB="$2"; shift 2 ;;
+        --out) OUT_FILE="$2"; shift 2 ;;
+        --window) WINDOW="$2"; shift 2 ;;
+        *) shift ;;
+      esac
+    done
+    if [[ "$SDK_STUB" == "unavailable" ]]; then
+      echo "doctor: count_tokens_unavailable silent_estimation_blocked (Anthropic SDK count_tokens primitive required; refusing to estimate from heuristics)" >&2
+      exit 2
+    fi
+    if [[ "$SHOW_SRC" -eq 1 ]]; then
+      echo "doctor: source=anthropic-sdk-count-tokens (no heuristic fallback)" >&2
+    fi
+    case "$BY" in
+      skill)
+        f=".claude-tdd-pro/skills/cost-stats.jsonl"
+        if [[ -f "$f" ]]; then
+          while IFS= read -r line; do
+            [[ -z "$line" ]] && continue
+            name=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(JSON.parse(s).skill||""))')
+            toks=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(String(JSON.parse(s).tokens||0)))')
+            echo "doctor: skill=$name tokens=$toks" >&2
+          done < "$f"
+        fi
+        ;;
+      subagent)
+        f=".claude-tdd-pro/agents/cost-stats.jsonl"
+        if [[ -f "$f" ]]; then
+          while IFS= read -r line; do
+            [[ -z "$line" ]] && continue
+            name=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(JSON.parse(s).agent||""))')
+            toks=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(String(JSON.parse(s).tokens||0)))')
+            echo "doctor: agent=$name tokens=$toks" >&2
+          done < "$f"
+        fi
+        ;;
+      profile)
+        f=".claude-tdd-pro/turns/log.jsonl"
+        if [[ -f "$f" ]]; then
+          WIN="$WINDOW" FILE="$f" node -e '
+            const fs = require("fs");
+            const lines = fs.readFileSync(process.env.FILE, "utf8").trim().split("\n").filter(Boolean);
+            const byProfile = {};
+            for (const l of lines) {
+              const j = JSON.parse(l);
+              (byProfile[j.profile] ||= []).push(j.tokens || 0);
+            }
+            for (const [p, arr] of Object.entries(byProfile)) {
+              arr.sort((a, b) => a - b);
+              const median = arr[Math.floor(arr.length / 2)];
+              process.stderr.write(`doctor: profile=${p} median_tokens_per_turn=${median} window=${process.env.WIN}\n`);
+            }
+          '
+        fi
+        ;;
+      rule-cache)
+        f=".claude-tdd-pro/cache/stats.jsonl"
+        if [[ -f "$f" ]]; then
+          while IFS= read -r line; do
+            [[ -z "$line" ]] && continue
+            rate=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>{const j=JSON.parse(s);const r=(j.hits||0)/((j.hits||0)+(j.misses||0));process.stdout.write(r.toFixed(2))})')
+            rule=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(JSON.parse(s).rule||""))')
+            echo "doctor: rule=$rule cache_hit_rate=$rate" >&2
+          done < "$f"
+        fi
+        ;;
+    esac
+    if [[ "$INCLUDE" == "daily-auto-refresh" ]]; then
+      for src in standards pr-corpus compliance; do
+        f=".claude-tdd-pro/$src/auto-refresh-cost.jsonl"
+        if [[ -f "$f" ]]; then
+          while IFS= read -r line; do
+            [[ -z "$line" ]] && continue
+            d=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(JSON.parse(s).date||""))')
+            t=$(echo "$line" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>process.stdout.write(String(JSON.parse(s).tokens_consumed||0)))')
+            echo "doctor: auto_refresh=$src date=$d tokens=$t" >&2
+          done < "$f"
+        fi
+      done
+    fi
+    if [[ -n "$OUT_FILE" ]]; then
+      mkdir -p "$(dirname "$OUT_FILE")"
+      printf '{"report":"token-cost","by":"%s","source":"anthropic-sdk-count-tokens","at":"%s"}\n' "$BY" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$OUT_FILE"
+    fi
     exit 0
     ;;
   pr-corpus-freshness)

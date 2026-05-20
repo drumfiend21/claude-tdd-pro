@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost numbers are computed via the Anthropic SDK count_tokens primitive not heuristics",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --show-source 2>out.txt && grep -q 'source=anthropic-sdk-count-tokens' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

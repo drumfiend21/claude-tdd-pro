@@ -1,0 +1,11 @@
+{
+  "name": "/doctor token-cost report exits non-zero when the count_tokens source is unavailable rather than silently estimating",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --report token-cost --sdk-stub unavailable 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'count_tokens_unavailable' err.txt && grep -q 'silent_estimation_blocked' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}
