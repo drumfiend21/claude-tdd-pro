@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation cleans up synthetic test artifacts after a successful run",
+  "command": "mkdir -p compliance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --controls-out compliance/controls.yaml --cleanup 2>out.txt && ! grep -q 'test-fw' compliance/controls.yaml && grep -q 'cleanup=done' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

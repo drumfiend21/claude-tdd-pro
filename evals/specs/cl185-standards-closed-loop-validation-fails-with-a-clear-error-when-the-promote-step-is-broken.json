@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation fails with a clear error when the promote step is broken",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std --simulate-failure promote 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'failed_step=promote' err.txt && grep -q 'pipeline_broken' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

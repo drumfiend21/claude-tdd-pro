@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test reports a per-step status summary covering each pipeline phase",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules --emit summary 2>out.txt && grep -q 'step=triage' out.txt && grep -q 'step=extract' out.txt && grep -q 'step=reconcile' out.txt && grep -q 'step=aggregate-evidence' out.txt && grep -q 'step=promote' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation records the run result to a structured json file for tracking",
+  "command": "mkdir -p standards && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std --out standards/closed-loop-result.json --now 2026-05-13T00:00:00Z 2>err.txt && [ -f standards/closed-loop-result.json ] && grep -q '\"run_at\":\"2026-05-13T00:00:00Z\"' standards/closed-loop-result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation is wired into the plugin self-test CI gate workflow",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" ] && grep -q 'compliance/closed-loop-validate.sh' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

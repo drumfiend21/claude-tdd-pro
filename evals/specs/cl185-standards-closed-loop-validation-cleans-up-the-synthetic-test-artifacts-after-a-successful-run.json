@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation cleans up the synthetic test artifacts after a successful run",
+  "command": "mkdir -p active-rules && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std --rules-out active-rules --cleanup 2>out.txt && [ ! -f active-rules/test-std-1-1.yaml ] && grep -q 'cleanup=done' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

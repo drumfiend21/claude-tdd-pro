@@ -42,3 +42,9 @@ jobs:
 
       - name: Run active eval suite
         run: bash evals/runner.sh
+
+      - name: Standards closed-loop validation (S-19)
+        run: bash standards/closed-loop-validate.sh --synthetic-source ci-test-std --rules-out /tmp/ci-rules
+
+      - name: Compliance closed-loop validation (C-21)
+        run: bash compliance/closed-loop-validate.sh --synthetic-framework ci-test-fw --controls-out /tmp/ci-controls.yaml

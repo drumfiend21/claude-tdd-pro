@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test cleans up the synthetic test rule and pattern artifacts after a successful run",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules --cleanup 2>out.txt && [ ! -f active-rules/test-pattern.yaml ] && grep -q 'cleanup=done' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

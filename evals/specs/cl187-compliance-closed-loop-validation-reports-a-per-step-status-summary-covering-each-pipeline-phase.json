@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation reports a per-step status summary covering each pipeline phase",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --emit summary 2>out.txt && grep -q 'step=catalog' out.txt && grep -q 'step=mapping' out.txt && grep -q 'step=rule' out.txt && grep -q 'step=manifest' out.txt && grep -q 'step=audit' out.txt && grep -q 'step=checkpoint' out.txt && grep -q 'step=audit-pack' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

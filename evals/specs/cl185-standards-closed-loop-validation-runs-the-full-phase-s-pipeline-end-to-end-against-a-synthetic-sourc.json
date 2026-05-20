@@ -1,0 +1,11 @@
+{
+  "name": "standards closed-loop validation runs the full Phase S pipeline end-to-end against a synthetic source",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-validate.sh\" --synthetic-source test-std --dry-run 2>out.txt && grep -q 'pipeline=catalog->fetch->coverage->audit->diff->promote->report->monitor' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

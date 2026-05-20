@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop validation script exists at pr-corpus/closed-loop-test.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

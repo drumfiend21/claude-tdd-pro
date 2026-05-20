@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation verifies the AI provenance manifest carries the controls_consulted block",
+  "command": "mkdir -p .claude-tdd-pro/provenance && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --provenance-out .claude-tdd-pro/provenance/test-commit.json 2>out.txt && grep -q '\"controls_consulted\"' .claude-tdd-pro/provenance/test-commit.json && grep -q 'verify=manifest_controls_consulted' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

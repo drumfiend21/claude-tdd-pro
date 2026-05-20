@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation runs the full Phase C pipeline end-to-end against a synthetic framework",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --dry-run 2>out.txt && grep -q 'pipeline=catalog->mapping->rule->manifest->audit->checkpoint->audit-pack' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

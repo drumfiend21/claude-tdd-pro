@@ -1,0 +1,26 @@
+name: closed-loop
+# L-24 + S-19 + C-21 closed-loop validation gate. Runs each phase's
+# end-to-end pipeline against a synthetic source/pattern/framework and
+# blocks releases when any chain breaks.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  closed-loop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PR-corpus closed-loop (L-24)
+        run: bash pr-corpus/closed-loop-test.sh --rules-out /tmp/ci-pr-rules
+
+      - name: Standards closed-loop (S-19)
+        run: bash standards/closed-loop-validate.sh --synthetic-source ci-test-std --rules-out /tmp/ci-std-rules
+
+      - name: Compliance closed-loop (C-21)
+        if: hashFiles('compliance/closed-loop-validate.sh') != ''
+        run: bash compliance/closed-loop-validate.sh --synthetic-framework ci-test-fw

@@ -1,0 +1,11 @@
+{
+  "name": "closed-loop test verifies the promoted rule provenance class equals pr-corpus exactly",
+  "command": "mkdir -p pr-corpus active-rules && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/closed-loop-test.sh\" --rules-out active-rules 2>out.txt && grep -q 'class: pr-corpus' active-rules/test-pattern.yaml && grep -q 'verify=provenance_class_pr_corpus' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation verifies the audit log entry hash is included in the merkle checkpoint",
+  "command": "mkdir -p compliance/audit-checkpoints && bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --checkpoint-dir compliance/audit-checkpoints 2>out.txt && [ -f compliance/audit-checkpoints/checkpoint-1.json ] && grep -q '\"merkle_root\"' compliance/audit-checkpoints/checkpoint-1.json && grep -q 'verify=checkpoint_merkle_includes_entry' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

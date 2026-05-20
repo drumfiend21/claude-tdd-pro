@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation fails with a clear error when the manifest step is broken",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" --synthetic-framework test-fw --simulate-failure manifest 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'failed_step=manifest' err.txt && grep -q 'pipeline_broken' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

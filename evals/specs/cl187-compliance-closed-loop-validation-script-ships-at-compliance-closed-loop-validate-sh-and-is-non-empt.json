@@ -1,0 +1,11 @@
+{
+  "name": "compliance closed-loop validation script ships at compliance/closed-loop-validate.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/compliance/closed-loop-validate.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
