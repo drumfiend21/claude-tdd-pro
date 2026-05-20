@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner generated tests are added to the active regression suite at the architecture-named tests slash e2e path",
+  "command": "mkdir -p repo/src/components tests/e2e && (cd repo && git init -q && printf 'export const Button=()=>1\\n' > src/components/Button.tsx) && bash \"$CLAUDE_PLUGIN_ROOT/agents/ui-regression-pinner.sh\" --root repo --feature-id feat-x --tests-out tests/e2e --diff-stub touched=src/components/Button.tsx 2>err.txt && [ -f tests/e2e/feat-x.spec.ts ] && bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --include tests/e2e --list 2>out.txt && grep -q 'tests/e2e/feat-x.spec.ts' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow state machine validates against the workflow state contract from cross-cutting section",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/validate-state.sh\" --state-file /dev/stdin <<< '{\"current_state\":\"unknown\",\"history\":[]}' 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_state=unknown' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

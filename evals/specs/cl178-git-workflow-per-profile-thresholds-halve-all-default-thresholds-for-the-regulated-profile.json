@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow per-profile thresholds halve all default thresholds for the regulated profile",
+  "command": "mkdir -p profiles && printf 'risk_tier: regulated\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --check branch-off --profile profiles/p.yaml --emit thresholds 2>out.txt && grep -q 'profile=regulated' out.txt && grep -q 'thresholds_halved=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

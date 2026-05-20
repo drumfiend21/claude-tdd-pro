@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner does not fire when the commit diff touches only non-UI paths",
+  "command": "mkdir -p repo/src/lib && (cd repo && git init -q) && bash \"$CLAUDE_PLUGIN_ROOT/agents/ui-regression-pinner-trigger.sh\" --root repo --diff-stub touched=src/lib/util.ts --dry-run 2>out.txt && grep -q 'pinner_fires=false' out.txt && grep -q 'reason=no_ui_path_touched' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -14,14 +14,25 @@ VERBOSE=0
 FILTER=""
 TESTS_DIR=""
 FEATURE=""
+INCLUDE_DIR=""
+LIST_ONLY=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -v|--verbose) VERBOSE=1; shift ;;
     --tests-dir) TESTS_DIR="$2"; shift 2 ;;
     --feature) FEATURE="$2"; shift 2 ;;
+    --include) INCLUDE_DIR="$2"; shift 2 ;;
+    --list) LIST_ONLY=1; shift ;;
     *) FILTER="$1"; shift ;;
   esac
 done
+
+# W-9 --include <dir> --list mode: list spec/test files under the included
+# directory (used by ui-regression-pinner to verify e2e specs joined suite).
+if [[ -n "$INCLUDE_DIR" && "$LIST_ONLY" -eq 1 ]]; then
+  find "$INCLUDE_DIR" -type f \( -name "*.spec.ts" -o -name "*.test.ts" -o -name "*.json" \) >&2 2>/dev/null
+  exit 0
+fi
 
 # W-7 --tests-dir + --feature mode: count red tests for a specific feature
 # and surface the red state. Tests under tests-dir are expected to fail.

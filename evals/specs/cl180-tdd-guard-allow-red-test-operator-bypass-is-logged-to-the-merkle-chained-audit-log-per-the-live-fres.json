@@ -1,0 +1,11 @@
+{
+  "name": "tdd-guard --allow-red-test operator bypass is logged to the merkle-chained audit log per the live freshness contract bypass pattern",
+  "command": "mkdir -p compliance && printf '{\"feature_id\":\"feat-x\",\"red_tests\":[\"t1\"]}\\n' > tdd-state.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/tdd-guard.sh\" --feature-id feat-x --tdd-state tdd-state.json --allow-red-test --audit-log compliance/audit.log --operator alice --now 2026-05-14T00:00:00Z 2>out.txt && grep -q 'commit_allowed' out.txt && grep -q '\"event\":\"tdd-guard-bypass\"' compliance/audit.log && grep -q '\"operator\":\"alice\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

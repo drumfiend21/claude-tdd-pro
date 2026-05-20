@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner subagent file ships at agents/ui-regression-pinner.md with model sonnet and required prompt fields",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/agents/ui-regression-pinner.md\" 2>err.txt > head.txt && grep -q '^name: ui-regression-pinner$' head.txt && grep -q 'model: sonnet' head.txt && grep -q 'prompt_id: ui-regression-pinner' head.txt && grep -q 'prompt_version:' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

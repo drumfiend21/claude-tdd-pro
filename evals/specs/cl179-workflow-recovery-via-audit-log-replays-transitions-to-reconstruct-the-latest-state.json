@@ -1,0 +1,11 @@
+{
+  "name": "workflow recovery via audit log replays transitions to reconstruct the latest state",
+  "command": "mkdir -p .claude-tdd-pro compliance && printf '{\"event\":\"workflow-transition\",\"from\":null,\"to\":\"plan\",\"at\":\"2026-05-13T00:00:00Z\"}\\n{\"event\":\"workflow-transition\",\"from\":\"plan\",\"to\":\"build\",\"at\":\"2026-05-13T01:00:00Z\"}\\n' > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/workflow/recover-from-audit.sh\" --audit-log compliance/audit.log --out .claude-tdd-pro/workflow-state.json 2>err.txt && grep -q '\"current_state\":\"build\"' .claude-tdd-pro/workflow-state.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/feature logs implementation completion to the workflow state machine as feature_complete true",
+  "command": "mkdir -p .claude-tdd-pro profiles evals/specs && printf '{\"session_id\":\"s1\",\"current_phase\":\"build\"}\\n' > .claude-tdd-pro/workflow-state.json && printf 'rules: {}\\n' > profiles/p.yaml && printf '{\"name\":\"r\",\"command\":\"true\",\"feature_id\":\"feat-x\"}\\n' > evals/specs/feat-x.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/feature.sh\" --feature-id feat-x --profile profiles/p.yaml --workflow-state .claude-tdd-pro/workflow-state.json --tdd-state-stub all-green 2>err.txt && grep -q '\"feature_complete\":true' .claude-tdd-pro/workflow-state.json && grep -q '\"feature_id\":\"feat-x\"' .claude-tdd-pro/workflow-state.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

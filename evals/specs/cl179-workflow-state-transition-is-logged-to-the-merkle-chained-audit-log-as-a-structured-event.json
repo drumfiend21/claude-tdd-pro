@@ -1,0 +1,11 @@
+{
+  "name": "workflow state transition is logged to the merkle-chained audit log as a structured event",
+  "command": "mkdir -p .claude-tdd-pro compliance && bash \"$CLAUDE_PLUGIN_ROOT/workflow/transition.sh\" --to plan --audit-log compliance/audit.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"workflow-transition\"' compliance/audit.log && grep -q '\"to\":\"plan\"' compliance/audit.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

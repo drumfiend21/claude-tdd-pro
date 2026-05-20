@@ -1,0 +1,11 @@
+{
+  "name": "workflow transition rejects a transition that is not allowed from the current state",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"current_state\":\"merge\",\"history\":[]}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/transition.sh\" --to plan --state-file .claude-tdd-pro/workflow-state.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_transition' err.txt && grep -q 'from=merge to=plan' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -25,6 +25,63 @@
 
 set -uo pipefail
 
+# W-8 flag-style invocation: --feature-id + --tdd-state mode (PreToolUse on
+# commit). This branch is exclusive: if any of the W-8 flags is present we
+# do not consume stdin. The legacy Edit/Write hook below still reads stdin.
+if [[ "${1:-}" == "--feature-id" ]] || [[ "${1:-}" == "--root" ]] || [[ "${1:-}" == "--tdd-state" ]] || [[ "${1:-}" == "--allow-red-test" ]]; then
+  FEATURE_ID=""; TDD_STATE=""; ROOT=""; ALLOW_RED=0; AUDIT_LOG=""; OPERATOR=""; NOW=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --feature-id) FEATURE_ID="$2"; shift 2 ;;
+      --tdd-state) TDD_STATE="$2"; shift 2 ;;
+      --root) ROOT="$2"; shift 2 ;;
+      --allow-red-test) ALLOW_RED=1; shift ;;
+      --audit-log) AUDIT_LOG="$2"; shift 2 ;;
+      --operator) OPERATOR="$2"; shift 2 ;;
+      --now) NOW="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+  [[ -z "$NOW" ]] && NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  [[ -z "$TDD_STATE" || ! -f "$TDD_STATE" ]] && { echo "tdd-guard: --tdd-state <json> required" >&2; exit 2; }
+
+  # --allow-red-test bypass path: log to audit, allow commit.
+  if [[ "$ALLOW_RED" -eq 1 ]]; then
+    if [[ -n "$AUDIT_LOG" ]]; then
+      mkdir -p "$(dirname "$AUDIT_LOG")"
+      printf '{"event":"tdd-guard-bypass","feature_id":"%s","operator":"%s","at":"%s"}\n' "$FEATURE_ID" "$OPERATOR" "$NOW" >> "$AUDIT_LOG"
+    fi
+    echo "tdd-guard: commit_allowed feature_id=$FEATURE_ID bypass=true operator=$OPERATOR (logged to C-4 audit)" >&2
+    exit 0
+  fi
+
+  # Inspect tdd-state: red_tests, regressions, scope drift.
+  RED_COUNT=$(TDD_STATE="$TDD_STATE" node -e 'const j=JSON.parse(require("fs").readFileSync(process.env.TDD_STATE,"utf8"));process.stdout.write(String((j.red_tests||[]).length))')
+  if [[ "$RED_COUNT" -gt 0 ]]; then
+    echo "tdd-guard: commit_blocked feature_id=$FEATURE_ID red_tests_remaining=$RED_COUNT (TDD red phase still active)" >&2
+    exit 2
+  fi
+  REGRESS=$(TDD_STATE="$TDD_STATE" node -e 'const j=JSON.parse(require("fs").readFileSync(process.env.TDD_STATE,"utf8"));process.stdout.write(((j.regressions||[])[0])||"")')
+  if [[ -n "$REGRESS" ]]; then
+    echo "tdd-guard: commit_blocked feature_id=$FEATURE_ID regression=$REGRESS (implementation broke a previously-green spec)" >&2
+    exit 2
+  fi
+  UNDECLARED=$(TDD_STATE="$TDD_STATE" node -e '
+    const j = JSON.parse(require("fs").readFileSync(process.env.TDD_STATE, "utf8"));
+    const declared = new Set(j.declared_scope || []);
+    const actual = j.actual_scope || [];
+    for (const a of actual) if (!declared.has(a)) { process.stdout.write(a); process.exit(0); }
+    process.stdout.write("");
+  ')
+  if [[ -n "$UNDECLARED" ]]; then
+    echo "tdd-guard: commit_blocked feature_id=$FEATURE_ID scope_drift undeclared_path=$UNDECLARED (implementation touches paths outside W-7 declared scope)" >&2
+    exit 2
+  fi
+
+  echo "tdd-guard: commit_allowed feature_id=$FEATURE_ID red_tests=0 regressions=0 scope=clean" >&2
+  exit 0
+fi
+
 # Read JSON input
 INPUT="$(cat)"
 

@@ -1,0 +1,11 @@
+{
+  "name": "workflow transition acquires the sectioned advisory lock before mutating the state file",
+  "command": "mkdir -p .claude-tdd-pro/locks && bash \"$CLAUDE_PLUGIN_ROOT/workflow/transition.sh\" --to plan --lock-dir .claude-tdd-pro/locks --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'lock_acquired=workflow_state' err.txt && grep -q 'lock_released=workflow_state' err.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

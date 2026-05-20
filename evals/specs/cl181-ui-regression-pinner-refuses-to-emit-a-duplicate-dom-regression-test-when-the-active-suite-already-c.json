@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner refuses to emit a duplicate DOM regression test when the active suite already covers the rendered behavior",
+  "command": "mkdir -p repo/src/components tests/e2e && (cd repo && git init -q && printf 'export const Button=()=>1\\n' > src/components/Button.tsx) && printf 'test(\"Button renders\", async ({page})=>{await page.goto(\"/\"); await expect(page.getByText(\"Submit\")).toBeVisible();})\\n' > tests/e2e/feat-x.spec.ts && bash \"$CLAUDE_PLUGIN_ROOT/agents/ui-regression-pinner.sh\" --root repo --feature-id feat-x --tests-out tests/e2e --diff-stub touched=src/components/Button.tsx --active-suite tests/e2e 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate_coverage' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

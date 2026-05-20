@@ -1,0 +1,11 @@
+{
+  "name": "git-workflow diverged-from-main check warns when local branch is ahead-or-behind the remote main",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/git-workflow/recommend.sh\" --check diverged-from-main --diverged-stub ahead=10,behind=20 2>out.txt && grep -q 'warning=diverged-from-main' out.txt && grep -q 'ahead=10' out.txt && grep -q 'behind=20' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

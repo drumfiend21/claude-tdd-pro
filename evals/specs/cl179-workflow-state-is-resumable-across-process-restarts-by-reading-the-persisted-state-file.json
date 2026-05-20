@@ -1,0 +1,11 @@
+{
+  "name": "workflow state is resumable across process restarts by reading the persisted state file",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"current_state\":\"build\",\"history\":[]}\\n' > .claude-tdd-pro/workflow-state.json && bash \"$CLAUDE_PLUGIN_ROOT/workflow/show-state.sh\" --state-file .claude-tdd-pro/workflow-state.json 2>out.txt && grep -q 'current_state=build' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

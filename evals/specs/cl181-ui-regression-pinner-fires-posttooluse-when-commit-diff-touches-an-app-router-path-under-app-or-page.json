@@ -1,0 +1,11 @@
+{
+  "name": "ui-regression-pinner fires PostToolUse when commit diff touches an app router path under app or pages folder",
+  "command": "mkdir -p repo/app && (cd repo && git init -q) && bash \"$CLAUDE_PLUGIN_ROOT/agents/ui-regression-pinner-trigger.sh\" --root repo --diff-stub touched=app/login/page.tsx --dry-run 2>out.txt && grep -q 'pinner_fires=true' out.txt && grep -q 'matched_path=app/login/page.tsx' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
