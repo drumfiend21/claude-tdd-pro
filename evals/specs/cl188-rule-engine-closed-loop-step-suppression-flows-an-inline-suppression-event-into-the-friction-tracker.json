@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step suppression flows an inline-suppression event into the friction tracker",
+  "command": "mkdir -p .claude-tdd-pro/friction && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step suppression --rule-id no-eval --justification migration-temp --friction-log .claude-tdd-pro/friction/events.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"event\":\"inline-suppression\"' .claude-tdd-pro/friction/events.jsonl && grep -q '\"rule_id\":\"no-eval\"' .claude-tdd-pro/friction/events.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

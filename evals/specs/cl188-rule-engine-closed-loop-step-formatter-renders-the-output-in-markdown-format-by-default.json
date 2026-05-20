@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step formatter renders the output in markdown format by default",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step formatter --findings-stub none --dry-run 2>out.txt && grep -q 'format=markdown' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

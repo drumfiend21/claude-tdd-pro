@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop step browse lists the source-namespace folders for operator inspection",
+  "command": "mkdir -p generated-code-quality-standards/google generated-code-quality-standards/owasp && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --step browse --root generated-code-quality-standards 2>out.txt && grep -q 'namespace=google' out.txt && grep -q 'namespace=owasp' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step plugin-install flows an org-slash-repo through the install pipeline",
+  "command": "mkdir -p stub-clones/acme/example && printf 'name: example\\nrules: [{id: foo, detector: x}]\\n' > stub-clones/acme/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step plugin-install --plugin acme/example --gh-clone-stub stub-clones --rule-tester-stub pass --dry-run 2>out.txt && grep -q 'plugin_install_planned=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

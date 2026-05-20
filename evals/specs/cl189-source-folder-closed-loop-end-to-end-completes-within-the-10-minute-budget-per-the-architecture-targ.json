@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop end-to-end completes within the 10-minute budget per the architecture target",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --end-to-end --measure-duration --dry-run 2>out.txt && grep -qE 'duration_seconds=[0-9]+' out.txt && grep -q 'within_budget=true' out.txt && grep -q 'budget_seconds=600' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

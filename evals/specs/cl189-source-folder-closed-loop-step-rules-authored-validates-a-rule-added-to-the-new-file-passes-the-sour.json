@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop step rules-authored validates a rule added to the new file passes the source-file schema",
+  "command": "mkdir -p generated-code-quality-standards/google && printf 'source:\\n  id: google-new\\n  authoritative_publisher: google\\n  authoritative_url: https://google.com\\n  registry_link: x\\n  fetched_at: 2026-05-13T00:00:00Z\\n  content_hash: sha256:abc\\nrules:\\n  - id: g-google-new-1\\n    detector: x\\n' > generated-code-quality-standards/google/google-new.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --step rules-authored --root generated-code-quality-standards --file generated-code-quality-standards/google/google-new.yaml 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step deprecation-migration runs the migrate-rule command for a deprecated rule",
+  "command": "mkdir -p profiles && printf 'rules:\\n  old-rule: warn\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step deprecation-migration --from old-rule --to new-rule --profile profiles/p.yaml --dry-run 2>out.txt && grep -q 'migrate_invoked=true' out.txt && grep -q 'planned: old-rule -> new-rule' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

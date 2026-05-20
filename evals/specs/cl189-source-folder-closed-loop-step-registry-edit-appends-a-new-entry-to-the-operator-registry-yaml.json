@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop step registry-edit appends a new entry to the operator registry yaml",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\noperator_namespace: []\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --step registry-edit --registry .claude-tdd-pro/STANDARDS-URLS.yaml --add-entry google-new --dry-run 2>out.txt && grep -q 'planned: add google-new to registry' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

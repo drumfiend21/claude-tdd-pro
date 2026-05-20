@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step config-import flows an ESLint config through the import bridge",
+  "command": "printf '{\"rules\":{\"no-eval\":\"error\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step config-import --eslintrc .eslintrc --dry-run 2>out.txt && grep -q 'imported_rules=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

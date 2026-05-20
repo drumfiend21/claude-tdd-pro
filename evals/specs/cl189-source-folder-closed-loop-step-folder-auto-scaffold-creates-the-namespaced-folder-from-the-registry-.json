@@ -1,0 +1,11 @@
+{
+  "name": "source-folder closed-loop step folder-auto-scaffold creates the namespaced folder from the registry entry",
+  "command": "mkdir -p generated-code-quality-standards .claude-tdd-pro && printf 'sources: [{id: google-new, source_namespace: google}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/closed-loop-test.sh\" --step folder-auto-scaffold --registry .claude-tdd-pro/STANDARDS-URLS.yaml --root generated-code-quality-standards 2>err.txt && [ -d generated-code-quality-standards/google ] && [ -f generated-code-quality-standards/google/google-new.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

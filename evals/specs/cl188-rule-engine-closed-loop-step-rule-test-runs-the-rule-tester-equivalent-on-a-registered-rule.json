@@ -1,0 +1,11 @@
+{
+  "name": "rule-engine closed-loop step rule-test runs the rule-tester equivalent on a registered rule",
+  "command": "mkdir -p tests/no-eval/invalid && printf '{\"code\":\"eval(s)\"}\\n' > tests/no-eval/invalid/case.json && bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/closed-loop-test.sh\" --step rule-test --rule-id no-eval --tests-dir tests --dry-run 2>out.txt && grep -q 'rule_tester_invoked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
