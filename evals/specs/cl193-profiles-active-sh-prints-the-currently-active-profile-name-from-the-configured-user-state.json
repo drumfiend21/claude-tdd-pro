@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh prints the currently active profile name from the configured user state",
+  "command": "mkdir -p .claude-tdd-pro && printf 'active_profile: baseline\\n' > .claude-tdd-pro/profile-state.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --state .claude-tdd-pro/profile-state.yaml 2>out.txt && grep -q 'profile=baseline' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

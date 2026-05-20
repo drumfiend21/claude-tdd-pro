@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh emits the profile precedence snapshot used in lock contracts when invoked with snapshot",
+  "command": "mkdir -p profiles && printf 'rules:\\n  no-eval: error\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --snapshot profiles/p.yaml --out snapshot.json 2>err.txt && grep -q '\"profile_snapshot_hash\"' snapshot.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

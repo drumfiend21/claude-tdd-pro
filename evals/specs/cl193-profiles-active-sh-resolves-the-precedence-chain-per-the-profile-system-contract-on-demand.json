@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh resolves the precedence chain per the profile system contract on demand",
+  "command": "mkdir -p profiles && printf 'extends: [base.yaml]\\nrules:\\n  no-eval: error\\n' > profiles/p.yaml && printf 'rules:\\n  no-eval: warn\\n  no-console: warn\\n' > profiles/base.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --resolve profiles/p.yaml 2>out.txt && grep -q 'no-eval=error' out.txt && grep -q 'no-console=warn' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

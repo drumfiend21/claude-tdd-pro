@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh records the previous profile so an undo set can revert the change",
+  "command": "mkdir -p .claude-tdd-pro profiles && printf 'active_profile: baseline\\n' > .claude-tdd-pro/profile-state.yaml && printf 'rules: {}\\n' > profiles/high-risk.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --set high-risk --state .claude-tdd-pro/profile-state.yaml --profiles-dir profiles 2>err.txt && grep -q 'previous_profile: baseline' .claude-tdd-pro/profile-state.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

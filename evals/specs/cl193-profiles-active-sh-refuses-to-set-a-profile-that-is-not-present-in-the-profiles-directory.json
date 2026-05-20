@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh refuses to set a profile that is not present in the profiles directory",
+  "command": "mkdir -p .claude-tdd-pro profiles && printf 'active_profile: baseline\\n' > .claude-tdd-pro/profile-state.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --set no-such-profile --state .claude-tdd-pro/profile-state.yaml --profiles-dir profiles 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_profile' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "profiles/active.sh switches the active profile when invoked with a set argument",
+  "command": "mkdir -p .claude-tdd-pro && printf 'active_profile: baseline\\n' > .claude-tdd-pro/profile-state.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --set high-risk --state .claude-tdd-pro/profile-state.yaml 2>err.txt && grep -q 'active_profile: high-risk' .claude-tdd-pro/profile-state.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

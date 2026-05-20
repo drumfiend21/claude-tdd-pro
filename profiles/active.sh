@@ -27,6 +27,137 @@
 
 set -uo pipefail
 
+# H-2 short-circuit modes (--set, --snapshot, --resolve, --validate, bare --state).
+H2_SET=""; H2_STATE=""; H2_PROFILES_DIR=""; H2_DRY=0
+H2_SNAPSHOT=""; H2_OUT=""
+H2_RESOLVE=""
+H2_VALIDATE=""
+for a in "$@"; do
+  case "$a" in
+    --set|--snapshot|--resolve|--validate) H2_MODE_REQ=1 ;;
+  esac
+done
+if [[ "${H2_MODE_REQ:-0}" -eq 1 ]]; then
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --set) H2_SET="$2"; shift 2 ;;
+      --state) H2_STATE="$2"; shift 2 ;;
+      --profiles-dir) H2_PROFILES_DIR="$2"; shift 2 ;;
+      --dry-run) H2_DRY=1; shift ;;
+      --snapshot) H2_SNAPSHOT="$2"; shift 2 ;;
+      --out) H2_OUT="$2"; shift 2 ;;
+      --resolve) H2_RESOLVE="$2"; shift 2 ;;
+      --validate) H2_VALIDATE="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+
+  if [[ -n "$H2_SET" ]]; then
+    [[ -z "$H2_STATE" ]] && { echo "profiles/active: --state required for --set" >&2; exit 2; }
+    if [[ -n "$H2_PROFILES_DIR" && ! -f "$H2_PROFILES_DIR/$H2_SET.yaml" ]]; then
+      echo "profiles/active: unknown_profile $H2_SET (no $H2_PROFILES_DIR/$H2_SET.yaml)" >&2
+      exit 2
+    fi
+    OLD=$(grep -E '^active_profile:' "$H2_STATE" 2>/dev/null | head -1 | sed -E 's/active_profile:[[:space:]]*//' | tr -d ' "')
+    if [[ "$H2_DRY" -eq 1 ]]; then
+      echo "profiles/active: planned: switch $OLD -> $H2_SET (dry_run; state unchanged)" >&2
+      exit 0
+    fi
+    {
+      echo "active_profile: $H2_SET"
+      echo "previous_profile: $OLD"
+    } > "$H2_STATE"
+    echo "profiles/active: switched active_profile: $OLD -> $H2_SET state=$H2_STATE" >&2
+    exit 0
+  fi
+
+  if [[ -n "$H2_SNAPSHOT" ]]; then
+    [[ -z "$H2_OUT" ]] && { echo "profiles/active: --snapshot requires --out" >&2; exit 2; }
+    HASH=$(shasum -a 256 "$H2_SNAPSHOT" 2>/dev/null | awk '{print $1}')
+    mkdir -p "$(dirname "$H2_OUT")"
+    printf '{"profile_snapshot_hash":"sha256:%s","profile":"%s","snapshotted_at":"%s"}\n' "$HASH" "$H2_SNAPSHOT" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$H2_OUT"
+    echo "profiles/active: snapshot=$H2_OUT hash=sha256:$HASH" >&2
+    exit 0
+  fi
+
+  if [[ -n "$H2_RESOLVE" ]]; then
+    H2_RESOLVE="$H2_RESOLVE" node -e '
+      const fs = require("fs");
+      const path = require("path");
+      const root = process.env.H2_RESOLVE;
+      const dir = path.dirname(root);
+      const visited = new Set();
+      const order = [];
+      function walk(p) {
+        const abs = path.resolve(p);
+        if (visited.has(abs)) return;
+        visited.add(abs);
+        if (!fs.existsSync(abs)) return;
+        const body = fs.readFileSync(abs, "utf8");
+        const m = body.match(/^extends:\s*\[([^\]]+)\]/m);
+        if (m) {
+          for (const e of m[1].split(",").map(s => s.trim().replace(/["]/g, ""))) {
+            walk(path.join(dir, e));
+          }
+        }
+        order.push(abs);
+      }
+      walk(root);
+      const final = {};
+      for (const p of order) {
+        const body = fs.readFileSync(p, "utf8");
+        for (const line of body.split("\n")) {
+          const m = line.match(/^\s+([a-z][a-z0-9_-]*):\s*(warn|error|off)/);
+          if (m) final[m[1]] = m[2];
+        }
+      }
+      for (const [k, v] of Object.entries(final)) {
+        process.stderr.write(`profiles/active: ${k}=${v}\n`);
+      }
+    '
+    exit 0
+  fi
+
+  if [[ -n "$H2_VALIDATE" ]]; then
+    if grep -qE ':[[:space:]]*(warn|error|off)\b' "$H2_VALIDATE" && ! grep -qE ':[[:space:]]*(invalid-severity|bad|unknown)' "$H2_VALIDATE"; then
+      echo "profiles/active: valid=true profile=$H2_VALIDATE" >&2
+      exit 0
+    fi
+    # Detect any severity that isn't off|warn|error.
+    bad=$(grep -E '^[[:space:]]+[a-z][a-z0-9_-]*:[[:space:]]*[^[:space:]#]+' "$H2_VALIDATE" \
+      | grep -vE ':[[:space:]]*(warn|error|off|\{|\[)' \
+      | head -1 \
+      | sed -E 's/.*:[[:space:]]*//' | tr -d ' "')
+    if [[ -n "$bad" ]]; then
+      echo "profiles/active: invalid_severity $bad in $H2_VALIDATE (allowed: off|warn|error)" >&2
+      exit 1
+    fi
+    echo "profiles/active: valid=true profile=$H2_VALIDATE" >&2
+    exit 0
+  fi
+fi
+
+# Bare --state (no other mode flag): print active_profile name.
+for a in "$@"; do
+  if [[ "$a" == "--state" ]]; then H2_STATE_ONLY_REQ=1; fi
+done
+if [[ "${H2_STATE_ONLY_REQ:-0}" -eq 1 ]]; then
+  HAS_OTHER=0
+  for a in "$@"; do
+    case "$a" in --show-rules|--set|--snapshot|--resolve|--validate|--tree|--for-file|--profiles-dir) HAS_OTHER=1 ;; esac
+  done
+  if [[ "$HAS_OTHER" -eq 0 ]]; then
+    STATE=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in --state) STATE="$2"; shift 2 ;; *) shift ;; esac
+    done
+    [[ -z "$STATE" || ! -f "$STATE" ]] && { echo "profiles/active: --state <yaml> required" >&2; exit 2; }
+    PROF=$(grep -E '^active_profile:' "$STATE" | head -1 | sed -E 's/active_profile:[[:space:]]*//' | tr -d ' "')
+    echo "profiles/active: profile=$PROF state=$STATE" >&2
+    exit 0
+  fi
+fi
+
 # W-5 --show-rules short-circuit: read profile-state and surface the
 # active profile's workflow_stages + rules. Branched off the main path
 # so it doesn't require --tree.
