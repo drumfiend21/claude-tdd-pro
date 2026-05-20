@@ -1,0 +1,11 @@
+{
+  "name": "/review legacy shim forwarding records the migration in the user warnings log for visibility",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/review.sh\" --dry-run 2>err.txt && grep -q 'event=command-deprecation' .claude-tdd-pro/warnings.jsonl && grep -q 'old=/review' .claude-tdd-pro/warnings.jsonl && grep -q 'new=/review-panel' .claude-tdd-pro/warnings.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -18,7 +18,7 @@ while [[ $# -gt 0 ]]; do
     --active-suite) ACTIVE_SUITE="$2"; shift 2 ;;
     --commit) COMMIT=1; shift ;;
     --now) NOW="$2"; shift 2 ;;
-    -h|--help) echo "Usage: spec.sh <description> --profile <yaml> [--tests-out <dir>] [--root <gen-code-quality-standards>] [--feature-id <id>] [--active-suite <dir>] [--grounding-stub none] [--emit-categories] [--emit-grounding] [--commit] [--dry-run] [--now <iso>]"; exit 0 ;;
+    -h|--help) { echo "Usage: spec.sh <description> --profile <yaml> [--tests-out <dir>] [--root <gen-code-quality-standards>] [--feature-id <id>] [--active-suite <dir>] [--grounding-stub none] [--emit-categories] [--emit-grounding] [--commit] [--dry-run] [--now <iso>]"; echo "Status: kept-as-is per H-6 builtin-command reconciliation."; } >&2; exit 0 ;;
     *) [[ -z "$INPUT" ]] && INPUT="$1"; shift ;;
   esac
 done

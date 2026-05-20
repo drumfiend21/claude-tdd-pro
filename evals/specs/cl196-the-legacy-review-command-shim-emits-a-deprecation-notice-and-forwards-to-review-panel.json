@@ -1,0 +1,11 @@
+{
+  "name": "the legacy /review command shim emits a deprecation notice and forwards to /review-panel",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/review.sh\" --dry-run 2>out.txt && grep -qi 'deprecated' out.txt && grep -q 'use /review-panel' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
