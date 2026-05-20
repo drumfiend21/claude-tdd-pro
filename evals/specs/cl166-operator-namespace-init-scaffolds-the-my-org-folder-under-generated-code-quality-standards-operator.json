@@ -1,0 +1,11 @@
+{
+  "name": "/operator-namespace-init scaffolds the my-org folder under generated-code-quality-standards/_operator/",
+  "command": "mkdir -p generated-code-quality-standards/_operator && bash \"$CLAUDE_PLUGIN_ROOT/commands/operator-namespace-init.sh\" my-org --root generated-code-quality-standards 2>err.txt && [ -d generated-code-quality-standards/_operator/my-org ] && [ -f generated-code-quality-standards/_operator/my-org/conventions.yaml ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

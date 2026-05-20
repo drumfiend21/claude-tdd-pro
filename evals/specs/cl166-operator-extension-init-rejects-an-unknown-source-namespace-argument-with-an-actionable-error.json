@@ -1,0 +1,11 @@
+{
+  "name": "/operator-extension-init rejects an unknown source-namespace argument with an actionable error",
+  "command": "mkdir -p generated-code-quality-standards && bash \"$CLAUDE_PLUGIN_ROOT/commands/operator-extension-init.sh\" no-such-namespace any-file --root generated-code-quality-standards 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_source_namespace' err.txt && grep -q 'no-such-namespace' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

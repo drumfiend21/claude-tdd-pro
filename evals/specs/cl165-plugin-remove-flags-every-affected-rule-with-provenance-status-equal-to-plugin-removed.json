@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-remove flags every affected rule with provenance_status equal to plugin-removed",
+  "command": "mkdir -p .claude-tdd-pro/plugins/registered/example active-rules && printf 'plugin_id: example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && printf 'rule_id: example/foo\\nprovenance: [{class: plugin, plugin_id: example}]\\n' > active-rules/example-foo.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-remove.sh\" example --rules-dir active-rules 2>err.txt && grep -q 'provenance_status: plugin-removed' active-rules/example-foo.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

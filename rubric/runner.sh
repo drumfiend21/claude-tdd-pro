@@ -42,6 +42,69 @@ RUBRIC="${PLUGIN_ROOT}/rubric/RUBRIC.yaml"
 # plugin defaults; community plugin redefining built-in ID rejected at
 # install. Cache awareness via directory tree hash; lock file pins."
 #
+# G-8 --aggregate-only short-circuit: read source-folder tree, apply _operator
+# extension cascade per §2.22, report final severity + winning source per rule.
+# Checked BEFORE the --root aggregator branch so --aggregate-only + --root
+# doesn't fall into the G-5 aggregator's strict-flag parser.
+AGG_ONLY=0; AGG_ROOT_ARG=""; AGG_RULE=""
+for ((i = 1; i <= $#; i++)); do
+  a="${!i}"
+  case "$a" in
+    --aggregate-only) AGG_ONLY=1 ;;
+    --root) j=$((i + 1)); AGG_ROOT_ARG="${!j}" ;;
+    --rule) j=$((i + 1)); AGG_RULE="${!j}" ;;
+  esac
+done
+if [[ "$AGG_ONLY" -eq 1 ]]; then
+  [[ -z "$AGG_ROOT_ARG" || ! -d "$AGG_ROOT_ARG" ]] && { echo "rubric-runner: --aggregate-only requires --root <dir>" >&2; exit 2; }
+  AGG_ROOT="$AGG_ROOT_ARG" RULE_FILTER="$AGG_RULE" node -e '
+    const fs = require("fs");
+    const path = require("path");
+    const root = process.env.AGG_ROOT;
+    const filter = process.env.RULE_FILTER;
+    const cascade = new Map();
+    function walk(dir, wantOperator) {
+      if (!fs.existsSync(dir)) return;
+      for (const e of fs.readdirSync(dir)) {
+        const p = path.join(dir, e);
+        const st = fs.statSync(p);
+        const inOperator = p.includes("/_operator/");
+        if (st.isDirectory()) {
+          walk(p, wantOperator);
+        } else if (e.endsWith(".yaml")) {
+          if (wantOperator && !inOperator) continue;
+          if (!wantOperator && inOperator) continue;
+          const body = fs.readFileSync(p, "utf8");
+          let curRule = null; let inRules = false;
+          for (const l of body.split("\n")) {
+            if (/^rules:/.test(l)) { inRules = true; continue; }
+            if (!inRules) continue;
+            const idMatch = l.match(/^\s*-\s*id:\s*(\S+)/);
+            if (idMatch) {
+              curRule = { id: idMatch[1] };
+              const prev = cascade.get(curRule.id) || {};
+              cascade.set(curRule.id, Object.assign({}, prev, { source: path.relative(root, path.dirname(p)) }));
+              continue;
+            }
+            const sevMatch = l.match(/^\s*severity:\s*(\S+)/);
+            if (sevMatch && curRule) {
+              const prev = cascade.get(curRule.id) || {};
+              cascade.set(curRule.id, Object.assign({}, prev, { severity: sevMatch[1], source: path.relative(root, path.dirname(p)) }));
+            }
+          }
+        }
+      }
+    }
+    walk(root, false);
+    walk(root, true);
+    for (const [id, v] of cascade.entries()) {
+      if (filter && id !== filter) continue;
+      process.stderr.write(`rubric-runner: rule_id=${id} rule=${id} severity=${v.severity || "?"} source=${v.source}\n`);
+    }
+  '
+  exit 0
+fi
+
 # Branched on first arg presence: --root invokes aggregator mode and
 # the rest of this script is bypassed. Without --root the existing
 # eval-runner / detector-dispatch behavior runs unchanged.

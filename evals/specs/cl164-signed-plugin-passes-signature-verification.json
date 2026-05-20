@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install accepts a plugin whose signature verifies against the configured signing keys when require_signed_plugins is true",
+  "command": "mkdir -p stub-clones/acme/signed && printf 'name: signed\\nrules:\\n  - id: foo\\n    detector: rubric/detectors/foo.sh\\n' > stub-clones/acme/signed/plugin.yaml && printf 'good-signature\\n' > stub-clones/acme/signed/plugin.yaml.sig && printf 'require_signed_plugins: true\\nsigning_keys: [k1]\\n' > userConfig.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/signed --gh-clone-stub stub-clones --rule-tester-stub pass --user-config userConfig.yaml --signature-stub valid 2>out.txt && grep -q 'signature_verified=true' out.txt && grep -q 'plugin_installed=signed' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-list --show-rules flag includes the namespaced rule ids for each installed plugin",
+  "command": "mkdir -p .claude-tdd-pro/plugins/registered/example && printf 'plugin_id: example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && printf 'example/foo\\nexample/bar\\n' > .claude-tdd-pro/plugins/registered/example/rules.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-list.sh\" --show-rules 2>out.txt && grep -q 'example/foo' out.txt && grep -q 'example/bar' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

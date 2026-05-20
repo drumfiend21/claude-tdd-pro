@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval run dry-run mode prints planned target invocations without executing them",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/meta-eval/run.sh\" --dry-run 2>out.txt && grep -q 'planned: known-good' out.txt && grep -q 'planned: known-bad' out.txt && grep -q 'invoked=false' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

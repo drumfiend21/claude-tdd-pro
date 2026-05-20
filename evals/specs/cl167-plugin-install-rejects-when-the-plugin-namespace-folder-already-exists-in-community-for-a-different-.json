@@ -1,0 +1,11 @@
+{
+  "name": "plugin install rejects when the plugin namespace folder already exists in _community for a different plugin",
+  "command": "mkdir -p generated-code-quality-standards/_community/other-plugin/example-namespace stub-clones/acme/example/generated-code-quality-standards/example-namespace && printf 'name: example\\nrules: [{id: foo, detector: x}]\\n' > stub-clones/acme/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --gh-clone-stub stub-clones --rule-tester-stub pass 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'namespace_collision=example-namespace' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

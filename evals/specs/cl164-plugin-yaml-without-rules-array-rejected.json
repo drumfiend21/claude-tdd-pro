@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-install rejects a plugin.yaml that does not declare a rules array (the manifest contract requires at least one rule)",
+  "command": "mkdir -p stub-clones/acme/empty && printf 'name: empty\\n' > stub-clones/acme/empty/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/empty --gh-clone-stub stub-clones 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'plugin_yaml_invalid' err.txt && grep -q 'missing.*rules' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

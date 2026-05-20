@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval run appends a structured result entry to HISTORY.md per quarterly cadence",
+  "command": "mkdir -p meta-eval && : > meta-eval/HISTORY.md && bash \"$CLAUDE_PLUGIN_ROOT/meta-eval/run.sh\" --target known-good --findings-stub p0=2,p1_absence=0.95 --history meta-eval/HISTORY.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '2026-05-13' meta-eval/HISTORY.md && grep -q 'p0=2' meta-eval/HISTORY.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

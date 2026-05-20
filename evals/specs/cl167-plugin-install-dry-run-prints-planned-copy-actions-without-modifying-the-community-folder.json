@@ -1,0 +1,11 @@
+{
+  "name": "plugin install dry-run prints planned copy actions without modifying the _community folder",
+  "command": "mkdir -p stub-clones/acme/example/generated-code-quality-standards/example-namespace && printf 'name: example\\nrules: [{id: foo, detector: x}]\\n' > stub-clones/acme/example/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --gh-clone-stub stub-clones --rule-tester-stub pass --dry-run 2>out.txt && [ ! -d generated-code-quality-standards/_community/example ] && grep -q 'planned: copy generated-code-quality-standards/example-namespace' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

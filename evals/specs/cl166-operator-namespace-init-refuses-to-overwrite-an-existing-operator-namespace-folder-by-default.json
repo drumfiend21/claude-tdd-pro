@@ -1,0 +1,11 @@
+{
+  "name": "/operator-namespace-init refuses to overwrite an existing operator namespace folder by default",
+  "command": "mkdir -p generated-code-quality-standards/_operator/my-org && printf 'rules: []\\n' > generated-code-quality-standards/_operator/my-org/conventions.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/operator-namespace-init.sh\" my-org --root generated-code-quality-standards 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'already_exists' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

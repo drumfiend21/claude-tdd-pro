@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning hashed id differs across distinct operators",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --opt-in --user alice --dry-run 2>out1.txt && bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --opt-in --user bob --dry-run 2>out2.txt && h1=$(grep -oE 'hashed_id=[a-f0-9]+' out1.txt) && h2=$(grep -oE 'hashed_id=[a-f0-9]+' out2.txt) && [ \"$h1\" != \"$h2\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

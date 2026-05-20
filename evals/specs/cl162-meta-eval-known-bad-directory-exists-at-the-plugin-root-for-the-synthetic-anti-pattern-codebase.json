@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval/known-bad directory exists at the plugin root for the synthetic anti-pattern codebase",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/meta-eval/known-bad\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

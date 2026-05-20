@@ -1,0 +1,11 @@
+{
+  "name": "plugin remove cleans up the _community/<plugin-id>/ folder and leaves operator namespace untouched",
+  "command": "mkdir -p generated-code-quality-standards/_community/example/ns generated-code-quality-standards/_operator/my-org .claude-tdd-pro/plugins/registered/example && printf 'plugin_id: example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && printf 'source: {id: x}\\n' > generated-code-quality-standards/_community/example/ns/main.yaml && printf 'rules: []\\n' > generated-code-quality-standards/_operator/my-org/conventions.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-remove.sh\" example --root generated-code-quality-standards 2>err.txt && [ ! -d generated-code-quality-standards/_community/example ] && [ -d generated-code-quality-standards/_operator/my-org ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

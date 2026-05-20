@@ -1,0 +1,11 @@
+{
+  "name": "shared-learning emission carries a hashed identifier rather than a plaintext user identifier",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --opt-in --user alice@example.com --dry-run 2>out.txt && ! grep -q 'alice@example.com' out.txt && grep -qE 'hashed_id=[a-f0-9]{8,}' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

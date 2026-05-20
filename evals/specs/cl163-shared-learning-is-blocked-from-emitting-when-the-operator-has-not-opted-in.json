@@ -1,0 +1,13 @@
+{
+  "name": "shared-learning is blocked from emitting when the operator has not opted in",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/community/shared-learning/emit.sh\" --counts community/shared-learning/counts.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'opt_in_required' err.txt && echo blocked 1>&2",
+  "setup": [
+    "mkdir -p community/shared-learning && printf '{\"fp\":1,\"tp\":1}\\n' > community/shared-learning/counts.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

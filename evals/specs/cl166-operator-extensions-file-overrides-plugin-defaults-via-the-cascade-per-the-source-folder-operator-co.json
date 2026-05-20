@@ -1,0 +1,11 @@
+{
+  "name": "operator extensions file overrides plugin defaults via the cascade per the source folder operator contract",
+  "command": "mkdir -p generated-code-quality-standards/google generated-code-quality-standards/_operator/google && printf 'source:\\n  id: google-tsguide\\nrules:\\n  - id: g-ts-001\\n    severity: P2\\n' > generated-code-quality-standards/google/tsguide.yaml && printf 'source:\\n  id: google-tsguide\\nrules:\\n  - id: g-ts-001\\n    severity: P0\\n' > generated-code-quality-standards/_operator/google/tsguide-extensions.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --aggregate-only --root generated-code-quality-standards --rule g-ts-001 2>out.txt && grep -q 'severity=P0' out.txt && grep -q 'source=_operator/google' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

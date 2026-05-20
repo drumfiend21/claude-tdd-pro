@@ -1,0 +1,11 @@
+{
+  "name": "operator namespace folder is preserved across simulated plugin upgrade per the operator contract",
+  "command": "mkdir -p generated-code-quality-standards/_operator/my-org && printf 'rules:\\n  - id: my-org-rule-1\\n' > generated-code-quality-standards/_operator/my-org/conventions.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/simulate-plugin-upgrade.sh\" --root generated-code-quality-standards --to-version 2.0.0 2>err.txt && [ -f generated-code-quality-standards/_operator/my-org/conventions.yaml ] && grep -q 'my-org-rule-1' generated-code-quality-standards/_operator/my-org/conventions.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

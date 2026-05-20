@@ -1,0 +1,11 @@
+{
+  "name": "/plugin-update rejects the update when the plugin tests fail after the upstream code change",
+  "command": "mkdir -p stub-clones/acme/example .claude-tdd-pro/plugins/registered/example && printf 'name: example\\nrules: [{id: foo, detector: x}]\\n' > stub-clones/acme/example/plugin.yaml && printf 'plugin_id: example\\nsource_repo: acme/example\\n' > .claude-tdd-pro/plugins/registered/example/source.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-update.sh\" example --gh-clone-stub stub-clones --rule-tester-stub fail 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rule_tester_failed' err.txt && grep -q 'update_blocked' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

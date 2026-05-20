@@ -1,0 +1,11 @@
+{
+  "name": "meta-eval run on known-bad calibration enforces the at-least-1-finding-per-anti-pattern floor",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/meta-eval/run.sh\" --target known-bad --anti-patterns-stub a=0,b=1 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'anti_pattern=a findings=0' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

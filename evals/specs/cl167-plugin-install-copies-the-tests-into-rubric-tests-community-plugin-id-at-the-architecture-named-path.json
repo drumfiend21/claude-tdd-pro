@@ -1,0 +1,11 @@
+{
+  "name": "plugin install copies the tests into rubric/tests/_community/<plugin-id>/ at the architecture-named path",
+  "command": "mkdir -p stub-clones/acme/example/tests/foo/valid && printf 'name: example\\nrules: [{id: foo, detector: x}]\\n' > stub-clones/acme/example/plugin.yaml && printf '{\"code\":\"x\"}\\n' > stub-clones/acme/example/tests/foo/valid/case.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/plugin-install.sh\" acme/example --gh-clone-stub stub-clones --rule-tester-stub pass 2>err.txt && [ -f rubric/tests/_community/example/foo/valid/case.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

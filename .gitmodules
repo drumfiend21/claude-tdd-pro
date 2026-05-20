@@ -1,0 +1,4 @@
+[submodule "meta-eval/known-good"]
+	path = meta-eval/known-good
+	url = https://github.com/kubernetes/kubernetes.git
+	branch = release-1.31

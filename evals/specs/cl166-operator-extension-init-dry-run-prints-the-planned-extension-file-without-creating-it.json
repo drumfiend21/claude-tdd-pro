@@ -1,0 +1,11 @@
+{
+  "name": "/operator-extension-init dry-run prints the planned extension file without creating it",
+  "command": "mkdir -p generated-code-quality-standards/google && printf 'source:\\n  id: google-tsguide\\n' > generated-code-quality-standards/google/tsguide.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/operator-extension-init.sh\" google tsguide --root generated-code-quality-standards --dry-run 2>out.txt && [ ! -f generated-code-quality-standards/_operator/google/tsguide-extensions.yaml ] && grep -q 'planned: scaffold _operator/google/tsguide-extensions.yaml' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
