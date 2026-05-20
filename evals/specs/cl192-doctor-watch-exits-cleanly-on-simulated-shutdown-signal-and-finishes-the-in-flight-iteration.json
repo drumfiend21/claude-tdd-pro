@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --watch exits cleanly on simulated shutdown signal and finishes the in-flight iteration",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --once --simulate-shutdown 2>out.txt && grep -q 'shutdown=clean' out.txt && grep -q 'iteration_completed=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

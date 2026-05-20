@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --watch records each iteration to a watch.log for audit traceability",
+  "command": "mkdir -p .claude-tdd-pro && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --once --log .claude-tdd-pro/doctor-watch.log --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'iteration_at=2026-05-13T00:00:00Z' .claude-tdd-pro/doctor-watch.log && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

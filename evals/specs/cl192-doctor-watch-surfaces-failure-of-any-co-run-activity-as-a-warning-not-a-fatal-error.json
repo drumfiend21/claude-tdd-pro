@@ -1,0 +1,11 @@
+{
+  "name": "/doctor --watch surfaces failure of any co-run activity as a warning not a fatal error",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --watch --once --co-run-stub fail-standards 2>out.txt; rc=$?; [ \"$rc\" = \"0\" ] && grep -q 'co_run=standards-monitor status=fail' out.txt && grep -q 'severity=warning' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
