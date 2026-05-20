@@ -158,6 +158,14 @@ per machine, reused across all projects. See `.claude-plugin/plugin.json`.
 Both are optional — commands have `gh` / `git` CLI fallbacks. Edit
 `.mcp.json` to disable any.
 
+## Language coverage (H-5 multi-language honesty)
+
+**First-class** (full rule coverage): JavaScript, TypeScript, Python.
+**Partial** (rule scaffold available, full coverage in roadmap): Go, Ruby, Rust.
+The plugin is honest about partial coverage: `/doctor --check coverage` and
+`/analyze --root <dir>` surface a coverage-caveat block whenever the repo
+contains files in a partial-coverage language.
+
 ## Standards baked in (citable)
 
 This plugin's quality bar comes from public, citable sources:

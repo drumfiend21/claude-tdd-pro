@@ -1,0 +1,11 @@
+{
+  "name": "/doctor warns when the repo contains files in a language with only partial rule coverage",
+  "command": "mkdir -p repo && printf 'package main\\n' > repo/main.go && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check coverage --root repo 2>out.txt && grep -q 'warning' out.txt && grep -q 'partial_coverage_language=go' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

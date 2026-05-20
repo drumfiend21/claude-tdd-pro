@@ -1,0 +1,11 @@
+{
+  "name": "/doctor coverage warning includes the count of files in each partial-coverage language",
+  "command": "mkdir -p repo && for i in 1 2 3; do printf 'package main\\n' > repo/m${i}.go; done && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check coverage --root repo 2>out.txt && grep -q 'go: 3 files' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

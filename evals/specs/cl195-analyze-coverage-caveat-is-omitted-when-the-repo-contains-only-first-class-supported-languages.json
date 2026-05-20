@@ -1,0 +1,11 @@
+{
+  "name": "/analyze coverage caveat is omitted when the repo contains only first-class supported languages",
+  "command": "mkdir -p repo && printf 'const x=1\\n' > repo/x.ts && bash \"$CLAUDE_PLUGIN_ROOT/commands/analyze.sh\" --root repo --dry-run 2>out.txt && ! grep -q 'coverage_caveat:' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/analyze coverage caveat enumerates which languages have full versus partial rule coverage",
+  "command": "mkdir -p repo && printf '{}\\n' > repo/package.json && printf 'package main\\n' > repo/main.go && bash \"$CLAUDE_PLUGIN_ROOT/commands/analyze.sh\" --root repo --dry-run 2>out.txt && grep -q 'first_class=javascript,typescript,python' out.txt && grep -q 'partial=go' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -368,6 +368,40 @@ case "$CHECK" in
     echo "ok" >&2
     exit 0
     ;;
+  coverage)
+    # H-5 per-repo language coverage report. ROOT is set by --root at
+    # top-level; --emit is parsed by the watch branch into WATCH_EMIT.
+    DOC_ROOT="$ROOT"
+    DOC_EMIT="${WATCH_EMIT:-}"
+    [[ -z "$DOC_ROOT" || ! -d "$DOC_ROOT" ]] && { echo "doctor: --check coverage requires --root <dir>" >&2; exit 2; }
+    declare_count() { find "$DOC_ROOT" -type f -name "*.$1" 2>/dev/null | wc -l | tr -d ' '; }
+    JS=$(declare_count js); TS=$(declare_count ts); PY=$(declare_count py)
+    GO=$(declare_count go); RB=$(declare_count rb); RS=$(declare_count rs)
+    ANY_PARTIAL=0
+    [[ "$GO" -gt 0 ]] && ANY_PARTIAL=1
+    [[ "$RB" -gt 0 ]] && ANY_PARTIAL=1
+    [[ "$RS" -gt 0 ]] && ANY_PARTIAL=1
+
+    if [[ "$DOC_EMIT" == "table" ]]; then
+      [[ "$JS" -gt 0 ]] && echo "doctor: js: full" >&2
+      [[ "$TS" -gt 0 ]] && echo "doctor: ts: full" >&2
+      [[ "$PY" -gt 0 ]] && echo "doctor: py: full" >&2
+      [[ "$GO" -gt 0 ]] && echo "doctor: go: partial" >&2
+      [[ "$RB" -gt 0 ]] && echo "doctor: rb: partial" >&2
+      [[ "$RS" -gt 0 ]] && echo "doctor: rs: partial" >&2
+      exit 0
+    fi
+
+    if [[ "$ANY_PARTIAL" -eq 1 ]]; then
+      [[ "$GO" -gt 0 ]] && echo "doctor: warning partial_coverage_language=go go: $GO files" >&2
+      [[ "$RB" -gt 0 ]] && echo "doctor: warning partial_coverage_language=ruby rb: $RB files" >&2
+      [[ "$RS" -gt 0 ]] && echo "doctor: warning partial_coverage_language=rust rs: $RS files" >&2
+      exit 0
+    fi
+
+    echo "doctor: all_first_class=true root=$DOC_ROOT (no partial-coverage language files)" >&2
+    exit 0
+    ;;
   token-cost)
     # H-1 token-cost report. Dimensions: skill, subagent, profile, rule-cache.
     # --include daily-auto-refresh adds per-source auto-refresh cost lines.
