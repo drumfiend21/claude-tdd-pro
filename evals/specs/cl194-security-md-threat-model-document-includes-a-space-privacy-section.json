@@ -1,0 +1,11 @@
+{
+  "name": "SECURITY.md threat model document includes a SPACE privacy section",
+  "command": "grep -q 'SPACE privacy' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

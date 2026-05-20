@@ -1,0 +1,11 @@
+{
+  "name": "SECURITY.md threat model document includes a PII guard limits section",
+  "command": "grep -q 'PII guard limits' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

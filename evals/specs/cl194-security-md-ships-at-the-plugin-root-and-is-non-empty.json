@@ -1,0 +1,11 @@
+{
+  "name": "SECURITY.md ships at the plugin root and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
