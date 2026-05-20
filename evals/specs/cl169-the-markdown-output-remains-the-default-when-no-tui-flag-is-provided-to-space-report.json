@@ -1,0 +1,11 @@
+{
+  "name": "the markdown output remains the default when no tui flag is provided to space-report",
+  "command": "mkdir -p space && printf 'metrics: []\\n' > space/metrics.yaml && printf 'dimensions: {performance: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --metrics space/metrics.yaml --config space/config.yaml 2>out.txt && grep -q 'view=markdown' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the plugin self-test workflow file exists at the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

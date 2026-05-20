@@ -1,0 +1,11 @@
+{
+  "name": "the tui visualization is gracefully unavailable in non-TTY environments and falls back to markdown",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/coverage.sh\" --tui --no-tty-stub 2>out.txt && grep -q 'tty_unavailable' out.txt && grep -q 'fallback=markdown' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config attempts a direct mapping for a rule that is named identically in our registry",
+  "command": "printf '{\"rules\":{\"no-eval\":\"error\"}}\\n' > .eslintrc && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" .eslintrc --mapping-stub direct-match --dry-run 2>out.txt && grep -q 'no-eval: direct-match' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

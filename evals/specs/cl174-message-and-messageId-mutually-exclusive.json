@@ -1,0 +1,13 @@
+{
+  "name": "messageId: providing both message and messageId in one report() throws",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule msgid-both --in \"$PWD/file.js\"",
+  "setup": [
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "exclusive"
+    ]
+  }
+}

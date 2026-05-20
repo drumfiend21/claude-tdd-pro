@@ -1,0 +1,30 @@
+# E-14 community-maintained mapping from ESLint rule ids → TDD-Pro rule ids.
+#
+# Each entry is one of:
+#   direct: <eslint-id>           # same rule, same semantics, just rename
+#   semantic: <eslint-id>         # different id, same intent
+#   wrap: <eslint-id>             # no native match; install via E-15 wrap
+#
+# Pull requests welcome under H-10 community-contribution review (2-reviewer
+# approval for tier-1 mapping endorsements).
+
+mappings:
+  # Direct matches.
+  - direct: no-eval
+    target: g-sec-no-eval
+  - direct: no-debugger
+    target: g-sec-no-debugger
+  - direct: no-console
+    target: g-style-no-console
+
+  # Semantic matches (different id, same intent).
+  - semantic: prefer-const
+    target: g-ts-prefer-const
+  - semantic: no-var
+    target: g-ts-prefer-const
+  - semantic: eqeqeq
+    target: g-correctness-strict-equality
+
+  # Wrap candidates (no native mapping; suggest E-15 ESLint-as-detector wrap).
+  - wrap: some-niche-rule
+  - wrap: react-hooks/exhaustive-deps

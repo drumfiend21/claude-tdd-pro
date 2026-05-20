@@ -1,0 +1,11 @@
+{
+  "name": "community contribution validator requires a review_status field on every entry",
+  "command": "mkdir -p community/sources && printf 'id: x\\ncontributor: alice\\nlicense: MIT\\n' > community/sources/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/community/validate.sh\" --entry community/sources/x.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*review_status' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

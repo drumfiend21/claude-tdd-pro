@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack --tui flag invokes the interactive visualization view",
+  "command": "mkdir -p compliance && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --tui --dry-run 2>out.txt && grep -q 'view=tui' out.txt && grep -q 'interactive=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

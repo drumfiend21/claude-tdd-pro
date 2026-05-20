@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config parses an ESLint flat-config file and emits the rule list",
+  "command": "printf 'export default [{rules:{\"no-eval\":\"error\",\"no-console\":\"warn\"}}]\\n' > eslint.config.js && bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" eslint.config.js --dry-run 2>out.txt && grep -q 'parsed_format=flat' out.txt && grep -q 'rule_count=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "messageId: reporting an unknown messageId throws (catches typos)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rule-engine/cli.sh\" --rule msgid-typo --in \"$PWD/file.js\"",
+  "setup": [
+    "echo 'x' > file.js"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "messageId"
+    ]
+  }
+}

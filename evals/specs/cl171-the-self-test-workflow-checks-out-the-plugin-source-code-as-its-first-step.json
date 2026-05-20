@@ -1,0 +1,11 @@
+{
+  "name": "the self-test workflow checks out the plugin source code as its first step",
+  "command": "grep -q 'actions/checkout' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

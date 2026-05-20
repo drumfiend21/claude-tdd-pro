@@ -33,9 +33,11 @@ NOW_ISO=""
 DRY_RUN=0
 BUNDLE_OUT=""
 SINCE=""
+TUI=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --tui) TUI=1; shift ;;
     --emit) EMIT="$2"; shift 2 ;;
     --section) SECTION="$2"; shift 2 ;;
     --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
@@ -60,6 +62,12 @@ done
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "audit-pack: dry-run; would emit section=${SECTION:-(default)} to ${EMIT:-(default)} (no writes)" >&2
   echo "audit-pack: dry_run=true bundle_out=${BUNDLE_OUT:-(none)}" >&2
+  # X-5 view-mode emission.
+  if [[ "$TUI" -eq 1 ]]; then
+    echo "audit-pack: view=tui interactive=true framework=charm.sh" >&2
+  else
+    echo "audit-pack: view=markdown (default; pass --tui for interactive view)" >&2
+  fi
   if [[ -n "$AUDIT_LOG_FILE" && -f "$AUDIT_LOG_FILE" ]]; then
     AUDIT_LOG_FILE="$AUDIT_LOG_FILE" SINCE="$SINCE" node -e '
       const fs = require("fs");

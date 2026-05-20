@@ -1,0 +1,11 @@
+{
+  "name": "the self-test workflow runs on push to the main branch",
+  "command": "grep -A 5 '^on:' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/self-test.yml\" | grep -q 'main' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

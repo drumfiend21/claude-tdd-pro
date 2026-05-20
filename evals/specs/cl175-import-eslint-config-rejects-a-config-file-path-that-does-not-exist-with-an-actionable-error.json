@@ -1,0 +1,11 @@
+{
+  "name": "/import-eslint-config rejects a config file path that does not exist with an actionable error",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/import-eslint-config.sh\" /nonexistent/eslint.config.js 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'config_file_not_found' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

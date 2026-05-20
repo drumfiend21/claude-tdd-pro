@@ -1,0 +1,11 @@
+{
+  "name": "the tui/ visualization layer folder exists at the plugin root",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/tui\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

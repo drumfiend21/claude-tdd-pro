@@ -1,0 +1,11 @@
+{
+  "name": "local-llm skill recognizes Ollama as one of the supported backends",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/local-llm/list-backends.sh\" 2>out.txt && grep -q 'backend=ollama' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

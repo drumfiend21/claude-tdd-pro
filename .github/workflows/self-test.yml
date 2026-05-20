@@ -1,0 +1,44 @@
+name: self-test
+# H-11 plugin self-test against itself — runs /analyze on the plugin's own
+# repo plus the G-12 + G-13 source-folder validators. Failures gate releases.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  self-test:
+    runs-on: ubuntu-latest
+    # Release gate: this job must pass before any release is published.
+    if: github.event_name != 'release' || github.event.action == 'created'
+    steps:
+      - name: Checkout plugin source
+        uses: actions/checkout@v4
+
+      - name: Validate all source folders (G-12)
+        run: bash generated-code-quality-standards/validate-all.sh --root generated-code-quality-standards --format text
+
+      - name: Validate ESLint compliance (G-13)
+        run: bash rubric/validate-eslint-compliance.sh --root generated-code-quality-standards
+
+      - name: Run /analyze on plugin repo
+        id: analyze
+        run: |
+          bash commands/analyze.sh --root . --format json > analyze-report.json || {
+            echo "::error::analyze found critical issues; failing release gate"
+            exit 1
+          }
+
+      - name: Upload analyze report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: analyze-report
+          path: analyze-report.json
+
+      - name: Run active eval suite
+        run: bash evals/runner.sh

@@ -1,0 +1,11 @@
+{
+  "name": "community contribution promotion to tier-1 requires exactly two reviewer approvals per REVIEW.md",
+  "command": "mkdir -p community/sources && printf 'id: x\\ncontributor: alice\\nreview_status: pending\\neval_evidence: x\\nlicense: MIT\\nreviewers: [bob]\\nproposed_tier: 1\\n' > community/sources/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/community/promote.sh\" --entry community/sources/x.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'reviewers_required>=2' err.txt && grep -q 'reviewers_count=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

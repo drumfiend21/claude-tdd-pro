@@ -1,0 +1,11 @@
+{
+  "name": "local-llm skill routes the triage operation to local model when local-llm is available",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/local-llm/route.sh\" --operation triage --availability-stub available 2>out.txt && grep -q 'route=local-llm' out.txt && grep -q 'operation=triage' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

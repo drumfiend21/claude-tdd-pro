@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document includes a compromised-pr-source threat section",
+  "command": "grep -qE 'compromised.PR.source' \"$CLAUDE_PLUGIN_ROOT/docs/threat-model.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

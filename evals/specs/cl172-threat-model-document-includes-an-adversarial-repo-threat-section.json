@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document includes an adversarial-repo threat section",
+  "command": "grep -qE '^## .*adversarial.repo' \"$CLAUDE_PLUGIN_ROOT/docs/threat-model.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

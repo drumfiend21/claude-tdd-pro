@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Q-3 SPACE text dashboard with metric IDs + counter-Goodhart guards.
 set -uo pipefail
-METRICS=""; COLLECTED=""; CONFIG=""; SINCE=""; SHARE_TO=""; AGGREGATE_USERS=0
+METRICS=""; COLLECTED=""; CONFIG=""; SINCE=""; SHARE_TO=""; AGGREGATE_USERS=0; TUI=0; DRY=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --metrics) METRICS="$2"; shift 2 ;;
@@ -10,11 +10,21 @@ while [[ $# -gt 0 ]]; do
     --since) SINCE="$2"; shift 2 ;;
     --share) SHARE_TO="$2"; shift 2 ;;
     --aggregate-users) AGGREGATE_USERS=1; shift ;;
-    -h|--help) echo "Usage: space-report.sh --metrics <yaml> [--collected <yaml>] --config <yaml> [--since <window>]"; exit 0 ;;
+    --tui) TUI=1; shift ;;
+    --dry-run) DRY=1; shift ;;
+    -h|--help) echo "Usage: space-report.sh --metrics <yaml> [--collected <yaml>] --config <yaml> [--since <window>] [--tui] [--dry-run]"; exit 0 ;;
     *) shift ;;
   esac
 done
 [[ -z "$METRICS" || -z "$CONFIG" ]] && { echo "space-report: --metrics and --config required" >&2; exit 2; }
+
+# X-5 view-mode emission: --tui activates the charm.sh-style interactive view;
+# default remains markdown so non-TTY callers (CI, redirected stdout) work.
+if [[ "$TUI" -eq 1 ]]; then
+  echo "space-report: view=tui interactive=true framework=charm.sh dry_run=$DRY" >&2
+  exit 0
+fi
+echo "space-report: view=markdown (default)" >&2
 
 # Reject --aggregate-users: this dashboard is solo-scale.
 if [[ "$AGGREGATE_USERS" -eq 1 ]]; then

@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document is referenced from SECURITY.md so operators discover it through the security entrypoint",
+  "command": "grep -q 'docs/threat-model.md' \"$CLAUDE_PLUGIN_ROOT/SECURITY.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

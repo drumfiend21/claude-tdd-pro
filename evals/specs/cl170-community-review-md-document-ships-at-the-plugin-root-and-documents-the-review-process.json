@@ -1,0 +1,11 @@
+{
+  "name": "community/REVIEW.md document ships at the plugin root and documents the review process",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/community/REVIEW.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

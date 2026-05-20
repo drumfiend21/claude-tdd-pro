@@ -1,0 +1,11 @@
+{
+  "name": "/coverage --tui flag invokes the interactive visualization view",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/coverage.sh\" --tui --dry-run 2>out.txt && grep -q 'view=tui' out.txt && grep -q 'interactive=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

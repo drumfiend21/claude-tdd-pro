@@ -1,0 +1,11 @@
+{
+  "name": "community contribution validator requires a contributor identity field on every entry",
+  "command": "mkdir -p community/sources && printf 'id: x\\nsource_class: financial-industry\\n' > community/sources/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/community/validate.sh\" --entry community/sources/x.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*contributor' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

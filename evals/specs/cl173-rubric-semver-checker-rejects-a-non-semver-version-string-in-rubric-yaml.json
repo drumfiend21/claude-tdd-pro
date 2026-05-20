@@ -1,0 +1,11 @@
+{
+  "name": "rubric semver checker rejects a non-semver version string in RUBRIC.yaml",
+  "command": "mkdir -p rubric && printf 'version: 1.2\\n' > rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/version-check.sh\" --rubric rubric/RUBRIC.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_semver' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

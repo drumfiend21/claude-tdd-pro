@@ -1,0 +1,11 @@
+{
+  "name": "threat-model document is referenced from the progressive-disclosure docs reference page",
+  "command": "grep -q 'threat-model' \"$CLAUDE_PLUGIN_ROOT/docs/reference.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
