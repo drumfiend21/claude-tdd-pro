@@ -1,0 +1,11 @@
+{
+  "name": "ADR index regenerator picks up newly added ADR files and adds them to INDEX.md",
+  "command": "mkdir -p docs/adr && printf '# 0042 New decision\\n' > docs/adr/0042-new-decision.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/regenerate-index.sh\" --adr-dir docs/adr --index docs/adr/INDEX.md 2>err.txt && grep -q '0042-new-decision' docs/adr/INDEX.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

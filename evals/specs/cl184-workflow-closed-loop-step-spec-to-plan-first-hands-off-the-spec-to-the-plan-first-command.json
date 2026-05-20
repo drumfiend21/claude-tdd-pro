@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step spec-to-plan-first hands off the spec to the /plan-first command",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step spec-to-plan-first --spec-id s1 --dry-run 2>out.txt && grep -q 'plan_first_invoked=true' out.txt && grep -q 'plan_input_spec=s1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration rejects an unknown workflow stage name",
+  "command": "mkdir -p profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --profile profiles/p.yaml --workflow-stage no-such-stage 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_workflow_stage' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

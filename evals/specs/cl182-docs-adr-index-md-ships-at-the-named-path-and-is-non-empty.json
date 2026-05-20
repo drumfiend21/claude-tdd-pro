@@ -1,0 +1,11 @@
+{
+  "name": "docs/adr/INDEX.md ships at the named path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/docs/adr/INDEX.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

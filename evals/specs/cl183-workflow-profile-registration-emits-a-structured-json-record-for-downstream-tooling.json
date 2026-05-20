@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration emits a structured json record for downstream tooling",
+  "command": "mkdir -p profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --profile profiles/p.yaml --workflow-stage architect --emit json --out result.json 2>err.txt && grep -q '\"profile\":' result.json && grep -q '\"stage\":\"architect\"' result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

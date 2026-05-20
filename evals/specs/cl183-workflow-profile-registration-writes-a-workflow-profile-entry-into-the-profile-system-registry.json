@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration writes a workflow-profile entry into the profile system registry",
+  "command": "mkdir -p profiles && printf 'rules: {}\\n' > profiles/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --profile profiles/p.yaml --workflow-stage architect 2>err.txt && grep -q 'workflow_stages:' profiles/p.yaml && grep -q 'architect' profiles/p.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

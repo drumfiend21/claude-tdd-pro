@@ -1,0 +1,11 @@
+{
+  "name": "docs/adr directory exists at the plugin root for the architectural decision records",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/docs/adr\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "ADR superseding chain validator rejects a superseding reference to a non-existent ADR id",
+  "command": "mkdir -p docs/adr && printf '# 0002 Second\\nsupersedes: 9999\\n' > docs/adr/0002-second.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-supersedes.sh\" --adr-dir docs/adr 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_supersedes=9999' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

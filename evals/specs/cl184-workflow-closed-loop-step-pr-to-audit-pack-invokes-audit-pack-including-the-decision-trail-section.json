@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step pr-to-audit-pack invokes /audit-pack including the Decision Trail section",
+  "command": "mkdir -p compliance docs/adr && : > compliance/audit.log && printf '# 0001 d1\\n' > docs/adr/0001-d1.md && bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step pr-to-audit-pack --audit-log compliance/audit.log --adr-dir docs/adr --dry-run 2>out.txt && grep -q 'audit_pack_invoked=true' out.txt && grep -q 'section: Decision Trail' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

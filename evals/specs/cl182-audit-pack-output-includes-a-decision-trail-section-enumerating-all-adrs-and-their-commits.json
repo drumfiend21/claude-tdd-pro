@@ -1,0 +1,11 @@
+{
+  "name": "/audit-pack output includes a Decision Trail section enumerating all ADRs and their commits",
+  "command": "mkdir -p docs/adr compliance && printf '# 0001 First\\n' > docs/adr/0001-first.md && : > compliance/audit.log && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --audit-log compliance/audit.log --adr-dir docs/adr --dry-run 2>out.txt && grep -q 'section: Decision Trail' out.txt && grep -q '0001-first' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

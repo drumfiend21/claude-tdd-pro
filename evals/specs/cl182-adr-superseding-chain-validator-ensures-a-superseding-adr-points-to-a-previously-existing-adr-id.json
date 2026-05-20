@@ -1,0 +1,11 @@
+{
+  "name": "ADR superseding chain validator ensures a superseding ADR points to a previously existing ADR id",
+  "command": "mkdir -p docs/adr && printf '# 0001 First\\n' > docs/adr/0001-first.md && printf '# 0002 Second\\nsupersedes: 0001\\n' > docs/adr/0002-second.md && bash \"$CLAUDE_PLUGIN_ROOT/docs/adr/validate-supersedes.sh\" --adr-dir docs/adr 2>out.txt && grep -q 'all_supersedes_valid=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "workflow profile registration --list-stages prints the registered workflow stage names",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/register-profile.sh\" --list-stages 2>out.txt && grep -qE 'stage=(architect|plan|build|review|merge)' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

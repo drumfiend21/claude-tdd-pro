@@ -27,6 +27,35 @@
 
 set -uo pipefail
 
+# W-5 --show-rules short-circuit: read profile-state and surface the
+# active profile's workflow_stages + rules. Branched off the main path
+# so it doesn't require --tree.
+for a in "$@"; do
+  if [[ "$a" == "--show-rules" ]]; then SHOW_RULES_REQ=1; fi
+done
+if [[ "${SHOW_RULES_REQ:-0}" -eq 1 ]]; then
+  SR_STATE=""; SR_PROFILES_DIR=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --show-rules) shift ;;
+      --state) SR_STATE="$2"; shift 2 ;;
+      --profiles-dir) SR_PROFILES_DIR="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+  [[ -z "$SR_STATE" || ! -f "$SR_STATE" ]] && { echo "profiles/active: --state <yaml> required for --show-rules" >&2; exit 2; }
+  [[ -z "$SR_PROFILES_DIR" || ! -d "$SR_PROFILES_DIR" ]] && { echo "profiles/active: --profiles-dir <dir> required for --show-rules" >&2; exit 2; }
+  SR_ACTIVE=$(grep -E '^active_profile:' "$SR_STATE" | head -1 | sed -E 's/active_profile:[[:space:]]*//' | tr -d ' "')
+  SR_PROFILE_FILE="$SR_PROFILES_DIR/$SR_ACTIVE.yaml"
+  [[ ! -f "$SR_PROFILE_FILE" ]] && { echo "profiles/active: profile $SR_ACTIVE not found at $SR_PROFILE_FILE" >&2; exit 2; }
+  SR_STAGES=$(grep -E '^workflow_stages:' "$SR_PROFILE_FILE" | head -1 | sed -E 's/workflow_stages:[[:space:]]*//' | tr -d '[]" ')
+  echo "profiles/active: profile=$SR_ACTIVE workflow_stages: ${SR_STAGES:-(none)}" >&2
+  while IFS= read -r line; do
+    [[ -n "$line" ]] && echo "profiles/active: rule: $line" >&2
+  done < <(grep -E '^[[:space:]]+[a-z][a-z0-9_-]*:[[:space:]]*(warn|error|off)' "$SR_PROFILE_FILE" 2>/dev/null)
+  exit 0
+fi
+
 PROFILE=""
 TREE=""
 EMIT_RESOLVED=0

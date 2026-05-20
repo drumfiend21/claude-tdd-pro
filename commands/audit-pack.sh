@@ -34,10 +34,12 @@ DRY_RUN=0
 BUNDLE_OUT=""
 SINCE=""
 TUI=0
+ADR_DIR=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --tui) TUI=1; shift ;;
+    --adr-dir) ADR_DIR="$2"; shift 2 ;;
     --emit) EMIT="$2"; shift 2 ;;
     --section) SECTION="$2"; shift 2 ;;
     --controls-file) CONTROLS_FILE="$2"; shift 2 ;;
@@ -67,6 +69,17 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
     echo "audit-pack: view=tui interactive=true framework=charm.sh" >&2
   else
     echo "audit-pack: view=markdown (default; pass --tui for interactive view)" >&2
+  fi
+  # W-4 Decision Trail section: enumerate ADRs + EU AI Act Art.12 cite.
+  if [[ -n "$ADR_DIR" && -d "$ADR_DIR" ]]; then
+    echo "audit-pack: section: Decision Trail" >&2
+    echo "audit-pack: EU AI Act Art.12 (record-keeping) satisfaction: per-decision ADR with commit trailer" >&2
+    for f in "$ADR_DIR"/*.md; do
+      [[ ! -f "$f" ]] && continue
+      base=$(basename "$f" .md)
+      [[ "$base" == "INDEX" ]] && continue
+      echo "audit-pack: adr=$base" >&2
+    done
   fi
   if [[ -n "$AUDIT_LOG_FILE" && -f "$AUDIT_LOG_FILE" ]]; then
     AUDIT_LOG_FILE="$AUDIT_LOG_FILE" SINCE="$SINCE" node -e '

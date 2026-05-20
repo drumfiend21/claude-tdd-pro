@@ -1,0 +1,11 @@
+{
+  "name": "workflow closed-loop step commit-to-git-workflow invokes the git-workflow recommendation skill",
+  "command": "mkdir -p repo && (cd repo && git init -q && git -c user.email=x@y -c user.name=x commit -q --allow-empty -m init) && bash \"$CLAUDE_PLUGIN_ROOT/workflow/closed-loop-test.sh\" --step commit-to-git-workflow --root repo --dry-run 2>out.txt && grep -q 'git_workflow_invoked=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
