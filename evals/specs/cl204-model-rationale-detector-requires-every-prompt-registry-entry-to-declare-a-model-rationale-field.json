@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector requires every prompt registry entry to declare a model_rationale field",
+  "command": "mkdir -p prompts/x && printf 'name: x\\nmodel: sonnet\\n' > prompts/x/v1.0.0.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --prompt prompts/x/v1.0.0.md 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*model_rationale' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

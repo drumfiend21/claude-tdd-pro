@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop end-to-end reports a per-step status summary for the entire chain",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --end-to-end --emit summary 2>out.txt && grep -q 'step=registry' out.txt && grep -q 'step=eval' out.txt && grep -q 'step=ab' out.txt && grep -q 'step=promote' out.txt && grep -q 'step=rationale' out.txt && grep -q 'step=perf' out.txt && grep -q 'step=audit-trail' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

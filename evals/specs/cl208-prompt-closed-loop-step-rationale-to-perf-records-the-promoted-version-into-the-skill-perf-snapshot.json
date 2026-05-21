@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step rationale-to-perf records the promoted version into the skill perf snapshot",
+  "command": "mkdir -p .claude-tdd-pro/skills && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step rationale-to-perf --prompt-id x --version v1.1.0 --perf-stats .claude-tdd-pro/skills/perf-stats.yaml --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'x:' .claude-tdd-pro/skills/perf-stats.yaml && grep -q 'version: v1.1.0' .claude-tdd-pro/skills/perf-stats.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

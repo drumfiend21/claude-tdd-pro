@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector exit code is zero when all prompts in the registry pass the check",
+  "command": "mkdir -p prompts/a prompts/b && printf 'name: a\\nmodel: sonnet\\nmodel_rationale: cost-quality balance for review workload\\n' > prompts/a/v1.0.0.md && printf 'name: b\\nmodel: opus\\nmodel_rationale: required for critical-path verification quality\\n' > prompts/b/v1.0.0.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --prompts-dir prompts 2>out.txt; rc=$?; [ \"$rc\" = \"0\" ] && grep -q 'prompts_checked=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

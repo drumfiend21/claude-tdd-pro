@@ -1,0 +1,5 @@
+# P-7 fine-tuning artifact registry. Each entry declares an
+# operator-facing fine-tune the plugin uses (or has used). AIBOM
+# emitter ingests this list at audit-pack time so every fine-tune
+# appears in the bill of materials.
+fine_tunes: []

@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry entry includes a training_data identifier referencing the source dataset",
+  "command": "mkdir -p prompts && printf 'fine_tunes:\\n  - {artifact_id: ft-1, base_model: sonnet, training_data: ds-internal-2026-05, license: MIT}\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-fine-tunes.sh\" --registry prompts/fine-tunes.yaml --check training-data 2>out.txt && grep -q 'training_data=ds-internal-2026-05' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

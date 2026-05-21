@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-ab statistical honesty guard runs full statistical comparison when sample size is at least 30",
+  "command": "mkdir -p prompts/x && printf 'name: x\\n' > prompts/x/v1.0.0.md && printf 'name: x\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-ab.sh\" x v1.0.0 v1.1.0 --eval-stub n=50 --dry-run 2>out.txt && grep -q 'mode=statistical' out.txt && grep -q 'sample_size=50' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

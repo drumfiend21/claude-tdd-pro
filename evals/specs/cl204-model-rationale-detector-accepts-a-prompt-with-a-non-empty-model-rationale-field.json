@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector accepts a prompt with a non-empty model_rationale field",
+  "command": "mkdir -p prompts/x && printf 'name: x\\nmodel: sonnet\\nmodel_rationale: chosen for cost-quality balance on triage workload\\n' > prompts/x/v1.0.0.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --prompt prompts/x/v1.0.0.md 2>out.txt && grep -q 'rationale_present=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

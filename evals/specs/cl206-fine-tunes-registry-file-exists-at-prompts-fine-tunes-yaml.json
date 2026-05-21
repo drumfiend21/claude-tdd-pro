@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry file exists at prompts/fine-tunes.yaml",
+  "command": "[ -f \"$CLAUDE_PLUGIN_ROOT/prompts/fine-tunes.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

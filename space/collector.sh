@@ -10,6 +10,7 @@ GIT_ROOT=""
 CONFIG=""
 SINCE=""
 OUT=""
+STATS=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -19,10 +20,37 @@ while [[ $# -gt 0 ]]; do
     --config) CONFIG="$2"; shift 2 ;;
     --since) SINCE="$2"; shift 2 ;;
     --out) OUT="$2"; shift 2 ;;
-    -h|--help) echo "Usage: collector.sh --metric <name> [--config <path>] [--git-root <path>] [--since <window>] | --all --out <path>"; exit 0 ;;
+    --stats) STATS="$2"; shift 2 ;;
+    -h|--help) echo "Usage: collector.sh --metric <name> [--config <path>] [--git-root <path>] [--since <window>] [--stats <yaml>] | --all --out <path>"; exit 0 ;;
     *) shift ;;
   esac
 done
+
+# P-8 skill-perf cross-loop signal. Inlined dim_enabled check (the function
+# below is defined later; bash 3.2 needs function definition before call site).
+if [[ "$METRIC" == "skill-perf" ]]; then
+  src="${STATS:-.claude-tdd-pro/skills/perf-stats.yaml}"
+  ENABLED=1
+  if [[ -n "$CONFIG" && -f "$CONFIG" ]]; then
+    grep -qE 'efficiency_and_flow:[[:space:]]*\{[[:space:]]*enabled:[[:space:]]*true' "$CONFIG" || ENABLED=0
+  fi
+  if [[ "$ENABLED" -eq 1 ]]; then
+    SKILLS=""
+    if [[ -f "$src" ]]; then
+      SKILLS=$(grep -E '^[a-zA-Z][a-zA-Z0-9_-]*:' "$src" | sed -E 's/:.*//' | tr '\n' ' ')
+    fi
+    legacy=".claude-tdd-pro/prompts/skill-perf.jsonl"
+    if [[ -f "$legacy" && -z "$SKILLS" ]]; then
+      SKILLS=$(grep -oE '"skill":"[^"]+"' "$legacy" | sed -E 's/.*"skill":"([^"]+)".*/\1/' | tr '\n' ' ')
+    fi
+    if [[ ! -f "$src" && ! -f "$legacy" ]]; then
+      echo "space-collector: id=space-skill-perf dimension=efficiency_and_flow source_loop=prompt skill_perf=no_data" >&2
+    else
+      echo "space-collector: id=space-skill-perf dimension=efficiency_and_flow source_loop=prompt stats=$src skills=$SKILLS" >&2
+    fi
+  fi
+  exit 0
+fi
 
 # Helper: check if a dimension is enabled in config.
 dim_enabled() {

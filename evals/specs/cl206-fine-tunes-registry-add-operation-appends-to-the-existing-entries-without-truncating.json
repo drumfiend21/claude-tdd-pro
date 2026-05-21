@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry add operation appends to the existing entries without truncating",
+  "command": "mkdir -p prompts && printf 'fine_tunes:\\n  - {artifact_id: ft-1, base_model: sonnet, training_data: ds-1, license: MIT}\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/fine-tunes-add.sh\" --registry prompts/fine-tunes.yaml --artifact-id ft-2 --base-model opus --training-data ds-2 --license MIT 2>err.txt && grep -q 'ft-1' prompts/fine-tunes.yaml && grep -q 'ft-2' prompts/fine-tunes.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

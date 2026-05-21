@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step perf-to-cross-loop emits a SPACE collector signal for the prompt-skill metric",
+  "command": "mkdir -p .claude-tdd-pro/skills space && printf 'x:\\n  latency_p50_ms: 100\\n' > .claude-tdd-pro/skills/perf-stats.yaml && printf 'dimensions: {efficiency_and_flow: {enabled: true}}\\nshare: never\\n' > space/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step perf-to-cross-loop --stats .claude-tdd-pro/skills/perf-stats.yaml --space-config space/config.yaml --dry-run 2>out.txt && grep -q 'cross_loop_emit=space:efficiency' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

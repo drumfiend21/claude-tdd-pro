@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector is wired into the rubric runner as a discoverable detector script",
+  "command": "[ -x \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" ] || [ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" ] && bash \"$CLAUDE_PLUGIN_ROOT/rubric/list-detectors.sh\" 2>out.txt && grep -q 'model-rationale' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

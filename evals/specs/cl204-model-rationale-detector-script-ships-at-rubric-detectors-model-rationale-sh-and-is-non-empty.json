@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector script ships at rubric/detectors/model-rationale.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

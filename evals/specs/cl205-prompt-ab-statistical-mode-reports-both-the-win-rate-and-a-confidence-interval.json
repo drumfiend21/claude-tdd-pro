@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-ab statistical mode reports both the win-rate and a confidence interval",
+  "command": "mkdir -p prompts/x && printf 'name: x\\n' > prompts/x/v1.0.0.md && printf 'name: x\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-ab.sh\" x v1.0.0 v1.1.0 --eval-stub n=100,b_wins=70 --dry-run 2>out.txt && grep -qE 'win_rate_b=0.70' out.txt && grep -qE 'ci_(low|95)=' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

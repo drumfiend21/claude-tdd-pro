@@ -1,0 +1,11 @@
+{
+  "name": "model rationale detector emits a structured per-prompt status record with prompt_id and verdict",
+  "command": "mkdir -p prompts/a && printf 'name: a\\nmodel: sonnet\\nmodel_rationale: ok-balance for triage\\n' > prompts/a/v1.0.0.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" --prompts-dir prompts --emit json --out result.json 2>err.txt && grep -q '\"prompt_id\":\"a\"' result.json && grep -q '\"verdict\":\"pass\"' result.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

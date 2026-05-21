@@ -1,0 +1,11 @@
+{
+  "name": "AIBOM emitter ingests the fine-tunes registry and includes each artifact in the bom output",
+  "command": "mkdir -p prompts compliance && printf 'fine_tunes:\\n  - {artifact_id: ft-1, base_model: sonnet, training_data: ds-1, license: MIT}\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom-emit.sh\" --fine-tunes prompts/fine-tunes.yaml --out compliance/aibom.json 2>err.txt && grep -q '\"artifact_id\":\"ft-1\"' compliance/aibom.json && grep -q '\"base_model\":\"sonnet\"' compliance/aibom.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

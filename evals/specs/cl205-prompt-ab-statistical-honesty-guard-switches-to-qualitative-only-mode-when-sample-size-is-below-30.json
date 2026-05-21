@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-ab statistical honesty guard switches to qualitative-only mode when sample size is below 30",
+  "command": "mkdir -p prompts/x && printf 'name: x\\n' > prompts/x/v1.0.0.md && printf 'name: x\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-ab.sh\" x v1.0.0 v1.1.0 --eval-stub n=20 --dry-run 2>out.txt && grep -q 'mode=qualitative-comparison-only' out.txt && grep -q 'sample_size=20' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

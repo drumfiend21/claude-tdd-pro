@@ -1,0 +1,11 @@
+{
+  "name": "/prompt-ab dry-run does not write to the eval-history record for either version",
+  "command": "mkdir -p prompts/x prompts/eval-history/x && printf 'name: x\\n' > prompts/x/v1.0.0.md && printf 'name: x\\n' > prompts/x/v1.1.0.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-ab.sh\" x v1.0.0 v1.1.0 --eval-stub n=50 --dry-run 2>err.txt && [ ! -f prompts/eval-history/x/ab-v1.0.0-v1.1.0.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

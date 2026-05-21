@@ -1,0 +1,11 @@
+{
+  "name": "fine-tunes registry validator rejects an entry missing the required base_model field",
+  "command": "mkdir -p prompts && printf 'fine_tunes:\\n  - {artifact_id: ft-1, training_data: ds-1}\\n' > prompts/fine-tunes.yaml && bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-fine-tunes.sh\" --registry prompts/fine-tunes.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*base_model' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "skill performance honors a --window flag overriding the default reporting window",
+  "command": "mkdir -p skills && bash \"$CLAUDE_PLUGIN_ROOT/skills/perf.sh\" --window 30d --out skills/PERF.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'window: 30d' skills/PERF.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "prompt closed-loop step eval-to-history records the eval result in eval-history directory",
+  "command": "mkdir -p prompts/eval-history/x && bash \"$CLAUDE_PLUGIN_ROOT/prompts/closed-loop-test.sh\" --step eval-to-history --prompt-id x --version v1.0.0 --score 0.85 --history-dir prompts/eval-history --now 2026-05-13T00:00:00Z 2>err.txt && [ -f prompts/eval-history/x/v1.0.0.json ] && grep -q '\"score\":0.85' prompts/eval-history/x/v1.0.0.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
