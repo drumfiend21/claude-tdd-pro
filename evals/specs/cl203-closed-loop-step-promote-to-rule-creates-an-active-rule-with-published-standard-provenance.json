@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step promote-to-rule creates an active rule with published-standard provenance",
+  "command": "mkdir -p standards/snapshots active-rules && printf 'sections:\\n  5.2.5: x\\n' > standards/snapshots/owasp-asvs.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step promote-to-rule --snapshot standards/snapshots/owasp-asvs.yaml --rules-out active-rules 2>err.txt && grep -q 'class: published-standard' active-rules/owasp-asvs-5-2-5.yaml && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

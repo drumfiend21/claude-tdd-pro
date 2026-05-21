@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor each iteration runs fetch and diff and gap-analysis in that order",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: [{id: owasp-asvs}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --emit pipeline 2>out.txt && grep -q 'step1=fetch' out.txt && grep -q 'step2=diff' out.txt && grep -q 'step3=gap-analysis' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

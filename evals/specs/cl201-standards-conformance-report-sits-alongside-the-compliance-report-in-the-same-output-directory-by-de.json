@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report sits alongside the compliance report in the same output directory by default",
+  "command": "mkdir -p reports && bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --out-dir reports --now 2026-05-13T00:00:00Z 2>err.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/compliance-report.sh\" --out-dir reports --now 2026-05-13T00:00:00Z 2>err.txt && [ -f reports/STANDARDS-CONFORMANCE.md ] && [ -f reports/COMPLIANCE-REPORT.md ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

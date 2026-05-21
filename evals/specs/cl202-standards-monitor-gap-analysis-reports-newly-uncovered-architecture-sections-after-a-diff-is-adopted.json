@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor gap-analysis reports newly uncovered architecture sections after a diff is adopted",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: [{id: owasp-asvs}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --fetcher-stub new-section-5.2.5 --emit gaps 2>out.txt && grep -q 'gap=owasp-asvs:5.2.5' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

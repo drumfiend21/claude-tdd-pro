@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step catalog-to-fetcher flows a cataloged source identifier into the fetcher script",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: [{id: owasp-asvs}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step catalog-to-fetcher --registry .claude-tdd-pro/STANDARDS-URLS.yaml --dry-run 2>out.txt && grep -q 'catalog_source=owasp-asvs flowed_into=fetcher' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

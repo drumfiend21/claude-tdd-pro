@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator subagent fields satisfy the cross-cutting subagent contract",
+  "command": "head -40 \"$CLAUDE_PLUGIN_ROOT/agents/standards-comparator.md\" 2>err.txt > head.txt && grep -q '^name:' head.txt && grep -q '^model:' head.txt && grep -q '^description:' head.txt && grep -q '^prompt_id:' head.txt && grep -q '^prompt_version:' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step diff-to-decision records an Adopt decision flowing into promote",
+  "command": "mkdir -p standards && printf '{\"decision\":\"adopt\",\"change\":\"5.2.5\"}\\n' > standards/decisions.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step diff-to-decision --decisions standards/decisions.jsonl --dry-run 2>out.txt && grep -q 'decision=adopt flowed_into=promote' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step audit-to-diff flows audit-recommended changes into the diff input",
+  "command": "mkdir -p standards && printf 'recommendations: [{source: owasp-asvs, action: review}]\\n' > standards/audit.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step audit-to-diff --audit standards/audit.yaml --dry-run 2>out.txt && grep -q 'audit_recommendation=owasp-asvs flowed_into=diff' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

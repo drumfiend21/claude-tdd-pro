@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step comparator-grounding verifies the comparator subagent declines without grounding",
+  "command": "printf '{\"question\":\"q\",\"grounded_sources\":[]}\\n' > query.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step comparator-grounding --query query.json --dry-run 2>out.txt && grep -q 'comparator_declined=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

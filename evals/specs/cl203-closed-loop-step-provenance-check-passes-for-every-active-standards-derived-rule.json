@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step provenance-check passes for every active standards-derived rule",
+  "command": "mkdir -p active-rules && printf 'rule_id: owasp-asvs-5-2-5\\nprovenance: [{class: published-standard, source_id: owasp-asvs, section_id: 5.2.5, fetched_at: 2026-05-13T00:00:00Z}]\\n' > active-rules/owasp-asvs-5-2-5.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step provenance-check --rules-dir active-rules --now 2026-05-13T00:00:00Z 2>out.txt && grep -q 'all_rules_have_provenance=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

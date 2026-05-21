@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator rejects a query that lacks the required question field on input",
+  "command": "printf '{}\\n' > query.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/comparator-validate.sh\" --query query.json 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'missing.*question' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

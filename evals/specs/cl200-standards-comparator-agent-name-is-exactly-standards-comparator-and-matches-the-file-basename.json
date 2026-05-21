@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator agent name is exactly standards-comparator and matches the file basename",
+  "command": "head -10 \"$CLAUDE_PLUGIN_ROOT/agents/standards-comparator.md\" 2>err.txt > head.txt && grep -q '^name: standards-comparator$' head.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

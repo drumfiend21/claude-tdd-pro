@@ -1,0 +1,11 @@
+{
+  "name": "closed loop step monitor-feedback surfaces upstream drift back into the catalog as a new diff",
+  "command": "mkdir -p .claude-tdd-pro standards && printf 'sources: [{id: owasp-asvs}]\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/closed-loop-test.sh\" --step monitor-feedback --registry .claude-tdd-pro/STANDARDS-URLS.yaml --fetcher-stub new-content --decisions standards/decisions.jsonl 2>err.txt && grep -q 'monitor_drift_detected' standards/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

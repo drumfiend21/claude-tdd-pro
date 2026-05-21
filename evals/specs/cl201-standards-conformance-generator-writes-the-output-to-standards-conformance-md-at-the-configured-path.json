@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance generator writes the output to STANDARDS-CONFORMANCE.md at the configured path",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --out STANDARDS-CONFORMANCE.md --now 2026-05-13T00:00:00Z 2>err.txt && [ -f STANDARDS-CONFORMANCE.md ] && grep -q 'generated_at: 2026-05-13' STANDARDS-CONFORMANCE.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

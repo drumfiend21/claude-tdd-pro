@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator subagent file ships at agents/standards-comparator.md and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/standards-comparator.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

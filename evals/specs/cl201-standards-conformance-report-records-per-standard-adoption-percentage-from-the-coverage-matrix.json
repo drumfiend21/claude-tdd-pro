@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report records per-standard adoption percentage from the coverage matrix",
+  "command": "mkdir -p .claude-tdd-pro && printf '{\"owasp-asvs\":{\"sections_total\":100,\"sections_adopted\":65}}\\n' > .claude-tdd-pro/coverage-matrix.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --coverage .claude-tdd-pro/coverage-matrix.json --out STANDARDS-CONFORMANCE.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'adoption_pct: 65' STANDARDS-CONFORMANCE.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

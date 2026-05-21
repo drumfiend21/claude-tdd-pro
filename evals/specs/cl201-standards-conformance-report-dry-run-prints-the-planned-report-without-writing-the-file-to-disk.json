@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report dry-run prints the planned report without writing the file to disk",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --out STANDARDS-CONFORMANCE.md --dry-run --now 2026-05-13T00:00:00Z 2>out.txt && [ ! -f STANDARDS-CONFORMANCE.md ] && grep -q 'planned: write STANDARDS-CONFORMANCE.md' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

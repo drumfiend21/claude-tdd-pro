@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor --once iteration count is exactly one for testability in CI",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml 2>out.txt && grep -q 'iterations=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

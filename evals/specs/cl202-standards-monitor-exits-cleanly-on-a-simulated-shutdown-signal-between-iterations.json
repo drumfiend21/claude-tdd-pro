@@ -1,0 +1,11 @@
+{
+  "name": "/standards-monitor exits cleanly on a simulated shutdown signal between iterations",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-monitor.sh\" --watch --once --registry .claude-tdd-pro/STANDARDS-URLS.yaml --simulate-shutdown 2>out.txt && grep -q 'shutdown=clean' out.txt && grep -q 'iteration_completed=true' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

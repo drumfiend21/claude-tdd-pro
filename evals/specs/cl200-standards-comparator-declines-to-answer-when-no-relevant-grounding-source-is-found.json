@@ -1,0 +1,11 @@
+{
+  "name": "standards-comparator declines to answer when no relevant grounding source is found",
+  "command": "printf '{\"question\":\"how to handle xyz\",\"grounded_sources\":[]}\\n' > query.json && bash \"$CLAUDE_PLUGIN_ROOT/standards/comparator-validate.sh\" --query query.json --check declined 2>out.txt && grep -q 'declined=true' out.txt && grep -q 'reason=no_grounding_available' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report generator script ships at standards/conformance-report.sh and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

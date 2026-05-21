@@ -1,0 +1,11 @@
+{
+  "name": "standards-conformance report emits a no-active-standards marker when no standards are active",
+  "command": "mkdir -p .claude-tdd-pro && printf 'sources: []\\n' > .claude-tdd-pro/active-standards.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/conformance-report.sh\" --active .claude-tdd-pro/active-standards.yaml --out STANDARDS-CONFORMANCE.md --now 2026-05-13T00:00:00Z 2>err.txt && grep -q 'no_active_standards: true' STANDARDS-CONFORMANCE.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
