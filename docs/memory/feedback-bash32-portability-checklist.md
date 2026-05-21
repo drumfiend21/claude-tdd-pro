@@ -29,3 +29,9 @@ type: feedback
 ## One bonus rule
 
 **Help text must go to stderr** when specs do `2>out.txt && grep ...`. Wrap multi-line `echo` in `{ ... } >&2` or change to `echo "..." >&2`. Caught in H-6 with /plan-first --help; lost 4 spec-fix cycles before fixing.
+
+## Two more (added 2026-05-21)
+
+8. **`node -e` does not allow top-level `return`.** Code passed via `-e` runs at the top of a module, not inside a function. `if (!x) { return; }` throws `SyntaxError: Illegal return statement`. Use early-return pattern via `if (x) { ... }` instead, or wrap in IIFE: `(() => { if (!x) return; ... })()`. Cost one spec-fix on S-9 conformance-report coverage matrix.
+
+9. **CLAUDE_PLUGIN_ROOT may not be cwd.** Spec tests `mkdir -p repo` and `cd` to a tmpdir, but substrate scripts that look up registries or rule trees with `$PWD/...` will miss them. Use `${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}` for in-repo lookups and the test-supplied `--root <dir>` for repo-under-test lookups. Don't mix.
