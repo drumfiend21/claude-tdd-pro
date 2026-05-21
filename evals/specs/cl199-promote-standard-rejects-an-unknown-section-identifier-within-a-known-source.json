@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard rejects an unknown section identifier within a known source",
+  "command": "mkdir -p standards/snapshots && printf 'sections:\\n  5.2.4: x\\n' > standards/snapshots/owasp-asvs.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 99.99.99 --snapshot standards/snapshots/owasp-asvs.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'unknown_section' err.txt && grep -q '99.99.99' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

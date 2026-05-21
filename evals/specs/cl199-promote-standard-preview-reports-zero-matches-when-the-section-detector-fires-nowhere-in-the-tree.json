@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard preview reports zero matches when the section detector fires nowhere in the tree",
+  "command": "mkdir -p standards/snapshots tree && printf 'sections:\\n  5.2.4: {detector: \"grep -lE eval\"}\\n' > standards/snapshots/owasp-asvs.yaml && printf 'no matches here\\n' > tree/x.js && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --root tree --preview-only 2>out.txt && grep -q 'files_flagged=0' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

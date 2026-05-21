@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff dry-run prints the planned decision without writing to decisions.jsonl",
+  "command": "mkdir -p standards/snapshots && printf 'r: a\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'r: b\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml --decide adopt --change r --decisions standards/decisions.jsonl --dry-run --now 2026-05-13T00:00:00Z 2>out.txt && [ ! -f standards/decisions.jsonl ] && grep -q 'planned: adopt r' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

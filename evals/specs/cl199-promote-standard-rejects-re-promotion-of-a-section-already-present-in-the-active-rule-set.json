@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard rejects re-promotion of a section already present in the active rule set",
+  "command": "mkdir -p standards/snapshots active-rules && printf 'sections:\\n  5.2.4: x\\n' > standards/snapshots/owasp-asvs.yaml && printf 'rule_id: owasp-asvs-5-2-4\\n' > active-rules/owasp-asvs-5-2-4.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --rules-out active-rules 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'already_promoted' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

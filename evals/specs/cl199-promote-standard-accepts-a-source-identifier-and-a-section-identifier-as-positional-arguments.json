@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard accepts a source identifier and a section identifier as positional arguments",
+  "command": "mkdir -p standards/snapshots && printf 'sections:\\n  5.2.4: x\\n' > standards/snapshots/owasp-asvs.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --dry-run 2>out.txt && grep -q 'source=owasp-asvs' out.txt && grep -q 'section_id=5.2.4' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

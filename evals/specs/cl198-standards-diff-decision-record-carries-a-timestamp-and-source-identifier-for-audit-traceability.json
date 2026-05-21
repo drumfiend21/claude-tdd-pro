@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff decision record carries a timestamp and source identifier for audit traceability",
+  "command": "mkdir -p standards/snapshots && printf 'r: a\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'r: b\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml --decide adopt --change r --decisions standards/decisions.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"timestamp\":\"2026-05-13T00:00:00Z\"' standards/decisions.jsonl && grep -q '\"source\":\"owasp-asvs\"' standards/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "/standards-diff records an Adopt decision in standards/decisions.jsonl when operator adopts a change",
+  "command": "mkdir -p standards/snapshots && printf 'rule-1: keep\\n' > standards/snapshots/owasp-asvs.current.yaml && printf 'rule-1: keep\\nrule-2: new\\n' > standards/snapshots/owasp-asvs.upstream.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-diff.sh\" --source owasp-asvs --current standards/snapshots/owasp-asvs.current.yaml --upstream standards/snapshots/owasp-asvs.upstream.yaml --decide adopt --change rule-2 --decisions standards/decisions.jsonl --now 2026-05-13T00:00:00Z 2>err.txt && grep -q '\"decision\":\"adopt\"' standards/decisions.jsonl && grep -q '\"change\":\"rule-2\"' standards/decisions.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

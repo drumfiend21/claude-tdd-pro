@@ -1,0 +1,11 @@
+{
+  "name": "/promote-standard preview reports the count of files the new rule would flag",
+  "command": "mkdir -p standards/snapshots tree && printf 'sections:\\n  5.2.4: {detector: \"grep -lE eval\"}\\n' > standards/snapshots/owasp-asvs.yaml && for f in a b c; do printf 'eval(x)\\n' > tree/$f.js; done && bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-standard.sh\" owasp-asvs 5.2.4 --snapshot standards/snapshots/owasp-asvs.yaml --root tree --preview-only 2>out.txt && grep -q 'files_flagged=3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
