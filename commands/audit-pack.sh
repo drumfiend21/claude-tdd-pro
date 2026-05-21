@@ -81,6 +81,8 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
       echo "audit-pack: adr=$base" >&2
     done
   fi
+  # H-8 license-attribution section: included in every dry-run bundle preview.
+  echo "audit-pack: section=license-attribution (H-8 sweep included in bundle)" >&2
   if [[ -n "$AUDIT_LOG_FILE" && -f "$AUDIT_LOG_FILE" ]]; then
     AUDIT_LOG_FILE="$AUDIT_LOG_FILE" SINCE="$SINCE" node -e '
       const fs = require("fs");

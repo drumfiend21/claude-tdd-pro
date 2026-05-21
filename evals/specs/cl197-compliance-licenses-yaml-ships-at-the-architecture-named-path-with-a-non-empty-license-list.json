@@ -1,0 +1,11 @@
+{
+  "name": "compliance/licenses.yaml ships at the architecture-named path with a non-empty license list",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/compliance/licenses.yaml\" ] && grep -q '^- ' \"$CLAUDE_PLUGIN_ROOT/compliance/licenses.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

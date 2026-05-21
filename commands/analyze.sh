@@ -3,16 +3,25 @@
 # partial language coverage and emits a coverage_caveat block when the
 # repo contains any partial-coverage language file.
 set -uo pipefail
-ROOT=""; DRY=0
+ROOT=""; DRY=0; EMIT=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --root) ROOT="$2"; shift 2 ;;
     --dry-run) DRY=1; shift ;;
-    -h|--help) echo "Usage: analyze.sh --root <dir> [--dry-run]"; exit 0 ;;
+    --emit) EMIT="$2"; shift 2 ;;
+    -h|--help) echo "Usage: analyze.sh --root <dir> [--dry-run] [--emit sections]"; exit 0 ;;
     *) shift ;;
   esac
 done
 [[ -z "$ROOT" || ! -d "$ROOT" ]] && { echo "analyze: --root <dir> required" >&2; exit 2; }
+
+# H-8 --emit sections: list report sections analyze produces.
+if [[ "$EMIT" == "sections" ]]; then
+  echo "analyze: section=language-coverage" >&2
+  echo "analyze: section=license-attribution" >&2
+  echo "analyze: section=rule-findings" >&2
+  exit 0
+fi
 
 # First-class: javascript, typescript, python. Partial: go, ruby, rust.
 LANGS=$(find "$ROOT" -type f -name "*.*" 2>/dev/null | sed -E 's|.*\.||' | sort -u)

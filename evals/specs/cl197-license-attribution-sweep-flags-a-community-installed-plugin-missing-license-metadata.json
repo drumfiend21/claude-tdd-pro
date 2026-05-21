@@ -1,0 +1,11 @@
+{
+  "name": "license-attribution sweep flags a community-installed plugin missing license metadata",
+  "command": "mkdir -p .claude-tdd-pro/plugins/registered/missing && printf 'name: missing\\n' > .claude-tdd-pro/plugins/registered/missing/plugin.yaml && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/license-attribution.sh\" --check-plugins 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'plugin=missing missing_license' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

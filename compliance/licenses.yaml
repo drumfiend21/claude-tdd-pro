@@ -1,0 +1,40 @@
+# H-8 license attribution registry. One entry per component (plugin,
+# attestation, third-party dependency) that ships with or is referenced
+# by claude-tdd-pro. The license-attribution sweep validates that every
+# component declares a license here or in its own metadata.
+
+- component: claude-tdd-pro
+  license: MIT
+  copyright: Claude TDD Pro contributors
+  spdx: MIT
+
+- component: ollama
+  license: MIT
+  spdx: MIT
+  used_by: skills/local-llm/
+
+- component: llama.cpp
+  license: MIT
+  spdx: MIT
+  used_by: skills/local-llm/
+
+- component: lm-studio
+  license: proprietary
+  used_by: skills/local-llm/
+  license_note: "operator-installed; not bundled"
+
+- component: charm.sh-bubbletea
+  license: MIT
+  spdx: MIT
+  used_by: tui/
+  license_note: "documented as the X-5 visualization stack"
+
+- component: playwright
+  license: Apache-2.0
+  spdx: Apache-2.0
+  used_by: templates/playwright.config.ts
+
+- component: vitest
+  license: MIT
+  spdx: MIT
+  used_by: templates/vitest.react.config.ts
