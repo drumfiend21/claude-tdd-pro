@@ -1,0 +1,375 @@
+# C-1 default compliance framework catalog (≥10 frameworks per
+# architecture §5). Operator-editable per §2.19 compliance source
+# contract. Each entry MUST satisfy operator-facing required fields
+# (id, name, url, authoritative_publisher, jurisdiction,
+# applicable_to, identifier_scheme, why_authoritative ≥3 lines,
+# fetch_frequency, legal_review_required, paywalled) plus
+# plugin-internal fetcher field naming a script under
+# compliance/fetchers/. Paywalled entries additionally require
+# document_url + attribution_note.
+- id: nist-ai-rmf
+  name: NIST AI Risk Management Framework
+  url: https://www.nist.gov/itl/ai-risk-management-framework
+  authoritative_publisher: National Institute of Standards and Technology
+  jurisdiction: us-government
+  applicable_to: [ai-systems]
+  identifier_scheme: GOVERN/MAP/MEASURE/MANAGE
+  why_authoritative: |
+    Federal-agency-published framework adopted across US public sector.
+    Mandated reference for federal AI procurement reviews.
+    Widely adopted by US private-sector AI risk programs.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: nist-ai-rmf.sh
+- id: nist-800-218
+  name: NIST SP 800-218 Secure Software Development Framework
+  url: https://csrc.nist.gov/publications/detail/sp/800-218/final
+  authoritative_publisher: NIST
+  jurisdiction: us-government
+  applicable_to: [software-development]
+  identifier_scheme: PO/PS/PW/RV
+  why_authoritative: |
+    Published as a NIST Special Publication.
+    Required reference for federal software supply-chain compliance.
+    Widely adopted by US enterprises producing software.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: nist-800-218.sh
+- id: nist-800-218a
+  name: NIST SP 800-218A SSDF for AI
+  url: https://csrc.nist.gov/publications/detail/sp/800-218a/final
+  authoritative_publisher: NIST
+  jurisdiction: us-government
+  applicable_to: [ai-systems, software-development]
+  identifier_scheme: PO/PS/PW/RV with AI augmentations
+  why_authoritative: |
+    Published as a NIST Special Publication.
+    Extends SSDF with AI-specific augmentations cited by EO 14110.
+    Reference for federal AI software supply-chain procurement.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: nist-800-218a.sh
+- id: nist-csf-2
+  name: NIST Cybersecurity Framework 2.0
+  url: https://www.nist.gov/cyberframework
+  authoritative_publisher: NIST
+  jurisdiction: us-government
+  applicable_to: [cybersecurity]
+  identifier_scheme: GV/ID/PR/DE/RS/RC
+  why_authoritative: |
+    Federal-agency-published cybersecurity framework.
+    Required reference for many US federal cybersecurity programs.
+    Widely adopted across US private-sector and international operators.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: nist-csf-2.sh
+- id: nist-800-53-r5
+  name: NIST SP 800-53 Revision 5
+  url: https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final
+  authoritative_publisher: NIST
+  jurisdiction: us-government
+  applicable_to: [security-controls]
+  identifier_scheme: Family-Number (AC-, AU-, SI-)
+  why_authoritative: |
+    Authoritative federal security and privacy control catalog.
+    Mandated baseline for federal information systems via FISMA.
+    Foundation for FedRAMP and many derivative frameworks.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: nist-800-53-r5.sh
+- id: nist-800-171-r3
+  name: NIST SP 800-171 Revision 3
+  url: https://csrc.nist.gov/publications/detail/sp/800-171/rev-3/final
+  authoritative_publisher: NIST
+  jurisdiction: us-government
+  applicable_to: [cui-protection]
+  identifier_scheme: Family-Number
+  why_authoritative: |
+    Federal requirement for protection of CUI in non-federal systems.
+    Mandated reference for DoD contractor compliance via DFARS.
+    Widely adopted by federal contractor programs.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: nist-800-171-r3.sh
+- id: fedramp-mod
+  name: FedRAMP Moderate Baseline
+  url: https://www.fedramp.gov/baselines/
+  authoritative_publisher: GSA / FedRAMP PMO
+  jurisdiction: us-government
+  applicable_to: [cloud-services]
+  identifier_scheme: NIST 800-53 subset
+  why_authoritative: |
+    Federal-agency-published cloud security baseline.
+    Required for cloud services serving federal agencies.
+    Authoritative US federal cloud compliance reference.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: fedramp-mod.sh
+- id: fedramp-high
+  name: FedRAMP High Baseline
+  url: https://www.fedramp.gov/baselines/
+  authoritative_publisher: GSA / FedRAMP PMO
+  jurisdiction: us-government
+  applicable_to: [cloud-services]
+  identifier_scheme: NIST 800-53 extended
+  why_authoritative: |
+    Federal-agency-published cloud security baseline for High systems.
+    Required for cloud services handling sensitive federal data.
+    Authoritative US federal cloud compliance reference.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: fedramp-high.sh
+- id: ffiec-its
+  name: FFIEC Information Technology Examination Handbook
+  url: https://ithandbook.ffiec.gov/
+  authoritative_publisher: Federal Financial Institutions Examination Council
+  jurisdiction: us-government
+  applicable_to: [financial-institutions]
+  identifier_scheme: Booklet-section
+  why_authoritative: |
+    Federal interagency-published examination handbook.
+    Authoritative US federal banking IT examination reference.
+    Required reading for US bank IT compliance programs.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: ffiec-its.sh
+- id: ffiec-cat
+  name: FFIEC Cybersecurity Assessment Tool
+  url: https://www.ffiec.gov/cyberassessmenttool.htm
+  authoritative_publisher: FFIEC
+  jurisdiction: us-government
+  applicable_to: [financial-institutions, cybersecurity]
+  identifier_scheme: Booklet-section
+  why_authoritative: |
+    Federal interagency-published cyber assessment tool.
+    Authoritative US federal banking cybersecurity reference.
+    Widely used by US bank cybersecurity programs.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: ffiec-cat.sh
+- id: occ-heightened-standards
+  name: OCC Heightened Standards (12 CFR 30 Appendix D)
+  url: https://www.occ.gov/topics/supervision-and-examination/dfa/index-dodd-frank-act.html
+  authoritative_publisher: Office of the Comptroller of the Currency
+  jurisdiction: us-government
+  applicable_to: [large-banks]
+  identifier_scheme: 12 CFR 30 App D
+  why_authoritative: |
+    Federal-agency-published regulation for large US banks.
+    Codified in 12 CFR 30 Appendix D.
+    Authoritative US federal banking risk-governance reference.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: occ-heightened-standards.sh
+- id: sec-cyber-disclosure
+  name: SEC Cybersecurity Disclosure Rule (17 CFR §229.106)
+  url: https://www.sec.gov/files/rules/final/2023/33-11216.pdf
+  authoritative_publisher: US Securities and Exchange Commission
+  jurisdiction: us-government
+  applicable_to: [public-companies, cybersecurity]
+  identifier_scheme: 17 CFR §229.106
+  why_authoritative: |
+    Federal-agency-published rule for public-company disclosures.
+    Codified in 17 CFR §229.106.
+    Authoritative US federal public-company cyber-disclosure reference.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: sec-cyber-disclosure.sh
+- id: sox-itcc
+  name: SOX IT General Controls (PCAOB AS 2201)
+  url: https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201
+  authoritative_publisher: Public Company Accounting Oversight Board
+  jurisdiction: us-government
+  applicable_to: [public-companies, internal-controls]
+  identifier_scheme: PCAOB AS 2201
+  why_authoritative: |
+    Federal-oversight-board-published auditing standard.
+    Authoritative US federal public-company IT controls reference.
+    Required basis for SOX 404 IT general-controls audits.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: sox-itcc.sh
+- id: hipaa-security-rule
+  name: HIPAA Security Rule (45 CFR §164.3xx)
+  url: https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html
+  authoritative_publisher: US Department of Health and Human Services
+  jurisdiction: us-government
+  applicable_to: [healthcare, phi-protection]
+  identifier_scheme: 45 CFR §164.3xx
+  why_authoritative: |
+    Federal-agency-published healthcare security rule.
+    Codified in 45 CFR §164.3xx.
+    Authoritative US federal healthcare PHI-protection reference.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: hipaa-security-rule.sh
+- id: eu-ai-act
+  name: EU AI Act (Regulation 2024/1689)
+  url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+  authoritative_publisher: European Parliament and Council
+  jurisdiction: european-union
+  applicable_to: [ai-systems]
+  identifier_scheme: Article + Annex
+  why_authoritative: |
+    Adopted by EU legislators as binding regulation.
+    Directly applicable in all EU member states.
+    Authoritative EU AI-systems compliance reference.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: eu-ai-act.sh
+- id: eu-ai-act-edpb-guidance
+  name: EDPB Guidance on EU AI Act
+  url: https://edpb.europa.eu/our-work-tools/our-documents_en
+  authoritative_publisher: European Data Protection Board
+  jurisdiction: european-union
+  applicable_to: [ai-systems, data-protection]
+  identifier_scheme: EDPB Guidelines
+  why_authoritative: |
+    Issued by EU data-protection supervisory body.
+    Authoritative interpretive guidance for EU AI Act.
+    Cited in EU data-protection enforcement actions.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: eu-ai-act-edpb-guidance.sh
+- id: gdpr
+  name: General Data Protection Regulation (Regulation 2016/679)
+  url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  authoritative_publisher: European Parliament and Council
+  jurisdiction: european-union
+  applicable_to: [data-protection]
+  identifier_scheme: Article
+  why_authoritative: |
+    Adopted by EU legislators as binding regulation.
+    Directly applicable in all EU member states.
+    Authoritative EU data-protection compliance reference.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: gdpr.sh
+- id: dora
+  name: Digital Operational Resilience Act (Regulation 2022/2554)
+  url: https://eur-lex.europa.eu/eli/reg/2022/2554/oj
+  authoritative_publisher: European Parliament and Council
+  jurisdiction: european-union
+  applicable_to: [financial-institutions, resilience]
+  identifier_scheme: Article
+  why_authoritative: |
+    Adopted by EU legislators as binding regulation.
+    Directly applicable in all EU member states for financial entities.
+    Authoritative EU financial operational-resilience reference.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: false
+  fetcher: dora.sh
+- id: pci-dss-v4
+  name: PCI Data Security Standard v4.0
+  url: https://www.pcisecuritystandards.org/document_library/
+  authoritative_publisher: PCI Security Standards Council
+  jurisdiction: international
+  applicable_to: [payment-card-data]
+  identifier_scheme: Req major.minor
+  why_authoritative: |
+    Published by the PCI Security Standards Council.
+    Required by payment-card networks worldwide for merchants/processors.
+    Authoritative international payment-card-data reference.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: pci-dss-v4.sh
+- id: slsa
+  name: Supply-chain Levels for Software Artifacts
+  url: https://slsa.dev/
+  authoritative_publisher: Open Source Security Foundation (OpenSSF)
+  jurisdiction: international
+  applicable_to: [software-supply-chain]
+  identifier_scheme: Levels 1-4
+  why_authoritative: |
+    Published by the OpenSSF under the Linux Foundation.
+    Cited by NIST SSDF as a reference for supply-chain integrity.
+    Widely adopted across the global open-source ecosystem.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: slsa.sh
+- id: owasp-asvs
+  name: OWASP Application Security Verification Standard
+  url: https://owasp.org/www-project-application-security-verification-standard/
+  authoritative_publisher: OWASP Foundation
+  jurisdiction: international
+  applicable_to: [application-security]
+  identifier_scheme: V<chapter>.<section>
+  why_authoritative: |
+    Published by the OWASP Foundation, recognized global authority.
+    Widely adopted as a baseline for application security verification.
+    Cited in many international procurement and audit programs.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: false
+  fetcher: owasp-asvs.sh
+- id: iso-27001-a14
+  name: ISO/IEC 27001 Annex A.14
+  url: https://www.iso.org/standard/27001
+  authoritative_publisher: International Organization for Standardization
+  jurisdiction: international
+  applicable_to: [information-security]
+  identifier_scheme: Annex A.<n>.<n>.<n>
+  why_authoritative: |
+    Published by the International Organization for Standardization.
+    Authoritative global information-security management standard.
+    Foundation for accredited international certification programs.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: true
+  document_url: https://www.iso.org/standard/27001
+  attribution_note: "Paywalled. Operator must obtain a licensed copy from ISO before reproducing rule text."
+  fetcher: iso-27001-a14.sh
+- id: iso-27017
+  name: ISO/IEC 27017
+  url: https://www.iso.org/standard/43757.html
+  authoritative_publisher: International Organization for Standardization
+  jurisdiction: international
+  applicable_to: [cloud-services, information-security]
+  identifier_scheme: Aligned with ISO 27002
+  why_authoritative: |
+    Published by the International Organization for Standardization.
+    Authoritative global cloud-services information-security standard.
+    Companion to ISO/IEC 27002 for cloud deployments.
+  fetch_frequency: weekly
+  legal_review_required: false
+  paywalled: true
+  document_url: https://www.iso.org/standard/43757.html
+  attribution_note: "Paywalled. Operator must obtain a licensed copy from ISO before reproducing rule text."
+  fetcher: iso-27017.sh
+- id: soc2-tsc
+  name: SOC 2 Trust Services Criteria
+  url: https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2
+  authoritative_publisher: American Institute of CPAs (AICPA)
+  jurisdiction: international
+  applicable_to: [service-organizations]
+  identifier_scheme: CC<n>.<n>, A, PI, C, P
+  why_authoritative: |
+    Published by the AICPA, the authoritative US accounting body.
+    Authoritative international service-organization trust criteria.
+    Foundation for SOC 2 reports relied on globally.
+  fetch_frequency: weekly
+  legal_review_required: true
+  paywalled: true
+  document_url: https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2
+  attribution_note: "Paywalled. Operator must obtain a licensed copy from the AICPA before reproducing rule text."
+  fetcher: soc2-tsc.sh
