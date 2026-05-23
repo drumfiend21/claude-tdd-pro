@@ -8,3 +8,6 @@ node_modules/
 .claude-tdd-pro/space/
 space/.local/
 space/
+
+# Per-session scheduled-task lock (machine/session state, not source)
+.claude/scheduled_tasks.lock
