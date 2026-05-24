@@ -4,13 +4,22 @@ Project instructions for Claude when operating in this repo.
 
 ## Scope
 
-This repo is a **prototype harness**, not the quality core. The quality core lives in `claude-tdd-pro` (sibling repo). When in doubt about TDD discipline, architecture fidelity, or commit workflow, defer to:
+This repo is a **prototype harness**, not the quality core. The quality core lives in `claude-tdd-pro` and is consumed here as an **installed Claude Code plugin dependency** (see "Dependency invariant" below). When in doubt about TDD discipline, architecture fidelity, or commit workflow, defer to:
 
-- `claude-tdd-pro/CLAUDE.md` (the authoritative workflow)
-- `claude-tdd-pro/docs/architecture-v1.9.md` (the authoritative architecture)
-- `claude-tdd-pro/.claude/skills/tdd-pro-cl-workflow/SKILL.md` (the per-CL loop)
+- The installed `claude-tdd-pro` plugin (skills/agents/commands surfaced via Claude Code)
+- The plugin's source-of-truth docs in the upstream `claude-tdd-pro` repository (`CLAUDE.md`, `docs/architecture-v1.9.md`) — referenced for context, not edited from here
 
 This file adds only what is specific to the hybrid harness.
+
+## Dependency invariant (prime directive)
+
+`claude-tdd-pro` is imported only as an installed Claude Code plugin (`.claude/settings.json` pins a specific version). It is NOT consumed via sibling-checkout, path references, file copies, or skill duplication. Every ticket, every commit, every CI check must preserve this property:
+
+- No relative or absolute path under `../claude-tdd-pro/` or `/.../claude-tdd-pro/` may appear in any tracked file.
+- Skill / command / agent names referenced in this repo MUST resolve through the installed plugin's manifest, not through filesystem assumptions.
+- Upgrades to claude-tdd-pro happen by bumping the plugin version pin (explicit), never by reaching across the filesystem.
+
+If a feature would require breaking this invariant, the answer is "no" — re-scope the feature or get the dependency upstreamed into claude-tdd-pro's plugin manifest first.
 
 ## Two harness rules (non-negotiable)
 
@@ -28,6 +37,7 @@ Violating either rule means the harness is not being used; it's just two tools r
 
 ## What this repo does NOT do
 
-- Re-implement Red-Green-Refactor. Reuse the three `tdd-pro-*` skills.
-- Define a new `tdd-pro-core` SKILL.md. The existing trio is the core.
+- Re-implement Red-Green-Refactor. Bind to the TDD skills shipped by the installed claude-tdd-pro plugin (see `docs/architecture.md`).
+- Define a new `tdd-pro-core` SKILL.md. The plugin's existing skills are the core.
 - Touch `claude-tdd-pro` substrate, specs, or architecture text.
+- Reach into the claude-tdd-pro repo via filesystem path (see "Dependency invariant" above).
