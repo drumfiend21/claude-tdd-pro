@@ -147,7 +147,7 @@ done
 # YAML → JSON via Ruby.
 SOURCE_JSON=$(ruby -ryaml -rjson -e '
   begin
-    data = YAML.load_file(ARGV[0])
+    data = YAML.unsafe_load_file(ARGV[0])
     puts JSON.generate(data)
   rescue => e
     STDERR.puts "validate-source-file: yaml parse error: #{e.message}"
@@ -266,7 +266,7 @@ if [[ "$CHECK_REGISTRY_LINK" -eq 1 ]] && [[ -n "$REGISTRY_PATH" ]] && [[ -f "$RE
   REGISTRY_CHECK_OUT=$(echo "$SOURCE_JSON" | ruby -ryaml -rjson -e '
     src_id = JSON.parse(STDIN.read)["source"]["id"] rescue nil
     exit 0 if src_id.nil?
-    reg = begin; YAML.load_file(ARGV[0]); rescue; nil; end
+    reg = begin; YAML.unsafe_load_file(ARGV[0]); rescue; nil; end
     if !reg.is_a?(Hash) || !reg.key?(src_id)
       STDERR.puts "[registry-link] source.id \"#{src_id}\" not found as a top-level key in registry: #{ARGV[0]}"
       exit 2

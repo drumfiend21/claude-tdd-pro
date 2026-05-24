@@ -53,7 +53,7 @@ check_hashes = ENV["CHECK_HASHES"] == "1"
 check_files  = ENV["CHECK_FILES"] == "1"
 
 begin
-  data = YAML.load_file(registry)
+  data = YAML.unsafe_load_file(registry)
 rescue => e
   STDERR.puts "validate-prompt-registry: yaml parse error: #{e.message}"
   exit 1

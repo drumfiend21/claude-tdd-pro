@@ -228,7 +228,7 @@ Encoding.default_internal = Encoding::UTF_8
     next if visited[path]
     visited[path] = true
     doc = begin
-      YAML.load_file(path)
+      YAML.unsafe_load_file(path)
     rescue Psych::SyntaxError
       content = File.read(path)
       d = {}
@@ -298,7 +298,7 @@ Encoding.default_internal = Encoding::UTF_8
     ns_key = if top == "_community" || top == "_operator" then parts[1] else top end
     file_base = File.basename(rel, ".yaml")
     sf = begin
-      YAML.load_file(rf)
+      YAML.unsafe_load_file(rf)
     rescue
       nil
     end

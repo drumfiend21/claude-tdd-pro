@@ -17,7 +17,7 @@ YAML="$YAML" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '# coding: utf-8
 Encoding.default_external = Encoding::UTF_8
 yaml_path = ENV["YAML"]
 begin
-  data = YAML.load_file(yaml_path)
+  data = YAML.unsafe_load_file(yaml_path)
 rescue => e
   STDERR.puts "validate-risk-classification-yaml: parse error: #{e.message}"
   exit 2

@@ -110,7 +110,7 @@ if [[ "$CHECK_CROSS_FILE_COLLISIONS" -eq 1 ]] && command -v ruby >/dev/null 2>&1
     seen = {}
     collisions = []
     ARGV.each do |path|
-      doc = begin; YAML.load_file(path); rescue; nil; end
+      doc = begin; YAML.unsafe_load_file(path); rescue; nil; end
       next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
       doc["rules"].each do |r|
         next unless r.is_a?(Hash) && r["id"].is_a?(String)
@@ -157,7 +157,7 @@ if [[ "$CHECK_ID_NAMESPACING" -eq 1 ]] && command -v ruby >/dev/null 2>&1; then
     pattern = /\A[a-z][a-z0-9-]*(\/[a-z][a-z0-9-]*)?\z/
     fail_count = 0
     ARGV.each do |path|
-      doc = begin; YAML.load_file(path); rescue; nil; end
+      doc = begin; YAML.unsafe_load_file(path); rescue; nil; end
       next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
       rel = path.sub(/\A#{Regexp.escape(root)}\/?/, "")
       parts = rel.split("/")
@@ -214,7 +214,7 @@ if [[ "$EMIT_ID_LOCATIONS" -eq 1 ]] && command -v ruby >/dev/null 2>&1; then
     root = ENV["ROOT_ABS"]
     out = {}
     ARGV.each do |path|
-      doc = begin; YAML.load_file(path); rescue; nil; end
+      doc = begin; YAML.unsafe_load_file(path); rescue; nil; end
       next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
       rel = path.sub(/\A#{Regexp.escape(root)}\/?/, "")
       doc["rules"].each do |r|
@@ -235,7 +235,7 @@ if [[ "$CHECK_REPLACED_BY_REFERENCES" -eq 1 ]] && command -v ruby >/dev/null 2>&
     refs = []
     ARGV.each do |path|
       content = File.read(path)
-      doc = begin; YAML.load_file(path); rescue; nil; end
+      doc = begin; YAML.unsafe_load_file(path); rescue; nil; end
       if doc.is_a?(Hash) && doc["rules"].is_a?(Array)
         doc["rules"].each do |r|
           next unless r.is_a?(Hash) && r["id"].is_a?(String)
@@ -272,7 +272,7 @@ if [[ "$INCLUDE_RULES" -eq 1 && "$FORMAT" == "json" ]] && command -v ruby >/dev/
   ROOT_ABS="$ROOT_ABS" ruby -ryaml -rjson -e '
     rules = []
     ARGV.each do |path|
-      doc = begin; YAML.load_file(path); rescue; nil; end
+      doc = begin; YAML.unsafe_load_file(path); rescue; nil; end
       next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
       doc["rules"].each do |r|
         next unless r.is_a?(Hash) && r["id"].is_a?(String)

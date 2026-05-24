@@ -45,6 +45,17 @@ fi
 
 export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
 
+# Hermetic git config for spec setups: disable any host-level commit signing
+# (cloud sandboxes that set commit.gpgsign=true with a remote signing server
+# fail when test setups run `git commit` inside the tmpdir). These vars are
+# treated like `-c` flags by git and win over ~/.gitconfig / /etc/gitconfig.
+# Note: do NOT override user.name/user.email here -- specs that assert author
+# attribution set those via `git config` in their own setup arrays and must
+# remain authoritative.
+export GIT_CONFIG_COUNT=2
+export GIT_CONFIG_KEY_0=commit.gpgsign;   export GIT_CONFIG_VALUE_0=false
+export GIT_CONFIG_KEY_1=tag.gpgsign;      export GIT_CONFIG_VALUE_1=false
+
 pass=0
 fail=0
 failed_specs=()

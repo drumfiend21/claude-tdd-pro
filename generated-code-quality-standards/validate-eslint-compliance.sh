@@ -91,7 +91,7 @@ ruby -ryaml -rjson -e '# coding: utf-8
   raw = raw.gsub(/(\bcontent_hash:\s+)(sha256:[A-Za-z0-9_\-]+)/, "\\1\"\\2\"")
 
   begin
-    data = YAML.load(raw)
+    data = YAML.unsafe_load(raw)
   rescue => e
     STDERR.puts "validate-eslint-compliance: yaml parse error: #{e.message}"
     exit 1

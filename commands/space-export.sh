@@ -21,7 +21,7 @@ done
 if [[ -n "$SHARE_TO" ]]; then
   SHARE="never"
   if [[ -n "$CONFIG" && -f "$CONFIG" ]]; then
-    SHARE=$(CONFIG="$CONFIG" ruby -ryaml -e 'd=YAML.load_file(ENV["CONFIG"]) rescue {}; print(d["share"] || "never")')
+    SHARE=$(CONFIG="$CONFIG" ruby -ryaml -e 'd=YAML.unsafe_load_file(ENV["CONFIG"]) rescue {}; print(d["share"] || "never")')
   fi
   if [[ "$SHARE" == "never" ]]; then
     echo "space-export: share=never blocked --share-to $SHARE_TO (network egress disabled by config)" >&2
@@ -45,7 +45,7 @@ out_path = ENV["OUT"]
 config_path = ENV["CONFIG"]
 root = ENV["ROOT"]
 
-cfg = config_path && !config_path.empty? && File.file?(config_path) ? (YAML.load_file(config_path) rescue {}) : {}
+cfg = config_path && !config_path.empty? && File.file?(config_path) ? (YAML.unsafe_load_file(config_path) rescue {}) : {}
 dims = cfg["dimensions"] || {}
 share = cfg["share"] || "never"
 retention = cfg["retention_days"] || 90

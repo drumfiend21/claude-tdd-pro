@@ -109,7 +109,7 @@ if [[ -n "$ARG" || -n "$REGISTRY" ]]; then
   [[ ! -f "$REGISTRY" ]] && { echo "pr-source-add: registry $REGISTRY not found" >&2; exit 2; }
   REG="$REGISTRY" NEW_ID="$NEW_ID" ARG="$ARG" TIER="$TIER" SC="$SOURCE_CLASS" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '
   Encoding.default_external = Encoding::UTF_8
-  data = YAML.load_file(ENV["REG"]) rescue {}
+  data = YAML.unsafe_load_file(ENV["REG"]) rescue {}
   data["operator_namespace"] ||= []
   entry = { "id" => ENV["NEW_ID"], "repo" => ENV["ARG"] }
   entry["tier"] = ENV["TIER"].to_i if ENV["TIER"] && !ENV["TIER"].empty?

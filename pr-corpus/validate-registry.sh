@@ -15,7 +15,7 @@ done
 REG="$REG" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '
 Encoding.default_external = Encoding::UTF_8
 begin
-  data = YAML.load_file(ENV["REG"])
+  data = YAML.unsafe_load_file(ENV["REG"])
 rescue => e
   STDERR.puts "validate-registry: parse_error #{e.message}"
   exit 1

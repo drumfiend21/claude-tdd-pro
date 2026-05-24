@@ -43,7 +43,7 @@ done
 CATALOG="$CATALOG" CHECK="$CHECK" ruby -ryaml -e '
   catalog_path = ENV["CATALOG"]
   check        = ENV["CHECK"]
-  doc = YAML.load_file(catalog_path)
+  doc = YAML.unsafe_load_file(catalog_path)
   unless doc.is_a?(Array)
     STDERR.puts "catalog must be a YAML array of source entries"
     exit 2

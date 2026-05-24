@@ -74,7 +74,7 @@ MAX_PER_FILE="$MAX_PER_FILE" TIMEOUT_SECS="$TIMEOUT_SECS" ruby -ryaml -rjson -ro
   # Load rules (each rule needs id + detector).
   rules = []
   rule_files.each do |rf|
-    doc = YAML.load_file(rf)
+    doc = YAML.unsafe_load_file(rf)
     next unless doc.is_a?(Hash) && doc["rules"].is_a?(Array)
     doc["rules"].each do |r|
       next unless r.is_a?(Hash) && r["id"] && r["detector"]

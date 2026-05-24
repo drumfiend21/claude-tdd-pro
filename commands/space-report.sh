@@ -54,10 +54,10 @@ EOF
 METRICS="$METRICS" COLLECTED="$COLLECTED" CONFIG="$CONFIG" \
 LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -rset -e '# coding: utf-8
 Encoding.default_external = Encoding::UTF_8
-metrics = (YAML.load_file(ENV["METRICS"]) rescue {})["metrics"] || []
+metrics = (YAML.unsafe_load_file(ENV["METRICS"]) rescue {})["metrics"] || []
 collected_path = ENV["COLLECTED"]
-collected = (collected_path.to_s.empty? || !File.file?(collected_path)) ? [] : ((YAML.load_file(collected_path) rescue {})["collected"] || [])
-config = YAML.load_file(ENV["CONFIG"]) rescue {}
+collected = (collected_path.to_s.empty? || !File.file?(collected_path)) ? [] : ((YAML.unsafe_load_file(collected_path) rescue {})["collected"] || [])
+config = YAML.unsafe_load_file(ENV["CONFIG"]) rescue {}
 dims = config["dimensions"] || {}
 
 def enabled?(dims, name)

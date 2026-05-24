@@ -46,7 +46,7 @@ fi
 if [[ -n "$UNREG" ]]; then
   PROFILE="$PROFILE" UNREG="$UNREG" ruby -ryaml -e '
     require "yaml"
-    data = YAML.load_file(ENV["PROFILE"]) rescue {}
+    data = YAML.unsafe_load_file(ENV["PROFILE"]) rescue {}
     stages = data["workflow_stages"] || []
     stages = stages.reject { |s| s == ENV["UNREG"] }
     data["workflow_stages"] = stages
@@ -69,7 +69,7 @@ if [[ "$RESOLVE" -eq 1 ]]; then
     while (p = queue.shift)
       next if visited.include?(p)
       visited << p
-      data = YAML.load_file(p) rescue {}
+      data = YAML.unsafe_load_file(p) rescue {}
       (data["workflow_stages"] || []).each { |s| stages << s unless stages.include?(s) }
       (data["extends"] || []).each do |ext|
         ext_path = File.expand_path(ext, File.dirname(p))
@@ -85,7 +85,7 @@ fi
 # Append stage(s) to profile yaml.
 PROFILE="$PROFILE" STAGES_CSV="$(IFS=,; echo "${STAGES[*]:-}")" ruby -ryaml -e '
   require "yaml"
-  data = YAML.load_file(ENV["PROFILE"]) rescue {}
+  data = YAML.unsafe_load_file(ENV["PROFILE"]) rescue {}
   data["workflow_stages"] ||= []
   (ENV["STAGES_CSV"] || "").split(",").reject(&:empty?).each do |s|
     data["workflow_stages"] << s unless data["workflow_stages"].include?(s)

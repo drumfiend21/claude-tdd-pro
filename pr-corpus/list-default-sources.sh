@@ -14,7 +14,7 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 CATALOG="$PLUGIN_ROOT/pr-corpus/sources/PR-SOURCES.defaults.yaml"
 
 CATALOG="$CATALOG" FORMAT="$FORMAT" ID="$ID" ruby -ryaml -e '
-d = YAML.load_file(ENV["CATALOG"])
+d = YAML.unsafe_load_file(ENV["CATALOG"])
 sources = d["sources"]
 fmt = ENV["FORMAT"]
 target_id = ENV["ID"]

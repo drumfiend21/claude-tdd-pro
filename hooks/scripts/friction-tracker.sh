@@ -56,7 +56,7 @@ fi
 
 # Honor activity opt-out: drop --user when activity is not enabled.
 if [[ -n "$CONFIG" && -f "$CONFIG" ]]; then
-  if ! CONFIG="$CONFIG" ruby -ryaml -e 'd=YAML.load_file(ENV["CONFIG"]) rescue {}; exit ((d["dimensions"]||{})["activity"] && (d["dimensions"]||{})["activity"]["enabled"] == true) ? 0 : 1'; then
+  if ! CONFIG="$CONFIG" ruby -ryaml -e 'd=YAML.unsafe_load_file(ENV["CONFIG"]) rescue {}; exit ((d["dimensions"]||{})["activity"] && (d["dimensions"]||{})["activity"]["enabled"] == true) ? 0 : 1'; then
     USER=""
   fi
 fi

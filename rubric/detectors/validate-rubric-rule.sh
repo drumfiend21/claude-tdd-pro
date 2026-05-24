@@ -55,7 +55,7 @@ fi
 # YAML → JSON via Ruby. Use ARGV to avoid quoting issues with paths.
 RULE_JSON=$(ruby -ryaml -rjson -e '
   begin
-    data = YAML.load_file(ARGV[0])
+    data = YAML.unsafe_load_file(ARGV[0])
     puts JSON.generate(data)
   rescue => e
     STDERR.puts "validate-rubric-rule: yaml parse error: #{e.message}"

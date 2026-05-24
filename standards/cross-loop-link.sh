@@ -14,7 +14,7 @@ done
 
 PATTERNS="$PATTERNS" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '
 Encoding.default_external = Encoding::UTF_8
-data = YAML.load_file(ENV["PATTERNS"]) rescue {}
+data = YAML.unsafe_load_file(ENV["PATTERNS"]) rescue {}
 (data["patterns"] || []).each do |p|
   if p["overlaps_standard"]
     STDERR.puts "cross-loop-link: standard=#{p["overlaps_standard"]} pr_corpus_pattern=#{p["id"]}"

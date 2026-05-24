@@ -14,7 +14,7 @@ VALID_STACKS="react node typescript javascript go ruby python rust"
 VALID_TIERS="1 2"
 
 SOURCE="$SOURCE" VC="$VALID_CLASSES" VS="$VALID_STACKS" VT="$VALID_TIERS" ruby -ryaml -e '
-d = YAML.load_file(ENV["SOURCE"]) rescue {}
+d = YAML.unsafe_load_file(ENV["SOURCE"]) rescue {}
 errs = []
 classes = ENV["VC"].split(" ")
 stacks = ENV["VS"].split(" ")
