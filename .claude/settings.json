@@ -1,0 +1,71 @@
+{
+  "_doc": "Project-level Claude Code settings for the claude-tdd-pro plugin. Travels into every session opened on this repo, including cloud Claude Code at claude.ai/code. Personal additions go in .claude/settings.local.json (gitignored).",
+  "model": "claude-opus-4-7",
+  "_model_doc": "Plugin development is substrate-write-heavy; opus reasoning depth matches the per-CL pre-flight + audit discipline in CLAUDE.md. Override per-session via /model.",
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
+  "_marketplace_doc": "Declares the anthropic-skills marketplace so cloud sessions can install covenant-genesis-protocol-for-cl (and other anthropic-skills) on first use. Per the project's governance posture, install with: /plugin install anthropic-skills@claude-plugins-official",
+  "permissions": {
+    "_doc": "Conservative allowlist: read-only git / filesystem inspection, the plugin's own runner + detectors, and the standard substrate-write loop. Anything not listed prompts. Add personal exceptions to .claude/settings.local.json.",
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git rev-parse*)",
+      "Bash(git rev-list*)",
+      "Bash(git ls-files*)",
+      "Bash(git config user.*)",
+      "Bash(git fetch*)",
+      "Bash(ls *)",
+      "Bash(find . *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(grep *)",
+      "Bash(cat *)",
+      "Bash(echo *)",
+      "Bash(mkdir -p *)",
+      "Bash(touch *)",
+      "Bash(rm -rf /tmp/*)",
+      "Bash(cd /tmp/* && *)",
+      "Bash(chmod +x *)",
+      "Bash(bash evals/runner.sh*)",
+      "Bash(bash hooks/scripts/*)",
+      "Bash(bash rubric/detectors/*)",
+      "Bash(bash compliance/*)",
+      "Bash(bash standards/*)",
+      "Bash(bash pr-corpus/*)",
+      "Bash(bash workflow/*)",
+      "Bash(bash space/*)",
+      "Bash(bash prompts/*)",
+      "Bash(bash rule-engine/*)",
+      "Bash(bash generated-code-quality-standards/*)",
+      "Bash(node -e *)",
+      "Bash(python3 -c *)",
+      "Bash(ruby -ryaml -e *)",
+      "WebFetch(domain:docs.claude.com)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:claude.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~/*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard origin/*)"
+    ]
+  },
+  "hooks": {
+    "_doc": "Hook wiring lives in hooks/hooks.json (plugin-shipped). The Setup hook auto-runs sync-memory.sh and verify-deps.sh on session start so docs/memory/ mirrors into the per-user auto-memory tree and missing dependencies are surfaced immediately."
+  }
+}
