@@ -4,10 +4,13 @@ node_modules/
 .env
 .env.local
 
-# Q-6 SPACE local data — gitignored by default per privacy posture
+# Q-6 SPACE local data — gitignored by default per privacy posture.
+# Only the user-data subtree is private; substrate scripts under space/ are
+# code and must remain tracked (prior `space/` blanket ignore silently dropped
+# space/cross-loop-emit.sh, honest-scope-validate.sh, retention-sweep.sh,
+# README.md from CL-137/138 commits).
 .claude-tdd-pro/space/
 space/.local/
-space/
 
 # Per-session scheduled-task lock (machine/session state, not source)
 .claude/scheduled_tasks.lock

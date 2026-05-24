@@ -13,7 +13,7 @@ done
 
 REG="$REG" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '
 Encoding.default_external = Encoding::UTF_8
-data = YAML.load_file(ENV["REG"]) rescue {}
+data = YAML.unsafe_load_file(ENV["REG"]) rescue {}
 sources = (data["sources"] || [])
 active = sources.select { |s| s["enabled"] != false }
 active.each { |s| STDERR.puts "list-active-sources: id=#{s["id"]} enabled=true" }

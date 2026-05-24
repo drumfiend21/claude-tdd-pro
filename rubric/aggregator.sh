@@ -251,7 +251,7 @@ ruby -ryaml -rjson -e '
     end
 
     begin
-      data = YAML.load_file(abspath)
+      data = YAML.unsafe_load_file(abspath)
     rescue => e
       STDERR.puts "aggregator: yaml parse error in #{relpath}: #{e.message}"
       parse_errors << relpath

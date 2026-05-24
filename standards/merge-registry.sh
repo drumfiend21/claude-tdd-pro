@@ -33,8 +33,8 @@ done
 [[ ! -f "$OPERATOR" ]] && { echo "merge-registry: operator not found: $OPERATOR" >&2; exit 2; }
 
 CATALOG="$CATALOG" OPERATOR="$OPERATOR" EMIT="$EMIT" PRESERVE_COMMENTS="$PRESERVE_COMMENTS" ruby -ryaml -e '
-  catalog = YAML.load_file(ENV["CATALOG"]) || []
-  operator = YAML.load_file(ENV["OPERATOR"]) || []
+  catalog = YAML.unsafe_load_file(ENV["CATALOG"]) || []
+  operator = YAML.unsafe_load_file(ENV["OPERATOR"]) || []
   preserve_comments = ENV["PRESERVE_COMMENTS"] == "1"
   comments = []
   if preserve_comments

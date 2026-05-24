@@ -15,7 +15,7 @@ done
 
 PROFILE="$PROFILE" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '# coding: utf-8
 Encoding.default_external = Encoding::UTF_8
-data = YAML.load_file(ENV["PROFILE"]) rescue {}
+data = YAML.unsafe_load_file(ENV["PROFILE"]) rescue {}
 rules = (data["rules"] || [])
 errors = []
 rules.each do |r|

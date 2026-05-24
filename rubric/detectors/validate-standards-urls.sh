@@ -22,7 +22,7 @@ REG="${1:-}"
 REG="$REG" ruby -ryaml -e '
   path = ENV["REG"]
   begin
-    doc = YAML.load_file(path)
+    doc = YAML.unsafe_load_file(path)
   rescue Psych::SyntaxError => e
     STDERR.puts "validate-standards-urls: YAML syntax error at line #{e.line}: #{e.problem}"
     exit 2

@@ -120,7 +120,7 @@ if [[ -n "$EXPLAIN_RULE" ]]; then
     walk = lambda do |path|
       next if visited[path]
       visited[path] = true
-      doc = YAML.load_file(path)
+      doc = YAML.unsafe_load_file(path)
       doc = {} unless doc.is_a?(Hash)
       ext = doc["extends"]
       if ext.is_a?(Array)
@@ -189,7 +189,7 @@ if [[ -n "$EXPLAIN_RULE" ]]; then
     if tree && !tree.empty?
       rdef = nil
       Dir.glob(File.join(tree, "**", "*.yaml")).each do |rf|
-        sf = YAML.load_file(rf)
+        sf = YAML.unsafe_load_file(rf)
         next unless sf.is_a?(Hash) && sf["rules"].is_a?(Array)
         sf["rules"].each do |r|
           if r.is_a?(Hash) && r["id"] == rule

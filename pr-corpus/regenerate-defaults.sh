@@ -17,8 +17,8 @@ DEFAULTS="$SCRIPT_DIR/sources/PR-SOURCES.defaults.yaml"
 
 REG="$REG" DEFAULTS="$DEFAULTS" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '
 Encoding.default_external = Encoding::UTF_8
-defaults = YAML.load_file(ENV["DEFAULTS"]) rescue {}
-existing = YAML.load_file(ENV["REG"]) rescue {}
+defaults = YAML.unsafe_load_file(ENV["DEFAULTS"]) rescue {}
+existing = YAML.unsafe_load_file(ENV["REG"]) rescue {}
 op_ns = existing["operator_namespace"] || []
 merged = { "sources" => (defaults["sources"] || []), "operator_namespace" => op_ns }
 File.write(ENV["REG"], YAML.dump(merged))

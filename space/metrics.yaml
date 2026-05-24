@@ -1,0 +1,8 @@
+metrics:
+  - id: space-perf-rubric-pass-rate
+    dimension: performance
+    source: rubric-runs/last.json
+    unit: ratio
+    reporting_window: 7d
+    privacy: local-only
+    opt_in: false

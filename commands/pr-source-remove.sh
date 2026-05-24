@@ -101,7 +101,7 @@ if [[ -n "$REGISTRY" || -n "$ARG" ]]; then
   # Remove from registry.
   REG="$REGISTRY" RM_ID="$RM_ID" LANG="${LANG:-en_US.UTF-8}" ruby -ryaml -e '
   Encoding.default_external = Encoding::UTF_8
-  data = YAML.load_file(ENV["REG"]) rescue {}
+  data = YAML.unsafe_load_file(ENV["REG"]) rescue {}
   data["sources"] = (data["sources"] || []).reject { |s| s["id"] == ENV["RM_ID"] }
   data["operator_namespace"] = (data["operator_namespace"] || []).reject { |s| s["id"] == ENV["RM_ID"] }
   File.write(ENV["REG"], YAML.dump(data))

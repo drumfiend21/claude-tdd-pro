@@ -1,0 +1,8 @@
+# evals/datasets/skills
+
+Per architecture v1.9: skills dataset folder ships at install time. Future
+skill auto-trigger evaluation datasets land here as `<skill-name>.jsonl`.
+
+This .gitkeep exists so git tracks the empty directory; without it the folder
+is silently dropped on clone (caught by `evals-datasets-skills-folder-exists`
+spec).

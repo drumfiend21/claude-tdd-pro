@@ -5,7 +5,7 @@ while [[ $# -gt 0 ]]; do
 done
 [[ -z "$LIST" || ! -f "$LIST" ]] && { echo "validate-source-list: --list required" >&2; exit 2; }
 LIST="$LIST" ruby -ryaml -e '
-d = YAML.load_file(ENV["LIST"]) rescue {}
+d = YAML.unsafe_load_file(ENV["LIST"]) rescue {}
 sources = d["sources"] || []
 seen = {}
 dupes = []

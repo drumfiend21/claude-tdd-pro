@@ -44,7 +44,7 @@ RULE_FILE="$1"
 ruby -ryaml -e '
   path = ARGV[0]
   doc = begin
-    YAML.load_file(path)
+    YAML.unsafe_load_file(path)
   rescue => e
     STDERR.puts "yaml parse error: #{e.message}"
     exit 1

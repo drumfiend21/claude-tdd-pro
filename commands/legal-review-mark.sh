@@ -27,7 +27,7 @@ FRAMEWORK="$FRAMEWORK" CONTROL_ID="$CONTROL_ID" REVIEWER="$REVIEWER" DATE="$DATE
   path = ENV["CONTROLS_FILE"]
   fw = ENV["FRAMEWORK"]
   cid = ENV["CONTROL_ID"]
-  doc = YAML.load_file(path) || []
+  doc = YAML.unsafe_load_file(path) || []
   found = false
   doc.each do |entry|
     next unless entry.is_a?(Hash)
