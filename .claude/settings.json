@@ -10,7 +10,7 @@
       }
     }
   },
-  "_marketplace_doc": "Declares the anthropic-skills marketplace so cloud sessions can install covenant-genesis-protocol-for-cl (and other anthropic-skills) on first use. Per the project's governance posture, install with: /plugin install anthropic-skills@claude-plugins-official",
+  "_marketplace_doc": "LOCAL-CLI ONLY: makes `/plugin install <name>@claude-plugins-official` work in local terminal sessions on this repo. Cloud Claude Code (claude.ai/code) does NOT support `/plugin install` — `/plugin isn't available in this environment` error. For cloud-session parity, any skill that must be available in cloud must either (a) come preinstalled in the cloud base image (most anthropic-skills do), or (b) be checked into .claude/skills/ in this repo.",
   "permissions": {
     "_doc": "Conservative allowlist: read-only git / filesystem inspection, the plugin's own runner + detectors, and the standard substrate-write loop. Anything not listed prompts. Add personal exceptions to .claude/settings.local.json.",
     "allow": [
