@@ -1,5 +1,11 @@
 # Claude TDD Pro — project instructions for Claude
 
+## PRIMARY RULESET (highest priority — read first, every session)
+
+**[generated-code-quality-standards/_universal/ai-dev-corpus.md](generated-code-quality-standards/_universal/ai-dev-corpus.md)** is the primary, highest-priority ruleset for how to architect, plan, and develop software on this project. Read it before anything else, every session.
+
+It encodes mindset and methodology (English-first programming · Musk's 5-step algorithm · Anthropic's verification + context discipline · Building Effective Agents patterns). It does not replace the per-CL discipline below — it overlays it. When the corpus conflicts with any other guidance in `generated-code-quality-standards/`, the corpus wins; for per-CL workflow steps, see "Workflow loop" below.
+
 ## ARCHITECTURE IS LAW
 
 **The canonical v1.9 architecture (plus v1.9.1 §23, v1.10 §24, and v1.9.2 §25 amendments) is at [docs/architecture-v1.9.md](docs/architecture-v1.9.md). It is the source of truth for every feature ID, every §2.X cross-cutting contract, every phase decomposition, and every CL plan.**
@@ -12,8 +18,9 @@ This rule exists because prior CLs (CL-08, CL-09, CL-10) deviated by inventing d
 
 ## PROJECT MEMORY — read alongside architecture every prompt
 
-The repo carries a project-memory tree at [docs/memory/](docs/memory/) that supplements the architecture text. **Read all of these at the start of every prompt**, alongside `docs/architecture-v1.9.md`:
+The repo carries a project-memory tree at [docs/memory/](docs/memory/) that supplements the architecture text. **Read all of these at the start of every prompt**, alongside `docs/architecture-v1.9.md` AND the PRIMARY RULESET above:
 
+- [generated-code-quality-standards/_universal/ai-dev-corpus.md](generated-code-quality-standards/_universal/ai-dev-corpus.md) — **PRIMARY RULESET, highest priority.** Karpathy English-first + Musk 5-step + Anthropic verification + Building Effective Agents + Amodei vision. Lives in the ESLint-style standards tree as the universal cross-cutting ruleset. Read first.
 - [docs/memory/MEMORY.md](docs/memory/MEMORY.md) — index of persisted memory files (1-line hooks per entry)
 - [docs/memory/project-v19-architecture-canonical.md](docs/memory/project-v19-architecture-canonical.md) — feature-ID summary + drift-mechanism catalog (CL-08/09/10 lessons); cite by exact ID
 - [docs/memory/feedback-self-gap-check-before-commit.md](docs/memory/feedback-self-gap-check-before-commit.md) — the gap-check workflow loop (overlaps with the "Workflow loop for every CL" section below; both must stay in sync)
