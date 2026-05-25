@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit --format html writes bundle.html with inline content and no external asset references per §2.24",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format html --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out 2>err.txt && grep -q '<title>Audit Pack abc123' out/abc123-2026-05-25T00:00:00Z/bundle.html && ! grep -q '<link\\|<script src' out/abc123-2026-05-25T00:00:00Z/bundle.html && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

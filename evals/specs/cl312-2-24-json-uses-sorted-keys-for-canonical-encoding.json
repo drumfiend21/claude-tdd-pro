@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit json output uses sorted keys for canonical RFC 8785 JCS-style encoding per §2.24",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format json --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out 2>err.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/abc123-2026-05-25T00:00:00Z/bundle.json\",\"utf8\"));const k=Object.keys(j);const s=k.slice().sort();process.exit(JSON.stringify(k)===JSON.stringify(s)?0:1)' && echo sorted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["sorted"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-schema.json ships at compliance/audit-pack-schema.json with bundle_schema_version 1.0 per §2.24",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/compliance/audit-pack-schema.json\" ] && node -e 'const s=JSON.parse(require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/compliance/audit-pack-schema.json\",\"utf8\"));process.exit(s.properties.bundle_schema_version.const===\"1.0\"?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit exits non-zero and rejects a format value that is not one of json markdown html tarball per §2.24",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format pdf --commit-sha abc --generated-at 2026-05-25T00:00:00Z --out-dir out 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["rejected"]
+  }
+}
