@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan dry-run computes findings but does not write the report file to disk per the dry-run contract",
+  "command": "mkdir -p src && printf 'a // rubric: ignore\\n' > src/x.js && rm -f report.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --paths src --out report.jsonl --dry-run 2>err.txt && [ ! -f report.jsonl ] && grep -q 'dry_run=true' err.txt && grep -q 'rubric_ignore' err.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan reads E-5 inline suppression log at rubric/suppressions/<rule-id>.jsonl and surfaces per-rule counts",
+  "command": "mkdir -p rubric/suppressions && printf '{\"file\":\"a.js\",\"line\":1,\"justification\":\"legacy\"}\\n{\"file\":\"b.js\",\"line\":3,\"justification\":\"vendor\"}\\n' > rubric/suppressions/no-eval.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --suppressions-dir rubric/suppressions --out report.jsonl 2>err.txt && grep -q 'no-eval' report.jsonl && grep -q '\"suppression_count\":2' report.jsonl && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
