@@ -1,0 +1,13 @@
+{
+  "name": "STANDARDS-URLS registry rejects an entry whose url is not https per section 2.6 operator schema",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/STANDARDS-URLS.yaml\"",
+  "setup": [
+    "printf '%b\\n' '- id: src-1\\n  name: X\\n  url: http://insecure.example.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "https"
+    ]
+  }
+}

@@ -19,6 +19,19 @@ Read [docs/architecture-v1.9.md](../../../docs/architecture-v1.9.md) for the sco
 
 Never proceed from memory. The architecture file is in the repo precisely so memory loss across sessions cannot cause drift.
 
+## Step 0.5 — Pending-spec content fidelity check (v1.9.2 §25)
+
+**Only applies when this CL promotes pre-existing pending specs (via `probe-feature` or `promote-pending`) rather than writing fresh ones in Step 1.** Run the §2.25 fidelity gate before any substrate work:
+
+```bash
+bash rubric/detectors/audit-pending-spec-fidelity.sh \
+  --pending evals/pending/<phase>/<feature-id>-<label>/ \
+  --arch docs/architecture-v1.9.md \
+  --section "<§X>"
+```
+
+Exit 0 → proceed to substrate. Exit 1 → triage each `unknown_vocab=<token> spec=<file>` line via one of the §25.3 paths: (1) Spec rewrite, (2) Architecture amendment as a separate governance CL, or (3) Misfiled relocation to `evals/pending/_misfiled/<feature-id>/`. Disclose every chosen path in the commit body under "Spec patches in this CL (architecture-fidelity corrections):". See `docs/memory/feedback-pending-spec-content-fidelity.md` for the §2.6 worked example.
+
 ## Step 1 — Write the unit tests
 
 Use ONLY the literal architecture feature names and §2.X labels from Step 0. Pending specs go in `evals/pending/<phase>/<feature-id>-<descriptive-label>/`. Active (regression baseline) specs go in `evals/specs/`.

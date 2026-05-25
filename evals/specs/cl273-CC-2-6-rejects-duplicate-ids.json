@@ -1,0 +1,14 @@
+{
+  "name": "STANDARDS-URLS registry rejects two entries that share the same id (uniqueness invariant)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/STANDARDS-URLS.yaml\"",
+  "setup": [
+    "printf '%b\\n' '- id: src-1\\n  name: X\\n  url: https://x.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily\\n- id: src-1\\n  name: Y\\n  url: https://y.com\\n  tier: 2\\n  applies_to: [node]\\n  fetch_frequency: weekly' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "duplicate",
+      "src-1"
+    ]
+  }
+}

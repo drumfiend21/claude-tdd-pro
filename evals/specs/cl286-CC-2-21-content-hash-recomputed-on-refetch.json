@@ -1,0 +1,14 @@
+{
+  "name": "provenance: refetcher recomputes content_hash and writes the new value when content changed",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/refetch-source.sh\" --rule-file \"$PWD/rule.yaml\" --fetcher-stub \"$PWD/upstream.sh\" && grep -E 'content_hash: sha256:NEW' rule.yaml 1>&2 && echo ok 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2025-01-01T00:00:00Z\\n  content_hash: sha256:OLD\\nrules: []\\n' > rule.yaml",
+    "printf '#!/bin/bash\\necho NEW_HASH=sha256:NEW\\nexit 0\\n' > upstream.sh && chmod +x upstream.sh"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

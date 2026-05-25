@@ -2,6 +2,10 @@
 
 Single source-organized directory holding every code-quality rule the plugin enforces, grouped by upstream publisher. Each `<namespace>/<file>.yaml` is a self-contained, ESLint-style rule configuration block sourced from one upstream publication.
 
+## Primary ruleset (highest priority)
+
+**[_universal/ai-dev-corpus.md](_universal/ai-dev-corpus.md)** is the primary, highest-priority ruleset on this project. It defines *how* software is architected, planned, and developed (mindset and methodology — English-first programming, Musk's 5-step algorithm, Anthropic's verification / context discipline, Building Effective Agents patterns). Code-quality rules in the namespaces below define *what* the final code must look like; the corpus governs the process that produces them. When the corpus conflicts with any per-language rule in this directory, the corpus wins on process and the language rule wins on output shape.
+
 ## Directory layout
 
 ```

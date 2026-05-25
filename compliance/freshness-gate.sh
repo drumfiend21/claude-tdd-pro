@@ -6,6 +6,15 @@
 # compliance/attestations/<id>.yaml is absent.
 set -uo pipefail
 
+# §2.17 dual-mode dispatch.
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+if [ -f "$PLUGIN_ROOT/lib/freshness-gate-217.sh" ]; then
+  # shellcheck disable=SC1091
+  . "$PLUGIN_ROOT/lib/freshness-gate-217.sh"
+  F217_LAST_FETCH_DIR=".claude-tdd-pro/compliance/last-fetch"
+  f217_detect_and_run "$@"
+fi
+
 FRAMEWORK_ID=""; FF=""; NOW_ISO=""; SKIP_FRESH=0; PAYWALLED=0
 REQUIRE_ATTESTATION=0; EMIT_AUDIT=""
 

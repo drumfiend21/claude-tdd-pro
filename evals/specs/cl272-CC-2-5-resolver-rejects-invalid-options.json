@@ -1,0 +1,13 @@
+{
+  "name": "profile precedence: resolver rejects profile with options that fail rule options_schema",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml 2>&1 | grep -q \"options_schema\" && echo ok >&2",
+  "setup": [
+    "printf '%s\\n' 'rules:\n  g-ts-001: [\"error\", { max_per_file: -5 }]' > profile.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -36,7 +36,14 @@ For each feature in the CL (filter by `cl<N>-` prefix on `evals/specs/`):
    grep -l '_internal\|_private' evals/specs/cl<N>-*.json
    ```
 
-7. **Full-suite still green**: confirm `bash evals/runner.sh` reports `<N> passed, 0 failed` where `<N>` matches `ls evals/specs/ | wc -l`.
+7. **Pending-spec content fidelity** (only when this CL promotes pre-existing pending specs; v1.9.2 §25): confirm `audit-pending-spec-fidelity.sh` was run for every promoted feature and reported exit 0, OR list every resolution chosen (spec rewrite / architecture amendment / misfiled relocation) per drift mechanism #6.
+   ```bash
+   bash rubric/detectors/audit-pending-spec-fidelity.sh \
+     --pending evals/pending/<phase>/<feature-id>-<label>/ \
+     --arch docs/architecture-v1.9.md --section "<§X>"
+   ```
+
+8. **Full-suite still green**: confirm `bash evals/runner.sh` reports `<N> passed, 0 failed` where `<N>` matches `ls evals/specs/ | wc -l`.
 
 ## Output format
 

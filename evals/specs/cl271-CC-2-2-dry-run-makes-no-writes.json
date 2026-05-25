@@ -1,0 +1,9 @@
+{
+  "name": "detector --dry-run with --fix leaves files unchanged",
+  "command": "cp src/a.ts /tmp/no-any-before.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --fix --dry-run --paths \"src/**/*.ts\"; cmp -s src/a.ts /tmp/no-any-before.ts && echo ok 1>&2 || { echo \"FAIL: file modified during --dry-run\" 1>&2; exit 1; }",
+  "setup": ["mkdir -p src && echo \"const x: any = 1;\" > src/a.ts"],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

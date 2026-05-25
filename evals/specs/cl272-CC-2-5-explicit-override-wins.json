@@ -1,0 +1,13 @@
+{
+  "name": "profile precedence: explicit_override entry wins over extends_rightmost (§2.5 resolution_order)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" profile.yaml | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{const r=JSON.parse(s);if(r.rules[\"g-ts-001\"].severity===\"P0\"&&r.rules[\"g-ts-001\"].source===\"explicit_override\"){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL\\n\");process.exit(1)}});'",
+  "setup": [
+    "printf '%s\\n' 'extends: [strict]\nrules:\n  g-ts-001: warn\noverride:\n  - target: rubric_rule:g-ts-001\n    field: severity\n    from: P1\n    to: P0\n    rationale: test' > profile.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

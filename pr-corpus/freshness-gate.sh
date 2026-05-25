@@ -3,6 +3,16 @@
 # on mode: --strict disables; default-non-strict demotes when severity present;
 # blocks otherwise. --skip-fresh bypasses with audit-log entry.
 set -uo pipefail
+
+# §2.17 dual-mode dispatch.
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+if [ -f "$PLUGIN_ROOT/lib/freshness-gate-217.sh" ]; then
+  # shellcheck disable=SC1091
+  . "$PLUGIN_ROOT/lib/freshness-gate-217.sh"
+  F217_LAST_FETCH_DIR=".claude-tdd-pro/pr-corpus/last-fetch"
+  f217_detect_and_run "$@"
+fi
+
 RULE=""; NOW=""; WINDOW="24h"; STRICT=0; SKIP_FRESH=0; AUDIT=""; EMIT=""
 while [[ $# -gt 0 ]]; do
   case "$1" in

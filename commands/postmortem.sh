@@ -28,6 +28,7 @@ INTERACTIVE=0
 DRAFT_RULE=0
 DRAFT_DETECTOR=0
 SHOW_HISTORICAL=0
+DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -36,10 +37,18 @@ while [[ $# -gt 0 ]]; do
     --draft-rule) DRAFT_RULE=1; shift ;;
     --draft-detector) DRAFT_DETECTOR=1; shift ;;
     --show-historical) SHOW_HISTORICAL=1; shift ;;
+    --dry-run) DRY_RUN=1; shift ;;
     -*) echo "postmortem: unknown flag: $1" >&2; exit 2 ;;
     *) [[ -z "$BUG_DESCRIPTION" ]] && BUG_DESCRIPTION="$1" || BUG_DESCRIPTION="$BUG_DESCRIPTION $1"; shift ;;
   esac
 done
+
+# §2.14 dry-run: short-circuit before any filesystem writes (tests,
+# rule drafts, detector stubs).
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo "postmortem: dry-run; would draft postmortem for: $BUG_DESCRIPTION (emit-test=$EMIT_TEST)" >&2
+  exit 0
+fi
 
 if [[ "$SHOW_HISTORICAL" -eq 1 ]]; then
   POSTMORTEMS_DIR="$PLUGIN_ROOT/seed/postmortems"

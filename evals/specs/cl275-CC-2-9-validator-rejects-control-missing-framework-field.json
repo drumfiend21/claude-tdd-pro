@@ -1,0 +1,13 @@
+{
+  "name": "control mapping validator rejects a control entry missing the required framework field",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-control-mapping.sh\" --controls controls.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'framework' err.txt && echo blocked 1>&2",
+  "setup": [
+    "printf '%b\\n' '- control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending' > controls.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}

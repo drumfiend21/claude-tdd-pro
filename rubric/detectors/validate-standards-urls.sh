@@ -34,7 +34,12 @@ REG="$REG" ruby -ryaml -e '
   end
   errs = []
   required = %w[id name url tier applies_to fetch_frequency]
-  ff_enum = %w[daily weekly monthly]
+  ff_enum = %w[hourly daily weekly monthly]
+  # §2.6 two-tier split: plugin-internal fields are NOT permitted in
+  # the operator-facing registry file (those are derived on the plugin
+  # side during the merge step).
+  forbidden = %w[class authority_tier fragility_tier fragility_strategy fetcher identifier_pattern license_note origin added_by added_at]
+  seen_ids = {}
   doc.each_with_index do |entry, idx|
     unless entry.is_a?(Hash)
       errs << "entry ##{idx}: must be a YAML map"
@@ -54,6 +59,18 @@ REG="$REG" ruby -ryaml -e '
     if entry.key?("applies_to")
       a = entry["applies_to"]
       errs << "id \"#{eid}\": applies_to must be non-empty array" unless a.is_a?(Array) && !a.empty?
+    end
+    # Plugin-internal fields not allowed in operator-facing file.
+    forbidden.each do |k|
+      if entry.key?(k)
+        errs << "id \"#{eid}\": plugin-internal field \"#{k}\" must not appear in operator-facing STANDARDS-URLS.yaml"
+      end
+    end
+    # Uniqueness invariant on id.
+    if entry["id"] && seen_ids[entry["id"]]
+      errs << "duplicate id: \"#{entry["id"]}\""
+    elsif entry["id"]
+      seen_ids[entry["id"]] = true
     end
   end
   if errs.empty?

@@ -83,6 +83,22 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
   fi
   # H-8 license-attribution section: included in every dry-run bundle preview.
   echo "audit-pack: section=license-attribution (H-8 sweep included in bundle)" >&2
+  # §2.9 control mapping: warn on any controls entry with
+  # legal_review_status=pending (the contract calls for an explicit
+  # warning surfaced to the operator at bundle assembly time).
+  if [[ -n "$CONTROLS_FILE" && -f "$CONTROLS_FILE" ]]; then
+    CONTROLS_FILE="$CONTROLS_FILE" ruby -ryaml -e '
+      begin
+        data = YAML.unsafe_load_file(ENV["CONTROLS_FILE"]) || []
+        pending = (data.is_a?(Array) ? data : []).select { |e| e.is_a?(Hash) && e["legal_review_status"] == "pending" }
+        pending.each do |e|
+          STDERR.write("audit-pack: warn legal_review_status=pending framework=#{e["framework"]} control_id=#{e["control_id"]}\n")
+        end
+      rescue => err
+        STDERR.write("audit-pack: warn controls-file parse error: #{err.message}\n")
+      end
+    '
+  fi
   if [[ -n "$AUDIT_LOG_FILE" && -f "$AUDIT_LOG_FILE" ]]; then
     AUDIT_LOG_FILE="$AUDIT_LOG_FILE" SINCE="$SINCE" node -e '
       const fs = require("fs");

@@ -23,6 +23,17 @@
 
 set -uo pipefail
 
+# §2.17 dual-mode dispatch: when --operation is in args, run the §2.17
+# live-freshness-gate handler against the standards last-fetch dir.
+# Otherwise fall through to the legacy S-13 daily-fresh implementation.
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+if [ -f "$PLUGIN_ROOT/lib/freshness-gate-217.sh" ]; then
+  # shellcheck disable=SC1091
+  . "$PLUGIN_ROOT/lib/freshness-gate-217.sh"
+  F217_LAST_FETCH_DIR=".claude-tdd-pro/standards/last-fetch"
+  f217_detect_and_run "$@"
+fi
+
 SOURCE_ID=""
 FETCH_FREQUENCY=""
 NOW_ISO=""
