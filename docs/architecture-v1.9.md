@@ -267,14 +267,17 @@ Per-commit `.claude-tdd-pro/provenance/<commit-sha>.json`:
 
 ### §2.11 SPACE metric schema
 
+File: `space/metrics.yaml`. Top-level `metrics:` key wrapping an array of metric definitions.
+
 ```yaml
-- id: space-perf-rubric-pass-rate
-  dimension: satisfaction | performance | activity | collaboration | efficiency-and-flow
-  source: "..."
-  unit: "..."
-  reporting_window: "..."
-  privacy: local-only
-  opt_in: true
+metrics:
+  - id: space-perf-rubric-pass-rate
+    dimension: satisfaction | performance | activity | collaboration | efficiency-and-flow
+    source: "..."
+    unit: "..."
+    reporting_window: "..."
+    privacy: local-only
+    opt_in: true
 ```
 
 ### §2.12 PR source contract (two-tier)
