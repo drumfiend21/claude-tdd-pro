@@ -1,0 +1,13 @@
+{
+  "name": "STANDARDS-URLS registry accepts an entry with all six operator-facing fields populated per section 2.6",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-standards-urls.sh\" \"$PWD/STANDARDS-URLS.yaml\" && echo ok 1>&2",
+  "setup": [
+    "printf '%b\\n' '- id: google-tsguide\\n  name: Google TypeScript Style Guide\\n  url: https://google.github.io/styleguide/tsguide.html\\n  tier: 1\\n  applies_to: [typescript, react]\\n  fetch_frequency: daily' > STANDARDS-URLS.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
