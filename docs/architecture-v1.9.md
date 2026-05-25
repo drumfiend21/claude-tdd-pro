@@ -332,6 +332,16 @@ Two or more CLs MAY execute concurrently when ALL of: (a) disjoint phase set —
 
 `/audit-pack --emit <format>` writes a portable bundle to `compliance/audit-packs/<bundle-id>/` where `bundle-id = <commit-sha>-<utc-timestamp>`. Formats: `json` (machine-consumable schema), `markdown` (human review), `html` (self-contained for non-cloned review), `tarball` (all formats bundled with detached signature). JSON top-level schema: `{ bundle_schema_version: "1.0", bundle_id, generated_at, commit, profile_snapshot_hash, aibom_uri, control_coverage, evidence_set, risk_classification, audit_log_window: { first_entry, last_entry, checkpoint_uris }, provenance_manifest_uris, decision_trail, standards_freshness, pr_corpus_freshness, compliance_freshness, all_three_fresh_badge, cost_telemetry_summary, signature }`. Schema validates against `compliance/audit-pack-schema.json` (versioned via `bundle_schema_version`). Export is reproducible: same inputs at same commit produce byte-identical bundles via canonical JSON encoding (sorted keys, RFC 8785 JCS), pinned timestamps from C-4 audit log, no wall-clock-time leakage. Bundles are read-only artifacts; ingesting tools (code-review platforms, compliance pipelines, junior-onboarding viewers) consume the schema without coupling to TDD-Pro internals. No new data collected versus C-10; this is a serialization contract over existing content.
 
+### §2.25 Pending-spec content fidelity contract (v1.9.2 amendment — see §25)
+
+Every spec under `evals/pending/<phase>/<feature-id>-<descriptive-label>/` MUST assert behavior using only vocabulary that appears verbatim in `docs/architecture-v1.9.md` for the corresponding feature ID. Audited vocabulary includes: (a) field names referenced in spec setup arrays or command assertions; (b) YAML/JSON document shape (array vs map at top level, nested structure); (c) output format keys; (d) enum values; (e) substrate paths invoked. Test-affordance CLI flag names per §2.X (existing flag-invention discipline) are exempt — they are recognized as test-time invocation surface, not feature surface.
+
+**Pre-promotion gate.** Before any pending feature transitions to `evals/specs/` (via `probe-feature` or `promote-pending`), the operator runs `rubric/detectors/audit-pending-spec-fidelity.sh --pending <path> --arch docs/architecture-v1.9.md --section <§X>`. The script extracts vocabulary candidates from pending specs and reports any not appearing in the architecture section. Output (per discrepancy): `unknown_vocab=<word> spec=<file>:<line>`. Exit 0 only when zero unknown vocabulary remains.
+
+**Resolution options for discrepancies.** (1) Rewrite the pending spec to use arch-spec'd vocabulary. (2) Amend the architecture section to formally include the vocabulary (requires a separate architecture-amendment CL, not bundled with substrate work). (3) Move the spec to `evals/pending/_misfiled/` with a one-line note in the parent folder's `MISFILED.md` explaining why.
+
+**Origin.** This contract codifies the failure mode discovered in CL-273 where 8 of 10 `CC/2-6-standards-source/` pending specs used an invented map-shape with fields `{publisher, license, last_verified, archive_url, etag, derivative_rules}` while §2.6 specifies array-shape with `{id, name, url, tier, applies_to, fetch_frequency}` (operator-facing) plus a defined plugin-internal field list. The folder name passed all existing fidelity audits (CLAUDE.md Step 0, Step 2 architecture fidelity, drift-mechanism catalog items 1–5) because those operate at folder-ID granularity. The drift sat inside spec bodies and would have shipped invented behavior under an arch-named feature. See `docs/memory/feedback-pending-spec-content-fidelity.md` for the worked example and CLAUDE.md drift mechanism #6.
+
 ## §3. Phase F — Foundation
 
 - **F-0** Lock contracts (rubric schema, detector contract, eval spec schema, profile precedence).
@@ -1010,3 +1020,54 @@ Build confidence preserved at 9/10 via canonical staged path; v1.10 amendments l
 Per `CLAUDE.md`, every CL must extract literal feature IDs and §2.X labels from this document. The v1.10 IDs (X-8, X-9, P-10, W-11, W-12, O-12) are canonical and must be used verbatim — never paraphrased as "the LSP feature," "the Codespaces feature," "the scaffolds thing," etc. Folder names under `evals/pending/` for these amendments must be exactly `evals/pending/x/x-8-language-server-protocol-surface/`, `evals/pending/x/x-9-cloud-devcontainer-surface/`, `evals/pending/p/p-10-runtime-model-router/`, `evals/pending/w/w-11-parallel-subagent-orchestrator/`, `evals/pending/w/w-12-conversational-pr-review-subagent/`, `evals/pending/o/o-12-application-scaffolds/`. Test-affordance flag invention discipline (CLAUDE.md) applies as usual.
 
 **Important — ID-collision lesson:** This block exists in part because an external proposal independently assigned X-6 / W-10 / X-7 / X-8 / W-11 to different features, conflicting with v1.9.1 §23. The defense going forward: every proposal that suggests a new architecture feature MUST first read this document end-to-end and confirm the proposed ID is free. The `next available` cursor at v1.10 is: P-11, X-10, W-13, O-13, H-13, plus any unused IDs in F/E/G/S/C/R/N/T/Q/L (which are unchanged from v1.9 base). Future v1.11+ amendments should grep this file for `^\- \*\*[A-Z]-` to enumerate taken IDs before proposing.
+
+## §25. v1.9.2 — Pending-spec content fidelity amendment
+
+A non-feature, governance-only amendment introduced to close the drift class discovered in CL-273: pending specs in `evals/pending/<phase>/<feature-id>-<descriptive-label>/` whose **folder name** correctly traced to an architecture feature but whose **spec body** asserted behavior using vocabulary (field names, YAML shapes, output keys, enum values) not present in the architecture text for that feature ID. The CL-08/09/10 invented-features drift catalog defended against folder-level deviation; this amendment defends against the analogous deviation hidden inside spec contents.
+
+### §25.1 Scope
+
+This amendment introduces no new architecture *feature* IDs. It adds:
+
+1. A new cross-cutting contract — §2.25 (Pending-spec content fidelity contract) — defining the audited vocabulary surface and the pre-promotion gate.
+2. A new substrate detector — `rubric/detectors/audit-pending-spec-fidelity.sh` — that automates discrepancy detection between pending specs and the architecture text.
+3. A new memory file — `docs/memory/feedback-pending-spec-content-fidelity.md` — documenting the discovered failure mode with the §2.6 worked example, indexed from `docs/memory/MEMORY.md` and referenced from `CLAUDE.md`.
+4. A new step in the per-CL workflow loop — Step 0.5 (spec-content fidelity check) — inserted between the existing Step 0 (architecture extraction) and Step 1 (write tests). When the CL promotes pre-existing pending specs rather than writing new ones, Step 0.5 is the binding gate.
+5. A new entry in the CLAUDE.md drift-mechanism catalog — mechanism #6 (Pending-spec invented vocabulary) — with defense pointing back at the substrate detector and the memory file.
+
+### §25.2 Operational semantics
+
+Per `audit-pending-spec-fidelity.sh`:
+
+- **Vocabulary extraction.** Parse each pending spec's `setup` array and `command` string for YAML/JSON key tokens (regex `[a-z][a-z0-9_]*:`), substrate paths (`$CLAUDE_PLUGIN_ROOT/<path>`), and enum-shaped string literals (CLI args, JSON values).
+- **Architecture lookup.** Read the architecture section for the feature ID (resolved from the parent folder name `<feature-id>-<label>`). Extract all words appearing in code-spans, fenced blocks, and field-list lines.
+- **Comparison.** Vocabulary candidates appearing in spec bodies but NOT in architecture are reported as `unknown_vocab=<token> spec=<filename>:<line>`. CLI flag names matching `--[a-z-]+` are exempt (covered by the existing CLI-flag-invention disclosure).
+- **Exit code.** 0 when zero unknowns remain; 1 when discrepancies found (blocks promotion). 2 on usage errors.
+
+### §25.3 Resolution paths for discrepancies
+
+When `audit-pending-spec-fidelity.sh` flags a token, the operator picks one path and disclosures the choice in the next CL's commit body:
+
+1. **Spec rewrite** — change the pending spec to use arch-spec'd vocabulary. Disclosed under "Spec patches in this CL (architecture-fidelity corrections):" — same disclosure surface CL-273 used.
+2. **Architecture amendment** — formally amend the architecture to include the vocabulary. Ships as a separate governance CL (like this §25) without substrate. References the spec being unblocked.
+3. **Misfiled relocation** — move the spec to `evals/pending/_misfiled/<feature-id>/` with a one-line entry in `evals/pending/_misfiled/MISFILED.md` explaining why. Does not block other specs in the same feature.
+
+Mixing paths within one CL is allowed when motivated; commit body must list each path used.
+
+### §25.4 Cross-references
+
+- §2.25 — the contract.
+- CLAUDE.md Step 0.5, drift mechanism #6 — the workflow integration.
+- `rubric/detectors/audit-pending-spec-fidelity.sh` — the substrate.
+- `docs/memory/feedback-pending-spec-content-fidelity.md` — the discipline document.
+- CL-273 — the originating worked example (8/10 CC/2-6-standards-source specs rewritten under path 1 above).
+
+### §25.5 Non-goals
+
+- Does not retroactively audit specs already promoted to `evals/specs/`. Those passed earlier gates and ship behavior the project owns. Re-audit is a separate decision; this amendment is forward-only.
+- Does not amend the existing CLI-flag-invention discipline. Flag names remain a separate disclosure surface (test-affordance), with the auditor exempting them as the existing process expects.
+- Does not change which features ship in §20 weeks. This amendment is governance-only, not surface expansion.
+
+### §25.6 Anti-drift note for future CLs touching §25
+
+The contract surface is fixed at five artifacts (§2.25 contract, the detector, the memory file, CLAUDE.md Step 0.5, drift catalog item #6). Future CLs that extend the auditor (richer vocabulary extraction, additional architecture sections, exemption rules) ship under this §25 umbrella and amend the detector. Future CLs that change the **workflow shape** (e.g., a new Step 0.6 or a different gating point) require a new amendment section, not an in-place edit of this one — preserving the per-amendment historical record the v1.9.1 and v1.10 sections established.

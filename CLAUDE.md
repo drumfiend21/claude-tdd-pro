@@ -2,11 +2,11 @@
 
 ## ARCHITECTURE IS LAW
 
-**The canonical v1.9 architecture (plus v1.9.1 §23 and v1.10 §24 amendments) is at [docs/architecture-v1.9.md](docs/architecture-v1.9.md). It is the source of truth for every feature ID, every §2.X cross-cutting contract, every phase decomposition, and every CL plan.**
+**The canonical v1.9 architecture (plus v1.9.1 §23, v1.10 §24, and v1.9.2 §25 amendments) is at [docs/architecture-v1.9.md](docs/architecture-v1.9.md). It is the source of truth for every feature ID, every §2.X cross-cutting contract, every phase decomposition, and every CL plan.**
 
 **Read it at the start of every prompt.** Before naming any feature, contract, folder, spec, or commit message, extract the literal feature ID and label from this file. Do not infer from memory, ESLint domain knowledge, or "what makes sense for this layer." Do not paraphrase. Do not invent.
 
-If you find yourself reasoning "this should be E-N because…" — STOP. The architecture's E-1..E-17 are listed in §16. Look them up. The same rule applies to every other phase (F, G, S, C, P, R, N, T, Q, H, L, O, X, W) and every cross-cutting contract (§2.1..§2.24).
+If you find yourself reasoning "this should be E-N because…" — STOP. The architecture's E-1..E-17 are listed in §16. Look them up. The same rule applies to every other phase (F, G, S, C, P, R, N, T, Q, H, L, O, X, W) and every cross-cutting contract (§2.1..§2.25).
 
 This rule exists because prior CLs (CL-08, CL-09, CL-10) deviated by inventing decompositions: Phase E's rule registry / AST walker / parallel runner / source code analyzer / suggestion API / performance budget were all invented (the architecture has none of those as features); Phase H's adversarial yaml / path traversal / sandbox / secret leak / privilege boundary were all invented (the architecture's H is operator polish: token-cost transparency, SECURITY.md, /doctor --watch, etc.); cross-cutting contract labels §2.7..§2.22 were assigned plausibly-sounding-but-wrong topics. ~297 specs were deleted in CL-11 to remove the deviation.
 
@@ -21,6 +21,7 @@ The repo carries a project-memory tree at [docs/memory/](docs/memory/) that supp
 - [docs/memory/feedback-implementation-optimization-plan.md](docs/memory/feedback-implementation-optimization-plan.md) — 4 lazy-build scripts + tiered active suite during iteration (reference at the START of every implementation-phase CL)
 - [docs/memory/feedback-bash32-portability-checklist.md](docs/memory/feedback-bash32-portability-checklist.md) — **read BEFORE every new substrate Write/Edit**: 7 recurring macOS bash 3.2 / BSD-tool gotchas (no associative arrays, `wc -l` padding, `printf %`, env-var-passing-first, set -u + empty arrays, BSD grep `--`, redirect order) + help-text-to-stderr bonus. Validated on CL-197: full H-8 promotion passed 10/10 first-run after applying this checklist (vs ~4 spec-fix cycles per CL without it).
 - [docs/memory/feedback-batch-cl-convention.md](docs/memory/feedback-batch-cl-convention.md) — **reference when planning the next CL boundary**: features extending the same substrate file ship as ONE commit (range CL-N..M) with per-feature audit sections in the body. Preserves every CLAUDE.md drift guard; amortizes full-suite wait. Validated on CL-146..161 (L-7..L-23 16-feature batch, audited 2026-05-19 with zero drift).
+- [docs/memory/feedback-pending-spec-content-fidelity.md](docs/memory/feedback-pending-spec-content-fidelity.md) — **read BEFORE promoting any pending feature** (via `probe-feature` or `promote-pending`): the §2.25 / §25 (v1.9.2) gate that catches pending specs whose folder name correctly maps to an architecture feature but whose spec body asserts invented vocabulary. Discovered in CL-273 (8/10 `CC/2-6-standards-source/` specs used invented `publisher` / `license` / `last_verified` / `archive_url` / `etag` / `derivative_rules` for arch-named §2.6). Automated by `rubric/detectors/audit-pending-spec-fidelity.sh`; integrated as Step 0.5 below and drift mechanism #6.
 - [docs/memory/architecture-backlog-conditional-gets.md](docs/memory/architecture-backlog-conditional-gets.md) — v1.8 candidate (conditional GETs prerequisite for in-use polling)
 - [docs/memory/architecture-backlog-in-use-polling.md](docs/memory/architecture-backlog-in-use-polling.md) — v1.8 candidate (millisecond in-use polling for registries)
 - [docs/memory/project-v19-architecture-text.md](docs/memory/project-v19-architecture-text.md) — pointer to `docs/architecture-v1.9.md` (canonical text not duplicated)
@@ -45,6 +46,19 @@ Read [docs/architecture-v1.9.md](docs/architecture-v1.9.md) for the scope you're
 - Asked about definition of done → Read §21.
 
 Never proceed from memory. The architecture file is in the repo precisely so memory loss across sessions cannot cause drift.
+
+### Step 0.5 — Pending-spec content fidelity check (NON-NEGOTIABLE for promotion-only CLs; v1.9.2 §25)
+
+If this CL promotes pre-existing pending specs (via `probe-feature` or `promote-pending`) rather than writing fresh ones in Step 1, you MUST run the §2.25 fidelity gate before any substrate work:
+
+```bash
+bash rubric/detectors/audit-pending-spec-fidelity.sh \
+  --pending evals/pending/<phase>/<feature-id>-<label>/ \
+  --arch docs/architecture-v1.9.md \
+  --section "<§X>"
+```
+
+Exit 0 → proceed. Exit 1 → triage each `unknown_vocab=<token> spec=<file>` line via one of the three §25.3 resolution paths: **(1) Spec rewrite** to arch-spec'd vocabulary (most common), **(2) Architecture amendment** as a separate governance CL, or **(3) Misfiled relocation** to `evals/pending/_misfiled/<feature-id>/`. Disclose every chosen path in the commit body under "Spec patches in this CL (architecture-fidelity corrections):". This step exists because folder-name fidelity is necessary but not sufficient — see drift mechanism #6 below and `docs/memory/feedback-pending-spec-content-fidelity.md`.
 
 ### Step 1 — Write the unit tests
 
@@ -119,11 +133,14 @@ These are the failure modes that have actually happened on this project. Watch f
 
 5. **Pattern-cloned coverage.** Hitting "10 per feature" by writing 10 variants of the same shape test instead of 10 distinct behaviors. **Defense:** verb-diversity check in audit; shape-only specs must justify themselves against architecture text.
 
+6. **Pending-spec invented vocabulary.** Specs that pre-existed in `evals/pending/<phase>/<feature-id>-<label>/` may assert behavior using field names, YAML/JSON shapes, or output keys not in `docs/architecture-v1.9.md` for that feature. The folder name passes every existing fidelity check; the drift hides inside spec bodies. Caught in CL-273 where 8/10 `CC/2-6-standards-source/` specs used invented `publisher` / `license` / `last_verified` / `archive_url` / `etag` / `derivative_rules` for arch-named §2.6 (which actually specifies `id` / `name` / `url` / `tier` / `applies_to` / `fetch_frequency`). **Defense:** Step 0.5 fidelity gate via `rubric/detectors/audit-pending-spec-fidelity.sh`; §2.25 contract; `docs/memory/feedback-pending-spec-content-fidelity.md`. The whole audit machinery before §25 assumed specs and substrate are produced together — pending specs that arrived via a different session were never re-audited at promotion. Step 0.5 closes that gap.
+
 ## How to recognize you are about to drift
 
 - You're reasoning "this should be E-N because…" without having quoted the architecture this turn.
 - You're writing a spec for a feature whose folder name isn't in `docs/architecture-v1.9.md` if you search for the exact ID.
 - You're inventing a new CLI flag and haven't listed it in a "test-affordance" disclosure section.
 - The audit results in your commit body are vague ("all checks pass") rather than specific (per-folder mapping table).
+- You're about to probe or promote pre-existing pending specs without running `audit-pending-spec-fidelity.sh` against them first.
 
 If any of these is true: STOP. Re-read the relevant architecture section. Restart the CL from Step 0.
