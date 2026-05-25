@@ -1,0 +1,9 @@
+{
+  "name": "/help <topic> resolves a known H-9 topic to the matching docs file and prints its contents per the progressive-disclosure entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/help.sh\" getting-started 2>out.txt && grep -q '#' out.txt && echo resolved 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["resolved"]
+  }
+}
