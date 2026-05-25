@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity exits two when --arch is omitted (usage error per the §25.2 contract)",
+  "command": "mkdir -p pending/x && printf '%s' '{}' > pending/x/case.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/x 2>out.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' out.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}

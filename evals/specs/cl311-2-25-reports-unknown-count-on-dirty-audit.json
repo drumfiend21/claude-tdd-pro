@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity reports unknown_count=<N> in the dirty-audit summary line per §25.2",
+  "command": "mkdir -p pending/F-4-x arch && printf 'F-4 minimal\\n' > arch/a.md && printf '%s' '{\"name\":\"x\",\"command\":\"echo alpha: 1; echo beta: 2; echo gamma: 3\",\"expect\":{\"exit_code\":0}}' > pending/F-4-x/c.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'unknown_count=3' out.txt && echo counted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["counted"]
+  }
+}

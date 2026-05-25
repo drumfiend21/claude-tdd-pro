@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity exits zero and reports fidelity_audit=clean when every spec token appears in the architecture vocabulary",
+  "command": "mkdir -p pending/F-4-x arch && printf '%s\\n' '## Phase F' '- **F-4** Drift-detection skill: `rubric: ignore`, `--no-verify`.' > arch/a.md && printf '%s' '{\"name\":\"x\",\"command\":\"grep no-verify file\",\"expect\":{\"exit_code\":0}}' > pending/F-4-x/case.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt && grep -q 'fidelity_audit=clean' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

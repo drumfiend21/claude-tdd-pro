@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity recognizes vocabulary from backticked tokens in the architecture markdown per §25.2",
+  "command": "mkdir -p pending/F-4-x arch && printf '## Phase F\\n- **F-4** uses `custom_field` per the spec.\\n' > arch/a.md && printf '%s' '{\"name\":\"x\",\"command\":\"echo custom_field: yes\",\"expect\":{\"exit_code\":0}}' > pending/F-4-x/c.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt && grep -q 'fidelity_audit=clean' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

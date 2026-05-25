@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity exits one and reports fidelity_audit=dirty when a spec uses a key not in the architecture vocabulary",
+  "command": "mkdir -p pending/F-4-x arch && printf '%s\\n' '## Phase F' '- **F-4** Drift-detection skill.' > arch/a.md && printf '%s' '{\"name\":\"x\",\"command\":\"echo wibblewobble: yes\",\"expect\":{\"exit_code\":0}}' > pending/F-4-x/case.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'fidelity_audit=dirty' out.txt && grep -q 'unknown_vocab=wibblewobble' out.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["blocked"]
+  }
+}

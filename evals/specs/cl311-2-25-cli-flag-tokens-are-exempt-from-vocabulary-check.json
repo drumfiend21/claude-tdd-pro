@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity exempts CLI flag tokens like --paths from the architecture-vocabulary check per the §25.2 exemption clause",
+  "command": "mkdir -p pending/F-4-x arch && printf 'F-4 minimal\\n' > arch/a.md && printf '%s' '{\"name\":\"x\",\"command\":\"bash scan.sh --paths src --out r.jsonl\",\"expect\":{\"exit_code\":0}}' > pending/F-4-x/c.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt && grep -q 'fidelity_audit=clean' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
