@@ -1,0 +1,9 @@
+{
+  "name": "L-1 catalog includes the 18f-identity-idp source with source_class=fedramp-high tier=1 per architecture",
+  "command": "grep -A1 'id: 18f-identity-idp' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" | grep -q 'fedramp-high' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Each L-1 catalog source declares all four required keys id source_class tier applies_to per the architecture table schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/pr-corpus/PR-SOURCES-DEFAULT.yaml\",\"utf8\");const blocks=y.split(/^  - id: /m).slice(1);for(const b of blocks){if(!/source_class:/.test(b)||!/tier:/.test(b)||!/applies_to:/.test(b))process.exit(1);}process.exit(0)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

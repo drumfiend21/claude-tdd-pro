@@ -1,0 +1,9 @@
+{
+  "name": "L-1 catalog includes the bloomberg-memray source at tier 2 per architecture (only tier-2 entry in the catalog)",
+  "command": "grep -A2 'id: bloomberg-memray' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" | grep -q 'tier: 2' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

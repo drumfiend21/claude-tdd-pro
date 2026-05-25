@@ -1,0 +1,45 @@
+# L-1 PR source catalog -- 10 default sources per architecture §16.
+# Operator-editable copy lives at .claude-tdd-pro/PR-SOURCES.yaml (L-17).
+# This file is the default catalog shipped at install time.
+
+sources:
+  - id: cfpb-consumerfinance
+    source_class: federal-financial-regulator
+    tier: 1
+    applies_to: [react, node]
+  - id: 18f-identity-idp
+    source_class: fedramp-high
+    tier: 1
+    applies_to: [node, security]
+  - id: va-vets-website
+    source_class: federal-digital-services
+    tier: 1
+    applies_to: [react, node]
+  - id: gsa-site-scanning
+    source_class: federal-infrastructure
+    tier: 1
+    applies_to: [node]
+  - id: stripe-node
+    source_class: financial-industry
+    tier: 1
+    applies_to: [typescript, node, library]
+  - id: capitalone-cloud-custodian
+    source_class: financial-industry
+    tier: 1
+    applies_to: [python]
+  - id: jpmorganchase-mosaic
+    source_class: financial-industry
+    tier: 1
+    applies_to: [typescript, node, react]
+  - id: finos-perspective
+    source_class: financial-industry-consortium
+    tier: 1
+    applies_to: [typescript, node, performance]
+  - id: kubernetes-kubernetes
+    source_class: gold-standard-process
+    tier: 1
+    applies_to: [infrastructure]
+  - id: bloomberg-memray
+    source_class: financial-industry
+    tier: 2
+    applies_to: [typescript, python]
