@@ -1,0 +1,6 @@
+{
+  "name": "detector respects CLAUDE_TDD_PRO_WORKDIR env to scan files relative to a different directory",
+  "command": "mkdir -p elsewhere && echo 'const x: any = 1;' > elsewhere/a.ts && CLAUDE_TDD_PRO_WORKDIR=\"$PWD/elsewhere\" bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" --json --paths \"*.ts\" 2>out.json; grep -E '\"filename\":\"a\\.ts\"' out.json 1>&2 && echo ok 1>&2 || { echo FAIL 1>&2; exit 2; }; exit 1",
+  "setup": [],
+  "expect": {"exit_code": 1, "stderr_contains": ["ok"]}
+}
