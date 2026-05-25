@@ -23,6 +23,7 @@ DATE=""
 LINK_COMMIT=""
 INTERACTIVE=0
 SEVERITY="medium"
+DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -30,6 +31,7 @@ while [[ $# -gt 0 ]]; do
     --link-commit) LINK_COMMIT="$2"; shift 2 ;;
     --interactive) INTERACTIVE=1; shift ;;
     --severity) SEVERITY="$2"; shift 2 ;;
+    --dry-run) DRY_RUN=1; shift ;;
     -*) echo "incident: unknown flag: $1" >&2; exit 2 ;;
     *) [[ -z "$SUMMARY" ]] && SUMMARY="$1" || SUMMARY="$SUMMARY $1"; shift ;;
   esac
@@ -37,6 +39,12 @@ done
 
 [[ -z "$SUMMARY" ]] && { echo "incident: <summary> argument required" >&2; exit 2; }
 [[ -z "$DATE" ]] && DATE=$(date +%Y-%m-%d)
+
+# §2.14 dry-run: short-circuit before any filesystem writes.
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  echo "incident: dry-run; would record incident on $DATE: $SUMMARY" >&2
+  exit 0
+fi
 
 # Auto-increment 3-digit suffix per same-date incident.
 mkdir -p incidents

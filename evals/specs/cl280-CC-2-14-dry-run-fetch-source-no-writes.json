@@ -1,9 +1,9 @@
 {
   "name": "dry-run: `fetch-source` with --dry-run produces no filesystem writes",
-  "command": "stat -f '%m' . > before.txt 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/rubric/fetch-source.sh\" --registry STANDARDS-URLS.yaml --id src-1 --out fetched.yaml --dry-run >/dev/null 2>&1 && [ ! -e fetched.yaml ] && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/fetch-source.sh\" --registry STANDARDS-URLS.yaml --id src-1 --out fetched.yaml --dry-run >/dev/null 2>&1 && [ ! -e fetched.yaml ] && echo ok 1>&2",
   "setup": [
     "mkdir -p tree && printf 'source:\\n  id: src-1\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' > tree/a.yaml",
-    "printf 'src-1:\\n  publisher: A\\n  url: https://a.com\\n  license: CC-BY-4.0\\n  last_verified: 2026-05-04\\n' > STANDARDS-URLS.yaml",
+    "printf '%b\\n' '- id: src-1\\n  name: A\\n  url: https://a.com\\n  tier: 1\\n  applies_to: [typescript]\\n  fetch_frequency: daily' > STANDARDS-URLS.yaml",
     ":> FAILURE-LOG.md"
   ],
   "expect": {

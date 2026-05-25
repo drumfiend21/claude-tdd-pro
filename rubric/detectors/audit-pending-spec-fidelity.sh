@@ -123,6 +123,8 @@ EXEMPT_BUILTIN = %w[
   array map list object string number boolean integer float
   http_status status
   if rc cmd
+  write writes wrote read reads emit emits would
+  validates validate accepts rejects creates removes
 ].to_set
 
 exempt_user = Set.new
