@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report --format=json emits machine-parseable JSON with window by and totals keys per H-12",
+  "command": "mkdir -p rollup/daily && printf '%s' '{\"entries\":[{\"skill\":\"sync\",\"tokens_in\":10,\"tokens_out\":5}]}' > rollup/daily/2026-05-25.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=daily --format=json --rollup-dir=rollup >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(j.window===\"daily\"&&j.by===\"skill\"&&j.totals?0:1)' && echo json 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["json"]
+  }
+}

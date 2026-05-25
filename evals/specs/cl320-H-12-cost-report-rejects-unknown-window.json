@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report exits two and rejects an unknown --window value not in daily weekly per H-12",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=monthly --rollup-dir=. 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["rejected"]
+  }
+}

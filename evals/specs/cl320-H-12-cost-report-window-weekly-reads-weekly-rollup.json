@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report --window=weekly aggregates entries from cost-rollup/weekly/<YYYY-Www>.json per H-12",
+  "command": "mkdir -p rollup/weekly && printf '%s' '{\"entries\":[{\"profile\":\"react\",\"tokens_in\":500,\"tokens_out\":250,\"invocations\":5}]}' > rollup/weekly/2026-W21.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=weekly --rollup-dir=rollup --by=profile 2>out.txt && grep -q 'window=weekly' out.txt && grep -q 'react' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

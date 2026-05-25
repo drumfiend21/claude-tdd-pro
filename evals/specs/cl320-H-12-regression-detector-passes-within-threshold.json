@@ -1,0 +1,9 @@
+{
+  "name": "rule-cost-regression detector exits zero when current tokens-per-check is within 2x the 30-day median per H-12",
+  "command": "printf '{\"rule\":\"r\",\"tokens_per_check\":100}\\n{\"rule\":\"r\",\"tokens_per_check\":100}\\n{\"rule\":\"r\",\"tokens_per_check\":100}\\n' > hist.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-cost-regression.sh\" --rule r --history hist.jsonl --current 150 2>err.txt && grep -q 'within_threshold=true' err.txt && echo within 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["within"]
+  }
+}
