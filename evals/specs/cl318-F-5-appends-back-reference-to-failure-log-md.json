@@ -1,0 +1,9 @@
+{
+  "name": "/incident appends a back-reference entry to FAILURE-LOG.md linking the incident directory per F-5 cross-reference",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'rate-limit breach' --date 2026-05-25 2>/dev/null && grep -q 'incidents/2026-05-25-001/' FAILURE-LOG.md && echo linked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["linked"]
+  }
+}

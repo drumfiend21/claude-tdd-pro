@@ -1,0 +1,9 @@
+{
+  "name": "/incident records the sideways-session incident under incidents/YYYY-MM-DD-NNN/ per F-5 storage path",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'db lock contention' --date 2026-05-25 2>err.txt && ls incidents/2026-05-25-001/timeline.md >/dev/null 2>&1 && echo recorded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["recorded"]
+  }
+}

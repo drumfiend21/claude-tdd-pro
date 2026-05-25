@@ -1,0 +1,9 @@
+{
+  "name": "/incident --severity high recommends /postmortem follow-up to drive RUBRIC.yaml CLAUDE.md additions per F-5",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'data corruption' --date 2026-05-25 --severity high 2>err.txt && grep -q 'severity=high' err.txt && grep -q 'postmortem' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

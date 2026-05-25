@@ -1,0 +1,9 @@
+{
+  "name": "/incident timeline scaffold records the summary and severity fields supplied at invocation per F-5",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'cache stampede' --date 2026-05-25 --severity medium 2>/dev/null && grep -q 'summary: cache stampede' incidents/2026-05-25-001/timeline.md && grep -q 'severity: medium' incidents/2026-05-25-001/timeline.md && echo scaffolded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["scaffolded"]
+  }
+}

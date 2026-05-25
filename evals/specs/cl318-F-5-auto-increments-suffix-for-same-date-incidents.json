@@ -1,0 +1,9 @@
+{
+  "name": "/incident auto-increments the 3-digit suffix when multiple incidents are recorded on the same date per F-5 collision policy",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'first' --date 2026-05-25 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'second' --date 2026-05-25 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'third' --date 2026-05-25 2>/dev/null && [ -d incidents/2026-05-25-001 ] && [ -d incidents/2026-05-25-002 ] && [ -d incidents/2026-05-25-003 ] && echo incremented 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["incremented"]
+  }
+}
