@@ -53,6 +53,7 @@ SIMULATE_FAIL_AFTER_BYTES=""
 EMIT_LOAD_ORDER=0
 PIN_COMMUNITY=""
 VALIDATE_COMMUNITY_STRUCTURE=0
+OVERRIDE_MODE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -123,6 +124,14 @@ while [[ $# -gt 0 ]]; do
     --validate-community-structure)
       VALIDATE_COMMUNITY_STRUCTURE=1
       shift
+      ;;
+    --override-mode)
+      if [[ $# -lt 2 ]]; then
+        echo "aggregator: --override-mode requires an argument" >&2
+        exit 1
+      fi
+      OVERRIDE_MODE="$2"
+      shift 2
       ;;
     -h|--help)
       sed -n '1,40p' "$0" | grep -E '^# ' | sed 's/^# //'
@@ -220,7 +229,7 @@ fi
 # Implementation lives inline so the aggregator is a single script.
 ROOT_ABS=$(cd "$ROOT" && pwd -P)
 
-AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VALIDATE_COMMUNITY="$VALIDATE_COMMUNITY_STRUCTURE" ruby -ryaml -rjson -e '
+AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VALIDATE_COMMUNITY="$VALIDATE_COMMUNITY_STRUCTURE" AGG_OVERRIDE_MODE="$OVERRIDE_MODE" AGG_EMIT_AUDIT="$EMIT_AUDIT" ruby -ryaml -rjson -e '
   require "find"
   require "pathname"
   require "set"
@@ -296,7 +305,7 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
     walk_namespace.call(full, entry, 2)
   end
 
-  # §2.20 rule-plugin contract validation gates BEFORE the community
+  # section 2.20 rule-plugin contract validation gates BEFORE the community
   # walk: reject bare files at _community/ root, non-kebab-case plugin
   # ids, and plugin folders lacking README.md.
   community_dir = File.join(root, "_community")
@@ -379,6 +388,7 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
   # Populated as we go; operator-namespace files are processed LAST so this
   # index is fully built when overrides are resolved.
   plugin_rules_by_id = {}
+  operator_overrides_by_id = {}
 
   collected.each do |order_index, relpath, abspath, ns_name|
     # G-12 composition: skip files that failed validation (when --validate-first
@@ -452,7 +462,7 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
         final_id = "#{plugin_id}/#{raw_id}"
       end
 
-      # §2.20 cross-plugin prefix rejection (opt-in via
+      # section 2.20 cross-plugin prefix rejection (opt-in via
       # --validate-community-structure): when a rule in
       # _community/<acme>/ declares an id like `contoso/foo`, reject.
       if ENV["AGG_VALIDATE_COMMUNITY"] == "1" && origin == "community" && plugin_id && raw_id.include?("/")
@@ -469,7 +479,7 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
       annotated["source_file"] = relpath
       annotated["source_namespace"] = ns_name
       # Legacy origin is always a string for backwards compatibility
-      # with the active suite. §2.20 introduces a sibling
+      # with the active suite. section 2.20 introduces a sibling
       # `community_plugin` field (community origin only) carrying the
       # plugin id; downstream consumers needing structured-origin
       # semantics use this field alongside origin.
@@ -494,16 +504,82 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
         plugin_rules_by_id[final_id] = annotated
       end
 
-      # Operator-override marking: if an operator rule shares an id with a
-      # plugin rule already in the registry, mark the plugin rule as
-      # superseded and the operator rule as superseding.
-      if origin == "operator" && plugin_rules_by_id.key?(final_id)
-        plugin_target = plugin_rules_by_id[final_id]
-        plugin_target["superseded_by_operator"] = true
-        annotated["supersedes"] = {
-          "source_file" => plugin_target["source_file"],
-          "original_origin" => "plugin"
-        }
+      # Operator-override marking per section 2.22.
+      if origin == "operator"
+        # section 2.22 multi-operator-override rejection: if another _operator
+        # file already declared this id, that is ambiguous and rejected.
+        if operator_overrides_by_id.key?(final_id)
+          first = operator_overrides_by_id[final_id]
+          STDERR.puts "aggregator: duplicate operator override for rule_id=#{final_id} (first in #{first}, now in #{relpath}); _operator overrides must not be multiply-defined"
+          community_redefinition_conflict = true
+          next
+        end
+        operator_overrides_by_id[final_id] = relpath
+
+        # section 2.22 disable handling: if the operator rule sets `disable: true`,
+        # remove the override AND any plugin rule with the same id from
+        # the output entirely. Also still emit the audit-override event.
+        is_disabled = rule["disable"] == true || rule["disabled"] == true
+
+        if plugin_rules_by_id.key?(final_id)
+          plugin_target = plugin_rules_by_id[final_id]
+
+          # section 2.22 --override-mode severity-only: when set, the operator
+          # may only change the severity field. Any other diff is
+          # rejected with the violating field names on stderr.
+          if ENV["AGG_OVERRIDE_MODE"] == "severity-only"
+            diffs = []
+            %w[name description detector type fixable has_suggestions docs_url].each do |k|
+              if rule.key?(k) && plugin_target[k] != rule[k]
+                diffs << k
+              end
+            end
+            unless diffs.empty?
+              STDERR.puts "aggregator: --override-mode=severity-only violation for rule_id=#{final_id} in #{relpath}: changed fields #{diffs.join(%q{, })}"
+              community_redefinition_conflict = true
+              next
+            end
+          end
+
+          plugin_target["superseded_by_operator"] = true
+          # Preserve the legacy contract: supersedes.source_file points
+          # to the plugin source (the file being superseded). The
+          # operator file is recorded as operator_source for section 2.22
+          # consumers that need to identify the superseder.
+          supersedes_block = {
+            "source_file"     => plugin_target["source_file"],
+            "operator_source" => relpath,
+            "original_origin" => "plugin"
+          }
+          plugin_target["supersedes"] = supersedes_block
+          annotated["supersedes"]     = supersedes_block
+
+          # section 2.22 audit emission: write an operator-override event to
+          # --emit-audit (when supplied).
+          audit_path = ENV["AGG_EMIT_AUDIT"].to_s
+          if !audit_path.empty?
+            require "fileutils"
+            FileUtils.mkdir_p(File.dirname(audit_path)) if !File.exist?(File.dirname(audit_path))
+            File.open(audit_path, "a") { |f|
+              f.write(JSON.generate({
+                "event"             => "operator-override",
+                "rule_id"           => final_id,
+                "plugin_source"     => plugin_target["source_file"],
+                "operator_source"   => relpath,
+                "disabled"          => is_disabled,
+                "at"                => Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+              }) + "\n")
+            }
+          end
+
+          if is_disabled
+            # Remove the plugin rule and skip emitting the operator
+            # entry. The audit entry above records the disable action.
+            rules.reject! { |r| r["id"] == final_id && r["source_namespace"] != "_operator" }
+            plugin_target["disabled"] = true
+            next
+          end
+        end
       end
 
       rules << annotated
@@ -523,7 +599,7 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
     "rules" => rules
   }
 
-  # §2.20 --emit-load-order: prepend load_order array reflecting the
+  # section 2.20 --emit-load-order: prepend load_order array reflecting the
   # canonical aggregation order (_universal first, plugin namespaces,
   # _community, _operator last). The frontend uses this to verify that
   # community plugins are loaded between plugin namespaces and operator

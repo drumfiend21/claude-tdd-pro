@@ -1,6 +1,6 @@
 {
   "name": "operator override: when both exist, the operator version is the active rule (its description, severity wins)",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json 2>out.json && grep -E '\"description\":\"stricter\"' out.json 1>&2 && echo ok 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json > out.txt 2>/dev/null && grep -E '\"description\":\"stricter\"' out.txt 1>&2 && echo ok 1>&2",
   "setup": [
     "mkdir -p tree/google tree/_operator",
     "printf 'source:\\n  id: g\\n  authoritative_publisher: G\\n  authoritative_url: https://g.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: r1, name: r1, description: lenient, detector: x}\\n' > tree/google/g.yaml",
