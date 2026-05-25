@@ -1,0 +1,13 @@
+{
+  "name": "control mapping validator accepts the reviewed_by:<reviewer>:<date> form of legal_review_status per section 2.9",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-control-mapping.sh\" --controls controls.yaml 2>out.txt && grep -q 'valid=true' out.txt && echo ok 1>&2",
+  "setup": [
+    "printf '%b\\n' '- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: reviewed_by:alice:2026-05-13' > controls.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -12,8 +12,12 @@
 #                       e.g. evals/pending/CC/2-6-standards-source/
 #   --arch PATH       architecture file (required)
 #                       e.g. docs/architecture-v1.9.md
-#   --section LABEL   architecture section label to constrain the lookup
-#                     to (recommended). e.g. "§2.6" or "§11" or "§16"
+#   --section LABEL   OPTIONAL architecture section label to additionally
+#                     show as context (e.g. "§2.6" or "§11"). When set,
+#                     vocabulary first checked against the section, then
+#                     fallback to whole-architecture (cross-section
+#                     references like §2.1 schema fields appearing in
+#                     a §2.9 spec are legitimate and should not flag).
 #   --exempt-file PATH  optional newline-separated file of exempt tokens
 #
 # Exit codes:
@@ -68,28 +72,19 @@ Encoding.default_internal = Encoding::UTF_8
 # Build the architecture vocabulary set for the constrained section.
 arch_text = File.read(arch_file, encoding: 'UTF-8')
 
-if section.empty?
-  arch_window = arch_text
-else
-  # Find the section heading and slurp until the next heading of the
-  # same or higher depth. Sections like §2.X live under ### headings;
-  # phases like §11 live under ## headings.
+# Default to whole-architecture vocabulary lookup. Cross-section
+# references (e.g. a §2.9 spec referencing §2.1 rule schema fields like
+# `controls` and `detector`) are legitimate. The --section flag is
+# informational; the actual gate is whole-architecture.
+arch_window = arch_text
+if !section.empty?
+  # Verify section exists; warn if not. Don't constrain the vocabulary
+  # window — that would false-positive on cross-section references.
   section_utf8 = section.dup.force_encoding('UTF-8')
   esc = Regexp.escape(section_utf8)
   re_start = Regexp.new("^(\#+)\\s+#{esc}[^\\n]*\\n", Regexp::MULTILINE)
-  start_match = arch_text.match(re_start)
-  if start_match
-    start_idx = start_match.pre_match.length + start_match[0].length
-    depth     = start_match[1].length
-    rest      = arch_text[start_idx..]
-    # Match next heading of same-or-shallower depth.
-    re_next = Regexp.new("^\#{1,#{depth}}\\s+\\S", Regexp::MULTILINE)
-    next_match = rest.match(re_next)
-    end_idx = next_match ? next_match.pre_match.length : rest.length
-    arch_window = rest[0, end_idx]
-  else
-    STDERR.write("audit-pending-spec-fidelity: section #{section} not found in #{arch_file}\n")
-    exit 2
+  unless arch_text.match(re_start)
+    STDERR.write("audit-pending-spec-fidelity: WARNING section #{section} not found in #{arch_file}\n")
   end
 end
 
@@ -109,10 +104,10 @@ end
 arch_window.scan(/^\s*([a-zA-Z][a-zA-Z0-9_]*)\s*:/m) do |m|
   arch_vocab << m[0].downcase
 end
-# Inline `<word>` mentions
-arch_window.scan(/\b([a-z][a-z0-9_]{2,})\b/) do |m|
-  arch_vocab << m[0].downcase
-end
+# NOTE: deliberately do NOT also pull every lowercase word from prose —
+# that would render the auditor toothless (any common-sounding invented
+# field name appears as substring in prose somewhere). Vocabulary
+# evidence must be code-shaped (backtick, fenced block, or YAML key).
 
 # Exempt set: CLI flags, common English, fixture noise.
 EXEMPT_BUILTIN = %w[
@@ -161,10 +156,18 @@ specs.each do |spec_path|
     next
   end
   haystack = ((d['setup'] || []).join("\n") + "\n" + d['command'].to_s)
+  # Normalize JSON-encoded newlines and tabs so the field-key regex
+  # doesn't false-positive on the `n` after `\n` (and similar escapes
+  # embedded in spec setup strings).
+  haystack = haystack.gsub(/\\[nrt]/, ' ')
   spec_base = File.basename(spec_path)
   # Extract YAML/JSON keys appearing in haystack: "<word>:" with no
-  # preceding alphanumeric (to avoid URLs like "https://").
-  haystack.scan(/(?:^|[\s\\"\{\[,])([a-z][a-z0-9_]+):/m) do |m|
+  # preceding backslash (to avoid escape-sequence tails like \nfoo:)
+  # and no preceding alphanumeric (to avoid URLs like "https://").
+  # Exclude when preceded by `:` to avoid matching the value half of
+  # compound identifiers like `reviewed_by:<reviewer>:<date>` where
+  # `<reviewer>` is a test fixture name, not a vocabulary key.
+  haystack.scan(/(?<![\\A-Za-z0-9_:])([a-z][a-z0-9_]+):/m) do |m|
     tok = m[0].downcase
     next if exempt?(tok, EXEMPT_BUILTIN, exempt_user)
     next if arch_vocab.include?(tok)

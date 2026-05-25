@@ -1,0 +1,13 @@
+{
+  "name": "audit-pack emits a warning when any control in compliance controls yaml has legal_review_status pending per section 2.9",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --controls-file compliance/controls.yaml --dry-run 2>out.txt; grep -q 'warn' out.txt && grep -q 'pending' out.txt && echo ok 1>&2",
+  "setup": [
+    "mkdir -p compliance && printf '%b\\n' '- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]\\n  legal_review_status: pending' > compliance/controls.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

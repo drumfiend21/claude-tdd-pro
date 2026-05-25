@@ -1,0 +1,13 @@
+{
+  "name": "control mapping validator rejects a control entry missing the required legal_review_status field",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-control-mapping.sh\" --controls controls.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'legal_review_status' err.txt && echo blocked 1>&2",
+  "setup": [
+    "printf '%b\\n' '- framework: soc2-tsc\\n  control_id: CC8.1\\n  satisfied_by: [rubric_rule]' > controls.yaml"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocked"
+    ]
+  }
+}
