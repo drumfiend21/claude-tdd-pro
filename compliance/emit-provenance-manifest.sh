@@ -18,14 +18,16 @@
 COMMIT=""
 OUT=""
 NOW=""
+STANDARDS_CITED=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --commit) COMMIT="${2-}"; shift 2 ;;
     --out)    OUT="${2-}";    shift 2 ;;
     --now)    NOW="${2-}";    shift 2 ;;
+    --standards-cited) STANDARDS_CITED="${2-}"; shift 2 ;;
     -h|--help)
-      echo "Usage: emit-provenance-manifest.sh --commit <sha> --out <path> --now <iso>" >&2
+      echo "Usage: emit-provenance-manifest.sh --commit <sha> --out <path> --now <iso> [--standards-cited <id>]" >&2
       exit 0
       ;;
     *) echo "emit-provenance-manifest: unknown arg: $1" >&2; exit 2 ;;
@@ -37,7 +39,7 @@ if [ -z "$COMMIT" ] || [ -z "$OUT" ] || [ -z "$NOW" ]; then
   exit 2
 fi
 
-COMMIT_SHA="$COMMIT" OUT_PATH="$OUT" NOW_ISO="$NOW" ruby - <<'RUBY'
+COMMIT_SHA="$COMMIT" OUT_PATH="$OUT" NOW_ISO="$NOW" STANDARDS_CITED="$STANDARDS_CITED" ruby - <<'RUBY'
 require 'json'
 
 doc = {
@@ -57,7 +59,22 @@ doc = {
     "rules_passed" => [],
     "rules_blocked" => [],
   },
-  "standards_state"  => {},
+  "standards_state"  => (lambda {
+    cited = ENV["STANDARDS_CITED"].to_s
+    result = {}
+    cited.split(",").reject(&:empty?).each do |id|
+      result[id] = {
+        "content_hash" => nil,
+        "fetched_at"   => nil,
+        "freshness_at_generation" => "fresh-within-fetch-frequency"
+      }
+      last_fetch = File.join(".claude-tdd-pro/standards/last-fetch", "#{id}.txt")
+      if File.exist?(last_fetch)
+        result[id]["fetched_at"] = File.read(last_fetch).strip
+      end
+    end
+    result
+  }).call,
   "pr_corpus_state"  => {},
   "compliance_state" => {},
   "human_review" => {
