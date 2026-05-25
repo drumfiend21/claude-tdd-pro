@@ -1,0 +1,16 @@
+{
+  "name": "community namespacing: a rule in _community/acme/ pre-namespaced as \"contoso/foo\" (wrong prefix) is rejected",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --validate-community-structure",
+  "setup": [
+    "mkdir -p tree/_community/acme",
+    "printf 'source:\\n  id: a\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: contoso/foo, name: foo, description: x, detector: x}\\n' > tree/_community/acme/x.yaml",
+    "printf '%s\\n' 'community plugin readme' > tree/_community/acme/README.md"
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "contoso/foo",
+      "acme"
+    ]
+  }
+}

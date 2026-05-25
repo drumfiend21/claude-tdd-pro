@@ -1,0 +1,15 @@
+{
+  "name": "community namespacing: aggregated rule output includes origin community plus a community_plugin field carrying the plugin id",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json > out.txt 2>/dev/null && grep -E '\"origin\":\"community\"' out.txt 1>&2 && grep -E '\"community_plugin\":\"acme\"' out.txt 1>&2 && echo ok 1>&2",
+  "setup": [
+    "mkdir -p tree/_community/acme",
+    "printf 'source:\\n  id: a\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules:\\n  - {id: foo, name: foo, description: x, detector: x}\\n' > tree/_community/acme/x.yaml",
+    "printf '%s\\n' 'community plugin readme' > tree/_community/acme/README.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

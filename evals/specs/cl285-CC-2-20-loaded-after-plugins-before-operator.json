@@ -1,0 +1,15 @@
+{
+  "name": "community namespacing: load order is _universal → plugins → _community → _operator",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root \"$PWD/tree\" --format json --emit-load-order > out.txt 2>/dev/null && node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"out.txt\",\"utf8\"));const ord=r.load_order;const idx=name=>ord.findIndex(x=>x.startsWith(name));if(idx(\"_universal\")<idx(\"google\")&&idx(\"google\")<idx(\"_community\")&&idx(\"_community\")<idx(\"_operator\")){process.stderr.write(\"ok\\n\")}else{process.stderr.write(\"FAIL: \"+JSON.stringify(ord)+\"\\n\");process.exit(1)}'",
+  "setup": [
+    "mkdir -p tree/_universal tree/google tree/_community/acme tree/_operator",
+    "for d in _universal google _community/acme _operator; do safe=$(echo \"$d\"|tr '/' '-'); printf 'source:\\n  id: s-%s\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\nrules: []\\n' \"$safe\" > \"tree/${d}/x.yaml\"; done",
+    "printf '%s\\n' 'community plugin readme' > tree/_community/acme/README.md"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

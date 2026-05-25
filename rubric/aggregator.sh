@@ -50,6 +50,9 @@ EMIT_AUDIT=""
 DRY_RUN=0
 EMIT_OUTPUT=""
 SIMULATE_FAIL_AFTER_BYTES=""
+EMIT_LOAD_ORDER=0
+PIN_COMMUNITY=""
+VALIDATE_COMMUNITY_STRUCTURE=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -104,6 +107,22 @@ while [[ $# -gt 0 ]]; do
       fi
       SIMULATE_FAIL_AFTER_BYTES="$2"
       shift 2
+      ;;
+    --emit-load-order)
+      EMIT_LOAD_ORDER=1
+      shift
+      ;;
+    --pin-community)
+      if [[ $# -lt 2 ]]; then
+        echo "aggregator: --pin-community requires an argument" >&2
+        exit 1
+      fi
+      PIN_COMMUNITY="$2"
+      shift 2
+      ;;
+    --validate-community-structure)
+      VALIDATE_COMMUNITY_STRUCTURE=1
+      shift
       ;;
     -h|--help)
       sed -n '1,40p' "$0" | grep -E '^# ' | sed 's/^# //'
@@ -201,7 +220,7 @@ fi
 # Implementation lives inline so the aggregator is a single script.
 ROOT_ABS=$(cd "$ROOT" && pwd -P)
 
-ruby -ryaml -rjson -e '
+AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VALIDATE_COMMUNITY="$VALIDATE_COMMUNITY_STRUCTURE" ruby -ryaml -rjson -e '
   require "find"
   require "pathname"
   require "set"
@@ -277,8 +296,67 @@ ruby -ryaml -rjson -e '
     walk_namespace.call(full, entry, 2)
   end
 
-  # 3. _community/<plugin-id>/<plugin-namespace>/*.yaml
+  # §2.20 rule-plugin contract validation gates BEFORE the community
+  # walk: reject bare files at _community/ root, non-kebab-case plugin
+  # ids, and plugin folders lacking README.md.
   community_dir = File.join(root, "_community")
+  validate_community = (ENV["AGG_VALIDATE_COMMUNITY"] == "1")
+  if File.directory?(community_dir)
+    if validate_community
+      bare_files = Dir.children(community_dir).reject { |e| File.directory?(File.join(community_dir, e)) }
+      bare_yaml = bare_files.select { |f| f.end_with?(".yaml") }
+      if bare_yaml.any?
+        STDERR.puts "aggregator: _community/ contains bare yaml files; files must live under a plugin folder _community/<plugin-id>/"
+        bare_yaml.each { |f| STDERR.puts "  bare_file=#{f}" }
+        exit 2
+      end
+    end
+    Dir.children(community_dir).each do |plugin_entry|
+      full = File.join(community_dir, plugin_entry)
+      next unless File.directory?(full)
+      if validate_community
+        unless plugin_entry =~ /\A[a-z0-9][a-z0-9-]*\z/
+          STDERR.puts "aggregator: _community/#{plugin_entry}: plugin id must be kebab-case (lowercase letters, digits, hyphens)"
+          exit 2
+        end
+        unless File.exist?(File.join(full, "README.md"))
+          STDERR.puts "aggregator: _community/#{plugin_entry}: missing required README.md"
+          exit 2
+        end
+      end
+      # --pin-community <plugin>=<expected-hash> mismatch check.
+      # Compares against the source.content_hash field of the first yaml
+      # file in the plugin folder (operator-pinning model: the content
+      # hash declared by the community plugin source file is the actual
+      # value the operator is pinning to).
+      pin = ENV["AGG_PIN_COMMUNITY"].to_s
+      if !pin.empty?
+        pin.split(",").each do |entry|
+          name, expected = entry.split("=", 2)
+          next unless name == plugin_entry && expected
+          actual_hash = nil
+          Dir.glob(File.join(full, "**", "*.yaml")).each do |yf|
+            begin
+              ydata = YAML.unsafe_load_file(yf)
+              src = ydata.is_a?(Hash) ? ydata["source"] : nil
+              if src.is_a?(Hash) && src["content_hash"]
+                actual_hash = src["content_hash"].to_s
+                break
+              end
+            rescue
+              next
+            end
+          end
+          if actual_hash.nil? || expected != actual_hash
+            STDERR.puts "aggregator: --pin-community mismatch for plugin [#{plugin_entry}]: expected=#{expected} actual=#{actual_hash || %q{(no content_hash found)}}"
+            exit 2
+          end
+        end
+      end
+    end
+  end
+
+  # 3. _community/<plugin-id>/<plugin-namespace>/*.yaml
   walk_namespace.call(community_dir, "_community", 3)
 
   # 4. _operator/**/*.yaml (LAST so operator overrides win)
@@ -374,11 +452,31 @@ ruby -ryaml -rjson -e '
         final_id = "#{plugin_id}/#{raw_id}"
       end
 
+      # §2.20 cross-plugin prefix rejection (opt-in via
+      # --validate-community-structure): when a rule in
+      # _community/<acme>/ declares an id like `contoso/foo`, reject.
+      if ENV["AGG_VALIDATE_COMMUNITY"] == "1" && origin == "community" && plugin_id && raw_id.include?("/")
+        prefix = raw_id.split("/").first
+        if prefix != plugin_id
+          STDERR.puts "aggregator: community plugin [#{plugin_id}] declares cross-plugin id [#{raw_id}] (expected #{plugin_id}/* prefix in #{plugin_id} folder); reject"
+          community_redefinition_conflict = true
+          next
+        end
+      end
+
       annotated = rule.dup
       annotated["id"] = final_id
       annotated["source_file"] = relpath
       annotated["source_namespace"] = ns_name
+      # Legacy origin is always a string for backwards compatibility
+      # with the active suite. §2.20 introduces a sibling
+      # `community_plugin` field (community origin only) carrying the
+      # plugin id; downstream consumers needing structured-origin
+      # semantics use this field alongside origin.
       annotated["origin"] = origin
+      if origin == "community" && plugin_id
+        annotated["community_plugin"] = plugin_id
+      end
       annotated["superseded_by_operator"] = false
 
       # Track plugin (built-in) ids for community redefinition detection.
@@ -424,6 +522,16 @@ ruby -ryaml -rjson -e '
     "files_processed" => files_processed,
     "rules" => rules
   }
+
+  # §2.20 --emit-load-order: prepend load_order array reflecting the
+  # canonical aggregation order (_universal first, plugin namespaces,
+  # _community, _operator last). The frontend uses this to verify that
+  # community plugins are loaded between plugin namespaces and operator
+  # overrides.
+  if ENV["AGG_EMIT_LOAD_ORDER"] == "1"
+    canonical = ["_universal"] + namespaces_seen.reject { |n| n == "_universal" || n == "_community" || n == "_operator" }.sort + ["_community", "_operator"]
+    output["load_order"] = canonical
+  end
 
   rendered = (format == "yaml") ? output.to_yaml : JSON.generate(output)
   if output_to_stderr

@@ -4,7 +4,8 @@
   "setup": [
     "mkdir -p tree/_community/acme",
     "printf 'source:\\n  id: a\\n  authoritative_publisher: A\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:ACTUAL\\nrules:\\n  - {id: foo, name: foo, description: x, detector: x}\\n' > tree/_community/acme/x.yaml",
-    "echo 'maintainer: a@b.c\\nlicense: MIT' > tree/_community/acme/README.md"
+    "echo 'maintainer: a@b.c\\nlicense: MIT' > tree/_community/acme/README.md",
+    "printf '%s\\n' 'community plugin readme' > tree/_community/acme/README.md"
   ],
   "expect": {
     "exit_code": 2,
