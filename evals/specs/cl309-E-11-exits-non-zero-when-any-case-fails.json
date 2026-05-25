@@ -1,0 +1,9 @@
+{
+  "name": "RuleTester exits non-zero when any case for any rule fails -- the H-11 CI gate red path",
+  "command": "mkdir -p tests/r/invalid && printf 'eval(bad)\\n' > tests/r/invalid/c.ts && printf '#!/usr/bin/env bash\\nexit 0\\n' > stub.sh && chmod +x stub.sh && bash \"$CLAUDE_PLUGIN_ROOT/rubric/test-rule.sh\" r --tests-dir tests --detector stub.sh 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'total pass=0 fail=1' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["blocked"]
+  }
+}

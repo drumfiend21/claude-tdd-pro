@@ -1,0 +1,9 @@
+{
+  "name": "RuleTester discovers .json case files under valid/ and invalid/ per the §16 architecture file extension contract",
+  "command": "mkdir -p tests/r/valid && printf '{\"code\":\"x\"}\\n' > tests/r/valid/case1.json && printf '{\"code\":\"y\"}\\n' > tests/r/valid/case2.json && printf '#!/usr/bin/env bash\\nexit 0\\n' > stub.sh && chmod +x stub.sh && bash \"$CLAUDE_PLUGIN_ROOT/rubric/test-rule.sh\" r --tests-dir tests --detector stub.sh 2>out.txt && grep -q 'pass=2' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

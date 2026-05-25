@@ -1,0 +1,9 @@
+{
+  "name": "RuleTester reports an invalid case as failing when the detector does not fire (false-negative on invalid code)",
+  "command": "mkdir -p tests/my-rule/invalid && printf 'eval(\"bad\")\\n' > tests/my-rule/invalid/a.ts && printf '#!/usr/bin/env bash\\nexit 0\\n' > stub.sh && chmod +x stub.sh && bash \"$CLAUDE_PLUGIN_ROOT/rubric/test-rule.sh\" my-rule --tests-dir tests --detector stub.sh 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'FAIL rule=my-rule case=invalid/a.ts' err.txt && echo failed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["failed"]
+  }
+}

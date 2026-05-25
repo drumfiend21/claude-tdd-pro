@@ -1,0 +1,9 @@
+{
+  "name": "RuleTester framework script ships at rubric/test-rule.sh per the §16 E-11 architecture-named path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/test-rule.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
