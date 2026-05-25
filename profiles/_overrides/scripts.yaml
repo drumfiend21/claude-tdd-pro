@@ -1,0 +1,12 @@
+# E-3 glob-based override recipe -- build / ops scripts.
+# Relaxes rules in shell-style scripting code where exits / sync I/O
+# are conventional.
+overrides:
+  - files:
+      - "scripts/**"
+      - "bin/**"
+      - ".github/scripts/**"
+      - "tools/**"
+    rules:
+      no-process-exit: off
+      no-sync: off

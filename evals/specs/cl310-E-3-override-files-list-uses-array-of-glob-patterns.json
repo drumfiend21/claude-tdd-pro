@@ -1,0 +1,9 @@
+{
+  "name": "every shipped override recipe declares overrides[].files as an array of glob patterns per §16 E-3 schema",
+  "command": "for f in test-files critical-paths scripts stories generated; do node -e \"const y=require('fs').readFileSync('$CLAUDE_PLUGIN_ROOT/profiles/_overrides/${f}.yaml','utf8');const m=y.match(/files:\\\\s*\\\\n((?:\\\\s+-\\\\s+\\\"[^\\\"]+\\\"\\\\s*\\\\n?)+)/);if(!m){process.exit(2)}\" || { echo \"FAIL $f missing files: array\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

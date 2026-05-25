@@ -1,0 +1,12 @@
+# E-3 glob-based override recipe -- Storybook stories.
+# Relaxes magic-numbers and unused-vars in component story fixtures.
+overrides:
+  - files:
+      - "**/*.stories.ts"
+      - "**/*.stories.tsx"
+      - "**/*.story.tsx"
+      - "stories/**"
+      - ".storybook/**"
+    rules:
+      no-magic-numbers: off
+      no-unused-vars: off

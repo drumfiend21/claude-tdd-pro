@@ -1,0 +1,15 @@
+# E-3 glob-based override recipe -- generated code.
+# Disables most rules in generated / built artifacts.
+overrides:
+  - files:
+      - "**/*.gen.ts"
+      - "**/*.generated.ts"
+      - "**/*.pb.ts"
+      - "**/__generated__/**"
+      - "dist/**"
+      - "build/**"
+      - "out/**"
+      - ".next/**"
+    rules:
+      no-magic-numbers: off
+      no-explicit-any: off

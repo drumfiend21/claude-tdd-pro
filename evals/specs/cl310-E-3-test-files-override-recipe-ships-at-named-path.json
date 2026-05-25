@@ -1,0 +1,9 @@
+{
+  "name": "glob-overrides recipe profiles/_overrides/test-files.yaml ships at the architecture-named path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/profiles/_overrides/test-files.yaml\" ] && grep -q 'overrides:' \"$CLAUDE_PLUGIN_ROOT/profiles/_overrides/test-files.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

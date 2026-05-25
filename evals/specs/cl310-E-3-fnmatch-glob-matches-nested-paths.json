@@ -1,0 +1,9 @@
+{
+  "name": "profiles/active.sh fnmatch glob matching applies to nested paths like src/sub/foo.test.ts when files glob is **/*.test.ts",
+  "command": "printf 'name: t\\nextends: []\\nrules:\\n  no-eval: error\\noverrides:\\n  - files: [\"**/*.test.ts\"]\\n    rules:\\n      no-eval: off\\n' > p.yaml && mkdir -p tree && printf 'id: no-eval\\n' > tree/no-eval.yaml && bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" p.yaml --tree tree --emit-resolved --for-file src/components/Button/Button.test.ts 2>out.txt && grep -q '\"severity\":\"false\"' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
