@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem --draft-rule scaffolds a rubric rule YAML at rubric/_draft/new-rule.yaml per the F-1 optional draft-rule clause",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'missing input check' --draft-rule 2>err.txt && [ -s rubric/_draft/new-rule.yaml ] && grep -q 'id: drafted-from-postmortem' rubric/_draft/new-rule.yaml && echo drafted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["drafted"]
+  }
+}

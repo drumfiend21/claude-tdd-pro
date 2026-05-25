@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem --draft-detector scaffolds a detector script under rubric/detectors/_draft/ per F-1 detector-contract scaffold clause",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'unsigned commit' --draft-detector 2>err.txt && ls rubric/detectors/_draft/postmortem-*-unsigned-commit.sh >/dev/null 2>&1 && grep -q 'detector contract' rubric/detectors/_draft/postmortem-*-unsigned-commit.sh && echo drafted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["drafted"]
+  }
+}

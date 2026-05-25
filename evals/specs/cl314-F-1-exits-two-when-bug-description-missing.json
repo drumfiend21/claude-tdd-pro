@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem exits two with a clear error message when invoked without the required bug-description argument per the F-1 entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}

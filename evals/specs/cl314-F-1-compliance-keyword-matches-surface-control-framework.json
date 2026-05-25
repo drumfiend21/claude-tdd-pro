@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem surfaces compliance-layer keyword matches for a bug description aligned with a known control framework per F-1",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'missing audit log entry' 2>out.txt && grep -q 'compliance-layer' out.txt && grep -q 'soc2-tsc' out.txt && echo matched 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["matched"]
+  }
+}
