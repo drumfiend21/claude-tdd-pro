@@ -1,0 +1,9 @@
+{
+  "name": "concurrent-cl-gate accepts a candidate that is disjoint with every active CL across all five §2.23 dimensions",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"s1\",\"phases\":[\"E\"],\"lock_sections\":[\"rubric\"],\"state_subsections\":[\"commits\"],\"source_folders\":[\"google-jsguide/x.yaml\"],\"branch\":\"feat/x\"}' > sessions/s1.json && printf '%s' '{\"session_id\":\"s2\",\"phases\":[\"F\"],\"lock_sections\":[\"profiles\"],\"state_subsections\":[\"spec_path\"],\"source_folders\":[\"google-pyguide/y.yaml\"],\"branch\":\"feat/y\"}' > cand.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/concurrent-cl-gate.sh\" --sessions-dir sessions --candidate cand.json --allow-concurrent 2>out.txt && grep -q 'accept reason=disjoint_with_1_active_sessions' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "concurrent-cl-gate accepts the candidate envelope when no active sessions exist (sequential start path)",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"s1\",\"phases\":[\"E\"],\"branch\":\"feat/x\"}' > cand.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/concurrent-cl-gate.sh\" --sessions-dir sessions --candidate cand.json 2>out.txt && grep -q 'accept reason=no_active_sessions' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

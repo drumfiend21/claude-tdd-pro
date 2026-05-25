@@ -1,0 +1,9 @@
+{
+  "name": "concurrent-cl-gate rejection includes the holding session_id so operators can locate the conflicting CL per §2.23 + W-10",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"cl-200\",\"phases\":[\"E\"],\"branch\":\"feat/x\"}' > sessions/cl-200.json && printf '%s' '{\"session_id\":\"cl-201\",\"phases\":[\"E\"],\"branch\":\"feat/y\"}' > cand.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/concurrent-cl-gate.sh\" --sessions-dir sessions --candidate cand.json --allow-concurrent 2>out.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'holding_session=cl-200' out.txt && echo identified 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["identified"]
+  }
+}
