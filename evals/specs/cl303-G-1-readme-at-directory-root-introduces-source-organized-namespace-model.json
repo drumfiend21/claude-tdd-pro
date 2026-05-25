@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: README.md at directory root introduces the source-organized namespace model to operators",
+  "command": "f=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/README.md\"; test -f \"$f\" && grep -qiE 'source-organized|namespace' \"$f\" && echo ok 1>&2 || { echo \"FAIL missing or undocumented $f\" 1>&2; exit 1; }",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: the ~38 ship-at-install rule files are distributed across at least 3 distinct namespace folders (not concentrated in one)",
+  "command": "root=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"; distinct=$(find \"$root\" -mindepth 2 -maxdepth 3 -name '*.yaml' -not -path '*/_operator/*' -not -path '*/_community/*' -not -path '*/_meta/*' 2>/dev/null | awk -F/ '{print $(NF-1)}' | sort -u | wc -l | tr -d ' '); [ \"$distinct\" -ge 3 ] && echo \"ok distinct=$distinct\" 1>&2 || { echo \"FAIL distinct=$distinct expected >=3\" 1>&2; exit 1; }",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}
