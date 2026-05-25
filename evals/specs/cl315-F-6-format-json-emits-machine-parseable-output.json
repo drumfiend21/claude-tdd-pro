@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview --format json emits machine-parseable JSON with the per-rule recommendation field per F-6",
+  "command": "mkdir -p tree && printf 'eval(0)\\n' > tree/x.js && printf '%s' '{\"rules\":[{\"id\":\"r\",\"detector\":\"grep -n eval || true\"}]}' > r.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file r.json --root tree --format json 2>out.txt && node -e 'const a=JSON.parse(require(\"fs\").readFileSync(\"out.txt\",\"utf8\").split(\"\\n\").find(l=>l.startsWith(\"[\")));process.exit(a[0].recommendation?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

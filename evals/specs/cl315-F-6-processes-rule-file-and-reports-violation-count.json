@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview with --rule-file processes a single rule across the working tree and reports violation_count per F-6",
+  "command": "mkdir -p tree && printf 'eval(\"bad\")\\n' > tree/x.js && printf 'eval(\"also-bad\")\\n' > tree/y.js && printf '%s' '{\"rules\":[{\"id\":\"no-eval\",\"detector\":\"grep -n eval || true\"}]}' > rule.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file rule.json --root tree --format json 2>out.txt && grep -q 'no-eval' out.txt && grep -q 'violation_count' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

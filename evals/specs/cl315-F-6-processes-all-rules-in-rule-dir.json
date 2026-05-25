@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview with --rule-dir processes every YAML rule under the directory per F-6",
+  "command": "mkdir -p tree rules && printf 'a\\n' > tree/x.txt && printf 'b\\n' > tree/y.txt && printf '%s' '{\"rules\":[{\"id\":\"r-a\",\"detector\":\"grep -n a || true\"}]}' > rules/a.yaml && printf '%s' '{\"rules\":[{\"id\":\"r-b\",\"detector\":\"grep -n b || true\"}]}' > rules/b.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-dir rules --root tree --format json 2>out.txt && grep -q 'r-a' out.txt && grep -q 'r-b' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}
