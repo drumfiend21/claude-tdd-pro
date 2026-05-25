@@ -92,9 +92,12 @@ end
 # field-list lines, and YAML/JSON keys in fenced blocks.
 arch_vocab = Set.new
 
-# Backticked tokens
+# Backticked tokens. Strip trailing punctuation (colon, comma, period,
+# bracket) so `recommended_set:` in arch text matches `recommended_set`
+# in a spec body's YAML key extraction.
 arch_window.scan(/`([a-zA-Z][a-zA-Z0-9_.\/:\-]*)`/) do |m|
-  arch_vocab << m[0].downcase
+  tok = m[0].downcase.sub(/[:,.\]\}]+\z/, '')
+  arch_vocab << tok
 end
 # Words in fenced code blocks
 arch_window.scan(/```[a-z]*\n(.*?)```/m) do |m|
@@ -116,7 +119,7 @@ EXEMPT_BUILTIN = %w[
   exit exit_code expect setup command name file path
   src tmp tmpdir mkdir test tests dir
   setup_file stderr stdout stdin
-  process http https example com
+  process http https example com ftp file ssh git
   the and not for from with into into within when then else
   hash sha256 sha512 md5
   json yaml yml md html xml

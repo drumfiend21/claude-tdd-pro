@@ -30,6 +30,8 @@ CHECK_REGISTRY_LINK=0
 REGISTRY_PATH=""
 CHECK_RECOMMENDED_CONSISTENCY=0
 CHECK_HISTORY_APPEND_ONLY=0
+VSF_NOW=""
+VSF_MAX_AGE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -37,6 +39,8 @@ while [[ $# -gt 0 ]]; do
     --registry) REGISTRY_PATH="$2"; shift 2 ;;
     --check-recommended-consistency) CHECK_RECOMMENDED_CONSISTENCY=1; shift ;;
     --check-history-append-only) CHECK_HISTORY_APPEND_ONLY=1; shift ;;
+    --now) VSF_NOW="$2"; shift 2 ;;
+    --max-age-days) VSF_MAX_AGE="$2"; shift 2 ;;
     -h|--help)
       echo "Usage: validate-source-file.sh <path> [--check-registry-link --registry <path>] [--check-recommended-consistency] [--check-history-append-only]" >&2
       exit 0 ;;
@@ -61,6 +65,121 @@ if [[ ! -f "$SOURCE_FILE" ]]; then
   echo "validate-source-file: file not found: $SOURCE_FILE" >&2
   exit 1
 fi
+
+# §2.21 source folder contract — checks layered ahead of the JSON-schema
+# validation pipeline. These are the contract invariants enumerated in
+# §2.21: required source-header fields, URL https-only, content_hash
+# sha256: format, fetched_at UTC + not-future, source.id kebab-case,
+# rule-id uniqueness within file, rule.id string type, freshness
+# window (when --now and --max-age-days are passed).
+VSF_SOURCE_FILE="$SOURCE_FILE" VSF_NOW="$VSF_NOW" VSF_MAX_AGE="$VSF_MAX_AGE" ruby -ryaml -e '
+require "time"
+path = ENV["VSF_SOURCE_FILE"]
+now_iso = ENV["VSF_NOW"].to_s
+max_age = ENV["VSF_MAX_AGE"].to_s
+data = YAML.unsafe_load_file(path) rescue nil
+src = data.is_a?(Hash) ? data["source"] : nil
+errors = []
+stale_warning = false
+
+if src.is_a?(Hash)
+  # §2.21 supplementary checks (the existing JSON-schema layer already
+  # enforces required fields, minLength, types). These extra checks
+  # cover behavioral contract details (kebab-case id, https URL,
+  # content_hash sha256:<hex>, UTC fetched_at, future-fetched_at,
+  # max-age-days freshness) that the schema does not encode.
+
+  # source.id kebab-case format (only fires when id is present AND
+  # non-empty AND not kebab — empty/missing is left to the schema).
+  if src.key?("id") && src["id"].is_a?(String) && !src["id"].empty? &&
+     src["id"] !~ /\A[a-z0-9][a-z0-9-]*\z/
+    errors << "invalid source id format=#{src["id"]} expected_format=kebab-case"
+  end
+
+  # authoritative_publisher non-empty (only fires when present-but-empty;
+  # missing-entirely is left to the JSON-schema layer).
+  if src.key?("authoritative_publisher") && src["authoritative_publisher"].to_s.strip.empty?
+    errors << "authoritative_publisher must not be empty"
+  end
+
+  # URL must be https://.
+  if src.key?("authoritative_url") && src["authoritative_url"].is_a?(String) &&
+     !src["authoritative_url"].start_with?("https://")
+    errors << "authoritative_url must use https://"
+  end
+
+  # content_hash must be sha256:<hex>.
+  if src.key?("content_hash") && src["content_hash"].is_a?(String) &&
+     !(src["content_hash"] =~ /\Asha256:[a-zA-Z0-9]+\z/)
+    errors << "invalid content_hash format=#{src["content_hash"]} expected=sha256:<hex>"
+  end
+
+  # fetched_at must be UTC ISO-8601 with trailing Z. YAML parses ISO
+  # timestamps as Time objects; handle both Time and String forms.
+  if src.key?("fetched_at")
+    fa_raw = src["fetched_at"]
+    fa_str = fa_raw.is_a?(Time) ? fa_raw.iso8601 : fa_raw.to_s
+    fa_t = nil
+    if fa_raw.is_a?(Time)
+      fa_t = fa_raw
+      unless fa_raw.utc?
+        errors << "invalid fetched_at=#{fa_str}: must be UTC (Z suffix)"
+      end
+    elsif fa_raw.is_a?(String)
+      unless fa_str.end_with?("Z")
+        errors << "invalid fetched_at=#{fa_str}: must be UTC with trailing Z"
+      end
+      begin
+        fa_t = Time.iso8601(fa_str)
+      rescue
+      end
+    end
+    if !now_iso.empty? && fa_t
+      begin
+        now_t = Time.iso8601(now_iso)
+        if fa_t > now_t
+          errors << "fetched_at=#{fa_str} is in the future relative to now=#{now_iso}"
+        end
+        if !max_age.empty?
+          age_days = (now_t - fa_t) / 86400.0
+          if age_days > max_age.to_f
+            STDERR.write("validate-source-file: stale fetched_at=#{fa_str} age_days=#{age_days.to_i} max_age_days=#{max_age}\n")
+            stale_warning = true
+          end
+        end
+      rescue
+      end
+    end
+  end
+end
+
+# rules-level checks: id collision and id-must-be-string.
+if data.is_a?(Hash) && data["rules"].is_a?(Array)
+  seen = {}
+  data["rules"].each_with_index do |r, i|
+    next unless r.is_a?(Hash) && r.key?("id")
+    rid = r["id"]
+    unless rid.is_a?(String)
+      errors << "rule[#{i}].id is wrong type=#{rid.class.name} (expected string)"
+      next
+    end
+    if seen[rid]
+      errors << "duplicate rule id=#{rid} (also at rule[#{seen[rid]}])"
+    else
+      seen[rid] = i
+    end
+  end
+end
+
+errors.each { |e| STDERR.write("validate-source-file: #{e}\n") }
+
+if !errors.empty?
+  exit 2
+end
+if stale_warning
+  exit 1
+end
+' || { rc=$?; exit "$rc"; }
 
 # O-7: --check-history-append-only verifies rule_state_history is
 # consistent with current rule_state (history.last.to must equal
