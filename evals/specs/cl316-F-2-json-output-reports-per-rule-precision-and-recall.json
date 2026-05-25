@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric --format json reports per-rule precision and recall under runs_per_rule per F-2",
+  "command": "git init -q repo && cd repo && git -c user.email=x@y -c user.name=x commit --allow-empty -q -m c1 && bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 1 --format json >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));const r=Object.values(j.runs_per_rule)[0];process.exit(typeof r.precision===\"number\"&&typeof r.recall===\"number\"?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

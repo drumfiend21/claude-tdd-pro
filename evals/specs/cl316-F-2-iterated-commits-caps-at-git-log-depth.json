@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric iterated_commits caps at the actual git log depth when --n exceeds available history per F-2",
+  "command": "git init -q repo && cd repo && git -c user.email=x@y -c user.name=x commit --allow-empty -q -m c1 && git -c user.email=x@y -c user.name=x commit --allow-empty -q -m c2 && bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 100 --format json >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(j.iterated_commits===2?0:1)' && echo capped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["capped"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric --interactive appends a triage entry to rubric/fp-log/<rule-id>.jsonl per the F-2 FP triage clause",
+  "command": "git init -q repo && cd repo && git -c user.email=x@y -c user.name=x commit --allow-empty -q -m c1 && echo y | bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 1 --interactive 2>err.txt && [ -s rubric/fp-log/g-x-001.jsonl ] && grep -q '\"verdict\":\"y\"' rubric/fp-log/g-x-001.jsonl && echo logged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["logged"]
+  }
+}
