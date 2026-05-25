@@ -1,0 +1,9 @@
+{
+  "name": "/agent-verify appends a jsonl audit entry to .claude-tdd-pro/agent-verify.jsonl on each invocation per F-3 audit-trail requirement",
+  "command": "printf 'diff stub\\n' > d.txt && printf '#!/usr/bin/env bash\\necho \"verdict: agree\"\\n' > v.sh && chmod +x v.sh && bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff d.txt --verifier-stub ./v.sh 2>/dev/null && [ -s .claude-tdd-pro/agent-verify.jsonl ] && grep -q '\"verdict\":\"agree\"' .claude-tdd-pro/agent-verify.jsonl && echo logged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["logged"]
+  }
+}

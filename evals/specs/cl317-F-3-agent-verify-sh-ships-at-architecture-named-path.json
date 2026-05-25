@@ -1,0 +1,9 @@
+{
+  "name": "/agent-verify ships at commands/agent-verify.sh per the literal F-3 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

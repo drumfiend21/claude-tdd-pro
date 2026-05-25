@@ -1,0 +1,9 @@
+{
+  "name": "/agent-verify jsonl audit entry includes diff_sha256 and an ISO8601 timestamp per F-3",
+  "command": "printf 'diff stub\\n' > d.txt && printf '#!/usr/bin/env bash\\necho \"verdict: agree\"\\n' > v.sh && chmod +x v.sh && bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff d.txt --verifier-stub ./v.sh 2>/dev/null && node -e 'const ln=require(\"fs\").readFileSync(\".claude-tdd-pro/agent-verify.jsonl\",\"utf8\").split(\"\\n\").filter(Boolean).pop();const e=JSON.parse(ln);process.exit(e.diff_sha256&&/^[0-9a-f]{64}$/.test(e.diff_sha256)&&/^\\d{4}-\\d{2}-\\d{2}T/.test(e.timestamp)?0:1)' && echo audit 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["audit"]
+  }
+}

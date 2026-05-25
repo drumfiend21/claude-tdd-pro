@@ -1,0 +1,9 @@
+{
+  "name": "/agent-verify pipes the diff to the verifier on stdin so the verifier runs as its own process per F-3 Karpathy independent-verifier discipline",
+  "command": "printf 'this is the diff body\\n' > d.txt && printf '#!/usr/bin/env bash\\nread -r line\\nif [ \"$line\" = \"this is the diff body\" ]; then echo \"verdict: agree\"; else echo \"verdict: disagree\"; echo \"reason: did not receive diff\"; fi\\n' > v.sh && chmod +x v.sh && bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff d.txt --verifier-stub ./v.sh 2>err.txt && grep -q 'verdict: agree' err.txt && echo piped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["piped"]
+  }
+}
