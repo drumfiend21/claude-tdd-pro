@@ -1,0 +1,9 @@
+{
+  "name": "L-2 PR fetcher ships at pr-corpus/fetch.sh per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

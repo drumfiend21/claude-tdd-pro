@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher exits two when --source is omitted per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}

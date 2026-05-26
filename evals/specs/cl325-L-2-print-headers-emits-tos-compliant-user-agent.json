@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher --print-headers emits a ToS-compliant User-Agent header per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run --print-headers 2>out.txt && grep -q 'User-Agent: claude-tdd-pro' out.txt && echo tos 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["tos"]
+  }
+}

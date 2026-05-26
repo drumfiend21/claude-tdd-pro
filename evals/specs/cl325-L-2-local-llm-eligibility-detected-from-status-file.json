@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher detects local-LLM eligibility from .claude-tdd-pro/local-llm/status.json and labels summarizer accordingly per X-4 cross-reference",
+  "command": "mkdir -p .claude-tdd-pro/local-llm && printf '%s' '{\"available\":true}' > .claude-tdd-pro/local-llm/status.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run 2>out.txt && grep -q 'summarizer=local-llm' out.txt && echo local 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["local"]
+  }
+}
