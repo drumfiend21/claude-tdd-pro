@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge tags operator-only entries with origin: operator and class: operator-curated per the §2.6 schema",
+  "command": "printf -- '[]' > catalog.yaml && printf -- '- id: custom-source\\n  url: https://x.com\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog catalog.yaml --operator operator.yaml --emit merged.yaml && grep -q 'origin: operator' merged.yaml && grep -q 'class: operator-curated' merged.yaml && echo tagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["tagged"]}
+}

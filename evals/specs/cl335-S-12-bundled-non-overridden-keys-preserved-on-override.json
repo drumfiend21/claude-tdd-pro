@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge preserves bundled keys not touched by the operator override (only override key wins) per §2.6 partial-override",
+  "command": "printf -- '- id: shared\\n  url: https://bundled.com\\n  tier: 1\\n  fetch_frequency: daily\\n' > catalog.yaml && printf -- '- id: shared\\n  url: https://operator.com\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog catalog.yaml --operator operator.yaml --emit merged.yaml && grep -q 'tier: 1' merged.yaml && grep -q 'fetch_frequency: daily' merged.yaml && grep -q 'url: https://operator.com' merged.yaml && echo preserved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preserved"]}
+}

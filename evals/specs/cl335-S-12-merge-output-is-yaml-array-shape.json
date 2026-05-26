@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge output is a YAML array of source entries (each starting with `- id:`) per the §2.6 shape",
+  "command": "printf -- '- id: a\\n  url: https://a.com\\n' > catalog.yaml && printf -- '- id: b\\n  url: https://b.com\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog catalog.yaml --operator operator.yaml --emit merged.yaml && [ \"$(grep -c '^- id:' merged.yaml)\" = \"2\" ] && echo array 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["array"]}
+}

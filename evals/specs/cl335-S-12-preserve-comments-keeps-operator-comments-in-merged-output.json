@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge --preserve-comments retains operator-supplied comment lines in the merged registry output",
+  "command": "printf -- '[]' > catalog.yaml && printf '# operator entry pinned for compliance\\n- id: custom\\n  url: https://x.com\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog catalog.yaml --operator operator.yaml --emit merged.yaml --preserve-comments && grep -q '# operator entry pinned for compliance' merged.yaml && echo preserved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preserved"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge-registry includes a bundled catalog entry in the merged output when the operator file does not touch it",
+  "command": "printf -- '- id: bundled-source\\n  url: https://x.com\\n' > catalog.yaml && printf -- '[]' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog catalog.yaml --operator operator.yaml --emit merged.yaml && grep -q 'id: bundled-source' merged.yaml && echo merged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["merged"]}
+}
