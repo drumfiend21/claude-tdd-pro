@@ -1,0 +1,6 @@
+{
+  "name": "S-4 --check-shallow-provenance flags rules whose provenance array is empty per the gap analyzer",
+  "command": "printf -- '- id: g\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/g && printf 'source:\\n  id: g\\nrules:\\n  - {id: thin-rule, provenance: []}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit r.md --catalog cat.yaml --tree tree --check-shallow-provenance && grep -q '### Shallow provenance' r.md && grep -q 'shallow provenance' r.md && echo shallow 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["shallow"]}
+}

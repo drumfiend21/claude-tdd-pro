@@ -1,0 +1,6 @@
+{
+  "name": "S-4 --include-gaps lists every catalog source with zero citing rules under a Gaps heading per the gap analyzer",
+  "command": "printf -- '- id: covered\\n  fetch_frequency: daily\\n- id: gap-source\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/c && printf 'source:\\n  id: covered\\nrules:\\n  - {id: r, provenance: [{source: covered}]}\\n' > tree/c/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit r.md --catalog cat.yaml --tree tree --include-gaps && grep -q '### Gaps' r.md && grep -q 'gap-source: zero citing rules' r.md && echo gapped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gapped"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-4 --recommend emits PROMOTE action cards for catalog sources with zero citing rules per the gap analyzer",
+  "command": "printf -- '- id: covered\\n  fetch_frequency: daily\\n- id: gap-source\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/c && printf 'source:\\n  id: covered\\nrules:\\n  - {id: r, provenance: [{source: covered}]}\\n' > tree/c/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit r.md --catalog cat.yaml --tree tree --recommend && grep -q 'PROMOTE:' r.md && grep -q 'gap-source' r.md && echo recommended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recommended"]}
+}

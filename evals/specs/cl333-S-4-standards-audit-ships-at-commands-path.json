@@ -1,0 +1,6 @@
+{
+  "name": "S-4 /standards-audit ships at commands/standards-audit.sh per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

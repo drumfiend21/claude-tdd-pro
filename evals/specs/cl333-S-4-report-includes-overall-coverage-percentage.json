@@ -1,0 +1,6 @@
+{
+  "name": "S-4 audit report includes an overall coverage percentage line per the gap analyzer contract",
+  "command": "printf -- '- id: a\\n  fetch_frequency: daily\\n- id: b\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/a && printf 'source:\\n  id: a\\nrules:\\n  - {id: r, provenance: [{source: a}]}\\n' > tree/a/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit r.md --catalog cat.yaml --tree tree && grep -q 'Overall coverage: 50%' r.md && echo coverage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["coverage"]}
+}
