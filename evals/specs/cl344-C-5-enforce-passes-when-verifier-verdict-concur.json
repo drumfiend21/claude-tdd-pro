@@ -1,0 +1,6 @@
+{
+  "name": "C-5 --enforce passes when the verifier-output verdict is concur per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --emit v.json --verdict concur --pr-sha abc123 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --enforce --pr-sha abc123 --verifier-output v.json 2>err.txt && echo concurred 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["concurred"]}
+}

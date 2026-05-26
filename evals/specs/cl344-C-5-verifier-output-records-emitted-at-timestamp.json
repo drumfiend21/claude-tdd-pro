@@ -1,0 +1,6 @@
+{
+  "name": "C-5 verifier-output JSON includes an emitted_at ISO timestamp per the architecture audit-trail contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --emit v.json --verdict concur --pr-sha abc123 && grep -qE '\"emitted_at\":\"[0-9]{4}-[0-9]{2}-[0-9]{2}T' v.json && echo timestamped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["timestamped"]}
+}
