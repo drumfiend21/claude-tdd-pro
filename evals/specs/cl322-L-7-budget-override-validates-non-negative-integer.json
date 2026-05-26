@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update --budget-override rejects non-integer values per the L-7 operator override input contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --budget-override abc 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid_budget_override' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["rejected"]
+  }
+}

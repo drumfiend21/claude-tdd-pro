@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update --budget-override applies an operator-supplied cap in place of the default 100k per L-7",
+  "command": "printf '%s' '{}' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --budget-override 50000 --estimated-tokens 10000 --budget b.json --dry-run 2>out.txt && grep -q 'effective_budget=50000' out.txt && grep -q 'override=operator' out.txt && echo overridden 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["overridden"]
+  }
+}

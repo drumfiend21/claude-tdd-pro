@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update reports budget_exhausted with a resets_at timestamp when remaining is zero per L-7 day-rollover signal",
+  "command": "printf '%s' '{\"stripe-node\":{\"used_today\":100000,\"date\":\"2026-05-25\"}}' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source stripe-node --estimated-tokens 1 --budget b.json --now 2026-05-25T10:00:00Z --dry-run 2>out.txt && grep -q 'budget_exhausted' out.txt && grep -q 'resets_at=' out.txt && echo exhausted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["exhausted"]
+  }
+}
