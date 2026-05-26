@@ -1,0 +1,6 @@
+{
+  "name": "S-17 auto-refresh-daily script ships at standards/auto-refresh-daily.sh per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
