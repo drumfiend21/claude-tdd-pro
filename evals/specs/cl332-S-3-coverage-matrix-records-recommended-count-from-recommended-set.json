@@ -1,0 +1,6 @@
+{
+  "name": "S-3 coverage matrix counts how many of a source's rules appear in recommended_set under recommended_count",
+  "command": "mkdir -p tree/g && printf '\\nrecommended_set: [\"rule-a\"]\\nrules:\\n  - {id: rule-a, provenance: [{source: g, section_id: \"1.1\"}]}\\n  - {id: rule-b, provenance: [{source: g, section_id: \"1.2\"}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" --tree tree --emit m.json 2>err.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));process.exit(j.sources.g.recommended_count===1?0:1)' && echo recommended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recommended"]}
+}

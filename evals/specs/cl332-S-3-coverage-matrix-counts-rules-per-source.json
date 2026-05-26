@@ -1,0 +1,6 @@
+{
+  "name": "S-3 coverage matrix counts the number of rules citing each source under rule_count per the architecture",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: rule-a, provenance: [{source: g, section_id: \"1.1\"}]}\\n  - {id: rule-b, provenance: [{source: g, section_id: \"1.2\"}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" --tree tree --emit m.json 2>err.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));process.exit(j.sources.g.rule_count===2?0:1)' && echo counted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["counted"]}
+}

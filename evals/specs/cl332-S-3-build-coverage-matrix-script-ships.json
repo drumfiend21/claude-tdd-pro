@@ -1,0 +1,6 @@
+{
+  "name": "S-3 coverage matrix generator ships at standards/build-coverage-matrix.sh per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

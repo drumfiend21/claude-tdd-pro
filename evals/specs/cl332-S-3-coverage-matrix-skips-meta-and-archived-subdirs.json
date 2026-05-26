@@ -1,0 +1,6 @@
+{
+  "name": "S-3 generator skips _meta and _archived subdirs during tree walk per the architecture exclusion convention",
+  "command": "mkdir -p tree/g/_archived tree/g/_meta && printf '\\nrules:\\n  - {id: live, provenance: [{source: g, section_id: \"1.1\"}]}\\n' > tree/g/live.yaml && printf '\\nrules:\\n  - {id: ghost, provenance: [{source: g, section_id: \"9.9\"}]}\\n' > tree/g/_archived/old.yaml && printf '\\nrules:\\n  - {id: meta, provenance: [{source: g, section_id: \"0.0\"}]}\\n' > tree/g/_meta/m.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" --tree tree --emit m.json 2>err.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));process.exit(j.sources.g.rule_count===1&&j.sources.g.rule_ids[0]===\"live\"?0:1)' && echo excluded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["excluded"]}
+}

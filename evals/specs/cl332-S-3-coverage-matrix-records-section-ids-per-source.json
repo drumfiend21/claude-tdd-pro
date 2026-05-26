@@ -1,0 +1,6 @@
+{
+  "name": "S-3 coverage matrix records each cited section_id under the source's section_ids list per the architecture",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, provenance: [{source: g, section_id: \"5.2.1\"}, {source: g, section_id: \"6.3\"}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" --tree tree --emit m.json 2>err.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));const ids=j.sources.g.section_ids;process.exit(ids.includes(\"5.2.1\")&&ids.includes(\"6.3\")?0:1)' && echo recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recorded"]}
+}

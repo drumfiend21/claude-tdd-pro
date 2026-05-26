@@ -1,0 +1,6 @@
+{
+  "name": "S-3 --emit-md writes a markdown coverage report alongside the JSON matrix per the architecture COVERAGE.md target",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r-1, provenance: [{source: google-jsguide, section_id: \"5.2\"}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" --tree tree --emit-md COVERAGE.md 2>err.txt && [ -s COVERAGE.md ] && grep -q 'google-jsguide' COVERAGE.md && echo markdown 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["markdown"]}
+}
