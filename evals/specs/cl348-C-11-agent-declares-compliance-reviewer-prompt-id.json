@@ -1,0 +1,6 @@
+{
+  "name": "C-11 agent declares compliance-reviewer prompt_id per the architecture",
+  "command": "grep -q 'prompt_id: compliance-reviewer' \"$CLAUDE_PLUGIN_ROOT/agents/review-compliance.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
