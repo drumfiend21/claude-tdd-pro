@@ -1,0 +1,6 @@
+{
+  "name": "S-6 --check-catalog rejects provenance entries whose source id is absent from the catalog",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, severity: P1, provenance: [{source: ghost-source, class: published-standard, section_id: \"1.1\", url: https://x.com, fetched_at: 2026-05-01T00:00:00Z, content_hash: sha256:abc}]}\\n' > tree/g/x.yaml && printf -- '- id: real-source\\n' > catalog.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" --tree tree --check-catalog catalog.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'ghost-source' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

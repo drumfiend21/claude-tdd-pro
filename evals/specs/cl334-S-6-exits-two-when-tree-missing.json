@@ -1,0 +1,6 @@
+{
+  "name": "S-6 detector exits two when --tree is omitted per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

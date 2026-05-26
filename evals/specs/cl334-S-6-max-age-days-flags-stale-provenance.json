@@ -1,0 +1,6 @@
+{
+  "name": "S-6 --max-age-days flags provenance entries older than N days per the architecture freshness threshold",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, severity: P1, provenance: [{source: g, class: published-standard, section_id: \"1.1\", url: https://x.com, fetched_at: 2026-01-01T00:00:00Z, content_hash: sha256:abc}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" --tree tree --max-age-days 90 --now 2026-05-25T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && echo stale 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["stale"]}
+}

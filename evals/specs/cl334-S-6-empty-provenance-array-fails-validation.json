@@ -1,0 +1,6 @@
+{
+  "name": "S-6 detector fails validation when a rule's provenance array is empty per the architecture (>=1 entry required)",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, severity: P1, provenance: []}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" --tree tree 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'provenance is empty' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocked"]}
+}

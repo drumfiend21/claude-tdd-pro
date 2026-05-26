@@ -1,0 +1,6 @@
+{
+  "name": "S-6 detector rejects provenance entries with class outside the allowed enum per the architecture vocabulary",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, severity: P1, provenance: [{source: g, class: made-up-class, section_id: \"1.1\", url: https://x.com, fetched_at: 2026-05-01T00:00:00Z, content_hash: sha256:abc}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" --tree tree 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'made-up-class' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}
