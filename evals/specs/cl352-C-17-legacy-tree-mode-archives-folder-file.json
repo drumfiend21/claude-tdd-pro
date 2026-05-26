@@ -1,0 +1,6 @@
+{
+  "name": "C-17 legacy mode (--tree without --catalog) archives the source-folder file to _archived/ per the G-9 chain",
+  "command": "mkdir -p tree/ns && printf '  id: custom-framework\\n' > tree/ns/custom-framework.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" --id custom-framework --tree tree && [ -f tree/ns/_archived/custom-framework.yaml ] && [ ! -f tree/ns/custom-framework.yaml ] && echo archived 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["archived"]}
+}
