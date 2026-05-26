@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate --emit-status writes the §2.17 status enum value (fresh-within-fetch-frequency on happy path)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && printf '2026-05-25T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/src.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency daily --now 2026-05-25T10:00:00Z --emit-status status.json && grep -q 'fresh-within-fetch-frequency' status.json && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

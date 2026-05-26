@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate exits two when --fetch-frequency is not in the architecture-allowed enum (hourly daily weekly monthly)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency yearly --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'unknown fetch-frequency' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

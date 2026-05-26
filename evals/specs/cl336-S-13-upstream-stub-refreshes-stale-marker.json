@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate auto-refreshes a stale source by invoking the upstream-stub and updates the last-fetch marker",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && printf '2026-05-20T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/src.txt && printf '#!/usr/bin/env bash\\nexit 0\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency daily --now 2026-05-25T10:00:00Z --upstream-stub ./up.sh && grep -q '2026-05-25T10:00:00Z' .claude-tdd-pro/standards-last-fetch/src.txt && echo refreshed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["refreshed"]}
+}

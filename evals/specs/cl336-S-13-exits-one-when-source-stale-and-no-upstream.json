@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate exits one when the source is stale and no upstream-stub is available to refresh",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && printf '2026-05-20T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/src.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency daily --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'stale' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocked"]}
+}

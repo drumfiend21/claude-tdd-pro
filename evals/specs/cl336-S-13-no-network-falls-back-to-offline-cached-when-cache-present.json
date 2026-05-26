@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate --no-network falls back to offline-cached status when a cache file exists per §2.17",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch .claude-tdd-pro/standards-cache && printf '2026-05-20T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/src.txt && printf 'cached html' > .claude-tdd-pro/standards-cache/src.html && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency daily --now 2026-05-25T10:00:00Z --no-network --emit-status s.json && grep -q 'offline-cached' s.json && echo cached 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cached"]}
+}
