@@ -1,0 +1,6 @@
+{
+  "name": "S-1 catalog includes owasp-asvs source per the architecture default catalog",
+  "command": "grep -q '^- id: owasp-asvs' \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

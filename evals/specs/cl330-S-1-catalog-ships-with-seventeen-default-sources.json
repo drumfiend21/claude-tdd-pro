@@ -1,0 +1,6 @@
+{
+  "name": "S-1 standards catalog ships at standards/sources.yaml with exactly the 17 default sources enumerated in the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" ] && [ \"$(grep -c '^- id:' \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\")\" = \"17\" ] && echo seventeen 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["seventeen"]}
+}

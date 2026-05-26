@@ -1,0 +1,6 @@
+{
+  "name": "Every S-1 default catalog entry's tier is 1 or 2 per the architecture (no tier-3 default sources)",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/standards/sources.yaml\",\"utf8\");const tiers=(y.match(/^\\s+tier: \\d+/mg)||[]).map(s=>parseInt(s.trim().split(\" \")[1]));process.exit(tiers.length===17&&tiers.every(t=>t===1||t===2)?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

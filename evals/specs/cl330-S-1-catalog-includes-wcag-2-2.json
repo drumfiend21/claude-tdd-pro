@@ -1,0 +1,6 @@
+{
+  "name": "S-1 catalog includes wcag-2-2 source per the architecture default catalog (accessibility)",
+  "command": "grep -q '^- id: wcag-2-2' \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
