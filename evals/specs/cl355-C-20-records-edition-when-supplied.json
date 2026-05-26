@@ -1,0 +1,6 @@
+{
+  "name": "C-20 --edition records the framework-edition identifier in the trace for compliance versioning",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc --consulted-compliance soc2-tsc --edition 2017-v3 --now 2026-05-25T10:00:00Z --emit trace.json && grep -q '2017-v3' trace.json && echo edition 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["edition"]}
+}
