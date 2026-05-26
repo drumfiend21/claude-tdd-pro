@@ -1,0 +1,9 @@
+{
+  "name": "W-10 /cl-status reports no_active_sessions when no envelopes exist under the sessions dir",
+  "command": "mkdir -p sessions && bash \"$CLAUDE_PLUGIN_ROOT/commands/cl-status.sh\" --sessions-dir sessions 2>out.txt && grep -q 'no_active_sessions' out.txt && echo empty 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["empty"]
+  }
+}

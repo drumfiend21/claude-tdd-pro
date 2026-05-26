@@ -1,0 +1,9 @@
+{
+  "name": "W-10 gate prints the offending resource and the holding session_id on rejection per the architecture",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"cl-100\",\"phases\":[\"E\"],\"branch\":\"a\"}' > sessions/cl-100.json && printf '%s' '{\"session_id\":\"cl-101\",\"phases\":[\"E\"],\"branch\":\"b\"}' > cand.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/concurrent-cl-gate.sh\" --sessions-dir sessions --candidate cand.json --allow-concurrent 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'offending_resource=phase=E' err.txt && grep -q 'holding_session=cl-100' err.txt && echo reported 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["reported"]
+  }
+}

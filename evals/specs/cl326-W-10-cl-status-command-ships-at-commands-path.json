@@ -1,0 +1,9 @@
+{
+  "name": "W-10 companion /cl-status command ships at commands/cl-status.sh per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/cl-status.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

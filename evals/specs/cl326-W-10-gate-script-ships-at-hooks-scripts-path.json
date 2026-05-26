@@ -1,0 +1,9 @@
+{
+  "name": "W-10 gate script ships at hooks/scripts/concurrent-cl-gate.sh per the architecture-named PreToolUse path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/concurrent-cl-gate.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

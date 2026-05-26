@@ -1,0 +1,9 @@
+{
+  "name": "W-10 /cl-status --format=json emits a JSON array of session envelopes for machine consumption",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"a\",\"phases\":[\"E\"],\"branch\":\"x\"}' > sessions/a.json && printf '%s' '{\"session_id\":\"b\",\"phases\":[\"F\"],\"branch\":\"y\"}' > sessions/b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cl-status.sh\" --format=json --sessions-dir sessions >out.json 2>/dev/null && node -e 'const a=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(Array.isArray(a)&&a.length===2?0:1)' && echo json 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["json"]
+  }
+}
