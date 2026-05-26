@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add --tree scaffolds <tree>/<namespace>/<id>.yaml in addition to the registry append (G-9 chain)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/foo.html --id example-foo --tree tree && [ -s tree/example/example-foo.yaml ] && grep -q '^source:' tree/example/example-foo.yaml && echo scaffolded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["scaffolded"]}
+}

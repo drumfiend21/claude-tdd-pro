@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add --emit-audit records a jsonl line with id url ts on each invocation",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/spec --id example-spec --emit-audit audit.jsonl && [ -s audit.jsonl ] && grep -q '\"command\":\"standards-add\"' audit.jsonl && grep -q '\"id\":\"example-spec\"' audit.jsonl && echo audited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audited"]}
+}

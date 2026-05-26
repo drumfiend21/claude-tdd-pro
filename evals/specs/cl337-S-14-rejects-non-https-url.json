@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add rejects a url that does not start with https:// per the ToS-compliant fetcher contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" http://insecure.com/spec 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'https' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add registry entry includes added_by: operator and an added_at ISO timestamp per §2.6 provenance",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/spec --id example-spec && grep -q 'added_by: operator' .claude-tdd-pro/STANDARDS-URLS.yaml && grep -qE 'added_at: [0-9]{4}-[0-9]{2}-[0-9]{2}T' .claude-tdd-pro/STANDARDS-URLS.yaml && echo provenance 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["provenance"]}
+}

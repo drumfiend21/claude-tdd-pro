@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add exits two when the inferred or supplied id collides with an existing registry entry",
+  "command": "mkdir -p .claude-tdd-pro && printf -- '- id: example-spec\\n  url: https://example.com/spec\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/spec --id example-spec 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'collision' err.txt && echo collided 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["collided"]}
+}
