@@ -1,0 +1,6 @@
+{
+  "name": "W-11 parallel-subagents skill ships at skills/parallel-subagents/SKILL.md per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

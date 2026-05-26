@@ -1,0 +1,6 @@
+{
+  "name": "W-11 parallel-coordinator agent documents the refuse triggers (budget exceeded unknown subagent cyclical wait)",
+  "command": "grep -qi 'refuse when\\|refuses' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && grep -q 'budget' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

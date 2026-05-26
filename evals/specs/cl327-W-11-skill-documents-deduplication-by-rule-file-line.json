@@ -1,0 +1,6 @@
+{
+  "name": "W-11 skill documents the consolidated finding deduplication key rule_id + file + line per the architecture",
+  "command": "grep -q 'rule_id' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -q 'file' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -q 'line' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

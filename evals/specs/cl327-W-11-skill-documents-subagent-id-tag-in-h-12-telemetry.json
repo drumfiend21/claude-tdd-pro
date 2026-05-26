@@ -1,0 +1,6 @@
+{
+  "name": "W-11 skill documents the subagent_id tag preservation in H-12 per-subagent token-cost telemetry",
+  "command": "grep -q 'subagent_id' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -q 'H-12' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

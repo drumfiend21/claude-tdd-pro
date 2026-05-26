@@ -1,0 +1,6 @@
+{
+  "name": "W-11 parallel-coordinator subagent ships at agents/parallel-coordinator.md with the sonnet model annotation and prompt_id",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" ] && grep -q 'model: sonnet' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && grep -q 'prompt_id: parallel-coordinator' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

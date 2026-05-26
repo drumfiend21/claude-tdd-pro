@@ -1,0 +1,6 @@
+{
+  "name": "W-11 skill documents the §2.7 sectioned-lock serialization rule for overlapping subagents",
+  "command": "grep -q 'lock' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -q 'serialize' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -q '§2.7' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}
