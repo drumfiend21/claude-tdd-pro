@@ -1,0 +1,6 @@
+{
+  "name": "C-4 audit entries record a monotonic seq number starting at 1 per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event e1 --actor a --data '{}' && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event e2 --actor a --data '{}' && node -e 'const lines=require(\"fs\").readFileSync(\".claude-tdd-pro/audit.jsonl\",\"utf8\").split(\"\\n\").filter(Boolean);const seqs=lines.map(l=>JSON.parse(l).seq);process.exit(seqs[0]===1&&seqs[1]===2?0:1)' && echo monotonic 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["monotonic"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "C-4 --append writes a JSON line to .claude-tdd-pro/audit.jsonl with the event and actor fields",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event login --actor user-1 --data '{}' && [ -s .claude-tdd-pro/audit.jsonl ] && grep -q '\"event\":\"login\"' .claude-tdd-pro/audit.jsonl && grep -q '\"actor\":\"user-1\"' .claude-tdd-pro/audit.jsonl && echo appended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["appended"]}
+}
