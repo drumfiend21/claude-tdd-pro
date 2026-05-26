@@ -1,0 +1,6 @@
+{
+  "name": "C-13 merge tags operator-only entries with added_by: operator per the architecture provenance contract",
+  "command": "printf -- '[]' > bundled.yaml && printf -- '- id: custom-framework\\n  url: https://x.com\\n  why_authoritative: company policy\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/merge-registry.sh\" --operator operator.yaml --emit merged.yaml --bundled bundled.yaml && grep -q 'added_by: operator' merged.yaml && echo tagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["tagged"]}
+}

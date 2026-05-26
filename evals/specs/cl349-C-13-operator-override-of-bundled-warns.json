@@ -1,0 +1,6 @@
+{
+  "name": "C-13 merge warns when an operator entry overrides a bundled framework id per the architecture",
+  "command": "printf -- '- id: soc2-tsc\\n  url: https://b.com\\n' > bundled.yaml && printf -- '- id: soc2-tsc\\n  url: https://operator.com\\n  why_authoritative: company override\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/merge-registry.sh\" --operator operator.yaml --emit merged.yaml --bundled bundled.yaml 2>err.txt && grep -qiE 'warn|overrid' err.txt && echo warned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["warned"]}
+}

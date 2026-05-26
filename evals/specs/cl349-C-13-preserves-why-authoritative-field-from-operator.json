@@ -1,0 +1,6 @@
+{
+  "name": "C-13 merge preserves the why_authoritative field from the operator entry per the architecture verbose-justification contract",
+  "command": "printf -- '[]' > bundled.yaml && printf -- '- id: custom-framework\\n  url: https://x.com\\n  why_authoritative: full justification text per policy\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/compliance/merge-registry.sh\" --operator operator.yaml --emit merged.yaml --bundled bundled.yaml && grep -q 'full justification text per policy' merged.yaml && echo preserved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preserved"]}
+}
