@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --apply-to-rules --dry-run reports would-demote actions without writing the demotion-state file per §2.14",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '2026-05-20T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && printf '\\nrules:\\n  - {id: r, rule_state: block, provenance: [{class: published-standard, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z --dry-run --emit-applied a.json && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"a.json\",\"utf8\"));process.exit(j.r&&j.r.action===\"would demote\"?0:1)' && [ ! -f .claude-tdd-pro/freshness-demotions.json ] && echo preview 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preview"]}
+}

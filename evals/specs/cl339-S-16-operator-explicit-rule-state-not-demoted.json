@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --apply-to-rules does not auto-demote a rule whose history records operator-explicit state per the architecture",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '2026-05-20T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && printf '\\nrules:\\n  - {id: r, rule_state: block, rule_state_history: [{reason: operator-explicit}], provenance: [{class: published-standard, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z 2>err.txt && ! grep -q 'auto-demoted r' err.txt && echo preserved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preserved"]}
+}

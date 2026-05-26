@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --apply-to-rules --strict disables the rule rather than demoting to warn-only on staleness",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '2026-05-20T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && printf '\\nrules:\\n  - {id: r, rule_state: block, provenance: [{class: published-standard, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z --strict 2>err.txt && grep -q 'disabled r' err.txt && grep -q 'block -> disabled' err.txt && echo disabled 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["disabled"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --apply-to-rules auto-restores a previously-demoted rule when its sources become fresh again",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '2026-05-20T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && printf '\\nrules:\\n  - {id: r, rule_state: block, provenance: [{class: published-standard, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z 2>/dev/null && printf '2026-05-25T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z 2>err.txt && grep -q 'auto-restored r' err.txt && echo restored 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["restored"]}
+}

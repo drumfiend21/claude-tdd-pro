@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --emit-applied writes a JSON summary of demote/restore actions per the architecture audit surface",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '2026-05-20T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && printf '\\nrules:\\n  - {id: r, rule_state: block, provenance: [{class: published-standard, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z --emit-applied applied.json && [ -s applied.json ] && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"applied.json\",\"utf8\"));process.exit(j.r&&j.r.action===\"auto-demoted\"?0:1)' && echo summary 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["summary"]}
+}

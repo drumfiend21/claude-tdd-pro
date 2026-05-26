@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --apply-to-rules ignores pr-corpus class provenance for freshness decisions (only standards classes gate)",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '\\nrules:\\n  - {id: r, rule_state: block, provenance: [{class: pr-corpus, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z 2>err.txt && ! grep -q 'auto-demoted r' err.txt && echo ignored 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ignored"]}
+}
