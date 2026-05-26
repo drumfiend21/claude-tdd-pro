@@ -1,0 +1,9 @@
+{
+  "name": "L-6 evidence aggregator ships at pr-corpus/aggregate-evidence.sh per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

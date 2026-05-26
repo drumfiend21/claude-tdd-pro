@@ -1,0 +1,9 @@
+{
+  "name": "L-6 aggregator blocks a pattern with fewer than 3 supporting PRs per the architecture evidence threshold",
+  "command": "printf '%s' '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"org\":\"cfpb\",\"tier\":1},{\"org\":\"stripe\",\"tier\":1}]}' > p.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern p.json 2>out.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'BLOCKED' out.txt && grep -q 'evidence_count=2' out.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["blocked"]
+  }
+}

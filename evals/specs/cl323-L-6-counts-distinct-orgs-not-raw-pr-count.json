@@ -1,0 +1,9 @@
+{
+  "name": "L-6 aggregator counts distinct orgs not raw PR count for the organizations_count threshold per architecture",
+  "command": "printf '%s' '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"org\":\"cfpb\",\"tier\":1},{\"org\":\"stripe\",\"tier\":1},{\"org\":\"stripe\",\"tier\":1},{\"org\":\"stripe\",\"tier\":1}]}' > p.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern p.json --emit-fields 2>err.txt && grep -q '\"organizations_count\":2' err.txt && grep -q '\"evidence_count\":4' err.txt && echo distinct 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["distinct"]
+  }
+}
