@@ -1,0 +1,6 @@
+{
+  "name": "S-2 fetcher preserves the prior cache when the upstream stub fails (cache discipline per architecture)",
+  "command": "mkdir -p cache && printf 'old-cached' > cache/x.html && printf '#!/usr/bin/env bash\\nexit 1\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id x --fragility-tier high --strategy silent-replace --upstream-stub ./up.sh --cache cache 2>err.txt && grep -q 'cache preserved' err.txt && grep -q 'old-cached' cache/x.html && echo preserved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preserved"]}
+}
