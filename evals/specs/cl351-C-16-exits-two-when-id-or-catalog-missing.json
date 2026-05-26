@@ -1,0 +1,6 @@
+{
+  "name": "C-16 compliance-add exits two when --id or --catalog is omitted (non-legacy mode)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://x.com 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

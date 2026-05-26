@@ -1,0 +1,6 @@
+{
+  "name": "C-16 --paywalled requires both --document-url and --attribution per the paywalled-source contract",
+  "command": "printf 'line one\\nline two\\nline three\\n' > w.txt && touch cat.yaml && EDITOR= bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" https://x.com --id test --catalog cat.yaml --why-authoritative-file w.txt --paywalled 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -qE 'document-url|attribution' err.txt && echo required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+}
