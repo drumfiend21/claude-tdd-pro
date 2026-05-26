@@ -1,0 +1,6 @@
+{
+  "name": "P-3 eval-history records a regression delta against the prior version when one exists per the architecture",
+  "command": "mkdir -p evals/datasets/agents prompts/eval-history/test-agent && printf '{\"id\":\"r1\",\"input\":\"x\",\"expected\":\"y\"}\\n' > evals/datasets/agents/test-agent.jsonl && printf '%s' '{\"eval_pass_rate\":0.5}' > prompts/eval-history/test-agent/0.9.0.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" test-agent --version 1.0.0 2>/dev/null && grep -qE 'regression|delta|prior' prompts/eval-history/test-agent/1.0.0.json && echo delta 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["delta"]}
+}

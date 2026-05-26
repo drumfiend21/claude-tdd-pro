@@ -1,0 +1,6 @@
+{
+  "name": "P-3 prompt-eval exits two when the agent dataset is missing per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" never-existed 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'not found' err.txt && echo missing 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["missing"]}
+}

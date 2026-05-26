@@ -1,0 +1,6 @@
+{
+  "name": "P-3 prompt-eval --dry-run reports the planned eval without writing the eval-history file per §2.14",
+  "command": "mkdir -p evals/datasets/agents && printf '{\"id\":\"r1\",\"input\":\"x\",\"expected\":\"y\"}\\n' > evals/datasets/agents/test-agent.jsonl && rm -rf prompts/eval-history && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" test-agent --version 1.0.0 --dry-run 2>err.txt && [ ! -d prompts/eval-history ] && grep -q 'dry-run' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}

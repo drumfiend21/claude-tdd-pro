@@ -1,0 +1,6 @@
+{
+  "name": "P-3 eval-history output records the eval_pass_rate field per the architecture regression-gating contract",
+  "command": "mkdir -p evals/datasets/agents && printf '{\"id\":\"r1\",\"input\":\"x\",\"expected\":\"y\"}\\n{\"id\":\"r2\",\"input\":\"a\",\"expected\":\"b\"}\\n' > evals/datasets/agents/test-agent.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" test-agent --version 1.0.0 2>/dev/null && grep -q 'eval_pass_rate' prompts/eval-history/test-agent/1.0.0.json && echo recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recorded"]}
+}

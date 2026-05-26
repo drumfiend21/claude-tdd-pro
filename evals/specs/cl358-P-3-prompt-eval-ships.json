@@ -1,0 +1,6 @@
+{
+  "name": "P-3 /prompt-eval ships at commands/prompt-eval.sh per the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

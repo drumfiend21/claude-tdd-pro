@@ -1,0 +1,6 @@
+{
+  "name": "P-3 --emit-telemetry writes token usage telemetry for the eval run per the architecture telemetry contract",
+  "command": "mkdir -p evals/datasets/agents && printf '{\"id\":\"r1\",\"input\":\"x\",\"expected\":\"y\"}\\n' > evals/datasets/agents/test-agent.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-eval.sh\" test-agent --version 1.0.0 --emit-telemetry t.jsonl 2>/dev/null && [ -s t.jsonl ] && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}
