@@ -1,0 +1,6 @@
+{
+  "name": "C-10 --dry-run computes the bundle without writing the --emit path per §2.14",
+  "command": "printf '%s' '{\"bomFormat\":\"CycloneDX\",\"specVersion\":\"1.6\",\"components\":[]}' > a.json && rm -f p.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --section aibom --emit p.json --aibom-file a.json --commit-sha abc --now 2026-05-25T10:00:00Z --dry-run 2>err.txt && [ ! -f p.json ] && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}
