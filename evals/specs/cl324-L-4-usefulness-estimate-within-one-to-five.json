@@ -1,0 +1,9 @@
+{
+  "name": "L-4 extract-patterns populates usefulness_estimate within the 1 to 5 range per the architecture per-pattern field",
+  "command": "printf '%s' '{\"number\":1,\"comments\":[{\"body\":\"please add null check before dereferencing\"}]}' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --pr pr.json --out patterns.json 2>/dev/null && node -e 'const a=JSON.parse(require(\"fs\").readFileSync(\"patterns.json\",\"utf8\"));process.exit(a[0].usefulness_estimate>=1&&a[0].usefulness_estimate<=5?0:1)' && echo ranged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ranged"]
+  }
+}

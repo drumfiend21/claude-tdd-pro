@@ -1,0 +1,9 @@
+{
+  "name": "L-4 pattern extractor invoker ships at pr-corpus/extract-patterns.sh per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

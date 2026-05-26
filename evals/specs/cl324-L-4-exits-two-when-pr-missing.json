@@ -1,0 +1,9 @@
+{
+  "name": "L-4 extract-patterns exits two when --pr is omitted per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --out o.json 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}
