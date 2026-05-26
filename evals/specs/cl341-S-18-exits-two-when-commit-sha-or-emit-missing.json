@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace exits two when --commit-sha or --emit is omitted per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

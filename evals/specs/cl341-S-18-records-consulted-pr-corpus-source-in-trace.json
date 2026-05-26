@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace records consulted-pr-corpus source ids per the L-23 cross-loop contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted-pr-corpus stripe-node --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'stripe-node' trace.json && echo recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recorded"]}
+}

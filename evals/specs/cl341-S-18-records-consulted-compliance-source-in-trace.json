@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace records consulted-compliance source ids per the C-19 cross-loop contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted-compliance soc2-tsc --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'soc2-tsc' trace.json && echo recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recorded"]}
+}
