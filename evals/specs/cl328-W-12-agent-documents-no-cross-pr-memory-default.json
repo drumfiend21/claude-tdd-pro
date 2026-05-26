@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents the no-memory-across-PRs default behavior per the architecture",
+  "command": "grep -qi 'no memory\\|fresh' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -qi 'default' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

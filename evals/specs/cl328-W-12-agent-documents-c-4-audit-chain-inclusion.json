@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents the C-4 audit-chain inclusion of the conversation log per the architecture",
+  "command": "grep -q 'C-4' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -qi 'audit.chain\\|audit chain\\|audit-pack' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

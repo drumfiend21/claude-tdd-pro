@@ -1,0 +1,6 @@
+{
+  "name": "W-12 pr-review-conversational subagent ships at agents/pr-review-conversational.md per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

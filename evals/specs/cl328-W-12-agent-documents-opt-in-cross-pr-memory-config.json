@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents the opt-in cross-PR memory via userConfig.pr_review_cross_pr_memory per the architecture",
+  "command": "grep -q 'pr_review_cross_pr_memory' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -qi 'opt.in' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents the conversation.jsonl audit log path at .claude-tdd-pro/pr-reviews/<pr-sha>/ per architecture",
+  "command": "grep -q 'pr-reviews' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'conversation.jsonl' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q '<pr-sha>' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

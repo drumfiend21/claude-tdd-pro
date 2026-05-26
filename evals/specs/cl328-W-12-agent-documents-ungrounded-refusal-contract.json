@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents the ungrounded-answer refusal contract per the architecture (refuses to speculate or hallucinate)",
+  "command": "grep -qi 'ungrounded\\|refusal\\|refuse' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -qi 'don.t have grounding\\|no grounding' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

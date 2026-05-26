@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents all four grounding sources (manifest §2.8 ADR W-4 eval P-2 test suite)",
+  "command": "grep -q '§2.8' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'W-4' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'P-2' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -qi 'test suite\\|test path' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cited"]}
+}

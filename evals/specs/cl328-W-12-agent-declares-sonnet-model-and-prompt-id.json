@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent declares sonnet model and prompt_id pr-review-conversational per the architecture",
+  "command": "grep -q 'model: sonnet' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'prompt_id: pr-review-conversational' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
