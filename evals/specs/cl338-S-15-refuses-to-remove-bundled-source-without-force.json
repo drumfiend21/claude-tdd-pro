@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove refuses to remove a bundled source without --force per the protection contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id google-tsguide 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'bundled' err.txt && grep -q 'force' err.txt && echo refused 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["refused"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove --emit-audit records a jsonl line documenting the removal action",
+  "command": "mkdir -p .claude-tdd-pro && printf -- '- id: custom-spec\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id custom-spec --emit-audit audit.jsonl && [ -s audit.jsonl ] && grep -q '\"command\":\"standards-remove\"' audit.jsonl && grep -q '\"id\":\"custom-spec\"' audit.jsonl && echo audited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audited"]}
+}

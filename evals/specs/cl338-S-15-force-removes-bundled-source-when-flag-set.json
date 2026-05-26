@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove --force allows removal of a bundled source and records the force action in audit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id google-tsguide --force --emit-audit audit.jsonl && [ -s audit.jsonl ] && grep -q 'force-removed-bundled' audit.jsonl && echo forced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["forced"]}
+}

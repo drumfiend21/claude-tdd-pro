@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove removes the operator-added entry from .claude-tdd-pro/STANDARDS-URLS.yaml",
+  "command": "mkdir -p .claude-tdd-pro && printf -- '- id: custom-spec\\n  url: https://x.com\\n  added_by: operator\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id custom-spec 2>err.txt && ! grep -q '^- id: custom-spec$' .claude-tdd-pro/STANDARDS-URLS.yaml && echo removed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["removed"]}
+}
