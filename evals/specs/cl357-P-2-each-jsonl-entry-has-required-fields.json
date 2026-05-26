@@ -1,0 +1,6 @@
+{
+  "name": "P-2 each agent dataset jsonl entry declares id input and expected fields per the architecture eval schema",
+  "command": "node -e 'const fs=require(\"fs\");const path=require(\"path\");const dir=process.env.CLAUDE_PLUGIN_ROOT+\"/evals/datasets/agents\";for(const f of fs.readdirSync(dir).filter(n=>n.endsWith(\".jsonl\"))){for(const l of fs.readFileSync(path.join(dir,f),\"utf8\").split(\"\\n\").filter(Boolean)){const j=JSON.parse(l);if(!j.id||j.input===undefined||j.expected===undefined)process.exit(1);}}process.exit(0)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
