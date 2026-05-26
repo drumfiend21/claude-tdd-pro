@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: detector contract follows the §2.2 exit-code convention 0=clean 2=violation",
+  "command": "printf 'x' > /tmp/f0-empty.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/refused-flags.sh\" --in /tmp/f0-empty.txt 2>/dev/null; rc=$?; [ \"$rc\" = 0 ] || [ \"$rc\" = 2 ] && echo locked 1>&2; rm -f /tmp/f0-empty.txt",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["locked"]}
+}

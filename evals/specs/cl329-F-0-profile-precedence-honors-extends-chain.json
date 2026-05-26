@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: profile precedence runtime honors the extends chain per §2.5 (rightmost wins on merged rules)",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" ] && grep -q 'extends' \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && grep -q 'rightmost' \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

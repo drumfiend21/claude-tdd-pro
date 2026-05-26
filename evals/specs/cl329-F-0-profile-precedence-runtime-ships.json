@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: profile precedence runtime is profiles/active.sh per §2.5 profile precedence lock",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

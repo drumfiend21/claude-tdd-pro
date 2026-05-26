@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: detector contract documented in rubric/detectors directory per §2.2 detector contract lock",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/rubric/detectors\" ] && ls \"$CLAUDE_PLUGIN_ROOT/rubric/detectors\"/*.sh 2>/dev/null | head -1 | grep -q . && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: rubric/runner.sh dispatch runtime ships and is the §2.2 detector-invocation home",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

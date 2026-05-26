@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: source-file schema (G-1 directory layout) ships at schemas/source-file.schema.json",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/schemas/source-file.schema.json\" ] && node -e 'JSON.parse(require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/schemas/source-file.schema.json\",\"utf8\"))' && echo locked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["locked"]}
+}
