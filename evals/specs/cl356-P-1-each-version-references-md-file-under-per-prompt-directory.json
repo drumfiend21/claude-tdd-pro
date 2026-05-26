@@ -1,0 +1,6 @@
+{
+  "name": "P-1 each version's file path points at prompts/<id>/v<semver>.md per the architecture per-prompt directory",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/prompts/registry.yaml\",\"utf8\");const files=y.match(/^\\s+file: \\S+/mg)||[];process.exit(files.every(f=>/prompts\\/[a-z0-9-]+\\/v[0-9]+\\.[0-9]+\\.[0-9]+\\.md/.test(f))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "P-1 versioned prompt registry ships at prompts/registry.yaml per the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/prompts/registry.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

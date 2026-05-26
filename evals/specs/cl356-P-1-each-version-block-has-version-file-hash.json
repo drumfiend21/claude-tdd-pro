@@ -1,0 +1,6 @@
+{
+  "name": "P-1 each prompt version block declares version, file, and hash fields per the architecture",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/prompts/registry.yaml\",\"utf8\");const versions=(y.match(/^\\s+- version:/mg)||[]).length;const files=(y.match(/^\\s+file:/mg)||[]).length;const hashes=(y.match(/^\\s+hash:/mg)||[]).length;process.exit(versions>0&&versions===files&&versions===hashes?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

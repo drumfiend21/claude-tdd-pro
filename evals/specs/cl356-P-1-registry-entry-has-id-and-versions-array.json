@@ -1,0 +1,6 @@
+{
+  "name": "P-1 each registry entry declares an id and a versions array per the architecture schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/prompts/registry.yaml\",\"utf8\");const ids=(y.match(/^- id: /mg)||[]).length;const vers=(y.match(/^\\s+versions:/mg)||[]).length;process.exit(ids>0&&ids===vers?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
