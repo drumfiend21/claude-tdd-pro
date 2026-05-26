@@ -1,0 +1,6 @@
+{
+  "name": "C-19 compliance auto-refresh telemetry includes a tokens_used field per the architecture telemetry contract",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && printf '2026-01-01T00:00:00Z' > .claude-tdd-pro/compliance-last-fetch/soc2-tsc.txt && printf '#!/usr/bin/env bash\\nexit 0\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-25T10:00:00Z --upstream-stub ./up.sh --emit-telemetry t.jsonl && grep -q 'tokens_used' t.jsonl && echo telemetered 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["telemetered"]}
+}
