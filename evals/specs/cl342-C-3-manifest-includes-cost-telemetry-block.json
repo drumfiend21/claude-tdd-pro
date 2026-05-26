@@ -1,0 +1,6 @@
+{
+  "name": "C-3 manifest envelope includes the cost_telemetry block per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/emit-provenance-manifest.sh\" --commit abc123 --out m.json --now 2026-05-25T10:00:00Z && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));const c=j.cost_telemetry;process.exit(c&&typeof c.tokens_in===\"number\"&&typeof c.tokens_out===\"number\"&&typeof c.monetary_estimate_usd===\"number\"?0:1)' && echo block 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["block"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "C-3 manifest envelope includes a signature field for the project-local key signing per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/emit-provenance-manifest.sh\" --commit abc123 --out m.json --now 2026-05-25T10:00:00Z && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));process.exit(\"signature\" in j?0:1)' && echo signed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["signed"]}
+}
