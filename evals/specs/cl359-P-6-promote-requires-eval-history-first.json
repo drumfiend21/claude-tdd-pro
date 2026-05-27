@@ -1,0 +1,6 @@
+{
+  "name": "P-6 prompt-promote exits two when no eval-history exists for the candidate version",
+  "command": "touch prompts-registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" never-existed 9.9.9 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'eval' err.txt && echo gated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gated"]}
+}

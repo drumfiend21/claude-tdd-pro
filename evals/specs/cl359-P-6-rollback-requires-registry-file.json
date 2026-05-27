@@ -1,0 +1,6 @@
+{
+  "name": "P-6 prompt-rollback exits two when prompts/registry.yaml does not exist",
+  "command": "rm -rf prompts && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-rollback.sh\" test-agent 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'registry' err.txt && echo gated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gated"]}
+}

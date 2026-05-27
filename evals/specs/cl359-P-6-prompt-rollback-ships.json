@@ -1,0 +1,6 @@
+{
+  "name": "P-6 /prompt-rollback ships at commands/prompt-rollback.sh per the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/prompt-rollback.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

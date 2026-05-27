@@ -1,0 +1,6 @@
+{
+  "name": "P-6 /prompt-promote ships at commands/prompt-promote.sh per the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

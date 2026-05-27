@@ -1,0 +1,6 @@
+{
+  "name": "P-6 prompt-rollback exits two when <agent> argument is omitted",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-rollback.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}
