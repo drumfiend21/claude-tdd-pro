@@ -1,0 +1,6 @@
+{
+  "name": "Q-11 PR with full manifest, 5+ ADRs, no drift, and invocations logged scores 100/100 per §26",
+  "command": "printf '%s' '{\"commit\":\"abc\",\"ai_involvement\":{\"models_used\":[\"sonnet\"]},\"standards_state\":{\"g\":1},\"cost_telemetry\":{\"tokens_in\":100},\"decision_provenance\":{\"adrs\":[\"ADR-1\"]}}' > manifest.json && : > drift.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-quality-scorecard.sh\" --pr-sha abc --manifest manifest.json --adrs-csv 'ADR-1,ADR-2,ADR-3,ADR-4,ADR-5' --drift-findings drift.jsonl --invocations-count 3 --format json > out.json && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(j.score===100?0:1)' && echo perfect 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["perfect"]}
+}
