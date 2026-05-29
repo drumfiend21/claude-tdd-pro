@@ -1,0 +1,6 @@
+{
+  "name": "Q-12 --append writes a jsonl entry to .claude-tdd-pro/agent-invocations.jsonl with all required fields per §26",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/agent-invocations.sh\" --append --subagent-id review-types --prompt-id types-reviewer --prompt-version 1.0.0 --model sonnet --tokens-in 1500 --tokens-out 300 --latency-ms 2400 --exit-code 0 --now 2026-05-26T10:00:00Z 2>err.txt && [ -s .claude-tdd-pro/agent-invocations.jsonl ] && grep -q 'review-types' .claude-tdd-pro/agent-invocations.jsonl && echo appended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["appended"]}
+}

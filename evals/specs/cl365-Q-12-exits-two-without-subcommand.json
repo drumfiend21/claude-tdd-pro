@@ -1,0 +1,6 @@
+{
+  "name": "Q-12 exits two when no --append --query or --summarize-by subcommand is supplied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/agent-invocations.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

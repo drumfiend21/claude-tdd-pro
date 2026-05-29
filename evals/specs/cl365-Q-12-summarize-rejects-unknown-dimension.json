@@ -1,0 +1,6 @@
+{
+  "name": "Q-12 --summarize-by rejects a dimension value not in subagent_id prompt_id model per §26",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/agent-invocations.sh\" --summarize-by author 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'subagent_id|prompt_id|model' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}
