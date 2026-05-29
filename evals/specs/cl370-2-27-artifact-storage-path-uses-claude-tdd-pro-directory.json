@@ -1,0 +1,6 @@
+{
+  "name": "§2.27 continuation artifact lives at .claude-tdd-pro/agent-continuations/<session_id>.json per the contract path",
+  "command": "H13_ARTIFACT_DIR=.claude-tdd-pro/agent-continuations bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-target --parent-session-id cl-src --parent-cl-id cl-src --current-phase F --context-summary mid --next-action go --now 2026-05-25T10:00:00Z 2>/dev/null && [ -s .claude-tdd-pro/agent-continuations/cl-target.json ] && echo path 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["path"]}
+}

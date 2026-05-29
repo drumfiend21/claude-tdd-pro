@@ -1,0 +1,6 @@
+{
+  "name": "§2.27 artifact next_action declares both action and rationale fields per the contract schema",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id s --parent-session-id p --parent-cl-id c --current-phase F --context-summary mid --next-action 'resume step 7' --next-rationale 'parent paused' --now 2026-05-25T10:00:00Z 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"art/s.json\",\"utf8\"));process.exit(j.next_action.action===\"resume step 7\"&&j.next_action.rationale===\"parent paused\"?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

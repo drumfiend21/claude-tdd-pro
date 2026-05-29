@@ -1,0 +1,6 @@
+{
+  "name": "§2.27 context_summary length cap of 500 chars is enforced at write time per the contract",
+  "command": "BIG=$(printf 'a%.0s' $(seq 1 501)) && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id s --parent-session-id p --parent-cl-id c --current-phase F --context-summary \"$BIG\" --next-action go --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q '500 char' err.txt && echo enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["enforced"]}
+}

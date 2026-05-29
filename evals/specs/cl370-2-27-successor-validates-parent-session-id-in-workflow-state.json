@@ -1,0 +1,6 @@
+{
+  "name": "§2.27 successor --read validates parent_session_id exists in the §2.15 workflow-state envelope; refuses if absent",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id child --parent-session-id missing-parent --parent-cl-id c --current-phase F --context-summary mid --next-action go --now 2026-05-25T10:00:00Z 2>/dev/null && mkdir -p ws && printf '%s' '{\"_concurrent\":true,\"sessions\":{\"other-session\":{}}}' > ws/state.json && H13_ARTIFACT_DIR=art H13_WORKFLOW_STATE=ws/state.json bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --read --session-id child 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'not active' err.txt && echo refused 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["refused"]}
+}
