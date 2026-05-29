@@ -1,0 +1,6 @@
+{
+  "name": "O-13 default finding severity is warn per the §2.17 auto-demote mapping in §26.2",
+  "command": "mkdir -p src && printf 'const c = tokens.color.legacy.red;\\n' > src/c.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/design-token-freshness.sh\" --registry \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" --paths src 2>err.txt && grep -q 'severity=warn' err.txt && echo warned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["warned"]}
+}

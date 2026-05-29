@@ -1,0 +1,6 @@
+{
+  "name": "O-13 detector flags CSS var(--color-legacy-red) form references to the deprecated token",
+  "command": "mkdir -p src && printf '.button { color: var(--color-legacy-red); }\\n' > src/Button.css && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/design-token-freshness.sh\" --registry \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" --paths src 2>err.txt && grep -q 'token=color.legacy.red' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["flagged"]}
+}
