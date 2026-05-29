@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 safety classifier --extra-blocklist extends the built-in patterns with operator-supplied terms",
+  "command": "printf 'forbidden-keyword\\n' > extra.txt && echo 'mentioning forbidden-keyword here' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/customer-agent-safety-classifier.sh\" --agent example --extra-blocklist extra.txt 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'verdict=block' err.txt && echo extended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["extended"]}
+}
