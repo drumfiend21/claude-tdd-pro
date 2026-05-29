@@ -1,0 +1,6 @@
+{
+  "name": "R-10 detector flags prop_type_changed when same prop name has different type",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; };\\n' > before/Button.tsx && printf 'export type ButtonProps = { label: number; };\\n' > after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'kind=prop_type_changed' err.txt && grep -q 'prop=label' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["flagged"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-10 finding includes the component name and source file per the §26 W-12 citation contract",
+  "command": "mkdir -p before after && printf 'export type CardProps = { title: string; };\\n' > before/Card.tsx && printf 'export type CardProps = { heading: string; };\\n' > after/Card.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'component=Card' err.txt && grep -q 'Card.tsx' err.txt && echo cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cited"]}
+}

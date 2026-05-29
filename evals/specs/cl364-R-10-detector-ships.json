@@ -1,0 +1,6 @@
+{
+  "name": "R-10 component-API drift detector ships at rubric/detectors/component-api-drift.sh per §26 v1.11",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
