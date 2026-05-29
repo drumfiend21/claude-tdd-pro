@@ -1,0 +1,6 @@
+{
+  "name": "H-13 last_tool_calls slice keeps only the most recent ten entries per §2.27 cap",
+  "command": "printf '[' > tools.json; for i in $(seq 1 15); do [ \"$i\" -gt 1 ] && printf ',' >> tools.json; printf '\"call-%d\"' \"$i\" >> tools.json; done; printf ']' >> tools.json && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-z --parent-session-id cl-y --parent-cl-id cl-y --current-phase F --context-summary 's' --next-action 'go' --last-tool-calls-file tools.json --now 2026-05-25T10:00:00Z 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"art/cl-z.json\",\"utf8\"));process.exit(j.last_tool_calls.length===10&&j.last_tool_calls[0]===\"call-6\"&&j.last_tool_calls[9]===\"call-15\"?0:1)' && echo capped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["capped"]}
+}

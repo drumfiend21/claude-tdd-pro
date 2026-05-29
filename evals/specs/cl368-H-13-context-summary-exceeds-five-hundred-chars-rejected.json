@@ -1,0 +1,6 @@
+{
+  "name": "H-13 --write rejects a --context-summary that exceeds the 500-char limit per §2.27",
+  "command": "BIG=$(printf 'x%.0s' $(seq 1 501)) && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-x --parent-session-id cl-y --parent-cl-id cl-y --current-phase F --context-summary \"$BIG\" --next-action 'go' --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q '500 char' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

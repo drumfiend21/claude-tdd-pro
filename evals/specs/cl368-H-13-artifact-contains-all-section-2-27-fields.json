@@ -1,0 +1,6 @@
+{
+  "name": "H-13 artifact declares all required §2.27 fields (parent_session_id, parent_cl_id, current_phase, context_summary, next_action)",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-302 --parent-session-id cl-301 --parent-cl-id cl-301 --current-phase E --context-summary 'mid' --next-action 'go' --next-rationale 'because' --now 2026-05-25T10:00:00Z 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"art/cl-302.json\",\"utf8\"));process.exit(j.parent_session_id===\"cl-301\"&&j.parent_cl_id===\"cl-301\"&&j.current_phase===\"E\"&&j.context_summary===\"mid\"&&j.next_action.action===\"go\"&&j.next_action.rationale===\"because\"?0:1)' && echo schema 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["schema"]}
+}

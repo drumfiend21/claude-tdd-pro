@@ -1,0 +1,6 @@
+{
+  "name": "H-13 --purge-stale removes artifacts whose written_at exceeds the 24-hour TTL per §2.27",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-old --parent-session-id cl-p --parent-cl-id cl-p --current-phase F --context-summary 'old' --next-action 'x' --now 2026-05-23T10:00:00Z 2>/dev/null && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-fresh --parent-session-id cl-p --parent-cl-id cl-p --current-phase F --context-summary 'fresh' --next-action 'x' --now 2026-05-25T10:00:00Z 2>/dev/null && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --purge-stale --now 2026-05-25T11:00:00Z 2>err.txt && [ ! -f art/cl-old.json ] && [ -f art/cl-fresh.json ] && grep -q 'purged=1' err.txt && echo purged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["purged"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "H-13 substrate exits two when no --write/--read/--purge-stale subcommand is supplied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}
