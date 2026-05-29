@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add --dry-run reports planned writes without creating any files per §2.14",
+  "command": "rm -rf src && bash \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" --name Button --target-dir src/components --dry-run 2>err.txt && [ ! -d src ] && grep -q 'dry_run=true' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}

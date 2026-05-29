@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add appends a named export to the target-dir barrel index.ts",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" --name Card --target-dir src/components 2>err.txt && grep -q 'export { Card } from \"./Card/Card\";' src/components/index.ts && echo exported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["exported"]}
+}

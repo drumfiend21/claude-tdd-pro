@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add rejects a --name value that is not PascalCase per the §26 naming contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" --name button-card 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'PascalCase' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}
