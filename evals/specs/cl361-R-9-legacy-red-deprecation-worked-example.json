@@ -1,0 +1,6 @@
+{
+  "name": "R-9 registry includes the color.legacy.red deprecated token replaced_by color.signal.danger as a worked example",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/design-tokens/registry.yaml\",\"utf8\");const blocks=y.split(/^  - id: /m).slice(1);const legacy=blocks.find(b=>b.startsWith(\"color.legacy.red\"));process.exit(legacy&&/deprecated: true/.test(legacy)&&/replaced_by: color\\.signal\\.danger/.test(legacy)?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

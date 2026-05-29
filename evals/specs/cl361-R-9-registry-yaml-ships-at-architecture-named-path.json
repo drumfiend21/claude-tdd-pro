@@ -1,0 +1,6 @@
+{
+  "name": "R-9 design-token registry ships at design-tokens/registry.yaml per the §26 architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

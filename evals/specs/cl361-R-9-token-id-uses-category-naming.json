@@ -1,0 +1,6 @@
+{
+  "name": "R-9 token id naming follows category.role.variant convention per the §26 schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/design-tokens/registry.yaml\",\"utf8\");const ids=(y.match(/^  - id: \\S+/mg)||[]).map(s=>s.replace(/^  - id: /,\"\"));const cats=new Set([\"color\",\"space\",\"font\",\"radius\",\"shadow\",\"motion\",\"breakpoint\"]);process.exit(ids.every(id=>cats.has(id.split(\".\")[0]))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
