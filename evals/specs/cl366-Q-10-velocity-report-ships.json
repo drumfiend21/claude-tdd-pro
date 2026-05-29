@@ -1,0 +1,6 @@
+{
+  "name": "Q-10 velocity-report ships at commands/velocity-report.sh per §26 v1.11",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/velocity-report.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-10 --dry-run reports planned parameters and exits zero without reading the log per §2.14",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/velocity-report.sh\" --dry-run --baseline-days 30 --recent-days 7 2>err.txt && grep -q 'dry_run=true' err.txt && grep -q 'baseline_days=30' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}

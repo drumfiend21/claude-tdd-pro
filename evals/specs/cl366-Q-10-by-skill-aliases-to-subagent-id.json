@@ -1,0 +1,6 @@
+{
+  "name": "Q-10 --by skill aliases to grouping by subagent_id per the §26 skill = subagent equivalence",
+  "command": "printf '{\"ts\":\"2026-05-10T00:00:00Z\",\"subagent_id\":\"review-types\",\"prompt_id\":\"p\",\"prompt_version\":\"1.0.0\",\"model\":\"sonnet\",\"tokens_in\":100,\"tokens_out\":50,\"latency_ms\":3000,\"exit_code\":0,\"finding_count\":0}\\n{\"ts\":\"2026-05-23T00:00:00Z\",\"subagent_id\":\"review-types\",\"prompt_id\":\"p\",\"prompt_version\":\"1.0.0\",\"model\":\"sonnet\",\"tokens_in\":100,\"tokens_out\":50,\"latency_ms\":1000,\"exit_code\":0,\"finding_count\":0}\\n' > log.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/velocity-report.sh\" --log log.jsonl --by skill --now 2026-05-25T00:00:00Z 2>err.txt && grep -q 'review-types' err.txt && echo aliased 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["aliased"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-10 velocity-report rejects --format outside text json per §26",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/velocity-report.sh\" --format yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'must be' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}
