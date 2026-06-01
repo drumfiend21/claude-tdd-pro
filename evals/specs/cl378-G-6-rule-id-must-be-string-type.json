@@ -1,0 +1,6 @@
+{
+  "name": "G-6 source-file validator: rule.id must be a string type; integer or boolean ids are rejected",
+  "command": "printf 'source:\\n  id: test-src\\n  authoritative_publisher: A\\n  authoritative_url: https://e.t/d\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:abc123\"\\n  fetch_frequency: weekly\\n  fragility_tier: low\\n  license_note: \"MIT\"\\nrules:\\n  - id: 12345\\n    type: problem\\nrecommended_set: []\\nall_set: []\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/sf.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rule\\[0\\].id is wrong type' err.txt && echo type_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["type_enforced"]}
+}
