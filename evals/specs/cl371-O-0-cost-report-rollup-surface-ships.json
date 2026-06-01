@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: H-12 cost rollup script ships at commands/cost-report.sh per the §23 v1.9.1 amendment",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

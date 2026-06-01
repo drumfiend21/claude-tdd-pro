@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: CLAUDE.md references the PRIMARY RULESET and §20 sequencing per the week-1 discipline",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/CLAUDE.md\" ] && grep -q 'PRIMARY RULESET' \"$CLAUDE_PLUGIN_ROOT/CLAUDE.md\" && grep -q 'ai-dev-corpus' \"$CLAUDE_PLUGIN_ROOT/CLAUDE.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

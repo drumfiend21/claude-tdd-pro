@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: P-4 model-rationale detector ships and refuses agents without rationale per the cost-justification chain",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/model-rationale.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

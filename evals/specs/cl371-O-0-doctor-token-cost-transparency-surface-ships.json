@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: H-1 token-cost transparency substrate ships at commands/doctor.sh as the per-skill telemetry surface",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" ] && grep -qE 'token|cost|H-1' \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

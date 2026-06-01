@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: ai-dev-corpus PRIMARY RULESET ships at the architecture-named path per the universal cross-cutting discipline",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_universal/ai-dev-corpus.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
