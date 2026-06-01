@@ -1,0 +1,6 @@
+{
+  "name": "G-2 source-organized file format: file missing the source: header is rejected by validate-source-file",
+  "command": "printf 'rules:\\n  - id: g-test-001\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/sf.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && echo header_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["header_required"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-2 source-organized file format: content_hash must start with sha256: per §2.21 contract; other prefixes are rejected",
+  "command": "printf 'source:\\n  id: test-src\\n  authoritative_publisher: A\\n  authoritative_url: https://e.t/d\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"md5:abc\"\\n  fetch_frequency: weekly\\n  fragility_tier: low\\n  license_note: \"MIT\"\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/sf.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'content_hash' err.txt && echo sha256_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["sha256_required"]}
+}
