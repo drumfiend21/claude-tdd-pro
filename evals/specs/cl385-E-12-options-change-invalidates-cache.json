@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: different resolved-options invalidate the entry because the cache key includes them",
+  "command": "printf 'x\\n' > in.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --options '{\"a\":1}' --cache --cache-location cache.json --cache-stats 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --options '{\"a\":2}' --cache --cache-location cache.json --cache-stats 2>err.txt; grep -q '\"cache_status\":\"miss\"' err.txt && echo options_invalidates 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_invalidates"]}
+}

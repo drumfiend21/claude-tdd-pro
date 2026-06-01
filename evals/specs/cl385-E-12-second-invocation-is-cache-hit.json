@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: second invocation with the same inputs reports cache_status=hit so ~0 tokens land in H-1 transparency",
+  "command": "printf 'x\\n' > in.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache --cache-location cache.json --cache-stats 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache --cache-location cache.json --cache-stats 2>err.txt; grep -q '\"cache_status\":\"hit\"' err.txt && echo second_hit 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["second_hit"]}
+}

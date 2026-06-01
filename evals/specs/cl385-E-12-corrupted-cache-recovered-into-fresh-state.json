@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: a corrupted cache file is recovered into a fresh state and the run continues",
+  "command": "printf 'x\\n' > in.txt && printf 'not json at all\\n' > cache.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache --cache-location cache.json --cache-stats 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q '\"cache_recovered\":true' err.txt && echo recovered 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recovered"]}
+}

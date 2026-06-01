@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: run-detector.sh --cache requires --cache-location <path>",
+  "command": "printf 'x\\n' > in.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- '--cache requires --cache-location' err.txt && echo location_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["location_required"]}
+}
