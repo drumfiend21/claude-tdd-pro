@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: agent-datasets/<review-subagent>.jsonl supplies ~30 hand-graded inputs per review subagent so P-2 eval datasets can bootstrap",
+  "command": "ok=0; bad=0; for f in \"$CLAUDE_PLUGIN_ROOT/seed/agent-datasets\"/review-*.jsonl; do [ -s \"$f\" ] || continue; n=$(wc -l < \"$f\" | tr -d ' '); if [ \"$n\" -ge 30 ]; then ok=$((ok+1)); else bad=$((bad+1)); fi; done; [ \"$ok\" -ge 1 ] && [ \"$bad\" -eq 0 ] && echo \"subagent_datasets_ok=$ok\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["subagent_datasets_ok="]}
+}

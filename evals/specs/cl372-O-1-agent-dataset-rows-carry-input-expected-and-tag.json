@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: agent-dataset rows carry input, expected and bootstrap_seed: true so P-2 evals can grade subagent output deterministically",
+  "command": "missing=0; for f in \"$CLAUDE_PLUGIN_ROOT/seed/agent-datasets\"/review-*.jsonl; do [ -s \"$f\" ] || continue; grep -q '\"input\":' \"$f\" || missing=$((missing+1)); grep -q '\"expected\":' \"$f\" || missing=$((missing+1)); grep -q '\"bootstrap_seed\":true' \"$f\" || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo agent_dataset_fields_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["agent_dataset_fields_present"]}
+}

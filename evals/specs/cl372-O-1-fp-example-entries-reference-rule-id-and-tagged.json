@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: each fp-example record carries rule_id, is_false_positive and bootstrap_seed: true so it can feed false-positive triage",
+  "command": "missing=0; for d in \"$CLAUDE_PLUGIN_ROOT/seed/fp-examples\"/*/; do f=\"$d/examples.jsonl\"; [ -s \"$f\" ] || continue; grep -q '\"rule_id\":' \"$f\" || missing=$((missing+1)); grep -q '\"is_false_positive\":' \"$f\" || missing=$((missing+1)); grep -q '\"bootstrap_seed\":true' \"$f\" || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo fp_fields_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["fp_fields_present"]}
+}

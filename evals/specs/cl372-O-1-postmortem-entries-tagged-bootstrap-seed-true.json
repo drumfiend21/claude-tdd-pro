@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: every postmortem entry is tagged bootstrap_seed: true per the §13 provenance tag",
+  "command": "n=0; m=0; for f in \"$CLAUDE_PLUGIN_ROOT/seed/postmortems\"/*.jsonl; do n=$((n+1)); grep -q '\"bootstrap_seed\":true' \"$f\" && m=$((m+1)); done; [ \"$n\" -gt 0 ] && [ \"$n\" -eq \"$m\" ] && echo \"tagged=$m/$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["tagged=12/12"]}
+}
