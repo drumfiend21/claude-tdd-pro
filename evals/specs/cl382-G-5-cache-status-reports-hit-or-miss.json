@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: cache_status reports hit or miss so F-2 reports hit rate",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -qE '\"cache_status\":\"(hit|miss)\"' err.txt && echo cache_reported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cache_reported"]}
+}

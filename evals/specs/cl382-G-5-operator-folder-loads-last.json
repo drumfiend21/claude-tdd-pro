@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: _operator/**/*.yaml loads last so operator overrides win per the §17 G-5 ordering",
+  "command": "mkdir -p tree/google tree/_operator/my-org && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && printf 'source:\\n  id: o\\nrules:\\n  - id: my-org-001\\n' > tree/_operator/my-org/c.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json --emit-load-order 2>err.txt; node -e 'const e=require(\"fs\").readFileSync(\"err.txt\",\"utf8\");const m=e.match(/\"load_order\":\\[([^\\]]+)\\]/);if(!m)process.exit(1);const arr=m[1];const i_g=arr.indexOf(\"google\");const i_o=arr.indexOf(\"_operator\");process.exit(i_g>=0 && i_o>=0 && i_o>i_g?0:1)' && echo operator_last 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["operator_last"]}
+}

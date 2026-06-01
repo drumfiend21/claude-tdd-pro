@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: unknown flags in --root mode are rejected with a clear error and exit 2",
+  "command": "mkdir -p tree && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --nonsense-flag 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'aggregator: unknown flag' err.txt && echo strict_flags 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["strict_flags"]}
+}

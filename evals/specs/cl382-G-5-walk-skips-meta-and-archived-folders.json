@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: walk skips _meta and _archived folders so substrate and retired files are not aggregated",
+  "command": "mkdir -p tree/google tree/google/_archived tree/_meta && printf 'not yaml\\n' > tree/_meta/INDEX.md && printf 'source:\\n  id: o\\nrules:\\n  - id: g-ts-old\\n' > tree/google/_archived/old.yaml && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json --emit-load-order 2>err.txt; node -e 'const e=require(\"fs\").readFileSync(\"err.txt\",\"utf8\");const m=e.match(/\"load_order\":\\[([^\\]]*)\\]/);if(!m)process.exit(1);const arr=m[1];process.exit(arr.indexOf(\"_meta\")<0 && arr.indexOf(\"_archived\")<0 ? 0 : 1)' && echo substrate_skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["substrate_skipped"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: --strict + .claude-tdd-pro/lock.json mismatch on quality_standards_directory_hash is rejected (exit 2)",
+  "command": "mkdir -p tree/google .claude-tdd-pro && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && printf '{\"quality_standards_directory_hash\":\"sha256:00\"}\\n' > .claude-tdd-pro/lock.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json --strict 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'quality_standards_directory_hash mismatch' err.txt && echo mismatch_blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["mismatch_blocked"]}
+}
