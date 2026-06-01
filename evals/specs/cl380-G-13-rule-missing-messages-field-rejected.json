@@ -1,0 +1,8 @@
+{
+  "name": "G-13 eslint compliance: rule missing the messages field is rejected with exit 2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-eslint-compliance.sh\" \"$PWD/file.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'field messages is required' err.txt && echo missing_messages 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\nrules:\\n  - {id: g-x-001, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: []}\\n' > file.yaml"
+  ],
+  "expect": {"exit_code": 0, "stderr_contains": ["missing_messages"]}
+}

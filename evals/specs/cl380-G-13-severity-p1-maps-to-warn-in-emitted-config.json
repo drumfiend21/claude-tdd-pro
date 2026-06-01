@@ -1,0 +1,8 @@
+{
+  "name": "G-13 eslint compliance: severity P1 maps to warn in the emitted ESLint-equivalent config",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-eslint-compliance.sh\" \"$PWD/file.yaml\" --emit-eslint-config 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -qE '\"g-x-001\":[[:space:]]*\"warn\"' err.txt && echo p1_warn 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\n  authoritative_publisher: Acme\\n  authoritative_url: https://a.com\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: 2026-05-04T00:00:00Z\\n  content_hash: sha256:S\\n  fetch_frequency: daily\\n  fragility_tier: low\\n  license_note: MIT\\nrules:\\n  - {id: g-x-001, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: https://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: []}\\nrecommended_set: [g-x-001]\\nall_set: [g-x-001]\\n' > file.yaml"
+  ],
+  "expect": {"exit_code": 0, "stderr_contains": ["p1_warn"]}
+}
