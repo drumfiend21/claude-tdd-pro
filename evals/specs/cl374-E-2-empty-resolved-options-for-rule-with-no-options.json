@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: a rule with no options_schema and no profile options yields resolved_options={} (empty merge)",
+  "command": "mkdir -p tree/g && printf 'rules:\\n  - id: g-ts-105\\n' > tree/g/rules.yaml && printf 'rules:\\n  g-ts-105: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-105 --profile p.yaml --tree tree 2>err.txt; grep -q 'resolved_options={}' err.txt && echo empty_merge 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["empty_merge"]}
+}

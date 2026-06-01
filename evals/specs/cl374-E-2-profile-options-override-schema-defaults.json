@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: profile-supplied tuple options override schema defaults for the same key in resolved_options",
+  "command": "mkdir -p tree/g && printf 'rules:\\n  - id: g-ts-102\\n    options_schema:\\n      properties:\\n        budget_kb:\\n          default: 250\\n' > tree/g/rules.yaml && printf 'rules:\\n  g-ts-102:\\n    - error\\n    - budget_kb: 500\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-102 --profile p.yaml --tree tree 2>err.txt; grep -q '\"budget_kb\":500' err.txt && echo override_won 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["override_won"]}
+}

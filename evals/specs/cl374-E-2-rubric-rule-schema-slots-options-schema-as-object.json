@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: rubric-rule schema reserves options_schema as a JSON Schema object slot per §2.1",
+  "command": "node -e 'const s=JSON.parse(require(\"fs\").readFileSync(\"'$CLAUDE_PLUGIN_ROOT'/schemas/rubric-rule.schema.json\",\"utf8\"));process.exit(s.properties.options_schema && s.properties.options_schema.type===\"object\"?0:1)' && echo schema_slot_ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["schema_slot_ok"]}
+}

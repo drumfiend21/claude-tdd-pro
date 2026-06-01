@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: profile tuple options surface via resolved_options even when the rule has no options_schema",
+  "command": "mkdir -p tree/g && printf 'rules:\\n  - id: g-ts-104\\n' > tree/g/rules.yaml && printf 'rules:\\n  g-ts-104:\\n    - error\\n    - allow_with_comment: false\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-104 --profile p.yaml --tree tree 2>err.txt; grep -q '\"allow_with_comment\":false' err.txt && echo passthrough 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["passthrough"]}
+}

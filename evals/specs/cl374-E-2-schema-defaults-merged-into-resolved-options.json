@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: options_schema defaults are merged into resolved_options when the profile does not supply them",
+  "command": "mkdir -p tree/g && printf 'rules:\\n  - id: g-ts-101\\n    options_schema:\\n      properties:\\n        budget_kb:\\n          default: 250\\n        strict_schema:\\n          default: true\\n' > tree/g/rules.yaml && printf 'rules:\\n  g-ts-101: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-101 --profile p.yaml --tree tree 2>err.txt; grep -q '\"budget_kb\":250' err.txt && grep -q '\"strict_schema\":true' err.txt && echo defaults_merged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["defaults_merged"]}
+}

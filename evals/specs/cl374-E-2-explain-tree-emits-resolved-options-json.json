@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: doctor --explain --tree emits resolved_options as JSON when a rule has options_schema",
+  "command": "mkdir -p tree/g && printf 'rules:\\n  - id: g-ts-100\\n    options_schema:\\n      properties:\\n        budget_kb:\\n          default: 250\\n' > tree/g/rules.yaml && printf 'rules:\\n  g-ts-100: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-100 --profile p.yaml --tree tree 2>err.txt; grep -q 'resolved_options=' err.txt && grep -q 'budget_kb' err.txt && echo resolved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["resolved"]}
+}

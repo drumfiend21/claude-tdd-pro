@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: rule-metadata-complete detector rejects a rule whose options_schema is not a hash (JSON Schema object)",
+  "command": "printf 'id: g-ts-200\\ntype: problem\\noptions_schema: not-a-hash\\n' > g-ts-200.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-200.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'options_schema: must be a JSON Schema object' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

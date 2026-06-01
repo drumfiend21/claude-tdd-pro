@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: a rule's detector (no-any.sh) accepts --options <json> per §16 E-2 detector contract",
+  "command": "grep -q -- '--options)  OPTIONS=' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" && grep -q 'Merge --options' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" && echo options_wired 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_wired"]}
+}

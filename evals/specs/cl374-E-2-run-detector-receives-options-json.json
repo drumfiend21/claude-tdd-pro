@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: rubric/detectors/run-detector.sh accepts the --options <json> flag per the §16 E-2 final clause",
+  "command": "grep -q -- '--options) OPTIONS=' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" && grep -q -E 'E-2 final clause.*detectors receive .{0,3}--options' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" && echo dispatched 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dispatched"]}
+}
