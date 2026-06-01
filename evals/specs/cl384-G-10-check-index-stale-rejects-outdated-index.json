@@ -1,0 +1,6 @@
+{
+  "name": "G-10 index generation: --check-index-stale rejects an outdated INDEX.md so /doctor catches drift",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: Acme\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\nrules:\\n  - id: g-ts-001\\nrecommended_set: [g-ts-001]\\n' > tree/google/g.yaml && printf 'wrong outdated content\\n' > stale.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --check-index-stale --index-path \"$PWD/stale.md\" 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'INDEX.md stale at' err.txt && echo stale_detected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["stale_detected"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-10 index generation: --check-index-stale rejects with exit 2 when --index-path is not supplied",
+  "command": "mkdir -p tree && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --check-index-stale 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- '--check-index-stale requires --index-path' err.txt && echo path_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["path_required"]}
+}

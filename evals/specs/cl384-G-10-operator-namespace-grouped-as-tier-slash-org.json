@@ -1,0 +1,6 @@
+{
+  "name": "G-10 index generation: _operator/<my-org> files are classified under _operator/<my-org> so per-namespace counts stay scoped",
+  "command": "mkdir -p tree/_operator/acme && printf 'source:\\n  id: o\\n  authoritative_publisher: Acme\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\nrules:\\n  - id: acme-001\\nrecommended_set: [acme-001]\\n' > tree/_operator/acme/c.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --emit-index \"$PWD/INDEX.md\" 2>err.txt; grep -q '_operator/acme' INDEX.md && echo operator_grouped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["operator_grouped"]}
+}
