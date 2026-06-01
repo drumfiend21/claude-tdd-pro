@@ -1,0 +1,6 @@
+{
+  "name": "G-1 directory layout: the react namespace folder ships per the §17 14-default namespaces list",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/react\" ] && echo react_ships 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["react_ships"]}
+}

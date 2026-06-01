@@ -1,0 +1,6 @@
+{
+  "name": "G-1 directory layout: the _operator/, _community/, and _meta/ substrate folders ship alongside the 14 default namespaces",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_operator\" ] && [ -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_community\" ] && [ -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_meta\" ] && echo substrate_tiers 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["substrate_tiers"]}
+}
