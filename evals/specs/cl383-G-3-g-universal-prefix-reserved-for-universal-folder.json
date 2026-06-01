@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: g-universal- prefix is reserved for _universal/ folder; using it in default folders is rejected",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: g-universal-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing 2>err.txt; grep -q 'g-universal- prefix is reserved' err.txt && echo prefix_reserved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["prefix_reserved"]}
+}

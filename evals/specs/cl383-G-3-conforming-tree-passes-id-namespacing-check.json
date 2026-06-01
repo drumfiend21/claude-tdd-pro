@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: a tree where every rule honors the per-folder prefix discipline passes the check",
+  "command": "mkdir -p tree/google tree/_universal tree/_operator/acme tree/_community/my-plugin && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && printf 'source:\\n  id: u\\nrules:\\n  - id: g-universal-001\\n' > tree/_universal/u.yaml && printf 'source:\\n  id: o\\nrules:\\n  - id: acme-001\\n' > tree/_operator/acme/c.yaml && printf 'source:\\n  id: c\\nrules:\\n  - id: my-plugin/foo-001\\n' > tree/_community/my-plugin/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing 2>err.txt; ! grep -q 'id-namespacing:' err.txt && echo all_clean 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_clean"]}
+}

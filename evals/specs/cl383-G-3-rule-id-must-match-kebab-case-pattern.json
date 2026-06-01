@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: rule IDs must match the kebab-case pattern ^[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)?$",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: Bad_Id\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing 2>err.txt; grep -q 'must match kebab-case pattern' err.txt && echo kebab_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["kebab_enforced"]}
+}

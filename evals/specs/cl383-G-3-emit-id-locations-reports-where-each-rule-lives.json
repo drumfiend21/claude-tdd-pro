@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: --emit-id-locations reports where each rule id lives so renames preserve stability",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --emit-id-locations 2>err.txt; grep -q 'g-ts-001' err.txt && grep -q 'google/g.yaml' err.txt && echo locations_emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["locations_emitted"]}
+}

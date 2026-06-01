@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: the shipped generated-code-quality-standards/ tree passes the --check-id-namespacing gate",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" --check-id-namespacing 2>err.txt; ! grep -q '^id-namespacing:' err.txt && echo shipped_clean 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["shipped_clean"]}
+}
