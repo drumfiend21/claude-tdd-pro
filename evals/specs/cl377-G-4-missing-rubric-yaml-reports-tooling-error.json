@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: a missing rubric/RUBRIC.yaml is reported as a tooling error with exit 1",
+  "command": "mkdir -p root/rubric && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'source file not found' err.txt && echo missing_input 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["missing_input"]}
+}

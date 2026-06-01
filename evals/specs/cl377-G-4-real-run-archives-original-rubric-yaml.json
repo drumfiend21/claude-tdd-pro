@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: a real run archives rubric/RUBRIC.yaml to rubric/RUBRIC.legacy.yaml.archived",
+  "command": "mkdir -p root/rubric && printf 'rules:\\n  - id: g-google-001\\n    provenance:\\n      - source: google-tsguide\\n' > root/rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -f root/rubric/RUBRIC.legacy.yaml.archived ] && [ ! -f root/rubric/RUBRIC.yaml ] && echo archived 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["archived"]}
+}

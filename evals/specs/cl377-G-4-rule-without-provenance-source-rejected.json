@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: a rule lacking provenance.source is rejected because namespace routing depends on it",
+  "command": "mkdir -p root/rubric && printf 'rules:\\n  - id: g-orphan\\n    provenance: []\\n' > root/rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'provenance.source is required' err.txt && echo provenance_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["provenance_required"]}
+}

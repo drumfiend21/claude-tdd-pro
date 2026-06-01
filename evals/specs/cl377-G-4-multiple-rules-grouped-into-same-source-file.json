@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: multiple rules whose provenance.source resolves to the same namespace/file are grouped into one source-organized file",
+  "command": "mkdir -p root/rubric && printf 'rules:\\n  - id: g-ts-001\\n    provenance:\\n      - source: google-tsguide\\n  - id: g-ts-002\\n    provenance:\\n      - source: google-tsguide\\n' > root/rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -f out/google/tsguide.yaml ] && grep -c 'id: g-ts-' out/google/tsguide.yaml | grep -q '^2$' && echo grouped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["grouped"]}
+}

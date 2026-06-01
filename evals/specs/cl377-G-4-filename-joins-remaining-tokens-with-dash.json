@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: namespace routing joins the remaining tokens with '-' so google-eng-practices lands under google/eng-practices.yaml",
+  "command": "mkdir -p root/rubric && printf 'rules:\\n  - id: g-eng-001\\n    provenance:\\n      - source: google-eng-practices\\n' > root/rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -f out/google/eng-practices.yaml ] && echo joined 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["joined"]}
+}
