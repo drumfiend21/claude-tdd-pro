@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: tuple severity with the wrong array length is rejected because §16 E-1 mandates a 2-tuple of [severity, options]",
+  "command": "printf 'rules:\\n  g-ts-001:\\n    - error\\n    - allow_with_comment: false\\n    - options: noise\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'array_length=3' err.txt && grep -q 'expected_length=2' err.txt && echo arity_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["arity_enforced"]}
+}

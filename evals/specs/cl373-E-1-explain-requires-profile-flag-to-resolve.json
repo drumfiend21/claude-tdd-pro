@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: doctor --explain refuses to resolve without --profile <path> because the resolution chain anchors on the root profile",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q -- '--profile <path> required' err.txt && echo profile_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["profile_required"]}
+}

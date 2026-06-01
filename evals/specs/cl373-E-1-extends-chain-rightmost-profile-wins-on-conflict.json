@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: when extends chain disagrees about a rule, the rightmost (most-recent) extends source wins per §2.5 extends_rightmost",
+  "command": "printf 'rules:\\n  g-ts-001: warn\\n' > base.yaml && printf 'extends:\\n  - ./base.yaml\\nrules:\\n  g-ts-001: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; grep -q 'effective_severity=error' err.txt && grep -q 'source=p.yaml' err.txt && echo rightmost_wins 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rightmost_wins"]}
+}

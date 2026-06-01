@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: numeric severity 0 resolves to the named effective_severity=off per the ESLint 0/1/2 convention",
+  "command": "printf 'rules:\\n  g-ts-001: 0\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; grep -q 'effective_severity=off' err.txt && grep -q 'source_value=0' err.txt && echo coerced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["coerced"]}
+}

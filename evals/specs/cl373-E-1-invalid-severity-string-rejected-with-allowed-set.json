@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: invalid severity string is rejected by doctor --explain with an allowed=off|warn|error|0|1|2 message",
+  "command": "printf 'rules:\\n  g-ts-001: critical\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'invalid_severity=critical' err.txt && grep -q 'allowed=off|warn|error|0|1|2' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

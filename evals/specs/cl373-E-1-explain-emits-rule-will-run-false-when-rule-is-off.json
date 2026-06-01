@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: severity off makes rule_will_run=false in doctor --explain output",
+  "command": "printf 'rules:\\n  g-ts-001: \"off\"\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; grep -q 'effective_severity=off' err.txt && grep -q 'rule_will_run=false' err.txt && echo gated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gated"]}
+}

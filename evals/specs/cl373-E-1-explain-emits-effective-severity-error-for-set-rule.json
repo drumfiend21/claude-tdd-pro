@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: doctor --explain emits effective_severity=error when rules: { id: error } in profile",
+  "command": "printf 'rules:\\n  g-ts-001: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; grep -q 'effective_severity=error' err.txt && grep -q 'rule_will_run=true' err.txt && echo resolved 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["resolved"]}
+}

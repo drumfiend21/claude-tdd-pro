@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: tuple [error, {options}] surfaces per-rule options on the resolution chain via options.<key>=<value>",
+  "command": "printf 'rules:\\n  g-ts-002:\\n    - error\\n    - allow_with_comment: false\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-002 --profile p.yaml 2>err.txt; grep -q 'effective_severity=error' err.txt && grep -q 'options.allow_with_comment=false' err.txt && echo options_surfaced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_surfaced"]}
+}
