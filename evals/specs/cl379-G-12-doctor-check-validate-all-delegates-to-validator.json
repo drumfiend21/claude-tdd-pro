@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: /doctor --check validate-all --root <dir> delegates to validate-all.sh per the §17 G-12 integration",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: gx\\n  authoritative_publisher: Acme\\n  authoritative_url: https://e.t/d\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:abc123\"\\n  fetch_frequency: weekly\\n  fragility_tier: low\\n  license_note: \"MIT\"\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check validate-all --root \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'validate-all: ok' err.txt && echo delegated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["delegated"]}
+}

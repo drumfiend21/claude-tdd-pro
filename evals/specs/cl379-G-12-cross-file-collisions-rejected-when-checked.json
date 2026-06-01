@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: --check-cross-file-collisions rejects when the same rule id appears in two source files",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: a\\nrules:\\n  - id: g-x-001\\n' > tree/google/a.yaml && printf 'source:\\n  id: b\\nrules:\\n  - id: g-x-001\\n' > tree/google/b.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-cross-file-collisions 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -qi 'duplicate rule id' err.txt && echo collision_caught 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["collision_caught"]}
+}

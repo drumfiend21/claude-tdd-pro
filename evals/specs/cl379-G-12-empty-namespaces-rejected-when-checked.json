@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: --check-empty-namespaces rejects when a non-substrate namespace folder has no .yaml files",
+  "command": "mkdir -p tree/google tree/node && printf 'source:\\n  id: x\\nrules: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-empty-namespaces 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -qi 'empty' err.txt && echo empty_caught 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["empty_caught"]}
+}

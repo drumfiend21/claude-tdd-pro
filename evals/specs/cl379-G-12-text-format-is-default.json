@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: text is the default format when --format is not specified",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: x\\nrules: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" 2>err.txt; grep -qv '\"files_total\"' err.txt && echo text_default 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["text_default"]}
+}
