@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: fixable values outside {code, whitespace, null} are rejected per the §2.1 enum",
+  "command": "printf 'id: g-ts-303\\ntype: problem\\nfixable: yes-please\\n' > g-ts-303.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-303.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'fixable: \"yes-please\" not in enum {code, whitespace, null}' err.txt && echo fixable_enum 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["fixable_enum"]}
+}

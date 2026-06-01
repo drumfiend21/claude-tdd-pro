@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: type values outside {problem, suggestion, layout} are rejected per the §2.1 enum",
+  "command": "printf 'id: g-ts-302\\ntype: bug\\n' > g-ts-302.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-302.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'type: \"bug\" not in enum {problem, suggestion, layout}' err.txt && echo enum_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["enum_enforced"]}
+}

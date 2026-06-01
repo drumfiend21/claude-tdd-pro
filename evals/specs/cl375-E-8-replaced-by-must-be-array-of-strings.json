@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: replaced_by must be an array of rule-id strings; scalar values are rejected",
+  "command": "printf 'id: g-ts-306\\ntype: problem\\nreplaced_by: g-ts-999\\n' > g-ts-306.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-306.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'replaced_by: must be array of rule-id strings' err.txt && echo array_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["array_enforced"]}
+}

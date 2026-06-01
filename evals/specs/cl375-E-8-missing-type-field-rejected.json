@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: rule file missing the required type field is rejected with exit 2",
+  "command": "printf 'id: g-ts-301\\nfixable: null\\n' > g-ts-301.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-301.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'type: required' err.txt && echo type_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["type_required"]}
+}

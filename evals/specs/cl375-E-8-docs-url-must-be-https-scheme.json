@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: docs_url must use the https:// scheme; http or other schemes are rejected",
+  "command": "printf 'id: g-ts-307\\ntype: problem\\ndocs_url: http://example.test/rule\\n' > g-ts-307.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-307.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'docs_url: must start with https://' err.txt && echo https_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["https_required"]}
+}
