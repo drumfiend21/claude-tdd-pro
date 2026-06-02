@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: --check-recommended-consistency rejects a rule with recommended: true that is missing from recommended_set",
+  "command": "mkdir -p tree && printf 'source:\\n  id: g\\nrules:\\n  - id: g-x-001\\n    recommended: true\\nrecommended_set: []\\nall_set: [g-x-001]\\n' > tree/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" --check-recommended-consistency tree/g.yaml 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'recommended_set inconsistent' err.txt && echo inconsistent_caught 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["inconsistent_caught"]}
+}

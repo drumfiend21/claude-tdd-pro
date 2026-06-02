@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: rubric-rule schema slots recommended as a boolean field per §16 E-6",
+  "command": "node -e 'const s=JSON.parse(require(\"fs\").readFileSync(\"'$CLAUDE_PLUGIN_ROOT'/schemas/rubric-rule.schema.json\",\"utf8\"));process.exit(s.properties.recommended && s.properties.recommended.type===\"boolean\"?0:1)' && echo boolean_slot 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["boolean_slot"]}
+}

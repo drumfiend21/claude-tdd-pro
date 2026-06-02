@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: profiles/government.yaml uses extends: rubric:recommended per §16 E-6",
+  "command": "grep -q 'rubric:recommended' \"$CLAUDE_PLUGIN_ROOT/profiles/government.yaml\" && echo gov_extends 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gov_extends"]}
+}

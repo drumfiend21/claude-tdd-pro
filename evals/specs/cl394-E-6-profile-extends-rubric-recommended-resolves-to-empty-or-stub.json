@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: extends: rubric:recommended is a known built-in entry recognized by profile resolution",
+  "command": "grep -q 'rubric:recommended' \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" && echo built_in 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["built_in"]}
+}

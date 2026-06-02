@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: source-file schema requires recommended_set to be an array per §17 G-2",
+  "command": "node -e 'const s=JSON.parse(require(\"fs\").readFileSync(\"'$CLAUDE_PLUGIN_ROOT'/schemas/source-file.schema.json\",\"utf8\"));process.exit(s.properties.recommended_set && s.properties.recommended_set.type===\"array\"?0:1)' && echo array_shape 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["array_shape"]}
+}

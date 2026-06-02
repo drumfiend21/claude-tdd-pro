@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: profiles/financial.yaml uses extends: rubric:recommended per §16 E-6",
+  "command": "grep -q 'extends:.*rubric:recommended' \"$CLAUDE_PLUGIN_ROOT/profiles/financial.yaml\" && echo financial_extends 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["financial_extends"]}
+}
