@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: promotion to block refuses when no fp-log file exists because 14 days clean evidence is missing",
+  "command": "mkdir -p tree && bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" --rule-id g-ts-test --to block --tree \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'requires 14 days clean fp-log evidence' err.txt && echo fp_evidence 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["fp_evidence"]}
+}

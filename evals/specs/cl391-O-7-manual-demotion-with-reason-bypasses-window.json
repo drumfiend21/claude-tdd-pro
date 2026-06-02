@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: --reason operator-decision allows manual demotion without the 14-day window",
+  "command": "mkdir -p tree && bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" --rule-id g-ts-test --to warn-only --tree \"$PWD/tree\" --reason operator-decision 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'rule_state: warn-only' tree/google/x.yaml && echo demoted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["demoted"]}
+}

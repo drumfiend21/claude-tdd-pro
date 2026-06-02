@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: canary-promote requires --rule-id, --to, --tree flags",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- '--rule-id, --to, --tree required' err.txt && echo required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+}
