@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-007 component-test-required ships under google/testing-blog.yaml per the §9 R-2 table",
+  "command": "grep -q 'id: g-react-007' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/testing-blog.yaml\" && echo r007_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r007_placed"]}
+}

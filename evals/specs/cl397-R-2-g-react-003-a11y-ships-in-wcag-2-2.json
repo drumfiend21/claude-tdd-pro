@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-003 A11y P1 violations ships under w3c/wcag-2-2.yaml per the §9 R-2 table",
+  "command": "grep -q 'id: g-react-003' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/w3c/wcag-2-2.yaml\" && echo r003_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r003_placed"]}
+}

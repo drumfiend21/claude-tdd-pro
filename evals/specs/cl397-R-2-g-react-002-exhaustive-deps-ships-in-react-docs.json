@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-002 exhaustive-deps ships under react/react-docs.yaml per the §9 R-2 table",
+  "command": "grep -q 'id: g-react-002' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/react/react-docs.yaml\" && echo r002_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r002_placed"]}
+}
