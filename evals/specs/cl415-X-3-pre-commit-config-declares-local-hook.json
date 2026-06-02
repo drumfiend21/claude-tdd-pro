@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: config declares a local hook entry",
+  "command": "grep -qE \"repo:.*local|repos:|local\" \"$CLAUDE_PLUGIN_ROOT/.pre-commit-config.yaml\" && echo local_hook 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["local_hook"]}
+}

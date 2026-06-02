@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: vscode-tdd-pro/ ships package.json so it can be packaged as an extension",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/vscode-tdd-pro/package.json\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

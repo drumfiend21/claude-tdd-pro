@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: config stage is pre-commit",
+  "command": "grep -qE \"stages:.*pre-commit|pre-commit\" \"$CLAUDE_PLUGIN_ROOT/.pre-commit-config.yaml\" && echo stage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["stage"]}
+}

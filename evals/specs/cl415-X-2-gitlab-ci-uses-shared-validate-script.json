@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: invokes scripts/ci-validate-all.sh so X-1/X-2 share the gate",
+  "command": "grep -q \"ci-validate-all.sh\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo shared 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["shared"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: --settings-path <path> required",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- \"--settings-path\" err.txt && echo required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+}

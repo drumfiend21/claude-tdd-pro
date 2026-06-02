@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: scripts/ci-validate-all.sh mirror also ships for X-2/X-3 sharing",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/scripts/ci-validate-all.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

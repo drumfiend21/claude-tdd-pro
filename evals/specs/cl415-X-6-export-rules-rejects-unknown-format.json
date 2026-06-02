@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: rejects unknown --format with exit 2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" --target /tmp/test.json --format nonsense 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

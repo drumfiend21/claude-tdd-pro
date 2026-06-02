@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: skills/lsp-bootstrap ships so operators can install the runtime",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/skills/lsp-bootstrap\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

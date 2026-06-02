@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: skills/lsp-bootstrap/SKILL.md frontmatter declares name",
+  "command": "grep -q \"^name:\" \"$CLAUDE_PLUGIN_ROOT/skills/lsp-bootstrap/SKILL.md\" && echo name 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["name"]}
+}

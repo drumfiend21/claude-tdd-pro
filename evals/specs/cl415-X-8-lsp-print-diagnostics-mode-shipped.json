@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: tdd-pro-lsp surface documents --print-diagnostics mode per §14 X-8",
+  "command": "grep -rE \"print-diagnostics|--print-diagnostics\" \"$CLAUDE_PLUGIN_ROOT/lsp\" 2>/dev/null | head -1 | grep -q diagnostics && echo print_diagnostics 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["print_diagnostics"]}
+}

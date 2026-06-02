@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: declares SessionStart hook",
+  "command": "grep -q \"SessionStart\" \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" && echo sessionstart 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["sessionstart"]}
+}

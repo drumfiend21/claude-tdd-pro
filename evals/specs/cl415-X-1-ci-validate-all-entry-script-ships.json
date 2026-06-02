@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: ci-validate-all.sh entry script ships",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.github/workflows/ci-validate-all.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

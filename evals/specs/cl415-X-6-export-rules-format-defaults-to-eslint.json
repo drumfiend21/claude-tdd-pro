@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: --format defaults to eslint",
+  "command": "grep -q \"FORMAT=.eslint\" \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" && echo default_eslint 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["default_eslint"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: supports --dry-run per the §2.14 destructive command list",
+  "command": "grep -q -- \"--dry-run\" \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

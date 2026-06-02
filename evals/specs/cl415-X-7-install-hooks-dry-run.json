@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: supports --dry-run per §2.14",
+  "command": "grep -q -- \"--dry-run\" \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

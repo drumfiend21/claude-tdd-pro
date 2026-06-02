@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: .github/workflows/ ships at the §14 X-1 path",
+  "command": "ls \"$CLAUDE_PLUGIN_ROOT/.github/workflows/\"*.yml 2>/dev/null | head -1 | grep -q yml && echo workflows 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["workflows"]}
+}

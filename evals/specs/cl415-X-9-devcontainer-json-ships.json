@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: .devcontainer/devcontainer.json ships",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

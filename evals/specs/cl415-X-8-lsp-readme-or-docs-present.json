@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: lsp/ ships at least one README or markdown documenting the surface",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/lsp\" -name \"*.md\" 2>/dev/null | head -1 | grep -q .md && echo docs 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["docs"]}
+}

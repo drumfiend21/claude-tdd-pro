@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: devcontainer.json declares image or Dockerfile per spec",
+  "command": "grep -qE \"image|dockerFile|Dockerfile\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" && echo container_base 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["container_base"]}
+}

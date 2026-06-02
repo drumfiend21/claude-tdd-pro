@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: devcontainer.json declares a name",
+  "command": "grep -qE \"\\\"name\\\":\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" && echo name 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["name"]}
+}

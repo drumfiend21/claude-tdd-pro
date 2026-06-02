@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: vscode-tdd-pro/ extension ships per the v1.10 amendment",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/vscode-tdd-pro\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

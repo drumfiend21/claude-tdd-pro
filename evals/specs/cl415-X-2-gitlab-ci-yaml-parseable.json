@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: .gitlab-ci.yml is non-empty and contains stages key",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" ] && grep -qE \"^stages:|^variables:\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo parseable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["parseable"]}
+}

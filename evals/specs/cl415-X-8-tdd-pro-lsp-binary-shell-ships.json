@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: tdd-pro-lsp executable ships under lsp/",
+  "command": "find \"$CLAUDE_PLUGIN_ROOT/lsp\" -name \"tdd-pro-lsp*\" -type f 2>/dev/null | head -1 | grep -q tdd-pro && echo lsp_bin 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["lsp_bin"]}
+}

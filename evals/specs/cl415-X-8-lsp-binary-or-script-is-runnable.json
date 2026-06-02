@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: a tdd-pro-lsp entry script under lsp/ is invocable",
+  "command": "f=$(find \"$CLAUDE_PLUGIN_ROOT/lsp\" -name \"tdd-pro-lsp*\" -type f | head -1); [ -n \"$f\" ] && head -1 \"$f\" | grep -qE \"bash|node|#!\" && echo runnable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["runnable"]}
+}

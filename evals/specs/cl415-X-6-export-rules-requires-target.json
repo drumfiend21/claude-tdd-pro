@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: --target <path> required",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- \"--target\" err.txt && echo required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+}

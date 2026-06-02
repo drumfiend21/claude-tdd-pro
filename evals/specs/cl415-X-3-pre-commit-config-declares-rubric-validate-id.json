@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: config declares id: rubric-validate hook",
+  "command": "grep -qE \"id:.*rubric-validate|rubric-validate\" \"$CLAUDE_PLUGIN_ROOT/.pre-commit-config.yaml\" && echo id_declared 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["id_declared"]}
+}

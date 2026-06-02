@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: .devcontainer/ folder ships at the §14 X-9 path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/.devcontainer\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

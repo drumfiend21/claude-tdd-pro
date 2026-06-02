@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: installs bash + ruby + node toolchain",
+  "command": "grep -qE \"bash|ruby\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo toolchain 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["toolchain"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: forwarded ports declared OR no-network mode documented",
+  "command": "grep -qE \"forwardPorts|portsAttributes|no-network|appPort\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" 2>/dev/null && echo ports 1>&2 || echo ports 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ports"]}
+}

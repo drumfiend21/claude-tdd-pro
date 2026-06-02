@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: workflow declares a name: key",
+  "command": "grep -qE \"^name:\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" && echo name 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["name"]}
+}

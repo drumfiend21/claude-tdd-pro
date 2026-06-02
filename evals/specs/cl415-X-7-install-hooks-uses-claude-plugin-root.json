@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: installed hooks reference $CLAUDE_PLUGIN_ROOT so updates flow through",
+  "command": "grep -q \"CLAUDE_PLUGIN_ROOT\" \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" && echo plugin_root 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["plugin_root"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: lsp/ folder ships at the §14 X-8 path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/lsp\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
