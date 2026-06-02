@@ -4,6 +4,16 @@ node_modules/
 .env
 .env.local
 
+# Eval runner spec-result cache. Machine-local; rebuilt on demand.
+# Markers under .claude-tdd-pro/eval-cache/<sha>.passed are touched when
+# a spec passes; the substrate-tree hash is part of the key so any change
+# under rubric/, commands/, agents/, skills/, hooks/, profiles/, schemas/,
+# compliance/, generated-code-quality-standards/, templates/, scripts/,
+# space/, seed/, migrations/, standards/, design-tokens/, prompts/,
+# pr-corpus/, lsp/, scaffolds/, vscode-tdd-pro/, community/,
+# community-shared/ derives a fresh key and invalidates the cache.
+.claude-tdd-pro/eval-cache/
+
 # Q-6 SPACE local data — gitignored by default per privacy posture.
 # Only the user-data subtree is private; substrate scripts under space/ are
 # code and must remain tracked (prior `space/` blanket ignore silently dropped
