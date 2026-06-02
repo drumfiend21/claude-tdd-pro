@@ -1,0 +1,6 @@
+{
+  "name": "N-3 node detectors: fetch-timeout.sh references the default_timeout_ms option used by g-node-003",
+  "command": "grep -q 'default_timeout_ms' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/fetch-timeout.sh\" && echo option_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["option_present"]}
+}

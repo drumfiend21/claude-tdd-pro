@@ -1,0 +1,6 @@
+{
+  "name": "N-3 node detectors: five detectors (boundary-schema, console-in-src, fetch-timeout, naked-throw, supply-chain) ship per §8 N-3",
+  "command": "n=0; for d in boundary-schema console-in-src fetch-timeout naked-throw supply-chain; do [ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" ] && n=$((n+1)); done; [ \"$n\" -eq 5 ] && echo \"five_present=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["five_present=5"]}
+}
