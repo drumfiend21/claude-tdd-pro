@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: playwright.config.ts wires defineConfig from @playwright/test so e2e tests work out of the box",
+  "command": "grep -q 'defineConfig' \"$CLAUDE_PLUGIN_ROOT/templates/playwright.config.ts\" && grep -q '@playwright/test' \"$CLAUDE_PLUGIN_ROOT/templates/playwright.config.ts\" && echo playwright_wired 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["playwright_wired"]}
+}

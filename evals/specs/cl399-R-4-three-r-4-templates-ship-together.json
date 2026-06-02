@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: three templates (vitest.react.config.ts, playwright.config.ts, size-limit.config.js) ship together per §9 R-4",
+  "command": "n=0; for t in vitest.react.config.ts playwright.config.ts size-limit.config.js; do [ -s \"$CLAUDE_PLUGIN_ROOT/templates/$t\" ] && n=$((n+1)); done; [ \"$n\" -eq 3 ] && echo \"three_templates=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["three_templates=3"]}
+}

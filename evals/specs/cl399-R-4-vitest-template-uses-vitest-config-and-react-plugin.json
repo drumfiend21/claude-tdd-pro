@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: vitest.react.config.ts wires defineConfig + @vitejs/plugin-react so Vitest + React testing land out of the box",
+  "command": "grep -q 'defineConfig' \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" && grep -q '@vitejs/plugin-react' \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" && echo vitest_wired 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["vitest_wired"]}
+}

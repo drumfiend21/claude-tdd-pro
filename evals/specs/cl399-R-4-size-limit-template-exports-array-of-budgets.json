@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: size-limit.config.js exports an array of per-route budget entries that feed g-react-008 bundle-budget enforcement",
+  "command": "grep -q 'module.exports' \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" && grep -q 'limit' \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" && echo limits_array 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["limits_array"]}
+}

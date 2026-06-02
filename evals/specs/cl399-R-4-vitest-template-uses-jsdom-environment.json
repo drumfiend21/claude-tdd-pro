@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: vitest.react.config.ts sets environment: jsdom so React component tests render",
+  "command": "grep -q 'environment: \"jsdom\"' \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" && echo jsdom_env 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["jsdom_env"]}
+}

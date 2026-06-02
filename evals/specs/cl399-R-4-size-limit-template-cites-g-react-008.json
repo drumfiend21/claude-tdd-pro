@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: size-limit.config.js cites g-react-008 so the budget rule's link to the template is auditable",
+  "command": "grep -q 'g-react-008' \"$CLAUDE_PLUGIN_ROOT/templates/size-limit.config.js\" && echo g_react_008_cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["g_react_008_cited"]}
+}

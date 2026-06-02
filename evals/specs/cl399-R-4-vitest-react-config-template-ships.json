@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: templates/vitest.react.config.ts ships at the §9 R-4 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/templates/vitest.react.config.ts\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
