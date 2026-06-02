@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: router.yaml declares the routes: key",
+  "command": "grep -qE \"^routes:\" \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\" && echo routes 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["routes"]}
+}

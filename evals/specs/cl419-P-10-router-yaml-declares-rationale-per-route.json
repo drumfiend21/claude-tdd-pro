@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: each route declares rationale so P-4 detector verifies it",
+  "command": "grep -qE \"rationale:\" \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\" && echo rationale 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rationale"]}
+}

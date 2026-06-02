@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: --task-class required",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/router-set.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- \"--task-class\" err.txt && echo required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+}

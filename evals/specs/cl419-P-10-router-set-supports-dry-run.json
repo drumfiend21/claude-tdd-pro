@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: router-set supports --dry-run per §2.14",
+  "command": "grep -q -- \"--dry-run\" \"$CLAUDE_PLUGIN_ROOT/commands/router-set.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}
