@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: commands/migrate-rule.sh ships at the §16 E-10 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

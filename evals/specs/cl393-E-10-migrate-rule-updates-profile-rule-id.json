@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: migrate-rule replaces <old> with <new> in the profile's rules: block",
+  "command": "printf 'rules:\\n  old-rule: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" old-rule --to new-rule --profile p.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'new-rule:' p.yaml && ! grep -q 'old-rule:' p.yaml && echo replaced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["replaced"]}
+}

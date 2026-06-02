@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: --update-adrs appends a Superseded: <old> -> <new> marker to ADRs that reference the old rule",
+  "command": "mkdir -p docs/adr && printf '# ADR\\n\\nold-rule discussion.\\n' > docs/adr/0001-x.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" old-rule --to new-rule --update-adrs 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'Superseded: old-rule -> new-rule' docs/adr/0001-x.md && echo adr_superseded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["adr_superseded"]}
+}

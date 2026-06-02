@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: migrate-rule rejects unknown flags with exit 2 (strict CLI surface)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" --nonsense 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'unknown flag' err.txt && echo strict 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["strict"]}
+}

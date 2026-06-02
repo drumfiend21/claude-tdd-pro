@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: --emit-audit appends a rule-migrated JSONL entry for compliance reconstruction",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" old-rule --to new-rule --emit-audit \"$PWD/audit.jsonl\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'rule-migrated' audit.jsonl && grep -q 'old-rule' audit.jsonl && grep -q 'new-rule' audit.jsonl && echo audited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audited"]}
+}

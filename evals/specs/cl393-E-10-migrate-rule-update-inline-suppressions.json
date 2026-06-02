@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: --update-inline-suppressions --paths rewrites inline rubric-disable comments from <old> to <new>",
+  "command": "mkdir -p src && printf 'let x = 1; // rubric-disable-line old-rule -- temp\\n' > src/a.ts && bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" old-rule --to new-rule --update-inline-suppressions --paths 'src/**/*.ts' 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'new-rule' src/a.ts && ! grep -q 'old-rule' src/a.ts && echo inline_updated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["inline_updated"]}
+}

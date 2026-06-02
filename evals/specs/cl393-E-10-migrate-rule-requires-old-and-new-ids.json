@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: migrate-rule requires <old-rule-id> and --to <new-rule-id>",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- '<old-rule-id> + --to <new-rule-id> required' err.txt && echo required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+}

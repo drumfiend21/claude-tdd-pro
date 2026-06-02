@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: migrate-rule emits a 'migrated <old> -> <new>' confirmation on stderr",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" old-rule --to new-rule 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'migrated old-rule -> new-rule' err.txt && echo confirmed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["confirmed"]}
+}
