@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: self-test emits a starting marker on stderr so operators can see the run begin",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\" --help >out.txt 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'Usage' out.txt && echo runnable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["runnable"]}
+}

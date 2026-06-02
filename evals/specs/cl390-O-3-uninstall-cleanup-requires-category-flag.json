@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: uninstall-cleanup requires --category per the category-by-category contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- '--category required' err.txt && echo category_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["category_required"]}
+}

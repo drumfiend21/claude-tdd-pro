@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: commands/self-test.sh ships and extends /doctor per §13 O-3",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\" ] && grep -q 'extends /doctor' \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: commands/uninstall-cleanup.sh ships at the §13 O-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

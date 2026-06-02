@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: uninstall-cleanup never auto-deletes evidence or audit-log paths per §13 O-3",
+  "command": "grep -q 'PROTECTED=(compliance/evidence compliance/audit-checkpoints)' \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" && grep -q 'refusing to remove protected path' \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" && echo evidence_protected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["evidence_protected"]}
+}
