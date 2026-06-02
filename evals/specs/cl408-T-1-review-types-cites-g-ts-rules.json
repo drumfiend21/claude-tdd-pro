@@ -1,0 +1,6 @@
+{
+  "name": "T-1 types review subagent: review-types body discusses TypeScript concepts (any, unions, generics, narrowing) so findings are concrete",
+  "command": "grep -qiE 'typescript|tsc|generic|narrow|union|type assertion|any\\b' \"$CLAUDE_PLUGIN_ROOT/agents/review-types.md\" && echo concepts_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["concepts_present"]}
+}
