@@ -1,0 +1,6 @@
+{
+  "name": "T-5 ts eval specs: eight per-rule fixture folders (one per g-ts-NNN) ship under evals/fixtures/typescript/",
+  "command": "n=$(ls -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript\"/g-ts-* 2>/dev/null | wc -l | tr -d ' '); [ \"$n\" -eq 8 ] && echo \"per_rule=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["per_rule=8"]}
+}
