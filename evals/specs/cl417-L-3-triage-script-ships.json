@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: pr-corpus/triage.sh ships at the §5 L-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: emits --help banner",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo helpable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["helpable"]}
+}

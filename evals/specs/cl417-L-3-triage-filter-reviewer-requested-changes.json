@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: filters for reviewer requested changes OR iterative push",
+  "command": "grep -qE \"requested|iterative|review\" \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" && echo reviewer 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["reviewer"]}
+}

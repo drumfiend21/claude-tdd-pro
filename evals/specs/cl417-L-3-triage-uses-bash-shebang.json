@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: script uses bash shebang",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

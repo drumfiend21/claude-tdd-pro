@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: sets strict bash options",
+  "command": "grep -qE \"set -u\" \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" && echo strict 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["strict"]}
+}
