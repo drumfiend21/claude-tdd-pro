@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: missing --rule flag is a usage error with exit 2",
+  "command": "printf 'noop\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- '--rule <id> required' err.txt && echo rule_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rule_required"]}
+}

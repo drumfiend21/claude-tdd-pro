@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: a directive naming a different rule-id does not suppress this rule's violation",
+  "command": "printf 'eval(\"x\"); // rubric-disable-line no-alert -- unrelated\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q '\\[no-eval\\] violation' err.txt && echo not_suppressed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["not_suppressed"]}
+}

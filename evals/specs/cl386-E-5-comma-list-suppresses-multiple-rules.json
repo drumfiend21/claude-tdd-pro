@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: a comma-separated rule-list suppresses each named rule",
+  "command": "printf 'eval(\"x\"); // rubric-disable-line no-eval, no-alert -- batch\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-alert --in in.js 2>err2.txt; rc2=$?; [ \"$rc2\" -eq 0 ] && echo both_suppressed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["both_suppressed"]}
+}
