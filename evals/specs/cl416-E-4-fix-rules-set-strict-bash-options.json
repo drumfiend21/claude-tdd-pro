@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: script sets strict bash options",
+  "command": "grep -qE \"set -u\" \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" && echo strict 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["strict"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: all three formatter scripts are executable",
+  "command": "n=0; for f in stylish compact json; do [ -x \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/$f.sh\" ] && n=$((n+1)); done; [ \"$n\" -eq 3 ] && echo executable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["executable"]}
+}

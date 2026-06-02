@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: honors --paths per the §2.2 detector contract",
+  "command": "grep -q -- \"--paths\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo paths 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["paths"]}
+}

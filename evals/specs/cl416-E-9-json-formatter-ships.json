@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: json.sh ships",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/json.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

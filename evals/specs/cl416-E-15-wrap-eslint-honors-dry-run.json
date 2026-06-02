@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: honors --dry-run per the §2.14 dry-run contract",
+  "command": "grep -q -- \"--dry-run\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

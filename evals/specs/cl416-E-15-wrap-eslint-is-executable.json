@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: detector is executable",
+  "command": "[ -x \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" ] && echo executable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["executable"]}
+}

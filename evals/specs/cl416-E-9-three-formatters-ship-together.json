@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: three formatters (stylish, compact, json) ship together",
+  "command": "n=0; for f in stylish compact json; do [ -s \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/$f.sh\" ] && n=$((n+1)); done; [ \"$n\" -eq 3 ] && echo three_formatters 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["three_formatters"]}
+}

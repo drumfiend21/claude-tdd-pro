@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: references the detector contract (E-15 wrap or rubric/detectors/) for fix dispatch",
+  "command": "grep -qE \"detector|fix|rubric\" \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" && echo detector 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["detector"]}
+}

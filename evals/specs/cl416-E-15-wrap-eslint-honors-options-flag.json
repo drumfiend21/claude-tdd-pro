@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: detector accepts arguments / config (--rule or ESLint config dispatch)",
+  "command": "grep -qE \"options|config|rule\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo arg_surface 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["arg_surface"]}
+}

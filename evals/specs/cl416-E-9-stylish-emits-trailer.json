@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: stylish.sh emits the canonical 'N problems' trailer",
+  "command": "echo \"[]\" | bash \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/stylish.sh\" | grep -qE \"problems|0 errors\" && echo trailer 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["trailer"]}
+}
