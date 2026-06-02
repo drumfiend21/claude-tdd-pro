@@ -1,0 +1,14 @@
+# X-3 pre-commit adapter per §14. Installs a local hook that runs the
+# rubric runner on staged specs before allowing the commit. Operators
+# install via `pre-commit install` after cloning.
+
+repos:
+  - repo: local
+    hooks:
+      - id: rubric-validate
+        name: claude-tdd-pro rubric validate
+        entry: bash hooks/pre-commit
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+        description: "Run rubric/runner.sh against staged specs; block commit on any failure."

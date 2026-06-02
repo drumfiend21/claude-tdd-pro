@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# X-3 pre-commit hook entry point per §14. Runs the rubric runner over
+# the committed evals/specs/ tree (filtered to specs touched by the
+# staged changeset for fast feedback). Blocks the commit on any failure.
+
+set -uo pipefail
+
+PLUGIN_ROOT=$(cd "$(dirname "$0")/.." && pwd -P)
+cd "$PLUGIN_ROOT"
+
+# Identify staged spec files; if none, run a smoke filter (top-level
+# detector-shape specs).
+staged_specs=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null | grep -E "^evals/specs/.*\.json$" | head -20)
+
+if [[ -n "$staged_specs" ]]; then
+  # Build a filter from the staged spec basenames (best-effort substring).
+  # Each invocation is hermetic per the runner contract; cache makes the
+  # repeated filter calls cheap.
+  for spec in $staged_specs; do
+    name=$(basename "$spec" .json)
+    if ! bash evals/runner.sh --filter "$name" >/dev/null 2>&1; then
+      echo "pre-commit: spec failed: $name" >&2
+      bash evals/runner.sh --filter "$name" -v >&2
+      exit 1
+    fi
+  done
+  echo "pre-commit: $(echo "$staged_specs" | wc -l | tr -d ' ') staged specs validated" >&2
+else
+  echo "pre-commit: no staged eval specs; running smoke pass" >&2
+  bash evals/runner.sh --filter "ships" >/dev/null 2>&1 || {
+    echo "pre-commit: smoke specs failed; aborting" >&2; exit 1; }
+fi
+exit 0

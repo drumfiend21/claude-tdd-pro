@@ -1,0 +1,27 @@
+# P-10 runtime model router config per §6. Maps task-classes to model
+# tiers; the runtime checks the active class on each subagent invocation
+# and picks the cheapest sufficient model.
+#
+# Cost telemetry: H-1 cost-transparency reports per-tier consumption.
+# H-12 cost-rollup aggregates daily/weekly by tier.
+
+routes:
+  - task_class: review-quick
+    model: haiku
+    rationale: "Triage and pattern-match reviews where misses are recoverable; haiku is 6x cheaper than sonnet."
+  - task_class: review-deep
+    model: sonnet
+    rationale: "Nuanced reads (a11y conformance, RSC boundaries, type soundness) where haiku misses subtle issues."
+  - task_class: critical-path-verifier
+    model: opus
+    rationale: "F-3 critical path verification; cost-justified by blast-radius of false-confidence."
+  - task_class: standards-comparator
+    model: sonnet
+    rationale: "S-7 standards diff requires multi-source synthesis; haiku weak at conflict reconciliation."
+  - task_class: architect
+    model: opus
+    rationale: "W-1 architecture decisions are 1-of-N choices with long-tail consequences; opus margins payoff at the decision point."
+
+defaults:
+  fallback_model: sonnet
+  ratelimit_strategy: queue-with-backoff
