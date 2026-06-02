@@ -1,0 +1,6 @@
+{
+  "name": "T-4 tsconfig.strict.json template: file parses as valid JSON",
+  "command": "node -e 'JSON.parse(require(\"fs\").readFileSync(\"'$CLAUDE_PLUGIN_ROOT'/templates/tsconfig.strict.json\",\"utf8\"))' && echo valid_json 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["valid_json"]}
+}
