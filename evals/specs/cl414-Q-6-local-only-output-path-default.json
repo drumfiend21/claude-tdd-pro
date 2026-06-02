@@ -1,0 +1,6 @@
+{
+  "name": "Q-6 privacy posture: output references --out / OUT (local-only target path)",
+  "command": "grep -qE -- \"--out|OUT\" \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" && echo out 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["out"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-9 risk-tiered profile: skill folder ships at least 2 files (SKILL.md + scan.sh)",
+  "command": "n=$(ls \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/\" 2>/dev/null | wc -l | tr -d \" \"); [ \"$n\" -ge 2 ] && echo nonempty 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["nonempty"]}
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report: dashboard outputs text format per §10 Q-3",
+  "command": "grep -qE \"echo|printf|cat\" \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" && echo text_dashboard 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "text_dashboard"
+    ]
+  }
+}

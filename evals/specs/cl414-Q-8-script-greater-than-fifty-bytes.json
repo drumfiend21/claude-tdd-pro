@@ -1,0 +1,6 @@
+{
+  "name": "Q-8 honest scope: validate script is non-trivial (>50 bytes)",
+  "command": "n=$(wc -c < \"$CLAUDE_PLUGIN_ROOT/space/honest-scope-validate.sh\" | tr -d \" \"); [ \"$n\" -gt 50 ] && echo nontrivial 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["nontrivial"]}
+}

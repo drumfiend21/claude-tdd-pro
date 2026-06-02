@@ -1,0 +1,6 @@
+{
+  "name": "Q-6 privacy posture: space-export applies a redaction / PII guard per §10 Q-6",
+  "command": "grep -qiE \"redact|pii|sanitize|filter\" \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" && echo redaction 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["redaction"]}
+}

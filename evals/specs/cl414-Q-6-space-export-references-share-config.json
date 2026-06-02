@@ -1,0 +1,6 @@
+{
+  "name": "Q-6 privacy posture: space-export references the share posture (config or flag)",
+  "command": "grep -q -- \"share\\|SHARE\" \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" && echo share 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["share"]}
+}

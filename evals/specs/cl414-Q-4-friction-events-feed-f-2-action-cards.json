@@ -1,0 +1,6 @@
+{
+  "name": "Q-4 friction tracker: severity field surfaces P-tier so F-2 action cards can prioritize",
+  "command": "grep -q -- \"--severity\\|SEVERITY\" \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" && echo severity 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["severity"]}
+}

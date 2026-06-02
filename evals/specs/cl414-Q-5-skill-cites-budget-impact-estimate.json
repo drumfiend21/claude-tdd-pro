@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: skill folder ships at least 2 files (SKILL.md + check.sh)",
+  "command": "n=$(ls \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/\" 2>/dev/null | wc -l | tr -d \" \"); [ \"$n\" -ge 2 ] && echo files 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["files"]}
+}

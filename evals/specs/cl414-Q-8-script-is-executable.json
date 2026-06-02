@@ -1,0 +1,6 @@
+{
+  "name": "Q-8 honest scope: validate script is executable",
+  "command": "[ -x \"$CLAUDE_PLUGIN_ROOT/space/honest-scope-validate.sh\" ] && echo executable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["executable"]}
+}

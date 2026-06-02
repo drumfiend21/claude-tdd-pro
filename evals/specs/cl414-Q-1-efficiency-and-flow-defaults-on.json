@@ -1,0 +1,6 @@
+{
+  "name": "Q-1 SPACE config: efficiency_and_flow defaults to ON (enabled: true) per §10 Q-1",
+  "command": "grep -A1 '^  efficiency_and_flow:' \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" | grep -q 'enabled: true' && echo on 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["on"]}
+}

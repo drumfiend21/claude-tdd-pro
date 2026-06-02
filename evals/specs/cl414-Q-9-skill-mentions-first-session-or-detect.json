@@ -1,0 +1,6 @@
+{
+  "name": "Q-9 risk-tiered profile: SKILL.md mentions first-session or detection",
+  "command": "grep -qiE \"first.session|detect|scan\" \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/SKILL.md\" && echo first 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["first"]}
+}

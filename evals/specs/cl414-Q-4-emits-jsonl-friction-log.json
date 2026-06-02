@@ -1,0 +1,6 @@
+{
+  "name": "Q-4 friction tracker: aggregates events into a structured log via --aggregate",
+  "command": "grep -q -- \"--aggregate\\|AGGREGATE\" \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" && echo aggregate 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["aggregate"]}
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report: metrics.yaml has metric IDs as keys per §10 Q-3",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/space/metrics.yaml\" ] && grep -qE \"^[a-z_]+:\" \"$CLAUDE_PLUGIN_ROOT/space/metrics.yaml\" && echo linked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "linked"
+    ]
+  }
+}

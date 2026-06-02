@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report: runs with --help to surface its CLI interface",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runnable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runnable"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-9 risk-tiered profile: scan.sh uses bash shebang",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

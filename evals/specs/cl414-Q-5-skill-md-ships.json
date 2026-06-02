@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: skills/flow-guard/SKILL.md ships at the §10 Q-5 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

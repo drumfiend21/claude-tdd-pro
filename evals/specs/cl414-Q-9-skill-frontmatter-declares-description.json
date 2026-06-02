@@ -1,0 +1,6 @@
+{
+  "name": "Q-9 risk-tiered profile: SKILL.md frontmatter declares description field",
+  "command": "grep -q \"^description:\" \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/SKILL.md\" && echo description 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["description"]}
+}

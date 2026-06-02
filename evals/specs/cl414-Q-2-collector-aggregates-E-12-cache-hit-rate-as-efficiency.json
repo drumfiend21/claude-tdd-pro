@@ -1,0 +1,6 @@
+{
+  "name": "Q-2 collector: aggregates E-12 cache hit rate as Efficiency signal per §10 Q-2",
+  "command": "grep -qE 'E-12|cache hit|cache_hit' \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" && echo cache 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cache"]}
+}

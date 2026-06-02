@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: SKILL.md describes warning intent per §10 Q-5 (soft signal)",
+  "command": "grep -qiE \"warn|soft|guard|signal\" \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/SKILL.md\" && echo soft 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["soft"]}
+}

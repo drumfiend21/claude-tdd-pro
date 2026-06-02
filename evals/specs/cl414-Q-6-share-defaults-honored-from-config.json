@@ -1,0 +1,6 @@
+{
+  "name": "Q-6 privacy posture: defaults derive from space/config.yaml share: never",
+  "command": "grep -qE \"^share:\\s*never\" \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" && echo never 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["never"]}
+}

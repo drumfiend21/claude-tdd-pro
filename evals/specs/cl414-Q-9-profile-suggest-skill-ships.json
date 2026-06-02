@@ -1,0 +1,6 @@
+{
+  "name": "Q-9 risk-tiered profile: skills/profile-suggest/SKILL.md ships at the §10 Q-9 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

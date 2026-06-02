@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: SKILL.md mentions thrash / context per §10 Q-5",
+  "command": "grep -qiE \"thrash|context\" \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/SKILL.md\" && echo thrash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["thrash"]}
+}

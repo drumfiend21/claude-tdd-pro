@@ -150,8 +150,10 @@ probe_lines=()
 probe_failed=0
 for feat in "${FEATURES[@]}"; do
   filter="cl${CL_NUM}-${feat}-"
-  result=$(bash evals/runner.sh --filter "$filter" 2>&1 | tail -3)
-  pass_line=$(echo "$result" | grep -E "Results:" | head -1)
+  # Capture full runner output; the Failed-specs section can push the
+  # Results line out of a small tail window, so grep for it directly.
+  result=$(bash evals/runner.sh --filter "$filter" 2>&1)
+  pass_line=$(echo "$result" | grep -E "^Results:" | tail -1)
   pass=$(echo "$pass_line" | grep -oE '[0-9]+ passed' | grep -oE '[0-9]+')
   fail=$(echo "$pass_line" | grep -oE '[0-9]+ failed' | grep -oE '[0-9]+')
   if [[ "${fail:-0}" -eq 0 && "${pass:-0}" -gt 0 ]]; then

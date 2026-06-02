@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: check.sh uses bash shebang",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/check.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

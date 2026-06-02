@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report: references space/config.yaml so dashboard honors opt-in gates",
+  "command": "grep -qE \"config.yaml|config\" \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" && echo config 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config"
+    ]
+  }
+}
