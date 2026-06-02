@@ -1,0 +1,6 @@
+{
+  "name": "N-4 node eval fixtures: ten per-rule fixture folders (one per g-node-NNN) ship under evals/fixtures/node/",
+  "command": "n=$(ls -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\"/g-node-* 2>/dev/null | wc -l | tr -d ' '); [ \"$n\" -eq 10 ] && echo \"per_rule=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["per_rule=10"]}
+}

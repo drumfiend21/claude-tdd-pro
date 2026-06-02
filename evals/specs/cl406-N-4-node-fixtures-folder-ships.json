@@ -1,0 +1,6 @@
+{
+  "name": "N-4 node eval fixtures: evals/fixtures/node/ ships at the §8 N-4 path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

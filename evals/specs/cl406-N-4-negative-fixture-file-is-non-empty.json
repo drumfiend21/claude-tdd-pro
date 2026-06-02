@@ -1,0 +1,6 @@
+{
+  "name": "N-4 node eval fixtures: negative fixture .js files are non-empty so they exercise the detector against a clean baseline",
+  "command": "missing=0; for d in \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\"/g-node-*/negative; do [ -d \"$d\" ] || continue; for f in \"$d\"/*.js; do [ -s \"$f\" ] || missing=$((missing+1)); done; done; [ \"$missing\" -eq 0 ] && echo non_empty 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["non_empty"]}
+}
