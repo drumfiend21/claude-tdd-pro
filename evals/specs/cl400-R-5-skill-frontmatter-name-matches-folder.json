@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: SKILL.md frontmatter name matches the folder per Claude Code skill convention",
+  "command": "grep -q '^name: react-component-build' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && echo name_matches 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["name_matches"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: SKILL.md references the four R-3 detectors so the skill's cost-benefit is auditable",
+  "command": "for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do grep -q \"$d\" \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" || { echo missing 1>&2; exit 1; }; done && echo detectors_cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["detectors_cited"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: skill folder ships _install.sh so the R-4 templates land in the operator project",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/_install.sh\" ] && echo install_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["install_present"]}
+}

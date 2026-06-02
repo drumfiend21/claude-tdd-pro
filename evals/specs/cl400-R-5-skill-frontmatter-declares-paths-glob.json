@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: frontmatter declares paths glob targeting React component files (.tsx and .jsx)",
+  "command": "grep -qE '^paths:.*tsx' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && grep -qE '^paths:.*jsx' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && echo paths_target 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["paths_target"]}
+}

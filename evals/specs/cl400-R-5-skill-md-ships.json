@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: skills/react-component-build/SKILL.md ships at the §9 R-5 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}
