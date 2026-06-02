@@ -63,15 +63,18 @@ else
 fi
 
 # ---- Gate 4: equivalence on representative filter ----
+# Stage the baseline runner side-by-side with the real one so its
+# relative-path logic ($SCRIPT_DIR/specs and $SCRIPT_DIR/..) still
+# resolves to the live plugin tree. Restore the original on exit.
 tmpd=$(mktemp -d -t verify-regression.XXXXXX)
-trap 'rm -rf "$tmpd"' EXIT
-old_runner="$tmpd/runner-baseline.sh"
-git show "$BASELINE_COMMIT":evals/runner.sh > "$old_runner" 2>/dev/null
-chmod +x "$old_runner"
+baseline_runner="evals/runner.baseline.sh"
+git show "$BASELINE_COMMIT":evals/runner.sh > "$baseline_runner" 2>/dev/null
+chmod +x "$baseline_runner"
+trap 'rm -rf "$tmpd"; rm -f "$baseline_runner"' EXIT
 
 old_out="$tmpd/old.out"
 new_out="$tmpd/new.out"
-bash "$old_runner" --filter "$FILTER" > "$old_out" 2>&1
+bash "$baseline_runner" --filter "$FILTER" > "$old_out" 2>&1
 old_exit=$?
 bash evals/runner.sh --no-cache --no-parallel --filter "$FILTER" > "$new_out" 2>&1
 new_exit=$?
