@@ -1,0 +1,6 @@
+{
+  "name": "N-1 node review subagents: review-node-boundaries is configured with model: sonnet per §8 N-1",
+  "command": "grep -q '^model: sonnet' \"$CLAUDE_PLUGIN_ROOT/agents/review-node-boundaries.md\" && echo sonnet 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["sonnet"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "N-1 node review subagents: review-node-observability declares prompt_id field per §2.3",
+  "command": "grep -q '^prompt_id:' \"$CLAUDE_PLUGIN_ROOT/agents/review-node-observability.md\" && echo prompt_id 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["prompt_id"]}
+}

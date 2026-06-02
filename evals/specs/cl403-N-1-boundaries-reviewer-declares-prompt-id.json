@@ -1,0 +1,6 @@
+{
+  "name": "N-1 node review subagents: review-node-boundaries declares prompt_id: node-boundaries-reviewer per §2.3",
+  "command": "grep -q '^prompt_id: node-boundaries-reviewer' \"$CLAUDE_PLUGIN_ROOT/agents/review-node-boundaries.md\" && echo prompt_id 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["prompt_id"]}
+}
