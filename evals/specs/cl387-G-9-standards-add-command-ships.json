@@ -1,0 +1,6 @@
+{
+  "name": "G-9 sync with operator registries: /standards-add ships at the §17 G-9 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" ] && echo standards_add_ships 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["standards_add_ships"]}
+}

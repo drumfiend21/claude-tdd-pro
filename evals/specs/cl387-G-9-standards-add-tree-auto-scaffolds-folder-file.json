@@ -1,0 +1,6 @@
+{
+  "name": "G-9 sync with operator registries: standards-add --tree auto-scaffolds <inferred-namespace>/<id>.yaml per the §17 G-9 chain",
+  "command": "mkdir -p .claude-tdd-pro && touch .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" --url https://docs.example.test/style --id example --tier 1 --applies-to typescript --source-namespace google --tree \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s tree/google/example.yaml ] && echo scaffolded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["scaffolded"]}
+}
