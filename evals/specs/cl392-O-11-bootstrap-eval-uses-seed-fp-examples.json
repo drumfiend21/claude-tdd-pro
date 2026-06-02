@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: install-time bootstrap evals consume the O-1 seed/fp-examples/ fixtures",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --emit-report \"$PWD/report.json\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s report.json ] && grep -q 'g-ts-001' report.json && echo seed_consumed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["seed_consumed"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: --trace-tmpdirs records that each scenario runs in an isolated tmpdir",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --trace-tmpdirs --emit-report \"$PWD/report.json\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s report.json ] && grep -q 'tmpdir' err.txt && echo isolated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["isolated"]}
+}

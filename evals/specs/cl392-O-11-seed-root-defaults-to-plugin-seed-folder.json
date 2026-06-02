@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: --seed-root defaults to the plugin's seed/ folder when not provided",
+  "command": "grep -q 'SEED_ROOT=\"\\$PLUGIN_ROOT/seed\"' \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" && echo seed_default 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["seed_default"]}
+}

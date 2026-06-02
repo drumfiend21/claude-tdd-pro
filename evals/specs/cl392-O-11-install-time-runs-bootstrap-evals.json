@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: install time --run-bootstrap-evals runs at least one scenario from seed/fp-examples per §13 O-11",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --emit-report \"$PWD/report.json\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s report.json ] && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"report.json\",\"utf8\"));process.exit(j.scenarios_run>=1?0:1)' && echo scenarios_ran 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["scenarios_ran"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: /self-test --include-bootstrap re-runs the bootstrap eval on demand via init-guardrails",
+  "command": "grep -q 'include-bootstrap' \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\" && grep -q 'init-guardrails.sh' \"$CLAUDE_PLUGIN_ROOT/commands/self-test.sh\" && echo selftest_extends 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["selftest_extends"]}
+}
