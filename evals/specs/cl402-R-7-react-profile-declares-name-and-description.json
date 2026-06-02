@@ -1,0 +1,6 @@
+{
+  "name": "R-7 react profile registration: react.yaml declares name + description per §2.5 profile system",
+  "command": "grep -q '^name: react' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && grep -q '^description:' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && echo identified 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["identified"]}
+}

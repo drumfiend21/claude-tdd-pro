@@ -1,0 +1,6 @@
+{
+  "name": "R-7 react profile registration: profiles/regulated.yaml extends strict.yaml so the R-7 inheritance chain is intact",
+  "command": "grep -q 'strict.yaml' \"$CLAUDE_PLUGIN_ROOT/profiles/regulated.yaml\" && echo regulated_extends_strict 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["regulated_extends_strict"]}
+}

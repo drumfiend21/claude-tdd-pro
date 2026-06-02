@@ -1,0 +1,6 @@
+{
+  "name": "R-7 react profile registration: three R-7 profiles (react.yaml, strict.yaml, regulated.yaml) ship together per §9 R-7",
+  "command": "n=0; for p in react strict regulated; do [ -s \"$CLAUDE_PLUGIN_ROOT/profiles/$p.yaml\" ] && n=$((n+1)); done; [ \"$n\" -eq 3 ] && echo \"three_profiles=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["three_profiles=3"]}
+}
