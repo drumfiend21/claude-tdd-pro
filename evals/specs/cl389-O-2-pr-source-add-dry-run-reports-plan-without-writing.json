@@ -1,0 +1,6 @@
+{
+  "name": "O-2 global --dry-run: /pr-source-add --dry-run reports the plan without scaffolding the folder file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" --github acme/repo --id sec-pr --source-class federal-financial-regulator --tree \"$PWD/tree\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -d tree ] && grep -q 'dry-run' err.txt && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

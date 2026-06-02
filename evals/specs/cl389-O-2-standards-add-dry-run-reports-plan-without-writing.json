@@ -1,0 +1,6 @@
+{
+  "name": "O-2 global --dry-run: /standards-add --dry-run reports the plan without appending to STANDARDS-URLS.yaml",
+  "command": "mkdir -p .claude-tdd-pro && touch .claude-tdd-pro/STANDARDS-URLS.yaml && before=$(wc -c < .claude-tdd-pro/STANDARDS-URLS.yaml) && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" --url https://example.test/style --id ex --dry-run 2>err.txt; rc=$?; after=$(wc -c < .claude-tdd-pro/STANDARDS-URLS.yaml); [ \"$rc\" -eq 0 ] && [ \"$before\" -eq \"$after\" ] && grep -q 'dry-run' err.txt && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}
