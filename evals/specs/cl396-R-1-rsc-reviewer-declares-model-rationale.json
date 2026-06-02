@@ -1,0 +1,6 @@
+{
+  "name": "R-1 react review subagents: review-react-rsc declares model_rationale per the P-4 cost-justification chain",
+  "command": "grep -q '^model_rationale:' \"$CLAUDE_PLUGIN_ROOT/agents/review-react-rsc.md\" && echo rationale_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rationale_present"]}
+}

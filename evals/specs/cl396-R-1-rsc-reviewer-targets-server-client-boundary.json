@@ -1,0 +1,6 @@
+{
+  "name": "R-1 react review subagents: review-react-rsc body documents the server/client boundary focus per its §16 R-1 charter",
+  "command": "grep -qE 'server/client|server-client|client-only hook|serialization' \"$CLAUDE_PLUGIN_ROOT/agents/review-react-rsc.md\" && echo boundary_focus 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["boundary_focus"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-1 react review subagents: review-react-a11y body cites WCAG 2.2 success criteria so findings carry authority",
+  "command": "grep -qE 'wcag-2-2|WCAG 2.2|success criterion' \"$CLAUDE_PLUGIN_ROOT/agents/review-react-a11y.md\" && echo wcag_cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["wcag_cited"]}
+}

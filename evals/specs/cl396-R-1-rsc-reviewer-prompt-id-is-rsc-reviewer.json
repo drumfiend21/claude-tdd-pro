@@ -1,0 +1,6 @@
+{
+  "name": "R-1 react review subagents: review-react-rsc declares prompt_id: rsc-reviewer per §16 R-1",
+  "command": "grep -q '^prompt_id: rsc-reviewer' \"$CLAUDE_PLUGIN_ROOT/agents/review-react-rsc.md\" && echo prompt_id_set 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["prompt_id_set"]}
+}
