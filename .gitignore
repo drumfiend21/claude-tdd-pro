@@ -4,6 +4,11 @@ node_modules/
 .env
 .env.local
 
+# Eval runner perf log — append-only JSONL of timing samples per
+# `bash scripts/eval-perf-log.sh` invocation. Machine-local; rebuilt
+# on demand; never committed.
+.claude-tdd-pro/eval-perf.jsonl
+
 # Eval runner spec-result cache. Machine-local; rebuilt on demand.
 # Markers under .claude-tdd-pro/eval-cache/<sha>.passed are touched when
 # a spec passes; the substrate-tree hash is part of the key so any change

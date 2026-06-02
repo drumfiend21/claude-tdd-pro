@@ -54,6 +54,7 @@ if [[ "${1-}" == "--__worker" ]]; then
     if [[ -f "$marker" ]]; then
       echo "  ✓ $spec_name" > "$out"
       echo "PASS" > "$status_file"
+      : > "$OUTDIR/$spec_name.cachehit"
       exit 0
     fi
   fi
@@ -137,6 +138,7 @@ INCLUDE_DIR=""
 LIST_ONLY=0
 NO_CACHE=0
 NO_PARALLEL=0
+EMIT_STATS=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -v|--verbose) VERBOSE=1; shift ;;
@@ -146,6 +148,7 @@ while [[ $# -gt 0 ]]; do
     --list) LIST_ONLY=1; shift ;;
     --no-cache) NO_CACHE=1; shift ;;
     --no-parallel) NO_PARALLEL=1; shift ;;
+    --stats) EMIT_STATS=1; shift ;;
     *) FILTER="$1"; shift ;;
   esac
 done
@@ -311,6 +314,16 @@ done
 
 echo
 echo "Results: $pass passed, $fail failed"
+
+# --stats: emit a single structured line for instrumentation. Opt-in so
+# default output stays bit-identical to a baseline serial run.
+if [[ "$EMIT_STATS" -eq 1 ]]; then
+  cache_hits=$(ls "$OUTDIR"/*.cachehit 2>/dev/null | wc -l | tr -d ' ')
+  cache_misses=$((pass + fail - cache_hits))
+  tree_short=${TREE_SHA:0:12}
+  echo "STATS: workers=$WORKERS parallel_specs=${#parallel_specs[@]} serial_specs=${#serial_specs[@]} cache=$USE_CACHE cache_hits=$cache_hits cache_misses=$cache_misses tree_sha=$tree_short"
+fi
+
 if [[ $fail -gt 0 ]]; then
   echo "Failed specs:"
   for s in "${failed_specs[@]}"; do echo "  - $s"; done
