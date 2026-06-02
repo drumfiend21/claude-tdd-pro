@@ -1,0 +1,6 @@
+{
+  "name": "C-2 control mapping: post-update controls.yaml remains a valid YAML sequence (array) per the §16 C-2 shape",
+  "command": "printf -- '- framework: soc2\\n  control_id: CC1.1\\n  legal_review_status: pending\\n' > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/legal-review-mark.sh\" --framework soc2 --control-id CC1.1 --reviewer counsel --date 2026-05-04 --controls-file controls.yaml 2>/dev/null && ruby -ryaml -e 'doc=YAML.load_file(\"controls.yaml\"); exit(doc.is_a?(Array) ? 0 : 1)' && echo array_shape 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["array_shape"]}
+}
