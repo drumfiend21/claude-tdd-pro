@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: 8 g-ts-* rules ship across the generated-code-quality-standards tree per §7 T-2",
+  "command": "n=$(grep -rE 'id: g-ts-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" 2>/dev/null | grep -oE 'g-ts-[0-9]+' | sort -u | wc -l | tr -d ' '); [ \"$n\" -eq 8 ] && echo \"ts_rules=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ts_rules=8"]}
+}

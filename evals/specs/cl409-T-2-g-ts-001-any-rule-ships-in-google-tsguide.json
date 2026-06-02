@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: g-ts-001 any-requires-allow-any-comment ships under google/tsguide.yaml per the §7 T-2 table",
+  "command": "grep -q 'id: g-ts-001' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/tsguide.yaml\" && echo t001_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t001_placed"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: g-ts-008 re-exports use export type ships under typescript/handbook.yaml per the §7 T-2 table",
+  "command": "grep -q 'id: g-ts-008' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/typescript/handbook.yaml\" && echo t008_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t008_placed"]}
+}

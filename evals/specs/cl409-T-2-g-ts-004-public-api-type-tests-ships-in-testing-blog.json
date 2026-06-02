@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: g-ts-004 public-api-type-tests ships under google/testing-blog.yaml per the §7 T-2 table",
+  "command": "grep -q 'id: g-ts-004' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/testing-blog.yaml\" && echo t004_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t004_placed"]}
+}

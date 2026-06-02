@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: g-ts-002 as-requires-allow-cast-comment ships under google/tsguide.yaml per the §7 T-2 table",
+  "command": "grep -q 'id: g-ts-002' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/tsguide.yaml\" && echo t002_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t002_placed"]}
+}
