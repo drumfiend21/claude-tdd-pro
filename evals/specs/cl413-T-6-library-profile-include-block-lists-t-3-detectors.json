@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: include.detectors lists the three T-3 detector scripts",
+  "command": "for d in no-any.sh exhaustive-unions.sh type-test-coverage.sh; do grep -q \"$d\" \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" || { echo missing 1>&2; exit 1; }; done && echo detectors_included 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["detectors_included"]}
+}

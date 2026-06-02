@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: include.rubric_rules lists all eight g-ts-001..008 rules per §7 T-2 table",
+  "command": "for i in 001 002 003 004 005 006 007 008; do grep -q \"g-ts-$i\" \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" || { echo missing 1>&2; exit 1; }; done && echo all_eight_listed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_eight_listed"]}
+}

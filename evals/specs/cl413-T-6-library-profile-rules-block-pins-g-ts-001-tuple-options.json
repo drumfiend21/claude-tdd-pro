@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: rules block pins g-ts-001 tuple options (allow_with_comment_pattern, max_per_file) per §7 T-2 options table",
+  "command": "grep -q 'g-ts-001' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && grep -q 'allow_with_comment_pattern' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && grep -q 'max_per_file' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && echo any_pinned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["any_pinned"]}
+}
