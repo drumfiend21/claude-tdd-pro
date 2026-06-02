@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: description references N-2 rule table so audit traceability is preserved",
+  "command": "grep -q 'N-2' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'g-node-' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo n2_referenced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["n2_referenced"]}
+}

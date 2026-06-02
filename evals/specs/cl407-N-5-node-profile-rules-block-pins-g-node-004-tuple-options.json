@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: rules: block pins g-node-004 tuple options (allowed_loggers, cli_paths) per §8 N-2 options table",
+  "command": "grep -q 'g-node-004' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'allowed_loggers' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'cli_paths' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo logger_pinned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["logger_pinned"]}
+}

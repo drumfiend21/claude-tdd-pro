@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: profiles/node.yaml declares name + description per §2.5",
+  "command": "grep -q '^name: node' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q '^description:' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo identified 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["identified"]}
+}

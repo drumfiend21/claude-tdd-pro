@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: include.agents lists the two N-1 review subagents per §2.5",
+  "command": "grep -q 'review-node-boundaries' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'review-node-observability' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo agents_included 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["agents_included"]}
+}
