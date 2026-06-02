@@ -1,0 +1,6 @@
+{
+  "name": "R-3 react detectors: four detectors (a11y-axe, bundle-budget, rsc-boundary, exhaustive-deps) ship per §9 R-3",
+  "command": "n=0; for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do [ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" ] && n=$((n+1)); done; [ \"$n\" -eq 4 ] && echo \"four_present=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["four_present=4"]}
+}
