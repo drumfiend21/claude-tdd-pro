@@ -1,0 +1,6 @@
+{
+  "name": "N-2 ten node rules: 10 g-node-* rules ship across the generated-code-quality-standards tree per §8 N-2",
+  "command": "n=$(grep -rE 'id: g-node-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" 2>/dev/null | grep -oE 'g-node-[0-9]+' | sort -u | wc -l | tr -d ' '); [ \"$n\" -eq 10 ] && echo \"node_rules=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["node_rules=10"]}
+}

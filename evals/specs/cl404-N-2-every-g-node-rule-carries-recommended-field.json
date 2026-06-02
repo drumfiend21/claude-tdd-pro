@@ -1,0 +1,6 @@
+{
+  "name": "N-2 ten node rules: every g-node-* rule declares the recommended: boolean field per §16 E-8",
+  "command": "for i in 001 002 003 004 005 006 007 008 009 010; do f=$(grep -l \"id: g-node-$i\" \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/{node,owasp,google,slsa}/*.yaml 2>/dev/null | head -1); [ -n \"$f\" ] && grep -q 'recommended:' \"$f\" || { echo missing 1>&2; exit 1; }; done && echo recommended_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recommended_present"]}
+}

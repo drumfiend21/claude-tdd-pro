@@ -1,0 +1,6 @@
+{
+  "name": "N-2 ten node rules: g-node-010 supply-chain check ships under slsa/slsa-v1.yaml per the §8 N-2 table",
+  "command": "grep -q 'id: g-node-010' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/slsa/slsa-v1.yaml\" && echo n010_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["n010_placed"]}
+}
