@@ -1,0 +1,6 @@
+{
+  "name": "R-6 react eval specs and fixtures: g-react-008 fixture folder exists at evals/fixtures/react/g-react-008/",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react/g-react-008\" ] && echo r008_fixture 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r008_fixture"]}
+}

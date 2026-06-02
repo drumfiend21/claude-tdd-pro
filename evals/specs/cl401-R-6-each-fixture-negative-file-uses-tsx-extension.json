@@ -1,0 +1,6 @@
+{
+  "name": "R-6 react eval specs and fixtures: negative fixtures use the .tsx extension so detectors can distinguish true-negative inputs",
+  "command": "missing=0; for d in \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react\"/g-react-*; do [ -d \"$d/negative\" ] || continue; n=$(ls \"$d/negative\"/*.tsx 2>/dev/null | wc -l | tr -d ' '); [ \"${n:-0}\" -ge 1 ] || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo tsx_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["tsx_present"]}
+}

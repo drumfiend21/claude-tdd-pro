@@ -1,0 +1,6 @@
+{
+  "name": "R-6 react eval specs and fixtures: ten per-rule fixture folders (one per g-react-NNN) ship under evals/fixtures/react/",
+  "command": "n=$(ls -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react\"/g-react-* 2>/dev/null | wc -l | tr -d ' '); [ \"$n\" -eq 10 ] && echo \"per_rule=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["per_rule=10"]}
+}
