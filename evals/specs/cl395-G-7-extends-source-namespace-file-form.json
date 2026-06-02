@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: profile extends accepts [<source-namespace>:<file>] form per §17 G-7",
+  "command": "grep -qE 'google:tsguide|react:rsc-rfc|react:rsc' \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" && echo file_form 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["file_form"]}
+}

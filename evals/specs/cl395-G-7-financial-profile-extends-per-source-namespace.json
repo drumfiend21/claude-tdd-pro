@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: profiles/financial.yaml uses [<source-namespace>:<file>] / [<source-namespace>:*] form per §17 G-7",
+  "command": "grep -qE 'finance-industry:\\*' \"$CLAUDE_PLUGIN_ROOT/profiles/financial.yaml\" && grep -qE 'owasp:recommended' \"$CLAUDE_PLUGIN_ROOT/profiles/financial.yaml\" && echo per_source 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["per_source"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: profile resolver supports the exclude_sources: array per §17 G-7",
+  "command": "grep -q 'exclude_sources' \"$CLAUDE_PLUGIN_ROOT/profiles/resolve.sh\" && grep -q 'exclude_sources' \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && echo exclude_supported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["exclude_supported"]}
+}
