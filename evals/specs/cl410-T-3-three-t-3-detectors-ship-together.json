@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: three detectors (no-any, exhaustive-unions, type-test-coverage) ship per §7 T-3",
+  "command": "n=0; for d in no-any exhaustive-unions type-test-coverage; do [ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" ] && n=$((n+1)); done; [ \"$n\" -eq 3 ] && echo \"three_present=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["three_present=3"]}
+}

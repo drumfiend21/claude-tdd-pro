@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: type-test-coverage.sh body references the public API type-tests that g-ts-004 charters",
+  "command": "grep -qiE 'type test|public api|\\.test-d\\.ts|expectType' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/type-test-coverage.sh\" && echo public_api_target 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["public_api_target"]}
+}

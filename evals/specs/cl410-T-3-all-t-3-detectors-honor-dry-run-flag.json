@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: every T-3 detector honors --dry-run per the §2.14 dry-run contract",
+  "command": "for d in no-any exhaustive-unions type-test-coverage; do grep -q -- '--dry-run' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" || { echo missing 1>&2; exit 1; }; done && echo all_dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_dry_run"]}
+}
