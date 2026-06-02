@@ -1,0 +1,17 @@
+{
+  "name": "next-saas-scaffold",
+  "version": "0.1.0",
+  "private": true,
+  "description": "O-12 next-saas application scaffold per §13 — Next.js SaaS starter pre-wired with the TDD Pro plugin (rubric runner + hooks + standards).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  }
+}

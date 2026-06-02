@@ -1,0 +1,6 @@
+{
+  "name": "O-12 application scaffolds: scaffolds/next-saas ships per §13 O-12",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/scaffolds/next-saas\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

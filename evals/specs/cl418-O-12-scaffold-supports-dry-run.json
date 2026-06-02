@@ -1,0 +1,6 @@
+{
+  "name": "O-12 application scaffolds: scaffold command supports --dry-run per §2.14",
+  "command": "grep -q -- \"--dry-run\\|DRY_RUN\" \"$CLAUDE_PLUGIN_ROOT/commands/scaffold.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}
