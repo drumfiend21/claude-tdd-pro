@@ -1,5 +1,25 @@
 # claude-tdd-pro
 
+## 🚀 Quick Start — one command, <60 seconds
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/drumfiend21/claude-tdd-pro/main/scripts/install.sh | bash
+```
+
+Interactive prompts walk you through profile, harness, and LSP wiring. Background rubric verification runs while you start coding. **See [QUICKSTART.md](QUICKSTART.md) for the full walk-through, subcommands (`init` / `upgrade` / `doctor` / `uninstall`), conflict handling, and lockfile semantics.**
+
+```bash
+# Scripted / CI (npm init -y pattern):
+curl -fsSL .../install.sh | bash -s -- init --yes
+
+# Full kit with Grok harness:
+curl -fsSL .../install.sh | bash -s -- init --yes --profile strict --with-grok --with-lsp
+```
+
+---
+
+## What is this?
+
 A Claude Code plugin that elevates any codebase to **Google's
 published engineering standards** (eng-practices, JS/TS style, Python
 style) and keeps it there. Drop the plugin into any Claude install,
