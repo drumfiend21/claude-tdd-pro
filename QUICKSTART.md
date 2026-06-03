@@ -1,22 +1,54 @@
 # Quick Start — Claude TDD Pro
 
-## 2-minute path (recommended)
-
-From inside any project you want to develop in:
+## Installer (npm-style subcommands)
 
 ```bash
-# Claude TDD Pro only:
 curl -fsSL https://raw.githubusercontent.com/drumfiend21/claude-tdd-pro/main/scripts/install.sh | bash
-
-# With grok-claude-tdd-pro harness and LSP:
-curl -fsSL https://raw.githubusercontent.com/drumfiend21/claude-tdd-pro/main/scripts/install.sh | bash -s -- --with-grok --with-lsp
 ```
 
-That's it. The installer parallelizes the plugin clone(s), installs hooks, exports Cursor rules, writes a default profile, and kicks the cold rubric suite off in the background so you can start coding immediately. Verification result lands in `~/.claude-tdd-pro-install.log` ~3–5 min later.
+That's it. Interactive prompts walk you through profile, harness, LSP. **<60 s wall-clock to ready-in-Cursor.**
 
-Open the project in Cursor and start writing code. The rules and hooks are already active.
+### Subcommands
 
-If you want manual control over each step, the long-form paths are below.
+```bash
+bash install.sh init        # first-time setup (default; idempotent)
+bash install.sh upgrade     # refresh plugin + regenerate rules
+bash install.sh doctor      # health check (npm-style ok/warn report)
+bash install.sh uninstall   # clean removal (preserves operator keys)
+bash install.sh version     # version + pinned commit
+bash install.sh help        # full usage
+```
+
+### Common one-liners
+
+```bash
+# Quick non-interactive (npm init -y pattern):
+curl -fsSL .../install.sh | bash -s -- init --yes
+
+# Full kit (Claude TDD Pro + Grok harness + LSP, scripted):
+curl -fsSL .../install.sh | bash -s -- init --yes --profile strict --with-grok --with-lsp
+
+# Pin to a specific commit (reproducible):
+curl -fsSL .../install.sh | bash -s -- init --yes --pin 107d228
+
+# Air-gapped / offline (after first install):
+bash install.sh init --offline --yes
+
+# Update everything:
+bash install.sh upgrade --yes
+
+# Verify after install:
+bash install.sh doctor
+```
+
+### What you get
+
+- **Lockfile** `.claude-tdd-pro.lock.json` in your project — records pinned commit, profile, components. Mirrors `package-lock.json`.
+- **Idempotency** — re-running `init` is a no-op unless you pass `--force`. Mirrors `npm install`.
+- **Doctor** — `install.sh doctor` reports `N ok, M warning(s)` with per-check hints. Mirrors `npm doctor`.
+- **Clean uninstall** — removes the hooks block but preserves any operator keys in `.claude/settings.json`. Mirrors `npm uninstall`.
+
+If you want manual step-by-step control or are auditing what the installer does, the long-form paths are below.
 
 ---
 
