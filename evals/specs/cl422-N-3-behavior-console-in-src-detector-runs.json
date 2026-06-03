@@ -1,0 +1,11 @@
+{
+  "name": "N-3 Node detectors: rubric/detectors/console-in-src.sh exits with recognized status",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/console-in-src.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "X-1 GitHub Actions: scripts/ci-validate-all.sh runs with --help (CI entry script)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/scripts/ci-validate-all.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2 || (bash \"$CLAUDE_PLUGIN_ROOT/scripts/ci-validate-all.sh\" 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2)",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

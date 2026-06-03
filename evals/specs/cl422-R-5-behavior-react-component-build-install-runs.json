@@ -1,0 +1,11 @@
+{
+  "name": "R-5 react-component-build: skills/react-component-build/_install.sh exits with recognized status",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/_install.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2 || (bash \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/_install.sh\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2)",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

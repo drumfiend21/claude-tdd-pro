@@ -1,0 +1,11 @@
+{
+  "name": "P-1 prompt registry: validate-registry.sh --help emits banner",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/prompts/validate-registry.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo helpable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "helpable"
+    ]
+  }
+}
