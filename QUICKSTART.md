@@ -1,5 +1,27 @@
 # Quick Start — Claude TDD Pro
 
+## 2-minute path (recommended)
+
+From inside any project you want to develop in:
+
+```bash
+# Claude TDD Pro only:
+curl -fsSL https://raw.githubusercontent.com/drumfiend21/claude-tdd-pro/main/scripts/install.sh | bash
+
+# With grok-claude-tdd-pro harness and LSP:
+curl -fsSL https://raw.githubusercontent.com/drumfiend21/claude-tdd-pro/main/scripts/install.sh | bash -s -- --with-grok --with-lsp
+```
+
+That's it. The installer parallelizes the plugin clone(s), installs hooks, exports Cursor rules, writes a default profile, and kicks the cold rubric suite off in the background so you can start coding immediately. Verification result lands in `~/.claude-tdd-pro-install.log` ~3–5 min later.
+
+Open the project in Cursor and start writing code. The rules and hooks are already active.
+
+If you want manual control over each step, the long-form paths are below.
+
+---
+
+## Long-form paths (manual)
+
 Two paths. Pick one.
 
 | Path | What it gets you | Setup time | First code in |
