@@ -19,22 +19,47 @@ set -uo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 
+# Per §23 X-7: --scope user|project + --include <component>... +
+# --dry-run + --force. Legacy --settings-path / --emit-audit kept as
+# test-affordance aliases during reconciliation.
+SCOPE="project"
+INCLUDE=""
 SETTINGS=""
 DRY_RUN=0
+FORCE=0
 EMIT_AUDIT=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --scope) SCOPE="$2"; shift 2 ;;
+    --include) INCLUDE="${INCLUDE:+$INCLUDE,}$2"; shift 2 ;;
     --settings-path) SETTINGS="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
+    --force) FORCE=1; shift ;;
     --emit-audit) EMIT_AUDIT="$2"; shift 2 ;;
     -h|--help)
-      echo "Usage: install-hooks.sh --settings-path <path> [--dry-run] [--emit-audit <jsonl>]"
+      echo "Usage: install-hooks.sh [--scope user|project] [--include <component>...] [--dry-run] [--force]" >&2
+      echo "  scopes: user -> ~/.claude/settings.json" >&2
+      echo "          project -> .claude/settings.json" >&2
+      echo "  components: hooks | commands | agents | detectors" >&2
+      echo "  (legacy: --settings-path <path>)" >&2
       exit 0 ;;
     *) echo "install-hooks: unknown flag: $1" >&2; exit 2 ;;
   esac
 done
 
-[[ -z "$SETTINGS" ]] && { echo "install-hooks: --settings-path <path> required" >&2; exit 2; }
+case "$SCOPE" in
+  user|project) : ;;
+  *) echo "install-hooks: --scope must be user|project (got $SCOPE)" >&2; exit 2 ;;
+esac
+
+# If --settings-path not given, resolve from --scope.
+if [[ -z "$SETTINGS" ]]; then
+  if [[ "$SCOPE" == "user" ]]; then
+    SETTINGS="$HOME/.claude/settings.json"
+  else
+    SETTINGS=".claude/settings.json"
+  fi
+fi
 
 # Build the hooks-block additions. Each hook points at the plugin's
 # scripts/ directory under PLUGIN_ROOT so updates flow through without

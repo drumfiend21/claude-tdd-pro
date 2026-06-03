@@ -19,22 +19,43 @@ set -uo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 
+# Per §23 X-6: positional <ide> (cursor|vscode-copilot|continue|aider|
+# windsurf) + --profile + --include + --exclude + --out + --skip-fresh +
+# --dry-run. Legacy --target / --format kept as test-affordance aliases
+# during reconciliation.
+IDE=""
+PROFILE=""
+INCLUDE=""
+EXCLUDE=""
+OUT=""
 TARGET=""
 FORMAT="eslint"
+SKIP_FRESH=0
 DRY_RUN=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --profile) PROFILE="$2"; shift 2 ;;
+    --include) INCLUDE="${INCLUDE:+$INCLUDE,}$2"; shift 2 ;;
+    --exclude) EXCLUDE="${EXCLUDE:+$EXCLUDE,}$2"; shift 2 ;;
+    --out) OUT="$2"; shift 2 ;;
     --target) TARGET="$2"; shift 2 ;;
     --format) FORMAT="$2"; shift 2 ;;
+    --skip-fresh) SKIP_FRESH=1; shift ;;
     --dry-run) DRY_RUN=1; shift ;;
     -h|--help)
-      echo "Usage: export-rules.sh --target <path> [--format eslint|biome|stylelint] [--dry-run]"
+      echo "Usage: export-rules.sh <ide> [--profile <name>] [--include <ns>] [--exclude <ns>] [--out <dir>] [--skip-fresh] [--dry-run]"
+      echo "       <ide>: cursor | vscode-copilot | continue | aider | windsurf"
+      echo "  (legacy: --target <path> --format eslint|biome|stylelint)"
       exit 0 ;;
-    *) echo "export-rules: unknown flag: $1" >&2; exit 2 ;;
+    cursor|vscode-copilot|continue|aider|windsurf) IDE="$1"; shift ;;
+    *) echo "export-rules: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
 
-[[ -z "$TARGET" ]] && { echo "export-rules: --target <path> required" >&2; exit 2; }
+[[ -z "$TARGET" && -z "$OUT" && -z "$IDE" ]] && { echo "export-rules: <ide> (or legacy --target <path>) required" >&2; exit 2; }
+# Bridge legacy --target / new --out to a single TARGET variable.
+[[ -z "$TARGET" && -n "$OUT" ]] && TARGET="$OUT/.${IDE:-eslint}rules.json"
+[[ -z "$TARGET" && -n "$IDE" ]] && TARGET="./.${IDE}rules.json"
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "export-rules: dry-run; would write $FORMAT config to $TARGET" >&2

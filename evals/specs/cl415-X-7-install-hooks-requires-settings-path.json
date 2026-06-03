@@ -1,6 +1,6 @@
 {
-  "name": "X-7 installable hooks bundle: --settings-path <path> required",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q -- \"--settings-path\" err.txt && echo required 1>&2",
+  "name": "X-7 installable hooks bundle: --scope user|project resolves the settings target path per §23",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q -- '--scope' err.txt && echo scope 1>&2",
   "setup": [],
-  "expect": {"exit_code": 0, "stderr_contains": ["required"]}
+  "expect": {"exit_code": 0, "stderr_contains": ["scope"]}
 }

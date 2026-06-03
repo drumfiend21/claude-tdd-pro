@@ -11,21 +11,21 @@
 
 dimensions:
   satisfaction:
-    enabled: false           # opt-in (Q-6 privacy posture)
-    notes: "In-terminal micro-survey; gated until operator flips enabled: true."
+    posture: opt-in           # Q-6 privacy posture; collector gated until "ON"
+    notes: "In-terminal micro-survey; gated until operator sets posture: ON."
   performance:
-    enabled: true            # ON (rubric pass rate, defect escape — already aggregated)
+    posture: ON               # rubric pass rate, defect escape — already aggregated
     sources: ["F-2.rubric_pass_rate", "F-2.defect_escape"]
   activity:
-    enabled: false           # opt-in (git commit cadence; per-individual signal)
+    posture: opt-in           # git commit cadence; per-individual signal
     sources: ["git.commit_count"]
   collaboration:
-    enabled: false           # opt-in (W-3 transitions, review thread depth)
+    posture: opt-in           # W-3 transitions, review thread depth
     sources: ["W-3.transitions"]
   efficiency_and_flow:
-    enabled: true            # ON (E-12 cache hit rate; P-8 prompt-effort; aggregate signal)
+    posture: ON               # E-12 cache hit rate; P-8 prompt-effort; aggregate signal
     sources: ["E-12.cache_hit_rate", "P-8.prompt_effort"]
 
-retention_days: 90           # Q-1 default; Q-8 honest-scope reviews if changed
+retention: 90-days           # Q-1 default per arch text "retention 90-days"
 
 share: never                 # Q-6 privacy posture default; raise via Q-6 redacted export

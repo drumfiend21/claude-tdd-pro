@@ -1,6 +1,6 @@
 {
-  "name": "Q-1 SPACE config: activity defaults to opt-in (enabled: false) per §10 Q-1 privacy posture",
-  "command": "grep -A1 '^  activity:' \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" | grep -q 'enabled: false' && echo opt_in 1>&2",
+  "name": "Q-1 SPACE config: activity defaults to posture: opt-in per §10 Q-1 privacy posture",
+  "command": "grep -A1 activity: \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" | grep -q \"posture: opt-in\" && echo opt_in 1>&2",
   "setup": [],
   "expect": {"exit_code": 0, "stderr_contains": ["opt_in"]}
 }
