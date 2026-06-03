@@ -1,43 +1,101 @@
 #!/usr/bin/env bash
-# Claude TDD Pro one-liner installer with interactive prompts.
+# Claude TDD Pro installer — npm-style subcommands + lockfile.
 #
-# Usage (from any project root):
+# Subcommands (npm parallel in parens):
+#   init                first-time setup in current project (npm init)
+#   upgrade             refresh plugin + regenerate rules     (npm update)
+#   doctor              health check                          (npm doctor)
+#   uninstall           remove hooks, rules, profile          (npm uninstall)
+#   version             print installed version + pin
+#   help                show usage
+#
+# Defaults to `init` when no subcommand is given.
+#
+# Quick start:
 #   curl -fsSL https://raw.githubusercontent.com/drumfiend21/claude-tdd-pro/main/scripts/install.sh | bash
 #
-# Or download and run:
-#   curl -fsSL .../install.sh -o /tmp/install.sh && bash /tmp/install.sh
+# Scripted / CI:
+#   curl -fsSL .../install.sh | bash -s -- init --yes --profile strict --with-grok
 #
-# Prompts the operator for each decision (profile, harness, LSP, target).
-# Defaults shown in brackets; press Enter to accept.
-#
-# Target wall-clock: <60 seconds to ready-in-Cursor.
+# Target: <60s wall-clock to ready-in-Cursor.
 
 set -uo pipefail
 
 START_SECONDS=$SECONDS
+VERSION="1.0.0"
 
-CLONE_DIR="$HOME/.claude-tdd-pro"
-GROK_DIR="$HOME/.grok-claude-tdd-pro"
+CLONE_DIR="${CLAUDE_TDD_PRO_HOME:-$HOME/.claude-tdd-pro}"
+GROK_DIR="${GROK_TDD_PRO_HOME:-$HOME/.grok-claude-tdd-pro}"
+LOCKFILE_NAME=".claude-tdd-pro.lock.json"
 
-# Detect TTY availability robustly. Three cases:
-#  (a) stdin is a TTY → just read from stdin
-#  (b) piped from curl but /dev/tty is a real terminal → use /dev/tty
-#  (c) no TTY at all (CI, container) → defaults only
+# ──────────────────────────────────────────────────────────────────────
+# Flag parsing
+# ──────────────────────────────────────────────────────────────────────
+
+SUBCMD="init"
+TARGET=""
+PROFILE=""
+SCOPE="project"
+WITH_GROK=""
+WITH_LSP=""
+PIN=""
+OFFLINE=0
+YES=0
+FORCE=0
+
+# First positional arg is the subcommand if it matches one we know.
+if [[ $# -gt 0 ]]; then
+  case "$1" in
+    init|upgrade|doctor|uninstall|version|help|--help|-h)
+      SUBCMD="${1#--}"; SUBCMD="${SUBCMD#-}"
+      [[ "$SUBCMD" == "help" || "$SUBCMD" == "h" ]] && SUBCMD="help"
+      shift ;;
+  esac
+fi
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -y|--yes)        YES=1; shift ;;
+    --force)         FORCE=1; shift ;;
+    --target)        TARGET="$2"; shift 2 ;;
+    --profile)       PROFILE="$2"; shift 2 ;;
+    --scope)         SCOPE="$2"; shift 2 ;;
+    --with-grok)     WITH_GROK=1; shift ;;
+    --no-grok)       WITH_GROK=0; shift ;;
+    --with-lsp)      WITH_LSP=1; shift ;;
+    --no-lsp)        WITH_LSP=0; shift ;;
+    --pin)           PIN="$2"; shift 2 ;;
+    --offline)       OFFLINE=1; shift ;;
+    -h|--help)       SUBCMD="help"; shift ;;
+    *) echo "install: unknown flag: $1" >&2; exit 2 ;;
+  esac
+done
+
+[[ -z "$TARGET" ]] && TARGET="$(pwd)"
+
+# ──────────────────────────────────────────────────────────────────────
+# TTY-safe prompts (npm init style)
+# ──────────────────────────────────────────────────────────────────────
+
 PROMPTS_AVAILABLE=0
-READ_FROM=""
-if [[ -t 0 ]]; then
-  PROMPTS_AVAILABLE=1
-  READ_FROM=""        # empty = read from stdin
-elif [[ -e /dev/tty ]] && exec 3<>/dev/tty 2>/dev/null; then
-  PROMPTS_AVAILABLE=1
-  READ_FROM="/dev/fd/3"
+READ_FD=""
+if [[ "$YES" -eq 0 ]] && [[ "$SUBCMD" != "version" && "$SUBCMD" != "help" && "$SUBCMD" != "doctor" ]]; then
+  if [[ -t 0 ]]; then
+    PROMPTS_AVAILABLE=1
+  elif [[ -e /dev/tty ]]; then
+    # Wrap exec in a subshell-tested attach; bash prints to stderr on
+    # exec failure even with 2>/dev/null. Test first via a noop fd open.
+    if ( exec 3<>/dev/tty ) 2>/dev/null; then
+      exec 3<>/dev/tty 2>/dev/null && { PROMPTS_AVAILABLE=1; READ_FD=3; }
+    fi
+  fi
 fi
 
 prompt() {
   local var_name="$1" question="$2" default="$3"
   local answer=""
   if [[ "$PROMPTS_AVAILABLE" -eq 1 ]]; then
-    if [[ -n "$READ_FROM" ]]; then
+    if [[ -n "$READ_FD" ]]; then
       printf '%s [%s]: ' "$question" "$default" >&3
       IFS= read -r answer <&3 || answer=""
     else
@@ -50,12 +108,12 @@ prompt() {
 }
 
 prompt_yn() {
-  local var_name="$1" question="$2" default="$3"   # default: y or n
+  local var_name="$1" question="$2" default="$3"
   local answer=""
   local hint="[y/N]"
   [[ "$default" == "y" ]] && hint="[Y/n]"
   if [[ "$PROMPTS_AVAILABLE" -eq 1 ]]; then
-    if [[ -n "$READ_FROM" ]]; then
+    if [[ -n "$READ_FD" ]]; then
       printf '%s %s: ' "$question" "$hint" >&3
       IFS= read -r answer <&3 || answer=""
     else
@@ -67,149 +125,380 @@ prompt_yn() {
   case "${answer:0:1}" in y|Y) printf -v "$var_name" '1' ;; *) printf -v "$var_name" '0' ;; esac
 }
 
+log() { printf '[%s +%02ds] %s\n' "$SUBCMD" "$(($SECONDS - $START_SECONDS))" "$*" >&2; }
+
 # ──────────────────────────────────────────────────────────────────────
-# Interactive prompts
+# Lockfile helpers (npm lockfile pattern)
 # ──────────────────────────────────────────────────────────────────────
 
-cat <<'BANNER' >&2
+lockfile_path() { printf '%s/%s' "$TARGET" "$LOCKFILE_NAME"; }
+lockfile_exists() { [[ -f "$(lockfile_path)" ]]; }
+
+lockfile_read_field() {
+  local field="$1"
+  lockfile_exists || { echo ""; return; }
+  node -e "const j=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'));process.stdout.write(String(${field}||''))" "$(lockfile_path)" 2>/dev/null || echo ""
+}
+
+lockfile_write() {
+  local commit="$1" profile="$2" with_grok="$3" with_lsp="$4"
+  local now; now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  cat > "$(lockfile_path)" <<EOF
+{
+  "version": "1.0",
+  "installer_version": "$VERSION",
+  "plugin": {
+    "name": "claude-tdd-pro",
+    "url": "https://github.com/drumfiend21/claude-tdd-pro",
+    "commit": "$commit",
+    "installed_at": "$now"
+  },
+  "harness": $( [[ "$with_grok" == "1" ]] && echo '{"name":"grok-claude-tdd-pro","url":"https://github.com/drumfiend21/grok-claude-tdd-pro"}' || echo "null" ),
+  "profile": "$profile",
+  "scope": "$SCOPE",
+  "components": {
+    "hooks": true,
+    "cursor_rules": true,
+    "lsp_symlink": $( [[ "$with_lsp" == "1" ]] && echo true || echo false )
+  }
+}
+EOF
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Subcommand: version
+# ──────────────────────────────────────────────────────────────────────
+
+cmd_version() {
+  echo "claude-tdd-pro installer $VERSION"
+  if lockfile_exists; then
+    local pin; pin=$(lockfile_read_field "j.plugin.commit")
+    local profile; profile=$(lockfile_read_field "j.profile")
+    echo "  installed: $pin (profile: $profile)"
+  fi
+  exit 0
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Subcommand: help
+# ──────────────────────────────────────────────────────────────────────
+
+cmd_help() {
+  cat <<USAGE
+Usage: install.sh [SUBCOMMAND] [OPTIONS]
+
+Subcommands:
+  init                    First-time setup in current project (default)
+  upgrade                 Update plugin to latest; regenerate rules
+  doctor                  Health check (idempotent)
+  uninstall               Remove hooks, rules, profile, lockfile
+  version                 Print installed version + pin
+  help                    Show this message
+
+Options:
+  -y, --yes               Skip all prompts; use defaults / flags
+  --force                 Re-run even when lockfile says we're current
+  --target <dir>          Target project directory (default: cwd)
+  --profile <name>        Profile (standard|strict|financial|regulated|government|react|node|library)
+  --scope project|user    Hook install scope (default: project)
+  --with-grok             Also install grok-claude-tdd-pro harness
+  --no-grok               Skip grok harness (default in --yes mode)
+  --with-lsp              Symlink LSP binary into ~/.local/bin
+  --no-lsp                Skip LSP symlink
+  --pin <commit>          Pin to specific commit (default: main HEAD)
+  --offline               Skip network operations; use cached clone
+
+Environment:
+  CLAUDE_TDD_PRO_HOME     Plugin clone location (default: ~/.claude-tdd-pro)
+  GROK_TDD_PRO_HOME       Harness clone location (default: ~/.grok-claude-tdd-pro)
+
+Examples:
+  curl ... | bash                                    # interactive init
+  curl ... | bash -s -- init -y                      # quick non-interactive
+  curl ... | bash -s -- init -y --profile strict --with-grok --with-lsp
+  bash install.sh upgrade --yes                      # update everything
+  bash install.sh doctor                             # health check
+  bash install.sh uninstall --yes                    # clean removal
+
+Target: <60s wall-clock for init.
+USAGE
+  exit 0
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Banner
+# ──────────────────────────────────────────────────────────────────────
+
+banner() {
+  cat <<BANNER >&2
 ┌──────────────────────────────────────────────────────────────────┐
-│  Claude TDD Pro installer                                        │
-│  Target: <60s to ready-in-Cursor                                 │
+│  Claude TDD Pro installer v$VERSION                                 │
+│  Subcommand: $(printf '%-52s' "$SUBCMD")│
 └──────────────────────────────────────────────────────────────────┘
 BANNER
-
-prompt    TARGET       "Target project directory"                       "$(pwd)"
-prompt    PROFILE      "Profile (standard|strict|financial|regulated|government|react|node|library)" "standard"
-prompt_yn WITH_GROK    "Install grok-claude-tdd-pro harness (outer-loop research/decompose/dispatch)?" "n"
-prompt_yn WITH_LSP     "Symlink LSP binary into ~/.local/bin (inline Cursor diagnostics)?"             "y"
-
-# Confirm and go.
-if [[ "$PROMPTS_AVAILABLE" -eq 1 ]]; then
-  cat >&2 <<SUMMARY
-
-Plan:
-  target:    $TARGET
-  profile:   $PROFILE
-  grok:      $( [[ $WITH_GROK -eq 1 ]] && echo yes || echo no )
-  lsp:       $( [[ $WITH_LSP  -eq 1 ]] && echo yes || echo no )
-
-SUMMARY
-  prompt_yn CONFIRM "Proceed?" "y"
-  [[ "$CONFIRM" -eq 1 ]] || { echo "Aborted." >&2; exit 1; }
-fi
+}
 
 # ──────────────────────────────────────────────────────────────────────
-# Step 1 — parallel shallow clones (no .git history, blob-filter for speed)
+# Clone helper (idempotent, parallel-safe)
 # ──────────────────────────────────────────────────────────────────────
 
-log() { printf '[install +%02ds] %s\n' "$(($SECONDS - $START_SECONDS))" "$*" >&2; }
-
-log "fetching plugin..."
-clone_one() {
+clone_or_update() {
   local url="$1" dest="$2"
   if [[ -d "$dest/.git" ]]; then
-    git -C "$dest" pull --ff-only --quiet origin main 2>/dev/null || true
+    [[ "$OFFLINE" -eq 1 ]] && return 0
+    git -C "$dest" fetch --quiet --depth 1 origin main 2>/dev/null \
+      && git -C "$dest" reset --quiet --hard origin/main 2>/dev/null \
+      || true
   else
+    [[ "$OFFLINE" -eq 1 ]] && { echo "install: --offline but $dest not present" >&2; return 1; }
     git clone --quiet --depth 1 --filter=blob:none "$url" "$dest" 2>/dev/null \
       || git clone --quiet --depth 1 "$url" "$dest"
   fi
 }
 
-clone_one https://github.com/drumfiend21/claude-tdd-pro.git "$CLONE_DIR" &
-PID_PLUGIN=$!
-
-if [[ "$WITH_GROK" -eq 1 ]]; then
-  clone_one https://github.com/drumfiend21/grok-claude-tdd-pro.git "$GROK_DIR" &
-  PID_GROK=$!
-fi
-
-wait "$PID_PLUGIN"
-log "plugin at $CLONE_DIR"
-
-if [[ "$WITH_GROK" -eq 1 ]]; then
-  wait "$PID_GROK"
-  log "grok harness at $GROK_DIR"
-fi
-
-export CLAUDE_PLUGIN_ROOT="$CLONE_DIR"
+resolve_pin() {
+  local dir="$1" pin="$2"
+  [[ -z "$pin" ]] && pin=$(git -C "$dir" rev-parse --short HEAD 2>/dev/null)
+  [[ -n "$pin" && "$pin" != "$(git -C "$dir" rev-parse --short HEAD 2>/dev/null)" ]] && {
+    git -C "$dir" fetch --quiet --depth 1 origin "$pin" 2>/dev/null && \
+    git -C "$dir" checkout --quiet "$pin" 2>/dev/null
+  }
+  printf '%s' "$pin"
+}
 
 # ──────────────────────────────────────────────────────────────────────
-# Step 2 — install hooks (non-interactive; --scope project)
+# Subcommand: init
 # ──────────────────────────────────────────────────────────────────────
 
-mkdir -p "$TARGET/.claude"
-bash "$CLONE_DIR/commands/install-hooks.sh" --scope project --settings-path "$TARGET/.claude/settings.json" >/dev/null 2>&1 || \
-  log "WARN hooks install failed; check $TARGET/.claude/settings.json"
-log "hooks → $TARGET/.claude/settings.json"
+cmd_init() {
+  banner
 
-# ──────────────────────────────────────────────────────────────────────
-# Step 3 — export Cursor rules
-# ──────────────────────────────────────────────────────────────────────
-
-bash "$CLONE_DIR/commands/export-rules.sh" --target "$TARGET/.cursorrules" >/dev/null 2>&1 || \
-  log "WARN cursor rule export failed"
-log "rules → $TARGET/.cursorrules"
-
-# ──────────────────────────────────────────────────────────────────────
-# Step 4 — profile config
-# ──────────────────────────────────────────────────────────────────────
-
-mkdir -p "$TARGET/.claude-tdd-pro"
-if [[ ! -f "$TARGET/.claude-tdd-pro/userConfig.yaml" ]]; then
-  printf 'profile: %s\n' "$PROFILE" > "$TARGET/.claude-tdd-pro/userConfig.yaml"
-fi
-log "profile → $PROFILE"
-
-# ──────────────────────────────────────────────────────────────────────
-# Step 5 — LSP symlink
-# ──────────────────────────────────────────────────────────────────────
-
-if [[ "$WITH_LSP" -eq 1 ]]; then
-  mkdir -p "$HOME/.local/bin"
-  ln -sf "$CLONE_DIR/lsp/tdd-pro-lsp/tdd-pro-lsp" "$HOME/.local/bin/tdd-pro-lsp"
-  log "lsp → $HOME/.local/bin/tdd-pro-lsp"
-fi
-
-# ──────────────────────────────────────────────────────────────────────
-# Step 6 — wire grok harness to share our clone (skip its internal re-clone)
-# ──────────────────────────────────────────────────────────────────────
-
-if [[ "$WITH_GROK" -eq 1 ]]; then
-  mkdir -p "$GROK_DIR/.harness/plugin-cache"
-  ln -sfn "$CLONE_DIR" "$GROK_DIR/.harness/plugin-cache/claude-tdd-pro"
-  # Materialize the harness's .claude/skills/tdd-pro-* symlinks.
-  if [[ -d "$GROK_DIR/.claude/skills" ]]; then
-    for skill in "$GROK_DIR/.claude/skills/tdd-pro-"*; do
-      [[ -L "$skill" ]] || continue
-      target=$(readlink "$skill")
-      # Re-point any dangling symlinks to the shared cache.
-      [[ -e "$skill" ]] && continue
-      name=$(basename "$skill")
-      ln -sfn "$CLONE_DIR/skills/${name#tdd-pro-}" "$skill" 2>/dev/null || true
-    done
+  # Idempotency: detect prior install (npm rerun pattern)
+  if lockfile_exists && [[ "$FORCE" -eq 0 ]]; then
+    local pin; pin=$(lockfile_read_field "j.plugin.commit")
+    log "found existing $LOCKFILE_NAME (pin: $pin)"
+    log "use 'upgrade' to refresh, 'doctor' to verify, or pass --force to reinstall"
+    exit 0
   fi
-  log "grok harness sharing plugin cache → $CLONE_DIR"
-fi
 
-# ──────────────────────────────────────────────────────────────────────
-# Step 7 — kick cold-suite verification into background; user can code now
-# ──────────────────────────────────────────────────────────────────────
+  # Prompts (npm init style: questions + defaults + final summary)
+  prompt    TARGET_R     "Target project directory"  "$TARGET"
+  TARGET="$TARGET_R"
+  [[ -z "$PROFILE"   ]] && prompt PROFILE "Profile (standard|strict|financial|regulated|government|react|node|library)" "standard"
+  [[ -z "$WITH_GROK" ]] && prompt_yn WITH_GROK "Install grok-claude-tdd-pro harness?" "n"
+  [[ -z "$WITH_LSP"  ]] && prompt_yn WITH_LSP  "Symlink LSP binary into ~/.local/bin?" "y"
+  WITH_GROK="${WITH_GROK:-0}"
+  WITH_LSP="${WITH_LSP:-1}"
 
-( bash "$CLONE_DIR/evals/runner.sh" >"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
-disown 2>/dev/null || true
+  if [[ "$PROMPTS_AVAILABLE" -eq 1 ]]; then
+    cat >&2 <<PLAN
 
-ELAPSED=$(($SECONDS - $START_SECONDS))
+Plan:
+  target:   $TARGET
+  profile:  $PROFILE
+  scope:    $SCOPE
+  grok:     $( [[ $WITH_GROK -eq 1 ]] && echo yes || echo no )
+  lsp:      $( [[ $WITH_LSP  -eq 1 ]] && echo yes || echo no )
+  pin:      $( [[ -n "$PIN" ]] && echo "$PIN" || echo "main HEAD" )
 
-cat >&2 <<DONE
+PLAN
+    prompt_yn CONFIRM "Proceed?" "y"
+    [[ "$CONFIRM" -eq 1 ]] || { echo "Aborted." >&2; exit 1; }
+  fi
 
-[install +${ELAPSED}s] ✓ ready — open $TARGET in Cursor and start coding.
+  # Step 1 — parallel clones (background)
+  log "fetching plugin(s)..."
+  clone_or_update https://github.com/drumfiend21/claude-tdd-pro.git "$CLONE_DIR" & PID_PLUGIN=$!
+  if [[ "$WITH_GROK" -eq 1 ]]; then
+    clone_or_update https://github.com/drumfiend21/grok-claude-tdd-pro.git "$GROK_DIR" & PID_GROK=$!
+  fi
+
+  wait "$PID_PLUGIN" || { log "ERR plugin clone failed"; exit 1; }
+  local resolved_pin; resolved_pin=$(resolve_pin "$CLONE_DIR" "$PIN")
+  log "plugin @ $resolved_pin"
+
+  if [[ "$WITH_GROK" -eq 1 ]]; then
+    wait "$PID_GROK" || { log "ERR grok clone failed"; exit 1; }
+    log "harness ready"
+  fi
+
+  export CLAUDE_PLUGIN_ROOT="$CLONE_DIR"
+
+  # Step 2 — hooks
+  mkdir -p "$TARGET/.claude"
+  bash "$CLONE_DIR/commands/install-hooks.sh" --scope "$SCOPE" --settings-path "$TARGET/.claude/settings.json" >/dev/null 2>&1 \
+    || log "WARN hooks install failed"
+  log "hooks installed (--scope $SCOPE)"
+
+  # Step 3 — cursor rules
+  bash "$CLONE_DIR/commands/export-rules.sh" --target "$TARGET/.cursorrules" >/dev/null 2>&1 \
+    || log "WARN cursor rule export failed"
+  log "cursor rules → .cursorrules"
+
+  # Step 4 — profile config (preserved if user already wrote one)
+  mkdir -p "$TARGET/.claude-tdd-pro"
+  [[ -f "$TARGET/.claude-tdd-pro/userConfig.yaml" ]] || \
+    printf 'profile: %s\n' "$PROFILE" > "$TARGET/.claude-tdd-pro/userConfig.yaml"
+  log "profile: $PROFILE"
+
+  # Step 5 — LSP symlink
+  if [[ "$WITH_LSP" -eq 1 ]]; then
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$CLONE_DIR/lsp/tdd-pro-lsp/tdd-pro-lsp" "$HOME/.local/bin/tdd-pro-lsp"
+    log "lsp → ~/.local/bin/tdd-pro-lsp"
+  fi
+
+  # Step 6 — grok cache share (skip its internal re-clone)
+  if [[ "$WITH_GROK" -eq 1 ]]; then
+    mkdir -p "$GROK_DIR/.harness/plugin-cache"
+    ln -sfn "$CLONE_DIR" "$GROK_DIR/.harness/plugin-cache/claude-tdd-pro"
+    log "harness cache → $CLONE_DIR"
+  fi
+
+  # Step 7 — write lockfile
+  lockfile_write "$resolved_pin" "$PROFILE" "$WITH_GROK" "$WITH_LSP"
+  log "lockfile → $LOCKFILE_NAME"
+
+  # Step 8 — background suite verification + post-install doctor (async)
+  ( bash "$CLONE_DIR/evals/runner.sh" >"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
+  disown 2>/dev/null || true
+
+  local elapsed=$(($SECONDS - $START_SECONDS))
+  cat >&2 <<DONE
+
+[init +${elapsed}s] ✓ ready — open $TARGET in Cursor and start coding.
 
   CLAUDE_PLUGIN_ROOT=$CLONE_DIR  (add to your shell rc)
 
-  Verify later (background suite):
-    tail -1 ~/.claude-tdd-pro-install.log
+  Verify:    bash install.sh doctor
+  Upgrade:   bash install.sh upgrade
+  Uninstall: bash install.sh uninstall
 
-  Useful commands:
-    bash \$CLAUDE_PLUGIN_ROOT/commands/doctor.sh
-    bash \$CLAUDE_PLUGIN_ROOT/commands/space-report.sh
+  Background suite log: ~/.claude-tdd-pro-install.log
 DONE
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Subcommand: upgrade
+# ──────────────────────────────────────────────────────────────────────
+
+cmd_upgrade() {
+  banner
+  lockfile_exists || { echo "No $LOCKFILE_NAME in $TARGET; run 'init' first." >&2; exit 1; }
+
+  log "pulling plugin updates..."
+  clone_or_update https://github.com/drumfiend21/claude-tdd-pro.git "$CLONE_DIR" \
+    || { log "ERR plugin update failed"; exit 1; }
+
+  local with_grok; with_grok=$(lockfile_read_field "j.harness ? 1 : 0")
+  if [[ "$with_grok" == "1" ]]; then
+    clone_or_update https://github.com/drumfiend21/grok-claude-tdd-pro.git "$GROK_DIR" || true
+  fi
+
+  local resolved_pin; resolved_pin=$(resolve_pin "$CLONE_DIR" "$PIN")
+  log "plugin @ $resolved_pin"
+
+  # Regenerate Cursor rules (stamps go stale on upgrade)
+  bash "$CLONE_DIR/commands/export-rules.sh" --target "$TARGET/.cursorrules" >/dev/null 2>&1 \
+    && log "cursor rules refreshed" || log "WARN cursor rule export failed"
+
+  # Refresh lockfile
+  local profile; profile=$(lockfile_read_field "j.profile")
+  local with_lsp; with_lsp=$(lockfile_read_field "j.components.lsp_symlink ? 1 : 0")
+  lockfile_write "$resolved_pin" "$profile" "$with_grok" "$with_lsp"
+  log "lockfile updated"
+
+  local elapsed=$(($SECONDS - $START_SECONDS))
+  log "✓ upgrade complete (${elapsed}s)"
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Subcommand: doctor
+# ──────────────────────────────────────────────────────────────────────
+
+cmd_doctor() {
+  banner
+  local ok=0 warn=0
+  check() {
+    local label="$1" test="$2" hint="$3"
+    if eval "$test" >/dev/null 2>&1; then
+      printf '  ✓ %s\n' "$label" >&2; ok=$((ok+1))
+    else
+      printf '  ✗ %s — %s\n' "$label" "$hint" >&2; warn=$((warn+1))
+    fi
+  }
+  check "plugin cloned at $CLONE_DIR"          "[ -d '$CLONE_DIR/.git' ]"                        "run: install.sh init"
+  check "CLAUDE_PLUGIN_ROOT env var set"       "[ -n \"\${CLAUDE_PLUGIN_ROOT:-}\" ]"            "add 'export CLAUDE_PLUGIN_ROOT=$CLONE_DIR' to shell rc"
+  check "lockfile present in $TARGET"          "[ -f '$(lockfile_path)' ]"                       "run: install.sh init"
+  check "hooks installed"                       "[ -f '$TARGET/.claude/settings.json' ]"          "run: install.sh init"
+  check ".cursorrules present"                  "[ -f '$TARGET/.cursorrules' ]"                   "run: bash \$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh --target $TARGET/.cursorrules"
+  check "profile config present"                "[ -f '$TARGET/.claude-tdd-pro/userConfig.yaml' ]" "run: install.sh init"
+  check "rubric runner executable"              "[ -x '$CLONE_DIR/evals/runner.sh' ]"             "re-clone plugin"
+  if [[ -x "$CLONE_DIR/commands/doctor.sh" ]]; then
+    check "plugin /doctor health command"      "bash '$CLONE_DIR/commands/doctor.sh' --help"    "plugin doctor not runnable"
+  fi
+  printf '\n%d ok, %d warning(s)\n' "$ok" "$warn" >&2
+  [[ "$warn" -eq 0 ]]
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Subcommand: uninstall
+# ──────────────────────────────────────────────────────────────────────
+
+cmd_uninstall() {
+  banner
+  if [[ "$PROMPTS_AVAILABLE" -eq 1 && "$YES" -eq 0 ]]; then
+    cat >&2 <<WARN
+
+This will remove from $TARGET:
+  .claude/settings.json         (hooks block; non-TDD-Pro keys preserved)
+  .cursorrules
+  .claude-tdd-pro/userConfig.yaml
+  $LOCKFILE_NAME
+
+It will NOT remove the plugin clone at $CLONE_DIR.
+
+WARN
+    prompt_yn CONFIRM "Proceed?" "n"
+    [[ "$CONFIRM" -eq 1 ]] || { echo "Aborted." >&2; exit 1; }
+  fi
+
+  # Remove the hooks block, preserve other settings keys.
+  if [[ -f "$TARGET/.claude/settings.json" ]]; then
+    node -e '
+      const fs = require("fs");
+      const p = process.argv[1];
+      try {
+        const j = JSON.parse(fs.readFileSync(p, "utf8"));
+        delete j.hooks;
+        if (Object.keys(j).length === 0) fs.unlinkSync(p);
+        else fs.writeFileSync(p, JSON.stringify(j, null, 2) + "\n");
+      } catch {}
+    ' "$TARGET/.claude/settings.json"
+    log "hooks block removed from $TARGET/.claude/settings.json"
+  fi
+
+  rm -f "$TARGET/.cursorrules" && log "removed .cursorrules"
+  rm -f "$TARGET/.claude-tdd-pro/userConfig.yaml" && log "removed userConfig.yaml"
+  rm -f "$(lockfile_path)" && log "removed $LOCKFILE_NAME"
+  # Clean up LSP symlink if it points at our cache.
+  if [[ -L "$HOME/.local/bin/tdd-pro-lsp" ]] && [[ "$(readlink "$HOME/.local/bin/tdd-pro-lsp")" == "$CLONE_DIR/"* ]]; then
+    rm -f "$HOME/.local/bin/tdd-pro-lsp" && log "removed LSP symlink"
+  fi
+
+  log "✓ uninstalled. Plugin clone at $CLONE_DIR preserved (delete manually if desired)."
+}
+
+# ──────────────────────────────────────────────────────────────────────
+# Dispatch
+# ──────────────────────────────────────────────────────────────────────
+
+case "$SUBCMD" in
+  init)      cmd_init ;;
+  upgrade)   cmd_upgrade ;;
+  doctor)    cmd_doctor ;;
+  uninstall) cmd_uninstall ;;
+  version)   cmd_version ;;
+  help)      cmd_help ;;
+  *)         echo "install: unknown subcommand: $SUBCMD" >&2; cmd_help ;;
+esac

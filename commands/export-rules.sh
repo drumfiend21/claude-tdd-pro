@@ -68,7 +68,10 @@ case "$FORMAT" in
   eslint)
     # Use the per-source-file ESLint compliance emitter so the resulting
     # config carries the same severity/options the runtime gate applies.
-    node -e '
+    # Env vars must precede `node` so they reach process.env (positional
+    # args after `node -e '...'` are NOT env vars). Bash-3.2 portability
+    # gotcha #4.
+    PLUGIN_ROOT="$PLUGIN_ROOT" TARGET="$TARGET" node -e '
       const fs = require("fs");
       const path = require("path");
       const root = process.env.PLUGIN_ROOT;
@@ -99,21 +102,21 @@ case "$FORMAT" in
         rules: allRules
       };
       fs.writeFileSync(target, JSON.stringify(cfg, null, 2) + "\n");
-    ' PLUGIN_ROOT="$PLUGIN_ROOT" TARGET="$TARGET"
+    '
     n=$(grep -c '"g-' "$TARGET" 2>/dev/null || echo 0)
     echo "export-rules: wrote $n rules to $TARGET (format=$FORMAT)" >&2
     ;;
   biome|stylelint)
     # Stub: emit a minimal config carrying the rule ID list. Operators
     # adapt per linter-specific rule plug-in mapping.
-    node -e '
+    TARGET="$TARGET" node -e '
       const fs = require("fs");
       const target = process.env.TARGET;
       fs.writeFileSync(target, JSON.stringify({
         "//": "X-6 export — '"$FORMAT"' stub. Rule mapping happens in the consumer.",
         rules: {}
       }, null, 2) + "\n");
-    ' TARGET="$TARGET"
+    '
     echo "export-rules: wrote stub $FORMAT config to $TARGET" >&2
     ;;
   *) echo "export-rules: unknown format: $FORMAT" >&2; exit 2 ;;
