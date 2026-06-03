@@ -1,0 +1,11 @@
+{
+  "name": "Q-4 friction tracker behavior: --aggregate mode runs without crash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --aggregate --by hook --since 7d 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo aggregates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aggregates"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Q-4 friction tracker behavior: hooks/scripts/friction-tracker.sh accepts an --event with no crash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" --event test-event --hook Stop --decision allow --severity P2 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo accepts_event 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "accepts_event"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report behavior: space/metrics.yaml parses with at least one metric ID key",
+  "command": "grep -qE \"^[a-z_]+:\" \"$CLAUDE_PLUGIN_ROOT/space/metrics.yaml\" && echo has_metrics 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "has_metrics"
+    ]
+  }
+}

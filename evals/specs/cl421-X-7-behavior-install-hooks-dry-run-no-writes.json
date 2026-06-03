@@ -1,0 +1,11 @@
+{
+  "name": "X-7 installable hooks behavior: --dry-run does not modify settings.json (§2.14 contract)",
+  "command": "rm -f /tmp/x7-settings.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" --settings-path /tmp/x7-settings.json --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -f /tmp/x7-settings.json ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

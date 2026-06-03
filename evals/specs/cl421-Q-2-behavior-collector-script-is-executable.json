@@ -1,0 +1,11 @@
+{
+  "name": "Q-2 collector behavior: space/collector.sh is executable (collector runs at hook time)",
+  "command": "[ -x \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" ] && echo executable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "executable"
+    ]
+  }
+}

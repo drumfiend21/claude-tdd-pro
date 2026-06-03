@@ -1,0 +1,11 @@
+{
+  "name": "X-6 IDE rules export behavior: --dry-run does not write target file (§2.14 contract)",
+  "command": "rm -f /tmp/x6-out.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" --target /tmp/x6-out.json --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -f /tmp/x6-out.json ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

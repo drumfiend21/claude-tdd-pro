@@ -1,0 +1,11 @@
+{
+  "name": "Q-9 profile auto-select behavior: scan.sh exits with recognized status when run against a sample tree",
+  "command": "mkdir -p /tmp/q9-scan && echo \"{}\" > /tmp/q9-scan/package.json; bash \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/scan.sh\" --root /tmp/q9-scan 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo scans 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "scans"
+    ]
+  }
+}

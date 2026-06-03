@@ -1,0 +1,11 @@
+{
+  "name": "E-4 auto-fix behavior: --dry-run exits cleanly without modifying files",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

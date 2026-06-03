@@ -1,0 +1,11 @@
+{
+  "name": "Q-7 cross-loop behavior: space/cross-loop-emit.sh exits with recognized status code",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/space/cross-loop-emit.sh\" 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo emits_clean 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emits_clean"
+    ]
+  }
+}

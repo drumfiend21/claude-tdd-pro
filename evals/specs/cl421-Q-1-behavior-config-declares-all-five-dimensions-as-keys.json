@@ -1,0 +1,11 @@
+{
+  "name": "Q-1 SPACE config behavior: config declares all five SPACE dimensions as YAML keys (collector dispatch keys)",
+  "command": "n=0; for k in satisfaction performance activity collaboration efficiency_and_flow; do grep -qE \"^  $k:\" \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" && n=$((n+1)); done; [ \"$n\" -eq 5 ] && echo all_5 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all_5"
+    ]
+  }
+}

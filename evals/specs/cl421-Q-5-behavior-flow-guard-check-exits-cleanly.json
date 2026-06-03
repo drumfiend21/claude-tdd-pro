@@ -1,0 +1,11 @@
+{
+  "name": "Q-5 flow guard behavior: skills/flow-guard/check.sh exits with a recognized status code (0/1/2)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/check.sh\" 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo clean_exit 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "clean_exit"
+    ]
+  }
+}

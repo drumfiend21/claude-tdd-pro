@@ -1,0 +1,11 @@
+{
+  "name": "X-9 cloud devcontainer behavior: devcontainer.json declares name + image (or dockerFile)",
+  "command": "grep -qE \"\"name\"\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" && grep -qE \"\"image\"|\"dockerFile\"\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" && echo dc_fields 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dc_fields"
+    ]
+  }
+}

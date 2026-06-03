@@ -1,0 +1,11 @@
+{
+  "name": "P-10 router behavior: every route in router.yaml carries a rationale field (P-4 detector contract)",
+  "command": "routes=$(grep -cE \"^  - task_class:\" \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\"); rationales=$(grep -cE \"rationale:\" \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\"); [ \"$routes\" -gt 0 ] && [ \"$rationales\" -ge \"$routes\" ] && echo rationale_per_route 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rationale_per_route"
+    ]
+  }
+}

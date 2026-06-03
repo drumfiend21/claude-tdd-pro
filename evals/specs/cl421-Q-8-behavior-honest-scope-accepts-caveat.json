@@ -1,0 +1,11 @@
+{
+  "name": "Q-8 honest scope behavior: validate script returns 0 on a README that documents solo-scale self-observation",
+  "command": "printf \"# Project\\n\\nThis is solo-scale self-observation, not productivity science.\\n\" > /tmp/q8-readme.md; bash \"$CLAUDE_PLUGIN_ROOT/space/honest-scope-validate.sh\" --readme /tmp/q8-readme.md 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo accepts_caveat 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "accepts_caveat"
+    ]
+  }
+}

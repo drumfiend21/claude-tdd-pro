@@ -1,0 +1,11 @@
+{
+  "name": "E-9 ESLint formatters behavior: json.sh on sample input emits a JSON document",
+  "command": "out=$(echo \"[]\" | bash \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/json.sh\" 2>&1); echo \"$out\" | head -c 1 | grep -qE \"\\[|\\{\" && echo json_shape 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "json_shape"
+    ]
+  }
+}
