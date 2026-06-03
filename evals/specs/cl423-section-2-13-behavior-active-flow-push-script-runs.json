@@ -1,0 +1,6 @@
+{
+  "name": "§2.13 Active-flow stack: workflow/active-flow-push.sh runs with --help (NDJSON push wrapper contract)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/workflow/active-flow-push.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo pushable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["pushable"]}
+}

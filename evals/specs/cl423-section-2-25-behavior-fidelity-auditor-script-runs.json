@@ -1,0 +1,11 @@
+{
+  "name": "§2.25 Pending-spec content fidelity: rubric/detectors/audit-pending-spec-fidelity.sh exits cleanly with --help",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo auditor_runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "auditor_runs"
+    ]
+  }
+}

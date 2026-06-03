@@ -1,0 +1,6 @@
+{
+  "name": "§2.25 Pending-spec content fidelity: auditor reports unknown_vocab on a pending spec asserting on an invented YAML key",
+  "command": "mkdir -p /tmp/cl423-vocab-test && printf '{\"name\":\"x\",\"command\":\"grep zzfakekey123: file\",\"setup\":[],\"expect\":{\"exit_code\":0}}\\n' > /tmp/cl423-vocab-test/x.json; out=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending /tmp/cl423-vocab-test --arch \"$CLAUDE_PLUGIN_ROOT/docs/architecture-v1.9.md\" --section \"§10\" 2>&1 || true); echo \"$out\" | grep -qE 'unknown_vocab|dirty' && echo rejects 1>&2; rm -rf /tmp/cl423-vocab-test",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejects"]}
+}

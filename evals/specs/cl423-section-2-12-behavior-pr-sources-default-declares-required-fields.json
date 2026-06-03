@@ -1,0 +1,11 @@
+{
+  "name": "§2.12 PR source contract: pr-corpus/PR-SOURCES-DEFAULT.yaml declares id/tier/source_class fields per contract",
+  "command": "grep -qE \"id:|tier:|source_class:\" \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" && echo fields 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "fields"
+    ]
+  }
+}
