@@ -1,0 +1,9 @@
+{
+  "name": "/help reports the list of known H-9 topics when invoked with an unrecognized topic name",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/help.sh\" totally-made-up-topic 2>out.txt && grep -q 'unknown topic' out.txt && grep -q 'getting-started' out.txt && echo listed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["listed"]
+  }
+}

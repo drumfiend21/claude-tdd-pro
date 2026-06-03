@@ -1,0 +1,6 @@
+{
+  "name": "R-10 detector reports clean when before and after props match exactly",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; };\\n' > before/Button.tsx && cp before/Button.tsx after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'clean' err.txt && echo clean 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["clean"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem --interactive reads the operator's caught-by answer from stdin and generates an eval spec under evals/specs/ per F-1",
+  "command": "echo 'no-eval' | bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'unchecked eval call' --interactive 2>err.txt && ls evals/specs/postmortem-*-unchecked-eval-call.json >/dev/null 2>&1 && grep -q '\"subject\": \"no-eval\"' evals/specs/postmortem-*-unchecked-eval-call.json && echo generated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["generated"]
+  }
+}

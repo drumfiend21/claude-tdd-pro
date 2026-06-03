@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: profiles/eu-financial.yaml extends per source-namespace per §17 G-7",
+  "command": "grep -qE 'european-union:\\*' \"$CLAUDE_PLUGIN_ROOT/profiles/eu-financial.yaml\" && grep -qE 'finance-industry:\\*' \"$CLAUDE_PLUGIN_ROOT/profiles/eu-financial.yaml\" && echo per_source 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["per_source"]}
+}

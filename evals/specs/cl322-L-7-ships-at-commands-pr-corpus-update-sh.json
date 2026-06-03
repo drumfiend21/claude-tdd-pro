@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update ships at commands/pr-corpus-update.sh per the literal L-7 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

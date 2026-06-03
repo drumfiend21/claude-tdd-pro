@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-tdd-pro/compliance/audit-pack-schema.json",
+  "title": "Portable audit-pack export bundle (§2.24)",
+  "description": "v1.9.1 §23 / §2.24 portable audit-pack export format. Serialization of existing C-10 content per the contract -- no new data collected, no existing data dropped.",
+  "type": "object",
+  "required": [
+    "bundle_schema_version",
+    "bundle_id",
+    "generated_at",
+    "commit",
+    "profile_snapshot_hash",
+    "aibom_uri",
+    "control_coverage",
+    "evidence_set",
+    "risk_classification",
+    "audit_log_window",
+    "provenance_manifest_uris",
+    "decision_trail",
+    "standards_freshness",
+    "pr_corpus_freshness",
+    "compliance_freshness",
+    "all_three_fresh_badge",
+    "cost_telemetry_summary",
+    "signature"
+  ],
+  "properties": {
+    "bundle_schema_version": { "const": "1.0" },
+    "bundle_id": { "type": "string", "pattern": "^[0-9a-f]+-[0-9TZ:\\-]+$" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "commit": { "type": "string", "pattern": "^[0-9a-f]+$" },
+    "profile_snapshot_hash": { "type": "string" },
+    "aibom_uri": { "type": "string" },
+    "control_coverage": { "type": "object" },
+    "evidence_set": { "type": "array" },
+    "risk_classification": { "type": "object" },
+    "audit_log_window": {
+      "type": "object",
+      "required": ["first_entry", "last_entry", "checkpoint_uris"],
+      "properties": {
+        "first_entry": { "type": "string" },
+        "last_entry": { "type": "string" },
+        "checkpoint_uris": { "type": "array" }
+      }
+    },
+    "provenance_manifest_uris": { "type": "array" },
+    "decision_trail": { "type": "array" },
+    "standards_freshness": { "type": "object" },
+    "pr_corpus_freshness": { "type": "object" },
+    "compliance_freshness": { "type": "object" },
+    "all_three_fresh_badge": { "type": "boolean" },
+    "cost_telemetry_summary": { "type": "object" },
+    "signature": { "type": "string" }
+  }
+}

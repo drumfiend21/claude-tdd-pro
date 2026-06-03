@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: declares Stop hook",
+  "command": "grep -q \"Stop\" \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" && echo stop 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["stop"]}
+}

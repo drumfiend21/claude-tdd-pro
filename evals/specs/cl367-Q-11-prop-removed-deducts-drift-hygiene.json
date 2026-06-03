@@ -1,0 +1,6 @@
+{
+  "name": "Q-11 R-10 prop_removed findings deduct from drift_hygiene per §26",
+  "command": "printf '%s' '{\"commit\":\"abc\"}' > manifest.json && printf '{\"kind\":\"prop_removed\",\"component\":\"X\",\"prop\":\"a\"}\\n{\"kind\":\"prop_removed\",\"component\":\"X\",\"prop\":\"b\"}\\n' > drift.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-quality-scorecard.sh\" --pr-sha abc --manifest manifest.json --adrs-csv 'ADR-1' --drift-findings drift.jsonl --invocations-count 1 --format json > out.json && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(j.components.drift_hygiene===15?0:1)' && echo deducted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["deducted"]}
+}

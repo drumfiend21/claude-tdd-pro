@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: declares artifacts: on_failure for debugging",
+  "command": "grep -qE \"artifacts:|on_failure\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo artifacts 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["artifacts"]}
+}

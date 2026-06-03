@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: workflow invokes the eval runner",
+  "command": "grep -qE \"runner.sh|rubric|validate\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" && echo runs_eval 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["runs_eval"]}
+}

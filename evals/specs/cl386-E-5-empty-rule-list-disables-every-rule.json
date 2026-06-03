@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: an empty rule list (// rubric-disable-line -- reason) disables every rule on that line",
+  "command": "printf 'eval(\"x\"); // rubric-disable-line -- universal\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo universal_suppress 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["universal_suppress"]}
+}

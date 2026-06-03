@@ -1,0 +1,6 @@
+{
+  "name": "R-4 react templates: playwright.config.ts defaults baseURL to localhost:3000 so the Next.js dev server convention works without env wiring",
+  "command": "grep -q 'localhost:3000' \"$CLAUDE_PLUGIN_ROOT/templates/playwright.config.ts\" && echo localhost_default 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["localhost_default"]}
+}

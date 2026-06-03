@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: migrate-rule --dry-run makes no writes per the §2.14 dry-run contract",
+  "command": "printf 'rules:\\n  old-rule: error\\n' > p.yaml && before=$(md5sum p.yaml | cut -d' ' -f1) && bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rule.sh\" old-rule --to new-rule --profile p.yaml --dry-run 2>err.txt; rc=$?; after=$(md5sum p.yaml | cut -d' ' -f1) && [ \"$rc\" -eq 0 ] && [ \"$before\" = \"$after\" ] && grep -q 'dry-run; would migrate' err.txt && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

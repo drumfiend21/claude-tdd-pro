@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report: dashboard mentions counter-Goodhart guards per §10 Q-3",
+  "command": "grep -qiE \"goodhart|counter|guard|honest\" \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" && echo guards 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "guards"
+    ]
+  }
+}

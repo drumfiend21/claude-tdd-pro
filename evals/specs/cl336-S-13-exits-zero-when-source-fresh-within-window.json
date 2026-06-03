@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate exits zero when the source's last-fetch marker is inside the fetch-frequency window",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && printf '2026-05-25T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/src.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency daily --now 2026-05-25T10:00:00Z 2>err.txt && echo fresh 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["fresh"]}
+}

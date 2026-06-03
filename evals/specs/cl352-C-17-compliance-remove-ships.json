@@ -1,0 +1,6 @@
+{
+  "name": "C-17 /compliance-remove ships at commands/compliance-remove.sh per architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

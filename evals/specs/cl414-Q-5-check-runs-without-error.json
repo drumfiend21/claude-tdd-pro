@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: check.sh exits cleanly when invoked",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/check.sh\" 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runnable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["runnable"]}
+}

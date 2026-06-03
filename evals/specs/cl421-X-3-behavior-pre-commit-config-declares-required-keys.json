@@ -1,0 +1,11 @@
+{
+  "name": "X-3 pre-commit behavior: .pre-commit-config.yaml declares repos with at least one hook",
+  "command": "grep -qE \"^repos:\" \"$CLAUDE_PLUGIN_ROOT/.pre-commit-config.yaml\" && grep -qE \"hooks:\" \"$CLAUDE_PLUGIN_ROOT/.pre-commit-config.yaml\" && echo precommit_keys 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "precommit_keys"
+    ]
+  }
+}

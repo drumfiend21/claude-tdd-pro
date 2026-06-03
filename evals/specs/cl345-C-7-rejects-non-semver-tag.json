@@ -1,0 +1,6 @@
+{
+  "name": "C-7 aibom rejects a --tag value that is not semver-shaped per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/aibom.sh\" --tag latest --emit a.json 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'semver' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

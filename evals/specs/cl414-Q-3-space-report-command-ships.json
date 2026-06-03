@@ -1,0 +1,6 @@
+{
+  "name": "Q-3 /space-report: commands/space-report.sh ships at the §10 Q-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

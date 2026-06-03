@@ -1,0 +1,6 @@
+{
+  "name": "O-0 telemetry-first baseline: F-2 /measure-rubric token-telemetry substrate ships per the week-1 discipline",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" ] && grep -q 'F-2.6' \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: `_operator/`, `_community/`, `_meta/` tier folders are present alongside but separate from the 14 default source-namespace folders per §17 tiering",
+  "command": "root=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"; for tier in _operator _community _meta; do test -d \"$root/$tier\" || { echo \"FAIL missing tier $tier\" 1>&2; exit 1; }; done; defaults='google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory _universal'; for tier in _operator _community _meta; do echo \"$defaults\" | tr ' ' '\\n' | grep -qx \"$tier\" && { echo \"FAIL tier $tier should not be in the 14-default list\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

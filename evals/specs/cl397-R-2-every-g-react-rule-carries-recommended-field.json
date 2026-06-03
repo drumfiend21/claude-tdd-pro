@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: every g-react-* rule declares the recommended: boolean field per §16 E-8",
+  "command": "n_rules=$(grep -rE 'id: g-react-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" 2>/dev/null | wc -l | tr -d ' '); n_files=$(grep -rl 'g-react-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" 2>/dev/null | wc -l | tr -d ' '); n_recommended=$(grep -rE 'recommended:' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/{react,w3c,google,web-vitals}/*.yaml 2>/dev/null | wc -l | tr -d ' '); [ \"$n_recommended\" -ge \"$n_rules\" ] && echo recommended_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recommended_present"]}
+}

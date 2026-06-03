@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add rejects a --default-padding raw px value per the §26 token enforcement contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" --name Button --default-padding 16px 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'raw value' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

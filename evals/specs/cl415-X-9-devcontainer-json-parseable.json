@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: devcontainer.json parses as JSON (allowing jsonc comments via sed strip)",
+  "command": "sed -E \"s|//.*$||g\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" | node -e \"JSON.parse(require(\\\"fs\\\").readFileSync(0,\\\"utf8\\\"))\" && echo parseable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["parseable"]}
+}

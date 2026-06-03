@@ -1,0 +1,6 @@
+{
+  "name": "C-2 control mapping: legal-review-mark emits an update confirmation line on stderr so audit logs capture it",
+  "command": "printf -- '- framework: soc2\\n  control_id: CC1.1\\n  legal_review_status: pending\\n' > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/legal-review-mark.sh\" --framework soc2 --control-id CC1.1 --reviewer counsel --date 2026-05-04 --controls-file controls.yaml 2>err.txt; grep -q 'updated soc2/CC1.1 -> reviewed_by:counsel:2026-05-04' err.txt && echo confirmed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["confirmed"]}
+}

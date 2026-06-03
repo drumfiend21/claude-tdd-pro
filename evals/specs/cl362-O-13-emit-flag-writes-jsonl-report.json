@@ -1,0 +1,6 @@
+{
+  "name": "O-13 --emit writes a jsonl report with one finding per line",
+  "command": "mkdir -p src && printf 'const c = tokens.color.legacy.red;\\n' > src/c.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/design-token-freshness.sh\" --registry \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" --paths src --emit report.jsonl 2>err.txt && [ -s report.jsonl ] && node -e 'const lines=require(\"fs\").readFileSync(\"report.jsonl\",\"utf8\").split(\"\\n\").filter(Boolean);for(const l of lines)JSON.parse(l);process.stdout.write(\"lines=\"+lines.length)' > out.txt && grep -q 'lines=1' out.txt && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

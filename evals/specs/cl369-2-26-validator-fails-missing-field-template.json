@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 validator fails a template missing one or more required fields and lists the misses",
+  "command": "mkdir -p custom && printf -- '---\\nname: nope\\ngrounding_sources:\\n  - rag\\nrefusal_template: \"x\"\\n---\\nbody\\n' > custom/bad.md && bash \"$CLAUDE_PLUGIN_ROOT/agents/_customer/validate.sh\" --dir custom 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'FAIL bad.md' err.txt && grep -q 'per_turn_cost_target' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocked"]}
+}

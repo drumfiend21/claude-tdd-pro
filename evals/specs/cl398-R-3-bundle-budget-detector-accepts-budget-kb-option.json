@@ -1,0 +1,6 @@
+{
+  "name": "R-3 react detectors: bundle-budget.sh documents the budget_kb + per_route options used by g-react-008",
+  "command": "grep -q 'budget_kb' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/bundle-budget.sh\" && grep -q 'per_route' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/bundle-budget.sh\" && echo budget_options 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["budget_options"]}
+}

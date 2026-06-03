@@ -1,0 +1,9 @@
+{
+  "name": "L-4 extract-patterns assigns a deterministic id that includes the source PR number per pattern",
+  "command": "printf '%s' '{\"number\":42,\"comments\":[{\"body\":\"please add null check before dereferencing\"}]}' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --pr pr.json --out patterns.json 2>/dev/null && node -e 'const a=JSON.parse(require(\"fs\").readFileSync(\"patterns.json\",\"utf8\"));process.exit(a[0].id===\"p-42-1\"?0:1)' && echo identified 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["identified"]
+  }
+}

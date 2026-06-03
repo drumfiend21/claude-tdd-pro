@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: --now <iso> pins the transition timestamp into rule_state_history for deterministic audits",
+  "command": "mkdir -p tree rubric/fp-log && : > rubric/fp-log/g-ts-test.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" --rule-id g-ts-test --to block --tree \"$PWD/tree\" --now 2026-05-30T00:00:00Z 2>/dev/null && grep -q 'timestamp: 2026-05-30T00:00:00Z' tree/google/x.yaml && echo timestamp_pinned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["timestamp_pinned"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: every pr-corpus-patterns row is tagged bootstrap_seed: true so it cannot be confused with learned patterns",
+  "command": "f=\"$CLAUDE_PLUGIN_ROOT/seed/pr-corpus-patterns/patterns.jsonl\"; total=$(wc -l < \"$f\" | tr -d ' '); tagged=$(grep -c '\"bootstrap_seed\":true' \"$f\"); [ \"$total\" -gt 0 ] && [ \"$total\" -eq \"$tagged\" ] && echo \"tagged=$tagged/$total\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["tagged="]}
+}

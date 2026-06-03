@@ -1,0 +1,6 @@
+{
+  "name": "G-10 index generation: --emit-index <path> writes the regenerated _meta/INDEX.md to <path>",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: Acme\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\nrules:\\n  - id: g-ts-001\\nrecommended_set: [g-ts-001]\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --emit-index \"$PWD/tree/_meta/INDEX.md\" 2>err.txt; [ -s tree/_meta/INDEX.md ] && grep -q '# Generated Code Quality Standards Index' tree/_meta/INDEX.md && echo index_written 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["index_written"]}
+}

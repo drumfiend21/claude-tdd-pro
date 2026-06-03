@@ -1,0 +1,6 @@
+{
+  "name": "T-1 types review subagent: review-types declares prompt_id: types-reviewer per §7 T-1",
+  "command": "grep -q '^prompt_id: types-reviewer' \"$CLAUDE_PLUGIN_ROOT/agents/review-types.md\" && echo prompt_id 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["prompt_id"]}
+}

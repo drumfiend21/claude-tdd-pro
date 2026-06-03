@@ -1,0 +1,6 @@
+{
+  "name": "R-9 registry ships the canonical color.brand.primary token used by the design system",
+  "command": "grep -q '^  - id: color.brand.primary$' \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

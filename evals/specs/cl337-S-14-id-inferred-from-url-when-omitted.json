@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add infers the id from <hostname-first-label>-<basename-no-ext> when --id is omitted",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/foo.html && grep -q '^- id: example-foo$' .claude-tdd-pro/STANDARDS-URLS.yaml && echo inferred 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["inferred"]}
+}

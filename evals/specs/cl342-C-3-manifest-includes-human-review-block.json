@@ -1,0 +1,6 @@
+{
+  "name": "C-3 manifest envelope includes the human_review block (verifier_consulted field per §2.8)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/emit-provenance-manifest.sh\" --commit abc123 --out m.json --now 2026-05-25T10:00:00Z && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));const h=j.human_review;process.exit(h&&\"verifier_consulted\" in h?0:1)' && echo block 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["block"]}
+}

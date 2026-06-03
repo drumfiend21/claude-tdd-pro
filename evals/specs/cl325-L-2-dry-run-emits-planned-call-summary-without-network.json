@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher --dry-run emits planned-call summary with no_network=true per the §2.14 dry-run contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --dry-run --batch-size 5 --max-batches 3 2>out.txt && grep -q 'dry-run source=cfpb-consumerfinance' out.txt && grep -q 'planned_calls=15' out.txt && grep -q 'no_network=true' out.txt && echo planned 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["planned"]
+  }
+}

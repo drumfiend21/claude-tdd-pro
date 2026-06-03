@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: type=layout requires fixable in {whitespace, null}, so layout + fixable=code is rejected",
+  "command": "printf 'id: g-ts-304\\ntype: layout\\nfixable: code\\n' > g-ts-304.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-304.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'type=layout requires fixable in {whitespace, null}' err.txt && echo cross_set 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cross_set"]}
+}

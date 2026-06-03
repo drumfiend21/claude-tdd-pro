@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: supports --dry-run per the §2.14 destructive command list",
+  "command": "grep -q -- \"--dry-run\\|DRY_RUN\" \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

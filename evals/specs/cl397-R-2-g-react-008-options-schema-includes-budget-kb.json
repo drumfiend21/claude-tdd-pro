@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-008 options_schema includes budget_kb, per_route, excluded_routes per §9 R-2 options table",
+  "command": "grep -q 'budget_kb' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/web-vitals/core-web-vitals.yaml\" && grep -q 'per_route' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/web-vitals/core-web-vitals.yaml\" && grep -q 'excluded_routes' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/web-vitals/core-web-vitals.yaml\" && echo options_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_present"]}
+}

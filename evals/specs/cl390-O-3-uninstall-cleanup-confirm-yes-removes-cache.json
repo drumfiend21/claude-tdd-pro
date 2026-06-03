@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: uninstall-cleanup --category cache --confirm yes removes the cache directory",
+  "command": "mkdir -p .claude-tdd-pro/cache && printf 'x\\n' > .claude-tdd-pro/cache/y.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category cache --confirm yes 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -e .claude-tdd-pro/cache ] && grep -q 'removed' err.txt && echo removed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["removed"]}
+}

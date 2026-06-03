@@ -1,0 +1,6 @@
+{
+  "name": "S-4 --threshold exits one when overall coverage is below the bar per the gap analyzer gate",
+  "command": "printf -- '- id: a\\n  fetch_frequency: daily\\n- id: b\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/a && printf 'source:\\n  id: a\\nrules:\\n  - {id: r, provenance: [{source: a}]}\\n' > tree/a/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit r.md --catalog cat.yaml --tree tree --threshold 90 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && echo blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocked"]}
+}

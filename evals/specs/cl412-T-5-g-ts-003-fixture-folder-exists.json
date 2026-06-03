@@ -1,0 +1,6 @@
+{
+  "name": "T-5 ts eval specs: g-ts-003 fixture folder exists at evals/fixtures/typescript/g-ts-003/",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript/g-ts-003\" ] && echo t003_fixture 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t003_fixture"]}
+}

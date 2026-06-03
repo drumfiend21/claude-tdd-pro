@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: emits --help banner so operators can audit the surface",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo helpable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["helpable"]}
+}

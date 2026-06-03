@@ -1,0 +1,6 @@
+{
+  "name": "H-13 --read exits two when no continuation artifact exists for the supplied session-id",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --read --session-id never-existed 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'no continuation' err.txt && echo missing 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["missing"]}
+}

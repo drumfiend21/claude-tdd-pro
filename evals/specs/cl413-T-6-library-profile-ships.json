@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: profiles/library.yaml ships at the §7 T-6 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

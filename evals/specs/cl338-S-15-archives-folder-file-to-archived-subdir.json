@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove archives the matching source-folder file into _archived/ subdirectory per G-9",
+  "command": "mkdir -p .claude-tdd-pro tree/custom-ns && printf -- '- id: custom-spec\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && printf 'source:\\n  id: custom-spec\\nrules: []\\n' > tree/custom-ns/custom-spec.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id custom-spec --tree tree 2>err.txt && [ -f tree/custom-ns/_archived/custom-spec.yaml ] && [ ! -f tree/custom-ns/custom-spec.yaml ] && echo archived 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["archived"]}
+}

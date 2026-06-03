@@ -1,0 +1,6 @@
+{
+  "name": "S-17 auto-refresh-daily exits two when --upstream-stub is omitted per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

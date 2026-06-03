@@ -1,0 +1,6 @@
+{
+  "name": "C-20 consumption trace records the --commit-sha argument in the trace",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha deadbeef --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'deadbeef' trace.json && echo recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recorded"]}
+}

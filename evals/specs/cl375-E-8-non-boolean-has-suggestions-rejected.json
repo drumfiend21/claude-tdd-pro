@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: has_suggestions must be a boolean per §2.1; non-boolean values are rejected",
+  "command": "printf 'id: g-ts-305\\ntype: problem\\nhas_suggestions: maybe\\n' > g-ts-305.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-305.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'has_suggestions: must be boolean' err.txt && echo bool_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bool_enforced"]}
+}

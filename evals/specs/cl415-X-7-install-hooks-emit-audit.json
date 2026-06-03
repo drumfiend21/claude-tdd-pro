@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: supports --emit-audit for reconstructable install record",
+  "command": "grep -q -- \"--emit-audit\" \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" && echo audit 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audit"]}
+}

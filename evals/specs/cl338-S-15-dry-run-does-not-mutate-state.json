@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove --dry-run reports the planned removal without mutating registry or folder per §2.14",
+  "command": "mkdir -p .claude-tdd-pro && printf -- '- id: custom-spec\\n  url: https://x.com\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id custom-spec --dry-run 2>err.txt && grep -q 'dry-run' err.txt && grep -q '^- id: custom-spec$' .claude-tdd-pro/STANDARDS-URLS.yaml && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}

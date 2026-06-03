@@ -1,0 +1,6 @@
+{
+  "name": "W-11 skill documents the orthogonality to W-10 (CL-level vs subagent-level concurrency)",
+  "command": "grep -q 'W-10' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -qE 'orthogonal|distinct' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

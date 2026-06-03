@@ -1,0 +1,6 @@
+{
+  "name": "Q-7 cross-loop integration: space/cross-loop-emit.sh ships per §10 Q-7",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/space/cross-loop-emit.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

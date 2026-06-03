@@ -1,0 +1,6 @@
+{
+  "name": "G-6 source-file validator: duplicate rule ids within the same file are rejected because rule-id uniqueness is a §2.21 invariant",
+  "command": "printf 'source:\\n  id: test-src\\n  authoritative_publisher: A\\n  authoritative_url: https://e.t/d\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:abc123\"\\n  fetch_frequency: weekly\\n  fragility_tier: low\\n  license_note: \"MIT\"\\nrules:\\n  - id: g-test-001\\n    type: problem\\n  - id: g-test-001\\n    type: problem\\nrecommended_set: [g-test-001]\\nall_set: [g-test-001]\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/sf.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'duplicate rule id' err.txt && echo uniqueness 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["uniqueness"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-9 sync with operator registries: compliance-add jurisdiction EU routes to european-union/ per §17 G-9",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" --url https://gdpr.eu/x --id eu-x --jurisdiction EU --tree \"$PWD/tree\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'ns=european-union' err.txt && echo eu_routed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["eu_routed"]}
+}

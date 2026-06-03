@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: --cache-stats reports hits, misses, and bytes so F-2 can compute the cache hit rate",
+  "command": "printf 'x\\n' > in.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache --cache-location cache.json --cache-stats 2>err.txt; grep -q '\"hits\":' err.txt && grep -q '\"misses\":' err.txt && grep -q '\"bytes\":' err.txt && echo stats_reported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["stats_reported"]}
+}

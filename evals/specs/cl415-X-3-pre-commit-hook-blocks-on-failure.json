@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: hook exits non-zero on failure to block the commit",
+  "command": "grep -qE \"exit 1|exit \\$\" \"$CLAUDE_PLUGIN_ROOT/hooks/pre-commit\" && echo blocks 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocks"]}
+}

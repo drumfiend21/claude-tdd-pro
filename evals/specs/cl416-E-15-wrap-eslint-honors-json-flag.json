@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: honors --json per the §2.2 detector contract",
+  "command": "grep -q -- \"--json\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo json 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["json"]}
+}

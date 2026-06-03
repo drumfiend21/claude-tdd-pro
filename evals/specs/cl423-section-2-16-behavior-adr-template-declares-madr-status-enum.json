@@ -1,0 +1,11 @@
+{
+  "name": "§2.16 MADR ADR schema: ADR template/skill references the MADR status enum (proposed|accepted|rejected|superseded|deprecated)",
+  "command": "grep -rqE \"proposed|accepted|rejected|superseded|deprecated\" \"$CLAUDE_PLUGIN_ROOT/agents/architect.md\" 2>/dev/null && echo madr_enum 1>&2 || grep -rqE \"proposed|accepted|rejected|superseded|deprecated\" \"$CLAUDE_PLUGIN_ROOT/skills\" 2>/dev/null && echo madr_enum 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "madr_enum"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-10 detector flags prop_added when a new prop appears in after that was not in before",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; };\\n' > before/Button.tsx && printf 'export type ButtonProps = { label: string; loading: boolean; };\\n' > after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'kind=prop_added' err.txt && grep -q 'prop=loading' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["flagged"]}
+}

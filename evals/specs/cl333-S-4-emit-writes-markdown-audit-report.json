@@ -1,0 +1,6 @@
+{
+  "name": "S-4 standards-audit --emit writes a markdown audit report with Per-source state heading",
+  "command": "printf -- '- id: g\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/g && printf 'source:\\n  id: g\\nrules:\\n  - {id: r, provenance: [{source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit report.md --catalog cat.yaml --tree tree && [ -s report.md ] && grep -q 'Per-source state' report.md && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

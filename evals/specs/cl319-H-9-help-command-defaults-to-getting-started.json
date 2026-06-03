@@ -1,0 +1,9 @@
+{
+  "name": "/help without a topic argument defaults to the getting-started topic per H-9 progressive-disclosure entry path",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/help.sh\" 2>out.txt && grep -q '#' out.txt && echo defaulted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["defaulted"]
+  }
+}

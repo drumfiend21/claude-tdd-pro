@@ -1,0 +1,6 @@
+{
+  "name": "C-19 --framework-id narrows the refresh sweep to a single framework",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && printf '2026-01-01T00:00:00Z' > .claude-tdd-pro/compliance-last-fetch/soc2-tsc.txt && printf '2026-01-01T00:00:00Z' > .claude-tdd-pro/compliance-last-fetch/gdpr.txt && printf '#!/usr/bin/env bash\\nexit 0\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-25T10:00:00Z --upstream-stub ./up.sh --framework-id soc2-tsc 2>err.txt && grep -q '2026-05-25T10:00:00Z' .claude-tdd-pro/compliance-last-fetch/soc2-tsc.txt && grep -q '2026-01-01T00:00:00Z' .claude-tdd-pro/compliance-last-fetch/gdpr.txt && echo narrowed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["narrowed"]}
+}

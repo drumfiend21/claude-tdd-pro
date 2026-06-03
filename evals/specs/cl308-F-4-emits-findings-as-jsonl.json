@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan emits findings as one JSON object per line so downstream tooling can stream-parse the report",
+  "command": "mkdir -p src && printf 'a // rubric: ignore\\nb // rubric: ignore\\n' > src/two.js && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --paths src --out report.jsonl 2>err.txt; rc=$?; node -e 'const fs=require(\"fs\");const lines=fs.readFileSync(\"report.jsonl\",\"utf8\").split(\"\\n\").filter(Boolean);for(const l of lines){JSON.parse(l);}process.stdout.write(`lines=${lines.length}`)' > out.txt && grep -q 'lines=1' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

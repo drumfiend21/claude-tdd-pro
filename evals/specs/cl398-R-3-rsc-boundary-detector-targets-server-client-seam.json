@@ -1,0 +1,6 @@
+{
+  "name": "R-3 react detectors: rsc-boundary.sh body references the server/client boundary that R-1 RSC reviewer charters",
+  "command": "grep -qE 'use client|use server|server-component|client-component|boundary' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rsc-boundary.sh\" && echo boundary_target 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["boundary_target"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: --emit-output-hash appends a sha256: digest over the load_order + rules payload for reproducibility",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json --emit-output-hash 2>err.txt; grep -qE 'sha256:[a-f0-9]{64}' err.txt && echo output_hash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["output_hash"]}
+}

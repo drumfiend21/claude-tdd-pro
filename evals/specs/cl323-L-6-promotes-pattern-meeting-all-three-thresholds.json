@@ -1,0 +1,9 @@
+{
+  "name": "L-6 aggregator promotes a pattern that meets all three thresholds at least 3 PRs at least 2 orgs at least 1 tier-1",
+  "command": "printf '%s' '{\"pattern_id\":\"p1\",\"supporting_prs\":[{\"org\":\"cfpb\",\"tier\":1},{\"org\":\"stripe\",\"tier\":1},{\"org\":\"va\",\"tier\":2}]}' > p.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern p.json 2>out.txt && grep -q 'decision=promote' out.txt && echo promoted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["promoted"]
+  }
+}

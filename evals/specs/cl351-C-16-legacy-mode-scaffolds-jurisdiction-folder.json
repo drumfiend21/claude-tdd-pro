@@ -1,0 +1,6 @@
+{
+  "name": "C-16 legacy mode scaffolds a source-folder file under <tree>/<jurisdiction-ns>/<id>.yaml per the G-9 chain",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" --url https://x.gov/regs --id custom-reg --tree out --jurisdiction 'US Federal' && [ -s out/us-government/custom-reg.yaml ] && grep -q 'jurisdiction: \"US Federal\"' out/us-government/custom-reg.yaml && echo scaffolded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["scaffolded"]}
+}

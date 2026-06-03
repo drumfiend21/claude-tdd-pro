@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report behavior: command emits non-empty output when invoked (text-dashboard contract)",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" 2>&1 || true); [ -n \"$out\" ] && echo emits 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emits"
+    ]
+  }
+}

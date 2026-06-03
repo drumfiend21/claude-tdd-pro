@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report --by=rule aggregates totals per rule dimension per H-12",
+  "command": "mkdir -p rollup/daily && printf '%s' '{\"entries\":[{\"rule\":\"no-eval\",\"tokens_in\":50,\"tokens_out\":20,\"invocations\":3}]}' > rollup/daily/2026-05-25.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=daily --by=rule --rollup-dir=rollup --format=json >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(j.totals[\"no-eval\"].invocations===3?0:1)' && echo grouped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["grouped"]
+  }
+}

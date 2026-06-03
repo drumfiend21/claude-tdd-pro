@@ -1,0 +1,6 @@
+{
+  "name": "§2.27 24-hour TTL purge removes a 48-hour-old artifact and retains a 1-hour-old artifact",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id stale-48h --parent-session-id p --parent-cl-id c --current-phase F --context-summary old --next-action x --now 2026-05-23T10:00:00Z 2>/dev/null && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id fresh-1h --parent-session-id p --parent-cl-id c --current-phase F --context-summary new --next-action x --now 2026-05-25T09:00:00Z 2>/dev/null && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --purge-stale --now 2026-05-25T10:00:00Z 2>err.txt && [ ! -f art/stale-48h.json ] && [ -f art/fresh-1h.json ] && echo ttl 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ttl"]}
+}

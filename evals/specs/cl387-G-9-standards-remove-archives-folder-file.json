@@ -1,0 +1,6 @@
+{
+  "name": "G-9 sync with operator registries: /standards-remove archives the matching folder file to <ns>/_archived/ per §17 G-9",
+  "command": "mkdir -p tree/google .claude-tdd-pro && printf 'source:\\n  id: legacy\\n' > tree/google/legacy.yaml && touch .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id legacy --tree \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s tree/google/_archived/legacy.yaml ] && [ ! -f tree/google/legacy.yaml ] && echo archived 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["archived"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity reports the offending token in the unknown_vocab=<token> spec=<filename> format per §25.2",
+  "command": "mkdir -p pending/F-4-x arch && printf 'F-4 minimal\\n' > arch/a.md && printf '%s' '{\"name\":\"x\",\"command\":\"echo madeupkey: 1\",\"expect\":{\"exit_code\":0}}' > pending/F-4-x/c.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'unknown_vocab=madeupkey spec=c.json' out.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

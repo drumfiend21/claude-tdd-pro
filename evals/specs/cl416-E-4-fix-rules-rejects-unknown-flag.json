@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: rejects unknown flag with non-zero exit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" --nonsense-flag 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

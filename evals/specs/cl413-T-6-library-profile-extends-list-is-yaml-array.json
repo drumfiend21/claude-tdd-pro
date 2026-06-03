@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: profile extends: is a YAML array of selector strings per §2.5",
+  "command": "ruby -ryaml -e 'p=YAML.load_file(\"'$CLAUDE_PLUGIN_ROOT'/profiles/library.yaml\"); exit(p[\"extends\"].is_a?(Array) && p[\"extends\"].all?{|x| x.is_a?(String)} ? 0 : 1)' && echo array_of_strings 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["array_of_strings"]}
+}

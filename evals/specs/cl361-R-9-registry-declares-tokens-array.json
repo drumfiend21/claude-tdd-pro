@@ -1,0 +1,6 @@
+{
+  "name": "R-9 registry declares a top-level tokens array with at least one entry per the §26 schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/design-tokens/registry.yaml\",\"utf8\");process.exit(/^tokens:/m.test(y)&&(y.match(/^  - id: /mg)||[]).length>=1?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

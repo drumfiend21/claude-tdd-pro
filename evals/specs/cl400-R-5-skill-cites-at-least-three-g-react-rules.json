@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: SKILL.md cites at least three g-react-NNN rule IDs so contributors can grep their way back to authoritative source files",
+  "command": "n=$(grep -oE 'g-react-[0-9]+' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" 2>/dev/null | sort -u | wc -l | tr -d ' '); [ \"${n:-0}\" -ge 3 ] && echo \"rules_cited=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rules_cited="]}
+}

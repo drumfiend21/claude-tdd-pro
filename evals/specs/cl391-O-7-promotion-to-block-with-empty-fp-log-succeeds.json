@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: promotion to block with an empty fp-log file (14 days clean) sets rule_state to block",
+  "command": "mkdir -p tree rubric/fp-log && : > rubric/fp-log/g-ts-test.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" --rule-id g-ts-test --to block --tree \"$PWD/tree\" --now 2026-05-30T00:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'rule_state: block' tree/google/x.yaml && echo promoted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["promoted"]}
+}

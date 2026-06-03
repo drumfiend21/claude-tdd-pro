@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add appends a new entry to .claude-tdd-pro/STANDARDS-URLS.yaml per the registry write contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/spec --id example-spec && [ -s .claude-tdd-pro/STANDARDS-URLS.yaml ] && grep -q '^- id: example-spec' .claude-tdd-pro/STANDARDS-URLS.yaml && echo appended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["appended"]}
+}

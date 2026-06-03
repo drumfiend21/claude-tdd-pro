@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace records multiple consulted sources of mixed classes in a single trace invocation",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted-standards google-tsguide --consulted-pr-corpus stripe-node --consulted-compliance soc2-tsc --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'google-tsguide' trace.json && grep -q 'stripe-node' trace.json && grep -q 'soc2-tsc' trace.json && echo multi 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["multi"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "C-16 legacy G-9 mode (--tree without --catalog) requires --url --id --jurisdiction",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-add.sh\" --tree out 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -qE 'url.*required|jurisdiction|id' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

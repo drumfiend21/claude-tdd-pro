@@ -1,0 +1,11 @@
+{
+  "name": "O-12 scaffolds behavior: scaffold.sh on real run copies the kind into target",
+  "command": "rm -rf /tmp/o12-real; bash \"$CLAUDE_PLUGIN_ROOT/commands/scaffold.sh\" --kind react-spa --target /tmp/o12-real 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s /tmp/o12-real/package.json ] && echo created 1>&2; rm -rf /tmp/o12-real",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "created"
+    ]
+  }
+}

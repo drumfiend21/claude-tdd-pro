@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview exits two when --root is omitted (usage error per the F-6 entry contract)",
+  "command": "printf '%s' '{\"rules\":[]}' > r.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file r.json 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}

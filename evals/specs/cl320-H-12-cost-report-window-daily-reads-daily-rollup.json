@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report --window=daily aggregates entries from cost-rollup/daily/<YYYY-MM-DD>.json per H-12",
+  "command": "mkdir -p rollup/daily && printf '%s' '{\"entries\":[{\"skill\":\"sync\",\"tokens_in\":100,\"tokens_out\":50,\"invocations\":1}]}' > rollup/daily/2026-05-25.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=daily --rollup-dir=rollup 2>out.txt && grep -q 'window=daily' out.txt && grep -q 'sync' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

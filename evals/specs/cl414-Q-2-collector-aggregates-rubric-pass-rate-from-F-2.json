@@ -1,0 +1,6 @@
+{
+  "name": "Q-2 collector: aggregates rubric pass rate from F-2 per §10 Q-2",
+  "command": "grep -qE 'rubric pass rate|rubric_pass_rate|F-2' \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" && echo F2 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["F2"]}
+}

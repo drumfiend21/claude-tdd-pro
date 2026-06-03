@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection skill ships at skills/drift-detection/SKILL.md and is non-empty per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

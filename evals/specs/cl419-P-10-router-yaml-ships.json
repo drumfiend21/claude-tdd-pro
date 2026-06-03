@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: prompts/router.yaml ships at the §6 P-10 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

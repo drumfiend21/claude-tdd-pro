@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: no-any.sh references the allow_with_comment_pattern option used by g-ts-001",
+  "command": "grep -q 'allow_with_comment_pattern\\|allow-any' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" && echo options_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_present"]}
+}

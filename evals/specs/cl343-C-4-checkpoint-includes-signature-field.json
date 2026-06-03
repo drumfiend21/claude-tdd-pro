@@ -1,0 +1,6 @@
+{
+  "name": "C-4 checkpoint file includes a signature field signed against the signing key per the architecture",
+  "command": "for i in 1 2; do bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event e$i --actor a --data '{}'; done && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --emit-checkpoint-now && ckpt=$(ls compliance/audit-checkpoints/*.json | head -1) && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));process.exit(j.signature&&j.signature.startsWith(\"sha256:\")?0:1)' \"$ckpt\" && echo signed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["signed"]}
+}

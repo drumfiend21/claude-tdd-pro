@@ -1,0 +1,11 @@
+{
+  "name": "two-pass reconciler ships a threshold calibration config file naming the held-out O-1 seed corpus as the calibration baseline",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile-thresholds.yaml\" ] && grep -q 'held-out' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile-thresholds.yaml\" && grep -q 'O-1' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/reconcile-thresholds.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

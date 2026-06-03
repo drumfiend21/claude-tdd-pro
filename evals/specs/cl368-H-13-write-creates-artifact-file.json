@@ -1,0 +1,6 @@
+{
+  "name": "H-13 --write creates the continuation artifact at the per-§2.27 path under H13_ARTIFACT_DIR",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-302 --parent-session-id cl-301 --parent-cl-id cl-301 --current-phase F --context-summary 'mid-CL handoff' --next-action 'resume step 7' --now 2026-05-25T10:00:00Z 2>err.txt && [ -s art/cl-302.json ] && echo wrote 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["wrote"]}
+}

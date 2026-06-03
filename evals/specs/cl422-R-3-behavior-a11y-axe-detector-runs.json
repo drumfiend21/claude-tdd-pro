@@ -1,0 +1,11 @@
+{
+  "name": "R-3 React detectors: rubric/detectors/a11y-axe.sh runs with --help",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/a11y-axe.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

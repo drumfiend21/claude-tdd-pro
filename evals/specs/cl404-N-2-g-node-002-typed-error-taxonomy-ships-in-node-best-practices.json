@@ -1,0 +1,6 @@
+{
+  "name": "N-2 ten node rules: g-node-002 typed error taxonomy ships under node/node-best-practices.yaml per the §8 N-2 table",
+  "command": "grep -q 'id: g-node-002' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/node/node-best-practices.yaml\" && echo n002_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["n002_placed"]}
+}

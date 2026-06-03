@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: profile resolver supports include.operator_namespaces: to scope to specific orgs per §17 G-7",
+  "command": "grep -q 'operator_namespaces' \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && echo operator_ns_scoping 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["operator_ns_scoping"]}
+}

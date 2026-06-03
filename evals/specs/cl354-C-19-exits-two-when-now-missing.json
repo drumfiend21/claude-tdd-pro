@@ -1,0 +1,6 @@
+{
+  "name": "C-19 compliance auto-refresh exits two when --now is omitted per the entry contract",
+  "command": "printf '#!/usr/bin/env bash\\nexit 0\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --upstream-stub ./up.sh 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

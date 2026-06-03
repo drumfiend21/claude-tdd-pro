@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: commands/router-set.sh ships at the §6 P-10 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/router-set.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

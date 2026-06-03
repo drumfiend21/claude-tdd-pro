@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview recommends keep for a rule that produces three or more matches across files per F-6 verdict surface",
+  "command": "mkdir -p tree && for i in 1 2 3 4; do printf 'eval(0)\\n' > tree/x$i.js; done && printf '%s' '{\"rules\":[{\"id\":\"r\",\"detector\":\"grep -n eval || true\"}]}' > r.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file r.json --root tree --format json 2>out.txt && grep -q '\"recommendation\":\"keep\"' out.txt && echo kept 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["kept"]
+  }
+}

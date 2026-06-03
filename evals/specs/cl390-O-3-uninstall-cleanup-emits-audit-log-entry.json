@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: uninstall-cleanup emits an audit-log JSONL entry when --emit-audit is passed so the action is reconstructable",
+  "command": "mkdir -p .claude-tdd-pro/cache && printf 'x\\n' > .claude-tdd-pro/cache/z.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category cache --confirm yes --emit-audit \"$PWD/audit.jsonl\" 2>/dev/null && grep -q 'category-removed' audit.jsonl && grep -q 'cache' audit.jsonl && echo audited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audited"]}
+}

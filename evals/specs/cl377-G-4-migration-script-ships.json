@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: scripts/migrate-rubric-to-source-folders.sh ships at the §17 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

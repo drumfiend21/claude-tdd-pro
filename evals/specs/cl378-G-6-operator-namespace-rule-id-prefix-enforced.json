@@ -1,0 +1,6 @@
+{
+  "name": "G-6 source-file validator: --check id-prefix mode verifies every rule id in _operator/<org>/ is prefixed with the org name per §2.22",
+  "command": "mkdir -p _operator/my-org && printf 'source:\\n  id: my-org-rules\\nrules:\\n  - id: g-ts-001\\n' > _operator/my-org/conventions.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" --file \"$PWD/_operator/my-org/conventions.yaml\" --check id-prefix 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'lacks org prefix' err.txt && echo prefix_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["prefix_enforced"]}
+}

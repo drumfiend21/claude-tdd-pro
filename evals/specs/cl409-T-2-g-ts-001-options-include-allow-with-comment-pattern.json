@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: g-ts-001 options_schema includes allow_with_comment_pattern per §7 T-2 options table",
+  "command": "grep -q 'allow_with_comment_pattern' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/tsguide.yaml\" && echo options_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_present"]}
+}

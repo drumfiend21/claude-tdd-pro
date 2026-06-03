@@ -1,0 +1,11 @@
+{
+  "name": "X-2 GitLab CI behavior: .gitlab-ci.yml declares stages + at least one named job",
+  "command": "grep -qE \"^stages:\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && grep -qE \"^[a-z][a-z0-9_-]*:\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo gitlab_keys 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gitlab_keys"
+    ]
+  }
+}

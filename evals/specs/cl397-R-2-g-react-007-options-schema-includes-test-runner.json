@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-007 options_schema includes test_runner and allow_snapshot_only per §9 R-2 options table",
+  "command": "grep -q 'test_runner' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/testing-blog.yaml\" && grep -q 'allow_snapshot_only' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/google/testing-blog.yaml\" && echo options_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_present"]}
+}

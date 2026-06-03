@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update persists the consumed token count to the budget file outside dry-run mode per L-7 per-day tracking",
+  "command": "printf '%s' '{}' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --consumed-tokens 25000 --budget b.json --now 2026-05-25T10:00:00Z 2>out.txt && grep -q 'total_used_today=25000' out.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"b.json\",\"utf8\"));process.exit(j[\"cfpb-consumerfinance\"].used_today===25000?0:1)' && echo persisted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["persisted"]
+  }
+}

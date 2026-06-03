@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: source-file rule with recommended: true must appear in recommended_set per the §17 G-13 + E-6 consistency rule",
+  "command": "mkdir -p tree && printf 'source:\\n  id: g\\nrules:\\n  - id: g-x-001\\n    recommended: true\\n  - id: g-x-002\\n    recommended: false\\nrecommended_set: [g-x-001]\\nall_set: [g-x-001, g-x-002]\\n' > tree/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-source-file.sh\" --check-recommended-consistency tree/g.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo consistent 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["consistent"]}
+}

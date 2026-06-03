@@ -1,0 +1,6 @@
+{
+  "name": "R-6 react eval specs and fixtures: every per-rule fixture folder ships both a positive/ and negative/ subdirectory",
+  "command": "missing=0; for d in \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react\"/g-react-*; do [ -d \"$d\" ] || continue; [ -d \"$d/positive\" ] && [ -d \"$d/negative\" ] || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo positive_negative 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["positive_negative"]}
+}

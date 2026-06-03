@@ -1,0 +1,6 @@
+{
+  "name": "Q-1 SPACE config: space/validate-config.sh accepts the shipped default config",
+  "command": "[ -x \"$CLAUDE_PLUGIN_ROOT/space/validate-config.sh\" ] && bash \"$CLAUDE_PLUGIN_ROOT/space/validate-config.sh\" --config \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo valid 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["valid"]}
+}

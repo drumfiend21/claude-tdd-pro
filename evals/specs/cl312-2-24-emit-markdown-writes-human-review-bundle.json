@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit --format markdown writes bundle.md with a human-review heading for the bundle id per §2.24",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format markdown --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out 2>err.txt && grep -q 'Audit Pack abc123-2026-05-25T00:00:00Z' out/abc123-2026-05-25T00:00:00Z/bundle.md && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

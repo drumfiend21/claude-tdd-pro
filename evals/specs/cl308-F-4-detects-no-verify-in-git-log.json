@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan reports a finding for a recent commit that used `--no-verify` to skip hooks",
+  "command": "mkdir -p repo && (cd repo && git init -q && touch a && git -c user.email=x@y -c user.name=x add a && git -c user.email=x@y -c user.name=x commit -q --no-verify -m 'skipped hooks') && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --git-root repo --out report.jsonl 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'no_verify' report.jsonl && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

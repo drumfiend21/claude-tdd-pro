@@ -1,0 +1,6 @@
+{
+  "name": "S-14 /standards-add ships at commands/standards-add.sh per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

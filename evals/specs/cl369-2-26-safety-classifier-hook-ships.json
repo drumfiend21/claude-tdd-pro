@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 customer-agent safety classifier hook ships at hooks/scripts/customer-agent-safety-classifier.sh",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/customer-agent-safety-classifier.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

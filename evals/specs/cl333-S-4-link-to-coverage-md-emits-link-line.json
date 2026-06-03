@@ -1,0 +1,6 @@
+{
+  "name": "S-4 --link-to emits a markdown link to the coverage matrix file in the audit report per the gap analyzer",
+  "command": "printf -- '- id: g\\n  fetch_frequency: daily\\n' > cat.yaml && mkdir -p tree/g && printf 'source:\\n  id: g\\nrules:\\n  - {id: r, provenance: [{source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-audit.sh\" --emit r.md --catalog cat.yaml --tree tree --link-to COVERAGE.md && grep -q '\\[COVERAGE.md\\](COVERAGE.md)' r.md && echo linked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["linked"]}
+}

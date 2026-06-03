@@ -1,0 +1,6 @@
+{
+  "name": "P-1 each version uses semver MAJOR.MINOR.PATCH shape per the architecture per-prompt v<semver>.md path",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/prompts/registry.yaml\",\"utf8\");const vs=y.match(/^\\s+- version: \\S+/mg)||[];process.exit(vs.every(s=>/[0-9]+\\.[0-9]+\\.[0-9]+/.test(s))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

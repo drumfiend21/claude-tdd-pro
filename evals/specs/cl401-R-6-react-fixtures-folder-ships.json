@@ -1,0 +1,6 @@
+{
+  "name": "R-6 react eval specs and fixtures: evals/fixtures/react/ ships at the §9 R-6 path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/react\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

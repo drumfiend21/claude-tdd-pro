@@ -1,0 +1,6 @@
+{
+  "name": "C-5 --emit writes a verifier-output JSON file with pr_sha and verdict per the architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --emit verify.json --verdict concur --pr-sha abc123 2>err.txt && [ -s verify.json ] && grep -q '\"pr_sha\":\"abc123\"' verify.json && grep -q '\"verdict\":\"concur\"' verify.json && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

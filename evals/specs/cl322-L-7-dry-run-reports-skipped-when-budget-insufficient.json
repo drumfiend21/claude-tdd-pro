@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update --dry-run reports skipped=token-budget when estimated consumption exceeds remaining per L-7 cap enforcement",
+  "command": "printf '%s' '{\"stripe-node\":{\"used_today\":99000,\"date\":\"2026-05-25\"}}' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source stripe-node --estimated-tokens 5000 --budget b.json --now 2026-05-25T10:00:00Z --dry-run 2>out.txt && grep -q 'allowed=false' out.txt && grep -q 'skipped=token-budget' out.txt && echo capped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["capped"]
+  }
+}

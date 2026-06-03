@@ -1,0 +1,6 @@
+{
+  "name": "Q-12 --summarize-by subagent_id aggregates per-subagent invocation count tokens and latency per §26",
+  "command": "for i in review-types review-compliance review-types; do bash \"$CLAUDE_PLUGIN_ROOT/space/agent-invocations.sh\" --append --subagent-id $i --prompt-id p --prompt-version 1.0.0 --model sonnet --tokens-in 100 --tokens-out 50 --latency-ms 1000 --exit-code 0 2>/dev/null; done && bash \"$CLAUDE_PLUGIN_ROOT/space/agent-invocations.sh\" --summarize-by subagent_id 2>out.txt && grep -q '\\[review-types\\] invocations=2' out.txt && grep -q '\\[review-compliance\\] invocations=1' out.txt && echo summarized 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["summarized"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "C-20 --controls-consulted records the comma-separated list of cited control ids in the trace per the §2.18 schema",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/consumption-trace.sh\" --commit-sha abc --consulted-compliance soc2-tsc --controls-consulted 'CC1.1,CC2.3' --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'CC1.1' trace.json && grep -q 'CC2.3' trace.json && echo recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recorded"]}
+}

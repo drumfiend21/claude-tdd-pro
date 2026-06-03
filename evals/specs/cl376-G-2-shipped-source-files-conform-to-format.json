@@ -1,0 +1,6 @@
+{
+  "name": "G-2 source-organized file format: every shipped generated-code-quality-standards/<namespace>/<file>.yaml declares the source: header, rules: array, recommended_set, all_set",
+  "command": "n=0; ok=0; for f in \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/{node,react,typescript,google}/*.yaml; do [ -f \"$f\" ] || continue; n=$((n+1)); grep -qE '^source:' \"$f\" && grep -qE '^rules:' \"$f\" && grep -qE '^recommended_set:' \"$f\" && grep -qE '^all_set:' \"$f\" && ok=$((ok+1)); done; [ \"$n\" -gt 0 ] && [ \"$ok\" -eq \"$n\" ] && echo \"structural_keys_present=$ok/$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["structural_keys_present="]}
+}

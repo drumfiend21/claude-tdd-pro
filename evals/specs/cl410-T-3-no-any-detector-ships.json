@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: rubric/detectors/no-any.sh ships at the §7 T-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/no-any.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

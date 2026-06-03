@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: commands/export-rules.sh ships at the §14 X-6 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-2 low-fragility-tier manual-only strategy refuses under --auto per the architecture refusal contract",
+  "command": "mkdir -p cache && printf '#!/usr/bin/env bash\\necho x\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id x --fragility-tier low --strategy manual-only --upstream-stub ./up.sh --cache cache --auto 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'manual-only' err.txt && grep -q 'refused' err.txt && echo refused 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["refused"]}
+}

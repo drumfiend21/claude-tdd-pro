@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem --emit-test writes a vitest-style failing reproducer file under tests/ per the F-1 reproduces-as-failing-test clause",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'cache invalidation' --emit-test 2>err.txt && ls tests/postmortem-*-cache-invalidation.test.ts >/dev/null 2>&1 && grep -q 'expect(false).toBe(true)' tests/postmortem-*-cache-invalidation.test.ts && echo reproduces 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["reproduces"]
+  }
+}

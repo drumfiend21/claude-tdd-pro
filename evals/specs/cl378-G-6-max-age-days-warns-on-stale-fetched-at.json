@@ -1,0 +1,6 @@
+{
+  "name": "G-6 source-file validator: --now + --max-age-days warn when fetched_at is older than the freshness window",
+  "command": "printf 'source:\\n  id: test-src\\n  authoritative_publisher: A\\n  authoritative_url: https://e.t/d\\n  registry_link: STANDARDS-URLS.yaml\\n  fetched_at: \"2026-01-01T00:00:00Z\"\\n  content_hash: \"sha256:abc123\"\\n  fetch_frequency: weekly\\n  fragility_tier: low\\n  license_note: \"MIT\"\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/sf.yaml\" --now 2026-06-01T00:00:00Z --max-age-days 30 2>err.txt; grep -q 'stale fetched_at' err.txt && echo freshness_warn 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["freshness_warn"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: uninstall-cleanup without --confirm yes does not delete and reports what would be removed",
+  "command": "mkdir -p .claude-tdd-pro/cache && printf 'data\\n' > .claude-tdd-pro/cache/x.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category cache 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -d .claude-tdd-pro/cache ] && grep -q 'would remove' err.txt && echo would_remove 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["would_remove"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-9 registry ships a space scale with at least four entries (space.1 space.2 space.4 space.8) per the §26 design-token shape",
+  "command": "for tok in 'space.1' 'space.2' 'space.4' 'space.8'; do grep -q \"^  - id: $tok\\$\" \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" || exit 1; done; echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

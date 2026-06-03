@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: router-set supports --emit-audit",
+  "command": "grep -q -- \"--emit-audit\" \"$CLAUDE_PLUGIN_ROOT/commands/router-set.sh\" && echo audit 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audit"]}
+}

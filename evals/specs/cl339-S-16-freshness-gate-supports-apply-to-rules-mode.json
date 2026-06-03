@@ -1,0 +1,6 @@
+{
+  "name": "S-16 freshness gate supports --apply-to-rules mode that walks the source-folder tree per the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" ] && grep -q 'apply-to-rules' \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

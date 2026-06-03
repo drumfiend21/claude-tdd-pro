@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report ships at commands/cost-report.sh per the literal H-12 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

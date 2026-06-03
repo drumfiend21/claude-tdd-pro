@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: cost-report bundle window=daily aggregates the H-1 telemetry stream per the H-12 contract",
+  "command": "mkdir -p rollup/daily && printf '%s' '{\"entries\":[{\"skill\":\"sync\",\"tokens_in\":100,\"tokens_out\":50,\"invocations\":1}]}' > rollup/daily/2026-05-25.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=daily --rollup-dir=rollup 2>out.txt && grep -q 'window=daily' out.txt && echo aggregated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["aggregated"]}
+}

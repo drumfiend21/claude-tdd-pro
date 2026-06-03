@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: --emit-load-order surfaces the ordered list of files walked so the §17 G-5 priority can be audited",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json --emit-load-order 2>err.txt; grep -q '\"load_order\":' err.txt && echo load_order_surface 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["load_order_surface"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add writes the four required files (component story unit-test axe-test) per §26",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" --name Button --target-dir src/components 2>err.txt && [ -s src/components/Button/Button.tsx ] && [ -s src/components/Button/Button.stories.tsx ] && [ -s src/components/Button/Button.test.tsx ] && [ -s src/components/Button/Button.axe.test.tsx ] && echo four 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["four"]}
+}

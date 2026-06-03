@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: init-guardrails.sh --run-bootstrap-evals mode ships per §13 O-11",
+  "command": "grep -q -- '--run-bootstrap-evals' \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" && grep -q 'RUN_BOOTSTRAP' \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

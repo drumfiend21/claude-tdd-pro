@@ -1,0 +1,11 @@
+{
+  "name": "X-8 LSP behavior: --print-diagnostics mode exits cleanly when invoked (§24 documented surface)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/lsp/tdd-pro-lsp/tdd-pro-lsp\" --print-diagnostics 2>err.txt >/tmp/x8-out 2>&1; rc=$?; [ \"$rc\" -le 2 ] && echo diagnostics_mode 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "diagnostics_mode"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview skips files under directories listed in .gitignore at the root per F-6 working-tree walk policy",
+  "command": "mkdir -p tree/node_modules tree/src && printf 'eval(0)\\n' > tree/node_modules/x.js && printf 'clean\\n' > tree/src/y.js && printf 'node_modules\\n' > tree/.gitignore && printf '%s' '{\"rules\":[{\"id\":\"r\",\"detector\":\"grep -n eval || true\"}]}' > r.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file r.json --root tree --format json 2>out.txt && grep -q '\"violation_count\":0' out.txt && echo excluded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["excluded"]
+  }
+}

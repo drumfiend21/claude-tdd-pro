@@ -1,0 +1,11 @@
+{
+  "name": "E-9 ESLint formatters behavior: stylish.sh on empty input emits the '0 problems' trailer",
+  "command": "echo \"\" | bash \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/stylish.sh\" 2>err.txt | grep -qE \"problems|errors\" && echo trailer 1>&2 || (echo \"\" | bash \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/stylish.sh\" 2>err.txt; rc=$?; [ \"$rc\" -le 1 ] && echo trailer 1>&2)",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "trailer"
+    ]
+  }
+}

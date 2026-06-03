@@ -1,0 +1,9 @@
+{
+  "name": "L-4 extract-patterns records a verbatim quote from the underlying review comment per the architecture verbatim-quote enforcement",
+  "command": "printf '%s' '{\"number\":1,\"comments\":[{\"body\":\"please add null check before dereferencing\"}]}' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --pr pr.json --out patterns.json 2>/dev/null && node -e 'const a=JSON.parse(require(\"fs\").readFileSync(\"patterns.json\",\"utf8\"));process.exit(a[0].verbatim_quote===\"please add null check before dereferencing\"?0:1)' && echo verbatim 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["verbatim"]
+  }
+}

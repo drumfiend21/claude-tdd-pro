@@ -1,0 +1,6 @@
+{
+  "name": "Q-6 privacy posture: .gitignore covers space-local data",
+  "command": "grep -qE \"space|local\" \"$CLAUDE_PLUGIN_ROOT/.gitignore\" && echo gitignored 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gitignored"]}
+}

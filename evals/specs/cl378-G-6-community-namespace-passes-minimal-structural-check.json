@@ -1,0 +1,6 @@
+{
+  "name": "G-6 source-file validator: --file <path> mode (no --check) passes minimal structural check for _community plugin namespaces",
+  "command": "printf 'source:\\n  id: plugin-source\\nrules:\\n  - id: my-plugin/rule-001\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" --file \"$PWD/sf.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'valid=true' err.txt && echo minimal_structural 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["minimal_structural"]}
+}

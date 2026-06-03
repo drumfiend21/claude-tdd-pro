@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: community plugin rules in _community/<plugin-id>/ must use <plugin-id>/<rule-id> form",
+  "command": "mkdir -p tree/_community/my-plugin && printf 'source:\\n  id: c\\nrules:\\n  - id: g-foo-001\\n' > tree/_community/my-plugin/p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing 2>err.txt; grep -q 'must use my-plugin/<rule-id> namespaced form' err.txt && echo community_namespaced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["community_namespaced"]}
+}

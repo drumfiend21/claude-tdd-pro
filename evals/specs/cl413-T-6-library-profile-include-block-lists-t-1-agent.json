@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: include.agents lists the T-1 review-types subagent",
+  "command": "grep -q 'review-types' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && echo agents_included 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["agents_included"]}
+}

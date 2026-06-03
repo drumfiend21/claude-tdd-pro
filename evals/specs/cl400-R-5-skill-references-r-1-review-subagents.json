@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: SKILL.md references the R-1 review subagents (review-react-rsc, review-react-a11y)",
+  "command": "grep -q 'review-react-rsc' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && grep -q 'review-react-a11y' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && echo subagents_cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["subagents_cited"]}
+}

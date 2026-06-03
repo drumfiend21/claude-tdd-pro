@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan reports a finding for a source file that contains a `rubric: ignore` inline-comment bypass",
+  "command": "mkdir -p src && printf 'function f() { return 1; } // rubric: ignore\\n' > src/bypass.js && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --paths src --out report.jsonl 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'rubric_ignore' report.jsonl && grep -q 'src/bypass.js' report.jsonl && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

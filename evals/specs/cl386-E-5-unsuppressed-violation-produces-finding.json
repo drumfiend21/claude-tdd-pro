@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: an unsuppressed violation produces a finding and exit 1",
+  "command": "printf 'eval(\"x\");\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q '\\[no-eval\\] violation' err.txt && echo finding 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["finding"]}
+}

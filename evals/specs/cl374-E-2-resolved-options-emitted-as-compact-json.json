@@ -1,0 +1,6 @@
+{
+  "name": "E-2 options schema: resolved_options is emitted as compact JSON (no whitespace between keys) so downstream tools can parse a single line",
+  "command": "mkdir -p tree/g && printf 'rules:\\n  - id: g-ts-103\\n    options_schema:\\n      properties:\\n        a:\\n          default: 1\\n        b:\\n          default: 2\\n' > tree/g/rules.yaml && printf 'rules:\\n  g-ts-103: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-103 --profile p.yaml --tree tree 2>err.txt; grep -qE 'resolved_options=\\{\"[a-z]+\":[0-9]+,\"[a-z]+\":[0-9]+\\}' err.txt && echo compact_json 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["compact_json"]}
+}

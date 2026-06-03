@@ -1,0 +1,14 @@
+{
+  "name": "node-api-scaffold",
+  "version": "0.1.0",
+  "private": true,
+  "description": "O-12 node-api application scaffold per §13 — Express/Fastify Node.js API starter pre-wired with the TDD Pro plugin.",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "fastify": "^4.28.0"
+  }
+}

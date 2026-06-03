@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: detector uses bash shebang",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

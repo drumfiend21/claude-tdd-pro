@@ -1,0 +1,6 @@
+{
+  "name": "G-10 index generation: --check-index-stale passes when the on-disk INDEX.md matches the regenerated content",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\n  authoritative_publisher: Acme\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\nrules:\\n  - id: g-ts-001\\nrecommended_set: [g-ts-001]\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --emit-index \"$PWD/INDEX.md\" 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --check-index-stale --index-path \"$PWD/INDEX.md\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo index_current 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["index_current"]}
+}

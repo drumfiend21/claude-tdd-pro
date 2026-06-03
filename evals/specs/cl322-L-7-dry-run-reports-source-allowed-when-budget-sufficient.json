@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update --dry-run reports allowed=true when remaining budget exceeds estimated consumption per L-7",
+  "command": "printf '%s' '{}' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --estimated-tokens 50000 --budget b.json --dry-run 2>out.txt && grep -q 'source=cfpb-consumerfinance' out.txt && grep -q 'allowed=true' out.txt && echo allowed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["allowed"]
+  }
+}

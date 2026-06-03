@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add --dry-run reports the planned id without writing to the operator registry per §2.14 dry-run contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" https://example.com/spec --id example-spec --dry-run 2>err.txt && [ ! -f .claude-tdd-pro/STANDARDS-URLS.yaml ] && grep -q 'dry-run' err.txt && grep -q 'id=example-spec' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}

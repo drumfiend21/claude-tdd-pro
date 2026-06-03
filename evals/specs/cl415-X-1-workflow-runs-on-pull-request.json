@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: workflow triggers on pull_request",
+  "command": "grep -qE \"pull_request|push\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" && echo trigger 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["trigger"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan supports a post-commit mode that limits the git scan to the most recent commit by default",
+  "command": "mkdir -p repo && (cd repo && git init -q && touch a && git -c user.email=x@y -c user.name=x add a && git -c user.email=x@y -c user.name=x commit -q -m 'first' && touch b && git -c user.email=x@y -c user.name=x add b && git -c user.email=x@y -c user.name=x commit -q --no-verify -m 'second skipped') && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --git-root repo --post-commit --out report.jsonl 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'no_verify' report.jsonl && grep -q '\"commits_scanned\":1' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

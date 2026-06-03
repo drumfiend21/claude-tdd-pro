@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: walk skips _archived folders anywhere in the path so retired files do not block the gate",
+  "command": "mkdir -p tree/google/_archived tree/google && printf 'malformed yaml\\n' > tree/google/_archived/old.yaml && printf 'source:\\n  id: x\\nrules: []\\n' > tree/google/current.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -q '\"files_total\":1' err.txt && echo archived_skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["archived_skipped"]}
+}

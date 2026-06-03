@@ -1,0 +1,6 @@
+{
+  "name": "R-9 each deprecated: true token declares replaced_by pointing at the successor token per the §26 schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/design-tokens/registry.yaml\",\"utf8\");const blocks=y.split(/^  - id: /m).slice(1);const dep=blocks.filter(b=>/^\\s*deprecated: true/m.test(b));process.exit(dep.length>=1&&dep.every(b=>/^\\s*replaced_by: \\S+/m.test(b))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-6 source-file validator: generated-code-quality-standards/validate-source-file.sh ships at the §17 G-6 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

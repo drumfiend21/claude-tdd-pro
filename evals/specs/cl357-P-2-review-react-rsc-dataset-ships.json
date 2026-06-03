@@ -1,0 +1,6 @@
+{
+  "name": "P-2 review-react-rsc agent dataset ships at the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents/review-react-rsc.jsonl\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

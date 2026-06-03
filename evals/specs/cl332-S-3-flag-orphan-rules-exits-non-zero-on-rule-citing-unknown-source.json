@@ -1,0 +1,6 @@
+{
+  "name": "S-3 --flag-orphan-rules exits non-zero when a rule cites a source not in the standards catalog",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, provenance: [{source: not-in-catalog, section_id: \"1.1\"}]}\\n' > tree/g/x.yaml && printf -- '- id: g\\n  name: G\\n  url: x\\n  tier: 1\\n  applies_to: [x]\\n  fetch_frequency: daily\\n' > catalog.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/build-coverage-matrix.sh\" --tree tree --catalog catalog.yaml --flag-orphan-rules 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'not-in-catalog' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["flagged"]}
+}

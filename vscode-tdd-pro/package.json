@@ -1,0 +1,23 @@
+{
+  "name": "vscode-tdd-pro",
+  "displayName": "Claude TDD Pro",
+  "description": "X-8 LSP surface for the Claude TDD Pro rubric runner. Inline diagnostics powered by the same rubric/runner.sh gate that runs in CI.",
+  "version": "0.1.0",
+  "publisher": "claude-tdd-pro",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Linters", "Programming Languages"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Claude TDD Pro",
+      "properties": {
+        "tdd-pro.lspPath": {
+          "type": "string",
+          "default": "tdd-pro-lsp",
+          "description": "Path to the tdd-pro-lsp executable (defaults to PATH lookup)."
+        }
+      }
+    }
+  }
+}

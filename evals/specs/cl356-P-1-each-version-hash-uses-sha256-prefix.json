@@ -1,0 +1,6 @@
+{
+  "name": "P-1 each version's hash value uses the sha256: prefix per content-integrity contract",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/prompts/registry.yaml\",\"utf8\");const hashes=y.match(/^\\s+hash: \\S+/mg)||[];process.exit(hashes.every(h=>h.includes(\"sha256:\"))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

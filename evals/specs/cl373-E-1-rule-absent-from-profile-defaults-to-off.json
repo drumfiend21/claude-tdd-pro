@@ -1,0 +1,6 @@
+{
+  "name": "E-1 severity override: rule not present anywhere in the extends chain defaults to effective_severity=off + source=default",
+  "command": "printf 'rules:\\n  g-ts-002: error\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --explain g-ts-001 --profile p.yaml 2>err.txt; grep -q 'effective_severity=off' err.txt && grep -q 'source=default' err.txt && grep -q 'rule_will_run=false' err.txt && echo defaulted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["defaulted"]}
+}

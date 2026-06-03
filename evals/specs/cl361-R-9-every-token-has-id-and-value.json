@@ -1,0 +1,6 @@
+{
+  "name": "R-9 every token entry declares id and value fields per the §26 schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/design-tokens/registry.yaml\",\"utf8\");const blocks=y.split(/^  - id: /m).slice(1);process.exit(blocks.every(b=>/^\\s*value: /m.test(b))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: recommended_set must list a subset of rule ids in rules: per §17 G-2 + E-6",
+  "command": "mkdir -p tree && printf 'source:\\n  id: g\\nrules:\\n  - id: g-x-001\\nrecommended_set: [g-x-001]\\nall_set: [g-x-001]\\n' > tree/g.yaml && grep -q '^recommended_set:' tree/g.yaml && grep -q 'g-x-001' tree/g.yaml && echo subset 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["subset"]}
+}

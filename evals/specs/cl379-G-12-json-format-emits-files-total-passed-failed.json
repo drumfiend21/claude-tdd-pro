@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: --format json emits files_total, files_passed, files_failed, files_excluded_from_aggregation keys",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: x\\nrules: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -q '\"files_total\":' err.txt && grep -q '\"files_passed\":' err.txt && grep -q '\"files_failed\":' err.txt && grep -q '\"files_excluded_from_aggregation\":' err.txt && echo json_shape 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["json_shape"]}
+}

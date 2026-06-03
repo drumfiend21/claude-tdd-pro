@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate ships at standards/freshness-gate.sh per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

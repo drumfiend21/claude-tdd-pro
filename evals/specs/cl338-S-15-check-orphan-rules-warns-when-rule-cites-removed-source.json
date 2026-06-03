@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove --check-orphan-rules warns when a rule still cites the source being removed",
+  "command": "mkdir -p .claude-tdd-pro tree/ns && printf -- '- id: custom-spec\\n' > .claude-tdd-pro/STANDARDS-URLS.yaml && printf 'source:\\n  id: custom-spec\\nrules:\\n  id: r-1\\n  source: custom-spec\\n' > tree/ns/custom-spec.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id custom-spec --tree tree --check-orphan-rules 2>err.txt && grep -qiE 'orphan|r-1' err.txt && echo warned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["warned"]}
+}

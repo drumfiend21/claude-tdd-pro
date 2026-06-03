@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: a real run writes the audit record at <emit-tree>/_meta/migration-from-rubric-yaml.md",
+  "command": "mkdir -p root/rubric && printf 'rules:\\n  - id: g-google-001\\n    provenance:\\n      - source: google-tsguide\\n' > root/rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s out/_meta/migration-from-rubric-yaml.md ] && echo audit_recorded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audit_recorded"]}
+}

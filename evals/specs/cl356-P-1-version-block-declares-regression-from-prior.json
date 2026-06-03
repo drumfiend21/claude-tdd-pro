@@ -1,0 +1,6 @@
+{
+  "name": "P-1 each version block declares a regression_from_prior delta per the architecture regression-gating contract",
+  "command": "grep -q 'regression_from_prior:' \"$CLAUDE_PLUGIN_ROOT/prompts/registry.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

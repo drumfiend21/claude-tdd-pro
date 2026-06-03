@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: hook script invokes evals/runner.sh",
+  "command": "grep -q \"evals/runner.sh\" \"$CLAUDE_PLUGIN_ROOT/hooks/pre-commit\" && echo runs_runner 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["runs_runner"]}
+}

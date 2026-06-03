@@ -1,0 +1,6 @@
+{
+  "name": "W-11 parallel-coordinator agent documents the fan-out decision algorithm covering budget check and lock grouping",
+  "command": "grep -qi 'decision algorithm\\|algorithm' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && grep -q 'lock_sections' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && grep -q 'estimated_tokens' \"$CLAUDE_PLUGIN_ROOT/agents/parallel-coordinator.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

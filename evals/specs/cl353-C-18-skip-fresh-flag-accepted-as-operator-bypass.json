@@ -1,0 +1,6 @@
+{
+  "name": "C-18 --skip-fresh flag is accepted as the operator-bypass per §2.17 (audit emitted regardless)",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && printf '2026-01-01T00:00:00Z' > .claude-tdd-pro/compliance-last-fetch/soc2-tsc.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/control-mapping-gate.sh\" --framework soc2-tsc --control-id CC1.1 --now 2026-05-25T10:00:00Z --skip-fresh --emit-audit a.jsonl && [ -s a.jsonl ] && echo bypassed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bypassed"]}
+}

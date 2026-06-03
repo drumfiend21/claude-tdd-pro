@@ -1,0 +1,6 @@
+{
+  "name": "G-2 source-organized file format: registry_link enum is STANDARDS-URLS.yaml | COMPLIANCE-URLS.yaml | PR-SOURCES.yaml; other values are rejected",
+  "command": "printf 'source:\\n  id: test-src\\n  authoritative_publisher: A\\n  authoritative_url: https://e.t/d\\n  registry_link: WRONG-REGISTRY.yaml\\n  fetched_at: \"2026-05-04T00:00:00Z\"\\n  content_hash: \"sha256:abc\"\\n  fetch_frequency: weekly\\n  fragility_tier: low\\n  license_note: \"MIT\"\\nrules: []\\nrecommended_set: []\\nall_set: []\\n' > sf.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$PWD/sf.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'registry_link' err.txt && echo enum_enforced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["enum_enforced"]}
+}

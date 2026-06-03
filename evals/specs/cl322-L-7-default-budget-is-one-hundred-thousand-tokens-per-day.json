@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update --show-defaults reports the default budget of 100000 tokens per source per day per the L-7 default cap",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --show-defaults 2>out.txt && grep -q 'default_budget_per_source_per_day=100000' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-13 freshness gate --strict elevates stale-warn-degraded to exit two when upstream fails per §2.17 strict contract",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && printf '2026-05-20T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/src.txt && printf '#!/usr/bin/env bash\\nexit 1\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --source-id src --fetch-frequency daily --now 2026-05-25T10:00:00Z --upstream-stub ./up.sh --strict 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'strict' err.txt && echo strict 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["strict"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: --dry-run reports plan without modifying settings",
+  "command": "rm -f /tmp/test-settings.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" --settings-path /tmp/test-settings.json --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -f /tmp/test-settings.json ] && echo no_writes 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["no_writes"]}
+}

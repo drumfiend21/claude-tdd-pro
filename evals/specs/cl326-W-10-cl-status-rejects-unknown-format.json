@@ -1,0 +1,9 @@
+{
+  "name": "W-10 /cl-status exits two when --format is not one of text json tui",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cl-status.sh\" --format=xml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["rejected"]
+  }
+}

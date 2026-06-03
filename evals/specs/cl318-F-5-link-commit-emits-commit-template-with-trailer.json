@@ -1,0 +1,9 @@
+{
+  "name": "/incident --link-commit writes a commit-template with the Incident-Ref trailer for follow-up commit messages per F-5",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'failed deploy' --date 2026-05-25 --link-commit abc1234 2>/dev/null && [ -s incidents/2026-05-25-001/commit-template.txt ] && grep -q 'Incident-Ref: 2026-05-25-001' incidents/2026-05-25-001/commit-template.txt && grep -q 'Linked-Commit: abc1234' incidents/2026-05-25-001/commit-template.txt && echo trailer 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["trailer"]
+  }
+}

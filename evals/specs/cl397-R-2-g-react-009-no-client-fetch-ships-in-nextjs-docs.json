@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-009 no-client-fetch-where-server-equivalent ships under react/nextjs-docs.yaml per the §9 R-2 table",
+  "command": "grep -q 'id: g-react-009' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/react/nextjs-docs.yaml\" && echo r009_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r009_placed"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-9 color foreground tokens declare contrast_pair pointing at a background-color token per the §26 schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/design-tokens/registry.yaml\",\"utf8\");const blocks=y.split(/^  - id: /m).slice(1);const fg=blocks.filter(b=>{const id=b.split(\"\\n\")[0].trim();return /^color\\.(text|brand|signal|legacy)/.test(id)});process.exit(fg.length>=1&&fg.every(b=>/^\\s*contrast_pair: color\\./m.test(b))?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

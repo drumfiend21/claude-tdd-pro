@@ -1,0 +1,6 @@
+{
+  "name": "W-11 skill documents the max_parallel_subagents default of 1 sequential and opt-in N at least 2 parallel",
+  "command": "grep -q 'max_parallel_subagents' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -qE 'default 1|1 \\(default\\)' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

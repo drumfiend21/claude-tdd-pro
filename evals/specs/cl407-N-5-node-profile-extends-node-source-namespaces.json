@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: profiles/node.yaml extends node: source-namespaces (node-docs, node-best-practices)",
+  "command": "grep -q 'node:node-docs' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'node:node-best-practices' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo n_ns_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["n_ns_present"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-15 standards-remove exits two when the supplied id is not found in registry or any tree folder",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id never-existed 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'not found' err.txt && echo unknown 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["unknown"]}
+}

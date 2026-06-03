@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: a rule file declaring every §2.1 metadata field with valid shapes passes rule-metadata-complete",
+  "command": "printf 'id: g-ts-300\\ntype: problem\\nfixable: code\\nhas_suggestions: true\\ndeprecated: false\\nreplaced_by: []\\ndocs_url: https://example.test/rule\\nrequires_type_checking: false\\nrecommended: true\\noptions_schema: {}\\nmessages:\\n  default: \"bad\"\\n' > g-ts-300.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-300.yaml && echo complete 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["complete"]}
+}

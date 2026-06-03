@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: declares customizations so VS Code / Codespaces parity is real",
+  "command": "grep -qE \"customizations|extensions\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" && echo customizations 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["customizations"]}
+}

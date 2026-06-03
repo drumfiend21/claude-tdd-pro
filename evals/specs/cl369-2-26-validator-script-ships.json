@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 customer-agent validator ships at agents/_customer/validate.sh per §26 v1.11",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/_customer/validate.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "docs/getting-started.md ships at the literal H-9 progressive disclosure path and is non-empty",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/docs/getting-started.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

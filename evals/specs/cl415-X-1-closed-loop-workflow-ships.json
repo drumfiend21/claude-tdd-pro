@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: closed-loop.yml workflow ships",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

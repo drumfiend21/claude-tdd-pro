@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: postCreateCommand or features install bash/ruby/node toolchain",
+  "command": "grep -qE \"postCreate|features|ruby|node|bash\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" && echo toolchain 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["toolchain"]}
+}

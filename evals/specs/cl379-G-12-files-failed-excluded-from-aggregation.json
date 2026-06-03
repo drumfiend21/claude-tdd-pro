@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: invalid file's rules are excluded from aggregation (files_excluded_from_aggregation reflects failed count) per §17 G-12",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: x\\nrules:\\n  - id: bad\\n    name: r\\n' > tree/google/bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -q '\"files_failed\":1' err.txt && grep -q '\"files_excluded_from_aggregation\":1' err.txt && echo excluded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["excluded"]}
+}

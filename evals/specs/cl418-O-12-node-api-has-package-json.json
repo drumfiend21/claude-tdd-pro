@@ -1,0 +1,6 @@
+{
+  "name": "O-12 application scaffolds: node-api ships package.json so it boots as a project",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/scaffolds/node-api/package.json\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

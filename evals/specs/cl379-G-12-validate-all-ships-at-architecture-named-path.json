@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: generated-code-quality-standards/validate-all.sh ships at the §17 G-12 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

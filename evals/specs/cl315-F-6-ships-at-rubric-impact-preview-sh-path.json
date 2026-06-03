@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview helper ships at rubric/impact-preview.sh per the literal F-6 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

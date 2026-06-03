@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: bootstrap respects --token-budget and defers further scenarios when exhausted",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --bootstrap-token-budget 5 --tokens-per-scenario 10 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'budget exhausted' err.txt && echo budget_honored 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["budget_honored"]}
+}

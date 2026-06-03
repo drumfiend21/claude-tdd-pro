@@ -1,0 +1,6 @@
+{
+  "name": "S-6 detector rejects provenance entries whose url does not start with https:// per the architecture",
+  "command": "mkdir -p tree/g && printf '\\nrules:\\n  - {id: r, severity: P1, provenance: [{source: g, class: published-standard, section_id: \"1.1\", url: http://insecure.com, fetched_at: 2026-05-01T00:00:00Z, content_hash: sha256:abc}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" --tree tree 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -qE 'url|https' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

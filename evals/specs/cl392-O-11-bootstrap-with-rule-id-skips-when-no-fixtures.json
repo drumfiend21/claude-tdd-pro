@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: --rule-id <id> with no fixtures emits a skipping notice and exits 0",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --rule-id g-unknown-999 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'no bootstrap fixtures' err.txt && grep -q 'skipping' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skipped"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "C-3 --standards-cited populates the standards_state block keyed by source id",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/emit-provenance-manifest.sh\" --commit abc123 --out m.json --now 2026-05-25T10:00:00Z --standards-cited google-tsguide && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.json\",\"utf8\"));const s=j.standards_state;process.exit(s&&s[\"google-tsguide\"]?0:1)' && echo cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cited"]}
+}

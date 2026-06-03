@@ -1,0 +1,6 @@
+{
+  "name": "C-15 freshness gate marker lives at .claude-tdd-pro/compliance-last-fetch/<framework-id>.txt",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && printf '2026-05-25T08:00:00Z' > .claude-tdd-pro/compliance-last-fetch/gdpr.txt && bash \"$CLAUDE_PLUGIN_ROOT/compliance/freshness-gate.sh\" --framework-id gdpr --fetch-frequency weekly --now 2026-05-25T10:00:00Z && echo path 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["path"]}
+}

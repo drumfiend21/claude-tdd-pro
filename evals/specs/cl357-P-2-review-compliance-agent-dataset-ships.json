@@ -1,0 +1,6 @@
+{
+  "name": "P-2 review-compliance agent dataset ships at evals/datasets/agents/review-compliance.jsonl per architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents/review-compliance.jsonl\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

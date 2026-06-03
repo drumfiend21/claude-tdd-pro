@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan honors a configurable repeated-bypass threshold above which the finding is escalated",
+  "command": "mkdir -p src && printf 'a // rubric: ignore\\nb // rubric: ignore\\nc // rubric: ignore\\nd // rubric: ignore\\n' > src/many.js && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --paths src --repeated-bypass-threshold 3 --out report.jsonl 2>err.txt; rc=$?; grep -q '\"severity\":\"escalated\"' report.jsonl && grep -q '\"count\":4' report.jsonl && echo escalated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["escalated"]
+  }
+}

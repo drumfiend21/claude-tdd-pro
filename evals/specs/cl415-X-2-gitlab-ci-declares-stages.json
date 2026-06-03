@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: .gitlab-ci.yml declares stages",
+  "command": "grep -qE \"^stages:\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo stages 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["stages"]}
+}

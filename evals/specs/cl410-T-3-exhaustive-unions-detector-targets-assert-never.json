@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: exhaustive-unions.sh body targets the assertNever exhaustiveness pattern that g-ts-003 charters",
+  "command": "grep -qE 'assertNever|exhaustive|switch' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/exhaustive-unions.sh\" && echo exhaustive_target 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["exhaustive_target"]}
+}

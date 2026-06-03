@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: /* rubric-disable */ ... /* rubric-enable */ suppresses violations across the enclosed range",
+  "command": "printf '/* rubric-disable no-eval -- batch */\\neval(\"a\");\\neval(\"b\");\\n/* rubric-enable no-eval */\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo block_suppressed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["block_suppressed"]}
+}

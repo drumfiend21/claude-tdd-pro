@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: operator additions in _operator/<my-org>/ must start with the <my-org>- prefix",
+  "command": "mkdir -p tree/_operator/acme && printf 'source:\\n  id: o\\nrules:\\n  - id: foo-001\\n' > tree/_operator/acme/c.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing 2>err.txt; grep -q 'rules under _operator/acme/ must start with acme- prefix' err.txt && echo operator_prefix 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["operator_prefix"]}
+}

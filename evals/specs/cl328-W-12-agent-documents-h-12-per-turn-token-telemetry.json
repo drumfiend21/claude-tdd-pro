@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents per-turn token-cost telemetry routed to H-1 H-12 with subagent_id preserved",
+  "command": "grep -q 'H-1' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'H-12' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'subagent_id' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo telemetered 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["telemetered"]}
+}

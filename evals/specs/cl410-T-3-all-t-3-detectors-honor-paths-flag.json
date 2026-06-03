@@ -1,0 +1,6 @@
+{
+  "name": "T-3 ts detectors: every T-3 detector honors the --paths flag per the §2.2 detector contract",
+  "command": "for d in no-any exhaustive-unions type-test-coverage; do grep -q -- '--paths' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" || { echo missing 1>&2; exit 1; }; done && echo all_paths 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_paths"]}
+}

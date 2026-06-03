@@ -1,0 +1,6 @@
+{
+  "name": "N-4 node eval fixtures: every per-rule fixture folder ships positive/ and negative/ subdirectories",
+  "command": "missing=0; for d in \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node\"/g-node-*; do [ -d \"$d\" ] || continue; [ -d \"$d/positive\" ] && [ -d \"$d/negative\" ] || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo positive_negative 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["positive_negative"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "L-6 aggregator exits two when --pattern is omitted (usage error per the L-6 entry contract)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}

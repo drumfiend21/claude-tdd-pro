@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: rubric/canary-promote.sh ships at the §13 O-7 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

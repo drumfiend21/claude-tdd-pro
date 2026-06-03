@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: cache_key is sha256:<hex> over the canonical inputs per §16 E-12",
+  "command": "printf 'x\\n' > in.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache --cache-location cache.json --cache-stats 2>err.txt; grep -qE '\"cache_key\":\"sha256:[a-f0-9]{64}\"' err.txt && echo cache_key_shape 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cache_key_shape"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-7 react profile registration: regulated.yaml tightens g-react-003 accessibility to P0 for EU AI Act / WCAG 2.2 compliance",
+  "command": "grep -q 'g-react-003' \"$CLAUDE_PLUGIN_ROOT/profiles/regulated.yaml\" && grep -qE 'P0|error' \"$CLAUDE_PLUGIN_ROOT/profiles/regulated.yaml\" && echo p0_tightened 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["p0_tightened"]}
+}

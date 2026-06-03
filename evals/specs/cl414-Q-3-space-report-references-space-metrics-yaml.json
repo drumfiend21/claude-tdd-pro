@@ -1,0 +1,11 @@
+{
+  "name": "Q-3 /space-report: dashboard references space/metrics.yaml per §10 Q-3",
+  "command": "grep -q \"metrics.yaml\" \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" && echo metrics 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "metrics"
+    ]
+  }
+}

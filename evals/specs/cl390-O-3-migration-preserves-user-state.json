@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: migration script declares it preserves user state (operator rules, lock data) per §13 O-3",
+  "command": "grep -q 'preserve' \"$CLAUDE_PLUGIN_ROOT/migrations/0.3.0-to-0.4.0.sh\" && grep -q 'user state' \"$CLAUDE_PLUGIN_ROOT/migrations/0.3.0-to-0.4.0.sh\" && echo preserves 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["preserves"]}
+}

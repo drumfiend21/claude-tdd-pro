@@ -1,0 +1,9 @@
+{
+  "name": "Every L-1 catalog source's tier value is 1 or 2 per the architecture default catalog (no tier 3 entries shipped)",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/pr-corpus/PR-SOURCES-DEFAULT.yaml\",\"utf8\");const tiers=(y.match(/tier: \\d+/g)||[]).map(s=>parseInt(s.split(\" \")[1]));process.exit(tiers.every(t=>t===1||t===2)&&tiers.length===10?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

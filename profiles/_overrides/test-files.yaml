@@ -1,0 +1,17 @@
+# E-3 glob-based override recipe -- test files.
+# Architecture §16 E-3: per-file `overrides: [{ files, rules }]` block.
+# Operators extend a profile by including this file; the overrides[] array
+# is merged into the profile's overrides[] chain (later wins per §16 E-3).
+overrides:
+  - files:
+      - "**/*.test.ts"
+      - "**/*.test.tsx"
+      - "**/*.spec.ts"
+      - "**/*.spec.tsx"
+      - "**/*_test.ts"
+      - "tests/**"
+      - "spec/**"
+      - "__tests__/**"
+    rules:
+      no-console: off
+      no-magic-numbers: off

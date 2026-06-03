@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: rule.id must match basename(file, '.yaml') per the §2.1 filename-id consistency rule",
+  "command": "printf 'id: g-ts-999\\ntype: problem\\n' > g-ts-309.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-309.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'id: \"g-ts-999\" must match filename basename \"g-ts-309\"' err.txt && echo id_matches 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["id_matches"]}
+}

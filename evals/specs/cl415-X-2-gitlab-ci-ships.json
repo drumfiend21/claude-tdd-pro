@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: .gitlab-ci.yml ships at the §14 X-2 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

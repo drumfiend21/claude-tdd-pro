@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: rubric/formatters/ folder ships at the §16 E-9 path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/rubric/formatters\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

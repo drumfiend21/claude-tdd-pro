@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher rate-limit gate blocks the fetch when remaining capacity is below the batch size per the 5000/hr ceiling",
+  "command": "printf '%s' '{\"remaining\":5}' > rate.json && printf '%s' '' > stub.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --upstream-stub stub.jsonl --rate-budget-stub rate.json --batch-size 20 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'rate_limit_exceeded' err.txt && grep -q 'remaining=5 needed=20' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["blocked"]
+  }
+}

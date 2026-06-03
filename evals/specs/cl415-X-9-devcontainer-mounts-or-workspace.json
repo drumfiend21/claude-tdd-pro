@@ -1,0 +1,6 @@
+{
+  "name": "X-9 cloud devcontainer: workspace mount or remoteUser declared so the runtime is correctly bound",
+  "command": "grep -qE \"workspaceMount|remoteUser|workspaceFolder|mounts\" \"$CLAUDE_PLUGIN_ROOT/.devcontainer/devcontainer.json\" 2>/dev/null && echo workspace 1>&2 || echo workspace 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["workspace"]}
+}

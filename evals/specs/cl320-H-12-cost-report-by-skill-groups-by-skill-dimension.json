@@ -1,0 +1,9 @@
+{
+  "name": "/cost-report --by=skill aggregates totals per skill dimension per H-12",
+  "command": "mkdir -p rollup/daily && printf '%s' '{\"entries\":[{\"skill\":\"sync\",\"tokens_in\":100,\"tokens_out\":50,\"invocations\":1},{\"skill\":\"sync\",\"tokens_in\":200,\"tokens_out\":75,\"invocations\":1}]}' > rollup/daily/2026-05-25.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cost-report.sh\" --window=daily --by=skill --rollup-dir=rollup --format=json >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));process.exit(j.totals.sync.tokens_in===300?0:1)' && echo grouped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["grouped"]
+  }
+}

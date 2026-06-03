@@ -1,0 +1,6 @@
+{
+  "name": "T-5 ts eval specs: evals/fixtures/typescript/ ships at the §7 T-5 path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/typescript\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

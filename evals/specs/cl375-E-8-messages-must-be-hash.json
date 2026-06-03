@@ -1,0 +1,6 @@
+{
+  "name": "E-8 standardized rule metadata: messages must be a hash {messageId: template}; arrays or scalars are rejected",
+  "command": "printf 'id: g-ts-308\\ntype: problem\\nmessages:\\n  - default\\n  - bad\\n' > g-ts-308.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-metadata-complete.sh\" g-ts-308.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'messages: must be a hash {messageId: template}' err.txt && echo messages_hash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["messages_hash"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "E-10 rule deprecation lifecycle: /doctor --check deprecations reports deprecated rules with their replaced_by chain",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: old-rule\\n    deprecated: true\\n    replaced_by: [\"new-rule\"]\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check deprecations --tree \"$PWD/tree\" 2>err.txt; grep -q 'deprecations: old-rule deprecated, replaced_by \\[new-rule\\]' err.txt && echo reported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["reported"]}
+}

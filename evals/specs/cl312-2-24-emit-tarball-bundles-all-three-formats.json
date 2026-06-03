@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit --format tarball writes bundle.tar containing the json + markdown + html bundles per §2.24",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format tarball --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out 2>err.txt && [ -f out/abc123-2026-05-25T00:00:00Z/bundle.tar ] && tar -tf out/abc123-2026-05-25T00:00:00Z/bundle.tar | sort | tr '\\n' ',' > listing.txt && grep -q 'bundle.html,bundle.json,bundle.md' listing.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

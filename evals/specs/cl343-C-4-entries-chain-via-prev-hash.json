@@ -1,0 +1,6 @@
+{
+  "name": "C-4 audit entries chain via prev_hash from sha256 hash of the previous canonicalized line per the Merkle chain contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event e1 --actor a --data '{}' && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event e2 --actor a --data '{}' && node -e 'const lines=require(\"fs\").readFileSync(\".claude-tdd-pro/audit.jsonl\",\"utf8\").split(\"\\n\").filter(Boolean);const e1=JSON.parse(lines[0]);const e2=JSON.parse(lines[1]);process.exit(e1.prev_hash===\"GENESIS\"&&e2.prev_hash.startsWith(\"sha256:\")?0:1)' && echo chained 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["chained"]}
+}

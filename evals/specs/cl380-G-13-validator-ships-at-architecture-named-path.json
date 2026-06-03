@@ -1,0 +1,6 @@
+{
+  "name": "G-13 eslint compliance: generated-code-quality-standards/validate-eslint-compliance.sh ships at the §17 G-13 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-eslint-compliance.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

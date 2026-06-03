@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: plugin-shipped rules in default folders must start with g- prefix",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --check-id-namespacing 2>err.txt; grep -q 'plugin-shipped rules must start with g- prefix' err.txt && echo g_required 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["g_required"]}
+}

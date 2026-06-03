@@ -1,0 +1,9 @@
+{
+  "name": "skills/help/SKILL.md ships at the literal H-9 architecture-named path for /help <topic>",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/help/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,25 @@
+# X-2 GitLab CI adapter per §14. Mirrors the X-1 GitHub Actions
+# workflow shape: install minimal toolchain, run rubric/runner.sh on the
+# committed evals/specs/ tree, fail the pipeline on any spec failure.
+#
+# Reuses scripts/ci-validate-all.sh (the X-1 entry point) so behavior is
+# identical across surfaces; only the adapter shell differs.
+
+stages:
+  - validate
+
+variables:
+  CLAUDE_PLUGIN_ROOT: ${CI_PROJECT_DIR}
+
+rubric-validate:
+  stage: validate
+  image: node:22-bookworm
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq bash ruby
+  script:
+    - bash scripts/ci-validate-all.sh
+  artifacts:
+    when: on_failure
+    paths:
+      - /tmp/claude-tdd-pro-runner-*.log
+    expire_in: 7 days

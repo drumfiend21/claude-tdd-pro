@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace records the operator-bypass flag when --bypassed is passed per §2.17 audit semantics",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted-standards google-tsguide --bypassed --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'operator-bypass' trace.json && echo bypassed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bypassed"]}
+}

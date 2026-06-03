@@ -1,0 +1,6 @@
+{
+  "name": "O-12 application scaffolds: four scaffolds ship together (next-saas, node-api, python-fastapi, react-spa)",
+  "command": "n=0; for s in next-saas node-api python-fastapi react-spa; do [ -d \"$CLAUDE_PLUGIN_ROOT/scaffolds/$s\" ] && n=$((n+1)); done; [ \"$n\" -eq 4 ] && echo four_scaffolds 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["four_scaffolds"]}
+}

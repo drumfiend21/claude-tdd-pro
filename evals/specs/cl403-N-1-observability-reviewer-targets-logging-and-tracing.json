@@ -1,0 +1,6 @@
+{
+  "name": "N-1 node review subagents: review-node-observability body documents the logging/tracing focus per its §8 N-1 charter",
+  "command": "grep -qiE 'logging|tracing|metric|structured log' \"$CLAUDE_PLUGIN_ROOT/agents/review-node-observability.md\" && echo observability_focus 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["observability_focus"]}
+}

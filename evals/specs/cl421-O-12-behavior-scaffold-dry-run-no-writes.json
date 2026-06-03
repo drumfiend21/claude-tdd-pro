@@ -1,0 +1,11 @@
+{
+  "name": "O-12 scaffolds behavior: scaffold.sh --dry-run does not create target dir (§2.14 contract)",
+  "command": "rm -rf /tmp/o12-target; bash \"$CLAUDE_PLUGIN_ROOT/commands/scaffold.sh\" --kind next-saas --target /tmp/o12-target --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -d /tmp/o12-target ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

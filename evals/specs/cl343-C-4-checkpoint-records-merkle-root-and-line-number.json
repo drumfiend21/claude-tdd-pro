@@ -1,0 +1,6 @@
+{
+  "name": "C-4 checkpoint file records the merkle_root and last_line_number fields per the architecture",
+  "command": "for i in 1 2; do bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --append --event e$i --actor a --data '{}'; done && bash \"$CLAUDE_PLUGIN_ROOT/compliance/audit-log.sh\" --emit-checkpoint-now && ckpt=$(ls compliance/audit-checkpoints/*.json | head -1) && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));process.exit(j.merkle_root&&j.merkle_root.startsWith(\"sha256:\")&&typeof j.last_line_number===\"number\"?0:1)' \"$ckpt\" && echo merkle 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["merkle"]}
+}

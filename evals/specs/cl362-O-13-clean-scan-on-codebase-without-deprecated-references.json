@@ -1,0 +1,6 @@
+{
+  "name": "O-13 detector reports clean and exits zero when no deprecated tokens are referenced in the scanned paths",
+  "command": "mkdir -p src && printf 'import { signal } from \"./tokens\";\\nexport const Button = () => signal.success;\\n' > src/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/design-token-freshness.sh\" --registry \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" --paths src 2>err.txt && grep -q 'clean' err.txt && echo clean 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["clean"]}
+}

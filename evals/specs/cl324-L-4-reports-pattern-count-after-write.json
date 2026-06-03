@@ -1,0 +1,9 @@
+{
+  "name": "L-4 extract-patterns reports patterns count on stderr after writing the output file per the L-4 progress signal",
+  "command": "printf '%s' '{\"number\":7,\"comments\":[{\"body\":\"please add null check before dereferencing\"},{\"body\":\"prefer Map over object for unbounded key sets\"}]}' > pr.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/extract-patterns.sh\" --pr pr.json --out patterns.json 2>err.txt && grep -q 'pr=7' err.txt && grep -q 'patterns=2' err.txt && echo counted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["counted"]
+  }
+}

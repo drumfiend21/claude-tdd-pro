@@ -1,0 +1,8 @@
+{
+  "name": "G-13 eslint compliance: --emit-eslint-config refuses to emit (exit 2) when any rule fails the E-8 metadata check",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-eslint-compliance.sh\" \"$PWD/file.yaml\" --emit-eslint-config 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'is required' err.txt && grep -qv '\"rules\":' err.txt && echo refused 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\nrules:\\n  - {id: g-x-001}\\n' > file.yaml"
+  ],
+  "expect": {"exit_code": 0, "stderr_contains": ["refused"]}
+}

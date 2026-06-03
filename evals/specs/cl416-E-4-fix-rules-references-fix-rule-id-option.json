@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: supports per-rule fix via --rule-id or similar",
+  "command": "grep -qE -- \"--rule-id|--rule|RULE_ID\" \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" && echo per_rule 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["per_rule"]}
+}

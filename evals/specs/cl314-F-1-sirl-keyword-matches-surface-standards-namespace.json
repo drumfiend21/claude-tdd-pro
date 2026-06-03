@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem surfaces standards-layer (SIRL) keyword matches for a bug description aligned with a known source namespace per F-1",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'XSS via unsanitized input' 2>out.txt && grep -q 'standards-layer' out.txt && grep -q 'owasp-asvs' out.txt && echo matched 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["matched"]
+  }
+}

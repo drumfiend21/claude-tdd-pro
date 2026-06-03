@@ -1,0 +1,6 @@
+{
+  "name": "C-2 control mapping: legal-review-mark sets legal_review_status to reviewed_by:<reviewer>:<date>",
+  "command": "printf -- '- framework: soc2\\n  control_id: CC1.1\\n  legal_review_status: pending\\n' > controls.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/legal-review-mark.sh\" --framework soc2 --control-id CC1.1 --reviewer counsel --date 2026-05-04 --controls-file controls.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'legal_review_status: reviewed_by:counsel:2026-05-04' controls.yaml && echo marked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["marked"]}
+}

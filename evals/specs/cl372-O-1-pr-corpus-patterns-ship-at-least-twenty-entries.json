@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: pr-corpus-patterns/patterns.jsonl ships at least 20 hand-curated patterns per the §13 promise",
+  "command": "n=$(wc -l < \"$CLAUDE_PLUGIN_ROOT/seed/pr-corpus-patterns/patterns.jsonl\" 2>/dev/null | tr -d ' '); [ \"${n:-0}\" -ge 20 ] && echo \"pr_patterns=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["pr_patterns="]}
+}

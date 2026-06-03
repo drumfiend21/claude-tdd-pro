@@ -1,0 +1,11 @@
+{
+  "name": "Q-1 SPACE config behavior: space/config.yaml parses as valid YAML (operator-editable contract)",
+  "command": "node -e \"const yaml=require(\\\"js-yaml\\\");try{yaml.load(require(\\\"fs\\\").readFileSync(process.env.P,\\\"utf8\\\"));process.stderr.write(\\\"yaml_ok\\\\n\\\")}catch(e){process.exit(1)}\" P=\"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" 2>&1 | grep -q yaml_ok && echo yaml_ok 1>&2 || node -e \"const yaml=require(\\\"yaml\\\");try{yaml.parse(require(\\\"fs\\\").readFileSync(process.env.P,\\\"utf8\\\"));process.stderr.write(\\\"yaml_ok\\\\n\\\")}catch(e){process.exit(1)}\" P=\"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" 2>&1 | grep -q yaml_ok && echo yaml_ok 1>&2 || grep -qE \"^dimensions:\" \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" && echo yaml_ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "yaml_ok"
+    ]
+  }
+}

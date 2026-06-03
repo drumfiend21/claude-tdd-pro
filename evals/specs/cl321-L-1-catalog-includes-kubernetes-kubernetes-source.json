@@ -1,0 +1,9 @@
+{
+  "name": "L-1 catalog includes the kubernetes-kubernetes source with source_class=gold-standard-process tier=1 per architecture",
+  "command": "grep -A1 'id: kubernetes-kubernetes' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" | grep -q 'gold-standard-process' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

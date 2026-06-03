@@ -1,0 +1,6 @@
+{
+  "name": "W-11 skill documents the parallel_budget_tokens refusal contract when total estimated tokens exceed the budget",
+  "command": "grep -q 'parallel_budget_tokens' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && grep -qiE 'refuse|refuses' \"$CLAUDE_PLUGIN_ROOT/skills/parallel-subagents/SKILL.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

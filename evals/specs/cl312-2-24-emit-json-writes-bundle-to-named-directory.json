@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit --format json writes bundle.json into compliance/audit-packs/<commit-sha>-<utc-timestamp>/ per §2.24",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format json --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out 2>err.txt && [ -f out/abc123-2026-05-25T00:00:00Z/bundle.json ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-2 per-source fetcher pdf-section.sh ships at standards/fetchers/ per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/pdf-section.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

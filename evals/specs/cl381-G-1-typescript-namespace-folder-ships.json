@@ -1,0 +1,6 @@
+{
+  "name": "G-1 directory layout: the typescript namespace folder ships per the §17 14-default namespaces list",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/typescript\" ] && echo typescript_ships 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["typescript_ships"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "N-3 node detectors: every N-3 detector honors --json per the §2.2 detector contract",
+  "command": "for d in boundary-schema console-in-src fetch-timeout naked-throw supply-chain; do grep -q -- '--json' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" || { echo missing 1>&2; exit 1; }; done && echo all_json 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_json"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-2 global --dry-run: /standards-remove --dry-run reports the plan without moving the folder file to _archived/",
+  "command": "mkdir -p tree/google .claude-tdd-pro && printf 'source:\\n  id: legacy\\n' > tree/google/legacy.yaml && touch .claude-tdd-pro/STANDARDS-URLS.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-remove.sh\" --id legacy --tree \"$PWD/tree\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -f tree/google/legacy.yaml ] && [ ! -d tree/google/_archived ] && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["dry_run"]}
+}

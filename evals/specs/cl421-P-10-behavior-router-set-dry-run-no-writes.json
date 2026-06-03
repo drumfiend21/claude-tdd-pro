@@ -1,0 +1,11 @@
+{
+  "name": "P-10 router behavior: router-set --dry-run does not modify router.yaml (§2.14 contract)",
+  "command": "snap=$(sha256sum \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\" | cut -d\" \" -f1); bash \"$CLAUDE_PLUGIN_ROOT/commands/router-set.sh\" --task-class test-class --model haiku --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ \"$snap\" = \"$(sha256sum \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\" | cut -d\" \" -f1)\" ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

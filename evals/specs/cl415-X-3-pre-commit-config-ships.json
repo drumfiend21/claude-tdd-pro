@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: .pre-commit-config.yaml ships at the §14 X-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/.pre-commit-config.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

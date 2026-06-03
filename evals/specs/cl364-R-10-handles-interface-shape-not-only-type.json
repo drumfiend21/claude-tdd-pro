@@ -1,0 +1,6 @@
+{
+  "name": "R-10 detector recognizes both `export type ButtonProps = { ... }` and `export interface ButtonProps { ... }` declarations",
+  "command": "mkdir -p before after && printf 'export interface ButtonProps { label: string; }\\n' > before/Button.tsx && printf 'export interface ButtonProps { label: string; loading: boolean; }\\n' > after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'kind=prop_added' err.txt && echo recognized 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["recognized"]}
+}

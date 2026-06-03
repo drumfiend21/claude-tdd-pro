@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: stylish.sh handles empty input without crashing",
+  "command": "echo \"\" | bash \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/stylish.sh\" 2>err.txt; rc=$?; [ \"$rc\" -le 1 ] && echo handles_empty 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["handles_empty"]}
+}

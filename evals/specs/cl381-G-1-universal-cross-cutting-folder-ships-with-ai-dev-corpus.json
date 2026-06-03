@@ -1,0 +1,6 @@
+{
+  "name": "G-1 directory layout: the _universal cross-cutting folder ships and carries the ai-dev-corpus PRIMARY RULESET",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_universal\" ] && [ -s \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_universal/ai-dev-corpus.md\" ] && echo universal_ships 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["universal_ships"]}
+}

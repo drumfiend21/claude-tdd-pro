@@ -1,0 +1,31 @@
+# Q-1 SPACE config per architecture section §10 Q-1.
+#
+# Five SPACE dimensions (Satisfaction, Performance, Activity, Collaboration,
+# Efficiency_and_flow) plus retention + share settings. Defaults are
+# privacy-respecting: anything that could leak individual signal is opt-in;
+# anything that aggregates safely is ON.
+#
+# Operators override per-project by editing this file. Q-2 collector
+# (space/collector.sh) reads this config and refuses to collect any
+# dimension whose value is `opt-in: false`.
+
+dimensions:
+  satisfaction:
+    posture: opt-in           # Q-6 privacy posture; collector gated until "ON"
+    notes: "In-terminal micro-survey; gated until operator sets posture: ON."
+  performance:
+    posture: ON               # rubric pass rate, defect escape — already aggregated
+    sources: ["F-2.rubric_pass_rate", "F-2.defect_escape"]
+  activity:
+    posture: opt-in           # git commit cadence; per-individual signal
+    sources: ["git.commit_count"]
+  collaboration:
+    posture: opt-in           # W-3 transitions, review thread depth
+    sources: ["W-3.transitions"]
+  efficiency_and_flow:
+    posture: ON               # E-12 cache hit rate; P-8 prompt-effort; aggregate signal
+    sources: ["E-12.cache_hit_rate", "P-8.prompt_effort"]
+
+retention: 90-days           # Q-1 default per arch text "retention 90-days"
+
+share: never                 # Q-6 privacy posture default; raise via Q-6 redacted export

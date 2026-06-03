@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: json.sh emits ESLint-shape array (filePath / messages / errorCount / warningCount)",
+  "command": "grep -qE \"filePath|messages|errorCount\" \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/json.sh\" && echo eslint_shape 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["eslint_shape"]}
+}

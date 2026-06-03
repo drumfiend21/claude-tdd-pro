@@ -1,0 +1,6 @@
+{
+  "name": "G-3 rule ID namespacing: validate-all.sh ships --check-id-namespacing per the §17 G-3 prefix discipline",
+  "command": "grep -q -- '--check-id-namespacing' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" && grep -q 'g-universal-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" && echo flag_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["flag_present"]}
+}

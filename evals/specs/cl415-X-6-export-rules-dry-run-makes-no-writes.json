@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: --dry-run reports plan without writing target file",
+  "command": "rm -f /tmp/test-export.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" --target /tmp/test-export.json --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ ! -f /tmp/test-export.json ] && echo no_writes 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["no_writes"]}
+}

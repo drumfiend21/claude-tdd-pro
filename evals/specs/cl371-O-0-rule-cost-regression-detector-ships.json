@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: H-12 rule-cost-regression detector ships at rubric/detectors/rule-cost-regression.sh",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-cost-regression.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

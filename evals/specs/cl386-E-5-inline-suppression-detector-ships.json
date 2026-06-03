@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: rubric/detectors/inline-suppression.sh ships at the §16 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

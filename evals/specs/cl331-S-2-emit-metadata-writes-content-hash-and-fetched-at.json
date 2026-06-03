@@ -1,0 +1,6 @@
+{
+  "name": "S-2 fetcher --emit-metadata writes content_hash and fetched_at fields per §2.6 provenance contract",
+  "command": "mkdir -p cache && printf '#!/usr/bin/env bash\\necho new\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id x --fragility-tier high --strategy silent-replace --upstream-stub ./up.sh --cache cache --emit-metadata meta.json && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"meta.json\",\"utf8\"));process.exit(j.content_hash&&j.content_hash.startsWith(\"sha256:\")&&j.fetched_at?0:1)' && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "S-1 catalog includes both slsa and semver sources per the architecture default catalog (supply chain + versioning)",
+  "command": "grep -q '^- id: slsa' \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && grep -q '^- id: semver' \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

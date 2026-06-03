@@ -1,0 +1,6 @@
+{
+  "name": "R-10 --ignore-file suppresses findings for components in the operator-supplied allowlist",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; onClick: () => void; };\\n' > before/Button.tsx && printf 'export type ButtonProps = { label: string; };\\n' > after/Button.tsx && printf 'Button\\n' > ignore.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after --ignore-file ignore.txt 2>err.txt && grep -q 'clean' err.txt && echo suppressed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["suppressed"]}
+}

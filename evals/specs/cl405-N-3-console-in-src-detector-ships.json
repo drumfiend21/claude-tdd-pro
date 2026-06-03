@@ -1,0 +1,6 @@
+{
+  "name": "N-3 node detectors: rubric/detectors/console-in-src.sh ships at the §8 N-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/console-in-src.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "C-10 --section evidence --evidence-dir includes the SOC 2 evidence files from the C-9 cross-reference",
+  "command": "mkdir -p ev/CC7.2 && printf 'evidence text' > ev/CC7.2/incident.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --section evidence --emit p.json --evidence-dir ev --commit-sha abc --now 2026-05-25T10:00:00Z && grep -q 'CC7.2' p.json && echo bundled 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bundled"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "E-12 per-rule per-file cache: first invocation against a fresh cache reports cache_status=miss",
+  "command": "printf 'x\\n' > in.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/run-detector.sh\" --rule g-ts-001 --in in.txt --cache --cache-location cache.json --cache-stats 2>err.txt; grep -q '\"cache_status\":\"miss\"' err.txt && echo first_miss 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["first_miss"]}
+}

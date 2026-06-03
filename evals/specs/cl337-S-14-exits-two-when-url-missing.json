@@ -1,0 +1,6 @@
+{
+  "name": "S-14 standards-add exits two when no <url> argument is supplied per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

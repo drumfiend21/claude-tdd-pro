@@ -1,0 +1,6 @@
+{
+  "name": "E-15 ESLint wrap: accepts a rule mapping argument so g-ts-001 → eslint's no-explicit-any et al.",
+  "command": "grep -qE -- \"--rule|RULE|--id\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo rule_mapping 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rule_mapping"]}
+}

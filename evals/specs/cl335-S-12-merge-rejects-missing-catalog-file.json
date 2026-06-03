@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge exits two when the supplied --catalog path does not exist on disk",
+  "command": "printf -- '[]' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog missing.yaml --operator operator.yaml --emit m.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'not found' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

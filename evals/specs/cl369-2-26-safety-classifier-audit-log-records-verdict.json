@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 safety classifier --audit-log appends a jsonl line per decision per the C-4 audit chain",
+  "command": "echo 'safe content' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/customer-agent-safety-classifier.sh\" --agent example --audit-log audit.jsonl --now 2026-05-26T10:00:00Z 2>/dev/null && [ -s audit.jsonl ] && grep -q '\"verdict\":\"allow\"' audit.jsonl && grep -q '\"agent\":\"example\"' audit.jsonl && echo audited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["audited"]}
+}

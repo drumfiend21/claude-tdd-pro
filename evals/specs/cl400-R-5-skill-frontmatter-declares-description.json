@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: frontmatter description explains when to invoke per Claude Code skill convention",
+  "command": "grep -q '^description:' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && echo description_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["description_present"]}
+}

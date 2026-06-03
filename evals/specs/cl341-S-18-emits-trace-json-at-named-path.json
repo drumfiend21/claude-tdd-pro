@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace writes a JSON trace file at the --emit path per the architecture trace shape",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --now 2026-05-25T10:00:00Z --emit trace.json && [ -s trace.json ] && node -e 'JSON.parse(require(\"fs\").readFileSync(\"trace.json\",\"utf8\"))' && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

@@ -1,0 +1,11 @@
+{
+  "name": "X-1 GitHub Actions behavior: rubric-check.yml declares name + on + jobs (executable contract)",
+  "command": "n=0; for k in name: on: jobs:; do grep -qE \"^${k}|^  ${k}\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" && n=$((n+1)); done; [ \"$n\" -eq 3 ] && echo wf_keys 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "wf_keys"
+    ]
+  }
+}

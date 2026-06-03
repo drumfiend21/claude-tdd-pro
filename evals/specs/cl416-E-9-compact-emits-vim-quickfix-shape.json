@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: compact.sh emits vim-quickfix-shape (file:line:col format)",
+  "command": "grep -qE \"file.*line.*col|filePath|file:line\" \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/compact.sh\" && echo quickfix 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["quickfix"]}
+}

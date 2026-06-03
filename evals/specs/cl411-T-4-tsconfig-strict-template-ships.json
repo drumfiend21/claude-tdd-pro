@@ -1,0 +1,6 @@
+{
+  "name": "T-4 tsconfig.strict.json template: templates/tsconfig.strict.json ships at the §7 T-4 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/templates/tsconfig.strict.json\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

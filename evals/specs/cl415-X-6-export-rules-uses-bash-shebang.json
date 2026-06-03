@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: script uses bash shebang",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-1 react review subagents: agents/review-react-a11y.md ships at the §16 R-1 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/review-react-a11y.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

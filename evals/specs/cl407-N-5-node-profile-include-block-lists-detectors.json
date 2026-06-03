@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: include.detectors lists the five N-3 detector scripts per §2.5",
+  "command": "for d in boundary-schema.sh console-in-src.sh fetch-timeout.sh naked-throw.sh supply-chain.sh; do grep -q \"$d\" \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" || { echo missing 1>&2; exit 1; }; done && echo detectors_included 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["detectors_included"]}
+}

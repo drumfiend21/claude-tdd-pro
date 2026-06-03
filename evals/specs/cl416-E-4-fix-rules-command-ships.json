@@ -1,0 +1,6 @@
+{
+  "name": "E-4 auto-fix: commands/fix-rules.sh ships at the §16 E-4 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/fix-rules.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

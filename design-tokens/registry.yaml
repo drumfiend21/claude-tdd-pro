@@ -1,0 +1,115 @@
+# R-9 design-token registry per §26 v1.11.
+#
+# Operator-editable design-system token catalog. Component generator
+# (R-8) consults this registry and refuses to emit component code that
+# references untokenized raw values (hex / magic numbers).
+#
+# Token id naming: <category>.<role>[.<variant>]
+#   category ∈ {color, space, font, radius, shadow, motion, breakpoint}
+#
+# Deprecation: set `deprecated: true` and populate `replaced_by` with
+# the successor token id. O-13 freshness gate auto-demotes any rule
+# referencing a deprecated token to warn-only until the operator
+# migrates the call-site or marks the suppression with E-5 inline
+# justification.
+#
+# Contrast pairs (color tokens only): `contrast_pair: <token-id>` —
+# specifies which background-color token this foreground-color token
+# is validated against by the R-3 a11y-axe detector.
+
+tokens:
+  - id: color.brand.primary
+    value: "#0B5FFF"
+    contrast_pair: color.surface.default
+    deprecated: false
+
+  - id: color.brand.primary-hover
+    value: "#084EDB"
+    contrast_pair: color.surface.default
+    deprecated: false
+
+  - id: color.surface.default
+    value: "#FFFFFF"
+    deprecated: false
+
+  - id: color.surface.muted
+    value: "#F4F6FA"
+    deprecated: false
+
+  - id: color.text.default
+    value: "#0F1116"
+    contrast_pair: color.surface.default
+    deprecated: false
+
+  - id: color.text.muted
+    value: "#5A6478"
+    contrast_pair: color.surface.default
+    deprecated: false
+
+  - id: color.signal.danger
+    value: "#C5253A"
+    contrast_pair: color.surface.default
+    deprecated: false
+
+  - id: color.signal.success
+    value: "#1F8A4C"
+    contrast_pair: color.surface.default
+    deprecated: false
+
+  - id: color.legacy.red
+    value: "#FF0000"
+    contrast_pair: color.surface.default
+    deprecated: true
+    replaced_by: color.signal.danger
+
+  - id: space.0
+    value: "0px"
+    deprecated: false
+
+  - id: space.1
+    value: "4px"
+    deprecated: false
+
+  - id: space.2
+    value: "8px"
+    deprecated: false
+
+  - id: space.3
+    value: "12px"
+    deprecated: false
+
+  - id: space.4
+    value: "16px"
+    deprecated: false
+
+  - id: space.6
+    value: "24px"
+    deprecated: false
+
+  - id: space.8
+    value: "32px"
+    deprecated: false
+
+  - id: font.size.sm
+    value: "14px"
+    deprecated: false
+
+  - id: font.size.md
+    value: "16px"
+    deprecated: false
+
+  - id: font.size.lg
+    value: "20px"
+    deprecated: false
+
+  - id: radius.sm
+    value: "4px"
+    deprecated: false
+
+  - id: radius.md
+    value: "8px"
+    deprecated: false
+
+  - id: radius.lg
+    value: "12px"
+    deprecated: false

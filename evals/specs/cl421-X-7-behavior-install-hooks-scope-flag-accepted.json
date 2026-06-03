@@ -1,0 +1,11 @@
+{
+  "name": "X-7 installable hooks behavior: --scope user|project accepted (§23 documented surface)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" --scope project --dry-run 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo scope_ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "scope_ok"
+    ]
+  }
+}

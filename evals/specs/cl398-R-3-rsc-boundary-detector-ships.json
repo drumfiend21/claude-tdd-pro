@@ -1,0 +1,6 @@
+{
+  "name": "R-3 react detectors: rubric/detectors/rsc-boundary.sh ships at the §9 R-3 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rsc-boundary.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

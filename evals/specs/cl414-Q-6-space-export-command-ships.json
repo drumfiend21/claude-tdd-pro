@@ -1,0 +1,6 @@
+{
+  "name": "Q-6 privacy posture: commands/space-export.sh ships at the §10 Q-6 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

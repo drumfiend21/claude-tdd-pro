@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: leading // rubric-disable-next-line <rule-id> suppresses the violation on the next line",
+  "command": "printf '// rubric-disable-next-line no-eval -- legacy\\neval(\"x\");\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo next_line_suppressed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["next_line_suppressed"]}
+}

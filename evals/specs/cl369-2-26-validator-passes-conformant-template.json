@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 validator passes a conformant customer-agent template (all five fields present)",
+  "command": "mkdir -p custom && printf -- '---\\nname: ok\\ngrounding_sources:\\n  - rag\\nrefusal_template: \"I do not have grounding\"\\nper_turn_cost_target: 1000\\naudit_log: log.jsonl\\nsafety_classifier_hook: hook.sh\\n---\\nbody\\n' > custom/ok.md && bash \"$CLAUDE_PLUGIN_ROOT/agents/_customer/validate.sh\" --dir custom 2>err.txt && grep -q 'PASS ok.md' err.txt && grep -q 'total_fail=0' err.txt && echo passed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["passed"]}
+}

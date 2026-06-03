@@ -1,0 +1,6 @@
+{
+  "name": "T-2 eight ts rules: g-ts-006 strict-tsconfig-flags ships under typescript/handbook.yaml per the §7 T-2 table",
+  "command": "grep -q 'id: g-ts-006' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/typescript/handbook.yaml\" && echo t006_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t006_placed"]}
+}

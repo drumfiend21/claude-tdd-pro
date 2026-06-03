@@ -1,0 +1,9 @@
+{
+  "name": "W-10 concurrent-cl skill ships at skills/concurrent-cl/SKILL.md per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/skills/concurrent-cl/SKILL.md\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

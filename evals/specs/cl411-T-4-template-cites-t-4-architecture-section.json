@@ -1,0 +1,6 @@
+{
+  "name": "T-4 tsconfig.strict.json template: header comment cites T-4 so the template's audit trace is preserved",
+  "command": "grep -q 'T-4' \"$CLAUDE_PLUGIN_ROOT/templates/tsconfig.strict.json\" && echo t4_cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["t4_cited"]}
+}

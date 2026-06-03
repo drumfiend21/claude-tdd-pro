@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: rubric-rule schema ships at schemas/rubric-rule.schema.json per §2.1 lock",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/schemas/rubric-rule.schema.json\" ] && node -e 'JSON.parse(require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/schemas/rubric-rule.schema.json\",\"utf8\"))' && echo locked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["locked"]}
+}

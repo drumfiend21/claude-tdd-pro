@@ -1,0 +1,9 @@
+{
+  "name": "audit-pack-emit json bundle is byte-identical when run twice with the same commit-sha and generated-at per §2.24 reproducibility",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format json --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out1 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack-emit.sh\" --format json --commit-sha abc123 --generated-at 2026-05-25T00:00:00Z --out-dir out2 2>/dev/null && diff out1/abc123-2026-05-25T00:00:00Z/bundle.json out2/abc123-2026-05-25T00:00:00Z/bundle.json && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

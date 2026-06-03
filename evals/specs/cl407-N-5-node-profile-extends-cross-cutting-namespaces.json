@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: profiles/node.yaml extends owasp/google/slsa cross-cutting source-namespaces per the §8 N-2 table",
+  "command": "grep -q 'owasp:asvs' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'google:eng-practices' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'slsa:slsa-v1' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo cross_cutting_extended 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cross_cutting_extended"]}
+}

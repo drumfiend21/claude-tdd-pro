@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric ships at commands/measure-rubric.sh per the literal F-2 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

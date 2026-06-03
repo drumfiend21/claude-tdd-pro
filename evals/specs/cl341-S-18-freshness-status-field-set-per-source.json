@@ -1,0 +1,6 @@
+{
+  "name": "S-18 consumption trace populates freshness_at_generation per consulted source per §2.17 enum",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && printf '2026-05-25T08:00:00Z' > .claude-tdd-pro/standards-last-fetch/google-tsguide.txt && bash \"$CLAUDE_PLUGIN_ROOT/standards/consumption-trace.sh\" --commit-sha abc123 --consulted-standards google-tsguide --now 2026-05-25T10:00:00Z --emit trace.json && grep -q 'fresh-within-fetch-frequency' trace.json && echo fresh 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["fresh"]}
+}

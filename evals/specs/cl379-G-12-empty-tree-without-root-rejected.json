@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: missing --root <dir> is a usage error with exit 2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && echo usage_error 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage_error"]}
+}

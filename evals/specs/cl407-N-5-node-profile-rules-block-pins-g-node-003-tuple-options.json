@@ -1,0 +1,6 @@
+{
+  "name": "N-5 node profile registration: rules: block pins g-node-003 tuple options (default_timeout_ms, allow_no_timeout_for) per §8 N-2 options table",
+  "command": "grep -q 'g-node-003' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'default_timeout_ms' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && grep -q 'allow_no_timeout_for' \"$CLAUDE_PLUGIN_ROOT/profiles/node.yaml\" && echo timeout_pinned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["timeout_pinned"]}
+}

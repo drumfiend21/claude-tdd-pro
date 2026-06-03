@@ -1,0 +1,6 @@
+{
+  "name": "P-6 prompt-promote --override-regression --reason is accepted to bypass regression block",
+  "command": "mkdir -p prompts/eval-history/test-agent && printf '%s' '{\"eval_pass_rate\":0.5}' > prompts/eval-history/test-agent/2.0.0.json && printf -- '- id: test-agent\\n  versions:\\n    - version: 1.0.0, eval_pass_rate: 0.9, status: active\\n    - version: 2.0.0, eval_pass_rate: 0.5, status: candidate\\n' > prompts/registry.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/prompt-promote.sh\" test-agent 2.0.0 --override-regression --reason 'compliance update' 2>err.txt && echo overridden 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["overridden"]}
+}

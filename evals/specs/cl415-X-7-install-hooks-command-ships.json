@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: commands/install-hooks.sh ships at the §14 X-7 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-5 react-component-build skill: SKILL.md references the three R-4 templates so the skill points contributors at scaffolding",
+  "command": "grep -q 'vitest.react.config.ts' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && grep -q 'playwright.config.ts' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && grep -q 'size-limit.config.js' \"$CLAUDE_PLUGIN_ROOT/skills/react-component-build/SKILL.md\" && echo templates_cited 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["templates_cited"]}
+}

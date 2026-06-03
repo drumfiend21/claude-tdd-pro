@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add ships at commands/component-add.sh per §26 v1.11",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

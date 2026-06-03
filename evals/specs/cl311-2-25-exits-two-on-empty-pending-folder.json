@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity exits two when the --pending folder contains no .json spec files",
+  "command": "mkdir -p pending/F-4-empty arch && printf 'F-4 minimal\\n' > arch/a.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-empty --arch arch/a.md 2>out.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'no specs' out.txt && echo nospecs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["nospecs"]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Each S-1 catalog entry declares the six operator-facing fields id name url tier applies_to fetch_frequency per §2.6 schema",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/standards/sources.yaml\",\"utf8\");const blocks=y.split(/^- id: /m).slice(1);for(const b of blocks){for(const k of [\"name\",\"url\",\"tier\",\"applies_to\",\"fetch_frequency\"]){if(!new RegExp(\"^\\\\s*\"+k+\":\",\"m\").test(b))process.exit(1);}}process.exit(0)' && echo schema 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["schema"]}
+}

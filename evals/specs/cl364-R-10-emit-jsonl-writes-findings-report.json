@@ -1,0 +1,6 @@
+{
+  "name": "R-10 --emit writes a jsonl report with one finding per line",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; onClick: () => void; };\\n' > before/Button.tsx && printf 'export type ButtonProps = { label: string; };\\n' > after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after --emit report.jsonl 2>err.txt && [ -s report.jsonl ] && node -e 'const lines=require(\"fs\").readFileSync(\"report.jsonl\",\"utf8\").split(\"\\n\").filter(Boolean);for(const l of lines)JSON.parse(l);process.stdout.write(\"n=\"+lines.length)' > out.txt && grep -q 'n=1' out.txt && echo emitted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["emitted"]}
+}

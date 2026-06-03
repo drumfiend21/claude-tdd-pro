@@ -1,0 +1,6 @@
+{
+  "name": "G-4 migrate-rubric: --dry-run reports the rules→files plan to stderr and does not archive the original RUBRIC.yaml",
+  "command": "mkdir -p root/rubric && printf 'rules:\\n  - id: g-google-001\\n    provenance:\\n      - source: google-tsguide\\n' > root/rubric/RUBRIC.yaml && bash \"$CLAUDE_PLUGIN_ROOT/scripts/migrate-rubric-to-source-folders.sh\" --root \"$PWD/root\" --emit-tree \"$PWD/out\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -f root/rubric/RUBRIC.yaml ] && [ ! -f root/rubric/RUBRIC.legacy.yaml.archived ] && grep -q 'rules -> ' err.txt && echo planned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["planned"]}
+}

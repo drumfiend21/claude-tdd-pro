@@ -1,0 +1,6 @@
+{
+  "name": "O-0 baseline: F-2 measure-rubric emits per-rule token cost field cost_tokens per the F-2.6 token-telemetry clause",
+  "command": "git init -q repo && cd repo && git -c user.email=x@y -c user.name=x commit --allow-empty -q -m c1 && bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 1 --format json >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));const r=Object.values(j.runs_per_rule)[0];process.exit(typeof r.cost_tokens===\"number\"?0:1)' && echo telemetered 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["telemetered"]}
+}

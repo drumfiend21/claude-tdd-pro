@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge-registry script ships at standards/merge-registry.sh per the architecture-named path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: library.yaml description references T-2 + g-ts-NNN so audit traceability is preserved",
+  "command": "grep -q 'g-ts-' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && echo references_table 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["references_table"]}
+}

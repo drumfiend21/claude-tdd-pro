@@ -1,0 +1,6 @@
+{
+  "name": "T-1 types review subagent: review-types declares prompt_migration_status per the P-3 lifecycle contract",
+  "command": "grep -q '^prompt_migration_status:' \"$CLAUDE_PLUGIN_ROOT/agents/review-types.md\" && echo migration_status_set 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["migration_status_set"]}
+}

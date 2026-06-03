@@ -1,0 +1,6 @@
+{
+  "name": "C-18 single-control mode reports no-fetch-record when no marker file exists for the framework",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/control-mapping-gate.sh\" --framework never-fetched --control-id CC1.1 --now 2026-05-25T10:00:00Z --emit-status s.json; grep -q 'no-fetch-record' s.json && echo never 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["never"]}
+}

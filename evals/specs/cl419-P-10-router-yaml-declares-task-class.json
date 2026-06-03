@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: routes declare task_class field",
+  "command": "grep -qE \"task_class:\" \"$CLAUDE_PLUGIN_ROOT/prompts/router.yaml\" && echo task_class 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["task_class"]}
+}

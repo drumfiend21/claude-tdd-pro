@@ -1,0 +1,9 @@
+{
+  "name": "L-6 aggregator --resolve-consortia expands consortium reviewer affiliation cache to member_orgs for org-count semantics",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/affiliation-cache && printf '%s' '{\"member_orgs\":[\"jpmorgan\",\"stripe\",\"capitalone\"]}' > .claude-tdd-pro/pr-corpus/affiliation-cache/finos.json && printf '%s' '{\"pattern_id\":\"q\",\"supporting_prs\":[{\"reviewer\":\"finos\",\"tier\":1},{\"reviewer\":\"finos\",\"tier\":1},{\"reviewer\":\"finos\",\"tier\":1}]}' > p.json && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/aggregate-evidence.sh\" --pattern p.json --resolve-consortia --emit-fields 2>err.txt && grep -q '\"organizations_count\":3' err.txt && echo expanded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["expanded"]
+  }
+}

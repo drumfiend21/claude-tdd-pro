@@ -1,0 +1,6 @@
+{
+  "name": "P-2 dataset entries mark bootstrap_seed: true when bootstrapped from O-1 hand-graded inputs per the architecture",
+  "command": "grep -q '\"bootstrap_seed\":true' \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents/review-compliance.jsonl\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

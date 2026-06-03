@@ -1,0 +1,6 @@
+{
+  "name": "X-6 IDE rules export: supports --format eslint",
+  "command": "grep -q \"eslint)\" \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" && echo eslint_case 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["eslint_case"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric --dry-run short-circuits and reports the iteration count without invoking any detector per the §2.14 dry-run contract",
+  "command": "git init -q repo && cd repo && bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 5 --dry-run 2>err.txt && grep -q 'dry-run' err.txt && grep -q 'iterating 5 commits' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["skipped"]
+  }
+}

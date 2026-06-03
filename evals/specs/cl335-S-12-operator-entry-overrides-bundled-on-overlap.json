@@ -1,0 +1,6 @@
+{
+  "name": "S-12 merge overrides bundled catalog values when the operator file declares the same id (operator wins per §2.6)",
+  "command": "printf -- '- id: shared\\n  url: https://bundled.com\\n  tier: 1\\n' > catalog.yaml && printf -- '- id: shared\\n  url: https://operator.com\\n' > operator.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/merge-registry.sh\" --catalog catalog.yaml --operator operator.yaml --emit merged.yaml && grep -q 'url: https://operator.com' merged.yaml && ! grep -q 'url: https://bundled.com' merged.yaml && echo overridden 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["overridden"]}
+}

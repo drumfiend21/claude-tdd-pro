@@ -1,0 +1,6 @@
+{
+  "name": "C-15 freshness gate exits one with never-fetched stale signal when no marker exists",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/compliance/freshness-gate.sh\" --framework-id soc2-tsc --fetch-frequency daily --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'never fetched' err.txt && echo never 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["never"]}
+}

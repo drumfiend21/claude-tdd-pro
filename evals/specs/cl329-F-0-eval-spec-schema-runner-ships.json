@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: eval spec schema runtime is evals/runner.sh per §2.4 eval spec schema lock",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

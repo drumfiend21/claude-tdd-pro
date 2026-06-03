@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric --format json cross-references control coverage via controls_satisfied per the F-2 control-coverage cross-reference clause",
+  "command": "git init -q repo && cd repo && git -c user.email=x@y -c user.name=x commit --allow-empty -q -m c1 && bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --n 1 --format json >out.json 2>/dev/null && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out.json\",\"utf8\"));const r=Object.values(j.runs_per_rule)[0];process.exit(Array.isArray(r.controls_satisfied)&&r.controls_satisfied.length>0?0:1)' && echo controls 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["controls"]
+  }
+}

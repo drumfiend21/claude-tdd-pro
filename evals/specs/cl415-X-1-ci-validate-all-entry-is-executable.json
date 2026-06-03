@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: ci-validate-all.sh is executable",
+  "command": "[ -x \"$CLAUDE_PLUGIN_ROOT/.github/workflows/ci-validate-all.sh\" ] && echo executable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["executable"]}
+}

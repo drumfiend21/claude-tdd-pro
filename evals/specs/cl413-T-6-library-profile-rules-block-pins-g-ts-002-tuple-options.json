@@ -1,0 +1,6 @@
+{
+  "name": "T-6 ts profile registration: rules block pins g-ts-002 tuple options (allow_with_comment_pattern, allowed_for) per §7 T-2 options table",
+  "command": "grep -q 'g-ts-002' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && grep -q 'allowed_for' \"$CLAUDE_PLUGIN_ROOT/profiles/library.yaml\" && echo cast_pinned 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["cast_pinned"]}
+}

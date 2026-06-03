@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 safety classifier allows clean product-catalog response and exits zero",
+  "command": "echo 'The blue widget is in stock at $19.99 per catalog_record_id=42.' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/customer-agent-safety-classifier.sh\" --agent example 2>err.txt && grep -q 'verdict=allow' err.txt && echo allowed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["allowed"]}
+}

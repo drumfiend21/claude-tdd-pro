@@ -1,0 +1,6 @@
+{
+  "name": "E-5 inline suppression: --report-unused-disable-directives flags directives that did not match any violation so F-4 can track repetition",
+  "command": "printf '// rubric-disable-next-line no-eval -- unused dir\\nlet x = 1;\\n' > in.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/inline-suppression.sh\" --rule no-eval --in in.js --report-unused-disable-directives 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q '\\[unused-disable-directive\\]' err.txt && echo unused_flagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["unused_flagged"]}
+}

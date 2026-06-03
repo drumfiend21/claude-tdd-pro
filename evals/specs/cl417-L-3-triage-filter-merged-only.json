@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: includes merged PRs only",
+  "command": "grep -qE \"merged|merge\" \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" && echo merged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["merged"]}
+}

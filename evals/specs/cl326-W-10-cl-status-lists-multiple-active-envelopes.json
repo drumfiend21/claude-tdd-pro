@@ -1,0 +1,9 @@
+{
+  "name": "W-10 /cl-status lists multiple active envelopes when several CLs are running concurrently per the architecture",
+  "command": "mkdir -p sessions && for i in cl-100 cl-101 cl-102; do printf '%s' \"{\\\"session_id\\\":\\\"$i\\\",\\\"phases\\\":[\\\"$i\\\"],\\\"branch\\\":\\\"$i\\\"}\" > \"sessions/$i.json\"; done && bash \"$CLAUDE_PLUGIN_ROOT/commands/cl-status.sh\" --sessions-dir sessions 2>out.txt && grep -q 'session_id=cl-100' out.txt && grep -q 'session_id=cl-101' out.txt && grep -q 'session_id=cl-102' out.txt && echo three 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["three"]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-3 /space-report: uses bash shebang so the command is invocable as a script",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/commands/space-report.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

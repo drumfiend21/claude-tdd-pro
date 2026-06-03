@@ -1,0 +1,9 @@
+{
+  "name": "W-10 /cl-status --format=tui emits a bracketed per-session summary line per the architecture format option",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"cl-100\",\"phases\":[\"E\"],\"branch\":\"feat/x\"}' > sessions/cl-100.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cl-status.sh\" --format=tui --sessions-dir sessions 2>out.txt && grep -q '\\[cl-status\\]' out.txt && grep -q 'session_id=cl-100' out.txt && echo tui 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["tui"]
+  }
+}

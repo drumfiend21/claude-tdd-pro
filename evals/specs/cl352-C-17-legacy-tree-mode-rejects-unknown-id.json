@@ -1,0 +1,6 @@
+{
+  "name": "C-17 legacy mode exits non-zero when the supplied id is not found in --tree",
+  "command": "mkdir -p tree && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" --id never-existed --tree tree 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q 'not found' err.txt && echo unknown 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["unknown"]}
+}

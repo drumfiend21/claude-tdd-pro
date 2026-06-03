@@ -1,0 +1,6 @@
+{
+  "name": "R-3 react detectors: every R-3 detector honors the --paths flag per the §2.2 detector contract",
+  "command": "for d in a11y-axe bundle-budget rsc-boundary exhaustive-deps; do grep -q -- '--paths' \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/$d.sh\" || { echo missing 1>&2; exit 1; }; done && echo all_paths 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_paths"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-9 risk-tiered profile: SKILL.md mentions profile or signal vocabulary",
+  "command": "grep -qiE \"profile|signal|scan\" \"$CLAUDE_PLUGIN_ROOT/skills/profile-suggest/SKILL.md\" && echo profile 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["profile"]}
+}

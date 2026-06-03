@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: CLAUDE_TDD_PRO_BOOTSTRAP_BREAK simulates a broken detector and the bootstrap reports the failure",
+  "command": "CLAUDE_TDD_PRO_BOOTSTRAP_BREAK=g-ts-001 bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals 2>err.txt; rc=$?; grep -q 'bootstrap eval failed' err.txt && grep -q 'detector broken' err.txt && echo break_detected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["break_detected"]}
+}

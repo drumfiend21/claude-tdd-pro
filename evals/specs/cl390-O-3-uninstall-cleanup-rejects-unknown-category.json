@@ -1,0 +1,6 @@
+{
+  "name": "O-3 plugin lifecycle: uninstall-cleanup rejects unknown --category values with exit 2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/uninstall-cleanup.sh\" --category everything 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'unknown category' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-7 react profile registration: profiles/react.yaml extends react: source-namespaces (rsc-rfc, react-docs, nextjs-docs)",
+  "command": "grep -q 'react:rsc-rfc' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && grep -q 'react:react-docs' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && grep -q 'react:nextjs-docs' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && echo r_ns_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r_ns_present"]}
+}

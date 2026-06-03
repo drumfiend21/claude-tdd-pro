@@ -1,0 +1,6 @@
+{
+  "name": "R-10 detector flags prop_removed when a prop in before is missing in after",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; onClick: () => void; };\\n' > before/Button.tsx && printf 'export type ButtonProps = { label: string; };\\n' > after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'kind=prop_removed' err.txt && grep -q 'prop=onClick' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["flagged"]}
+}

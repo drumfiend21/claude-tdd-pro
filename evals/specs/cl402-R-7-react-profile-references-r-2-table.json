@@ -1,0 +1,6 @@
+{
+  "name": "R-7 react profile registration: react.yaml description references all 10 g-react-* rules (R-2) so audit traceability is preserved",
+  "command": "grep -q 'g-react-' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && grep -q 'R-2' \"$CLAUDE_PLUGIN_ROOT/profiles/react.yaml\" && echo r2_referenced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r2_referenced"]}
+}

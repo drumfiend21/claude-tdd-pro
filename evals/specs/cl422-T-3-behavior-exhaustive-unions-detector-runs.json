@@ -1,0 +1,11 @@
+{
+  "name": "T-3 TypeScript detectors: rubric/detectors/exhaustive-unions.sh runs with --help",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/exhaustive-unions.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

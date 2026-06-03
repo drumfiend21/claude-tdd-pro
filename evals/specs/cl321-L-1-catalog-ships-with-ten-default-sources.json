@@ -1,0 +1,9 @@
+{
+  "name": "L-1 PR source catalog ships at pr-corpus/PR-SOURCES-DEFAULT.yaml with exactly the 10 default sources enumerated in the architecture",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" ] && node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/pr-corpus/PR-SOURCES-DEFAULT.yaml\",\"utf8\");const ids=(y.match(/^  - id: /mg)||[]).length;process.exit(ids===10?0:1)' && echo ten 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ten"]
+  }
+}

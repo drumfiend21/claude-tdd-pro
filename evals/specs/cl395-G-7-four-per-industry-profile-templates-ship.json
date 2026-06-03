@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: four per-industry profile templates ship (financial, government, healthcare, eu-financial) per §17 G-7",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/profiles/financial.yaml\" ] && [ -s \"$CLAUDE_PLUGIN_ROOT/profiles/government.yaml\" ] && [ -s \"$CLAUDE_PLUGIN_ROOT/profiles/healthcare.yaml\" ] && [ -s \"$CLAUDE_PLUGIN_ROOT/profiles/eu-financial.yaml\" ] && echo industry_templates 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["industry_templates"]}
+}

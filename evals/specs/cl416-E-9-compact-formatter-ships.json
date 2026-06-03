@@ -1,0 +1,6 @@
+{
+  "name": "E-9 ESLint formatters: compact.sh ships",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/formatters/compact.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

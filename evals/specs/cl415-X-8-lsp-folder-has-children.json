@@ -1,0 +1,6 @@
+{
+  "name": "X-8 LSP surface: lsp/ folder is not empty",
+  "command": "n=$(ls -A \"$CLAUDE_PLUGIN_ROOT/lsp\" 2>/dev/null | wc -l | tr -d \" \"); [ \"$n\" -gt 0 ] && echo nonempty 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["nonempty"]}
+}

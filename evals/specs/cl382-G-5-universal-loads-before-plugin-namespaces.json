@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: _universal/*.yaml loads before plugin namespace folders per the §17 G-5 ordering",
+  "command": "mkdir -p tree/_universal tree/google && printf 'source:\\n  id: u\\nrules:\\n  - id: g-universal-001\\n' > tree/_universal/u.yaml && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json --emit-load-order 2>err.txt; idx_u=$(echo \"$(grep -oE '\"[^\"]*_universal/u.yaml\"' err.txt)\" | head -1); idx_g=$(echo \"$(grep -oE '\"[^\"]*google/g.yaml\"' err.txt)\" | head -1); [ -n \"$idx_u\" ] && [ -n \"$idx_g\" ] && echo universal_first 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["universal_first"]}
+}

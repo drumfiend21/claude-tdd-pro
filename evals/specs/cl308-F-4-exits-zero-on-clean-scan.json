@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan exits zero and writes an empty report when no `rubric: ignore` and no `--no-verify` bypasses are found",
+  "command": "mkdir -p src && printf 'function f() { return 1; }\\n' > src/clean.js && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --paths src --out report.jsonl 2>err.txt && [ ! -s report.jsonl ] && echo clean 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["clean"]
+  }
+}

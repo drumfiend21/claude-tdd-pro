@@ -1,0 +1,6 @@
+{
+  "name": "§2.26 example template declares all five required fields (grounding_sources, refusal_template, per_turn_cost_target, audit_log, safety_classifier_hook)",
+  "command": "for k in 'grounding_sources:' 'refusal_template:' 'per_turn_cost_target:' 'audit_log:' 'safety_classifier_hook:'; do grep -q \"^$k\" \"$CLAUDE_PLUGIN_ROOT/agents/_customer/example-product-helper.md\" || exit 1; done; echo all_five 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["all_five"]}
+}

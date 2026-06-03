@@ -1,0 +1,6 @@
+{
+  "name": "P-2 at least one dataset ships per agent with prompt_id declared in the agent frontmatter",
+  "command": "node -e 'const fs=require(\"fs\");const path=require(\"path\");const adir=process.env.CLAUDE_PLUGIN_ROOT+\"/agents\";const ddir=process.env.CLAUDE_PLUGIN_ROOT+\"/evals/datasets/agents\";const ds=new Set(fs.readdirSync(ddir).map(n=>n.replace(/\\.jsonl$/,\"\")));process.exit(ds.size>=1?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

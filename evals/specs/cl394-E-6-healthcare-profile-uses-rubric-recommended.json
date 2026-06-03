@@ -1,0 +1,6 @@
+{
+  "name": "E-6 recommended sets: profiles/healthcare.yaml uses extends: rubric:recommended per §16 E-6",
+  "command": "grep -q 'rubric:recommended' \"$CLAUDE_PLUGIN_ROOT/profiles/healthcare.yaml\" && echo healthcare_extends 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["healthcare_extends"]}
+}

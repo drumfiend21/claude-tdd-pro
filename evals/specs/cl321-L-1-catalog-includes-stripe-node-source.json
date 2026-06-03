@@ -1,0 +1,9 @@
+{
+  "name": "L-1 catalog includes the stripe-node source with source_class=financial-industry tier=1 per architecture",
+  "command": "grep -A1 'id: stripe-node' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" | grep -q 'financial-industry' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

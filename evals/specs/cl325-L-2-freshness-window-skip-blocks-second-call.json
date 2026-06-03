@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher honors --freshness-window and reports fresh_skip when the last fetch was inside the window per L-19 daily-fresh gate",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-25T09:00:00Z' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb-consumerfinance.txt && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --freshness-window 24h --now 2026-05-25T10:00:00Z 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'fresh_skip' err.txt && grep -q 'window=24h' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["blocked"]
+  }
+}

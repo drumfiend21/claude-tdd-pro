@@ -1,0 +1,6 @@
+{
+  "name": "Q-1 SPACE config: space/config.yaml ships at the §10 Q-1 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/space/config.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

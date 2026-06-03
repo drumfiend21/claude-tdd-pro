@@ -1,0 +1,6 @@
+{
+  "name": "N-1 node review subagents: review-node-boundaries body documents the trust-boundary focus per its §8 N-1 charter",
+  "command": "grep -qiE 'trust.boundary|untrusted input|seam|validation' \"$CLAUDE_PLUGIN_ROOT/agents/review-node-boundaries.md\" && echo boundary_focus 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["boundary_focus"]}
+}

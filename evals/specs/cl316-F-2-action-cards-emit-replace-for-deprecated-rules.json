@@ -1,0 +1,9 @@
+{
+  "name": "/measure-rubric --action-cards emits REPLACE: <old> -> <new> for deprecated rules with replaced_by populated per E-10 cross-reference",
+  "command": "mkdir -p tree && printf 'name: src\\nrules:\\n  - id: old-rule\\n    deprecated: true\\n    replaced_by: [\"new-rule\"]\\n' > tree/r.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/measure-rubric.sh\" --tree tree --action-cards 2>err.txt && grep -q 'REPLACE: old-rule -> new-rule' err.txt && echo replaced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["replaced"]
+  }
+}

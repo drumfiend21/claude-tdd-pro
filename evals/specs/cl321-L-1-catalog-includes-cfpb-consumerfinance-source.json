@@ -1,0 +1,9 @@
+{
+  "name": "L-1 catalog includes the cfpb-consumerfinance source with source_class=federal-financial-regulator tier=1 per architecture",
+  "command": "grep -A1 'id: cfpb-consumerfinance' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" | grep -q 'federal-financial-regulator' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

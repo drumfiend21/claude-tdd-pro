@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: eval spec schema requires name + command + expect.exit_code per §2.4 (verified by inspecting the runner source)",
+  "command": "grep -q 'name' \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" && grep -q 'command' \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" && grep -qE 'exit_code|expected' \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" && echo locked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["locked"]}
+}

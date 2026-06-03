@@ -1,0 +1,6 @@
+{
+  "name": "G-12 validate-all: walk skips _meta/ folder (substrate, not source files)",
+  "command": "mkdir -p tree/_meta tree/google && printf 'not yaml at all\\n' > tree/_meta/INDEX.md && printf 'source:\\n  id: x\\nrules: []\\n' > tree/google/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -q '\"files_total\":1' err.txt && echo meta_skipped 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["meta_skipped"]}
+}

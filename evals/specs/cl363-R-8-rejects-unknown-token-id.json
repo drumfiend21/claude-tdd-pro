@@ -1,0 +1,6 @@
+{
+  "name": "R-8 component-add rejects a --default-color token id that is not present in the registry",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/component-add.sh\" --name Button --default-color color.never.existed 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'not in registry' err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

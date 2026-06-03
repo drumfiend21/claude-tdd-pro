@@ -1,0 +1,6 @@
+{
+  "name": "G-9 sync with operator registries: pr-source-add source_class gold-standard-process routes to linux-foundation/ per §17 G-9",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" --github acme/repo --id lf-pr --source-class gold-standard-process --tree \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s tree/linux-foundation/lf-pr.yaml ] && echo gold_routed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["gold_routed"]}
+}

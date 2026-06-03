@@ -1,0 +1,6 @@
+{
+  "name": "C-10 audit-pack exits non-zero when --emit is omitted per the entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --section aibom 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && echo usage 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["usage"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-3 pre-commit adapter: hooks/pre-commit hook script ships",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/hooks/pre-commit\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

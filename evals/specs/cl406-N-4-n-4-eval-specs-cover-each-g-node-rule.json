@@ -1,0 +1,6 @@
+{
+  "name": "N-4 node eval fixtures: evals/specs/ holds at least one spec citing each g-node-NNN rule for the N-4 eval coverage",
+  "command": "missing=0; for i in 1 2 3 4 5 6 7 8 9 10; do id=g-node-$(printf '%03d' $i); n=$(grep -l \"$id\" \"$CLAUDE_PLUGIN_ROOT/evals/specs\"/*.json 2>/dev/null | wc -l | tr -d ' '); [ \"${n:-0}\" -ge 1 ] || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo every_rule_covered 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["every_rule_covered"]}
+}

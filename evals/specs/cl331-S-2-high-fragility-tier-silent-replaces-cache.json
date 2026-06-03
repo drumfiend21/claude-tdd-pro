@@ -1,0 +1,6 @@
+{
+  "name": "S-2 high-fragility-tier silent-replace strategy overwrites the cache file with fresh upstream content per the architecture",
+  "command": "mkdir -p cache && printf 'old' > cache/x.html && printf '#!/usr/bin/env bash\\necho \"new content fresh\"\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --source-id x --fragility-tier high --strategy silent-replace --upstream-stub ./up.sh --cache cache && grep -q 'new content fresh' cache/x.html && echo replaced 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["replaced"]}
+}

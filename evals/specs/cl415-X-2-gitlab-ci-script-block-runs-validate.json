@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: script block executes the validate entry",
+  "command": "grep -qE \"^[[:space:]]*-[[:space:]]*bash.*ci-validate\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo script_runs 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["script_runs"]}
+}

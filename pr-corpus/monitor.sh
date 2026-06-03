@@ -27,7 +27,7 @@ done
 
 GATE_VAL=$(GATE="$GATE" node -e 'const j=JSON.parse(require("fs").readFileSync(process.env.GATE,"utf8"));process.stdout.write(j.gate||"unknown")')
 if [[ "$GATE_VAL" != "pass" ]]; then
-  echo "monitor: monitor_blocked gate=$GATE_VAL (quality-eval gate must report gate=pass; run /pr-quality-eval first)" >&2
+  echo "monitor: monitor_blocked quality_eval_gate=$GATE_VAL (quality-eval gate must report gate=pass; run /pr-quality-eval first)" >&2
   exit 2
 fi
 

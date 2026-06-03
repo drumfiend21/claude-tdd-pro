@@ -1,0 +1,11 @@
+{
+  "name": "directory layout: the canonical 17 namespace directories (14 default + `_operator`/`_community`/`_meta`) are present at the directory root per §17",
+  "command": "root=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"; expected='google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory _universal _operator _community _meta'; missing=0; for d in $expected; do test -d \"$root/$d\" || { echo \"MISSING $d\" 1>&2; missing=1; }; done; [ \"$missing\" -eq 0 ] && echo ok 1>&2 || exit 1",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ok"
+    ]
+  }
+}

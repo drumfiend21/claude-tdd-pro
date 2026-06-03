@@ -1,0 +1,6 @@
+{
+  "name": "P-10 runtime model router: rejects --model values outside haiku|sonnet|opus",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/router-set.sh\" --task-class x --model nonsense 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q nonsense err.txt && echo rejected 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rejected"]}
+}

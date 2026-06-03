@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: g-react-001 RSC boundary integrity ships under react/rsc-rfc.yaml per the §9 R-2 table",
+  "command": "grep -q 'id: g-react-001' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/react/rsc-rfc.yaml\" && echo r001_placed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["r001_placed"]}
+}

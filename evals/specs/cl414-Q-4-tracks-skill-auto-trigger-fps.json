@@ -1,0 +1,6 @@
+{
+  "name": "Q-4 friction tracker: records skill events via --skill",
+  "command": "grep -q -- \"--skill\\|SKILL\" \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" && echo skill 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["skill"]}
+}

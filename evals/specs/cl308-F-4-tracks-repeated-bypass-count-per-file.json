@@ -1,0 +1,9 @@
+{
+  "name": "drift-detection scan tracks repeated bypass count per source file across multiple offending lines",
+  "command": "mkdir -p src && printf 'a // rubric: ignore\\nb // rubric: ignore\\nc // rubric: ignore\\n' > src/repeat.js && bash \"$CLAUDE_PLUGIN_ROOT/skills/drift-detection/scan.sh\" --paths src --out report.jsonl 2>err.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -q '\"count\":3' report.jsonl && grep -q 'src/repeat.js' report.jsonl && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

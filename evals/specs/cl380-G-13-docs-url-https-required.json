@@ -1,0 +1,8 @@
+{
+  "name": "G-13 eslint compliance: docs_url must use the https:// scheme per E-8; http:// is rejected",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-eslint-compliance.sh\" \"$PWD/file.yaml\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'docs_url must use https://' err.txt && echo https_only 1>&2",
+  "setup": [
+    "printf 'source:\\n  id: src-1\\nrules:\\n  - {id: g-x-001, name: x, description: x, detector: x, type: problem, fixable: null, has_suggestions: false, deprecated: false, replaced_by: [], docs_url: http://x.com, requires_type_checking: false, recommended: true, options_schema: {}, messages: {default: x}, severity: P1, version: 1.0.0, semver: 1.0.0, rule_state: warn-only, provenance: []}\\n' > file.yaml"
+  ],
+  "expect": {"exit_code": 0, "stderr_contains": ["https_only"]}
+}

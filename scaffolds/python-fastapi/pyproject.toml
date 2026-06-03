@@ -1,0 +1,8 @@
+# O-12 python-fastapi application scaffold per §13 — FastAPI starter
+# pre-wired with the TDD Pro plugin (rubric runner + hooks + standards).
+[project]
+name = "python-fastapi-scaffold"
+version = "0.1.0"
+description = "FastAPI starter with TDD Pro plugin wiring"
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.115", "uvicorn>=0.30"]

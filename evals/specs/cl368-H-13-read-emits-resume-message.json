@@ -1,0 +1,6 @@
+{
+  "name": "H-13 --read emits a resume message to stderr with parent_session_id and next_action per §2.27",
+  "command": "H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --write --session-id cl-302 --parent-session-id cl-301 --parent-cl-id cl-301 --current-phase F --context-summary 'mid' --next-action 'resume step 7' --now 2026-05-25T10:00:00Z 2>/dev/null && H13_ARTIFACT_DIR=art bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-continuity.sh\" --read --session-id cl-302 2>err.txt && grep -q 'resume parent_session_id=cl-301' err.txt && grep -q 'next_action=\"resume step 7\"' err.txt && echo resumed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["resumed"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "R-2 ten react rules: 10 g-react-* rules ship across the generated-code-quality-standards tree per §9 R-2",
+  "command": "n=$(grep -rE 'id: g-react-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" 2>/dev/null | grep -oE 'g-react-[0-9]+' | sort -u | wc -l | tr -d ' '); [ \"$n\" -eq 10 ] && echo \"react_rules=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["react_rules=10"]}
+}

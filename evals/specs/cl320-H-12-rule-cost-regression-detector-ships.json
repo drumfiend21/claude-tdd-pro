@@ -1,0 +1,9 @@
+{
+  "name": "rule-cost-regression detector ships at rubric/detectors/rule-cost-regression.sh per the literal H-12 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-cost-regression.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "/incident exits two with a clear error message when invoked without the required summary argument per the F-5 entry contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' err.txt && echo usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["usage"]
+  }
+}

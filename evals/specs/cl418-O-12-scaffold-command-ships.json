@@ -1,0 +1,6 @@
+{
+  "name": "O-12 application scaffolds: /scaffold command ships at the §13 O-12 path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/scaffold.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

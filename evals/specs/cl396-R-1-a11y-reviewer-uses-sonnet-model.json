@@ -1,0 +1,6 @@
+{
+  "name": "R-1 react review subagents: review-react-a11y is configured with model: sonnet per §16 R-1",
+  "command": "grep -q '^model: sonnet' \"$CLAUDE_PLUGIN_ROOT/agents/review-react-a11y.md\" && echo sonnet 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["sonnet"]}
+}

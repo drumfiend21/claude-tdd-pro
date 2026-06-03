@@ -1,0 +1,9 @@
+{
+  "name": "agents/critical-path-verifier.md ships at the F-3 architecture-named path with the opus model annotation",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/agents/critical-path-verifier.md\" ] && grep -q 'model: opus' \"$CLAUDE_PLUGIN_ROOT/agents/critical-path-verifier.md\" && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

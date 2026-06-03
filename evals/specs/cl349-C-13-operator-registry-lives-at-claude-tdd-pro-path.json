@@ -1,0 +1,6 @@
+{
+  "name": "C-13 operator registry file at .claude-tdd-pro/COMPLIANCE-URLS.yaml ships with the plugin install",
+  "command": "[ -e \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

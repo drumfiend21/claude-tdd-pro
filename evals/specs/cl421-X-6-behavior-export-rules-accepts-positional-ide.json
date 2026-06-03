@@ -1,0 +1,11 @@
+{
+  "name": "X-6 IDE rules export behavior: positional <ide> argument accepted (§23 documented surface)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/export-rules.sh\" cursor --dry-run 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo accepts_ide 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "accepts_ide"
+    ]
+  }
+}

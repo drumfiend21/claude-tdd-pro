@@ -1,0 +1,6 @@
+{
+  "name": "C-17 compliance-remove refuses to remove a default bundled entry without --force",
+  "command": "printf -- '- id: soc2-tsc\\n' > cat.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/compliance-remove.sh\" soc2-tsc --catalog cat.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'force' err.txt && echo refused 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["refused"]}
+}

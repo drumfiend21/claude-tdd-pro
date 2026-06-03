@@ -1,0 +1,6 @@
+{
+  "name": "O-13 --strict elevates a deprecated-token finding from severity=warn to exit code one per §26",
+  "command": "mkdir -p src && printf 'const c = tokens.color.legacy.red;\\n' > src/c.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/design-token-freshness.sh\" --registry \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" --paths src --strict 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && echo elevated 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["elevated"]}
+}

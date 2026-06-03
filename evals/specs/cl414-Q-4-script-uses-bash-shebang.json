@@ -1,0 +1,6 @@
+{
+  "name": "Q-4 friction tracker: script uses bash shebang",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" | grep -q bash && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

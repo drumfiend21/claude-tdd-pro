@@ -1,0 +1,6 @@
+{
+  "name": "C-2 control mapping: missing controls-file is rejected with exit 2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/legal-review-mark.sh\" --framework soc2 --control-id CC1.1 --reviewer counsel --date 2026-05-04 --controls-file nonexistent.yaml 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'file not found' err.txt && echo missing_file 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["missing_file"]}
+}

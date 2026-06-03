@@ -1,0 +1,6 @@
+{
+  "name": "C-5 --enforce exits two when verifier-output pr_sha does not match the --pr-sha gate argument",
+  "command": "printf '{\"pr_sha\":\"wrong-sha\",\"verdict\":\"concur\"}' > v.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --enforce --pr-sha abc123 --verifier-output v.json 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'pr_sha mismatch' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocked"]}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "audit-pending-spec-fidelity reports the audited spec count in the specs_audited=<N> line on a clean audit",
+  "command": "mkdir -p pending/F-4-x arch && printf 'F-4 minimal\\n' > arch/a.md && for i in 1 2 3; do printf '%s' '{\"name\":\"x\",\"command\":\"echo ok\",\"expect\":{\"exit_code\":0}}' > \"pending/F-4-x/c${i}.json\"; done && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-pending-spec-fidelity.sh\" --pending pending/F-4-x --arch arch/a.md 2>out.txt && grep -q 'specs_audited=3' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

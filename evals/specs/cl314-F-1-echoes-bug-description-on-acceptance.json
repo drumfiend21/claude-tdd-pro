@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem echoes the bug-description argument so callers can confirm the input was accepted per F-1",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'login race condition' 2>out.txt && grep -q 'bug=\"login race condition\"' out.txt && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

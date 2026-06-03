@@ -1,0 +1,6 @@
+{
+  "name": "X-1 GitHub Actions adapter: workflow uses bash shell",
+  "command": "grep -qE \"bash|run:\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/rubric-check.yml\" && echo bash 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bash"]}
+}

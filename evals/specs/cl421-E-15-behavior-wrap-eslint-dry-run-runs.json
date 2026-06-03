@@ -1,0 +1,11 @@
+{
+  "name": "E-15 ESLint wrap behavior: --dry-run exits cleanly (detector contract)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" --dry-run 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "/postmortem --dry-run short-circuits before any test or spec is written per the §2.14 cross-cutting dry-run contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/postmortem.sh\" 'sample defect' --emit-test --dry-run 2>err.txt && [ ! -d tests ] && [ ! -f FAILURE-LOG.md ] && grep -q 'dry-run' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["skipped"]
+  }
+}

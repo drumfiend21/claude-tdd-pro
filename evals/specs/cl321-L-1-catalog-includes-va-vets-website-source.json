@@ -1,0 +1,9 @@
+{
+  "name": "L-1 catalog includes the va-vets-website source with source_class=federal-digital-services tier=1 per architecture",
+  "command": "grep -A1 'id: va-vets-website' \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" | grep -q 'federal-digital-services' && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

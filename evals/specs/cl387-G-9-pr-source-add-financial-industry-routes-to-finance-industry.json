@@ -1,0 +1,6 @@
+{
+  "name": "G-9 sync with operator registries: pr-source-add source_class financial-industry routes to finance-industry/ per §17 G-9",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-source-add.sh\" --github acme/repo --id fin-pr --source-class financial-industry --tree \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && [ -s tree/finance-industry/fin-pr.yaml ] && echo finance_routed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["finance_routed"]}
+}

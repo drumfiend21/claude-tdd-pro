@@ -1,0 +1,6 @@
+{
+  "name": "N-2 ten node rules: g-node-003 options_schema includes default_timeout_ms per §8 N-2 options table",
+  "command": "grep -q 'default_timeout_ms' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/node/node-docs.yaml\" && echo options_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["options_present"]}
+}

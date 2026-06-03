@@ -1,0 +1,6 @@
+{
+  "name": "S-6 provenance enforcement detector ships at rubric/detectors/rubric-provenance.sh per the literal architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rubric-provenance.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

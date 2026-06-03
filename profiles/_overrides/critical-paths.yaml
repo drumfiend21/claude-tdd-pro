@@ -1,0 +1,12 @@
+# E-3 glob-based override recipe -- critical paths.
+# Tightens rules in security/auth/payments code paths
+# (cross-ref F-3 critical-paths.txt).
+overrides:
+  - files:
+      - "src/auth/**"
+      - "src/payments/**"
+      - "src/security/**"
+      - "lib/auth/**"
+      - "lib/crypto/**"
+    rules:
+      no-eval: error

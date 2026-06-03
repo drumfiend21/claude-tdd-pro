@@ -1,0 +1,6 @@
+{
+  "name": "O-7 per-rule canary: promotion to block refuses when fp-log is non-empty (recent FPs in window)",
+  "command": "mkdir -p tree rubric/fp-log && printf '{\"fp\":1}\\n' > rubric/fp-log/g-ts-test.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/canary-promote.sh\" --rule-id g-ts-test --to block --tree \"$PWD/tree\" 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'fp-log non-empty' err.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["blocked"]}
+}

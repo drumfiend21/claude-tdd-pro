@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: ships 12 hand-written postmortem files per the §13 promise",
+  "command": "n=$(ls \"$CLAUDE_PLUGIN_ROOT/seed/postmortems\"/*.jsonl 2>/dev/null | wc -l | tr -d ' '); [ \"$n\" -ge 12 ] && echo \"postmortems=$n\" 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["postmortems=12"]}
+}

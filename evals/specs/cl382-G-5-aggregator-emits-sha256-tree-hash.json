@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: every aggregation emits a sha256:<hex> tree hash so the lock file can pin it",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: g\\nrules:\\n  - id: g-ts-001\\n' > tree/google/g.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -qE '\"tree_hash\":\"sha256:[a-f0-9]+\"' err.txt && echo tree_hashed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["tree_hashed"]}
+}

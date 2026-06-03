@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher resumes from the stored cursor and skips PRs whose number is at or below the previous high-water mark",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/cursors && printf '%s' '{\"last_pr_number\":200,\"fetched_at\":\"2026-05-24T00:00:00Z\"}' > .claude-tdd-pro/pr-corpus/cursors/stripe-node.json && printf '{\"number\":150,\"merged\":true}\\n{\"number\":201,\"merged\":true}\\n{\"number\":202,\"merged\":true}\\n' > stub.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source stripe-node --upstream-stub stub.jsonl --out out.jsonl --now 2026-05-25T10:00:00Z 2>err.txt && grep -q 'resumed_from=200' err.txt && grep -q 'fetched=2' err.txt && echo resumed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["resumed"]
+  }
+}

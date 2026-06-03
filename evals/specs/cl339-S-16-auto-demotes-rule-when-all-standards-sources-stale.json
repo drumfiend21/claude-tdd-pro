@@ -1,0 +1,6 @@
+{
+  "name": "S-16 --apply-to-rules auto-demotes a rule from block to warn-only when every standards source it cites is stale",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch tree/g && printf '2026-05-20T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/g.txt && printf '\\nrules:\\n  - {id: r, rule_state: block, provenance: [{class: published-standard, source: g}]}\\n' > tree/g/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/freshness-gate.sh\" --apply-to-rules --tree tree --now 2026-05-25T10:00:00Z 2>err.txt && grep -q 'auto-demoted r' err.txt && grep -q 'block -> warn-only' err.txt && echo demoted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["demoted"]}
+}

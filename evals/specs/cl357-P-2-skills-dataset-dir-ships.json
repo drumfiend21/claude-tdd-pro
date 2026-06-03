@@ -1,0 +1,6 @@
+{
+  "name": "P-2 skills dataset directory ships at evals/datasets/skills/ per the architecture path",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/datasets/skills\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

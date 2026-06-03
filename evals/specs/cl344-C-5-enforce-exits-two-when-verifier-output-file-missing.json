@@ -1,0 +1,6 @@
+{
+  "name": "C-5 --enforce exits two when the verifier-output file does not exist on disk (no verifier ran)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/sod-gate.sh\" --enforce --pr-sha abc123 --verifier-output missing.json 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'missing' err.txt && echo unran 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["unran"]}
+}

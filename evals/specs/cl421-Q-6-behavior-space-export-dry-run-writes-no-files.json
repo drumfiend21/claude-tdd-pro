@@ -1,0 +1,11 @@
+{
+  "name": "Q-6 privacy posture behavior: space-export --dry-run does not write to disk (§2.14 contract)",
+  "command": "rm -f /tmp/q6-out.txt; bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --dry-run --out /tmp/q6-out.txt 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && [ ! -f /tmp/q6-out.txt ] && echo dry_safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_safe"
+    ]
+  }
+}

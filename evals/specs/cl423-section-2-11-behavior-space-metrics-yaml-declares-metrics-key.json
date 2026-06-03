@@ -1,0 +1,11 @@
+{
+  "name": "§2.11 SPACE metric schema: space/metrics.yaml declares a top-level metrics: key per contract",
+  "command": "grep -qE \"^metrics:\" \"$CLAUDE_PLUGIN_ROOT/space/metrics.yaml\" && echo metrics_key 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "metrics_key"
+    ]
+  }
+}

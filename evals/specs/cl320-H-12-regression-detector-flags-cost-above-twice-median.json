@@ -1,0 +1,9 @@
+{
+  "name": "rule-cost-regression detector exits one with severity=warn when current tokens-per-check exceeds 2x the 30-day median per H-12 threshold",
+  "command": "printf '{\"rule\":\"r\",\"tokens_per_check\":100}\\n{\"rule\":\"r\",\"tokens_per_check\":100}\\n{\"rule\":\"r\",\"tokens_per_check\":100}\\n' > hist.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/rule-cost-regression.sh\" --rule r --history hist.jsonl --current 250 2>err.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'severity=warn' err.txt && echo flagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["flagged"]
+  }
+}

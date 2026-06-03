@@ -1,0 +1,6 @@
+{
+  "name": "X-7 installable hooks bundle: declares PostToolUse hook",
+  "command": "grep -q \"PostToolUse\" \"$CLAUDE_PLUGIN_ROOT/commands/install-hooks.sh\" && echo posttooluse 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["posttooluse"]}
+}

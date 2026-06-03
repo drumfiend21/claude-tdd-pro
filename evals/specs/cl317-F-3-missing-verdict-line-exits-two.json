@@ -1,0 +1,9 @@
+{
+  "name": "/agent-verify exits two when the verifier emits no verdict: agree|disagree line per the F-3 verdict-required contract",
+  "command": "printf 'diff stub\\n' > d.txt && printf '#!/usr/bin/env bash\\necho \"some unrelated output\"\\n' > v.sh && chmod +x v.sh && bash \"$CLAUDE_PLUGIN_ROOT/commands/agent-verify.sh\" --diff d.txt --verifier-stub ./v.sh 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'no .verdict' err.txt && echo missing 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["missing"]
+  }
+}

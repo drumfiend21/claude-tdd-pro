@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: seed/ tree ships at the §13 path with postmortems, fp-examples, pr-corpus-patterns and agent-datasets subdirs",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/seed/postmortems\" ] && [ -d \"$CLAUDE_PLUGIN_ROOT/seed/fp-examples\" ] && [ -d \"$CLAUDE_PLUGIN_ROOT/seed/pr-corpus-patterns\" ] && [ -d \"$CLAUDE_PLUGIN_ROOT/seed/agent-datasets\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

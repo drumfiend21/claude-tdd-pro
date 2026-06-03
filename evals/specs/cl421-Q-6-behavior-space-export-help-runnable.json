@@ -1,0 +1,11 @@
+{
+  "name": "Q-6 privacy posture behavior: space-export --help surfaces flags (operator discovery)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/space-export.sh\" --help 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo helpable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "helpable"
+    ]
+  }
+}

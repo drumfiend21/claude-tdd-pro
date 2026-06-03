@@ -1,0 +1,6 @@
+{
+  "name": "N-4 node eval fixtures: g-node-001 fixture folder exists at evals/fixtures/node/g-node-001/",
+  "command": "[ -d \"$CLAUDE_PLUGIN_ROOT/evals/fixtures/node/g-node-001\" ] && echo n001_fixture 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["n001_fixture"]}
+}

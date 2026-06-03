@@ -1,0 +1,6 @@
+{
+  "name": "C-19 --paywalled flag is accepted and the refresh sweep completes per the paywalled HEAD-only contract",
+  "command": "mkdir -p .claude-tdd-pro/compliance-last-fetch && printf '2026-01-01T00:00:00Z' > .claude-tdd-pro/compliance-last-fetch/paywall-src.txt && printf '#!/usr/bin/env bash\\nexit 0\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/compliance/auto-refresh-daily.sh\" --now 2026-05-25T10:00:00Z --upstream-stub ./up.sh --paywalled 2>err.txt && echo paywall 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["paywall"]}
+}

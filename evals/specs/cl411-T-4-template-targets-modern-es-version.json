@@ -1,0 +1,6 @@
+{
+  "name": "T-4 tsconfig.strict.json template: target line declares a modern ES baseline (ES2022 or newer)",
+  "command": "grep -qE '\"target\":\\s*\"ES20(22|23|24|25)\"' \"$CLAUDE_PLUGIN_ROOT/templates/tsconfig.strict.json\" && echo modern_target 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["modern_target"]}
+}

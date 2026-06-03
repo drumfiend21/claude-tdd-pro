@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher --force bypasses the freshness gate even when a recent fetch is recorded per the operator override",
+  "command": "mkdir -p .claude-tdd-pro/pr-corpus/last-fetch && printf '2026-05-25T09:00:00Z' > .claude-tdd-pro/pr-corpus/last-fetch/cfpb-consumerfinance.txt && printf '%s' '{\"number\":1,\"merged\":true}' > stub.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source cfpb-consumerfinance --freshness-window 24h --force --upstream-stub stub.jsonl --out out.jsonl --now 2026-05-25T10:00:00Z 2>err.txt && grep -q 'force=true' err.txt && echo bypassed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["bypassed"]
+  }
+}

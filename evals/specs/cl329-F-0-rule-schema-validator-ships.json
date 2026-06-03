@@ -1,0 +1,6 @@
+{
+  "name": "F-0 lock contract: rubric-rule schema validator ships at rubric/validate-rule-schema.sh per §2.1 enforcement",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/rubric/validate-rule-schema.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

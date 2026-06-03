@@ -1,0 +1,6 @@
+{
+  "name": "Q-10 velocity-report reports `no log` when the agent-invocations log is missing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/velocity-report.sh\" --log missing.jsonl 2>err.txt && grep -q 'no log' err.txt && echo reported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["reported"]}
+}

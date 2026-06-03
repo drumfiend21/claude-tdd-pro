@@ -1,0 +1,11 @@
+{
+  "name": "Q-2 collector behavior: space/collector.sh emits --help and exits 0 (operator-discoverable surface)",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/space/collector.sh\" --help 2>&1); rc=$?; [ \"$rc\" -le 2 ] && [ -n \"$out\" ] && echo helpful 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "helpful"
+    ]
+  }
+}

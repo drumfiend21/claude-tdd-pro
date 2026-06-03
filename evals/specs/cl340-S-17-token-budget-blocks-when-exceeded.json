@@ -1,0 +1,6 @@
+{
+  "name": "S-17 auto-refresh-daily honors --token-budget and stops fetching when budget exhausted",
+  "command": "mkdir -p .claude-tdd-pro/standards-last-fetch && for s in g h i; do printf '2026-05-20T00:00:00Z' > \".claude-tdd-pro/standards-last-fetch/$s.txt\"; done && printf '#!/usr/bin/env bash\\nexit 0\\n' > up.sh && chmod +x up.sh && bash \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" --now 2026-05-25T10:00:00Z --upstream-stub ./up.sh --token-budget 5 --tokens-per-fetch 2 --emit-telemetry t.jsonl && [ \"$(grep -c '\"action\":\"refreshed\"' t.jsonl)\" -le \"2\" ] && echo budgeted 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["budgeted"]}
+}

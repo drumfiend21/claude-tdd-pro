@@ -1,0 +1,9 @@
+{
+  "name": "impact-preview recommends prune for a rule that produces zero matches across the working tree per F-6 verdict surface",
+  "command": "mkdir -p tree && printf 'clean code\\n' > tree/x.js && printf '%s' '{\"rules\":[{\"id\":\"r\",\"detector\":\"grep -n SHOULD_NOT_MATCH || true\"}]}' > r.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/impact-preview.sh\" --rule-file r.json --root tree --format json 2>out.txt && grep -q '\"recommendation\":\"prune\"' out.txt && echo pruned 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["pruned"]
+  }
+}

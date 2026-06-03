@@ -1,0 +1,6 @@
+{
+  "name": "O-1 seed corpus: postmortem records carry a root_cause field so they can train the H-5/H-9 lessons-learned surface",
+  "command": "missing=0; for f in \"$CLAUDE_PLUGIN_ROOT/seed/postmortems\"/*.jsonl; do grep -q '\"root_cause\":' \"$f\" || missing=$((missing+1)); done; [ \"$missing\" -eq 0 ] && echo root_cause_present 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["root_cause_present"]}
+}

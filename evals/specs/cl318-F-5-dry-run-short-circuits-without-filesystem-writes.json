@@ -1,0 +1,9 @@
+{
+  "name": "/incident --dry-run short-circuits before any incident directory or FAILURE-LOG entry is written per the §2.14 dry-run contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'preview only' --date 2026-05-25 --dry-run 2>err.txt && [ ! -d incidents ] && [ ! -f FAILURE-LOG.md ] && grep -q 'dry-run' err.txt && echo skipped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["skipped"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "concurrent-cl-gate rejects a candidate that overlaps an active CL on workflow-state subsections per §2.23 (b) disjoint clause",
+  "command": "mkdir -p sessions && printf '%s' '{\"session_id\":\"s1\",\"phases\":[\"E\"],\"state_subsections\":[\"commits\"],\"branch\":\"feat/x\"}' > sessions/s1.json && printf '%s' '{\"session_id\":\"s2\",\"phases\":[\"F\"],\"state_subsections\":[\"commits\"],\"branch\":\"feat/y\"}' > cand.json && bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/concurrent-cl-gate.sh\" --sessions-dir sessions --candidate cand.json --allow-concurrent 2>out.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'reject reason=overlap_b' out.txt && grep -q 'state_subsection=commits' out.txt && echo blocked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["blocked"]
+  }
+}

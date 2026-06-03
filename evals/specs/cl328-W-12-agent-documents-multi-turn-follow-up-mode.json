@@ -1,0 +1,6 @@
+{
+  "name": "W-12 agent documents the multi-turn follow-up mode that extends C-11 single-shot review per the architecture",
+  "command": "grep -qi 'multi-turn\\|follow-up' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && grep -q 'C-11' \"$CLAUDE_PLUGIN_ROOT/agents/pr-review-conversational.md\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["documented"]}
+}

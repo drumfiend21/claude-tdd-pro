@@ -1,0 +1,6 @@
+{
+  "name": "Q-5 flow guard: SKILL.md targets PreToolUse per §10 Q-5",
+  "command": "grep -qiE \"pretooluse|pre-tool|tool use\" \"$CLAUDE_PLUGIN_ROOT/skills/flow-guard/SKILL.md\" && echo pretooluse 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["pretooluse"]}
+}

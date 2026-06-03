@@ -1,0 +1,6 @@
+{
+  "name": "R-10 detector does not emit prop_added findings for components that did not exist in before (newly-added is not breaking)",
+  "command": "mkdir -p before after && printf 'export type ButtonProps = { label: string; };\\n' > after/Button.tsx && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/component-api-drift.sh\" --before before --after after 2>err.txt && grep -q 'clean' err.txt && echo clean 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["clean"]}
+}

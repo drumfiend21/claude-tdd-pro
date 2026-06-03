@@ -1,0 +1,9 @@
+{
+  "name": "/incident ships at commands/incident.sh per the literal F-5 architecture path",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ok"]
+  }
+}

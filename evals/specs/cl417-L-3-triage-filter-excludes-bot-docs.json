@@ -1,0 +1,6 @@
+{
+  "name": "L-3 triage filter: excludes bot / docs PRs",
+  "command": "grep -qE \"bot|docs|exclude\" \"$CLAUDE_PLUGIN_ROOT/pr-corpus/triage.sh\" && echo excluded 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["excluded"]}
+}

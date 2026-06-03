@@ -1,0 +1,6 @@
+{
+  "name": "G-5 aggregator: rubric/runner.sh --root <dir> walks every YAML under generated-code-quality-standards/ recursively",
+  "command": "mkdir -p tree/google && printf 'source:\\n  id: a\\nrules:\\n  - id: g-x-001\\n' > tree/google/a.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runner.sh\" --root \"$PWD/tree\" --format json 2>err.txt; grep -q 'g-x-001' err.txt && echo walked 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["walked"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-4 friction tracker: records suppressions per --rule-id",
+  "command": "grep -q -- \"--rule-id\\|RULE_ID\" \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/friction-tracker.sh\" && echo rule_id 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["rule_id"]}
+}

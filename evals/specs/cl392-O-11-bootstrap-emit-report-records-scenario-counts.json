@@ -1,0 +1,6 @@
+{
+  "name": "O-11 bootstrap eval scenarios: --emit-report writes scenarios_run/passed/failed/tokens_spent for budget transparency",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/init-guardrails.sh\" --run-bootstrap-evals --emit-report \"$PWD/report.json\" 2>err.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'scenarios_run' report.json && grep -q 'scenarios_passed' report.json && echo report_shape 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["report_shape"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "G-7 per-source granular extends: profile extends accepts [<source-namespace>:*] wildcard form per §17 G-7",
+  "command": "grep -qE '<ns>:\\*' \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && grep -q ':\\*:all' \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && echo wildcard_supported 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["wildcard_supported"]}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "X-2 GitLab CI adapter: sets CLAUDE_PLUGIN_ROOT variable",
+  "command": "grep -q \"CLAUDE_PLUGIN_ROOT\" \"$CLAUDE_PLUGIN_ROOT/.gitlab-ci.yml\" && echo plugin_root 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["plugin_root"]}
+}

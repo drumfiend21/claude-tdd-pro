@@ -1,0 +1,9 @@
+{
+  "name": "/pr-corpus-update resets the per-source budget when the stored date differs from today per L-7 per-day semantics",
+  "command": "printf '%s' '{\"cfpb-consumerfinance\":{\"used_today\":100000,\"date\":\"2026-05-24\"}}' > b.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/pr-corpus-update.sh\" --source cfpb-consumerfinance --estimated-tokens 1000 --budget b.json --now 2026-05-25T10:00:00Z --dry-run 2>out.txt && grep -q 'budget_reset=true' out.txt && echo reset 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["reset"]
+  }
+}

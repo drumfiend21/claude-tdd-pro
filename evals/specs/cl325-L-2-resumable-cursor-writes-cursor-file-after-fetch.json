@@ -1,0 +1,9 @@
+{
+  "name": "L-2 fetcher writes a resumable cursor file at .claude-tdd-pro/pr-corpus/cursors/<source>.json after a successful fetch",
+  "command": "printf '{\"number\":101,\"merged\":true}\\n{\"number\":102,\"merged\":true}\\n' > stub.jsonl && bash \"$CLAUDE_PLUGIN_ROOT/pr-corpus/fetch.sh\" --source stripe-node --upstream-stub stub.jsonl --out out.jsonl --now 2026-05-25T10:00:00Z 2>err.txt && [ -f .claude-tdd-pro/pr-corpus/cursors/stripe-node.json ] && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\".claude-tdd-pro/pr-corpus/cursors/stripe-node.json\",\"utf8\"));process.exit(j.last_pr_number===102?0:1)' && echo persisted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["persisted"]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Q-11 pr-quality-scorecard ships at commands/pr-quality-scorecard.sh per §26 v1.11",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/commands/pr-quality-scorecard.sh\" ] && echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

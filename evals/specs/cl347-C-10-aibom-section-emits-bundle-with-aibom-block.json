@@ -1,0 +1,6 @@
+{
+  "name": "C-10 --section aibom --aibom-file emits a bundle including the AIBOM block per the architecture",
+  "command": "printf '%s' '{\"bomFormat\":\"CycloneDX\",\"specVersion\":\"1.6\",\"components\":[]}' > a.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/audit-pack.sh\" --section aibom --emit p.json --aibom-file a.json --commit-sha abc123 --now 2026-05-25T10:00:00Z && grep -q 'CycloneDX' p.json && echo bundled 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["bundled"]}
+}

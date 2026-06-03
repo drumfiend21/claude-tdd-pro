@@ -1,0 +1,6 @@
+{
+  "name": "P-2 each agent dataset uses .jsonl extension per the architecture file naming convention",
+  "command": "ls \"$CLAUDE_PLUGIN_ROOT/evals/datasets/agents/\" | grep -vE '\\.jsonl$' | head -1 | grep -q . && echo NONJSONL 1>&2 || echo ok 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["ok"]}
+}

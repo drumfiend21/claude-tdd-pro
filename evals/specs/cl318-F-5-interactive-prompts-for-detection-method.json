@@ -1,0 +1,9 @@
+{
+  "name": "/incident --interactive prompts for the detection mechanism on stdin and records it in the timeline per F-5",
+  "command": "echo 'alert from monitoring' | bash \"$CLAUDE_PLUGIN_ROOT/commands/incident.sh\" 'spike in 5xx' --date 2026-05-25 --interactive 2>/dev/null && grep -q 'detection: alert from monitoring' incidents/2026-05-25-001/timeline.md && echo captured 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["captured"]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "O-13 --ignore-file suppresses findings for deprecated tokens listed in the operator-supplied allowlist",
+  "command": "mkdir -p src && printf 'const c = tokens.color.legacy.red;\\n' > src/c.ts && printf 'color.legacy.red\\n' > ignore.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/design-token-freshness.sh\" --registry \"$CLAUDE_PLUGIN_ROOT/design-tokens/registry.yaml\" --paths src --ignore-file ignore.txt 2>err.txt && grep -q 'clean' err.txt && echo suppressed 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["suppressed"]}
+}
