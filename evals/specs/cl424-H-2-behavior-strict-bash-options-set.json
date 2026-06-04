@@ -1,0 +1,11 @@
+{
+  "name": "H-2 profile activation: script sets strict bash options (set -uo pipefail or similar)",
+  "command": "grep -qE \"set -[ueo]\" \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" && echo strict 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "strict"
+    ]
+  }
+}

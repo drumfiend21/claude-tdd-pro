@@ -1,0 +1,11 @@
+{
+  "name": "S-2 standards fetcher: html-anchor fetcher ships for high-fragility-tier sources",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/html-anchor.sh\" ] && echo html_anchor 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "html_anchor"
+    ]
+  }
+}

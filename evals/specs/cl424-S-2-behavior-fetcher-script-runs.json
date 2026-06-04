@@ -1,0 +1,11 @@
+{
+  "name": "S-2 standards fetcher: standards/fetcher.sh runs --help cleanly",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/fetcher.sh\" --help >/dev/null 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo helpful 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "helpful"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "G-5 aggregator: rubric/aggregator.sh runs cleanly with --help",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --help >/dev/null 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

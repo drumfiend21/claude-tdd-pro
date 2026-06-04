@@ -1,0 +1,11 @@
+{
+  "name": "E-12 cache: tree_sha in STATS block is at least 8 hex chars (content-addressed key)",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --stats --filter \"cl414-Q-1-space-config-yaml-ships\" 2>&1); echo \"$out\" | grep -oE \"tree_sha=[0-9a-f]{8,}\" | head -1 | grep -q tree_sha && echo hex_sha 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "hex_sha"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "G-5 aggregator: substrate is non-trivial (>200 bytes) — proves real logic vs placeholder",
+  "command": "n=$(wc -c < \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" | tr -d \" \"); [ \"$n\" -gt 200 ] && echo substantive 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "substantive"
+    ]
+  }
+}

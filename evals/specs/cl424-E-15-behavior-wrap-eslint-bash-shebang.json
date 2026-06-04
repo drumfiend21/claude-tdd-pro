@@ -1,0 +1,11 @@
+{
+  "name": "E-15 wrap-eslint: substrate has bash shebang (script is invocable)",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" | grep -q \"^#!/.*bash\" && echo bash_shebang 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bash_shebang"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "H-2 profile activation: substrate documents §2.5 profile contract via header comment",
+  "command": "head -5 \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" | grep -qE \"H-2|§2\\.5|profile\" && echo documented 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "documented"
+    ]
+  }
+}

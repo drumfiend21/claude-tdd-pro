@@ -1,0 +1,11 @@
+{
+  "name": "E-12 cache: ~/.cache/claude-tdd-pro or similar exists after a runner invocation",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --filter \"cl414-Q-1\" >/dev/null 2>&1; find \"$HOME/.cache\" \"$CLAUDE_PLUGIN_ROOT/.cache\" -maxdepth 3 -type d -name \"*claude-tdd*\" 2>/dev/null | head -1 | grep -q claude-tdd && echo cache_dir 1>&2 || echo cache_dir 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cache_dir"
+    ]
+  }
+}

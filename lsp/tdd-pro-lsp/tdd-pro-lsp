@@ -1,56 +1,63 @@
 #!/usr/bin/env bash
-# X-8 LSP surface per §14. Wraps the rubric/runner.sh detector dispatch
-# in a minimal Language Server Protocol stub. Editors (Cursor, VS Code,
-# Continue, Aider, Windsurf) consume diagnostics via the standard LSP
-# textDocument/publishDiagnostics method.
+# X-8 LSP entry script per §14 X-8 + §24 v1.10 amendment.
 #
-# Usage:
-#   tdd-pro-lsp.sh                          start LSP over stdio
-#   tdd-pro-lsp.sh --print-diagnostics      one-shot mode per §14 X-8
-#                                          (run detectors, emit JSON
-#                                          diagnostics to stdout, exit)
-#   tdd-pro-lsp.sh --help
+# Two modes:
+#   1. LSP server (default): if the compiled TypeScript server exists
+#      at out/server.js, invoke it via `node`. Speaks standard LSP
+#      over stdio.
+#   2. --print-diagnostics: one-shot mode. Runs rubric and emits
+#      ESLint-shaped JSON diagnostics to stdout. For CI / batch use.
+#
+# Build the TypeScript server:
+#   cd lsp/tdd-pro-lsp && npm install && npm run build
+#
+# Editors (Cursor, VS Code) configure tdd-pro.lspPath -> this file.
 
 set -uo pipefail
 
-PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
+SERVER_JS="$(dirname "$0")/out/server.js"
 
 MODE="server"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --print-diagnostics) MODE="diagnostics"; shift ;;
     -h|--help)
-      echo "Usage: tdd-pro-lsp.sh [--print-diagnostics] [--help]"
-      echo "  --print-diagnostics  one-shot mode: run detectors and emit"
-      echo "                       JSON diagnostics to stdout"
+      echo "Usage: tdd-pro-lsp [--print-diagnostics] [--help]" >&2
+      echo "  default: start LSP server over stdio (requires compiled out/server.js)" >&2
+      echo "  --print-diagnostics: one-shot rubric → JSON diagnostics" >&2
       exit 0 ;;
     *) shift ;;
   esac
 done
 
 if [[ "$MODE" == "diagnostics" ]]; then
-  # One-shot: collect diagnostics from the rubric runner and emit
-  # ESLint-shaped JSON for downstream LSP consumption.
-  bash "$PLUGIN_ROOT/evals/runner.sh" --filter "smoke" 2>&1 | \
-    node -e '
-      const fs = require("fs");
-      const raw = fs.readFileSync(0, "utf8");
-      const out = { diagnostics: [] };
-      for (const line of raw.split("\n")) {
-        if (line.startsWith("  ✗ ")) {
-          out.diagnostics.push({
-            severity: 1,
-            message: line.slice(4),
-            range: { start: { line: 0, character: 0 }, end: { line: 0, character: 0 } }
-          });
-        }
+  bash "$PLUGIN_ROOT/evals/runner.sh" --filter "smoke" 2>&1 | node -e '
+    const fs = require("fs");
+    const raw = fs.readFileSync(0, "utf8");
+    const out = { diagnostics: [] };
+    for (const line of raw.split("\n")) {
+      if (line.startsWith("  ✗ ")) {
+        out.diagnostics.push({
+          severity: 1,
+          message: line.slice(4),
+          range: { start: { line: 0, character: 0 }, end: { line: 0, character: 0 } }
+        });
       }
-      process.stdout.write(JSON.stringify(out, null, 2) + "\n");
-    '
+    }
+    process.stdout.write(JSON.stringify(out, null, 2) + "\n");
+  '
   exit 0
 fi
 
-# LSP server stdio loop (stub): read Content-Length framed messages,
-# respond with a minimal capability set.
+# LSP server mode. Prefer the compiled TypeScript server if present.
+if [[ -f "$SERVER_JS" ]]; then
+  exec node "$SERVER_JS"
+fi
+
+# Fallback: minimal stub LSP that announces capabilities and exits
+# on the first JSON-RPC message. Operators should compile the
+# TypeScript server (out/server.js) for real diagnostics.
+echo "tdd-pro-lsp: out/server.js not found; compile with: cd $(dirname $0) && npm install && npm run build" >&2
 echo '{"jsonrpc":"2.0","id":0,"result":{"capabilities":{"textDocumentSync":1}}}' >&2
 cat >/dev/null

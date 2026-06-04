@@ -1,0 +1,11 @@
+{
+  "name": "G-5 aggregator: substrate mentions source-folder traversal (G-1 directory)",
+  "command": "grep -qE \"source|standards|namespace|fold\" \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" && echo source_aware 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "source_aware"
+    ]
+  }
+}

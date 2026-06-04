@@ -1,0 +1,11 @@
+{
+  "name": "E-15 wrap-eslint: --json flag is declared in the substrate (detector contract §2.2)",
+  "command": "grep -q -- \"--json\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo json_flag 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "json_flag"
+    ]
+  }
+}

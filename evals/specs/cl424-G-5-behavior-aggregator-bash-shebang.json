@@ -1,0 +1,11 @@
+{
+  "name": "G-5 aggregator: substrate has bash shebang (script is invocable)",
+  "command": "head -1 \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" | grep -q \"^#!/.*bash\" && echo shebang 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "shebang"
+    ]
+  }
+}

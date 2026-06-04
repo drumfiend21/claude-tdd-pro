@@ -1,0 +1,11 @@
+{
+  "name": "E-15 wrap-eslint: --dry-run flag declared per §2.14 dry-run subjects",
+  "command": "grep -q -- \"--dry-run\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" && echo dry_run 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run"
+    ]
+  }
+}

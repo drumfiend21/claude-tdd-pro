@@ -1,0 +1,11 @@
+{
+  "name": "S-2 standards fetcher: per-source fetchers ship in standards/fetchers/",
+  "command": "ls \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/\"*.sh 2>/dev/null | head -1 | grep -q fetchers && echo per_source 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "per_source"
+    ]
+  }
+}

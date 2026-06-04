@@ -1,0 +1,11 @@
+{
+  "name": "E-15 wrap-eslint: --help is runnable without an ESLint install",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/wrap-eslint.sh\" --help >/dev/null 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo helpable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "helpable"
+    ]
+  }
+}

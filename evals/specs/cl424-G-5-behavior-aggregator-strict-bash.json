@@ -1,0 +1,11 @@
+{
+  "name": "G-5 aggregator: substrate sets strict bash options",
+  "command": "grep -qE \"set -[ueo]\" \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" && echo strict 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "strict"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "S-2 standards fetcher: rfc-style fetcher ships for IETF/RFC-style references",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/rfc-style.sh\" ] && echo rfc 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rfc"
+    ]
+  }
+}

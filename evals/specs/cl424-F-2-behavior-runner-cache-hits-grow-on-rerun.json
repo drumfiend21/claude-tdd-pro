@@ -1,0 +1,11 @@
+{
+  "name": "F-2 rubric runner: second run of the same filter shows cache_hits > 0 (proves cache is hot)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --filter \"cl414-Q-1-space-config-yaml-ships\" >/dev/null 2>&1; out=$(bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --stats --filter \"cl414-Q-1-space-config-yaml-ships\" 2>&1); echo \"$out\" | grep -qE \"cache_hits=[1-9]\" && echo cache_hit 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cache_hit"
+    ]
+  }
+}

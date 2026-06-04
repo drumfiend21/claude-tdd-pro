@@ -1,0 +1,11 @@
+{
+  "name": "H-2 profile activation: profiles/active.sh runs without crash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --help >/dev/null 2>err.txt; rc=$?; [ \"$rc\" -le 2 ] && echo runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runs"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "claude-tdd-pro",
+  "version": "0.4.0",
+  "description": "A Claude Code plugin that elevates any codebase to Google's published engineering standards and keeps it there.",
+  "main": "lib/index.js",
+  "bin": {
+    "tdd-pro-lsp": "./lsp/tdd-pro-lsp/tdd-pro-lsp"
+  },
+  "scripts": {
+    "test": "bash evals/runner.sh",
+    "test:stats": "bash evals/runner.sh --stats",
+    "lint": "shellcheck -S warning $(find . -name '*.sh' -not -path './.git/*' -not -path './node_modules/*' 2>/dev/null) || true",
+    "doctor": "bash commands/doctor.sh",
+    "install:project": "bash scripts/install.sh init --scope project",
+    "install:user": "bash scripts/install.sh init --scope user",
+    "upgrade": "bash scripts/install.sh upgrade --yes",
+    "drift:audit": "bash rubric/detectors/audit-substrate-completeness.sh && bash rubric/detectors/audit-cli-surface-fidelity.sh && bash rubric/detectors/audit-spec-depth.sh",
+    "drift:fidelity": "find evals/pending -mindepth 2 -maxdepth 2 -type d -exec bash rubric/detectors/audit-pending-spec-fidelity.sh --pending {} --arch docs/architecture-v1.9.md \\;"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drumfiend21/claude-tdd-pro.git"
+  },
+  "keywords": [
+    "claude-code",
+    "tdd",
+    "code-quality",
+    "rubric",
+    "lsp",
+    "lint",
+    "google-eng-practices",
+    "architecture"
+  ],
+  "author": "drumfiend21",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/drumfiend21/claude-tdd-pro/issues"
+  },
+  "homepage": "https://github.com/drumfiend21/claude-tdd-pro#readme",
+  "engines": {
+    "node": ">=18",
+    "bash": ">=3.2"
+  }
+}

@@ -1,0 +1,7 @@
+# Bash-3.2 portability per docs/memory/feedback-bash32-portability-checklist.md
+shell=bash
+
+# Disabled rules with rationale:
+disable=SC1091  # follow source — many sourced files are downstream artifacts
+disable=SC2034  # unused variables — many set for documentation/audit
+disable=SC2086  # unquoted vars — sometimes intentional for argv splitting in test commands

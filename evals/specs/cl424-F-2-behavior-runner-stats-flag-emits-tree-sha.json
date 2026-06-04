@@ -1,0 +1,11 @@
+{
+  "name": "F-2 rubric runner: --stats emits a STATS block with tree_sha for cache provenance",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --stats --filter \"cl414-Q-1-space-config-yaml-ships\" 2>&1 | grep -qE \"tree_sha=\" && echo tree_sha 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tree_sha"
+    ]
+  }
+}

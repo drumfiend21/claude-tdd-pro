@@ -1,0 +1,11 @@
+{
+  "name": "H-2 profile activation: --help mentions --tree flag (rule tree traversal)",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" --help 2>&1); echo \"$out\" | grep -qE -- \"--tree|tree|profile\" && echo tree_flag 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tree_flag"
+    ]
+  }
+}

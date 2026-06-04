@@ -1,0 +1,8 @@
+{
+  "name": "F-2 rubric runner: on failure, emits 'Failed specs:' section after the Results line",
+  "command": "mkdir -p /tmp/cl424-tmp; cat > /tmp/cl424-tmp/cl424-deliberate-failure.json <<EOJ\n{\n  \"name\": \"deliberate failure for runner contract\",\n  \"command\": \"exit 1",
+  "setup": [],
+  "expect": {
+    "exit_code": 0
+  }
+}

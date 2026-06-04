@@ -1,0 +1,11 @@
+{
+  "name": "F-2 rubric runner: filter that matches no spec returns 0 passed, 0 failed (not a crash)",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\" --filter \"zzzzz-nonexistent-filter-zzzzz\" 2>&1); echo \"$out\" | grep -qE \"^Results: 0 passed\" && echo zero_match 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "zero_match"
+    ]
+  }
+}

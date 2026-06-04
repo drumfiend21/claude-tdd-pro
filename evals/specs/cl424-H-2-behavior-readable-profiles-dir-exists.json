@@ -1,0 +1,11 @@
+{
+  "name": "H-2 profile activation: profiles/ directory ships with at least one .yaml profile",
+  "command": "ls \"$CLAUDE_PLUGIN_ROOT/profiles/\"*.yaml 2>/dev/null | head -1 | grep -q yaml && echo profile_yaml 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "profile_yaml"
+    ]
+  }
+}

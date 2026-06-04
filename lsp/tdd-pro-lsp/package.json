@@ -1,0 +1,21 @@
+{
+  "name": "tdd-pro-lsp",
+  "version": "0.4.0",
+  "description": "X-8 LSP server for Claude TDD Pro. Speaks standard LSP over stdio; invokes the rubric runner for per-document diagnostics.",
+  "main": "out/server.js",
+  "bin": "out/server.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "engines": { "node": ">=18" },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
