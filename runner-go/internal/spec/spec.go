@@ -20,10 +20,11 @@ type Expectation struct {
 
 // Spec is a single eval spec.
 type Spec struct {
-	Name    string      `json:"name"`
-	Command string      `json:"command"`
-	Setup   []string    `json:"setup,omitempty"`
-	Expect  Expectation `json:"expect"`
+	Name     string      `json:"name"`
+	Command  string      `json:"command"`
+	Setup    []string    `json:"setup,omitempty"`
+	Expect   Expectation `json:"expect"`
+	Severity string      `json:"severity,omitempty"` // P0|P1|P2; defaults to P1
 
 	// Internal fields populated by the loader.
 	Path string `json:"-"`

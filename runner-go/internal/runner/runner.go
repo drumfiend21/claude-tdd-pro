@@ -206,14 +206,13 @@ func truncate(s string, n int) string {
 }
 
 // CountAtOrAbove returns the number of failing results whose
-// severity (as parsed from the spec's expect block or default P1)
-// meets or exceeds the floor (P0 > P1 > P2).
+// severity meets or exceeds the floor (P0 > P1 > P2). Reads the
+// severity from the spec.Spec.Severity field (defaults to P1 when
+// the spec doesn't declare one explicitly).
 func CountAtOrAbove(results []Result, floor string) int {
-	// Severity ordering: P0 is most severe, P2 least.
 	rank := map[string]int{"P0": 0, "P1": 1, "P2": 2}
 	floorRank, ok := rank[floor]
 	if !ok {
-		// Unknown floor: count all failures.
 		floorRank = 99
 	}
 	count := 0
@@ -221,9 +220,10 @@ func CountAtOrAbove(results []Result, floor string) int {
 		if r.Passed {
 			continue
 		}
-		// Default severity P1 for specs without explicit annotation.
-		// Future: parse from spec.Severity field.
-		specRank := 1
+		specRank := rank[r.Spec.Severity]
+		if r.Spec.Severity == "" {
+			specRank = 1 // P1 default
+		}
 		if specRank <= floorRank {
 			count++
 		}
