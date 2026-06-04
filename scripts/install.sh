@@ -22,7 +22,7 @@
 set -uo pipefail
 
 START_SECONDS=$SECONDS
-VERSION="1.0.0"
+VERSION="0.4.0"
 
 CLONE_DIR="${CLAUDE_TDD_PRO_HOME:-$HOME/.claude-tdd-pro}"
 GROK_DIR="${GROK_TDD_PRO_HOME:-$HOME/.grok-claude-tdd-pro}"

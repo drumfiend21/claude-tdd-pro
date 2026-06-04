@@ -1,0 +1,33 @@
+# claude-tdd-pro code owners
+#
+# Order matters: the LAST matching pattern wins. Default owner +
+# area-specific owners listed top to bottom.
+#
+# AI-assisted disclosure: a substantial portion of this project's commits
+# were authored with Claude Code assistance under the direction of the
+# primary maintainer. See CONTRIBUTING.md and individual commit bodies
+# for attribution.
+
+# Default — primary maintainer reviews all changes
+*                                       @drumfiend21
+
+# Architecture is law: any change to the canonical architecture
+# requires explicit maintainer approval and an ADR
+/docs/architecture-v1.9.md              @drumfiend21
+/docs/adr/                              @drumfiend21
+/CLAUDE.md                              @drumfiend21
+
+# Drift gates and per-CL workflow are load-bearing
+/scripts/cl-build.sh                    @drumfiend21
+/scripts/install.sh                     @drumfiend21
+/rubric/detectors/audit-*               @drumfiend21
+/rubric/runner.sh                       @drumfiend21
+
+# Operator-facing surfaces (installer, README, QUICKSTART)
+/README.md                              @drumfiend21
+/QUICKSTART.md                          @drumfiend21
+/CONTRIBUTING.md                        @drumfiend21
+
+# Generated standards directory — auto-fetched per S-2; manual edits
+# require justification linked to the source authority
+/generated-code-quality-standards/      @drumfiend21

@@ -1,5 +1,11 @@
 # claude-tdd-pro
 
+[![CI](https://github.com/drumfiend21/claude-tdd-pro/actions/workflows/rubric-check.yml/badge.svg?branch=main)](https://github.com/drumfiend21/claude-tdd-pro/actions/workflows/rubric-check.yml)
+[![specs](https://img.shields.io/badge/specs-4000_passed-brightgreen)](evals/specs/)
+[![architecture](https://img.shields.io/badge/architecture-v1.9.2_%2B_v1.10_%2B_v1.11-blue)](docs/architecture-v1.9.md)
+[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![version](https://img.shields.io/badge/version-0.4.0-informational)](CHANGELOG.md)
+
 ## 🚀 Quick Start — one command, <60 seconds
 
 ```bash
@@ -28,7 +34,7 @@ run `/remediate` for a small-CL elevation pass. For greenfield code,
 every prompt is gated through the same RUBRIC.yaml so output is
 born-compliant.
 
-**Current version: 0.3.0** — see [CHANGELOG](#changelog) below.
+**Current version: 0.4.0** — see [CHANGELOG.md](CHANGELOG.md).
 
 ## The two flows
 
