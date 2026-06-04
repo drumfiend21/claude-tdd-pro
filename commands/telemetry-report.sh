@@ -94,7 +94,7 @@ LOG_FILE="$LOG_FILE" SINCE="$SINCE" EVENT="$EVENT" FORMAT="$FORMAT" node -e '
 
   if (format === "json") {
     process.stdout.write(JSON.stringify(stats, null, 2) + "\n");
-    return;
+    process.exit(0);
   }
   console.log("=== Production telemetry report ===");
   console.log(`Window:        ${stats.first_ts} → ${stats.last_ts}`);
