@@ -25,6 +25,9 @@ func main() {
 	filter := flag.String("filter", "", "only run specs whose basename contains this substring")
 	stats := flag.Bool("stats", false, "emit STATS line after Results")
 	workers := flag.Int("workers", 4, "parallel workers")
+	md := flag.String("md", "", "emit JSONL findings to this path (per --md contract)")
+	quiet := flag.Bool("quiet", false, "no findings → exit 0; any finding → exit 2 (Stop-hook contract)")
+	severityFloor := flag.String("severity-floor", "", "gate exit on findings at or above this severity (P0|P1|P2)")
 	flag.Parse()
 
 	entries, err := os.ReadDir(*specsDir)
@@ -61,6 +64,30 @@ func main() {
 			fail++
 		}
 	}
+
+	// --md JSONL emission (Stop-hook downstream consumer contract).
+	if *md != "" {
+		if err := runner.EmitJSONL(results, *md); err != nil {
+			fmt.Fprintf(os.Stderr, "tdd-pro-runner: --md emit failed: %v\n", err)
+		}
+	}
+
+	// --severity-floor / --quiet gating (Stop-hook exit semantics).
+	if *severityFloor != "" {
+		blocking := runner.CountAtOrAbove(results, *severityFloor)
+		if blocking > 0 {
+			fmt.Fprintf(os.Stderr, "tdd-pro-runner: gated on %d findings at severity floor=%s\n",
+				blocking, *severityFloor)
+			os.Exit(1)
+		}
+	}
+	if *quiet {
+		if fail > 0 {
+			os.Exit(2)
+		}
+		os.Exit(0)
+	}
+
 	if fail > 0 {
 		os.Exit(1)
 	}

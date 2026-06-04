@@ -1,0 +1,146 @@
+# Phase aliases — operational mapping from architecture v2 (5 phases)
+# to v1.9 features (193).
+#
+# Per Musk + Fowler's second-review note:
+#   "The architecture-v2 pruning is a documentation gesture until the
+#    substrate, the fitness gates, and the §25 vocabulary source also
+#    collapse to five."
+#
+# This file is the operational collapse. Each v2 phase aliases the set
+# of v1.9 feature IDs that participate in it. Fitness functions and
+# §25 vocabulary auditing now have both views available:
+#   - v1.9 view (governance, fine-grained)
+#   - v2 view (operator-facing, coarse)
+#
+# When a fitness function runs, it can scope to a v2 phase and the
+# alias resolves to all v1.9 features within. When a new contributor
+# reads docs/architecture-v2.md, they can find the underlying detail
+# via this mapping.
+
+version: 2
+generated_from: docs/architecture-v1.9.md
+generated_at: 2026-06-04
+
+phases:
+
+  G:
+    name: "Generated standards"
+    description: "The rubric source-of-truth tree at generated-code-quality-standards/"
+    v1_9_features:
+      - G-1   # standards source directory
+      - G-2   # source-organized file format
+      - G-3   # publisher namespace folders
+      - G-4   # operator extension namespace
+      - G-5   # aggregator
+      - G-6   # validate-source-file
+      - G-7   # profile system implementation
+      - G-8   # rubric runner
+      - G-9   # canary rollout
+      - G-10  # legal review status
+      - G-11  # registry link
+      - G-12  # fragility tier
+      - G-13  # license note
+      - G-14  # closed-loop validation
+    v1_9_contracts:
+      - "§2.1"   # rubric rule schema
+      - "§2.6"   # standards source contract
+      - "§2.17"  # freshness gate
+      - "§2.21"  # source-file validation
+
+  F:
+    name: "Enforcement"
+    description: "The rubric runner at rubric/runner.sh and runner-go/"
+    v1_9_features:
+      - F-0   # rubric runner core
+      - F-1   # detector dispatch
+      - F-2   # rubric pass rate
+      - F-3   # critical-path verification
+      - F-4   # drift-detection skill
+      - F-5   # incident command
+      - F-6   # severity floor
+    v1_9_contracts:
+      - "§2.2"   # detector contract
+      - "§2.7"   # sectioned advisory locks
+      - "§2.14"  # destructive command dry-run
+      - "§2.25"  # pending-spec content fidelity
+
+  X:
+    name: "Surfaces"
+    description: "LSP, hooks, CI — the three execution surfaces"
+    v1_9_features:
+      - X-1   # GitHub Actions adapter
+      - X-2   # GitLab CI adapter
+      - X-3   # pre-commit adapter
+      - X-4   # ESLint plugin shape
+      - X-5   # TUI / interactive
+      - X-6   # IDE rules export
+      - X-7   # installable hooks bundle
+      - X-8   # LSP surface
+      - X-9   # cloud devcontainer
+    v1_9_contracts:
+      - "§2.19"  # inline suppression
+
+  H:
+    name: "Profiles"
+    description: "Operator policy layer via profiles/ + userConfig.yaml"
+    v1_9_features:
+      - H-1   # token-cost transparency
+      - H-2   # profile system implementation
+      - H-3   # sectioned advisory locks
+      - H-4   # SECURITY.md threat model
+      - H-5   # multi-language honesty
+      - H-6   # built-in command reconciliation
+      - H-7   # /doctor --watch
+      - H-8   # operator-facing /doctor
+      - H-9   # progressive disclosure
+      - H-10  # error budget contract
+      - H-11  # self-test workflow
+      - H-12  # cost rollup
+      - H-13  # agent harness continuity
+    v1_9_contracts:
+      - "§2.5"   # profile config schema
+      - "§2.10"  # risk tier
+
+  E:
+    name: "ESLint integration"
+    description: "JS/TS ecosystem reach via the ESLint substrate"
+    v1_9_features:
+      - E-1    # ESLint shape compatibility
+      - E-2    # detector dispatch
+      - E-3    # rule registry
+      - E-4    # auto-fix
+      - E-5    # inline suppression with justification
+      - E-6    # severity policy
+      - E-7    # plugin install
+      - E-8    # E-8 metadata
+      - E-9    # formatters
+      - E-10   # rule cost regression
+      - E-11   # progressive enablement
+      - E-12   # rule cache
+      - E-13   # messageId discipline
+      - E-14   # downgrade-on-conflict
+      - E-15   # wrap-eslint
+      - E-16   # SARIF format
+      - E-17   # rule-state lifecycle
+    v1_9_contracts:
+      - "§2.4"   # ESLint domain glossary
+
+# Convenience aliases for legacy phases (preserved in governance,
+# not operator-facing). When a new CL or fitness function references
+# a legacy phase, the lookup still resolves.
+legacy_phases_preserved_in_governance:
+  - S  # standards source (now subsumed under G)
+  - C  # compliance (orthogonal to enforcement)
+  - P  # prompts (orthogonal to enforcement)
+  - R  # risk profiles (subsumed under H)
+  - N  # cost telemetry (subsumed under H-12)
+  - T  # type rules (subsumed under E with TS)
+  - Q  # SPACE telemetry (observability, not enforcement)
+  - L  # PR-corpus learning (long-loop)
+  - O  # operational (distribution, audit, uninstall)
+  - W  # workflow orchestration
+
+# Total v1.9 features mapped: 60 in the 5 v2 phases above.
+# Total v1.9 features overall: 193.
+# The other 133 features are preserved in governance (architecture-v1.9.md)
+# and remain fitness-function-protected. They are not customer-facing.

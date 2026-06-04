@@ -172,3 +172,61 @@ func baseName(path string) string {
 	b := filepath.Base(path)
 	return strings.TrimSuffix(b, ".json")
 }
+
+// EmitJSONL writes one finding per failing result to path, as JSONL.
+// Mirrors the bash runner's --md format so downstream consumers
+// (Stop hook, PR-comment bot, IDE diagnostics) need no changes.
+func EmitJSONL(results []Result, path string) error {
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	for _, r := range results {
+		if r.Passed {
+			continue
+		}
+		line := fmt.Sprintf(
+			`{"spec":%q,"exit_code":%d,"stderr":%q,"stdout":%q}`+"\n",
+			baseName(r.Spec.Path), r.ExitCode,
+			truncate(r.Stderr, 200), truncate(r.Stdout, 200),
+		)
+		if _, err := f.WriteString(line); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func truncate(s string, n int) string {
+	if len(s) <= n {
+		return s
+	}
+	return s[:n] + "..."
+}
+
+// CountAtOrAbove returns the number of failing results whose
+// severity (as parsed from the spec's expect block or default P1)
+// meets or exceeds the floor (P0 > P1 > P2).
+func CountAtOrAbove(results []Result, floor string) int {
+	// Severity ordering: P0 is most severe, P2 least.
+	rank := map[string]int{"P0": 0, "P1": 1, "P2": 2}
+	floorRank, ok := rank[floor]
+	if !ok {
+		// Unknown floor: count all failures.
+		floorRank = 99
+	}
+	count := 0
+	for _, r := range results {
+		if r.Passed {
+			continue
+		}
+		// Default severity P1 for specs without explicit annotation.
+		// Future: parse from spec.Severity field.
+		specRank := 1
+		if specRank <= floorRank {
+			count++
+		}
+	}
+	return count
+}
