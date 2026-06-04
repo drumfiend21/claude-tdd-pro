@@ -1,0 +1,46 @@
+# Grok Build plugin manifest — claude-tdd-pro native port.
+# Per docs/PLATFORM_DEPENDENCY.md: 15% of surface is platform-
+# specific; this file is one of the platform-specific artifacts.
+
+name: claude-tdd-pro
+version: 0.4.0
+description: |
+  Rubric runner + drift gates + fitness functions for AI-assisted
+  code review. Ported from the Claude Code plugin surface.
+license: Apache-2.0
+homepage: https://github.com/drumfiend21/claude-tdd-pro
+maintainer: drumfiend21
+
+# Grok Build hook events → script files.
+# These delegate to the platform-independent runner.
+hooks:
+  on_save: grok-build/hooks/on-save.sh
+  on_pre_commit: grok-build/hooks/on-pre-commit.sh
+  on_session_start: grok-build/hooks/on-session-start.sh
+
+# Slash commands registered with Grok Build.
+slash_commands:
+  - name: /tdd-pro-doctor
+    script: grok-build/slash-commands/tdd-pro-doctor.sh
+    description: Health check + drift gate audit
+  - name: /tdd-pro-analyze
+    script: grok-build/slash-commands/tdd-pro-analyze.sh
+    description: Run rubric runner on current project
+  - name: /tdd-pro-remediate
+    script: grok-build/slash-commands/tdd-pro-remediate.sh
+    description: Small-CL remediation pass
+
+# Toolchain expectations (mirrors scripts/install.sh preflight).
+engines:
+  bash: ">=3.2"
+  node: ">=18"
+  ruby: ">=3.0"
+
+# Environment variables this plugin reads.
+env:
+  CLAUDE_PLUGIN_ROOT:
+    description: Root path of the plugin checkout
+    default: $HOME/.claude-tdd-pro
+  LLM_JUDGE:
+    description: When 1, deferred detectors route through llm-judge.sh
+    default: 0

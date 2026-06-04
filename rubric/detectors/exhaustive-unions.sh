@@ -7,6 +7,20 @@
 
 set -uo pipefail
 
+# AI-NATIVE MIGRATION (Musk + Fowler joint review):
+#   When LLM_JUDGE=1 and llm-judge.sh + a model CLI exist,
+#   defer to llm-judge for semantic verdict; fall back to
+#   grep on rc=3 (model unavailable).
+PLUGIN_ROOT_LJ="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
+LLM_JUDGE="${LLM_JUDGE:-0}"
+LLM_JUDGE_RULE_ID="ts/exhaustive-unions"
+ai_native_judge() {
+  [[ "$LLM_JUDGE" -ne 1 ]] && return 1
+  bash "$PLUGIN_ROOT_LJ/rubric/detectors/llm-judge.sh" \
+       --target "$1" --rule "$LLM_JUDGE_RULE_ID" 2>/dev/null
+  return $?
+}
+
 JSON=0
 PATHS=""
 DRY=0

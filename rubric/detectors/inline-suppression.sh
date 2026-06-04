@@ -24,6 +24,24 @@
 
 set -uo pipefail
 
+# AI-NATIVE MIGRATION (Musk + Fowler joint review):
+#   When LLM_JUDGE=1 in the environment and llm-judge.sh +
+#   a model CLI (claude/grok) are available, this detector
+#   defers to llm-judge for the semantic verdict and falls
+#   back to grep when the model is unavailable (rc=3) or
+#   indeterminate. Toggle via:
+#     LLM_JUDGE=1 bash rubric/detectors/<this>.sh ...
+PLUGIN_ROOT_LJ="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
+LLM_JUDGE="${LLM_JUDGE:-0}"
+LLM_JUDGE_RULE_ID="common/inline-suppression"
+ai_native_judge() {
+  local target="$1"
+  [[ "$LLM_JUDGE" -ne 1 ]] && return 1
+  bash "$PLUGIN_ROOT_LJ/rubric/detectors/llm-judge.sh" \
+       --target "$target" --rule "$LLM_JUDGE_RULE_ID" 2>/dev/null
+  return $?  # 0=satisfies, 1=violates, 3=unavailable
+}
+
 RULE=""
 IN=""
 REPORT_UNUSED=0

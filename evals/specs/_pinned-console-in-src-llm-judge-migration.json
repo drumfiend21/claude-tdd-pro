@@ -1,0 +1,6 @@
+{
+  "name": "console-in-src detector migrated to llm-judge with grep fallback preserves grep behavior when LLM_JUDGE=0",
+  "command": "mkdir -p /tmp/cl-musk-fowler-src && printf 'console.log(\"hello\")\\n' > /tmp/cl-musk-fowler-src/bad.js; rc1=0; LLM_JUDGE=0 bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/console-in-src.sh\" --paths \"/tmp/cl-musk-fowler-src/*.js\" 2>err.txt; rc1=$?; rc2=0; LLM_JUDGE=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/console-in-src.sh\" --paths \"/tmp/cl-musk-fowler-src/*.js\" 2>err2.txt; rc2=$?; rm -rf /tmp/cl-musk-fowler-src; [ \"$rc1\" -eq 1 ] && [ \"$rc2\" -le 1 ] && echo migration_compatible 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["migration_compatible"]}
+}

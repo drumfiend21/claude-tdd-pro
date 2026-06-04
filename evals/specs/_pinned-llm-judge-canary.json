@@ -1,0 +1,6 @@
+{
+  "name": "llm-judge detector runs against a real rule from the standards tree and emits a verdict",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/llm-judge.sh\" --target \"$CLAUDE_PLUGIN_ROOT/runner-go/internal/spec/spec.go\" --rule g-ts-001 --dry-run 2>err.txt; rc=$?; [ \"$rc\" -le 3 ] && grep -qE \"dry-run|model=\" err.txt && echo judge_runnable 1>&2",
+  "setup": [],
+  "expect": {"exit_code": 0, "stderr_contains": ["judge_runnable"]}
+}
