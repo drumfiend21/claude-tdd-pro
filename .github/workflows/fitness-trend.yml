@@ -1,0 +1,32 @@
+name: fitness-trend
+
+# Per docs/FITNESS_FUNCTIONS.md, the holistic/temporal fitness function.
+# Runs weekly and appends a row to docs/fitness-trend.md.
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"  # Mondays 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  trend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby ruby-yaml
+      - name: Run trend
+        run: bash scripts/fitness-trend.sh
+      - name: Commit and push trend row
+        run: |
+          if [ -n "$(git status --porcelain docs/fitness-trend.md)" ]; then
+            git config user.name "fitness-trend"
+            git config user.email "fitness-trend@claude-tdd-pro"
+            git add docs/fitness-trend.md
+            git commit -m "fitness: weekly trend row"
+            git push origin main
+          fi

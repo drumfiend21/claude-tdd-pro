@@ -1,0 +1,47 @@
+name: release
+
+# Per docs/RELEASE.md. Cuts a GitHub release on tag push, attaches
+# the source tarball, and extracts the matching CHANGELOG section as
+# release notes.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify version coherence
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg=$(node -p "require('./package.json').version")
+          ins=$(grep -oE 'VERSION="[^"]+"' scripts/install.sh | head -1 | grep -oE '[0-9.]+')
+          readme=$(grep -oE 'Current version: [0-9.]+' README.md | head -1 | grep -oE '[0-9.]+')
+          echo "tag=$tag pkg=$pkg installer=$ins readme=$readme"
+          [ "$tag" = "$pkg" ] || { echo "tag does not match package.json"; exit 1; }
+          [ "$tag" = "$ins" ] || { echo "tag does not match install.sh"; exit 1; }
+          [ "$tag" = "$readme" ] || { echo "tag does not match README"; exit 1; }
+
+      - name: Extract release notes
+        id: notes
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          awk "/^## \\[${tag}\\]/,/^## \\[/" CHANGELOG.md \
+            | head -n -1 > /tmp/release-notes.md
+          echo "notes_path=/tmp/release-notes.md" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body_path: ${{ steps.notes.outputs.notes_path }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'rc') || contains(github.ref_name, 'canary') }}
