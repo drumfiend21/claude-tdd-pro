@@ -56,8 +56,8 @@ check "LSP --print-diagnostics works as a CLI" \
 check "installer preflight runs (--help)" \
   bash "$PLUGIN_ROOT/scripts/install.sh" --help
 
-check "doctor command runs" \
-  bash "$PLUGIN_ROOT/scripts/install.sh" doctor
+check "doctor command runs (rc≤1 = ran; warnings expected without lockfile)" \
+  bash -c 'bash "$0" doctor >/dev/null 2>&1; rc=$?; [ "$rc" -le 1 ]' "$PLUGIN_ROOT/scripts/install.sh"
 
 check "version command runs" \
   bash "$PLUGIN_ROOT/scripts/install.sh" version
