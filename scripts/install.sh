@@ -539,7 +539,16 @@ PLAN
   lockfile_write "$resolved_pin" "$PROFILE" "$WITH_GROK" "$WITH_LSP"
   log "lockfile → $LOCKFILE_NAME"
 
-  # Step 8 — background suite verification + post-install doctor (async)
+  # Step 8 — production telemetry + background suite verification
+  if [[ -x "$CLONE_DIR/space/telemetry-emit.sh" ]]; then
+    bash "$CLONE_DIR/space/telemetry-emit.sh" \
+      --event "install.init" --severity "info" \
+      --field "scope=$SCOPE" --field "profile=$PROFILE" \
+      --field "with_grok=$WITH_GROK" --field "with_lsp=$WITH_LSP" \
+      --field "elapsed_s=$((SECONDS - START_SECONDS))" \
+      2>/dev/null || true
+  fi
+
   ( bash "$CLONE_DIR/evals/runner.sh" >"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
   disown 2>/dev/null || true
 

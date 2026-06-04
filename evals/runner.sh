@@ -315,6 +315,19 @@ done
 echo
 echo "Results: $pass passed, $fail failed"
 
+# Production telemetry: emit a structured event on every suite run.
+# Honors Q-6 privacy posture (local-only when share: never).
+# Best-effort; never blocks the runner or affects exit code.
+if [[ -x "${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}/space/telemetry-emit.sh" ]]; then
+  "${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}/space/telemetry-emit.sh" \
+    --event "suite.run" \
+    --severity "$( [[ $fail -eq 0 ]] && echo info || echo error )" \
+    --field "passed=$pass" \
+    --field "failed=$fail" \
+    --field "filter=${FILTER:-all}" \
+    2>/dev/null || true
+fi
+
 # --stats: emit a single structured line for instrumentation. Opt-in so
 # default output stays bit-identical to a baseline serial run.
 if [[ "$EMIT_STATS" -eq 1 ]]; then

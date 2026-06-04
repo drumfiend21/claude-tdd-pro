@@ -51,8 +51,12 @@ ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 session="${CLAUDE_SESSION_ID:-local-$(printf '%(%s)T' -1)}"
 version=$(grep -oE '"version": "[^"]+"' "$PLUGIN_ROOT/package.json" 2>/dev/null | head -1 | grep -oE '[0-9.]+' || echo unknown)
 
-# Compose the JSON event.
-event_json=$(node -e '
+# Compose the JSON event. Env vars precede node per bash-3.2
+# portability gotcha #4 (trailing positional args don't reach
+# process.env). Field key=value pairs are forwarded as args.
+event_json=$(TS="$ts" SESSION="$session" VERSION="$version" \
+            EVENT="$EVENT" SEVERITY="$SEVERITY" \
+            node -e '
   const ev = {
     ts: process.env.TS,
     session: process.env.SESSION,
@@ -66,7 +70,7 @@ event_json=$(node -e '
     if (i > 0) ev.fields[kv.substring(0, i)] = kv.substring(i + 1);
   }
   process.stdout.write(JSON.stringify(ev));
-' TS="$ts" SESSION="$session" VERSION="$version" EVENT="$EVENT" SEVERITY="$SEVERITY" "${FIELDS[@]}" 2>/dev/null)
+' "${FIELDS[@]}" 2>/dev/null)
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "telemetry-emit: dry-run; would write: $event_json" >&2
