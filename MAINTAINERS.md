@@ -40,19 +40,59 @@ with a banner. Consumers are advised to pin to the last released
 commit. Active development is suspended until a maintainer transition
 is documented.
 
-## Recruiting a secondary maintainer
+## Recruiting maintainers — aggressive policy
 
-The project is actively seeking one trusted reviewer for the role.
-Criteria:
+Per the simulated Musk-team review (DJ Seo):
+> "A codebase with talent density of 1 — even when that 1 is highly
+>  capable and AI-augmented — is at infinite bus-factor risk."
 
-- Has read `docs/architecture-v1.9.md` end-to-end at least once.
-- Has read `CLAUDE.md` and understands the six drift mechanisms.
-- Has shipped at least one CL through the per-CL workflow (Step 0 →
-  Step 4) under primary-maintainer pairing.
-- Is willing to be on-call for hotfix reviews on a best-effort basis.
+The project is **actively seeking** 2-3 secondary maintainers. Until
+talent density reaches at least 3, the following invariants apply:
 
-Interested? Open a GitHub issue titled "Maintainer interest:
-&lt;your-name&gt;" or contact @drumfiend21 directly.
+- **No new architecture phases or amendments** ship until the second
+  maintainer is recruited. (Maintenance-only mode for the canonical
+  architecture document.)
+- **All CLs touching `rubric/runner.sh`, `scripts/cl-build.sh`,
+  `scripts/install.sh`, or `rubric/detectors/audit-*.sh`** require
+  primary-maintainer review **plus** a documented review by at
+  least one external reader (can be informal — a GitHub comment
+  recording that someone else looked at it).
+- **Quarterly hotfix-without-AI rehearsal** must be completed by the
+  primary maintainer and the result logged to
+  `docs/hotfix-rehearsal-log.md`. Skipping a rehearsal triggers
+  maintenance-freeze status.
+
+### Criteria for becoming a secondary maintainer
+
+- Has read `docs/ARCHITECTURE.md` (the 200-line operator-facing
+  version) and `docs/FIRST_PRINCIPLES.md`.
+- Has read `CLAUDE.md` and can articulate at least 3 of the 6 drift
+  mechanisms in their own words.
+- Has shipped at least one CL through the per-CL workflow under
+  primary-maintainer pairing.
+- Is willing to commit to ~4 hours of review work per month.
+
+### Interested?
+
+- **Quickest path:** open a GitHub issue titled "Maintainer interest:
+  &lt;your-name&gt;" with a 2-paragraph statement of why you're
+  interested.
+- **Direct path:** contact @drumfiend21 via the email in commit
+  history.
+- **Pair-first path:** comment on any open issue or PR with a
+  thoughtful technical observation; this demonstrates capability
+  better than an introduction letter.
+
+### What we offer
+
+- Genuine architectural input on a project that explicitly values it
+  (see `docs/ADR/`, `CONTRIBUTING.md`).
+- Citation in `CHANGELOG.md` and (with permission) public
+  acknowledgment as a project maintainer.
+- A real ownership stake in the system's evolution under
+  Apache-2.0.
+- A working example of AI-augmented development with explicit
+  discipline boundaries — useful for your own work elsewhere.
 
 ## Onboarding a new maintainer (shadow + drive)
 
