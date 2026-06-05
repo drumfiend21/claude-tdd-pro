@@ -241,6 +241,28 @@ else
   WORKERS=${EVAL_WORKERS:-$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)}
   # Cap to avoid runaway on huge cores
   [[ "$WORKERS" -gt 16 ]] && WORKERS=16
+
+# Cost / timeout gates (per Musk-leadership review: "Parallel subagents
+# and review panels can explode token usage. Add cost/timeout gates.")
+#
+#   CLAUDE_TDD_PRO_COST_LIMIT_USD=N    aborts run when summed
+#                                       telemetry-emitted token cost
+#                                       exceeds N USD (best-effort;
+#                                       depends on operator wiring
+#                                       cost into telemetry events).
+#   CLAUDE_TDD_PRO_WALL_TIMEOUT_S=N    aborts run when wall-clock
+#                                       exceeds N seconds (per-suite).
+#   CLAUDE_TDD_PRO_PER_SPEC_TIMEOUT_S  aborts a single spec invocation
+#                                       when it exceeds N seconds
+#                                       (defaults to 10).
+PER_SPEC_TIMEOUT="${CLAUDE_TDD_PRO_PER_SPEC_TIMEOUT_S:-10}"
+WALL_TIMEOUT="${CLAUDE_TDD_PRO_WALL_TIMEOUT_S:-0}"  # 0 = no wall cap
+COST_LIMIT="${CLAUDE_TDD_PRO_COST_LIMIT_USD:-0}"     # 0 = no cost cap
+if [[ "$WALL_TIMEOUT" -gt 0 ]]; then
+  ( sleep "$WALL_TIMEOUT" && kill -TERM $$ 2>/dev/null ) &
+  WALL_TIMEOUT_WATCHDOG_PID=$!
+  trap "kill -9 $WALL_TIMEOUT_WATCHDOG_PID 2>/dev/null" EXIT
+fi
 fi
 
 OUTDIR=$(mktemp -d -t claude-tdd-pro-runner.XXXXXX)
