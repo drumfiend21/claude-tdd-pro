@@ -1,0 +1,80 @@
+# Claude Code host-version compatibility matrix.
+#
+# Declares the Claude Code versions claude-tdd-pro is known-good /
+# known-broken / untested against. Read by:
+#   - scripts/post-upgrade-verify.sh (validates compatibility)
+#   - hooks/scripts/session-start-version-check.sh (warns on
+#     untested-range upgrades)
+#   - commands/install.sh doctor (surfaces compatibility status)
+#
+# Analog of npm's "engines.node" or Cargo's "rust-version" — declares
+# the host runtime expectation explicitly.
+
+plugin_version: "0.4.0"
+schema_version: 1
+
+# Versions explicitly tested and known to work.
+known_good:
+  - version_range: ">=1.0.0,<2.0.0"
+    notes: "Claude Code 1.x — original hook payload contract; tested
+            with PreToolUse / PostToolUse / Stop / SessionStart."
+    last_verified: "2026-06-04"
+    verified_against_commit: "453741e"
+
+# Versions where breakage is documented.
+known_broken: []
+
+# Versions outside the tested range. Plugin runs but the operator
+# should observe more carefully.
+untested:
+  - version_range: ">=2.0.0"
+    rationale: "Major-version bump may change hook payload contract.
+                The hook payload validator (hooks/scripts/payload-validator.sh)
+                will fall back to standalone mode if shape diverges."
+    recommended_action: "Run scripts/post-upgrade-verify.sh; review
+                          telemetry for hook.payload-shape-divergence
+                          events; bump plugin version after compatibility
+                          confirmed via ADR."
+
+# When the hook payload validator detects a divergence, this is the
+# fallback path the plugin takes. Documented here so operators
+# understand the degradation model.
+fallback_on_incompatibility:
+  mode: "standalone"
+  description: "Plugin runs CLI / LSP / CI surfaces; Claude Code hooks
+                disabled with operator notification. The 85% of the
+                plugin that is platform-independent (per
+                docs/PLATFORM_DEPENDENCY.md) continues to function."
+  re-engagement: "Operator runs `bash commands/install.sh upgrade`
+                   after confirming compatibility, or bumps the plugin
+                   pin to a version with matching contract."
+
+# Hook payload contract — the JSON shape we expect to receive at
+# each hook event. Used by hooks/scripts/payload-validator.sh.
+hook_payload_contract:
+  PreToolUse:
+    required_fields: ["tool_name"]
+    optional_fields: ["tool_input", "session_id", "cwd"]
+  PostToolUse:
+    required_fields: ["tool_name"]
+    optional_fields: ["tool_input", "tool_output", "session_id", "cwd"]
+  Stop:
+    required_fields: []
+    optional_fields: ["session_id", "stop_reason"]
+  SessionStart:
+    required_fields: []
+    optional_fields: ["session_id", "claude_version", "cwd"]
+
+# Migration guidance per Claude Code major version.
+migration_paths:
+  "1.x_to_2.x":
+    status: "untested"
+    pre_upgrade_checklist:
+      - "Run scripts/pre-upgrade-check.sh to snapshot baseline"
+      - "Read Anthropic's Claude Code 2.x release notes for hook
+         payload changes"
+      - "Verify the hook payload contract above still matches"
+    post_upgrade_checklist:
+      - "Run scripts/post-upgrade-verify.sh"
+      - "Check telemetry for hook.payload-shape-divergence events"
+      - "Update known_good range in this file via ADR if all green"
