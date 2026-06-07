@@ -27,10 +27,11 @@ decomposition, persisting the output as
 ## Considered options
 
 1. **Per-feature dynamic consultation (the original TICKET-034
-   proposal).** New template, new handoff schema, new mandatory
-   step in the outer loop, new ADR-0039 in the harness, 2-3 new
-   evals. Behind an operator toggle with caching. ~45-60 min of
-   implementation work.
+   proposal, landed on the harness side as ADR-0039 before this
+   review arrived).** New template, new handoff schema, new
+   mandatory step in the outer loop, harness-side ADR-0039,
+   2-3 new evals. Behind an operator toggle with caching.
+   ~45-60 min of implementation work.
 
 2. **Static context injection at session start (this decision).**
    A single `docs/PROJECT_CONTEXT_FOR_PLANNER.md` file in
@@ -100,13 +101,35 @@ Ships in this CL:
   Grok's draft which incorrectly recommended avoiding `[[ ]]` and
   `(( ))`).
 
-Ships in the harness (`grok-claude-tdd-pro`) as a follow-up CL the
-operator applies:
+Shipped on the harness side (`grok-claude-tdd-pro`, confirmed at
+commit `4fb1a58`):
 
-- ~5-line patch to `scripts/sync-plugin.sh --ensure` to copy the
-  injected file into the harness's planner-context path.
-- `docs/adr/ADR-0039.md` documenting the harness-side acceptance
-  of the same decision.
+- ~5-line patch to `scripts/sync-plugin.sh --ensure` copies the
+  injected file into the harness's planner-context path. Emits
+  a deferred-activation notice when the pinned plugin commit
+  predates the file's first ship; activates on pin bump.
+- `docs/adr/ADR-0040.md` documents the harness-side reversal.
+  Per Nygard append-only discipline the prior harness-side
+  ADR-0039 (which had landed the original consult-phase
+  proposal before this review arrived) was not renumbered or
+  overwritten; ADR-0040 explicitly `SUPERSEDES: ADR-0039`. Both
+  ADRs remain in the tree; the supersession trail is the
+  decision record.
+- `docs/handoff-contract.md §Architecture-Consult` carries a
+  SUPERSEDED marker pointing at ADR-0040 (body retained per
+  Nygard append-only).
+- SUPERSEDED markers on `.grok/templates/architecture-consult.md`,
+  the `architecture_consult` input variable in
+  `decomposition.md`, and TICKET-034 in `TICKETS.md`.
+- Full reversal narrative in `AUTOMATION_INTEL.md`.
+- `.gitignore` excludes `.harness/context/`.
+
+The wire is shipped but inert until the harness's pinned plugin
+commit advances to `b3e17c0` (or any later commit including
+`docs/PROJECT_CONTEXT_FOR_PLANNER.md`). That pin bump is a
+separate operator-gated CL on the harness side per the harness's
+`architecture-principles §15` (precedent: ADR-0025), not pending
+Claude Code work.
 
 ## Corrections from Grok's original draft
 
