@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: an interval-grammar cadence exceeding a day is still classed sub-day not calendar",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value 25h",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["class=subday", "interval_ms=90000000"] }
+}

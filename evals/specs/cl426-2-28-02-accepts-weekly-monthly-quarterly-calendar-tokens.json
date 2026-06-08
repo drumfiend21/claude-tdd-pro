@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: accepts weekly, monthly, and quarterly calendar tokens with their respective intervals",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value weekly; bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value monthly; bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value quarterly",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["interval_ms=604800000", "interval_ms=2592000000", "interval_ms=7776000000"] }
+}

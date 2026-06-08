@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: accepts the daily calendar token and resolves it to an 86400000 millisecond interval",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value daily",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["valid=true", "class=calendar", "interval_ms=86400000"] }
+}

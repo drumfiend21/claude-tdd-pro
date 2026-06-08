@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: rejects a zero interval as below the one-millisecond grammar floor",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value 0ms",
+  "setup": [],
+  "expect": { "exit_code": 2, "stderr_contains": ["invalid_cadence=0ms"] }
+}

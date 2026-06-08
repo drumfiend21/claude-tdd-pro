@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: rejects a malformed cadence token with a non-zero exit and invalid marker",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value 7x",
+  "setup": [],
+  "expect": { "exit_code": 2, "stderr_contains": ["valid=false", "invalid_cadence=7x"] }
+}

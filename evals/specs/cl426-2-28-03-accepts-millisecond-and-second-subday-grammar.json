@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: accepts millisecond and second sub-day interval grammar and classes it as sub-day",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value 500ms; bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value 45s",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["class=subday", "interval_ms=500", "interval_ms=45000"] }
+}

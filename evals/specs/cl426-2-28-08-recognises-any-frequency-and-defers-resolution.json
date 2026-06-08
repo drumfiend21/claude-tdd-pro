@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: recognises the any-frequency shorthand and defers interval resolution to the registry",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value any-frequency",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["valid=true", "class=any-frequency"] }
+}

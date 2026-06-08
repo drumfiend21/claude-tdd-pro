@@ -40,6 +40,12 @@
 
 set -uo pipefail
 
+# §2.28 cadence grammar is shared with standards/validate-fetch-frequency.sh
+# via lib/fetch-frequency-grammar.sh (single source of truth — no drift).
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+# shellcheck disable=SC1091
+. "$PLUGIN_ROOT/lib/fetch-frequency-grammar.sh"
+
 SOURCE_ID=""
 FETCH_FREQUENCY=""
 NOW_MS="0"
@@ -70,38 +76,8 @@ if [ -z "$SOURCE_ID" ]; then
   exit 2
 fi
 
-# ---------------------------------------------------------------------------
-# Cadence resolution. Echoes "<interval_ms> <resolved_token> <class>" on
-# success; returns 2 on an invalid cadence. class is calendar|subday|manual.
-# ---------------------------------------------------------------------------
-resolve_cadence() {
-  c="$1"
-  case "$c" in
-    ""|daily)  echo "86400000 daily calendar" ;;
-    weekly)    echo "604800000 weekly calendar" ;;
-    monthly)   echo "2592000000 monthly calendar" ;;
-    quarterly) echo "7776000000 quarterly calendar" ;;
-    on-demand) echo "-1 on-demand manual" ;;
-    *)
-      # §2.28 sub-day interval grammar: ^[0-9]+(ms|s|m|h)$
-      if printf '%s' "$c" | grep -Eq '^[0-9]+(ms|s|m|h)$'; then
-        num=$(printf '%s' "$c" | sed -E 's/(ms|s|m|h)$//')
-        unit=$(printf '%s' "$c" | sed -E 's/^[0-9]+//')
-        # §27.5 grammar floor is 1ms; reject a zero interval.
-        if [ "$num" -eq 0 ] 2>/dev/null; then return 2; fi
-        case "$unit" in
-          ms) ms="$num" ;;
-          s)  ms=$((num * 1000)) ;;
-          m)  ms=$((num * 60000)) ;;
-          h)  ms=$((num * 3600000)) ;;
-        esac
-        echo "$ms $c subday"
-      else
-        return 2
-      fi
-      ;;
-  esac
-}
+# Cadence resolution (ff_resolve_cadence) is provided by the sourced
+# lib/fetch-frequency-grammar.sh — the §2.28 single source of truth.
 
 # ---------------------------------------------------------------------------
 # any-frequency (§2.28 shorthand) resolves via the S-22 FETCH-FREQUENCIES
@@ -120,7 +96,7 @@ if [ "$FETCH_FREQUENCY" = "any-frequency" ]; then
   echo "any-frequency-resolved=$af" >&2
 fi
 
-if ! parsed=$(resolve_cadence "$RESOLVED_FREQUENCY"); then
+if ! parsed=$(ff_resolve_cadence "$RESOLVED_FREQUENCY"); then
   echo "invalid_cadence=$FETCH_FREQUENCY" >&2
   exit 2
 fi

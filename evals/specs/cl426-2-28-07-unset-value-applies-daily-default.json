@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: an unset value applies the daily default and marks the default as applied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["default_applied=true", "resolved=daily", "interval_ms=86400000"] }
+}
