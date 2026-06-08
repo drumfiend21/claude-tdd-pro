@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: an edit to the file is picked up on the next resolution without a restart",
+  "command": "printf 'default: weekly\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id x --registry standards --file \"$PWD/ff.yaml\"; printf 'default: monthly\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id x --registry standards --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_frequency=weekly", "resolved_frequency=monthly"] }
+}

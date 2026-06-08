@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: a per-source override wins over the per-registry default",
+  "command": "printf 'default: weekly\\nregistries:\\n  standards: 12h\\nsources:\\n  aws-well-architected: 5m\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id aws-well-architected --registry standards --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_frequency=5m", "resolution=per-source-override"] }
+}

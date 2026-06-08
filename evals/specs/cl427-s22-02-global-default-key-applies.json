@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: the global default key applies when no registry or source entry matches",
+  "command": "printf 'default: weekly\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id x --registry standards --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_frequency=weekly", "resolution=global-default"] }
+}

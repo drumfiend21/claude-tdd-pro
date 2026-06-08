@@ -80,18 +80,18 @@ fi
 # lib/fetch-frequency-grammar.sh — the §2.28 single source of truth.
 
 # ---------------------------------------------------------------------------
-# any-frequency (§2.28 shorthand) resolves via the S-22 FETCH-FREQUENCIES
-# registry. S-20 ships the handoff: read a `default:` cadence from the file
-# when present, else fall back to the global default `daily`. The full
-# per-registry / per-source override resolution is S-22's substrate.
+# any-frequency (§2.28 shorthand) defers to the S-22 FETCH-FREQUENCIES
+# resolver (standards/fetch-frequency-registry.sh) — the single source of
+# truth for per-source -> per-registry -> global (daily) resolution.
 # ---------------------------------------------------------------------------
 RESOLVED_FREQUENCY="$FETCH_FREQUENCY"
 if [ "$FETCH_FREQUENCY" = "any-frequency" ]; then
-  af="daily"
-  if [ -n "$FREQ_FILE" ] && [ -f "$FREQ_FILE" ]; then
-    fileval=$(grep -E '^[[:space:]]*default:' "$FREQ_FILE" 2>/dev/null | head -1 | sed -E 's/^[[:space:]]*default:[[:space:]]*//' | tr -d '"' | tr -d ' ')
-    if [ -n "$fileval" ]; then af="$fileval"; fi
+  if [ -n "$FREQ_FILE" ]; then
+    af=$(bash "$PLUGIN_ROOT/standards/fetch-frequency-registry.sh" --source-id "$SOURCE_ID" --file "$FREQ_FILE" 2>/dev/null) || af="daily"
+  else
+    af=$(bash "$PLUGIN_ROOT/standards/fetch-frequency-registry.sh" --source-id "$SOURCE_ID" 2>/dev/null) || af="daily"
   fi
+  if [ -z "$af" ]; then af="daily"; fi
   RESOLVED_FREQUENCY="$af"
   echo "any-frequency-resolved=$af" >&2
 fi

@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: a millisecond value in the file validates against the cadence grammar",
+  "command": "printf 'sources:\\n  x: 250ms\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id x --registry standards --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_frequency=250ms", "interval_ms=250"] }
+}

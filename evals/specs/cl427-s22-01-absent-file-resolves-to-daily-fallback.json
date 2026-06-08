@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: an absent file resolves any source to the daily fallback",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id any-source --registry standards --file \"$PWD/missing.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_frequency=daily", "resolution=fallback-daily", "interval_ms=86400000"] }
+}
