@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: records the resolved cadence into the provenance standards_state block",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id aws-well-architected --fetch-frequency 5m --now-ms 0 --last-fetch-ms 0 --emit-provenance \"$PWD/prov.json\" && grep -q standards_state prov.json && grep -q aws-well-architected prov.json && grep -q 300000 prov.json && echo prov-ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["prov-ok"] }
+}

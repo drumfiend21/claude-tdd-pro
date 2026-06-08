@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: parses a 300000ms cadence and reports a 300000 millisecond interval",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id aws-well-architected --fetch-frequency 300000ms --now-ms 1000000 --last-fetch-ms 0",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["interval_ms=300000", "resolved_cadence=300000ms"] }
+}

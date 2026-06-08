@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: an unset fetch frequency resolves to the daily default interval",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --now-ms 0 --last-fetch-ms 0",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_cadence=daily", "interval_ms=86400000"] }
+}

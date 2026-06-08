@@ -1184,6 +1184,8 @@ Additive amendment giving the plugin a standing watch on authoritative cloud-arc
 
 **Status:** PROPOSED. Reference block appended without modifying any prior section. The substrate-and-spec build proceeds per the design file's ticket plan; the §25 fidelity gate reads this file, so the §27.6 vocabulary below is authoritative now.
 
+**Ratified:** 2026-06-08 — operator approved ("Let's build it"); the PROPOSED status above is superseded by this additive note (per the append-only discipline, ratification is recorded as a new line, never by rewriting the prior one). Build commenced at S-20 (configurable-frequency / in-use polling scheduler) per the design-file ticket plan (CL-B1 specs → CL-B2 substrate).
+
 **Authoritative IDs introduced by v1.12:** S-20, S-21, S-22, S-23, S-24 (Phase S, §4); §2.28, §2.29 (cross-cutting contracts, §2). No collision with §1–§26 IDs (S stopped at S-19; contracts at §2.27; amendment sections at §26).
 
 Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal compatibility):

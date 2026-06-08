@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: normalises 30s, 5m, and 2h interval grammar to milliseconds",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency 30s --now-ms 0 --last-fetch-ms 0; bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency 5m --now-ms 0 --last-fetch-ms 0; bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency 2h --now-ms 0 --last-fetch-ms 0",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["interval_ms=30000", "interval_ms=300000", "interval_ms=7200000"] }
+}
