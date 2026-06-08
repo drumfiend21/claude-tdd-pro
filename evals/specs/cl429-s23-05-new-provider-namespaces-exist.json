@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: the aws azure gcp and hashicorp source-namespace folders exist",
+  "command": "for ns in aws azure gcp hashicorp; do test -d \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/$ns\" || { echo \"FAIL missing namespace $ns\" 1>&2; exit 1; }; done; echo namespaces-ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["namespaces-ok"] }
+}

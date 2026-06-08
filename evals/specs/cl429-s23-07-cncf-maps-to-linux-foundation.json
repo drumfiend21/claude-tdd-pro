@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: the CNCF cloud-native source maps to the existing linux-foundation namespace",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/linux-foundation/cncf-cloud-native.yaml\" && echo cncf-mapped 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["cncf-mapped"] }
+}

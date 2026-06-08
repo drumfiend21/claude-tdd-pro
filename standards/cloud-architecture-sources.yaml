@@ -1,0 +1,239 @@
+# standards/cloud-architecture-sources.yaml — S-23 cloud-architecture domain
+# seed (v1.12 §27). Plugin-internal §2.6 schema, kept SEPARATE from the S-1
+# catalog standards/sources.yaml so the S-1 "exactly 17 default sources"
+# baseline is preserved. Each entry maps via G-9 to a reading-source file at
+# generated-code-quality-standards/<source_namespace>/<id>.yaml.
+#
+# All tier-1 first-party publisher guidance; applies_to: [cloud-architecture];
+# default fetch_frequency: daily (operator may set a <N>ms cadence per §2.28).
+# curriculum_phase (1-6) tags the source to the self-study curriculum phase for
+# the S-24 education digest.
+
+- id: aws-well-architected
+  name: "AWS Well-Architected Framework"
+  url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: aws
+  curriculum_phase: 2
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: aws-architecture-center
+  name: "AWS Architecture Center"
+  url: "https://aws.amazon.com/architecture/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: aws
+  curriculum_phase: 3
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: aws-prescriptive-security
+  name: "AWS Prescriptive Guidance Security"
+  url: "https://docs.aws.amazon.com/prescriptive-guidance/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: aws
+  curriculum_phase: 5
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: azure-well-architected
+  name: "Azure Well-Architected Framework"
+  url: "https://learn.microsoft.com/azure/well-architected/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: azure
+  curriculum_phase: 2
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: azure-architecture-center
+  name: "Azure Architecture Center"
+  url: "https://learn.microsoft.com/azure/architecture/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: azure
+  curriculum_phase: 3
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: azure-cloud-design-patterns
+  name: "Azure Cloud Design Patterns"
+  url: "https://learn.microsoft.com/azure/architecture/patterns/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: azure
+  curriculum_phase: 2
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: gcp-architecture-framework
+  name: "Google Cloud Architecture Framework"
+  url: "https://cloud.google.com/architecture/framework"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: gcp
+  curriculum_phase: 2
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: gcp-architecture-center
+  name: "Google Cloud Architecture Center"
+  url: "https://cloud.google.com/architecture"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: gcp
+  curriculum_phase: 3
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: terraform-docs
+  name: "HashiCorp Terraform Documentation"
+  url: "https://developer.hashicorp.com/terraform/docs"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: hashicorp
+  curriculum_phase: 4
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: dod-scca
+  name: "DoD Secure Cloud Computing Architecture SCCA"
+  url: "https://www.disa.mil/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: us-government
+  curriculum_phase: 5
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: nist-zero-trust
+  name: "NIST SP 800-207 Zero Trust Architecture"
+  url: "https://csrc.nist.gov/pubs/sp/800/207/final"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: low
+  fragility_strategy: manual-only
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: us-government
+  curriculum_phase: 5
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+
+- id: cncf-cloud-native
+  name: "CNCF Cloud Native and Kubernetes Architecture"
+  url: "https://kubernetes.io/docs/concepts/architecture/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  fragility_tier: medium
+  fragility_strategy: prompt-on-change
+  fetcher: html-anchor.sh
+  identifier_pattern: "^[a-z0-9-]+$"
+  license_note: "Reference/educational use — © respective publisher"
+  source_namespace: linux-foundation
+  curriculum_phase: 5
+  origin: bundled
+  added_by: plugin
+  added_at: "2026-06-08"
+

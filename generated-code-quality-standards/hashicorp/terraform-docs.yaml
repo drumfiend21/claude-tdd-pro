@@ -1,0 +1,15 @@
+source:
+  id: terraform-docs
+  authoritative_publisher: "HashiCorp"
+  authoritative_url: "https://developer.hashicorp.com/terraform/docs"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:9a8cc9568870744d8147bad8286b85b322363fafbb20a31285d0949984f2c269"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []

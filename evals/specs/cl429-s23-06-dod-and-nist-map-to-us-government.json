@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: the DoD SCCA and NIST zero-trust sources map to the existing us-government namespace",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/us-government/dod-scca.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/us-government/nist-zero-trust.yaml\" && echo us-gov-mapped 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["us-gov-mapped"] }
+}

@@ -1,0 +1,15 @@
+source:
+  id: azure-cloud-design-patterns
+  authoritative_publisher: "Microsoft"
+  authoritative_url: "https://learn.microsoft.com/azure/architecture/patterns/"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:199d60f98de90413793991de5105c53f63615d7a15ac4db899834a99c9995f00"
+  fetch_frequency: daily
+  fragility_tier: low
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []

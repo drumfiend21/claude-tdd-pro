@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: the domain catalog ships at standards/cloud-architecture-sources.yaml with exactly twelve seed sources",
+  "command": "[ -s \"$CLAUDE_PLUGIN_ROOT/standards/cloud-architecture-sources.yaml\" ] && [ \"$(grep -c '^- id:' \"$CLAUDE_PLUGIN_ROOT/standards/cloud-architecture-sources.yaml\")\" = \"12\" ] && echo twelve 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["twelve"] }
+}

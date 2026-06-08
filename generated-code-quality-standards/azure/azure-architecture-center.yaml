@@ -1,0 +1,15 @@
+source:
+  id: azure-architecture-center
+  authoritative_publisher: "Microsoft"
+  authoritative_url: "https://learn.microsoft.com/azure/architecture/"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:bfd3f77b966b9153c7e2813c0de03fe39db3bf8a7d3bb4f6ddcf0fc43f8101d1"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []

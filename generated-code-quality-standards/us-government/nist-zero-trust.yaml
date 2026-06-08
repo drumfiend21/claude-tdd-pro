@@ -1,0 +1,15 @@
+source:
+  id: nist-zero-trust
+  authoritative_publisher: "U.S. NIST"
+  authoritative_url: "https://csrc.nist.gov/pubs/sp/800/207/final"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:c2d5e31535321d433103c345e5036a97376585cfc2e026001bc3a312283e80be"
+  fetch_frequency: daily
+  fragility_tier: low
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []
