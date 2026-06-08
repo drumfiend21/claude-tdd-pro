@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get fetcher: a successful 200 persists the etag and last_modified alongside the content hash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/store\" --simulate-status 200 --etag etag-v1 --last-modified lm-v1 --body-hash abc && grep -q etag-v1 \"$PWD/store/aws.json\" && grep -q lm-v1 \"$PWD/store/aws.json\" && grep -q abc \"$PWD/store/aws.json\" && echo store-ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["response=200-ok", "store-ok"] }
+}

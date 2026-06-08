@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get contract: paywalled HEAD-only sources are exempt from conditional GET",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/s\" --paywalled",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["conditional-get=skipped-paywalled"] }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get contract: stored validators live at the standards-last-fetch json path with etag last_modified and content_hash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --simulate-status 200 --etag e1 --last-modified l1 --body-hash c1 && test -f .claude-tdd-pro/standards-last-fetch/aws.json && grep -q etag .claude-tdd-pro/standards-last-fetch/aws.json && grep -q last_modified .claude-tdd-pro/standards-last-fetch/aws.json && grep -q content_hash .claude-tdd-pro/standards-last-fetch/aws.json && echo path-ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["path-ok"] }
+}
