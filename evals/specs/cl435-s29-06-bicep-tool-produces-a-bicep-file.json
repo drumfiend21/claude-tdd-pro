@@ -1,0 +1,13 @@
+{
+  "name": "cloud build: the bicep tool produces a dot bicep IaC file",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" scaffold --decision-id d2 --pillar reliability --tool bicep --build-dir b2 --now 2026-06-08T12:00:00Z 2>/dev/null\ntest -f b2/d2/main.bicep && echo bicep-file 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bicep-file"
+    ]
+  }
+}

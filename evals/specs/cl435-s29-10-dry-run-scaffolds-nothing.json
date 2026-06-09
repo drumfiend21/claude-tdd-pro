@@ -1,0 +1,14 @@
+{
+  "name": "cloud build: a dry-run previews without writing the build unit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" scaffold --decision-id d4 --pillar security --build-dir dr --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e dr ] && echo no-files 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-files"
+    ]
+  }
+}

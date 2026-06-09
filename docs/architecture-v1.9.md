@@ -1259,3 +1259,19 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-28).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-28-cloud-architecture-adr-generator/`.
 
 **§20 sequencing (S-28).** Week 39: S-28 ships after S-26/S-27 (it grounds ADRs in the same pillar→source mapping). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.12 Cloud-architecture build units — test-first IaC from design (additive amendment, 2026-06-08)
+
+S-29 closes the design->build gap: the infrastructure the cloud-architect layer DESIGNS (the S-28 ADR + S-26 pillar review) must be DEVELOPED with the same excellence as every other type of code the plugin builds — test-first, standards-grounded, decision-traced, red-until-green. S-29 makes Infrastructure-as-Code a first-class TDD build target rather than a second-class side path. It reuses the existing core contracts: the §2.16 ADR is the design input, the test-first discipline (the plugin's universal build loop) governs the order, and the S-23/S-26 pillar->source grounding supplies the conformance criteria's provenance (cite-or-needs_grounding).
+
+**Authoritative ID introduced:** S-29 (Phase S, §4). No collision with §1–§27.11 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-29** Cloud-architecture build units (v1.12 addendum — see §27.12). `commands/cloud-build.sh`: turns a cloud design decision (an S-28 ADR) into a test-first IaC build unit. `scaffold` writes, together, a `conformance` spec (the test, derived from the decision's Well-Architected `pillar` + requirements, with grounding citations), an IaC stub (`terraform`->`.tf`, `bicep`->`.bicep`, `cloudformation`->`.json`), a `grounding` manifest, and a `unit` metadata record that traces to the ADR `decision_id`; the fresh unit starts RED (the `check` action fails until the IaC satisfies the conformance requirements, then it is GREEN). Requirements default per pillar and are overridable; a pillar with no grounding source is marked `needs_grounding`. This enforces the same spec-first / grounded / ADR-traced build excellence on infrastructure as on application code.
+
+**Vocabulary additions for §25 fidelity audit (S-29):** `cloud-build`, `build-unit`, `conformance`, `scaffold`, `iac`, `terraform`, `bicep`, `cloudformation`, `requirements`, `red`, `green`, `decision_id`, `needs_grounding`.
+
+**Anti-drift note (S-29).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-29-cloud-architecture-build-units/`.
+
+**§20 sequencing (S-29).** Week 40: S-29 ships after S-28 (it consumes the ADR design output and feeds the plugin's existing implement loop). Governance-only ID addition; preserves the §21 definition-of-done.

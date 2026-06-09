@@ -1,0 +1,13 @@
+{
+  "name": "cloud build: the terraform tool produces a dot tf IaC file",
+  "command": "cat > adr.json <<'JEOF'\n{\"decision_id\":\"0007-zt\",\"title\":\"Zero Trust mesh\",\"pillar\":\"security\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" scaffold --from-adr adr.json --tool terraform --build-dir build --now 2026-06-08T12:00:00Z 2>/dev/null\ntest -f build/0007-zt/main.tf && echo tf-file 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tf-file"
+    ]
+  }
+}
