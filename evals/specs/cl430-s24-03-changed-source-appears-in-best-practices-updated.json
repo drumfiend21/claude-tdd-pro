@@ -1,0 +1,13 @@
+{
+  "name": "education digest: a source whose guidance changed appears in best practices updated",
+  "command": "cat > d.jsonl <<'JEOF'\n{\"source_id\":\"azure-well-architected\",\"section_id\":\"ops1\",\"pillar\":\"operational-excellence\",\"curriculum_phase\":\"2\",\"delta_class\":\"best_practice_updated\",\"summary\":\"resiliency review cadence\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-digest.sh\" --deltas d.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.best_practices_updated.length===1 && j.best_practices_updated[0].source_id===\"azure-well-architected\"?0:1)' && echo best-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "best-ok"
+    ]
+  }
+}
