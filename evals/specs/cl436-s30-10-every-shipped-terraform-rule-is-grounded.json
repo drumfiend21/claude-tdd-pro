@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: every shipped terraform convention rule is grounded in a catalog source",
+  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; rules=YAML.unsafe_load_file(r+\"/standards/cloud-conventions/terraform.yaml\"); ids={}; [r+\"/standards/cloud-architecture-sources.yaml\", r+\"/standards/cloud-engineering-sources.yaml\"].each{|f| YAML.unsafe_load_file(f).each{|e| ids[e[\"id\"]]=true}}; bad=rules.reject{|x| ids[x[\"source_id\"]]}; exit(bad.empty? ? 0 : 1)' && echo all-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-grounded"
+    ]
+  }
+}

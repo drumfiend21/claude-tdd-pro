@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: lints a build unit by id reading its IaC and tool",
+  "command": "mkdir -p bd/u1\nprintf '{\"iac_file\":\"main.tf\",\"tool\":\"terraform\"}' > bd/u1/unit.json\ncat > bd/u1/main.tf <<'JEOF'\nterraform { required_version = \">= 1.5\" required_providers { aws = { source = \"hashicorp/aws\" } } }\nvariable \"name\" { description = \"n\" type = string }\nresource \"aws_s3_bucket\" \"b\" { tags = { env = \"prod\" } }\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --unit u1 --build-dir bd",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conventions=green"
+    ]
+  }
+}

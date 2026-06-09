@@ -1,0 +1,84 @@
+# Cloud-architecture software-engineering sources (S-30, v1.12 §27.13).
+#
+# Authoritative best-practice sources for the SOFTWARE DEVELOPMENT of cloud
+# architecture - the syntax and patterning of IaC and cloud-native code. These
+# were secured (URLs verified 2026-06-08) because the S-23 architecture seed,
+# while strong on Well-Architected guidance and design patterns, did not carry
+# dedicated style/convention authorities for Terraform, Bicep, CloudFormation,
+# or general software engineering. The S-30 convention rulesets ground their
+# rules in these source ids (cite-or-decline).
+#
+# Same schema as the S-23 catalog, plus a `discipline: [syntax|patterning]`
+# tag marking what kind of software-development concern the source governs.
+
+- id: hashicorp-terraform-style-guide
+  name: "HashiCorp Terraform Style Guide"
+  url: "https://developer.hashicorp.com/terraform/language/style"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [syntax, patterning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: terraform-recommended-practices
+  name: "Terraform Recommended Practices (module structure and workflow)"
+  url: "https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence, reliability]
+  discipline: [patterning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: azure-bicep-best-practices
+  name: "Azure Bicep Best Practices"
+  url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/best-practices"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence, security]
+  discipline: [syntax, patterning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: aws-cloudformation-best-practices
+  name: "AWS CloudFormation Best Practices"
+  url: "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence, security]
+  discipline: [syntax, patterning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: twelve-factor-app
+  name: "The Twelve-Factor App"
+  url: "https://12factor.net"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence, reliability]
+  discipline: [patterning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 3
+
+- id: google-eng-practices
+  name: "Google Engineering Practices (code review and authoring)"
+  url: "https://google.github.io/eng-practices/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [patterning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 6

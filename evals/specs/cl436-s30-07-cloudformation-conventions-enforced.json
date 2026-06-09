@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: cloudformation conventions are enforced and cite the cloudformation best-practices source",
+  "command": "printf '{\"Resources\":{}}\\n' > x.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool cloudformation --iac x.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "source=aws-cloudformation-best-practices"
+    ]
+  }
+}

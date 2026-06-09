@@ -1275,3 +1275,21 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-29).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-29-cloud-architecture-build-units/`.
 
 **§20 sequencing (S-29).** Week 40: S-29 ships after S-28 (it consumes the ADR design output and feeds the plugin's existing implement loop). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.13 Cloud-architecture convention enforcement — syntax + patterning (additive amendment, 2026-06-08)
+
+S-30 extends the cloud-architect feature so that EVERYTHING concerning the software development of cloud architecture — the syntax used in IaC implementations and all patterning — is enforced from authoritative best-practice sources. Comprehensiveness assessment (2026-06-08): the S-23 architecture seed covers Well-Architected guidance + design patterns but carried no dedicated style/convention authorities for Terraform/Bicep/CloudFormation or general software engineering, so the best world-class engineering sources were secured (URLs verified) into a new engineering catalog. Convention rules ground their rules in those source ids plus the S-23 catalog (cite-or-decline).
+
+**Authoritative ID introduced:** S-30 (Phase S, §4). No collision with §1–§27.12 IDs.
+
+**Sources secured (new engineering catalog `standards/cloud-engineering-sources.yaml`, all tier 1, applies_to cloud-architecture, with a `discipline: [syntax|patterning]` tag):** `hashicorp-terraform-style-guide`, `terraform-recommended-practices`, `azure-bicep-best-practices`, `aws-cloudformation-best-practices`, `twelve-factor-app`, `google-eng-practices`.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-30** Cloud-architecture convention enforcement (v1.12 addendum — see §27.13). `commands/cloud-conventions.sh`: enforces the syntax and patterning of IaC against grounded convention rulesets at `standards/cloud-conventions/<tool>.yaml` (terraform, bicep, cloudformation). Each rule `{id, source_id, kind (syntax|patterning), mode (require|forbid), token, message}` cites a best-practice source from the S-30 engineering catalog or the S-23 architecture catalog; a rule whose source is in neither is REJECTED (cite-or-decline, exit 2). `require` tokens must appear, `forbid` tokens (e.g. `0.0.0.0/0`) must not; each violation cites its grounding source. Lints an `--iac <file>` or a build unit (`--unit`); exit 0 green / 1 red. Composes with S-29: the build gate is `check` (requirements) AND `cloud-conventions` (syntax + patterning).
+
+**Vocabulary additions for §25 fidelity audit (S-30):** `cloud-conventions`, `convention`, `discipline`, `syntax`, `patterning`, `kind`, `mode`, `require`, `forbid`, `token`, `ruleset`, `violation`, `ungrounded`, `terraform`, `bicep`, `cloudformation`, `twelve-factor-app`, `google-eng-practices`.
+
+**Anti-drift note (S-30).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-30-cloud-architecture-convention-enforcement/`. The new engineering catalog is `standards/cloud-engineering-sources.yaml` (distinct from the S-23 `standards/cloud-architecture-sources.yaml`, whose exactly-twelve invariant is preserved).
+
+**§20 sequencing (S-30).** Week 41: S-30 ships after S-29 (it enforces convention on the IaC that S-29 scaffolds). Governance-only ID addition; preserves the §21 definition-of-done.
