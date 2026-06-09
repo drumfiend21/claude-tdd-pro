@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: each scaffolded reading-source file passes the source-file structural validation",
+  "command": "for f in aws/aws-well-architected aws/aws-architecture-center aws/aws-prescriptive-security azure/azure-well-architected azure/azure-architecture-center azure/azure-cloud-design-patterns gcp/gcp-architecture-framework gcp/gcp-architecture-center hashicorp/terraform-docs us-government/dod-scca us-government/nist-zero-trust linux-foundation/cncf-cloud-native; do bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/$f.yaml\" >/dev/null 2>&1 || { echo \"FAIL invalid $f\" 1>&2; exit 1; }; done; echo all-valid 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["all-valid"] }
+}

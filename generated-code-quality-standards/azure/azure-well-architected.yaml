@@ -1,0 +1,15 @@
+source:
+  id: azure-well-architected
+  authoritative_publisher: "Microsoft"
+  authoritative_url: "https://learn.microsoft.com/azure/well-architected/"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:6a53313dfdc2f68520ef3ebd553b348da5d88dcd94d7ecfefa4f8386a3c24210"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []

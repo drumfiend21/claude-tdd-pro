@@ -1,0 +1,13 @@
+{
+  "name": "observability profile: missing OpenTelemetry instrumentation is flagged and cites the OpenTelemetry docs",
+  "command": "printf 'resource \"x\" {}\\n' > bad.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac bad.tf --ruleset \"$CLAUDE_PLUGIN_ROOT/standards/cloud-conventions/observability.yaml\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "source=opentelemetry-docs"
+    ]
+  }
+}

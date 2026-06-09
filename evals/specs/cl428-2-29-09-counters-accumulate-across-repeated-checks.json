@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get contract: stored counters accumulate across repeated freshness checks",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/s\" --simulate-status 200 --etag e1 --body-hash h1 >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/s\" --simulate-status 304 >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/s\" --simulate-status 304 >/dev/null 2>&1; ruby -rjson -e 'h=JSON.parse(File.read(\"s/aws.json\")); STDERR.puts(\"count304=\"+h[\"count_304\"].to_s)'",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["count304=2"] }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "education digest: a no-change run produces an empty but valid digest",
+  "command": ": > d.jsonl\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-digest.sh\" --deltas d.jsonl --out-dir out --now 2026-06-08T12:00:00Z\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.topic_count===0 && Array.isArray(j.new_technology) && typeof j.pillars===\"object\"?0:1)' && echo empty-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "topic_count=0",
+      "empty-ok"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+source:
+  id: gcp-architecture-framework
+  authoritative_publisher: "Google"
+  authoritative_url: "https://cloud.google.com/architecture/framework"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:f27f0a3ba4c0f95a705b332d346ea178ae6b3c7940195fb3fa397d4114812f80"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []

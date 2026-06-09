@@ -1,0 +1,13 @@
+{
+  "name": "education digest: groups deltas by the six Well-Architected pillars",
+  "command": "cat > d.jsonl <<'JEOF'\n{\"source_id\":\"aws-well-architected\",\"section_id\":\"s1\",\"pillar\":\"security\",\"curriculum_phase\":\"2\",\"delta_class\":\"best_practice_updated\",\"summary\":\"IAM update\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\n{\"source_id\":\"gcp-architecture-framework\",\"section_id\":\"r3\",\"pillar\":\"reliability\",\"curriculum_phase\":\"5\",\"delta_class\":\"best_practice_updated\",\"summary\":\"failover\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-digest.sh\" --deltas d.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.pillars.security.length>=1 && j.pillars.reliability.length>=1?0:1)' && echo pillars-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pillars-ok"
+    ]
+  }
+}

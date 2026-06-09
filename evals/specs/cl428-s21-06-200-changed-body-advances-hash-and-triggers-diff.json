@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get fetcher: a 200 with a changed body advances the content hash and triggers the diff",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/store\" --simulate-status 200 --body-hash hash-one >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id aws --store-dir \"$PWD/store\" --simulate-status 200 --body-hash hash-two && grep -q hash-two \"$PWD/store/aws.json\" && echo advanced 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["content_changed=true", "diff=triggered", "advanced"] }
+}

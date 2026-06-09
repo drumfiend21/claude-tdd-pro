@@ -1,0 +1,14 @@
+{
+  "name": "well-architected review: a dry-run previews without writing files",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/well-architected-review.sh\" --workload w --out-dir out --now 2026-06-08T12:00:00Z --dry-run 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e out ] && echo no-files 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-files"
+    ]
+  }
+}

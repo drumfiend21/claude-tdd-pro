@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: the engineering catalog secures the Terraform Bicep and CloudFormation style sources",
+  "command": "grep -q hashicorp-terraform-style-guide \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && grep -q azure-bicep-best-practices \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && grep -q aws-cloudformation-best-practices \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && echo secured 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "secured"
+    ]
+  }
+}

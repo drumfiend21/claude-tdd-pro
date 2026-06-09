@@ -1,0 +1,13 @@
+# Observability convention profile (S-31). Grounded in OpenTelemetry + Google SRE.
+- id: obs-instrument-telemetry
+  source_id: opentelemetry-docs
+  kind: patterning
+  mode: require
+  token: "otel"
+  message: "instrument services with OpenTelemetry (traces, metrics, logs)"
+- id: obs-monitor-sli
+  source_id: google-sre-book
+  kind: patterning
+  mode: require
+  token: "monitor"
+  message: "monitor SLIs and define error budgets (Google SRE)"

@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: every catalog entry is tier 1 and class published-standard",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/standards/cloud-architecture-sources.yaml\",\"utf8\");const tiers=(y.match(/^\\s+tier: \\d+/mg)||[]);const cls=(y.match(/^\\s+class: published-standard/mg)||[]);process.exit(tiers.length===12 && tiers.every(t=>/tier: 1/.test(t)) && cls.length===12 ?0:1)' && echo ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["ok"] }
+}

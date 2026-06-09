@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: every catalog entry carries a curriculum_phase tag between one and six",
+  "command": "node -e 'const y=require(\"fs\").readFileSync(process.env.CLAUDE_PLUGIN_ROOT+\"/standards/cloud-architecture-sources.yaml\",\"utf8\");const ph=(y.match(/^\\s+curriculum_phase: \\d+/mg)||[]).map(s=>parseInt(s.trim().split(\" \")[1]));process.exit(ph.length===12 && ph.every(p=>p>=1&&p<=6)?0:1)' && echo phases-ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["phases-ok"] }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "cloud build: a check against a missing build unit errors cleanly with a usage exit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" check --build-dir build --unit does-not-exist",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "no build unit"
+    ]
+  }
+}

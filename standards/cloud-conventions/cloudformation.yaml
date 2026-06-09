@@ -1,0 +1,20 @@
+# CloudFormation convention rules (S-30), grounded in
+# aws-cloudformation-best-practices and the S-23 security sources.
+- id: cfn-template-description
+  source_id: aws-cloudformation-best-practices
+  kind: syntax
+  mode: require
+  token: "Description"
+  message: "include a template Description"
+- id: cfn-tag-resources
+  source_id: aws-cloudformation-best-practices
+  kind: patterning
+  mode: require
+  token: "Tags"
+  message: "apply a consistent tagging strategy (Tags)"
+- id: cfn-no-unrestricted-ingress
+  source_id: aws-prescriptive-security
+  kind: patterning
+  mode: forbid
+  token: "0.0.0.0/0"
+  message: "do not allow unrestricted 0.0.0.0/0 ingress"

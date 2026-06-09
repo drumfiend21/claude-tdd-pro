@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: an IaC missing required conventions is flagged red",
+  "command": "printf 'resource \"x\" \"y\" {}\\n' > bad.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac bad.tf",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "conventions=red"
+    ]
+  }
+}

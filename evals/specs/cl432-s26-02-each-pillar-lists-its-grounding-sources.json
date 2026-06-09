@@ -1,0 +1,13 @@
+{
+  "name": "well-architected review: each pillar lists the grounding sources that cover it",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/well-architected-review.sh\" --workload \"resilient multi-region platform\" --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));const sec=j.pillars.find(p=>p.pillar===\"security\");process.exit(Array.isArray(sec.grounding_sources)&&sec.grounding_sources.length>=1?0:1)' && echo lists-sources 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "lists-sources"
+    ]
+  }
+}

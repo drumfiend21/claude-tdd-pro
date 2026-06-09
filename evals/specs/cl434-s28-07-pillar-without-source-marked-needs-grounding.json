@@ -1,0 +1,13 @@
+{
+  "name": "cloud ADR: a pillar with no grounding source is marked needs_grounding",
+  "command": "printf -- '- id: x\\n  pillars: [security]\\n' > stub.yaml\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" --title t --pillar sustainability --decision d --catalog stub.yaml --out-dir a2 --seq 1 --slug t --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'grounding=needs_grounding' 1>&2 && echo needs-grounding 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "needs-grounding"
+    ]
+  }
+}

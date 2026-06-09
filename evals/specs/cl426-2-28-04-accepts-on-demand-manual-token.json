@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: accepts the on-demand token and classes it as a manual cadence",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value on-demand",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["valid=true", "class=manual", "resolved=on-demand"] }
+}

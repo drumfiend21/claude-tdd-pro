@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: an IaC that follows the conventions passes green",
+  "command": "cat > good.tf <<'JEOF'\nterraform { required_version = \">= 1.5\" required_providers { aws = { source = \"hashicorp/aws\" } } }\nvariable \"name\" { description = \"n\" type = string }\nresource \"aws_s3_bucket\" \"b\" { tags = { env = \"prod\" } }\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac good.tf",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conventions=green"
+    ]
+  }
+}

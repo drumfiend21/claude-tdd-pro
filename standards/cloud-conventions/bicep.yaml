@@ -1,0 +1,20 @@
+# Bicep convention rules (S-30), grounded in azure-bicep-best-practices and the
+# S-23 security sources.
+- id: bicep-secure-sensitive-params
+  source_id: azure-bicep-best-practices
+  kind: syntax
+  mode: require
+  token: "@secure"
+  message: "mark sensitive parameters and outputs with the @secure() decorator"
+- id: bicep-document-params
+  source_id: azure-bicep-best-practices
+  kind: syntax
+  mode: require
+  token: "@description"
+  message: "document parameters with @description"
+- id: bicep-no-unrestricted-ingress
+  source_id: aws-prescriptive-security
+  kind: patterning
+  mode: forbid
+  token: "0.0.0.0/0"
+  message: "do not allow unrestricted 0.0.0.0/0 ingress"

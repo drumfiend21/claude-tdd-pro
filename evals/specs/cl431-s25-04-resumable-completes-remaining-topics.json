@@ -1,0 +1,13 @@
+{
+  "name": "curriculum study loop: re-running after a partial run completes only the remaining topics",
+  "command": "cat > digest.json <<'JEOF'\n{\"topics\":[\n{\"topic_id\":\"t-A\",\"source_id\":\"aws-well-architected\",\"section_id\":\"sec.1\",\"pillar\":\"security\",\"curriculum_phase\":\"2\",\"delta_class\":\"best_practice_updated\",\"summary\":\"IAM update\",\"fetched_at\":\"2026-06-08T00:00:00Z\"},\n{\"topic_id\":\"t-B\",\"source_id\":\"terraform-docs\",\"section_id\":\"stacks\",\"pillar\":\"operational-excellence\",\"curriculum_phase\":\"4\",\"delta_class\":\"new_technology\",\"summary\":\"Stacks GA\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\n]}\nJEOF\nprintf '%s\\n' '{\"topic_id\":\"t-A\",\"state\":\"learned\"}' > l.jsonl\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-study.sh\" --digest digest.json --ledger l.jsonl --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'studied=1' 1>&2 && bash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-study.sh\" --digest digest.json --ledger l.jsonl --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'skipped=t-A' 1>&2 && echo resumable 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resumable"
+    ]
+  }
+}

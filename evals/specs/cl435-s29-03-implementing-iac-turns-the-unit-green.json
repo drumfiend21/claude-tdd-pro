@@ -1,0 +1,13 @@
+{
+  "name": "cloud build: implementing the IaC to meet the requirements turns the unit green",
+  "command": "cat > adr.json <<'JEOF'\n{\"decision_id\":\"0007-zt\",\"title\":\"Zero Trust mesh\",\"pillar\":\"security\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" scaffold --from-adr adr.json --tool terraform --build-dir build --now 2026-06-08T12:00:00Z 2>/dev/null\nprintf 'encryption least_privilege logging\\n' >> build/0007-zt/main.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" check --build-dir build --unit 0007-zt",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conformance=green"
+    ]
+  }
+}

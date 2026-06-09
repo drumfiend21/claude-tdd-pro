@@ -1,0 +1,13 @@
+{
+  "name": "DoD zero-trust profile: missing encryption and audit logging are flagged and cite NIST 800-53",
+  "command": "printf 'resource \"x\" {}\\n' > bad.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac bad.tf --ruleset \"$CLAUDE_PLUGIN_ROOT/standards/cloud-conventions/dod-zero-trust.yaml\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "source=nist-800-53"
+    ]
+  }
+}

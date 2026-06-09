@@ -1,0 +1,13 @@
+{
+  "name": "sources catalog: generates a markdown document listing sources with their links",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/sources-catalog.sh\" --out out.md --now 2026-06-08T12:00:00Z 2>/dev/null\ngrep -q '# Cloud-Architect Sources Catalog' out.md && grep -q 'https://' out.md && echo catalog-md 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "catalog-md"
+    ]
+  }
+}

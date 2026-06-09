@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: every catalog entry declares applies_to cloud-architecture",
+  "command": "n=$(grep -c '^  applies_to: \\[cloud-architecture\\]' \"$CLAUDE_PLUGIN_ROOT/standards/cloud-architecture-sources.yaml\"); [ \"$n\" = \"12\" ] && echo all-cloud-architecture 1>&2 || { echo \"FAIL n=$n\" 1>&2; exit 1; }",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["all-cloud-architecture"] }
+}

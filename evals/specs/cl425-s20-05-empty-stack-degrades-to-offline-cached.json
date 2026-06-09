@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: with an empty active-flow stack a sub-day cadence does not fire and degrades to offline-cached",
+  "command": ": > stack.ndjson && bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency 5m --now-ms 600000 --last-fetch-ms 0 --active-flow-stub \"$PWD/stack.ndjson\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["decision=no-fire-offline", "freshness=offline-cached"] }
+}

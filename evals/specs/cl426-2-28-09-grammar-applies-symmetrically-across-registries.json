@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequency contract: the grammar applies symmetrically across the standards, pr-corpus, and compliance registries",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value daily --registry standards; bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value daily --registry pr-corpus; bash \"$CLAUDE_PLUGIN_ROOT/standards/validate-fetch-frequency.sh\" --value daily --registry compliance",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["registry=standards", "registry=pr-corpus", "registry=compliance"] }
+}

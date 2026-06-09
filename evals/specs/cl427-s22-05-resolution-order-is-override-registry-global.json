@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: resolution order is exactly override then registry-default then global-default",
+  "command": "printf 'default: weekly\\nregistries:\\n  standards: 12h\\nsources:\\n  overridden: 5m\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id overridden --registry standards --file \"$PWD/ff.yaml\"; bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id only-registry --registry standards --file \"$PWD/ff.yaml\"; bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id neither --registry compliance --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolution=per-source-override", "resolution=per-registry-default", "resolution=global-default"] }
+}

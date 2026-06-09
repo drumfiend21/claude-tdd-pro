@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get fetcher: a 304 updates the freshness timestamp without changing the stored content hash",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id gcp --store-dir \"$PWD/store\" --simulate-status 200 --etag e1 --body-hash keep-hash >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id gcp --store-dir \"$PWD/store\" --simulate-status 304 --now 2026-06-08T12:00:00Z && grep -q keep-hash \"$PWD/store/gcp.json\" && echo hash-kept 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["freshness_timestamp_updated=2026-06-08T12:00:00Z", "hash-kept"] }
+}

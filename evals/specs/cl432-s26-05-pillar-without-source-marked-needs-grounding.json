@@ -1,0 +1,13 @@
+{
+  "name": "well-architected review: a pillar with no source in the catalog is marked needs_grounding",
+  "command": "cat > stub.yaml <<'YML'\n- id: only-sec\n  name: \"x\"\n  url: \"https://x\"\n  tier: 1\n  applies_to: [cloud-architecture]\n  pillars: [security]\n  fetch_frequency: daily\n  class: published-standard\nYML\nbash \"$CLAUDE_PLUGIN_ROOT/commands/well-architected-review.sh\" --workload w --catalog stub.yaml --out-dir o2 --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o2/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.pillars.find(p=>p.pillar===\"sustainability\").status===\"needs_grounding\"?0:1)' && echo needs-grounding 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "needs-grounding"
+    ]
+  }
+}

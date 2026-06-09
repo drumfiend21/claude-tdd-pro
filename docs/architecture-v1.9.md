@@ -1175,3 +1175,139 @@ Per `CLAUDE.md`, every CL must extract literal feature IDs and §2.X labels from
 ### §26.8 v1.11 sequencing note for §20
 
 §20 canonical staged path is extended with weeks 31-33 for v1.11 amendments. Suggested order: week 31 R-8 + O-12 reuse, R-9 + O-13 paired (design-token surface ships as one CL pair); week 32 R-10 + Q-12 (R-10 emits findings that Q-12 logs); week 33 Q-10 + Q-11 (productivity dashboard atop Q-12 stream), §2.26 + §2.27 contracts (governance-only). H-13 ships alongside §2.27 as the substrate. These amendments preserve the v1.9 `definition-of-done` (§21) by NOT changing what counts as "done" — they extend the surface, not the gate.
+
+## §27. v1.12 — Continuous cloud-architecture education amendment (reference)
+
+Additive amendment giving the plugin a standing watch on authoritative cloud-architecture guidance: poll tier-1 sources at any operator-specified frequency (millisecond-granular, **default `daily`**), cheaply (RFC 7232 conditional GETs), **only while a Claude Code session is active** (in-use semantics via the §2.13 active-flow stack), and roll the upstream delta into an operator-readable education digest organised by the six Well-Architected pillars and six curriculum phases. Promotes the two v1.8-candidate backlog notes (`docs/memory/architecture-backlog-in-use-polling.md`, `docs/memory/architecture-backlog-conditional-gets.md`) to active features and seeds a new Phase-S source domain. Reuses Phase S (S-2 fetcher, S-5 diff, S-10 monitor, S-13/S-16/S-17 freshness, S-18 trace) rather than building a parallel engine. Non-regressive: every existing F/E/G/S/C/P/R/N/T/Q/H/L/O/X/W feature and every §2.1–§2.27 contract retains its semantics; calendar `fetch_frequency` values keep exact current behavior (the grammar is *extended*, not replaced).
+
+**Full design text — the authoritative source for this amendment's rationale, requirement→mechanism mapping, §27.1–§27.8 subsections, the 12-source domain seed table, the 10-behavior TDD spec sketches, and the 17-ticket time-bound plan — lives at [docs/design/v1.12-cloud-architecture-curriculum.md](design/v1.12-cloud-architecture-curriculum.md).** This §27 is an additive reference block: it registers the canonical IDs, the §25-auditor vocabulary, and the anti-drift folder map here in the constitution (per `CLAUDE.md`, these must be extractable from this file), and delegates the detailed text to the referenced design file. No existing §1–§26 content is altered.
+
+**Status:** PROPOSED. Reference block appended without modifying any prior section. The substrate-and-spec build proceeds per the design file's ticket plan; the §25 fidelity gate reads this file, so the §27.6 vocabulary below is authoritative now.
+
+**Ratified:** 2026-06-08 — operator approved ("Let's build it"); the PROPOSED status above is superseded by this additive note (per the append-only discipline, ratification is recorded as a new line, never by rewriting the prior one). Build commenced at S-20 (configurable-frequency / in-use polling scheduler) per the design-file ticket plan (CL-B1 specs → CL-B2 substrate).
+
+**Authoritative IDs introduced by v1.12:** S-20, S-21, S-22, S-23, S-24 (Phase S, §4); §2.28, §2.29 (cross-cutting contracts, §2). No collision with §1–§26 IDs (S stopped at S-19; contracts at §2.27; amendment sections at §26).
+
+Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal compatibility):
+
+- **S-20** Configurable-frequency / in-use polling scheduler (v1.12 amendment — see design file §27.1(a)). `standards/poll-scheduler.sh` re-fetches each registry source on its resolved `fetch_frequency` cadence while a session is active (in-use detection via §2.13 active-flow stack). Cadence grammar per §2.28.
+- **S-21** Conditional-GET fetcher layer (v1.12 amendment — see design file §27.1(b)). Extends S-2 fetchers to persist `etag` + `last_modified` and send `If-None-Match` / `If-Modified-Since`; a `304` proves freshness without re-parsing/re-diffing. Contract §2.29.
+- **S-22** `FETCH-FREQUENCIES.yaml` operator registry (v1.12 amendment — see design file §27.1(c)). Top-level `.claude-tdd-pro/FETCH-FREQUENCIES.yaml` mapping per-registry default and per-source override cadence; `any-frequency` resolves here; global default `daily`.
+- **S-23** Cloud-architecture standards domain seed (v1.12 amendment — see design file §27.1(d)). Default cloud-architecture sources added to `STANDARDS-URLS.yaml` / `standards/sources.yaml`, each mapping via G-9 to a source-namespace folder. New namespaces by registry id prefix: `aws`, `azure`, `gcp`, `hashicorp` (DoD/NIST cloud guidance reuses `us-government`; CNCF/Kubernetes reuses `linux-foundation`).
+- **S-24** Continuous cloud-architecture education digest (v1.12 amendment — see design file §27.1(e)). `commands/curriculum-digest.sh` rolls up the cross-source delta since last review into a brief organised by the six Well-Architected pillars and six curriculum phases; surfaces "new technologies" as an explicit `new_technology` delta class. Output `standards/curriculum-digest/<utc>.md` + `.json`.
+
+**Cross-cutting contracts introduced (full text in the design file §27.3):**
+
+- **§2.28 Configurable-frequency in-use polling contract.** A source's `fetch_frequency` (in §2.6 standards, §2.12 PR-corpus, §2.19 compliance) accepts EITHER a calendar token `daily | weekly | monthly | quarterly | on-demand` (existing, unchanged) OR a sub-day interval matching `^[0-9]+(ms|s|m|h)$` OR the shorthand `any-frequency`. Default when unset is `daily`. Sub-day intervals fire only while a session is active (non-empty §2.13 active-flow stack); offline degrades to the calendar default with `freshness_at_generation: offline-cached`. `any-frequency` resolves via S-22 `FETCH-FREQUENCIES.yaml` (override → registry-default → global `daily`). `/doctor` shows `next-fetch-eta`; H-1/H-12 record per-source fetch cost; the resolved cadence is recorded in the §2.8 manifest `standards_state.<source>`.
+- **§2.29 Conditional-GET freshness-economy contract.** Each non-paywalled fetcher persists upstream `etag` and `last_modified` alongside `content_hash` in `.claude-tdd-pro/standards-last-fetch/<id>.json` and sends `If-None-Match` / `If-Modified-Since` on subsequent fetches. On `304 Not Modified`: update the freshness timestamp, increment the 304 counter, skip the parse/diff/hash-compare pipeline. On `200`: full S-2 pipeline + refresh stored headers. H-12 records the per-source `304:200` ratio. Paywalled/HEAD-only sources exempt. Conditional GET never advances `content_hash` or suppresses an S-5 diff when content actually changed.
+
+**Vocabulary additions for §25 fidelity audit.** The following tokens become part of the architecture vocabulary surface and the §25 auditor (`rubric/detectors/audit-pending-spec-fidelity.sh`) accepts them in pending spec bodies for S-20..S-24 / §2.28 / §2.29: `fetch_frequency`, `any-frequency`, `FETCH-FREQUENCIES`, `poll-scheduler`, `in-use`, `active-flow`, `etag`, `last_modified`, `if-none-match`, `if-modified-since`, `not-modified`, `304`, `conditional-get`, `next-fetch-eta`, `standards-last-fetch`, `curriculum-digest`, `new_technology`, `well-architected`, `pillar`, `aws`, `azure`, `gcp`, `hashicorp`, `source_namespace`, `freshness_at_generation`.
+
+**S-23 implementation note (additive clarification, 2026-06-08).** The S-23 cloud-architecture domain seed ships as its OWN domain catalog at `standards/cloud-architecture-sources.yaml` (plugin-internal §2.6 schema, one entry per seed source), kept SEPARATE from the S-1 catalog `standards/sources.yaml` so the S-1 "exactly 17 default sources" baseline is preserved unchanged. The operator-facing `.claude-tdd-pro/STANDARDS-URLS.yaml` merges both catalogs. Each seed entry maps via G-9 to its `generated-code-quality-standards/<namespace>/<id>.yaml` reading-source file — a source file with a populated `source:` header (per §2.21) and empty `rules: []` / `recommended_set: []` / `all_set: []` (cloud-architecture WAF guidance is educational reading for the S-24 digest, not lint rules; the empty-rules reading-source shape is the same one the active `validate-all` suite already blesses). The four new namespaces `aws`, `azure`, `gcp`, `hashicorp` are registered in `generated-code-quality-standards/validate-all.sh` `KNOWN_NAMESPACES`. **Additional §25 vocabulary (S-23/S-24):** `curriculum_phase`, `cloud-architecture-sources`, `architected`, `architecture-framework`, `reading-source`, `pillars`, `phases`.
+
+**Anti-drift note (per `CLAUDE.md`).** The v1.12 IDs (S-20, S-21, S-22, S-23, S-24, §2.28, §2.29) are canonical and must be used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-20-configurable-frequency-polling-scheduler/`, `evals/pending/s/s-21-conditional-get-fetcher-layer/`, `evals/pending/s/s-22-fetch-frequencies-registry/`, `evals/pending/s/s-23-cloud-architecture-standards-domain-seed/`, `evals/pending/s/s-24-continuous-cloud-architecture-education-digest/`, `evals/pending/cross-cutting/2-28-configurable-frequency-polling-contract/`, `evals/pending/cross-cutting/2-29-conditional-get-freshness-economy-contract/`.
+
+**§20 sequencing (full table in the design file §27.8).** Extends the canonical staged path with weeks 34–36: week 34 §2.28 + S-22 + S-20 (cadence grammar + registry + scheduler); week 35 §2.29 + S-21 (conditional-GET economy); week 36 S-23 then S-24 (seed the domain, then ship the digest). Preserves the §21 definition-of-done — extends surface, not gate.
+
+### §27.9 S-25 curriculum study loop (additive amendment, 2026-06-08)
+
+S-25 closes the divide → reach → learn loop over the S-24 digest. It is an ORCHESTRATOR over already-shipped Phase-S primitives — it reimplements none of them. Confirmed existing primitives it composes: **divide** = the S-24 digest `.json` `topics[]` (one topic per delta) + the S-2 section fetchers (`standards/fetchers/{markdown-headers,html-anchor,pdf-section,rfc-style}.sh`) + the S-3 coverage matrix; **reach** = `standards/fetcher.sh` (S-2) + `standards/conditional-get.sh` (S-21) + `standards/poll-scheduler.sh` (S-20) + `standards/freshness-gate.sh` (S-13/16/17); **learn** = `agents/standards-comparator.md` (S-8 grounded, decline-on-ungrounded summary) + `commands/standards-diff.sh` (S-5 Adopt/Defer/Reject → `standards/decisions.jsonl`) + optional `commands/promote-standard.sh` (S-7 section → rule). S-25 adds only the per-topic iteration + a resumable learning ledger.
+
+**Authoritative ID introduced:** S-25 (Phase S, §4). No collision with §1–§27 IDs (S-20..S-24 are the prior v1.12 IDs).
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-25** Curriculum study loop (v1.12 addendum — see §27.9). `commands/curriculum-study.sh` iterates the S-24 digest `topics[]`; for each topic it reaches the section (S-2 fetcher + S-21 conditional-get), learns it (S-8 grounded summary + S-5 adopt/defer/reject decision, optional S-7 promote), and records a per-topic learning record to a resumable ledger `standards/curriculum-ledger.jsonl` (state `learned`; a topic already learned is skipped on re-run — learn-once + resumable). Each record cites the topic's `source_id` + `section_id` (grounding). `--dry-run` previews without writing the ledger (§2.14).
+
+**Vocabulary additions for §25 fidelity audit (S-25):** `curriculum-study`, `curriculum-ledger`, `studied`, `learned`, `reach`, `reached`, `decision`, `adopt`, `defer`, `reject`, `resumable`, `topic_id`, `studied_at`, `delta_class`, `best_practice_updated`.
+
+**Anti-drift note (S-25).** The ID is S-25, used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-25-curriculum-study-loop/`.
+
+**§20 sequencing (S-25).** Extends the staged path with week 37: S-25 ships after S-24 (it consumes the S-24 digest). Governance-only ID addition; preserves the §21 definition-of-done (extends surface, not gate). Full divide/reach/learn rationale and the confirmation of pre-existing primitives are in the design file `docs/design/v1.12-cloud-architecture-curriculum.md` (to be appended there as the S-25 section).
+
+### §27.10 Cloud-architect application layer (additive amendment, 2026-06-08)
+
+S-26 and S-27 APPLY the cloud-architecture curriculum that the monitoring layer (S-20..S-25) keeps fresh. They consume the S-23 seed catalog + S-24 digest + S-25 ledger and reuse the S-8 standards-comparator grounding discipline (cite-or-decline). They add no new fetch/diff/learn logic — they are operator-facing application surfaces over the existing data.
+
+**Authoritative IDs introduced:** S-26, S-27 (Phase S, §4). No collision with §1–§27.9 IDs.
+
+Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-26** Well-Architected pillar review (v1.12 addendum — see §27.10). `commands/well-architected-review.sh`: given a workload description and the active cloud-architecture sources, emits a review scaffold organised by the six Well-Architected pillars (`operational-excellence`, `security`, `reliability`, `performance-efficiency`, `cost-optimization`, `sustainability`); each pillar lists the grounding sources that cover it (from the S-23 catalog `pillars` field), with `findings` / `trade_offs` / `risk_tier` slots; a pillar with no grounding source is marked `needs_grounding` (mirrors the S-8 decline contract). Output `standards/well-architected-reviews/<utc>.md` + `.json`.
+- **S-27** Curriculum progress and gap tracker (v1.12 addendum — see §27.10). `commands/curriculum-progress.sh`: reads the S-25 ledger + S-23 catalog and reports per-pillar and per-curriculum-phase coverage (studied vs available) plus the not-yet-studied gaps. Output `standards/curriculum-progress/<utc>.md` + `.json`.
+
+**S-23 catalog enrichment (additive data).** Each `standards/cloud-architecture-sources.yaml` entry gains a `pillars: [...]` field listing the Well-Architected pillars that source covers (single source of truth that S-26 reads). This is additive to the §2.6 plugin-internal schema for the cloud-architecture domain catalog; it does not alter the S-1 `standards/sources.yaml`.
+
+**Vocabulary additions for §25 fidelity audit (S-26/S-27):** `well-architected-review`, `pillars`, `needs_grounding`, `findings`, `trade_offs`, `risk_tier`, `workload`, `curriculum-progress`, `coverage`, `gap`, `studied`, `mastery`, `operational-excellence`, `security`, `reliability`, `performance-efficiency`, `cost-optimization`, `sustainability`.
+
+**Anti-drift note (S-26/S-27).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-26-well-architected-pillar-review/`, `evals/pending/s/s-27-curriculum-progress-and-gap-tracker/`.
+
+**§20 sequencing (S-26/S-27).** Week 38: S-26 (review) then S-27 (progress) — both consume the v1.12 monitoring-layer outputs. Governance-only ID additions; preserve the §21 definition-of-done.
+
+### §27.11 Cloud-architecture ADR generator (additive amendment, 2026-06-08)
+
+S-28 extends the cloud-architect application layer with the curriculum's "Architecture Decision Log" practice. It generates MADR-conformant Architecture Decision Records per the existing §2.16 decision-provenance schema, grounded in the S-23 cloud-architecture sources. It introduces no new ADR schema — it produces §2.16-format ADRs for cloud design decisions and cites the grounding sources for the decision's Well-Architected pillar (reusing the S-26 pillar→source mapping).
+
+**Authoritative ID introduced:** S-28 (Phase S, §4). No collision with §1–§27.10 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-28** Cloud-architecture ADR generator (v1.12 addendum — see §27.11). `commands/cloud-adr.sh`: generates a MADR-conformant Architecture Decision Record (per §2.16) for a cloud design decision — `<out-dir>/<NNNN>-<slug>.md` whose filename matches the §2.16 `^[0-9]{4}-[a-z0-9-]+\.md$` pattern — with `status` (enum `proposed|accepted|rejected|superseded|deprecated`), `context`, `considered_options`, and `decision_outcome` with `rationale`; grounded by citing the S-23 cloud-architecture sources that cover the decision's Well-Architected `pillar` (a pillar with no source is marked `needs_grounding`). Emits a json sidecar. Output default dir `docs/adr/`.
+
+**Vocabulary additions for §25 fidelity audit (S-28):** `cloud-adr`, `adr`, `slug`, `decision_outcome`, `considered_options`, `deciders`, `decision_id`, `superseded`, `deprecated`, `accepted`, `rejected`.
+
+**Anti-drift note (S-28).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-28-cloud-architecture-adr-generator/`.
+
+**§20 sequencing (S-28).** Week 39: S-28 ships after S-26/S-27 (it grounds ADRs in the same pillar→source mapping). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.12 Cloud-architecture build units — test-first IaC from design (additive amendment, 2026-06-08)
+
+S-29 closes the design->build gap: the infrastructure the cloud-architect layer DESIGNS (the S-28 ADR + S-26 pillar review) must be DEVELOPED with the same excellence as every other type of code the plugin builds — test-first, standards-grounded, decision-traced, red-until-green. S-29 makes Infrastructure-as-Code a first-class TDD build target rather than a second-class side path. It reuses the existing core contracts: the §2.16 ADR is the design input, the test-first discipline (the plugin's universal build loop) governs the order, and the S-23/S-26 pillar->source grounding supplies the conformance criteria's provenance (cite-or-needs_grounding).
+
+**Authoritative ID introduced:** S-29 (Phase S, §4). No collision with §1–§27.11 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-29** Cloud-architecture build units (v1.12 addendum — see §27.12). `commands/cloud-build.sh`: turns a cloud design decision (an S-28 ADR) into a test-first IaC build unit. `scaffold` writes, together, a `conformance` spec (the test, derived from the decision's Well-Architected `pillar` + requirements, with grounding citations), an IaC stub (`terraform`->`.tf`, `bicep`->`.bicep`, `cloudformation`->`.json`), a `grounding` manifest, and a `unit` metadata record that traces to the ADR `decision_id`; the fresh unit starts RED (the `check` action fails until the IaC satisfies the conformance requirements, then it is GREEN). Requirements default per pillar and are overridable; a pillar with no grounding source is marked `needs_grounding`. This enforces the same spec-first / grounded / ADR-traced build excellence on infrastructure as on application code.
+
+**Vocabulary additions for §25 fidelity audit (S-29):** `cloud-build`, `build-unit`, `conformance`, `scaffold`, `iac`, `terraform`, `bicep`, `cloudformation`, `requirements`, `red`, `green`, `decision_id`, `needs_grounding`.
+
+**Anti-drift note (S-29).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-29-cloud-architecture-build-units/`.
+
+**§20 sequencing (S-29).** Week 40: S-29 ships after S-28 (it consumes the ADR design output and feeds the plugin's existing implement loop). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.13 Cloud-architecture convention enforcement — syntax + patterning (additive amendment, 2026-06-08)
+
+S-30 extends the cloud-architect feature so that EVERYTHING concerning the software development of cloud architecture — the syntax used in IaC implementations and all patterning — is enforced from authoritative best-practice sources. Comprehensiveness assessment (2026-06-08): the S-23 architecture seed covers Well-Architected guidance + design patterns but carried no dedicated style/convention authorities for Terraform/Bicep/CloudFormation or general software engineering, so the best world-class engineering sources were secured (URLs verified) into a new engineering catalog. Convention rules ground their rules in those source ids plus the S-23 catalog (cite-or-decline).
+
+**Authoritative ID introduced:** S-30 (Phase S, §4). No collision with §1–§27.12 IDs.
+
+**Sources secured (new engineering catalog `standards/cloud-engineering-sources.yaml`, all tier 1, applies_to cloud-architecture, with a `discipline: [syntax|patterning]` tag):** `hashicorp-terraform-style-guide`, `terraform-recommended-practices`, `azure-bicep-best-practices`, `aws-cloudformation-best-practices`, `twelve-factor-app`, `google-eng-practices`.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-30** Cloud-architecture convention enforcement (v1.12 addendum — see §27.13). `commands/cloud-conventions.sh`: enforces the syntax and patterning of IaC against grounded convention rulesets at `standards/cloud-conventions/<tool>.yaml` (terraform, bicep, cloudformation). Each rule `{id, source_id, kind (syntax|patterning), mode (require|forbid), token, message}` cites a best-practice source from the S-30 engineering catalog or the S-23 architecture catalog; a rule whose source is in neither is REJECTED (cite-or-decline, exit 2). `require` tokens must appear, `forbid` tokens (e.g. `0.0.0.0/0`) must not; each violation cites its grounding source. Lints an `--iac <file>` or a build unit (`--unit`); exit 0 green / 1 red. Composes with S-29: the build gate is `check` (requirements) AND `cloud-conventions` (syntax + patterning).
+
+**Vocabulary additions for §25 fidelity audit (S-30):** `cloud-conventions`, `convention`, `discipline`, `syntax`, `patterning`, `kind`, `mode`, `require`, `forbid`, `token`, `ruleset`, `violation`, `ungrounded`, `terraform`, `bicep`, `cloudformation`, `twelve-factor-app`, `google-eng-practices`.
+
+**Anti-drift note (S-30).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-30-cloud-architecture-convention-enforcement/`. The new engineering catalog is `standards/cloud-engineering-sources.yaml` (distinct from the S-23 `standards/cloud-architecture-sources.yaml`, whose exactly-twelve invariant is preserved).
+
+**§20 sequencing (S-30).** Week 41: S-30 ships after S-29 (it enforces convention on the IaC that S-29 scaffolds). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.14 Secured-source expansion + sources-catalog + DoD/observability profiles (additive amendment, 2026-06-08)
+
+S-31 deepens the cloud-architect feature toward government-grade (DoD/DARPA, IL4/IL5, Zero Trust) and elite-scale (SRE, observability, FinOps, GitOps) excellence by securing additional verified primary authorities into the engineering catalog, generating the project's auditable sources-catalog document, and adding grounded convention profiles that cite the new authorities. No existing source/rule is altered; cite-or-decline still holds (every rule cites a catalog source).
+
+**Authoritative ID introduced:** S-31 (Phase S, §4). No collision with §1–§27.13 IDs.
+
+**Sources secured (appended to `standards/cloud-engineering-sources.yaml`, all tier 1, applies_to cloud-architecture, with a `discipline` tag; URLs verified 2026-06-08):** `aws-dod-scca-prescriptive`, `nist-800-53`, `nist-800-171`, `nist-rmf`, `google-sre-book`, `opentelemetry-docs`, `finops-framework`, `argocd-gitops`.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-31** Secured-source expansion and sources catalog (v1.12 addendum — see §27.14). Appends DoD/NIST security-controls, Google SRE reliability, OpenTelemetry observability, FinOps and GitOps authorities to the S-30 engineering catalog. `commands/sources-catalog.sh` generates `standards/SOURCES.md` — the auditable Markdown catalog mirroring both the S-23 and S-30/S-31 registries with links + metadata. Adds two grounded convention profiles at `standards/cloud-conventions/`: `dod-zero-trust.yaml` (require `encrypt` + `logging`, forbid `0.0.0.0/0` + hardcoded secrets; grounded in nist-800-53 / aws-dod-scca-prescriptive / aws-prescriptive-security) and `observability.yaml` (require OpenTelemetry instrumentation + SRE monitoring; grounded in opentelemetry-docs / google-sre-book), enforced via S-30 `cloud-conventions.sh --ruleset`.
+
+**Vocabulary additions for §25 fidelity audit (S-31):** `sources-catalog`, `security-controls`, `governance`, `reliability`, `observability`, `finops`, `gitops`, `telemetry`, `sre`, `zero-trust`, `aws-dod-scca-prescriptive`, `nist-800-53`, `nist-800-171`, `nist-rmf`, `google-sre-book`, `opentelemetry-docs`, `finops-framework`, `argocd-gitops`.
+
+**Anti-drift note (S-31).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-31-secured-source-expansion-and-sources-catalog/`. New sources append to the existing `standards/cloud-engineering-sources.yaml`; the S-23 `standards/cloud-architecture-sources.yaml` exactly-twelve invariant is untouched.
+
+**§20 sequencing (S-31).** Week 42: S-31 ships after S-30 (it expands the same grounding catalog and convention surface). Governance-only ID addition; preserves the §21 definition-of-done.

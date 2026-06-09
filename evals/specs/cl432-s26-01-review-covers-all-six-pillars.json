@@ -1,0 +1,13 @@
+{
+  "name": "well-architected review: covers all six Well-Architected pillars",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/well-architected-review.sh\" --workload \"resilient multi-region platform\" --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));const names=j.pillars.map(p=>p.pillar);const want=[\"operational-excellence\",\"security\",\"reliability\",\"performance-efficiency\",\"cost-optimization\",\"sustainability\"];process.exit(want.every(w=>names.includes(w))&&j.pillars.length===6?0:1)' && echo six-pillars 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "six-pillars"
+    ]
+  }
+}

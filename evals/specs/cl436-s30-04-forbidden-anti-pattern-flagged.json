@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: a forbidden anti-pattern such as unrestricted ingress is flagged",
+  "command": "cat > good.tf <<'JEOF'\nterraform { required_version = \">= 1.5\" required_providers { aws = { source = \"hashicorp/aws\" } } }\nvariable \"name\" { description = \"n\" type = string }\nresource \"aws_s3_bucket\" \"b\" { tags = { env = \"prod\" } }\nJEOF\nprintf 'resource \"sg\" \"s\" { cidr_blocks = [\"0.0.0.0/0\"] tags = {} }\\n' >> good.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac good.tf",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "violation=tf-no-unrestricted-ingress"
+    ]
+  }
+}

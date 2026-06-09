@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: an invalid cadence token is rejected with a non-zero exit and a clear message",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency 5x --now-ms 0 --last-fetch-ms 0",
+  "setup": [],
+  "expect": { "exit_code": 2, "stderr_contains": ["invalid_cadence=5x"] }
+}

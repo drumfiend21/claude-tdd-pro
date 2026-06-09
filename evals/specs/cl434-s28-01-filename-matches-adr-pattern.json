@@ -1,0 +1,13 @@
+{
+  "name": "cloud ADR: emits an ADR file whose name matches the four-digit MADR pattern",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" --title \"Zero Trust mesh\" --slug zero-trust-mesh --seq 7 --pillar security --decision \"mTLS per service\" --options \"VPN, mesh, hybrid\" --rationale \"least privilege\" --out-dir adr --now 2026-06-08T12:00:00Z 2>/dev/null\nls adr | grep -E '^[0-9]{4}-[a-z0-9-]+\\.md$' >/dev/null && echo pattern-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pattern-ok"
+    ]
+  }
+}

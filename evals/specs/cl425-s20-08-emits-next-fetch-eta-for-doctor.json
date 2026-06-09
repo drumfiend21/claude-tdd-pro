@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: emits a next-fetch-eta line computed as last-fetch plus interval for doctor consumption",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency 5m --now-ms 0 --last-fetch-ms 100000",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["next-fetch-eta-ms=400000"] }
+}

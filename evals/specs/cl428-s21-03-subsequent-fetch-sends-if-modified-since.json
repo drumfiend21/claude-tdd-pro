@@ -1,0 +1,6 @@
+{
+  "name": "conditional-get fetcher: a subsequent fetch sends If-Modified-Since built from the stored last_modified",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id azure --store-dir \"$PWD/store\" --simulate-status 200 --last-modified lastmod-xyz --body-hash h1 >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/standards/conditional-get.sh\" --source-id azure --store-dir \"$PWD/store\" --simulate-status 304",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["request_if_modified_since=lastmod-xyz"] }
+}

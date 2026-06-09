@@ -1,0 +1,13 @@
+{
+  "name": "curriculum progress: an empty ledger makes every available pillar a gap",
+  "command": ": > led.jsonl\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-progress.sh\" --ledger led.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'pillars_studied=0/' 1>&2 && echo all-gaps 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-gaps"
+    ]
+  }
+}

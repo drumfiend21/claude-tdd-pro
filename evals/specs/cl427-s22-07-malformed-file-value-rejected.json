@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: a malformed cadence value in the file is rejected with a non-zero exit",
+  "command": "printf 'sources:\\n  x: 9z\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id x --registry standards --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 2, "stderr_contains": ["valid=false", "invalid_cadence=9z"] }
+}

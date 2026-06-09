@@ -1,0 +1,15 @@
+source:
+  id: aws-well-architected
+  authoritative_publisher: "Amazon Web Services"
+  authoritative_url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-08T00:00:00Z"
+  content_hash: "sha256:e7e6bacee743f302914ec799906b9e2dddceed716eb1dbf54567073ea87f8bf7"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use — © respective publisher"
+# Reading-source (S-23): cloud-architecture guidance consumed by the S-24
+# education digest. No lint rules — empty rules per the §27 S-23 note.
+rules: []
+recommended_set: []
+all_set: []

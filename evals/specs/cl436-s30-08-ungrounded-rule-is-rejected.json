@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: a convention rule whose source is not in any catalog is rejected",
+  "command": "cat > good.tf <<'JEOF'\nterraform { required_version = \">= 1.5\" required_providers { aws = { source = \"hashicorp/aws\" } } }\nvariable \"name\" { description = \"n\" type = string }\nresource \"aws_s3_bucket\" \"b\" { tags = { env = \"prod\" } }\nJEOF\nprintf -- '- id: bogus\\n  source_id: not-a-real-source\\n  kind: syntax\\n  mode: require\\n  token: x\\n' > br.yaml\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac good.tf --ruleset br.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "ungrounded_rule=bogus"
+    ]
+  }
+}

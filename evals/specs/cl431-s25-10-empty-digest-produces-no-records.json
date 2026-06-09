@@ -1,0 +1,13 @@
+{
+  "name": "curriculum study loop: an empty digest with no topics produces no ledger records and exits cleanly",
+  "command": "printf '%s' '{\"topics\":[]}' > digest.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-study.sh\" --digest digest.json --ledger l.jsonl --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'topics_total=0' 1>&2\n[ ! -e l.jsonl ] && echo empty-clean 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "empty-clean"
+    ]
+  }
+}

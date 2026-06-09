@@ -1,0 +1,13 @@
+{
+  "name": "convention enforcement: bicep syntax conventions are enforced and cite the bicep best-practices source",
+  "command": "printf 'param p string\\n' > x.bicep\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool bicep --iac x.bicep",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "source=azure-bicep-best-practices"
+    ]
+  }
+}

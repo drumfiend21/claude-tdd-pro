@@ -1,0 +1,13 @@
+{
+  "name": "education digest: cites the source id and fetched_at timestamp for every delta",
+  "command": "cat > d.jsonl <<'JEOF'\n{\"source_id\":\"dod-scca\",\"section_id\":\"il5\",\"pillar\":\"security\",\"curriculum_phase\":\"5\",\"delta_class\":\"best_practice_updated\",\"summary\":\"IL5 boundary update\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-digest.sh\" --deltas d.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\ngrep -q dod-scca out/2026-06-08T120000Z.md && grep -q 2026-06-08T00:00:00Z out/2026-06-08T120000Z.md && echo cited 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cited"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "cloud build: a freshly scaffolded unit is red because conformance is not yet satisfied",
+  "command": "cat > adr.json <<'JEOF'\n{\"decision_id\":\"0007-zt\",\"title\":\"Zero Trust mesh\",\"pillar\":\"security\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" scaffold --from-adr adr.json --tool terraform --build-dir build --now 2026-06-08T12:00:00Z 2>/dev/null\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" check --build-dir build --unit 0007-zt",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "conformance=red"
+    ]
+  }
+}

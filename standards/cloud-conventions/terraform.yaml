@@ -1,0 +1,33 @@
+# Terraform convention rules (S-30). Each rule is grounded in a catalog source
+# (the S-30 engineering catalog or the S-23 architecture catalog). mode=require
+# -> token must be present; mode=forbid -> token must be absent.
+- id: tf-pin-terraform-version
+  source_id: terraform-recommended-practices
+  kind: patterning
+  mode: require
+  token: "required_version"
+  message: "pin the Terraform version with a required_version constraint"
+- id: tf-declare-required-providers
+  source_id: terraform-recommended-practices
+  kind: patterning
+  mode: require
+  token: "required_providers"
+  message: "declare and constrain providers via required_providers"
+- id: tf-document-variables
+  source_id: hashicorp-terraform-style-guide
+  kind: syntax
+  mode: require
+  token: "description"
+  message: "every variable and output must include a description (Terraform Style Guide)"
+- id: tf-tag-resources
+  source_id: aws-well-architected
+  kind: patterning
+  mode: require
+  token: "tags"
+  message: "tag resources for cost allocation and operations"
+- id: tf-no-unrestricted-ingress
+  source_id: aws-prescriptive-security
+  kind: patterning
+  mode: forbid
+  token: "0.0.0.0/0"
+  message: "do not allow unrestricted 0.0.0.0/0 ingress"

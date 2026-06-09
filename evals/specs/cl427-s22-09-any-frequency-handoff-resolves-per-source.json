@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: an any-frequency source resolves through the registry to its per-source cadence",
+  "command": "printf 'sources:\\n  aws-well-architected: 45s\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id aws-well-architected --fetch-frequency any-frequency --freq-file \"$PWD/ff.yaml\" --now-ms 0 --last-fetch-ms 0",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["any-frequency-resolved=45s", "interval_ms=45000"] }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "DoD zero-trust profile: unrestricted ingress is forbidden under least privilege",
+  "command": "printf 'resource \"x\" { encrypt = true\\n logging = true\\n cidr_blocks = [\"0.0.0.0/0\"]\\n}\\n' > open.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac open.tf --ruleset \"$CLAUDE_PLUGIN_ROOT/standards/cloud-conventions/dod-zero-trust.yaml\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "violation=ztr-no-unrestricted-ingress"
+    ]
+  }
+}

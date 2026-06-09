@@ -1,0 +1,13 @@
+{
+  "name": "curriculum study loop: a new technology topic is studied and tagged as such in the ledger",
+  "command": "cat > digest.json <<'JEOF'\n{\"topics\":[\n{\"topic_id\":\"t-A\",\"source_id\":\"aws-well-architected\",\"section_id\":\"sec.1\",\"pillar\":\"security\",\"curriculum_phase\":\"2\",\"delta_class\":\"best_practice_updated\",\"summary\":\"IAM update\",\"fetched_at\":\"2026-06-08T00:00:00Z\"},\n{\"topic_id\":\"t-B\",\"source_id\":\"terraform-docs\",\"section_id\":\"stacks\",\"pillar\":\"operational-excellence\",\"curriculum_phase\":\"4\",\"delta_class\":\"new_technology\",\"summary\":\"Stacks GA\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\n]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-study.sh\" --digest digest.json --ledger l.jsonl --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const r=require(\"fs\").readFileSync(\"l.jsonl\",\"utf8\").trim().split(\"\\n\").map(JSON.parse);const b=r.find(x=>x.topic_id===\"t-B\");process.exit(b.delta_class===\"new_technology\"?0:1)' && echo newtech-tagged 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "newtech-tagged"
+    ]
+  }
+}

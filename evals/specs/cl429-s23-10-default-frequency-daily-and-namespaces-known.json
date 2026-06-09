@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: every seed defaults to daily frequency and validate-all recognises the new namespaces",
+  "command": "n=$(grep -c '^  fetch_frequency: daily' \"$CLAUDE_PLUGIN_ROOT/standards/cloud-architecture-sources.yaml\"); [ \"$n\" = \"12\" ] || { echo \"FAIL daily n=$n\" 1>&2; exit 1; }; mkdir -p tree/aws && cp \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/aws-well-architected.yaml\" tree/aws/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" --root \"$PWD/tree\" 2>val.txt; grep -q 'unknown top-level folder: aws' val.txt && { echo FAIL-aws-unknown 1>&2; exit 1; }; echo daily-and-known 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["daily-and-known"] }
+}

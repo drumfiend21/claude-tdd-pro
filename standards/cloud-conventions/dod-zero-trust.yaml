@@ -1,0 +1,26 @@
+# DoD / Zero-Trust convention profile (S-31). Grounded in the secured DoD/NIST
+# controls + the S-23 security sources. Run via --ruleset for IL4/IL5-grade IaC.
+- id: ztr-encrypt-data
+  source_id: nist-800-53
+  kind: patterning
+  mode: require
+  token: "encrypt"
+  message: "encrypt data at rest and in transit (NIST SP 800-53 SC controls)"
+- id: ztr-enable-audit-logging
+  source_id: aws-dod-scca-prescriptive
+  kind: patterning
+  mode: require
+  token: "logging"
+  message: "enable audit logging at the boundary (DoD SCCA / AU controls)"
+- id: ztr-no-unrestricted-ingress
+  source_id: aws-prescriptive-security
+  kind: patterning
+  mode: forbid
+  token: "0.0.0.0/0"
+  message: "no unrestricted ingress under Zero Trust least-privilege"
+- id: ztr-no-hardcoded-secret
+  source_id: nist-800-53
+  kind: patterning
+  mode: forbid
+  token: "password ="
+  message: "no hardcoded secrets; use a secret store (NIST SP 800-53 IA controls)"

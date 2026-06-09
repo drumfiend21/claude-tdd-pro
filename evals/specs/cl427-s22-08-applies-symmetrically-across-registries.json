@@ -1,0 +1,6 @@
+{
+  "name": "fetch-frequencies registry: per-registry defaults apply symmetrically to standards, pr-corpus, and compliance",
+  "command": "printf 'registries:\\n  standards: 12h\\n  pr-corpus: 6h\\n  compliance: 2h\\n' > ff.yaml && bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id a --registry standards --file \"$PWD/ff.yaml\"; bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id b --registry pr-corpus --file \"$PWD/ff.yaml\"; bash \"$CLAUDE_PLUGIN_ROOT/standards/fetch-frequency-registry.sh\" --source-id c --registry compliance --file \"$PWD/ff.yaml\"",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["resolved_frequency=12h", "resolved_frequency=6h", "resolved_frequency=2h"] }
+}

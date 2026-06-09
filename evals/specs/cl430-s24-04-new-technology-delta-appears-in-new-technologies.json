@@ -1,0 +1,13 @@
+{
+  "name": "education digest: a delta tagged new_technology appears in the new technologies section",
+  "command": "cat > d.jsonl <<'JEOF'\n{\"source_id\":\"terraform-docs\",\"section_id\":\"stacks\",\"pillar\":\"operational-excellence\",\"curriculum_phase\":\"4\",\"delta_class\":\"new_technology\",\"summary\":\"Terraform Stacks GA\",\"fetched_at\":\"2026-06-08T00:00:00Z\"}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-digest.sh\" --deltas d.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.new_technology.length===1 && j.new_technology[0].summary===\"Terraform Stacks GA\"?0:1)' && echo newtech-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "newtech-ok"
+    ]
+  }
+}

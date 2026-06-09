@@ -1,0 +1,6 @@
+{
+  "name": "polling scheduler: an any-frequency cadence with no FETCH-FREQUENCIES file resolves to the daily default",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/standards/poll-scheduler.sh\" --source-id s --fetch-frequency any-frequency --now-ms 0 --last-fetch-ms 0",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["any-frequency-resolved=daily", "interval_ms=86400000"] }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "cloud-architecture seed: all twelve seed source ids are present in the domain catalog",
+  "command": "for id in aws-well-architected aws-architecture-center aws-prescriptive-security azure-well-architected azure-architecture-center azure-cloud-design-patterns gcp-architecture-framework gcp-architecture-center terraform-docs dod-scca nist-zero-trust cncf-cloud-native; do grep -E \"^- id: $id$\" \"$CLAUDE_PLUGIN_ROOT/standards/cloud-architecture-sources.yaml\" >/dev/null || { echo \"FAIL missing $id\" 1>&2; exit 1; }; done; echo ok 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["ok"] }
+}

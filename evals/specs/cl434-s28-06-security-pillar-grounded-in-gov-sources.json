@@ -1,0 +1,13 @@
+{
+  "name": "cloud ADR: a security decision is grounded in the DoD SCCA and NIST zero-trust sources",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" --title \"Zero Trust mesh\" --slug zero-trust-mesh --seq 7 --pillar security --decision \"mTLS per service\" --options \"VPN, mesh, hybrid\" --rationale \"least privilege\" --out-dir adr --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"adr/0007-zero-trust-mesh.json\",\"utf8\"));const s=j.grounding_sources;process.exit(j.grounding===\"grounded\"&&s.includes(\"dod-scca\")&&s.includes(\"nist-zero-trust\")?0:1)' && echo gov-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gov-grounded"
+    ]
+  }
+}
