@@ -14,6 +14,7 @@
   url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [operational-excellence, security, reliability, performance-efficiency, cost-optimization, sustainability]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -33,6 +34,7 @@
   url: "https://aws.amazon.com/architecture/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [reliability, security]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -52,6 +54,7 @@
   url: "https://docs.aws.amazon.com/prescriptive-guidance/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [security]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -71,6 +74,7 @@
   url: "https://learn.microsoft.com/azure/well-architected/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [operational-excellence, security, reliability, performance-efficiency, cost-optimization, sustainability]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -90,6 +94,7 @@
   url: "https://learn.microsoft.com/azure/architecture/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -109,6 +114,7 @@
   url: "https://learn.microsoft.com/azure/architecture/patterns/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [reliability, performance-efficiency]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -128,6 +134,7 @@
   url: "https://cloud.google.com/architecture/framework"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [operational-excellence, security, reliability, performance-efficiency, cost-optimization, sustainability]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -147,6 +154,7 @@
   url: "https://cloud.google.com/architecture"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [performance-efficiency, cost-optimization]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -166,6 +174,7 @@
   url: "https://developer.hashicorp.com/terraform/docs"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -185,6 +194,7 @@
   url: "https://www.disa.mil/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [security]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -204,6 +214,7 @@
   url: "https://csrc.nist.gov/pubs/sp/800/207/final"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [security]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1
@@ -223,6 +234,7 @@
   url: "https://kubernetes.io/docs/concepts/architecture/"
   tier: 1
   applies_to: [cloud-architecture]
+  pillars: [reliability, performance-efficiency]
   fetch_frequency: daily
   class: published-standard
   authority_tier: 1

@@ -1,0 +1,13 @@
+{
+  "name": "well-architected review: each json pillar carries findings trade_offs and risk_tier slots",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/well-architected-review.sh\" --workload \"resilient multi-region platform\" --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.pillars.every(p=>\"findings\" in p && \"trade_offs\" in p && \"risk_tier\" in p && \"grounding_sources\" in p)?0:1)' && echo slots-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "slots-ok"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "well-architected review: writes both a markdown brief and a json review",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/well-architected-review.sh\" --workload \"resilient multi-region platform\" --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\ntest -f out/2026-06-08T120000Z.json && test -f out/2026-06-08T120000Z.md && echo both-files 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "both-files"
+    ]
+  }
+}

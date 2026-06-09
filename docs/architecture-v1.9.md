@@ -1224,3 +1224,22 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-25).** The ID is S-25, used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-25-curriculum-study-loop/`.
 
 **§20 sequencing (S-25).** Extends the staged path with week 37: S-25 ships after S-24 (it consumes the S-24 digest). Governance-only ID addition; preserves the §21 definition-of-done (extends surface, not gate). Full divide/reach/learn rationale and the confirmation of pre-existing primitives are in the design file `docs/design/v1.12-cloud-architecture-curriculum.md` (to be appended there as the S-25 section).
+
+### §27.10 Cloud-architect application layer (additive amendment, 2026-06-08)
+
+S-26 and S-27 APPLY the cloud-architecture curriculum that the monitoring layer (S-20..S-25) keeps fresh. They consume the S-23 seed catalog + S-24 digest + S-25 ledger and reuse the S-8 standards-comparator grounding discipline (cite-or-decline). They add no new fetch/diff/learn logic — they are operator-facing application surfaces over the existing data.
+
+**Authoritative IDs introduced:** S-26, S-27 (Phase S, §4). No collision with §1–§27.9 IDs.
+
+Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-26** Well-Architected pillar review (v1.12 addendum — see §27.10). `commands/well-architected-review.sh`: given a workload description and the active cloud-architecture sources, emits a review scaffold organised by the six Well-Architected pillars (`operational-excellence`, `security`, `reliability`, `performance-efficiency`, `cost-optimization`, `sustainability`); each pillar lists the grounding sources that cover it (from the S-23 catalog `pillars` field), with `findings` / `trade_offs` / `risk_tier` slots; a pillar with no grounding source is marked `needs_grounding` (mirrors the S-8 decline contract). Output `standards/well-architected-reviews/<utc>.md` + `.json`.
+- **S-27** Curriculum progress and gap tracker (v1.12 addendum — see §27.10). `commands/curriculum-progress.sh`: reads the S-25 ledger + S-23 catalog and reports per-pillar and per-curriculum-phase coverage (studied vs available) plus the not-yet-studied gaps. Output `standards/curriculum-progress/<utc>.md` + `.json`.
+
+**S-23 catalog enrichment (additive data).** Each `standards/cloud-architecture-sources.yaml` entry gains a `pillars: [...]` field listing the Well-Architected pillars that source covers (single source of truth that S-26 reads). This is additive to the §2.6 plugin-internal schema for the cloud-architecture domain catalog; it does not alter the S-1 `standards/sources.yaml`.
+
+**Vocabulary additions for §25 fidelity audit (S-26/S-27):** `well-architected-review`, `pillars`, `needs_grounding`, `findings`, `trade_offs`, `risk_tier`, `workload`, `curriculum-progress`, `coverage`, `gap`, `studied`, `mastery`, `operational-excellence`, `security`, `reliability`, `performance-efficiency`, `cost-optimization`, `sustainability`.
+
+**Anti-drift note (S-26/S-27).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-26-well-architected-pillar-review/`, `evals/pending/s/s-27-curriculum-progress-and-gap-tracker/`.
+
+**§20 sequencing (S-26/S-27).** Week 38: S-26 (review) then S-27 (progress) — both consume the v1.12 monitoring-layer outputs. Governance-only ID additions; preserve the §21 definition-of-done.
