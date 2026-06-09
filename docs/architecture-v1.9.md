@@ -1311,3 +1311,23 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-31).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-31-secured-source-expansion-and-sources-catalog/`. New sources append to the existing `standards/cloud-engineering-sources.yaml`; the S-23 `standards/cloud-architecture-sources.yaml` exactly-twelve invariant is untouched.
 
 **§20 sequencing (S-31).** Week 42: S-31 ships after S-30 (it expands the same grounding catalog and convention surface). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.15 Business-language architect advisory layer (additive amendment, 2026-06-08)
+
+S-32..S-36 add a business-language advisory front-end so an engineer with little cloud knowledge can act through the plugin as a competent architect — eliciting business inputs, translating them to technical concerns, recommending grounded decisions, and explaining the output in plain language. Detailed design + ticket plan: `docs/design/v1.13-business-language-architect.md`. These features COMPOSE the existing S-26 (review), S-28 (ADR), S-29 (build), S-30 (enforce) stack and reuse its schemas; the conversational layer is the agent acting on these deterministic, grounded artifacts. Cite-or-decline preserved (every translation/recommendation/glossary entry cites a catalog source or declines).
+
+**Authoritative IDs introduced:** S-32, S-33, S-34, S-35, S-36 (Phase S, §4). No collision with §1–§27.14 IDs.
+
+Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-32** Business-language requirements intake (v1.13 — see §27.15). `commands/business-intake.sh`: a structured questionnaire capturing business inputs (workload, criticality, availability_tolerance, data_sensitivity, compliance_regime, scale, budget_posture) with allowed-answer enums; validates answers, surfaces `unanswered`/`invalid` for agent follow-ups, emits `business-profile.json`.
+- **S-33** Business-to-technical translation (v1.13 — see §27.15). `commands/business-translate.sh`: maps a business-profile to pillar-keyed technical concerns, each `{concern, driver, source_id}` grounded in a catalog source; emits `technical-requirements.json` (the bridge into S-26/S-29).
+- **S-34** Architect recommendation engine (v1.13 — see §27.15). `commands/architect-recommend.sh`: emits opinionated recommended decisions `{decision, pillar, driver, rationale, source_id}` from the profile + requirements; emits S-28 ADR args and S-29 build requirements; `needs_grounding` when unbacked.
+- **S-35** Plain-language explainer (v1.13 — see §27.15). `commands/explain.sh`: a grounded glossary translating technical terms and review/ADR findings to business language `{term, plain, why_it_matters, source_id}`; annotates a review; declines `unknown_term`.
+- **S-36** Guided architect session orchestrator (v1.13 — see §27.15). `commands/architect-session.sh`: chains intake -> translate -> recommend -> S-26 review -> S-28 ADR -> S-29 build, surfaces `next_question` while the profile is incomplete, and emits a plain-language `session.md` summary via S-35 plus a `session.json` artifact.
+
+**Vocabulary additions for §25 fidelity audit (S-32..S-36):** `business-intake`, `business-profile`, `criticality`, `availability_tolerance`, `data_sensitivity`, `compliance_regime`, `budget_posture`, `scale`, `unanswered`, `business-translate`, `technical-requirements`, `concern`, `driver`, `architect-recommend`, `recommendation`, `rationale`, `explain`, `glossary`, `plain`, `why_it_matters`, `unknown_term`, `architect-session`, `next_question`, `session_complete`.
+
+**Anti-drift note (S-32..S-36).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-32-business-language-requirements-intake/`, `evals/pending/s/s-33-business-to-technical-translation/`, `evals/pending/s/s-34-architect-recommendation-engine/`, `evals/pending/s/s-35-plain-language-explainer/`, `evals/pending/s/s-36-guided-architect-session-orchestrator/`.
+
+**§20 sequencing (S-32..S-36).** Weeks 43–47: S-32 intake, then S-33 translate, S-34 recommend, S-35 explain, then S-36 orchestrator last (it composes the others + S-26/S-28/S-29). Governance-only ID additions; preserve the §21 definition-of-done.
