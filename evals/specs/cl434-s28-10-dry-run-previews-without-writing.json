@@ -1,0 +1,14 @@
+{
+  "name": "cloud ADR: a dry-run previews without writing files",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" --title t --pillar security --decision d --slug t --seq 1 --out-dir adr --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e adr ] && echo no-files 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-files"
+    ]
+  }
+}

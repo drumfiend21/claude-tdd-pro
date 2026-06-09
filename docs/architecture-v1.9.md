@@ -1243,3 +1243,19 @@ Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-26/S-27).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-26-well-architected-pillar-review/`, `evals/pending/s/s-27-curriculum-progress-and-gap-tracker/`.
 
 **§20 sequencing (S-26/S-27).** Week 38: S-26 (review) then S-27 (progress) — both consume the v1.12 monitoring-layer outputs. Governance-only ID additions; preserve the §21 definition-of-done.
+
+### §27.11 Cloud-architecture ADR generator (additive amendment, 2026-06-08)
+
+S-28 extends the cloud-architect application layer with the curriculum's "Architecture Decision Log" practice. It generates MADR-conformant Architecture Decision Records per the existing §2.16 decision-provenance schema, grounded in the S-23 cloud-architecture sources. It introduces no new ADR schema — it produces §2.16-format ADRs for cloud design decisions and cites the grounding sources for the decision's Well-Architected pillar (reusing the S-26 pillar→source mapping).
+
+**Authoritative ID introduced:** S-28 (Phase S, §4). No collision with §1–§27.10 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-28** Cloud-architecture ADR generator (v1.12 addendum — see §27.11). `commands/cloud-adr.sh`: generates a MADR-conformant Architecture Decision Record (per §2.16) for a cloud design decision — `<out-dir>/<NNNN>-<slug>.md` whose filename matches the §2.16 `^[0-9]{4}-[a-z0-9-]+\.md$` pattern — with `status` (enum `proposed|accepted|rejected|superseded|deprecated`), `context`, `considered_options`, and `decision_outcome` with `rationale`; grounded by citing the S-23 cloud-architecture sources that cover the decision's Well-Architected `pillar` (a pillar with no source is marked `needs_grounding`). Emits a json sidecar. Output default dir `docs/adr/`.
+
+**Vocabulary additions for §25 fidelity audit (S-28):** `cloud-adr`, `adr`, `slug`, `decision_outcome`, `considered_options`, `deciders`, `decision_id`, `superseded`, `deprecated`, `accepted`, `rejected`.
+
+**Anti-drift note (S-28).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-28-cloud-architecture-adr-generator/`.
+
+**§20 sequencing (S-28).** Week 39: S-28 ships after S-26/S-27 (it grounds ADRs in the same pillar→source mapping). Governance-only ID addition; preserves the §21 definition-of-done.

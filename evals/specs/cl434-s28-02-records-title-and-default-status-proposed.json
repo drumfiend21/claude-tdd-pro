@@ -1,0 +1,13 @@
+{
+  "name": "cloud ADR: records the decision title and defaults the status to proposed",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" --title \"Zero Trust mesh\" --slug zero-trust-mesh --seq 7 --pillar security --decision \"mTLS per service\" --options \"VPN, mesh, hybrid\" --rationale \"least privilege\" --out-dir adr --now 2026-06-08T12:00:00Z 2>/dev/null\ngrep -q 'Zero Trust mesh' adr/0007-zero-trust-mesh.md && grep -q 'Status: proposed' adr/0007-zero-trust-mesh.md && echo title-status 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "title-status"
+    ]
+  }
+}

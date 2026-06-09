@@ -1,0 +1,13 @@
+{
+  "name": "cloud ADR: an invalid status value is rejected with a non-zero exit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" --title t --pillar security --decision d --status bogus --out-dir a3 --now 2026-06-08T12:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "invalid --status bogus"
+    ]
+  }
+}
