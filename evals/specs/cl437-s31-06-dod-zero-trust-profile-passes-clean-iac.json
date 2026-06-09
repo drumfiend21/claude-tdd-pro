@@ -1,0 +1,13 @@
+{
+  "name": "DoD zero-trust profile: a clean IaC with encryption and logging passes green",
+  "command": "printf 'resource \"x\" { encrypt = true\\n logging = true\\n}\\n' > zt.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac zt.tf --ruleset \"$CLAUDE_PLUGIN_ROOT/standards/cloud-conventions/dod-zero-trust.yaml\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conventions=green"
+    ]
+  }
+}

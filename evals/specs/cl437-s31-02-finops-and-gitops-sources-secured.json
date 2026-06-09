@@ -1,0 +1,13 @@
+{
+  "name": "secured-source expansion: the FinOps and GitOps authorities are secured in the engineering catalog",
+  "command": "grep -q finops-framework \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && grep -q argocd-gitops \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && echo secured-ops 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "secured-ops"
+    ]
+  }
+}

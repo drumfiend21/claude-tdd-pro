@@ -82,3 +82,104 @@
   class: published-standard
   authority_tier: 1
   curriculum_phase: 6
+
+# --- S-31 expansion (v1.12 §27.14): DoD/DARPA-grade security controls,
+# elite-scale reliability/observability, FinOps and GitOps. URLs verified
+# 2026-06-08. These deepen the secured set toward government-grade secure/
+# resilient and xAI/SpaceX-scale operational authorities.
+
+- id: aws-dod-scca-prescriptive
+  name: "AWS Prescriptive Guidance: Secure Cloud Computing Architecture for DoD (IL4/IL5)"
+  url: "https://docs.aws.amazon.com/prescriptive-guidance/latest/secure-architecture-dod/introduction.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security]
+  discipline: [security-controls]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: nist-800-53
+  name: "NIST SP 800-53 Rev 5 Security and Privacy Controls"
+  url: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security]
+  discipline: [security-controls]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: nist-800-171
+  name: "NIST SP 800-171 Rev 3 Protecting Controlled Unclassified Information"
+  url: "https://csrc.nist.gov/pubs/sp/800/171/r3/final"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security]
+  discipline: [security-controls]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: nist-rmf
+  name: "NIST Risk Management Framework (RMF)"
+  url: "https://csrc.nist.gov/projects/risk-management/about-rmf"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security, operational-excellence]
+  discipline: [security-controls, governance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: google-sre-book
+  name: "Google Site Reliability Engineering (SRE) Book"
+  url: "https://sre.google/sre-book/table-of-contents/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability, operational-excellence]
+  discipline: [reliability]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: opentelemetry-docs
+  name: "OpenTelemetry Documentation"
+  url: "https://opentelemetry.io/docs/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [observability]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: finops-framework
+  name: "FinOps Framework"
+  url: "https://www.finops.org/framework/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [cost-optimization]
+  discipline: [finops]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 6
+
+- id: argocd-gitops
+  name: "Argo CD GitOps Documentation"
+  url: "https://argo-cd.readthedocs.io/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [gitops]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 6

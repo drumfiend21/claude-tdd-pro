@@ -1,0 +1,13 @@
+{
+  "name": "sources catalog: includes the secured DoD source and its url",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/sources-catalog.sh\" --out out.md --now 2026-06-08T12:00:00Z 2>/dev/null\ngrep -q aws-dod-scca-prescriptive out.md && grep -q 'secure-architecture-dod' out.md && echo dod-listed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dod-listed"
+    ]
+  }
+}

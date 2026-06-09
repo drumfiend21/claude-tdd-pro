@@ -1,0 +1,13 @@
+{
+  "name": "sources catalog: spans both the architecture and engineering source registries",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/sources-catalog.sh\" --out out.md --now 2026-06-08T12:00:00Z 2>/dev/null\ngrep -q aws-well-architected out.md && grep -q hashicorp-terraform-style-guide out.md && grep -q nist-800-53 out.md && echo spans-both 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "spans-both"
+    ]
+  }
+}

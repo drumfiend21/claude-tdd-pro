@@ -1293,3 +1293,21 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-30).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-30-cloud-architecture-convention-enforcement/`. The new engineering catalog is `standards/cloud-engineering-sources.yaml` (distinct from the S-23 `standards/cloud-architecture-sources.yaml`, whose exactly-twelve invariant is preserved).
 
 **§20 sequencing (S-30).** Week 41: S-30 ships after S-29 (it enforces convention on the IaC that S-29 scaffolds). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.14 Secured-source expansion + sources-catalog + DoD/observability profiles (additive amendment, 2026-06-08)
+
+S-31 deepens the cloud-architect feature toward government-grade (DoD/DARPA, IL4/IL5, Zero Trust) and elite-scale (SRE, observability, FinOps, GitOps) excellence by securing additional verified primary authorities into the engineering catalog, generating the project's auditable sources-catalog document, and adding grounded convention profiles that cite the new authorities. No existing source/rule is altered; cite-or-decline still holds (every rule cites a catalog source).
+
+**Authoritative ID introduced:** S-31 (Phase S, §4). No collision with §1–§27.13 IDs.
+
+**Sources secured (appended to `standards/cloud-engineering-sources.yaml`, all tier 1, applies_to cloud-architecture, with a `discipline` tag; URLs verified 2026-06-08):** `aws-dod-scca-prescriptive`, `nist-800-53`, `nist-800-171`, `nist-rmf`, `google-sre-book`, `opentelemetry-docs`, `finops-framework`, `argocd-gitops`.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-31** Secured-source expansion and sources catalog (v1.12 addendum — see §27.14). Appends DoD/NIST security-controls, Google SRE reliability, OpenTelemetry observability, FinOps and GitOps authorities to the S-30 engineering catalog. `commands/sources-catalog.sh` generates `standards/SOURCES.md` — the auditable Markdown catalog mirroring both the S-23 and S-30/S-31 registries with links + metadata. Adds two grounded convention profiles at `standards/cloud-conventions/`: `dod-zero-trust.yaml` (require `encrypt` + `logging`, forbid `0.0.0.0/0` + hardcoded secrets; grounded in nist-800-53 / aws-dod-scca-prescriptive / aws-prescriptive-security) and `observability.yaml` (require OpenTelemetry instrumentation + SRE monitoring; grounded in opentelemetry-docs / google-sre-book), enforced via S-30 `cloud-conventions.sh --ruleset`.
+
+**Vocabulary additions for §25 fidelity audit (S-31):** `sources-catalog`, `security-controls`, `governance`, `reliability`, `observability`, `finops`, `gitops`, `telemetry`, `sre`, `zero-trust`, `aws-dod-scca-prescriptive`, `nist-800-53`, `nist-800-171`, `nist-rmf`, `google-sre-book`, `opentelemetry-docs`, `finops-framework`, `argocd-gitops`.
+
+**Anti-drift note (S-31).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-31-secured-source-expansion-and-sources-catalog/`. New sources append to the existing `standards/cloud-engineering-sources.yaml`; the S-23 `standards/cloud-architecture-sources.yaml` exactly-twelve invariant is untouched.
+
+**§20 sequencing (S-31).** Week 42: S-31 ships after S-30 (it expands the same grounding catalog and convention surface). Governance-only ID addition; preserves the §21 definition-of-done.

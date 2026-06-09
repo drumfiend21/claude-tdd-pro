@@ -1,0 +1,13 @@
+{
+  "name": "secured-source expansion: the DoD NIST SRE and OpenTelemetry authorities are secured in the engineering catalog",
+  "command": "grep -q aws-dod-scca-prescriptive \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && grep -q nist-800-53 \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && grep -q google-sre-book \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && grep -q opentelemetry-docs \"$CLAUDE_PLUGIN_ROOT/standards/cloud-engineering-sources.yaml\" && echo secured-core 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "secured-core"
+    ]
+  }
+}
