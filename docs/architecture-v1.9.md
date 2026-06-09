@@ -1208,3 +1208,19 @@ Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal compatibility):
 **Anti-drift note (per `CLAUDE.md`).** The v1.12 IDs (S-20, S-21, S-22, S-23, S-24, §2.28, §2.29) are canonical and must be used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-20-configurable-frequency-polling-scheduler/`, `evals/pending/s/s-21-conditional-get-fetcher-layer/`, `evals/pending/s/s-22-fetch-frequencies-registry/`, `evals/pending/s/s-23-cloud-architecture-standards-domain-seed/`, `evals/pending/s/s-24-continuous-cloud-architecture-education-digest/`, `evals/pending/cross-cutting/2-28-configurable-frequency-polling-contract/`, `evals/pending/cross-cutting/2-29-conditional-get-freshness-economy-contract/`.
 
 **§20 sequencing (full table in the design file §27.8).** Extends the canonical staged path with weeks 34–36: week 34 §2.28 + S-22 + S-20 (cadence grammar + registry + scheduler); week 35 §2.29 + S-21 (conditional-GET economy); week 36 S-23 then S-24 (seed the domain, then ship the digest). Preserves the §21 definition-of-done — extends surface, not gate.
+
+### §27.9 S-25 curriculum study loop (additive amendment, 2026-06-08)
+
+S-25 closes the divide → reach → learn loop over the S-24 digest. It is an ORCHESTRATOR over already-shipped Phase-S primitives — it reimplements none of them. Confirmed existing primitives it composes: **divide** = the S-24 digest `.json` `topics[]` (one topic per delta) + the S-2 section fetchers (`standards/fetchers/{markdown-headers,html-anchor,pdf-section,rfc-style}.sh`) + the S-3 coverage matrix; **reach** = `standards/fetcher.sh` (S-2) + `standards/conditional-get.sh` (S-21) + `standards/poll-scheduler.sh` (S-20) + `standards/freshness-gate.sh` (S-13/16/17); **learn** = `agents/standards-comparator.md` (S-8 grounded, decline-on-ungrounded summary) + `commands/standards-diff.sh` (S-5 Adopt/Defer/Reject → `standards/decisions.jsonl`) + optional `commands/promote-standard.sh` (S-7 section → rule). S-25 adds only the per-topic iteration + a resumable learning ledger.
+
+**Authoritative ID introduced:** S-25 (Phase S, §4). No collision with §1–§27 IDs (S-20..S-24 are the prior v1.12 IDs).
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-25** Curriculum study loop (v1.12 addendum — see §27.9). `commands/curriculum-study.sh` iterates the S-24 digest `topics[]`; for each topic it reaches the section (S-2 fetcher + S-21 conditional-get), learns it (S-8 grounded summary + S-5 adopt/defer/reject decision, optional S-7 promote), and records a per-topic learning record to a resumable ledger `standards/curriculum-ledger.jsonl` (state `learned`; a topic already learned is skipped on re-run — learn-once + resumable). Each record cites the topic's `source_id` + `section_id` (grounding). `--dry-run` previews without writing the ledger (§2.14).
+
+**Vocabulary additions for §25 fidelity audit (S-25):** `curriculum-study`, `curriculum-ledger`, `studied`, `learned`, `reach`, `reached`, `decision`, `adopt`, `defer`, `reject`, `resumable`, `topic_id`, `studied_at`, `delta_class`, `best_practice_updated`.
+
+**Anti-drift note (S-25).** The ID is S-25, used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-25-curriculum-study-loop/`.
+
+**§20 sequencing (S-25).** Extends the staged path with week 37: S-25 ships after S-24 (it consumes the S-24 digest). Governance-only ID addition; preserves the §21 definition-of-done (extends surface, not gate). Full divide/reach/learn rationale and the confirmation of pre-existing primitives are in the design file `docs/design/v1.12-cloud-architecture-curriculum.md` (to be appended there as the S-25 section).
