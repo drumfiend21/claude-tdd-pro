@@ -1,0 +1,13 @@
+{
+  "name": "curriculum progress: lists the not-yet-studied pillar gaps",
+  "command": "printf '%s\\n' '{\"state\":\"learned\",\"pillar\":\"security\",\"curriculum_phase\":\"5\"}' > led.jsonl\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-progress.sh\" --ledger led.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(Array.isArray(j.pillar_gaps) && j.pillar_gaps.includes(\"reliability\") && !j.pillar_gaps.includes(\"security\")?0:1)' && echo gaps-listed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gaps-listed"
+    ]
+  }
+}

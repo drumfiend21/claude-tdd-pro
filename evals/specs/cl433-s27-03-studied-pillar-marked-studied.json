@@ -1,0 +1,13 @@
+{
+  "name": "curriculum progress: a pillar studied in the ledger is marked studied",
+  "command": "printf '%s\\n' '{\"state\":\"learned\",\"pillar\":\"security\",\"curriculum_phase\":\"5\"}' > led.jsonl\nbash \"$CLAUDE_PLUGIN_ROOT/commands/curriculum-progress.sh\" --ledger led.jsonl --out-dir out --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"out/2026-06-08T120000Z.json\",\"utf8\"));process.exit(j.pillar_coverage.find(p=>p.pillar===\"security\").studied===true?0:1)' && echo security-studied 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "security-studied"
+    ]
+  }
+}
