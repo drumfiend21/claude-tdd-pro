@@ -1,0 +1,13 @@
+{
+  "name": "business translation: a low availability tolerance maps to reliability concerns grounded in the AWS RPO RTO source",
+  "command": "cat > profile.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"answers\":{\"workload\":\"gov analytics\",\"motivation\":\"compliance\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"seconds\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"il5\",\"scale\":\"large\",\"budget_posture\":\"cost-first\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile profile.json --out tr.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tr.json\",\"utf8\"));const r=j.pillars.reliability;const hit=r.find(c=>c.source_id===\"aws-rpo-rto-targets\");process.exit(hit?0:1)' && echo rto-mapped 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rto-mapped"
+    ]
+  }
+}
