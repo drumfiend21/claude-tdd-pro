@@ -1,0 +1,13 @@
+{
+  "name": "business intake: lists the intake questions with their allowed answers",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --list-questions 2>/dev/null | node -e 'const q=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(q.length===9 && q.find(x=>x.key===\"criticality\").allowed.includes(\"mission-critical\")?0:1)' && echo listed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "listed"
+    ]
+  }
+}

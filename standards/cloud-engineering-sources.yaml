@@ -183,3 +183,57 @@
   class: published-standard
   authority_tier: 1
   curriculum_phase: 6
+
+# --- v1.13 S-32/S-33 grounding (intake + business->technical translation).
+# URLs verified 2026-06-08. The Azure architect-role guide supplies the
+# Listen->Probe->Clarify intake methodology; the AWS RPO/RTO blog + Reliability
+# Pillar ground the availability/criticality questions and their reliability
+# mappings; the WA Tool profiles ground the business-context questionnaire.
+
+- id: azure-waf-business-requirements
+  name: "Azure Well-Architected: Align technical strategy with business requirements"
+  url: "https://learn.microsoft.com/en-us/azure/well-architected/architect-role/design-business-requirements"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [business-requirements, intake]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 1
+
+- id: aws-rpo-rto-targets
+  name: "AWS: Establishing RPO and RTO Targets for Cloud Applications"
+  url: "https://aws.amazon.com/blogs/mt/establishing-rpo-and-rto-targets-for-cloud-applications/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability]
+  discipline: [business-requirements, reliability]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 2
+
+- id: aws-wa-tool-profiles
+  name: "AWS Well-Architected Tool: Profiles (business-context questionnaire)"
+  url: "https://docs.aws.amazon.com/wellarchitected/latest/userguide/profiles.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [business-requirements, intake]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 1
+
+- id: aws-reliability-pillar
+  name: "AWS Well-Architected Reliability Pillar"
+  url: "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability]
+  discipline: [patterning, reliability]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
