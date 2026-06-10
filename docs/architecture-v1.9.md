@@ -1390,3 +1390,15 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-47).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-47-requirement-clarification-loop/`.
 
 **§20 sequencing (S-47).** M1 refinement, built immediately after S-36 (it strengthens S-35's unknown-term handling). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.19 Platform-boundary external-call safety + plugin-standard normalized response (additive amendment, 2026-06-08)
+
+Two cross-cutting contracts binding every platform boundary (S-41 dispatcher + S-42/S-43/S-44 boundaries). No new feature ID.
+
+**Contract A — external-call safety (no POST/PUT on invalid input).** A boundary MUST validate the handoff BEFORE any interaction with an external platform API, and MUST NOT issue any mutating call (POST/PUT/create/update) for an invalid platform or an unknown/invalid option. Boundaries are SAFE-BY-DEFAULT: they normalize only; a mutating external call requires explicit `--apply` AND a passed validation. A would-be mutating call that is stopped by validation emits the observable marker `external_call=blocked-validation-failed` and exits 2; a non-applied run emits `external_call=skipped-not-applied`; an authorized, validated run emits `external_call=apply-authorized` (the production network edge). Validation failure never reaches the external API.
+
+**Contract B — plugin-standard normalized response.** Every boundary normalizes its DISTINCT native API response (AWS Well-Architected Tool risks, Azure Advisor recommendations, GCP Recommender insights) into ONE plugin-standard schema: `{schema_version, platform, source_api, validated, normalized:{recommendations:[{id, title, pillar, severity, source, mapped_concern, grounding}], native_review_ref}, build_units, iac_targets, applied}`. Each native finding maps to a grounded concern where possible (cite-or-decline: an unmappable finding is `grounding=needs_grounding`). `source` is `native-<platform>`; `source_api` names the vendor API.
+
+**Vocabulary additions for §25 fidelity audit (§27.19):** `source_api`, `normalized`, `validated`, `applied`, `mapped_concern`, `external_call`, `severity`, `aws-well-architected-tool`, `azure-advisor`, `gcp-recommender`, `apply`.
+
+**§20 note.** Contracts apply to the already-registered S-41..S-44; no new IDs or pending folders. Preserves the §21 definition-of-done.

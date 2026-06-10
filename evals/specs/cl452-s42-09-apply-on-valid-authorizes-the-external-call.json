@@ -1,0 +1,14 @@
+{
+  "name": "aws boundary: an apply on a valid validated handoff authorizes the external call",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"route\":\"aws-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\"]},\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > native.json <<'JEOF'\n{\"review_ref\":\"native-review/wl-1\",\"recommendations\":[{\"id\":\"SEC-1\",\"title\":\"Enable encryption at rest\",\"pillar\":\"security\",\"severity\":\"HIGH\"},{\"id\":\"REL-2\",\"title\":\"Use multi-AZ deployment\",\"pillar\":\"reliability\",\"severity\":\"MEDIUM\"},{\"id\":\"X-9\",\"title\":\"Adopt a mesh fabric thing\",\"pillar\":\"operational-excellence\",\"severity\":\"LOW\"}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/aws-boundary.sh\" --handoff h.json --native-response native.json --apply --out r.json --now 2026-06-08T12:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "external_call=apply-authorized",
+      "validated=true"
+    ]
+  }
+}

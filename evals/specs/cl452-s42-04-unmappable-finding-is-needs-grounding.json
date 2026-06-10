@@ -1,0 +1,13 @@
+{
+  "name": "aws boundary: an unmappable native finding is marked needs_grounding",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"route\":\"aws-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\"]},\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > native.json <<'JEOF'\n{\"review_ref\":\"native-review/wl-1\",\"recommendations\":[{\"id\":\"SEC-1\",\"title\":\"Enable encryption at rest\",\"pillar\":\"security\",\"severity\":\"HIGH\"},{\"id\":\"REL-2\",\"title\":\"Use multi-AZ deployment\",\"pillar\":\"reliability\",\"severity\":\"MEDIUM\"},{\"id\":\"X-9\",\"title\":\"Adopt a mesh fabric thing\",\"pillar\":\"operational-excellence\",\"severity\":\"LOW\"}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/aws-boundary.sh\" --handoff h.json --native-response native.json --out r.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"r.json\",\"utf8\"));process.exit(j.normalized.recommendations.some(r=>r.id===\"X-9\"&&r.mapped_concern===null&&r.grounding===\"needs_grounding\")?0:1)' && echo declined 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "declined"
+    ]
+  }
+}
