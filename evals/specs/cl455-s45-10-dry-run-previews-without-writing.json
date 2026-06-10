@@ -1,0 +1,14 @@
+{
+  "name": "toolchain advisor: a dry-run previews without writing the toolchain",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > req.json <<'JEOF'\n{\"pillars\":{\"integration\":[{\"concern\":\"message_queue\"}],\"data\":[{\"concern\":\"partitioning\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --out tc.json --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e tc.json ] && echo no-file 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-file"
+    ]
+  }
+}
