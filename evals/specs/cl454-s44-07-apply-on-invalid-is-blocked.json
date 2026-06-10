@@ -1,0 +1,13 @@
+{
+  "name": "gcp boundary: an apply on an invalid handoff is blocked before any external call",
+  "command": "cat > bad.json <<'JEOF'\n{\"platform\":\"aws\",\"selected_option\":{\"option_id\":\"x\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/gcp-boundary.sh\" --handoff bad.json --apply --out r.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "external_call=blocked-validation-failed"
+    ]
+  }
+}
