@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: the communication-style question is grounded in Enterprise Integration Patterns",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --list-questions 2>/dev/null | node -e 'const q=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(q.find(x=>x.key===\"communication_style\").source_id===\"enterprise-integration-patterns\"?0:1)' && echo comm-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "comm-grounded"
+    ]
+  }
+}

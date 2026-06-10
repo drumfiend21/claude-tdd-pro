@@ -29,11 +29,12 @@
 set -uo pipefail
 
 LIST=0; OUT=""; NOW=""; PARTIAL=0; DRY_RUN=0; ANSWERS_JSON=""
-ANSWERS_KV=""
+ANSWERS_KV=""; WITH_DATA=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --list-questions) LIST=1; shift ;;
+    --with-data) WITH_DATA=1; shift ;;
     --answer)  ANSWERS_KV="${ANSWERS_KV}${2-}"$'\n'; shift 2 ;;
     --answers) ANSWERS_JSON="${2-}"; shift 2 ;;
     --out)     OUT="${2-}"; shift 2 ;;
@@ -49,11 +50,11 @@ if [ -z "$OUT" ]; then OUT="standards/business-profile.json"; fi
 if [ -z "$NOW" ]; then NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ); fi
 
 LIST="$LIST" OUT="$OUT" NOW="$NOW" PARTIAL="$PARTIAL" DRY_RUN="$DRY_RUN" \
-ANSWERS_JSON="$ANSWERS_JSON" ANSWERS_KV="$ANSWERS_KV" ruby -rjson -e '
+ANSWERS_JSON="$ANSWERS_JSON" ANSWERS_KV="$ANSWERS_KV" WITH_DATA="$WITH_DATA" ruby -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
   list=ENV["LIST"]=="1"; out=ENV["OUT"]; now=ENV["NOW"]
-  partial=ENV["PARTIAL"]=="1"; dry=ENV["DRY_RUN"]=="1"
+  partial=ENV["PARTIAL"]=="1"; dry=ENV["DRY_RUN"]=="1"; with_data=ENV["WITH_DATA"]=="1"
 
   # Question schema: the grounded senior-architect intake set.
   # type free accepts any non-empty value; type enum validates against allowed.
@@ -86,6 +87,30 @@ ANSWERS_JSON="$ANSWERS_JSON" ANSWERS_KV="$ANSWERS_KV" ruby -rjson -e '
      "prompt"=>"What is your posture on cost versus uptime?",
      "source_id"=>"aws-wa-tool-profiles"}
   ]
+
+  # S-38 data-aware questions (opt-in via --with-data; grounded in the S-37
+  # data + distributed source catalogs). Still asked in business language.
+  DATA_Q = [
+    {"key"=>"data_volume",          "type"=>"enum", "allowed"=>%w[small medium large very-large],
+     "prompt"=>"How much data will the system hold and how fast will it grow?",
+     "source_id"=>"aws-data-analytics-lens"},
+    {"key"=>"read_write_pattern",   "type"=>"enum", "allowed"=>%w[read-heavy write-heavy balanced analytics],
+     "prompt"=>"Is the system mostly reading, mostly writing, balanced, or analytics?",
+     "source_id"=>"azure-data-store-models"},
+    {"key"=>"consistency_need",     "type"=>"enum", "allowed"=>%w[strong eventual mixed],
+     "prompt"=>"Must every read see the very latest write, or can some lag be tolerated?",
+     "source_id"=>"patterns-of-distributed-systems"},
+    {"key"=>"communication_style",  "type"=>"enum", "allowed"=>%w[synchronous event-driven mixed],
+     "prompt"=>"Should parts talk in real time (request/response) or via events/queues?",
+     "source_id"=>"enterprise-integration-patterns"},
+    {"key"=>"integration_scope",    "type"=>"enum", "allowed"=>%w[internal-only external-partner public],
+     "prompt"=>"Who does it integrate with - only internal services, external partners, or the public?",
+     "source_id"=>"enterprise-integration-patterns"},
+    {"key"=>"data_cadence",         "type"=>"enum", "allowed"=>%w[real-time near-real-time batch],
+     "prompt"=>"Does data need to move in real time, near-real-time, or in batches?",
+     "source_id"=>"aws-data-analytics-lens"}
+  ]
+  Q.concat(DATA_Q) if with_data
 
   if list
     STDOUT.puts JSON.pretty_generate(Q)

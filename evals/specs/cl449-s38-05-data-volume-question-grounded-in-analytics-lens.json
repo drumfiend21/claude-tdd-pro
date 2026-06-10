@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: the data-volume question is grounded in the AWS Data Analytics Lens",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --list-questions 2>/dev/null | node -e 'const q=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(q.find(x=>x.key===\"data_volume\").source_id===\"aws-data-analytics-lens\"?0:1)' && echo volume-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "volume-grounded"
+    ]
+  }
+}
