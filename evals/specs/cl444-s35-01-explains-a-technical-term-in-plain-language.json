@@ -1,0 +1,14 @@
+{
+  "name": "plain-language explainer: explains a technical term in plain business language",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term least_privilege",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "plain=",
+      "access"
+    ]
+  }
+}

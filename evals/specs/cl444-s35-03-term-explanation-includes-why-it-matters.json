@@ -1,0 +1,14 @@
+{
+  "name": "plain-language explainer: a term explanation includes why it matters for the business",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term multi_az",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "why=",
+      "outage"
+    ]
+  }
+}
