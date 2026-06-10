@@ -1,0 +1,13 @@
+{
+  "name": "objective scoring: options are ranked by weighted total score",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":4,\"options\":[{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized managed baseline\",\"trade_offs\":{\"cost\":\"low\",\"complexity\":\"low\",\"performance\":\"medium\",\"availability\":\"medium\",\"vendor_lock_in\":\"medium\"}},{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"trade_offs\":{\"cost\":\"medium\",\"complexity\":\"medium\",\"performance\":\"medium\",\"availability\":\"high\",\"vendor_lock_in\":\"low\"}},{\"option_id\":\"opt-resilient\",\"summary\":\"Resilient scale-out\",\"trade_offs\":{\"cost\":\"high\",\"complexity\":\"high\",\"performance\":\"high\",\"availability\":\"high\",\"vendor_lock_in\":\"medium\"}},{\"option_id\":\"opt-max\",\"summary\":\"Maximum-resilience multi-region\",\"trade_offs\":{\"cost\":\"high\",\"complexity\":\"high\",\"performance\":\"high\",\"availability\":\"very-high\",\"vendor_lock_in\":\"medium\"}}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/optimize-options.sh\" --options opts.json --out sc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"sc.json\",\"utf8\"));const t=j.scored_options.map(o=>o.total_score);const sorted=t.every((v,i)=>i===0||t[i-1]>=v);process.exit(sorted && j.ranked.length===4 && j.ranked[0]===j.scored_options[0].option_id?0:1)' && echo ranked 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ranked"
+    ]
+  }
+}

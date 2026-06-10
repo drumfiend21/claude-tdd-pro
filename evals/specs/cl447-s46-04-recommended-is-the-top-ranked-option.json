@@ -1,0 +1,13 @@
+{
+  "name": "objective scoring: the recommended option is the top-ranked option",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":4,\"options\":[{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized managed baseline\",\"trade_offs\":{\"cost\":\"low\",\"complexity\":\"low\",\"performance\":\"medium\",\"availability\":\"medium\",\"vendor_lock_in\":\"medium\"}},{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"trade_offs\":{\"cost\":\"medium\",\"complexity\":\"medium\",\"performance\":\"medium\",\"availability\":\"high\",\"vendor_lock_in\":\"low\"}},{\"option_id\":\"opt-resilient\",\"summary\":\"Resilient scale-out\",\"trade_offs\":{\"cost\":\"high\",\"complexity\":\"high\",\"performance\":\"high\",\"availability\":\"high\",\"vendor_lock_in\":\"medium\"}},{\"option_id\":\"opt-max\",\"summary\":\"Maximum-resilience multi-region\",\"trade_offs\":{\"cost\":\"high\",\"complexity\":\"high\",\"performance\":\"high\",\"availability\":\"very-high\",\"vendor_lock_in\":\"medium\"}}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/optimize-options.sh\" --options opts.json --out sc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"sc.json\",\"utf8\"));process.exit(j.recommended_option_id===j.ranked[0]?0:1)' && echo recommended-top 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "recommended-top"
+    ]
+  }
+}
