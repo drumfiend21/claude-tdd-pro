@@ -84,6 +84,28 @@ HANDOFF="$HANDOFF" REQ="$REQ" SCAFFOLD_DIR="$SCAFFOLD_DIR" OUT="$OUT" NOW="$NOW"
   add.call("messaging", NATIVE_MSG[platform], true, "event-driven communication", "enterprise-integration-patterns") if has_integration
   add.call("db-migrations", "flyway", false, "versioned schema migrations", nil) if has_data
 
+  # S-48: survey all viable alternatives per category (native + portable) so the
+  # developer can consider the whole field, not just the primary pick.
+  # Each entry: [tool, portable, native_platform_or_nil, source_id_or_nil].
+  ALT = {
+    "iac" => [["terraform",true,nil,"terraform-recommended-practices"],["aws-cloudformation",false,"aws","aws-cloudformation-best-practices"],["azure-bicep",false,"azure","azure-bicep-best-practices"],["pulumi",true,nil,nil],["crossplane",true,nil,nil]],
+    "observability" => [["opentelemetry",true,nil,"opentelemetry-docs"],["prometheus-grafana",true,nil,nil],["datadog",true,nil,nil],["amazon-cloudwatch",false,"aws",nil],["azure-monitor",false,"azure",nil],["google-cloud-operations",false,"gcp",nil]],
+    "gitops" => [["argocd",true,nil,"argocd-gitops"],["flux",true,nil,nil]],
+    "finops" => [["finops-practices",true,nil,"finops-framework"],["kubecost",true,nil,nil]],
+    "containers" => [["kubernetes",true,nil,nil],["amazon-eks",false,"aws",nil],["azure-aks",false,"azure",nil],["google-gke",false,"gcp",nil]],
+    "ci-cd" => [["github-actions",true,nil,nil],["gitlab-ci",true,nil,nil],["aws-codepipeline",false,"aws",nil],["azure-devops",false,"azure",nil],["google-cloud-build",false,"gcp",nil]],
+    "policy-as-code" => [["opa-conftest",true,nil,nil],["checkov",true,nil,nil],["aws-config",false,"aws",nil],["azure-policy",false,"azure",nil],["gcp-policy-controller",false,"gcp",nil]],
+    "testing" => [["terratest",true,nil,nil],["pact",true,nil,nil]],
+    "messaging" => [["apache-kafka",true,nil,"enterprise-integration-patterns"],["rabbitmq",true,nil,"enterprise-integration-patterns"],["amazon-sqs-sns",false,"aws","enterprise-integration-patterns"],["azure-service-bus",false,"azure","enterprise-integration-patterns"],["google-pubsub",false,"gcp","enterprise-integration-patterns"]],
+    "db-migrations" => [["flyway",true,nil,nil],["liquibase",true,nil,nil],["alembic",true,nil,nil]]
+  }
+  recs.each do |r|
+    r["alternatives"] = (ALT[r["category"]] || []).map do |tool, portable, native, src|
+      {"tool"=>tool, "platform_native"=>(native == platform), "portable"=>portable,
+       "source_id"=>src, "grounding"=> (src ? "grounded" : "needs_grounding")}
+    end
+  end
+
   grounded_n = recs.count { |r| r["grounding"] == "grounded" }
   needs = recs.select { |r| r["grounding"] == "needs_grounding" }.map { |r| r["category"] }
 

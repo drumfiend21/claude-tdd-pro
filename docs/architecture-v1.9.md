@@ -1402,3 +1402,19 @@ Two cross-cutting contracts binding every platform boundary (S-41 dispatcher + S
 **Vocabulary additions for §25 fidelity audit (§27.19):** `source_api`, `normalized`, `validated`, `applied`, `mapped_concern`, `external_call`, `severity`, `aws-well-architected-tool`, `azure-advisor`, `gcp-recommender`, `apply`.
 
 **§20 note.** Contracts apply to the already-registered S-41..S-44; no new IDs or pending folders. Preserves the §21 definition-of-done.
+
+### §27.20 Toolchain alternatives survey (additive amendment, 2026-06-08)
+
+Refines S-45: a category must not present a single tool. The advisor SURVEYS all viable alternatives across every cloud platform (platform-native + portable), annotates each with grounding (cite-or-decline) and platform-fit, and presents the full landscape so the developer can consider all options and choose. The S-45 primary recommendation is preserved (one of the alternatives).
+
+**Authoritative ID introduced:** S-48 (Phase S, §4). No collision with §1–§27.19 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-48** Toolchain alternatives survey (v1.14 refinement of S-45 — see §27.20). `commands/toolchain-advisor.sh` attaches to every recommendation an `alternatives[]` array surveying the field per category (e.g. observability: opentelemetry / prometheus-grafana / datadog / amazon-cloudwatch / azure-monitor / google-cloud-operations; gitops: argocd / flux; messaging: apache-kafka / rabbitmq / amazon-sqs-sns / azure-service-bus / google-pubsub; iac: terraform / cloudformation / bicep / pulumi / crossplane). Each alternative carries `{tool, platform_native, portable, source_id, grounding}`; `platform_native` is true when the tool is native to the target platform; grounded where a secured source backs it, else needs_grounding. The S-45 primary `tool` remains and appears among the alternatives.
+
+**Vocabulary additions for §25 fidelity audit (S-48):** `alternatives`, `alternative`, `portable`, `survey`, `prometheus-grafana`, `flux`, `pulumi`, `crossplane`, `kubernetes`.
+
+**Anti-drift note (S-48).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-48-toolchain-alternatives-survey/`.
+
+**§20 sequencing (S-48).** M5 refinement, built immediately after S-45. Governance-only ID addition; preserves the §21 definition-of-done.

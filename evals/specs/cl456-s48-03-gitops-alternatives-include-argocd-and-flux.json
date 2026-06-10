@@ -1,0 +1,13 @@
+{
+  "name": "toolchain alternatives: gitops alternatives include Argo CD and Flux",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}\nJEOF\ncat > req.json <<'JEOF'\n{\"pillars\":{\"integration\":[{\"concern\":\"message_queue\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --requirements req.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;const cat=c=>R.find(r=>r.category===c);const has=(c,t)=>cat(c).alternatives.some(a=>a.tool===t);process.exit(has(\"gitops\",\"argocd\")&&has(\"gitops\",\"flux\")?0:1)' && echo gitops-alts 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gitops-alts"
+    ]
+  }
+}
