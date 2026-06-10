@@ -1,0 +1,13 @@
+{
+  "name": "data sources: each data source carries a discipline tag",
+  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; d=YAML.unsafe_load_file(r+\"/standards/data-architecture-sources.yaml\"); exit(d.all?{|e| (e[\"discipline\"]||[]).include?(\"data-architecture\")} ? 0 : 1)' && echo data-discipline 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-discipline"
+    ]
+  }
+}

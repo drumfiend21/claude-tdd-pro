@@ -1,0 +1,13 @@
+{
+  "name": "distributed sources: the catalog includes Patterns of Distributed Systems",
+  "command": "grep -q patterns-of-distributed-systems \"$CLAUDE_PLUGIN_ROOT/standards/distributed-systems-sources.yaml\" && grep -q 'martinfowler.com' \"$CLAUDE_PLUGIN_ROOT/standards/distributed-systems-sources.yaml\" && echo pods 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pods"
+    ]
+  }
+}

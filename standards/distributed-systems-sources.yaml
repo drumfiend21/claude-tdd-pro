@@ -1,0 +1,51 @@
+# Distributed-systems and integration-pattern sources (S-37, v1.14 §27.16).
+# Grounding fuel for queues/messaging, server-to-server communication, and
+# distributed patterns (CQRS, event sourcing, saga, consensus, replication).
+# URLs verified 2026-06-08. References only (no source text reproduced).
+- id: enterprise-integration-patterns
+  name: "Enterprise Integration Patterns (messaging pattern catalog)"
+  url: "https://www.enterpriseintegrationpatterns.com/patterns/messaging/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability, operational-excellence]
+  discipline: [integration-patterns, messaging]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: patterns-of-distributed-systems
+  name: "Patterns of Distributed Systems (martinfowler.com)"
+  url: "https://martinfowler.com/articles/patterns-of-distributed-systems/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability]
+  discipline: [distributed-systems]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: fowler-cqrs
+  name: "CQRS (martinfowler.com)"
+  url: "https://martinfowler.com/bliki/CQRS.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability, performance-efficiency]
+  discipline: [distributed-systems]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4
+
+- id: fowler-event-sourcing
+  name: "Event Sourcing (martinfowler.com)"
+  url: "https://martinfowler.com/eaaDev/EventSourcing.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [reliability]
+  discipline: [distributed-systems]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4

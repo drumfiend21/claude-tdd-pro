@@ -1,0 +1,13 @@
+{
+  "name": "data and distributed sources: every entry in both catalogs has an id, name, and url",
+  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; ok=%w[data-architecture distributed-systems].all?{|f| YAML.unsafe_load_file(r+\"/standards/#{f}-sources.yaml\").all?{|e| e[\"id\"]&&e[\"name\"]&&e[\"url\"].to_s.start_with?(\"http\")}}; exit(ok ? 0 : 1)' && echo structured 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "structured"
+    ]
+  }
+}

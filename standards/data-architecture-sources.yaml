@@ -1,0 +1,51 @@
+# Data-architecture sources (S-37, v1.14 §27.16). Grounding fuel for the data
+# domain: relational/NoSQL choice, consistency models, replication,
+# partitioning, warehousing/lakehouse. URLs verified 2026-06-08. References
+# only (no source text reproduced).
+- id: aws-data-analytics-lens
+  name: "AWS Well-Architected Data Analytics Lens"
+  url: "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/analytics-lens.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [performance-efficiency, cost-optimization, reliability]
+  discipline: [data-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 3
+
+- id: azure-data-architecture-guide
+  name: "Azure Data Architecture Guide"
+  url: "https://learn.microsoft.com/en-us/azure/architecture/data-guide/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [performance-efficiency, reliability]
+  discipline: [data-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 3
+
+- id: azure-data-store-models
+  name: "Azure Architecture Center: Understand data store models (relational vs NoSQL)"
+  url: "https://learn.microsoft.com/en-us/azure/architecture/data-guide/technology-choices/understand-data-store-models"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [performance-efficiency]
+  discipline: [data-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 3
+
+- id: gcp-data-architecture
+  name: "Google Cloud Data Analytics and Architecture"
+  url: "https://cloud.google.com/docs/data"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [performance-efficiency, cost-optimization]
+  discipline: [data-architecture]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 3

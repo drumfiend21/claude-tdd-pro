@@ -1,0 +1,13 @@
+{
+  "name": "data sources: the data-architecture catalog ships with the AWS Data Analytics Lens",
+  "command": "grep -q aws-data-analytics-lens \"$CLAUDE_PLUGIN_ROOT/standards/data-architecture-sources.yaml\" && echo data-lens 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-lens"
+    ]
+  }
+}
