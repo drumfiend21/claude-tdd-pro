@@ -118,6 +118,42 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
   # Operational-excellence baseline (Google SRE).
   add.call("operational-excellence", "monitoring", "baseline", "google-sre-book")
 
+  # S-39 data + distributed concerns (grounded in the S-37 catalogs); fire only
+  # when the --with-data intake answers are present.
+  case a["consistency_need"]
+  when "strong"
+    add.call("data", "strong_consistency",      "consistency_need=strong",   "patterns-of-distributed-systems")
+    add.call("data", "synchronous_replication", "consistency_need=strong",   "patterns-of-distributed-systems")
+  when "eventual"
+    add.call("data", "eventual_consistency",    "consistency_need=eventual", "patterns-of-distributed-systems")
+  end
+  if %w[large very-large].include?(a["data_volume"])
+    add.call("data", "partitioning", "data_volume=#{a["data_volume"]}", "azure-data-store-models")
+    add.call("data", "sharding",     "data_volume=#{a["data_volume"]}", "azure-data-store-models")
+  end
+  if a["read_write_pattern"] == "analytics"
+    add.call("data", "data_warehouse", "read_write_pattern=analytics", "aws-data-analytics-lens")
+  end
+  case a["communication_style"]
+  when "event-driven"
+    add.call("integration", "message_queue",     "communication_style=event-driven", "enterprise-integration-patterns")
+    add.call("integration", "dead_letter_queue", "communication_style=event-driven", "enterprise-integration-patterns")
+    add.call("integration", "outbox_pattern",    "communication_style=event-driven", "enterprise-integration-patterns")
+  when "synchronous"
+    add.call("integration", "api_gateway", "communication_style=synchronous", "enterprise-integration-patterns")
+  end
+  if %w[external-partner public].include?(a["integration_scope"])
+    add.call("integration", "anti_corruption_layer", "integration_scope=#{a["integration_scope"]}", "enterprise-integration-patterns")
+    add.call("integration", "contract_test",         "integration_scope=#{a["integration_scope"]}", "enterprise-integration-patterns")
+  end
+  if a["read_write_pattern"] == "analytics" && a["consistency_need"] == "mixed"
+    add.call("distributed", "cqrs", "analytics+mixed-consistency", "fowler-cqrs")
+  end
+  if a["communication_style"] == "event-driven" && a["criticality"] == "mission-critical"
+    add.call("distributed", "saga",           "event-driven+mission-critical", "fowler-event-sourcing")
+    add.call("distributed", "event_sourcing", "event-driven+mission-critical", "fowler-event-sourcing")
+  end
+
   # Dedupe by (pillar, concern); first driver/source wins.
   seen = {}; deduped = []
   concerns.each do |c|
@@ -129,7 +165,8 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
   # Grounding verification (cite-or-decline): a concern whose source is in no
   # catalog is marked needs_grounding.
   grounded = {}
-  [catalog, eng].each do |cf|
+  sdir = File.dirname(catalog)
+  [catalog, eng, File.join(sdir, "data-architecture-sources.yaml"), File.join(sdir, "distributed-systems-sources.yaml")].each do |cf|
     next unless File.exist?(cf)
     d = begin; YAML.unsafe_load_file(cf); rescue; nil; end
     next unless d.is_a?(Array)
