@@ -1,0 +1,14 @@
+{
+  "name": "clarification loop: a cost description clarifies to a cost concern grounded in FinOps",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"spend=stop us from overpaying for idle servers\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "mapped_to=rightsizing",
+      "source=finops-framework"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "clarification loop: the mapped concern is a known concept that translates to architecture",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"a=our stored data must stay safe even if the disk is stolen\" 2>&1 | grep -q 'mapped_to=encryption_at_rest' && bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --list-terms 2>/dev/null | node -e 'const a=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(a.includes(\"encryption_at_rest\")?0:1)' && echo translatable 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "translatable"
+    ]
+  }
+}

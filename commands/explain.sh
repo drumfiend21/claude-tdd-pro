@@ -22,11 +22,12 @@
 
 set -uo pipefail
 
-TERM=""; ANNOTATE=""; OUT=""; LIST=0; NOW=""; DRY_RUN=0
+TERM=""; ANNOTATE=""; OUT=""; LIST=0; NOW=""; DRY_RUN=0; CLARIFY=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --term)       TERM="${2-}";     shift 2 ;;
+    --clarify)    CLARIFY="${2-}";  shift 2 ;;
     --annotate)   ANNOTATE="${2-}"; shift 2 ;;
     --out)        OUT="${2-}";      shift 2 ;;
     --list-terms) LIST=1;           shift ;;
@@ -40,11 +41,11 @@ done
 if [ -z "$OUT" ]; then OUT="standards/explanation.md"; fi
 if [ -z "$NOW" ]; then NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ); fi
 
-TERM="$TERM" ANNOTATE="$ANNOTATE" OUT="$OUT" LIST="$LIST" NOW="$NOW" DRY_RUN="$DRY_RUN" ruby -rjson -e '
+TERM="$TERM" CLARIFY="$CLARIFY" ANNOTATE="$ANNOTATE" OUT="$OUT" LIST="$LIST" NOW="$NOW" DRY_RUN="$DRY_RUN" ruby -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
   term=ENV["TERM"]; annotate=ENV["ANNOTATE"]; out=ENV["OUT"]; list=ENV["LIST"]=="1"
-  now=ENV["NOW"]; dry=ENV["DRY_RUN"]=="1"
+  clarify=ENV["CLARIFY"]; now=ENV["NOW"]; dry=ENV["DRY_RUN"]=="1"
 
   # Grounded plain-language glossary (definitions are original plain-English;
   # source_id ties each to the authority that establishes the practice).
@@ -71,10 +72,60 @@ TERM="$TERM" ANNOTATE="$ANNOTATE" OUT="$OUT" LIST="$LIST" NOW="$NOW" DRY_RUN="$D
 
   norm = lambda { |s| s.to_s.strip.downcase.gsub("-", "_") }
 
+  # Keyword index (S-47): business-language phrases -> known technical concern,
+  # so an unrecognised requirement can be clarified until it maps to a concern
+  # S-33/S-34 can translate to architecture. Order = G order (first match wins).
+  KW = {
+    "encryption_at_rest"      => ["stolen", "at rest", "stored data", "encrypt the data", "data safe", "disk"],
+    "encryption_in_transit"   => ["intercept", "in transit", "while it travels", "eavesdrop", "man in the middle"],
+    "access_control"          => ["who can access", "permission", "roles", "authorize", "limit who"],
+    "audit_logging"           => ["who did what", "audit", "record of actions", "trace actions", "compliance log"],
+    "least_privilege"         => ["minimum access", "least privilege", "only the access"],
+    "boundary_protection"     => ["perimeter", "il4", "il5", "boundary"],
+    "multi_az"                => ["never go down", "stay up", "outage", "downtime", "always available", "data center fails"],
+    "automated_failover"      => ["switch automatically", "failover", "take over automatically"],
+    "multi_region"            => ["whole region", "geographic", "multiple regions", "region outage"],
+    "health_check"            => ["detect broken", "is it working", "unhealthy"],
+    "backup"                  => ["lose data", "restore", "recover data", "backup"],
+    "synchronous_replication" => ["never lose recent", "zero data loss", "no data loss"],
+    "point_in_time_recovery"  => ["rewind", "point in time", "undo corruption"],
+    "autoscaling"             => ["traffic spike", "scale up", "handle load", "sudden growth", "get busy"],
+    "caching"                 => ["faster", "speed up", "frequently used"],
+    "rightsizing"             => ["overpay", "save money", "too expensive", "cheaper", "cut cost", "reduce cost"],
+    "managed_services"        => ["managed", "provider runs", "less ops", "not maintain"],
+    "monitoring"              => ["know when something breaks", "alert", "detect problems", "watch the system"]
+  }
+  resolve = lambda do |desc|
+    d = desc.to_s.downcase
+    G.keys.each { |concern| (KW[concern] || []).each { |kw| return concern if d.include?(kw) } }
+    nil
+  end
+  prompt_for = lambda do |t|
+    "I do not recognise \"#{t}\". In plain terms, what should it do for your users or business?"
+  end
+
   if list
     STDOUT.puts JSON.pretty_generate(G.keys)
     STDERR.puts "terms=#{G.length}"
     exit 0
+  end
+
+  # S-47 clarification step: map a business description to a known concern.
+  unless clarify.empty?
+    t, _, desc = clarify.partition("=")
+    concern = resolve.call(desc)
+    if concern
+      plain, why, src = G[concern]
+      STDERR.puts "clarified=#{t.strip}"
+      STDERR.puts "mapped_to=#{concern}"
+      STDERR.puts "plain=#{plain}"
+      STDERR.puts "source=#{src}"
+      exit 0
+    else
+      STDERR.puts "unresolved=#{t.strip}"
+      STDERR.puts "clarification_prompt=#{prompt_for.call(t.strip)}"
+      exit 1
+    end
   end
 
   unless term.empty?
@@ -87,7 +138,11 @@ TERM="$TERM" ANNOTATE="$ANNOTATE" OUT="$OUT" LIST="$LIST" NOW="$NOW" DRY_RUN="$D
       STDERR.puts "source=#{src}"
       exit 0
     else
+      # S-47: do not dead-end. Preserve the unknown_term signal AND ask the
+      # founder to clarify (the agent loops with --clarify until it resolves).
       STDERR.puts "unknown_term=#{term}"
+      STDERR.puts "clarification_needed=#{term}"
+      STDERR.puts "clarification_prompt=#{prompt_for.call(term)}"
       exit 1
     end
   end

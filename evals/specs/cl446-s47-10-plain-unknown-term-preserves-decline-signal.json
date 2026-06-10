@@ -1,0 +1,13 @@
+{
+  "name": "clarification loop: a plain unknown term still preserves the unknown_term decline signal",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term zzznotathing",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "unknown_term=zzznotathing"
+    ]
+  }
+}

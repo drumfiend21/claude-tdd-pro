@@ -1,0 +1,14 @@
+{
+  "name": "clarification loop: an unresolvable description loops again with another clarification prompt",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"vibe=make it delightful and trendy\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "unresolved=vibe",
+      "clarification_prompt="
+    ]
+  }
+}

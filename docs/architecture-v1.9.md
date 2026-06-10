@@ -1372,3 +1372,21 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-46).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-46-objective-weighted-optimization/`.
 
 **§20 sequencing (experience-first).** Delivery is milestone-ordered, not feature-ordered: M0 walking skeleton (S-34 + S-36 entry over the built S-32/S-33/S-26/S-28/S-29/S-30) -> M1 guided architect (S-35 + full S-36 + S-34 multi-option) -> M2 objectives first-class (S-46) -> M3 data/distributed depth (S-37, S-38, S-39) -> M4 platform APIs (S-41, S-42, S-43, S-44) -> M5 toolchain (S-45) -> M6 closed loop. Dependencies preserved (S-34 before S-46/boundaries; S-37 before S-38/S-39; S-41 before S-42/S-43/S-44). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.18 Requirement clarification loop + objective-weighting requirement (additive amendment, 2026-06-08)
+
+Refines S-35: an unrecognised term must not dead-end. The plugin CLARIFIES it (asks the founder, in business language, what it should do) and keeps clarifying until the requirement resolves to a technical concern that S-33/S-34 can translate to architecture. Also records the standing requirement that S-46 (held) must weigh all four objectives, grounded in the provided knowledge corpus, to produce first-class decisions.
+
+**Authoritative ID introduced:** S-47 (Phase S, §4). No collision with §1–§27.17 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-47** Requirement clarification loop (v1.13 refinement of S-35 — see §27.18). `commands/explain.sh` gains: an unrecognised `--term` emits a `clarification_prompt` (a plain-language question) alongside the preserved `unknown_term` signal; `--clarify "<term>=<business description>"` maps the description to a known technical concern via a grounded keyword index, emitting `clarified=<term> mapped_to=<concern> source=<id>` on resolution, or another `clarification_prompt` (`unresolved`) to continue the loop. The loop ends when the requirement resolves to a concern S-33/S-34 can translate. cite-or-decline preserved (the resolved concern carries its grounding source).
+
+**S-46 objective-weighting requirement (standing, for the held M2 build).** When built, S-46 MUST weigh all four objectives — cost-effective, performance-optimized, customer-centric, shareholder-centric — grounded in the secured knowledge corpus (the S-23/S-30/S-31 + v1.13 sources), so its rankings are first-class (on par with the world's best cloud architects' decisions), not heuristic. No option is recommended on a single objective alone.
+
+**Vocabulary additions for §25 fidelity audit (S-47):** `clarify`, `clarification`, `clarification_needed`, `clarification_prompt`, `clarified`, `mapped_to`, `unresolved`, `requirement`.
+
+**Anti-drift note (S-47).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-47-requirement-clarification-loop/`.
+
+**§20 sequencing (S-47).** M1 refinement, built immediately after S-36 (it strengthens S-35's unknown-term handling). Governance-only ID addition; preserves the §21 definition-of-done.
