@@ -1,0 +1,13 @@
+{
+  "name": "architect session: accepts a vision and inline answers and runs the full intake to completion",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"a small online shop\" --answers '{\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' --out-dir sess --now 2026-06-08T12:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "session_complete=true"
+    ]
+  }
+}
