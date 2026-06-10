@@ -1356,3 +1356,19 @@ Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-37..S-45).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-37-data-and-integration-sources-catalog/`, `evals/pending/s/s-38-data-aware-business-intake/`, `evals/pending/s/s-39-data-and-distributed-translation/`, `evals/pending/s/s-41-platform-boundary-contract-and-dispatcher/`, `evals/pending/s/s-42-aws-platform-boundary/`, `evals/pending/s/s-43-azure-platform-boundary/`, `evals/pending/s/s-44-gcp-platform-boundary/`, `evals/pending/s/s-45-implementation-toolchain-advisor/`. New catalogs are `standards/data-architecture-sources.yaml` and `standards/distributed-systems-sources.yaml` (distinct from the S-23/S-30 catalogs; their invariants are untouched).
 
 **§20 sequencing (S-37..S-45).** Weeks 48–55, after the v1.13 common layer (S-34 option composer, S-35, S-36) is built: S-37 sources, then S-38 intake + S-39 translation (common-layer domain depth), then S-41 boundary contract, then S-42/S-43/S-44 boundaries, then S-45 toolchain. Governance-only ID additions; preserve the §21 definition-of-done.
+
+### §27.17 Experience-first roadmap + objective-weighted optimization (additive amendment, 2026-06-08)
+
+Reframes the v1.13/v1.14 build around the end-user journey: a non-technical founder states an app vision and the plugin guides every cloud-architecture decision in business language, then implements it across the available platform APIs, optimized to be cost-effective, performance-optimized, customer-centric, and shareholder-centric. Two consequences: build the thinnest end-to-end path first (walking skeleton, M0) before deepening any stage; and make the four optimization objectives a first-class, grounded, scored dimension (S-46) from the skeleton onward. Detailed roadmap + milestones M0..M6: `docs/design/v1.15-experience-first-roadmap.md`.
+
+**Authoritative ID introduced:** S-46 (Phase S, §4). No collision with §1–§27.16 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-46** Objective-weighted optimization and option scoring (v1.15 — see §27.17). `commands/optimize-options.sh`: scores and ranks the S-34 options against four grounded objectives — cost-effective (`finops-framework` + AWS WAF Cost pillar), performance-optimized (AWS WAF Performance Efficiency pillar), customer-centric (`aws-reliability-pillar` / `aws-rpo-rto-targets`), shareholder-centric (`finops-framework` / `google-eng-practices` + operational-excellence). Weights derive from the business-profile (e.g. `budget_posture=cost-first`, `criticality=mission-critical`) and are overridable; emits a ranked `option-scoring.json` with per-objective scores + grounded rationale; cite-or-decline marks an unbacked objective `needs_grounding`.
+
+**Vocabulary additions for §25 fidelity audit (S-46):** `optimize-options`, `objective`, `objectives`, `cost-effective`, `performance-optimized`, `customer-centric`, `shareholder-centric`, `scoring`, `ranked`, `weight`, `time-to-market`, `vision`, `walking-skeleton`.
+
+**Anti-drift note (S-46).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-46-objective-weighted-optimization/`.
+
+**§20 sequencing (experience-first).** Delivery is milestone-ordered, not feature-ordered: M0 walking skeleton (S-34 + S-36 entry over the built S-32/S-33/S-26/S-28/S-29/S-30) -> M1 guided architect (S-35 + full S-36 + S-34 multi-option) -> M2 objectives first-class (S-46) -> M3 data/distributed depth (S-37, S-38, S-39) -> M4 platform APIs (S-41, S-42, S-43, S-44) -> M5 toolchain (S-45) -> M6 closed loop. Dependencies preserved (S-34 before S-46/boundaries; S-37 before S-38/S-39; S-41 before S-42/S-43/S-44). Governance-only ID addition; preserves the §21 definition-of-done.
