@@ -1,0 +1,13 @@
+{
+  "name": "azure boundary: an unknown option in the handoff is rejected",
+  "command": "cat > noopt.json <<'JEOF'\n{\"platform\":\"azure\",\"selected_option\":{}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/azure-boundary.sh\" --handoff noopt.json --out r.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "validation_failed=unknown-option"
+    ]
+  }
+}
