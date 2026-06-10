@@ -1,0 +1,13 @@
+{
+  "name": "platform boundary: routes an azure platform to the azure boundary",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":2,\"options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\",\"monitoring\"]},{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized\",\"build_requirements\":[\"encryption_at_rest\",\"backup\"]}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/platform-boundary.sh\" --options opts.json --select opt-cost --platform azure --out h.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"h.json\",\"utf8\"));process.exit(j.route===\"azure-boundary\"?0:1)' && echo azure-routed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-routed"
+    ]
+  }
+}

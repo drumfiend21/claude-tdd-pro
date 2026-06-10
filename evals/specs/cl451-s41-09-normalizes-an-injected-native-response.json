@@ -1,0 +1,13 @@
+{
+  "name": "platform boundary: normalizes an injected native API response into recommendations and a review reference",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":2,\"options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\",\"monitoring\"]},{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized\",\"build_requirements\":[\"encryption_at_rest\",\"backup\"]}]}\nJEOF\ncat > native.json <<'JEOF'\n{\"review_ref\":\"native-review/workload/abc123\",\"recommendations\":[{\"id\":\"REL-1\",\"title\":\"Add multi-AZ\",\"pillar\":\"reliability\"},{\"id\":\"SEC-3\",\"title\":\"Enable encryption\",\"pillar\":\"security\"}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/platform-boundary.sh\" --options opts.json --select opt-balanced --platform aws --native-response native.json --out h.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"h.json\",\"utf8\"));process.exit(j.recommendations.length===2 && j.recommendations[0].source===\"native-aws\" && j.native_review_ref===\"native-review/workload/abc123\"?0:1)' && echo native-normalized 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "native-normalized"
+    ]
+  }
+}
