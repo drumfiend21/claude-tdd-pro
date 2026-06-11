@@ -1450,3 +1450,9 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-50).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-50-closed-loop-decision-package/`.
 
 **§20 sequencing (S-50).** Week M6: ships after S-46 + S-45 (it bundles their outputs). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.23 End-to-end integration validation (additive amendment, 2026-06-08)
+
+The definition-of-done validation for the v1.13-v1.15 layered cloud-architect feature: a real common-case founder vision run through the ENTRY function (S-36 architect-session) and the full pipeline, producing a resulting cloud architecture for AWS, GCP, and Azure. It composes S-32 intake -> S-33 translate -> S-34 options -> S-46 scoring -> S-41 boundary dispatch -> S-42/S-43/S-44 boundary normalize -> S-45 toolchain -> S-50 decision package -> S-28 ADR -> S-29 build (red->green) -> S-30 enforce. No new feature ID (it validates the composition). Integration specs live at `evals/pending/integration/cloud-architect-e2e/` (promoted as `cl459-e2e-`).
+
+**§20 note.** Pure validation of S-32..S-50; preserves the §21 definition-of-done (adds the end-to-end gate).

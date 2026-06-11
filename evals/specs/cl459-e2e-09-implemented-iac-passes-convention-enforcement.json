@@ -1,0 +1,13 @@
+{
+  "name": "e2e: the implemented IaC passes grounded convention enforcement",
+  "command": "cat > main.tf <<'TF'\nterraform { required_version = \">= 1.5\" required_providers { aws = { source = \"hashicorp/aws\" } } }\nvariable \"name\" { description = \"n\" type = string }\nresource \"aws_s3_bucket\" \"b\" { tags = { env = \"prod\" } }\nTF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh\" --tool terraform --iac main.tf 2>&1 | grep -q 'conventions=green' && echo enforced 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "enforced"
+    ]
+  }
+}

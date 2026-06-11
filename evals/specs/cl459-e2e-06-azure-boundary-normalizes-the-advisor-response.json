@@ -1,0 +1,13 @@
+{
+  "name": "e2e: the Azure boundary validates and normalizes the Advisor response with bicep IaC",
+  "command": "cat > profile.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"an online appointment booking app for a medical clinic\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"external-partner\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"medical booking app\" --profile profile.json --out-dir sess --now 2026-06-08T12:00:00Z 2>/dev/null\nbash \"$CLAUDE_PLUGIN_ROOT/commands/platform-boundary.sh\" --options sess/architecture-options.json --select opt-balanced --platform azure --out h.json 2>/dev/null\nprintf '{\"review_ref\":\"native-review/az\",\"recommendations\":[{\"recommendationId\":\"a1\",\"category\":\"Security\",\"impact\":\"High\",\"shortDescription\":{\"solution\":\"Enable encryption\"}}]}' > n.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/azure-boundary.sh\" --handoff h.json --native-response n.json --out b.json 2>/dev/null\nnode -e 'const b=JSON.parse(require(\"fs\").readFileSync(\"b.json\",\"utf8\"));process.exit(b.platform===\"azure\"&&b.validated===true&&b.iac_targets.includes(\"bicep\")?0:1)' && echo azure-normalized 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-normalized"
+    ]
+  }
+}
