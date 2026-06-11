@@ -1434,3 +1434,19 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-49).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-49-plain-language-toolchain-alternatives/`.
 
 **§20 sequencing (S-49).** M5 refinement, built immediately after S-48. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.22 Closed-loop decision package (additive amendment, 2026-06-08)
+
+M6 capstone: closes the vision->implementation loop. Given the chosen option (S-34), its objective scores (S-46), and the toolchain (S-45), it produces ONE decided, enforceable decision package + a plain-language decision summary, and emits the next-step commands that feed S-28 (ADR), S-29 (build), S-30 (enforce). It reports whether the loop is closed (the choice is scored and has build requirements) or open (with the gap).
+
+**Authoritative ID introduced:** S-50 (Phase S, §4). No collision with §1–§27.21 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-50** Closed-loop decision package (v1.15 M6 — see §27.22). `commands/decision-package.sh`: reads the S-34 `architecture-options.json` + the S-46 `option-scoring.json` (+ optional S-45 `toolchain.json`), selects the chosen option (`--select`, default the scoring `recommended_option_id`), and emits a `decision-package.json` bundling `{chosen_option, objective_scores, toolchain_summary, next_steps:{adr_title, build_requirements, enforce_command}, loop_closed, gaps}` plus a plain-language `decision.md`. `loop_closed` is true only when the choice is scored and carries build requirements; otherwise `loop_closed=false` with the gap named. The next_steps feed S-28/S-29/S-30.
+
+**Vocabulary additions for §25 fidelity audit (S-50):** `decision-package`, `decision`, `loop_closed`, `gaps`, `next_steps`, `objective_scores`, `toolchain_summary`, `enforce_command`, `chosen_option`.
+
+**Anti-drift note (S-50).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-50-closed-loop-decision-package/`.
+
+**§20 sequencing (S-50).** Week M6: ships after S-46 + S-45 (it bundles their outputs). Governance-only ID addition; preserves the §21 definition-of-done.
