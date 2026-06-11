@@ -99,10 +99,54 @@ HANDOFF="$HANDOFF" REQ="$REQ" SCAFFOLD_DIR="$SCAFFOLD_DIR" OUT="$OUT" NOW="$NOW"
     "messaging" => [["apache-kafka",true,nil,"enterprise-integration-patterns"],["rabbitmq",true,nil,"enterprise-integration-patterns"],["amazon-sqs-sns",false,"aws","enterprise-integration-patterns"],["azure-service-bus",false,"azure","enterprise-integration-patterns"],["google-pubsub",false,"gcp","enterprise-integration-patterns"]],
     "db-migrations" => [["flyway",true,nil,nil],["liquibase",true,nil,nil],["alembic",true,nil,nil]]
   }
+  # S-49: a plain business-language explanation for each tool (what it means for
+  # you and the trade-off), so a non-technical founder can choose.
+  PLAIN = {
+    "terraform"=>"describe your infrastructure as code that works across clouds; the widely used default",
+    "aws-cloudformation"=>"AWS-built infrastructure-as-code; deep AWS fit but ties you to AWS",
+    "azure-bicep"=>"Azure-built infrastructure-as-code; clean and native to Azure",
+    "pulumi"=>"infrastructure as code using real programming languages; handy when the logic is complex",
+    "crossplane"=>"manage infrastructure the Kubernetes way; good if you already run Kubernetes",
+    "opentelemetry"=>"a vendor-neutral way to watch the health of your system, so you are not locked to one monitoring vendor",
+    "prometheus-grafana"=>"popular open-source monitoring and dashboards you run yourself; powerful, more to operate",
+    "datadog"=>"an all-in-one paid monitoring service; little setup but an ongoing subscription cost",
+    "amazon-cloudwatch"=>"the AWS built-in monitoring; works out of the box on AWS, keeps you on AWS",
+    "azure-monitor"=>"the Azure built-in monitoring; native to Azure",
+    "google-cloud-operations"=>"the Google Cloud built-in monitoring; native to Google Cloud",
+    "argocd"=>"keeps what is running in sync with what is in your code repository, so releases are automatic and auditable",
+    "flux"=>"a lightweight tool that deploys automatically from your code repository",
+    "finops-practices"=>"habits that keep cloud spending visible and under control",
+    "kubecost"=>"shows what the Kubernetes workloads actually cost so you can trim waste",
+    "kubernetes"=>"the standard way to run containers at scale on any cloud; powerful but more to learn",
+    "amazon-eks"=>"managed Kubernetes on AWS; the provider runs the hard parts, native to AWS",
+    "azure-aks"=>"managed Kubernetes on Azure; native to Azure",
+    "google-gke"=>"managed Kubernetes on Google Cloud; native to Google Cloud",
+    "github-actions"=>"automatically builds, tests, and ships your code from your repository",
+    "gitlab-ci"=>"build-test-ship automation built into GitLab",
+    "aws-codepipeline"=>"the AWS release pipeline; native to AWS",
+    "azure-devops"=>"the Microsoft release pipeline; native to Azure",
+    "google-cloud-build"=>"the Google Cloud build and release service; native to Google Cloud",
+    "opa-conftest"=>"automatically checks your setup against your rules before it ships",
+    "checkov"=>"scans your infrastructure code for risky settings before deploy",
+    "aws-config"=>"the AWS built-in compliance and guardrail checks",
+    "azure-policy"=>"the Azure built-in compliance and guardrail checks",
+    "gcp-policy-controller"=>"the Google Cloud built-in policy guardrails",
+    "terratest"=>"automated tests that prove your infrastructure actually works",
+    "pact"=>"tests that the services talking to each other keep their promises",
+    "apache-kafka"=>"a high-volume event backbone for large-scale streaming; powerful, more to run",
+    "rabbitmq"=>"a reliable message queue that is simpler to start with",
+    "amazon-sqs-sns"=>"the AWS managed queues and notifications; almost nothing to operate, native to AWS",
+    "azure-service-bus"=>"the Azure managed enterprise messaging; native to Azure",
+    "google-pubsub"=>"the Google Cloud managed global messaging; native to Google Cloud",
+    "flyway"=>"safely version and apply database changes",
+    "liquibase"=>"track and apply database changes in a controlled way",
+    "alembic"=>"version database changes for Python projects"
+  }
   recs.each do |r|
     r["alternatives"] = (ALT[r["category"]] || []).map do |tool, portable, native, src|
       {"tool"=>tool, "platform_native"=>(native == platform), "portable"=>portable,
-       "source_id"=>src, "grounding"=> (src ? "grounded" : "needs_grounding")}
+       "source_id"=>src, "grounding"=> (src ? "grounded" : "needs_grounding"),
+       "plain"=> (PLAIN[tool] || "an option for #{r["category"]}; ask for details")}
     end
   end
 

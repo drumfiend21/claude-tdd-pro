@@ -1418,3 +1418,19 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-48).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-48-toolchain-alternatives-survey/`.
 
 **§20 sequencing (S-48).** M5 refinement, built immediately after S-45. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.21 Plain-language toolchain alternatives (additive amendment, 2026-06-08)
+
+Refines S-48: every surveyed alternative must be explained in plain business language (what it means for you and the trade-off), not only the technical name/rationale, so a non-technical founder can choose between options like "observability for AWS".
+
+**Authoritative ID introduced:** S-49 (Phase S, §4). No collision with §1–§27.20 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-49** Plain-language toolchain alternatives (v1.14 refinement of S-48 — see §27.21). `commands/toolchain-advisor.sh` attaches a `plain` business-language explanation to every alternative in `alternatives[]` (e.g. CloudWatch -> "AWS's built-in monitoring; works out of the box on AWS, keeps you on AWS"; OpenTelemetry -> "a vendor-neutral way to watch your system's health, so you are not locked to one monitoring vendor"). The `plain` text states the business meaning and the trade-off (managed vs self-run, native-lock-in vs portable, cost vs effort), alongside the existing `{tool, platform_native, portable, source_id, grounding}`.
+
+**Vocabulary additions for §25 fidelity audit (S-49):** `plain`, `plain-language`, `trade-off`, `lock-in`.
+
+**Anti-drift note (S-49).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-49-plain-language-toolchain-alternatives/`.
+
+**§20 sequencing (S-49).** M5 refinement, built immediately after S-48. Governance-only ID addition; preserves the §21 definition-of-done.

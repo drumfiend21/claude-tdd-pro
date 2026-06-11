@@ -1,0 +1,13 @@
+{
+  "name": "plain alternatives: the plain explanation is distinct per tool",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}\nJEOF\ncat > req.json <<'JEOF'\n{\"pillars\":{\"integration\":[{\"concern\":\"message_queue\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --requirements req.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;const ALL=R.flatMap(r=>r.alternatives);const cat=c=>R.find(r=>r.category===c);const alt=(c,t)=>cat(c).alternatives.find(a=>a.tool===t);process.exit(alt(\"observability\",\"opentelemetry\").plain!==alt(\"observability\",\"amazon-cloudwatch\").plain?0:1)' && echo distinct-plain 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "distinct-plain"
+    ]
+  }
+}
