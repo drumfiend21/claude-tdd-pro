@@ -1456,3 +1456,19 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 The definition-of-done validation for the v1.13-v1.15 layered cloud-architect feature: a real common-case founder vision run through the ENTRY function (S-36 architect-session) and the full pipeline, producing a resulting cloud architecture for AWS, GCP, and Azure. It composes S-32 intake -> S-33 translate -> S-34 options -> S-46 scoring -> S-41 boundary dispatch -> S-42/S-43/S-44 boundary normalize -> S-45 toolchain -> S-50 decision package -> S-28 ADR -> S-29 build (red->green) -> S-30 enforce. No new feature ID (it validates the composition). Integration specs live at `evals/pending/integration/cloud-architect-e2e/` (promoted as `cl459-e2e-`).
 
 **§20 note.** Pure validation of S-32..S-50; preserves the §21 definition-of-done (adds the end-to-end gate).
+
+### §27.24 Observability and logging design (additive amendment, 2026-06-08)
+
+Refines S-33/S-39 so the design evidences ROBUST logging and analysis of the deployed services, tailored to the user's needs (not just generic monitoring). A mission-critical workload gets SLO alerting; any compliance regime gets audit-log retention; regulated data gets access logging; event-driven or mission-critical systems get distributed tracing; every workload gets centralized logging. Grounded in OpenTelemetry / Google SRE / NIST 800-53.
+
+**Authoritative ID introduced:** S-51 (Phase S, §4). No collision with §1–§27.23 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-51** Observability and logging design (v1.14 refinement of S-33/S-39 — see §27.24). `commands/business-translate.sh` emits, under operational-excellence, tailored logging + analysis concerns: `centralized_logging` (always) and `distributed_tracing` (event-driven or mission-critical) grounded in `opentelemetry-docs`; `slo_alerting` (mission-critical) grounded in `google-sre-book`; `audit_log_retention` (compliance regime present) and `access_logging` (regulated/confidential data) grounded in `nist-800-53`. Each carries its business driver and grounding; the toolchain (S-45/S-48) then surveys the analysis stack (OpenTelemetry, Prometheus/Grafana, Datadog, cloud-native) per platform.
+
+**Vocabulary additions for §25 fidelity audit (S-51):** `centralized_logging`, `distributed_tracing`, `slo_alerting`, `audit_log_retention`, `access_logging`, `observability`, `logging`, `analysis`.
+
+**Anti-drift note (S-51).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-51-observability-and-logging-design/`.
+
+**§20 sequencing (S-51).** M3 refinement; extends the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.

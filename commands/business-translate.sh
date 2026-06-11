@@ -118,6 +118,23 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
   # Operational-excellence baseline (Google SRE).
   add.call("operational-excellence", "monitoring", "baseline", "google-sre-book")
 
+  # S-51 observability + logging design: robust logging and analysis of deployed
+  # services, tailored to what the user needs. Grounded in OpenTelemetry/SRE/NIST.
+  add.call("operational-excellence", "centralized_logging", "baseline", "opentelemetry-docs")
+  if a["criticality"] == "mission-critical" || a["communication_style"] == "event-driven"
+    add.call("operational-excellence", "distributed_tracing", "criticality_or_event_driven", "opentelemetry-docs")
+  end
+  if a["criticality"] == "mission-critical"
+    add.call("operational-excellence", "slo_alerting", "criticality=mission-critical", "google-sre-book")
+  end
+  cr_obs = a["compliance_regime"].to_s
+  if !cr_obs.empty? && cr_obs != "none"
+    add.call("operational-excellence", "audit_log_retention", "compliance_regime=#{cr_obs}", "nist-800-53")
+  end
+  if %w[regulated confidential].include?(a["data_sensitivity"])
+    add.call("operational-excellence", "access_logging", "data_sensitivity=#{a["data_sensitivity"]}", "nist-800-53")
+  end
+
   # S-39 data + distributed concerns (grounded in the S-37 catalogs); fire only
   # when the --with-data intake answers are present.
   case a["consistency_need"]

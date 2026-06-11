@@ -1,0 +1,13 @@
+{
+  "name": "logging design: a mission-critical workload gets SLO alerting for service-health analysis grounded in Google SRE",
+  "command": "cat > pc.json <<'JEOF'\n{\"complete\":true,\"answers\":{\"workload\":\"medical booking\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"data_volume\":\"large\",\"read_write_pattern\":\"analytics\",\"integration_scope\":\"external-partner\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile pc.json --out req.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"req.json\",\"utf8\"));const O=(j.pillars[\"operational-excellence\"]||[]);const has=c=>O.some(x=>x.concern===c);const src=c=>(O.find(x=>x.concern===c)||{}).source_id;process.exit(has(\"slo_alerting\")&&src(\"slo_alerting\")===\"google-sre-book\"?0:1)' && echo slo 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "slo"
+    ]
+  }
+}

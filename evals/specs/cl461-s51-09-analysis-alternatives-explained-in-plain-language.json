@@ -1,0 +1,13 @@
+{
+  "name": "logging design: the analysis stack alternatives are explained in plain business language so the user can choose",
+  "command": "printf '{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}' > h.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const t=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const alts=t.recommendations.find(r=>r.category===\"observability\").alternatives;process.exit(alts.length>=4&&alts.every(a=>typeof a.plain===\"string\"&&a.plain.length>10)&&alts.some(a=>a.tool===\"amazon-cloudwatch\"&&a.platform_native)?0:1)' && echo plain-analysis 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "plain-analysis"
+    ]
+  }
+}
