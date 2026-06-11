@@ -237,3 +237,79 @@
   class: published-standard
   authority_tier: 1
   curriculum_phase: 5
+
+# --- v1.16 S-52 grounding (software-engineering design surfaces: testing,
+# dependency versioning/compatibility, authn/authz, object storage, REST APIs,
+# real-time sockets, HTTP security headers/CORS). URLs verified 2026-06-08.
+# References only.
+- id: fowler-test-pyramid
+  name: "The Practical Test Pyramid (martinfowler.com)"
+  url: "https://martinfowler.com/articles/practical-test-pyramid.html"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [testing]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 6
+
+- id: semver
+  name: "Semantic Versioning 2.0.0"
+  url: "https://semver.org/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [versioning]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 6
+
+- id: oauth2-oidc
+  name: "OAuth 2.0 (oauth.net)"
+  url: "https://oauth.net/2/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security]
+  discipline: [security-controls, identity]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: owasp-asvs
+  name: "OWASP Application Security Verification Standard (ASVS)"
+  url: "https://owasp.org/www-project-application-security-verification-standard/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security]
+  discipline: [security-controls, testing]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: owasp-secure-headers
+  name: "OWASP Secure Headers Project"
+  url: "https://owasp.org/www-project-secure-headers/"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [security]
+  discipline: [security-controls]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 5
+
+- id: microsoft-rest-api-guidelines
+  name: "Microsoft REST API Guidelines"
+  url: "https://github.com/microsoft/api-guidelines"
+  tier: 1
+  applies_to: [cloud-architecture]
+  pillars: [operational-excellence]
+  discipline: [patterning, api]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+  curriculum_phase: 4

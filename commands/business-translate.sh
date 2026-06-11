@@ -135,6 +135,68 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
     add.call("operational-excellence", "access_logging", "data_sensitivity=#{a["data_sensitivity"]}", "nist-800-53")
   end
 
+  # S-52 software-engineering design surfaces (grounded; tailored to the profile).
+  # New pillar keys keep the five Well-Architected pillars (S-34/S-29) untouched.
+  ds = a["data_sensitivity"].to_s
+  cr2 = a["compliance_regime"].to_s
+  scope = a["integration_scope"].to_s
+  comm = a["communication_style"].to_s
+  exposed = %w[external-partner public].include?(scope)
+  sensitive = %w[regulated confidential].include?(ds)
+  # Testing (always) + contract testing when services integrate.
+  add.call("testing", "unit_testing",        "baseline", "fowler-test-pyramid")
+  add.call("testing", "integration_testing", "baseline", "fowler-test-pyramid")
+  if comm == "event-driven" || exposed
+    add.call("testing", "contract_testing", "services_integrate", "enterprise-integration-patterns")
+  end
+  # Dependency versioning + compatibility (futureproofing) - always.
+  add.call("dependencies", "dependency_pinning",          "baseline", "semver")
+  add.call("dependencies", "automated_dependency_updates", "baseline", "google-eng-practices")
+  add.call("dependencies", "compatibility_testing",        "baseline", "semver")
+  # Identity: authentication / authorization / MFA.
+  if sensitive || exposed
+    add.call("identity", "authentication", "sensitive_or_exposed", "oauth2-oidc")
+  end
+  if ds != "public"
+    add.call("identity", "authorization_rbac", "data_sensitivity=#{ds}", "owasp-asvs")
+  end
+  if ds == "regulated" || (!cr2.empty? && cr2 != "none")
+    add.call("identity", "mfa", "regulated_or_compliance", "nist-800-53")
+  end
+  if scope == "public"
+    add.call("identity", "token_validation", "integration_scope=public", "owasp-asvs")
+  end
+  # Object storage (data buckets).
+  if ds != "public" || !a["data_volume"].to_s.empty?
+    add.call("storage", "object_storage_encryption", "data_at_rest", "nist-800-53")
+    add.call("storage", "public_access_block",       "data_at_rest", "nist-800-53")
+  end
+  if %w[large very-large].include?(a["data_volume"])
+    add.call("storage", "bucket_versioning", "data_volume=#{a["data_volume"]}", "aws-well-architected")
+    add.call("storage", "lifecycle_policy",  "data_volume=#{a["data_volume"]}", "aws-well-architected")
+  end
+  # REST APIs.
+  if %w[synchronous mixed].include?(comm) || scope == "public"
+    add.call("api", "rest_api_gateway", "request_response_or_public", "microsoft-rest-api-guidelines")
+  end
+  if scope == "public"
+    add.call("api", "rate_limiting",     "integration_scope=public", "microsoft-rest-api-guidelines")
+    add.call("api", "request_validation","integration_scope=public", "microsoft-rest-api-guidelines")
+  end
+  if exposed
+    add.call("api", "api_versioning", "integration_scope=#{scope}", "microsoft-rest-api-guidelines")
+  end
+  # Real-time sockets.
+  if a["data_cadence"] == "real-time"
+    add.call("realtime", "websocket_gateway", "data_cadence=real-time", "enterprise-integration-patterns")
+    add.call("realtime", "connection_auth",   "data_cadence=real-time", "oauth2-oidc")
+  end
+  # Edge: HTTP security headers + CORS (public surface).
+  if scope == "public"
+    add.call("edge", "security_headers", "integration_scope=public", "owasp-secure-headers")
+    add.call("edge", "cors_policy",      "integration_scope=public", "owasp-secure-headers")
+  end
+
   # S-39 data + distributed concerns (grounded in the S-37 catalogs); fire only
   # when the --with-data intake answers are present.
   case a["consistency_need"]

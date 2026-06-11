@@ -1472,3 +1472,21 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-51).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-51-observability-and-logging-design/`.
 
 **§20 sequencing (S-51).** M3 refinement; extends the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.25 Software-engineering design surfaces (additive amendment, 2026-06-08)
+
+Extends S-33/S-39 so the cloud-architect designs the remaining world-class surfaces: testing (unit/integration/contract), dependency versioning and compatibility (futureproofing), authentication, authorization, object storage (data buckets), REST APIs, real-time sockets, and HTTP security headers/CORS. Each is a grounded concern under a dedicated pillar key, tailored to the profile. Grounded in newly secured authorities (Fowler test pyramid, SemVer, OAuth 2.0, OWASP ASVS, OWASP Secure Headers, Microsoft REST API Guidelines) plus existing NIST/EIP.
+
+**Authoritative ID introduced:** S-52 (Phase S, §4). No collision with §1–§27.24 IDs.
+
+**Sources secured (appended to `standards/cloud-engineering-sources.yaml`):** `fowler-test-pyramid`, `semver`, `oauth2-oidc`, `owasp-asvs`, `owasp-secure-headers`, `microsoft-rest-api-guidelines`.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-52** Software-engineering design surfaces (v1.16 refinement of S-33/S-39 — see §27.25). `commands/business-translate.sh` emits, under dedicated pillar keys, grounded tailored concerns: `testing` (`unit_testing`, `integration_testing` always; `contract_testing` when services integrate) grounded in fowler-test-pyramid / enterprise-integration-patterns; `dependencies` (`dependency_pinning`, `automated_dependency_updates`, `compatibility_testing`) grounded in semver / google-eng-practices; `identity` (`authentication`, `mfa`, `authorization_rbac`, `token_validation`) grounded in oauth2-oidc / owasp-asvs / nist-800-53; `storage` (`object_storage_encryption`, `public_access_block`, `bucket_versioning`, `lifecycle_policy`) grounded in nist-800-53 / aws-well-architected; `api` (`rest_api_gateway`, `rate_limiting`, `request_validation`, `api_versioning`) grounded in microsoft-rest-api-guidelines / enterprise-integration-patterns; `realtime` (`websocket_gateway`, `connection_auth`) grounded in enterprise-integration-patterns / oauth2-oidc; `edge` (`security_headers`, `cors_policy`) grounded in owasp-secure-headers. New pillar keys do not disturb the five Well-Architected pillars consumed by S-34/S-29.
+
+**Vocabulary additions for §25 fidelity audit (S-52):** `testing`, `unit_testing`, `integration_testing`, `contract_testing`, `dependencies`, `dependency_pinning`, `automated_dependency_updates`, `compatibility_testing`, `futureproofing`, `identity`, `authentication`, `mfa`, `authorization_rbac`, `token_validation`, `storage`, `object_storage_encryption`, `public_access_block`, `bucket_versioning`, `lifecycle_policy`, `api`, `rest_api_gateway`, `rate_limiting`, `request_validation`, `api_versioning`, `realtime`, `websocket_gateway`, `connection_auth`, `edge`, `security_headers`, `cors_policy`, `fowler-test-pyramid`, `semver`, `oauth2-oidc`, `owasp-asvs`, `owasp-secure-headers`, `microsoft-rest-api-guidelines`.
+
+**Anti-drift note (S-52).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-52-software-engineering-design-surfaces/`.
+
+**§20 sequencing (S-52).** v1.16 refinement of the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
