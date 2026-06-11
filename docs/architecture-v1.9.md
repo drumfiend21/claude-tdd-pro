@@ -1490,3 +1490,19 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-52).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-52-software-engineering-design-surfaces/`.
 
 **§20 sequencing (S-52).** v1.16 refinement of the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.26 Global delivery and frontend performance (additive amendment, 2026-06-08)
+
+Extends S-33 so the cloud-architect designs the full-stack, international, UI-responsive surface a public consumer app needs: a CDN and edge caching for fast requests, a multi-region footprint with latency-based routing for international users, and frontend hosting with HTTP compression for UI responsiveness. Grounded in the AWS Well-Architected + Reliability Pillar authorities (already secured).
+
+**Authoritative ID introduced:** S-53 (Phase S, §4). No collision with §1–§27.25 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-53** Global delivery and frontend performance (v1.16 refinement of S-33 — see §27.26). `commands/business-translate.sh` emits, when the workload is public-facing (and at scale for the global concerns), grounded tailored concerns: under performance-efficiency `cdn` and `edge_caching` (aws-well-architected) for fast requests; under reliability `multi_region` and `latency_based_routing` (aws-reliability-pillar) for international users at scale; under a `frontend` pillar `spa_hosting` and `http_compression` (aws-well-architected) for UI responsiveness. Tailored to the profile; cite-or-decline grounded.
+
+**Vocabulary additions for §25 fidelity audit (S-53):** `cdn`, `content_delivery_network`, `edge_caching`, `multi_region`, `latency_based_routing`, `frontend`, `spa_hosting`, `http_compression`, `global-delivery`, `ui_responsiveness`, `international`.
+
+**Anti-drift note (S-53).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-53-global-delivery-and-frontend-performance/`.
+
+**§20 sequencing (S-53).** v1.16 refinement of the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.

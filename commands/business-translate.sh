@@ -197,6 +197,19 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
     add.call("edge", "cors_policy",      "integration_scope=public", "owasp-secure-headers")
   end
 
+  # S-53 global delivery + frontend performance (full-stack, international,
+  # UI-responsive). Fire for public-facing apps; global concerns add at scale.
+  if scope == "public"
+    add.call("performance-efficiency", "cdn",          "public_facing_fast_requests", "aws-well-architected")
+    add.call("performance-efficiency", "edge_caching", "public_facing_fast_requests", "aws-well-architected")
+    add.call("frontend", "spa_hosting",      "public_facing_ui", "aws-well-architected")
+    add.call("frontend", "http_compression", "ui_responsiveness", "aws-well-architected")
+    if %w[large hyperscale].include?(a["scale"])
+      add.call("reliability", "multi_region",          "international_users_at_scale", "aws-reliability-pillar")
+      add.call("reliability", "latency_based_routing", "international_low_latency",    "aws-reliability-pillar")
+    end
+  end
+
   # S-39 data + distributed concerns (grounded in the S-37 catalogs); fire only
   # when the --with-data intake answers are present.
   case a["consistency_need"]

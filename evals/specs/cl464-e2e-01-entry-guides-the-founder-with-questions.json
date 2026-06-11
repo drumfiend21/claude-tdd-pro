@@ -1,0 +1,14 @@
+{
+  "name": "fullstack e2e: the entry function guides the non-technical founder with the next question until it understands the need",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"a marketplace app\" --answer criticality=mission-critical --out-dir s0 --now 2026-06-08T12:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "session_complete=false",
+      "next_question="
+    ]
+  }
+}
