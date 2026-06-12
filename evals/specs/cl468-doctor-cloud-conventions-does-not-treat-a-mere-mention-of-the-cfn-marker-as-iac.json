@@ -1,0 +1,12 @@
+{
+  "name": "doctor: a JSON file that merely mentions AWSTemplateFormatVersion inside a string value (not as a top-level key) is not treated as CloudFormation IaC (false-positive regression)",
+  "command": "mkdir -p repo && printf '{\"about\":\"this fixture mentions AWSTemplateFormatVersion but is not a template\"}\\n' > repo/notes.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no_cloud_iac=true",
+      "status=skipped"
+    ]
+  }
+}

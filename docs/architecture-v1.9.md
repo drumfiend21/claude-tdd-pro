@@ -1532,3 +1532,13 @@ Completes the M6 roadmap step "Wire S-30 enforcement into /doctor + CI" on the `
 **Observable markers (§27.28):** `cloud-conventions no_cloud_iac=true status=skipped` (exit 0); `cloud-conventions status=green files=<n> convention_violations=0` (exit 0); per-file `cloud-conventions file=<path> tool=<tool> status=red convention_violations=<n>` plus summary `cloud-conventions status=red files=<n> red=<r> convention_violations=<m>` (exit 1).
 
 **§20 note.** Governance + substrate addition over the already-registered S-30 + `/doctor`; the CI (`closed-loop.yml`) half of M6 is staged for a follow-up CL and will call this same arm (`doctor.sh --check cloud-conventions --root .`). Preserves the §21 definition-of-done.
+
+### §27.29 S-30 enforcement wired into the CI closed-loop surface + precise IaC detection (M6 completion, additive amendment, 2026-06-12)
+
+Completes the CI half of M6 that §27.28 staged ("the CI (`closed-loop.yml`) half of M6 is staged for a follow-up CL"). Detail: `docs/design/v1.17-s30-doctor-ci-wiring.md`. **No new feature ID** — refines S-30 + the `/doctor` arm of §27.28 and the X-1 GitHub Actions surface.
+
+`.github/workflows/closed-loop.yml` gains a step "Cloud-architecture convention enforcement (S-30 / §27.28)" running `bash commands/doctor.sh --check cloud-conventions --root .` (a new workflow step appended after the C-21 compliance step; no existing step/job altered). This realizes the through-line "every enforcement runs in three execution surfaces (Claude Code, pre-commit, CI) with the same exit-code contract" for cloud-convention enforcement.
+
+**Precise CloudFormation detection (no-regression hardening).** The §27.28 `/doctor` arm now detects CloudFormation ONLY when `AWSTemplateFormatVersion` appears as a real top-level key at the start of a line (optionally after a leading brace, quoted or not), matching `^[[:space:]]*[{]?[[:space:]]*"?AWSTemplateFormatVersion"?[[:space:]]*:`. Files that merely MENTION the marker (documentation, test fixtures carrying an escaped `\"AWSTemplateFormatVersion\"` inside a string) are no longer misclassified as IaC. Discovery also prunes `.git/` and `node_modules/`. This makes `--root .` a true green no-op on this IaC-free repository, so adding the CI step cannot turn CI red.
+
+**§20 note.** Completes M6 (the closed loop is now wired in all three surfaces). Governance + substrate addition over S-30 + §27.28 + X-1; preserves the §21 definition-of-done.

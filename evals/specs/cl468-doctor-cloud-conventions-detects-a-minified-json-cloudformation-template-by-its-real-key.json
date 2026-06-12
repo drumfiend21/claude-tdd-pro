@@ -1,0 +1,12 @@
+{
+  "name": "doctor: a minified JSON CloudFormation template whose AWSTemplateFormatVersion is a real top-level key is detected and enforced",
+  "command": "mkdir -p repo && printf '{\"AWSTemplateFormatVersion\":\"2010-09-09\",\"Resources\":{}}\\n' > repo/stack.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "tool=cloudformation",
+      "status=red"
+    ]
+  }
+}

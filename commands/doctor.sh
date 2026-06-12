@@ -548,8 +548,10 @@ case "$CHECK" in
     files_red=0
     total_violations=0
     # Discover IaC and map to its tool ruleset. .tf -> terraform, .bicep -> bicep are
-    # unambiguous; CloudFormation is detected by its AWSTemplateFormatVersion marker so
-    # ordinary JSON/YAML is never mistaken for IaC.
+    # unambiguous; CloudFormation is detected ONLY when AWSTemplateFormatVersion appears
+    # as a real top-level key at the start of a line (optionally after a leading brace,
+    # quoted or not) -- so files that merely MENTION the marker (docs, test fixtures with
+    # an escaped \"AWSTemplateFormatVersion\") are never mistaken for IaC.
     while IFS= read -r ccf; do
       [[ -z "$ccf" ]] && continue
       cctool=""
@@ -557,7 +559,7 @@ case "$CHECK" in
         *.tf) cctool="terraform" ;;
         *.bicep) cctool="bicep" ;;
         *.json|*.yaml|*.yml)
-          grep -q "AWSTemplateFormatVersion" "$ccf" 2>/dev/null && cctool="cloudformation" ;;
+          grep -qE '^[[:space:]]*[{]?[[:space:]]*"?AWSTemplateFormatVersion"?[[:space:]]*:' "$ccf" 2>/dev/null && cctool="cloudformation" ;;
       esac
       [[ -z "$cctool" ]] && continue
       files_checked=$((files_checked + 1))
@@ -570,7 +572,7 @@ case "$CHECK" in
         echo "doctor: cloud-conventions file=$ccf tool=$cctool status=red convention_violations=$ccn" >&2
       fi
     done <<CCEOF
-$(find "$ROOT" -type f \( -name '*.tf' -o -name '*.bicep' -o -name '*.json' -o -name '*.yaml' -o -name '*.yml' \) 2>/dev/null)
+$(find "$ROOT" -type d \( -name .git -o -name node_modules \) -prune -o -type f \( -name '*.tf' -o -name '*.bicep' -o -name '*.json' -o -name '*.yaml' -o -name '*.yml' \) -print 2>/dev/null)
 CCEOF
     if [[ "$files_checked" -eq 0 ]]; then
       echo "doctor: cloud-conventions no_cloud_iac=true status=skipped" >&2

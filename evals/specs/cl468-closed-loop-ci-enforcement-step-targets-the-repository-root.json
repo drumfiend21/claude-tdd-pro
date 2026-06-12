@@ -1,0 +1,11 @@
+{
+  "name": "CI closed-loop: the cloud-convention enforcement step targets the repository root so all real IaC in the repo is linted",
+  "command": "grep -qE \"cloud-conventions --root \\\\.\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && echo targets-root 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "targets-root"
+    ]
+  }
+}

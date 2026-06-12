@@ -1,0 +1,11 @@
+{
+  "name": "CI closed-loop: the closed-loop.yml workflow remains valid, parseable YAML after the enforcement step is added",
+  "command": "ruby -ryaml -e 'YAML.load_file(ARGV[0])' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && echo yaml-valid 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "yaml-valid"
+    ]
+  }
+}

@@ -254,13 +254,13 @@ Terraform, Bicep, CloudFormation, observability, and DoD zero-trust
 (`standards/cloud-conventions/`).
 
 > **Status note (honest):** the enforcement *engine* is built, grounded, and
-> test-covered, and it is now **wired into the `/doctor` surface** as
-> `doctor.sh --check cloud-conventions --root <dir>` (architecture §27.28) —
-> safe-by-default: a repo with no cloud IaC is a green no-op, so non-cloud repos
-> are never regressed. The remaining half of M6 — adding the same check as a step
-> in the CI closed-loop workflow (`closed-loop.yml`) — is staged for a follow-up and
-> will call this same `/doctor` arm. Tracked, not over-claimed.
+> test-covered, and it is now wired into **all three execution surfaces** with the
+> same exit-code contract: invoked directly, exposed in `/doctor`
+> (`doctor.sh --check cloud-conventions --root <dir>`, §27.28), and run as a CI step
+> in `closed-loop.yml` (§27.29). Safe-by-default: a repo with no cloud IaC is a green
+> no-op, so non-cloud repos are never regressed; CI fails only on real IaC drift. M6
+> is complete.
 
 ## How this is guaranteed (not a one-off)
 
-A standing conformance contract (architecture section 27.27) requires **every** cloud-architecture design the plugin produces to be fully cited. It is enforced by cite-or-decline, gated by the end-to-end integration suites (`evals/specs/cl459-e2e-*` through `cl464-e2e-*`), and pinned by the golden reference in `standards/golden/` and `docs/golden/`. The full test suite is **4,169 passing / 0 failing**.
+A standing conformance contract (architecture section 27.27) requires **every** cloud-architecture design the plugin produces to be fully cited. It is enforced by cite-or-decline, gated by the end-to-end integration suites (`evals/specs/cl459-e2e-*` through `cl464-e2e-*`), and pinned by the golden reference in `standards/golden/` and `docs/golden/`. The full test suite is **4,175 passing / 0 failing**.
