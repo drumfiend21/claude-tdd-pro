@@ -182,6 +182,26 @@ bash commands/business-translate.sh \
 # every concern in /tmp/design.json carries a source_id and grounding=grounded
 ```
 
+## Breadth: not one scenario, not one cloud
+
+The run above is AWS. The same engine is **multi-cloud** and **multi-archetype** —
+two more persisted, byte-reproducible golden references prove it:
+
+- **One vision → three clouds.** The same marketplace vision, driven through each
+  platform boundary, yields three platform-correct plans — AWS (`aws-well-architected-tool`
+  / Terraform), Azure (`azure-advisor` / Bicep), GCP (`gcp-recommender` / Terraform) —
+  each validated, fully grounded, and safe-by-default (no external mutation without
+  `--apply`). See [docs/golden/multicloud-comparison.md](golden/multicloud-comparison.md).
+- **A different business → a different design.** A HIPAA medical-clinic booking app
+  (regulated, strongly-consistent, partner-integrated) produces a *different* 43-decision
+  design — uniquely pulling in `strong_consistency`, `synchronous_replication`,
+  `audit_logging`, `audit_log_retention`, and `mfa`, while correctly omitting the
+  public-edge concerns. Driver-traceable, fully cited. See
+  [docs/golden/healthcare-booking-hipaa-architecture.md](golden/healthcare-booking-hipaa-architecture.md).
+
+This is the difference between a template and an architect: the design changes
+because the *business profile* changed.
+
 ## How this is guaranteed (not a one-off)
 
 A standing conformance contract (architecture section 27.27) requires **every** cloud-architecture design the plugin produces to be fully cited. It is enforced by cite-or-decline, gated by the end-to-end integration suites (`evals/specs/cl459-e2e-*` through `cl464-e2e-*`), and pinned by the golden reference in `standards/golden/` and `docs/golden/`. The full test suite is **4,149 passing / 0 failing**.

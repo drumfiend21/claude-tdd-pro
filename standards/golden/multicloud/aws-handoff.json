@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-12T04:24:12Z",
+  "platform": "aws",
+  "route": "aws-boundary",
+  "handoff": {
+    "business_profile_ref": null,
+    "technical_requirements_ref": null,
+    "selected_option": "opt-balanced",
+    "target_platform": "aws"
+  },
+  "selected_option": {
+    "option_id": "opt-balanced",
+    "summary": "Balanced hybrid",
+    "build_requirements": [
+      "encryption_at_rest",
+      "encryption_in_transit",
+      "access_control",
+      "multi_az",
+      "automated_failover",
+      "health_check",
+      "frequent_backup",
+      "multi_region",
+      "latency_based_routing",
+      "autoscaling",
+      "caching",
+      "cdn",
+      "edge_caching",
+      "monitoring",
+      "centralized_logging",
+      "distributed_tracing",
+      "slo_alerting",
+      "access_logging"
+    ]
+  },
+  "iac_targets": [
+    "terraform"
+  ],
+  "build_units": [
+    "encryption_at_rest",
+    "encryption_in_transit",
+    "access_control",
+    "multi_az",
+    "automated_failover",
+    "health_check",
+    "frequent_backup",
+    "multi_region",
+    "latency_based_routing",
+    "autoscaling",
+    "caching",
+    "cdn",
+    "edge_caching",
+    "monitoring",
+    "centralized_logging",
+    "distributed_tracing",
+    "slo_alerting",
+    "access_logging"
+  ],
+  "recommendations": [
+
+  ],
+  "native_review_ref": null
+}
