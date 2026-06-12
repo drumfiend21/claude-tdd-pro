@@ -1,0 +1,13 @@
+{
+  "name": "toolchain alternatives: the primary recommendation appears among its alternatives",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}\nJEOF\ncat > req.json <<'JEOF'\n{\"pillars\":{\"integration\":[{\"concern\":\"message_queue\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --requirements req.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;const cat=c=>R.find(r=>r.category===c);process.exit(R.every(r=>!r.alternatives||r.alternatives.length===0||r.alternatives.some(a=>a.tool===r.tool))?0:1)' && echo primary-consistent 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "primary-consistent"
+    ]
+  }
+}

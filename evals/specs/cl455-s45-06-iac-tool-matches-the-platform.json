@@ -1,0 +1,13 @@
+{
+  "name": "toolchain advisor: the IaC tool matches the handoff platform (azure yields bicep)",
+  "command": "cat > ha.json <<'JEOF'\n{\"platform\":\"azure\",\"iac_targets\":[\"bicep\"]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff ha.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;process.exit(R.some(r=>r.category===\"iac\"&&r.tool===\"bicep\")?0:1)' && echo iac-matched 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac-matched"
+    ]
+  }
+}

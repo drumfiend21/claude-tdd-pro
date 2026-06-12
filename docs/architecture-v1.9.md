@@ -1311,3 +1311,212 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-31).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-31-secured-source-expansion-and-sources-catalog/`. New sources append to the existing `standards/cloud-engineering-sources.yaml`; the S-23 `standards/cloud-architecture-sources.yaml` exactly-twelve invariant is untouched.
 
 **§20 sequencing (S-31).** Week 42: S-31 ships after S-30 (it expands the same grounding catalog and convention surface). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.15 Business-language architect advisory layer (additive amendment, 2026-06-08)
+
+S-32..S-36 add a business-language advisory front-end so an engineer with little cloud knowledge can act through the plugin as a competent architect — eliciting business inputs, translating them to technical concerns, recommending grounded decisions, and explaining the output in plain language. Detailed design + ticket plan: `docs/design/v1.13-business-language-architect.md`. These features COMPOSE the existing S-26 (review), S-28 (ADR), S-29 (build), S-30 (enforce) stack and reuse its schemas; the conversational layer is the agent acting on these deterministic, grounded artifacts. Cite-or-decline preserved (every translation/recommendation/glossary entry cites a catalog source or declines).
+
+**Authoritative IDs introduced:** S-32, S-33, S-34, S-35, S-36 (Phase S, §4). No collision with §1–§27.14 IDs.
+
+Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-32** Business-language requirements intake (v1.13 — see §27.15). `commands/business-intake.sh`: a structured questionnaire capturing business inputs (workload, criticality, availability_tolerance, data_sensitivity, compliance_regime, scale, budget_posture) with allowed-answer enums; validates answers, surfaces `unanswered`/`invalid` for agent follow-ups, emits `business-profile.json`.
+- **S-33** Business-to-technical translation (v1.13 — see §27.15). `commands/business-translate.sh`: maps a business-profile to pillar-keyed technical concerns, each `{concern, driver, source_id}` grounded in a catalog source; emits `technical-requirements.json` (the bridge into S-26/S-29).
+- **S-34** Architect recommendation engine (v1.13 — see §27.15). `commands/architect-recommend.sh`: emits opinionated recommended decisions `{decision, pillar, driver, rationale, source_id}` from the profile + requirements; emits S-28 ADR args and S-29 build requirements; `needs_grounding` when unbacked.
+- **S-35** Plain-language explainer (v1.13 — see §27.15). `commands/explain.sh`: a grounded glossary translating technical terms and review/ADR findings to business language `{term, plain, why_it_matters, source_id}`; annotates a review; declines `unknown_term`.
+- **S-36** Guided architect session orchestrator (v1.13 — see §27.15). `commands/architect-session.sh`: chains intake -> translate -> recommend -> S-26 review -> S-28 ADR -> S-29 build, surfaces `next_question` while the profile is incomplete, and emits a plain-language `session.md` summary via S-35 plus a `session.json` artifact.
+
+**Vocabulary additions for §25 fidelity audit (S-32..S-36):** `business-intake`, `business-profile`, `criticality`, `availability_tolerance`, `data_sensitivity`, `compliance_regime`, `budget_posture`, `scale`, `unanswered`, `business-translate`, `technical-requirements`, `concern`, `driver`, `architect-recommend`, `recommendation`, `rationale`, `explain`, `glossary`, `plain`, `why_it_matters`, `unknown_term`, `architect-session`, `next_question`, `session_complete`.
+
+**Anti-drift note (S-32..S-36).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-32-business-language-requirements-intake/`, `evals/pending/s/s-33-business-to-technical-translation/`, `evals/pending/s/s-34-architect-recommendation-engine/`, `evals/pending/s/s-35-plain-language-explainer/`, `evals/pending/s/s-36-guided-architect-session-orchestrator/`.
+
+**§20 sequencing (S-32..S-36).** Weeks 43–47: S-32 intake, then S-33 translate, S-34 recommend, S-35 explain, then S-36 orchestrator last (it composes the others + S-26/S-28/S-29). Governance-only ID additions; preserve the §21 definition-of-done.
+
+**§27.15.1 Sources secured for S-32/S-33 (additive, 2026-06-08).** The business-language layer grounds in additional verified authorities appended to `standards/cloud-engineering-sources.yaml`: `azure-waf-business-requirements` (Listen->Probe->Clarify intake methodology), `aws-rpo-rto-targets` and `aws-reliability-pillar` (availability/criticality questions + reliability mappings), `aws-wa-tool-profiles` (business-context questionnaire). Additional §25 vocab: `motivation`, `data_loss_tolerance`, `availability`, `rto`, `rpo`, `grounded_in`, `intake`, `business-requirements`, `azure-waf-business-requirements`, `aws-rpo-rto-targets`, `aws-wa-tool-profiles`, `aws-reliability-pillar`.
+
+### §27.16 Layered multi-cloud advisor — common core + platform boundaries + data/distributed domain (additive amendment, 2026-06-08)
+
+S-37..S-45 layer the cloud-architect feature: one COMMON platform-agnostic business-to-technical core holding all cross-platform best-practice patterns (cloud + data + distributed-systems/integration) that guides beginners in business language, plus THREE platform-expert boundaries (AWS/Azure/GCP) that add platform-specific knowledge and wrap each vendor's native advisory API. The already-registered S-34 is built as the multi-option recommendation composer (improving on the AWS Well-Architected Tool: business-first, multi-option with trade-offs, multi-authority grounded, feeding S-28 ADR + S-29 build). Detailed design: `docs/design/v1.14-layered-multicloud-advisor.md`. Determinism preserved: native API responses are INJECTED fixtures (as with S-21 HTTP / S-24 deltas); the deterministic substrate is the normalizer. Cite-or-decline preserved across all layers.
+
+**Authoritative IDs introduced:** S-37, S-38, S-39, S-41, S-42, S-43, S-44, S-45 (Phase S, §4). No collision with §1–§27.15 IDs.
+
+Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-37** Data and distributed-systems source catalogs (v1.14 — see §27.16). Secures + registers `standards/data-architecture-sources.yaml` (AWS Data Analytics Lens, Azure/GCP data-architecture guidance) and `standards/distributed-systems-sources.yaml` (Enterprise Integration Patterns free catalog, Patterns of Distributed Systems on martinfowler.com, Fowler CQRS/Event-Sourcing/Saga) as grounding fuel for the data + integration domain.
+- **S-38** Data-aware business intake (v1.14 — see §27.16). Extends `business-intake.sh` with grounded business-language questions: data volume/growth, read/write pattern, consistency need, communication style (sync vs event-driven), integration scope, real-time vs batch.
+- **S-39** Data and distributed translation mappings (v1.14 — see §27.16). Extends `business-translate.sh` with grounded mappings to data/distributed concerns: sharding/replication/partition_strategy, message_queue/dead_letter_queue/outbox_pattern, saga/cqrs/event_sourcing, api_gateway/anti_corruption_layer.
+- **S-41** Platform-boundary contract and dispatcher (v1.14 — see §27.16). `commands/platform-boundary.sh`: the common->boundary handoff envelope (`{business_profile, technical_requirements, selected_option, target_platform}` in; `{platform, recommendations, iac_targets, build_units, native_review_ref}` out) and routing to the chosen platform boundary.
+- **S-42** AWS platform boundary (v1.14 — see §27.16). `commands/aws-boundary.sh`: AWS pattern depth + a normalizer wrapping the AWS Well-Architected Tool API (injected response -> common grounded concerns/options); platform-aware IaC Terraform/CloudFormation.
+- **S-43** Azure platform boundary (v1.14 — see §27.16). `commands/azure-boundary.sh`: Azure pattern depth + Azure Advisor REST API normalizer; platform-aware IaC Bicep.
+- **S-44** GCP platform boundary (v1.14 — see §27.16). `commands/gcp-boundary.sh`: GCP pattern depth + GCP Recommender API normalizer; platform-aware IaC Terraform/Deployment Manager.
+- **S-45** Implementation-toolchain advisor (v1.14 — see §27.16). `commands/toolchain-advisor.sh`: grounded recommendations + deterministic scaffolds for the toolchain beyond IaC (containers/orchestration, GitOps/CD, CI/CD, config mgmt, DB migrations, messaging, observability, policy-as-code, testing, FinOps), per chosen option + platform.
+
+**Vocabulary additions for §25 fidelity audit (S-37..S-45):** `data-architecture`, `distributed-systems`, `integration-patterns`, `enterprise-integration-patterns`, `patterns-of-distributed-systems`, `aws-data-analytics-lens`, `consistency`, `replication`, `partitioning`, `sharding`, `polyglot`, `event-driven`, `messaging`, `queue`, `dead_letter_queue`, `outbox_pattern`, `saga`, `cqrs`, `event_sourcing`, `anti_corruption_layer`, `option`, `options`, `trade_offs`, `platform-boundary`, `boundary`, `aws-boundary`, `azure-boundary`, `gcp-boundary`, `normalize`, `native_review_ref`, `toolchain`, `toolchain-advisor`, `gitops`.
+
+**Anti-drift note (S-37..S-45).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/s/s-37-data-and-integration-sources-catalog/`, `evals/pending/s/s-38-data-aware-business-intake/`, `evals/pending/s/s-39-data-and-distributed-translation/`, `evals/pending/s/s-41-platform-boundary-contract-and-dispatcher/`, `evals/pending/s/s-42-aws-platform-boundary/`, `evals/pending/s/s-43-azure-platform-boundary/`, `evals/pending/s/s-44-gcp-platform-boundary/`, `evals/pending/s/s-45-implementation-toolchain-advisor/`. New catalogs are `standards/data-architecture-sources.yaml` and `standards/distributed-systems-sources.yaml` (distinct from the S-23/S-30 catalogs; their invariants are untouched).
+
+**§20 sequencing (S-37..S-45).** Weeks 48–55, after the v1.13 common layer (S-34 option composer, S-35, S-36) is built: S-37 sources, then S-38 intake + S-39 translation (common-layer domain depth), then S-41 boundary contract, then S-42/S-43/S-44 boundaries, then S-45 toolchain. Governance-only ID additions; preserve the §21 definition-of-done.
+
+### §27.17 Experience-first roadmap + objective-weighted optimization (additive amendment, 2026-06-08)
+
+Reframes the v1.13/v1.14 build around the end-user journey: a non-technical founder states an app vision and the plugin guides every cloud-architecture decision in business language, then implements it across the available platform APIs, optimized to be cost-effective, performance-optimized, customer-centric, and shareholder-centric. Two consequences: build the thinnest end-to-end path first (walking skeleton, M0) before deepening any stage; and make the four optimization objectives a first-class, grounded, scored dimension (S-46) from the skeleton onward. Detailed roadmap + milestones M0..M6: `docs/design/v1.15-experience-first-roadmap.md`.
+
+**Authoritative ID introduced:** S-46 (Phase S, §4). No collision with §1–§27.16 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-46** Objective-weighted optimization and option scoring (v1.15 — see §27.17). `commands/optimize-options.sh`: scores and ranks the S-34 options against four grounded objectives — cost-effective (`finops-framework` + AWS WAF Cost pillar), performance-optimized (AWS WAF Performance Efficiency pillar), customer-centric (`aws-reliability-pillar` / `aws-rpo-rto-targets`), shareholder-centric (`finops-framework` / `google-eng-practices` + operational-excellence). Weights derive from the business-profile (e.g. `budget_posture=cost-first`, `criticality=mission-critical`) and are overridable; emits a ranked `option-scoring.json` with per-objective scores + grounded rationale; cite-or-decline marks an unbacked objective `needs_grounding`.
+
+**Vocabulary additions for §25 fidelity audit (S-46):** `optimize-options`, `objective`, `objectives`, `cost-effective`, `performance-optimized`, `customer-centric`, `shareholder-centric`, `scoring`, `ranked`, `weight`, `time-to-market`, `vision`, `walking-skeleton`.
+
+**Anti-drift note (S-46).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-46-objective-weighted-optimization/`.
+
+**§20 sequencing (experience-first).** Delivery is milestone-ordered, not feature-ordered: M0 walking skeleton (S-34 + S-36 entry over the built S-32/S-33/S-26/S-28/S-29/S-30) -> M1 guided architect (S-35 + full S-36 + S-34 multi-option) -> M2 objectives first-class (S-46) -> M3 data/distributed depth (S-37, S-38, S-39) -> M4 platform APIs (S-41, S-42, S-43, S-44) -> M5 toolchain (S-45) -> M6 closed loop. Dependencies preserved (S-34 before S-46/boundaries; S-37 before S-38/S-39; S-41 before S-42/S-43/S-44). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.18 Requirement clarification loop + objective-weighting requirement (additive amendment, 2026-06-08)
+
+Refines S-35: an unrecognised term must not dead-end. The plugin CLARIFIES it (asks the founder, in business language, what it should do) and keeps clarifying until the requirement resolves to a technical concern that S-33/S-34 can translate to architecture. Also records the standing requirement that S-46 (held) must weigh all four objectives, grounded in the provided knowledge corpus, to produce first-class decisions.
+
+**Authoritative ID introduced:** S-47 (Phase S, §4). No collision with §1–§27.17 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-47** Requirement clarification loop (v1.13 refinement of S-35 — see §27.18). `commands/explain.sh` gains: an unrecognised `--term` emits a `clarification_prompt` (a plain-language question) alongside the preserved `unknown_term` signal; `--clarify "<term>=<business description>"` maps the description to a known technical concern via a grounded keyword index, emitting `clarified=<term> mapped_to=<concern> source=<id>` on resolution, or another `clarification_prompt` (`unresolved`) to continue the loop. The loop ends when the requirement resolves to a concern S-33/S-34 can translate. cite-or-decline preserved (the resolved concern carries its grounding source).
+
+**S-46 objective-weighting requirement (standing, for the held M2 build).** When built, S-46 MUST weigh all four objectives — cost-effective, performance-optimized, customer-centric, shareholder-centric — grounded in the secured knowledge corpus (the S-23/S-30/S-31 + v1.13 sources), so its rankings are first-class (on par with the world's best cloud architects' decisions), not heuristic. No option is recommended on a single objective alone.
+
+**Vocabulary additions for §25 fidelity audit (S-47):** `clarify`, `clarification`, `clarification_needed`, `clarification_prompt`, `clarified`, `mapped_to`, `unresolved`, `requirement`.
+
+**Anti-drift note (S-47).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-47-requirement-clarification-loop/`.
+
+**§20 sequencing (S-47).** M1 refinement, built immediately after S-36 (it strengthens S-35's unknown-term handling). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.19 Platform-boundary external-call safety + plugin-standard normalized response (additive amendment, 2026-06-08)
+
+Two cross-cutting contracts binding every platform boundary (S-41 dispatcher + S-42/S-43/S-44 boundaries). No new feature ID.
+
+**Contract A — external-call safety (no POST/PUT on invalid input).** A boundary MUST validate the handoff BEFORE any interaction with an external platform API, and MUST NOT issue any mutating call (POST/PUT/create/update) for an invalid platform or an unknown/invalid option. Boundaries are SAFE-BY-DEFAULT: they normalize only; a mutating external call requires explicit `--apply` AND a passed validation. A would-be mutating call that is stopped by validation emits the observable marker `external_call=blocked-validation-failed` and exits 2; a non-applied run emits `external_call=skipped-not-applied`; an authorized, validated run emits `external_call=apply-authorized` (the production network edge). Validation failure never reaches the external API.
+
+**Contract B — plugin-standard normalized response.** Every boundary normalizes its DISTINCT native API response (AWS Well-Architected Tool risks, Azure Advisor recommendations, GCP Recommender insights) into ONE plugin-standard schema: `{schema_version, platform, source_api, validated, normalized:{recommendations:[{id, title, pillar, severity, source, mapped_concern, grounding}], native_review_ref}, build_units, iac_targets, applied}`. Each native finding maps to a grounded concern where possible (cite-or-decline: an unmappable finding is `grounding=needs_grounding`). `source` is `native-<platform>`; `source_api` names the vendor API.
+
+**Vocabulary additions for §25 fidelity audit (§27.19):** `source_api`, `normalized`, `validated`, `applied`, `mapped_concern`, `external_call`, `severity`, `aws-well-architected-tool`, `azure-advisor`, `gcp-recommender`, `apply`.
+
+**§20 note.** Contracts apply to the already-registered S-41..S-44; no new IDs or pending folders. Preserves the §21 definition-of-done.
+
+### §27.20 Toolchain alternatives survey (additive amendment, 2026-06-08)
+
+Refines S-45: a category must not present a single tool. The advisor SURVEYS all viable alternatives across every cloud platform (platform-native + portable), annotates each with grounding (cite-or-decline) and platform-fit, and presents the full landscape so the developer can consider all options and choose. The S-45 primary recommendation is preserved (one of the alternatives).
+
+**Authoritative ID introduced:** S-48 (Phase S, §4). No collision with §1–§27.19 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-48** Toolchain alternatives survey (v1.14 refinement of S-45 — see §27.20). `commands/toolchain-advisor.sh` attaches to every recommendation an `alternatives[]` array surveying the field per category (e.g. observability: opentelemetry / prometheus-grafana / datadog / amazon-cloudwatch / azure-monitor / google-cloud-operations; gitops: argocd / flux; messaging: apache-kafka / rabbitmq / amazon-sqs-sns / azure-service-bus / google-pubsub; iac: terraform / cloudformation / bicep / pulumi / crossplane). Each alternative carries `{tool, platform_native, portable, source_id, grounding}`; `platform_native` is true when the tool is native to the target platform; grounded where a secured source backs it, else needs_grounding. The S-45 primary `tool` remains and appears among the alternatives.
+
+**Vocabulary additions for §25 fidelity audit (S-48):** `alternatives`, `alternative`, `portable`, `survey`, `prometheus-grafana`, `flux`, `pulumi`, `crossplane`, `kubernetes`.
+
+**Anti-drift note (S-48).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-48-toolchain-alternatives-survey/`.
+
+**§20 sequencing (S-48).** M5 refinement, built immediately after S-45. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.21 Plain-language toolchain alternatives (additive amendment, 2026-06-08)
+
+Refines S-48: every surveyed alternative must be explained in plain business language (what it means for you and the trade-off), not only the technical name/rationale, so a non-technical founder can choose between options like "observability for AWS".
+
+**Authoritative ID introduced:** S-49 (Phase S, §4). No collision with §1–§27.20 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-49** Plain-language toolchain alternatives (v1.14 refinement of S-48 — see §27.21). `commands/toolchain-advisor.sh` attaches a `plain` business-language explanation to every alternative in `alternatives[]` (e.g. CloudWatch -> "AWS's built-in monitoring; works out of the box on AWS, keeps you on AWS"; OpenTelemetry -> "a vendor-neutral way to watch your system's health, so you are not locked to one monitoring vendor"). The `plain` text states the business meaning and the trade-off (managed vs self-run, native-lock-in vs portable, cost vs effort), alongside the existing `{tool, platform_native, portable, source_id, grounding}`.
+
+**Vocabulary additions for §25 fidelity audit (S-49):** `plain`, `plain-language`, `trade-off`, `lock-in`.
+
+**Anti-drift note (S-49).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-49-plain-language-toolchain-alternatives/`.
+
+**§20 sequencing (S-49).** M5 refinement, built immediately after S-48. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.22 Closed-loop decision package (additive amendment, 2026-06-08)
+
+M6 capstone: closes the vision->implementation loop. Given the chosen option (S-34), its objective scores (S-46), and the toolchain (S-45), it produces ONE decided, enforceable decision package + a plain-language decision summary, and emits the next-step commands that feed S-28 (ADR), S-29 (build), S-30 (enforce). It reports whether the loop is closed (the choice is scored and has build requirements) or open (with the gap).
+
+**Authoritative ID introduced:** S-50 (Phase S, §4). No collision with §1–§27.21 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-50** Closed-loop decision package (v1.15 M6 — see §27.22). `commands/decision-package.sh`: reads the S-34 `architecture-options.json` + the S-46 `option-scoring.json` (+ optional S-45 `toolchain.json`), selects the chosen option (`--select`, default the scoring `recommended_option_id`), and emits a `decision-package.json` bundling `{chosen_option, objective_scores, toolchain_summary, next_steps:{adr_title, build_requirements, enforce_command}, loop_closed, gaps}` plus a plain-language `decision.md`. `loop_closed` is true only when the choice is scored and carries build requirements; otherwise `loop_closed=false` with the gap named. The next_steps feed S-28/S-29/S-30.
+
+**Vocabulary additions for §25 fidelity audit (S-50):** `decision-package`, `decision`, `loop_closed`, `gaps`, `next_steps`, `objective_scores`, `toolchain_summary`, `enforce_command`, `chosen_option`.
+
+**Anti-drift note (S-50).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-50-closed-loop-decision-package/`.
+
+**§20 sequencing (S-50).** Week M6: ships after S-46 + S-45 (it bundles their outputs). Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.23 End-to-end integration validation (additive amendment, 2026-06-08)
+
+The definition-of-done validation for the v1.13-v1.15 layered cloud-architect feature: a real common-case founder vision run through the ENTRY function (S-36 architect-session) and the full pipeline, producing a resulting cloud architecture for AWS, GCP, and Azure. It composes S-32 intake -> S-33 translate -> S-34 options -> S-46 scoring -> S-41 boundary dispatch -> S-42/S-43/S-44 boundary normalize -> S-45 toolchain -> S-50 decision package -> S-28 ADR -> S-29 build (red->green) -> S-30 enforce. No new feature ID (it validates the composition). Integration specs live at `evals/pending/integration/cloud-architect-e2e/` (promoted as `cl459-e2e-`).
+
+**§20 note.** Pure validation of S-32..S-50; preserves the §21 definition-of-done (adds the end-to-end gate).
+
+### §27.24 Observability and logging design (additive amendment, 2026-06-08)
+
+Refines S-33/S-39 so the design evidences ROBUST logging and analysis of the deployed services, tailored to the user's needs (not just generic monitoring). A mission-critical workload gets SLO alerting; any compliance regime gets audit-log retention; regulated data gets access logging; event-driven or mission-critical systems get distributed tracing; every workload gets centralized logging. Grounded in OpenTelemetry / Google SRE / NIST 800-53.
+
+**Authoritative ID introduced:** S-51 (Phase S, §4). No collision with §1–§27.23 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-51** Observability and logging design (v1.14 refinement of S-33/S-39 — see §27.24). `commands/business-translate.sh` emits, under operational-excellence, tailored logging + analysis concerns: `centralized_logging` (always) and `distributed_tracing` (event-driven or mission-critical) grounded in `opentelemetry-docs`; `slo_alerting` (mission-critical) grounded in `google-sre-book`; `audit_log_retention` (compliance regime present) and `access_logging` (regulated/confidential data) grounded in `nist-800-53`. Each carries its business driver and grounding; the toolchain (S-45/S-48) then surveys the analysis stack (OpenTelemetry, Prometheus/Grafana, Datadog, cloud-native) per platform.
+
+**Vocabulary additions for §25 fidelity audit (S-51):** `centralized_logging`, `distributed_tracing`, `slo_alerting`, `audit_log_retention`, `access_logging`, `observability`, `logging`, `analysis`.
+
+**Anti-drift note (S-51).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-51-observability-and-logging-design/`.
+
+**§20 sequencing (S-51).** M3 refinement; extends the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.25 Software-engineering design surfaces (additive amendment, 2026-06-08)
+
+Extends S-33/S-39 so the cloud-architect designs the remaining world-class surfaces: testing (unit/integration/contract), dependency versioning and compatibility (futureproofing), authentication, authorization, object storage (data buckets), REST APIs, real-time sockets, and HTTP security headers/CORS. Each is a grounded concern under a dedicated pillar key, tailored to the profile. Grounded in newly secured authorities (Fowler test pyramid, SemVer, OAuth 2.0, OWASP ASVS, OWASP Secure Headers, Microsoft REST API Guidelines) plus existing NIST/EIP.
+
+**Authoritative ID introduced:** S-52 (Phase S, §4). No collision with §1–§27.24 IDs.
+
+**Sources secured (appended to `standards/cloud-engineering-sources.yaml`):** `fowler-test-pyramid`, `semver`, `oauth2-oidc`, `owasp-asvs`, `owasp-secure-headers`, `microsoft-rest-api-guidelines`.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-52** Software-engineering design surfaces (v1.16 refinement of S-33/S-39 — see §27.25). `commands/business-translate.sh` emits, under dedicated pillar keys, grounded tailored concerns: `testing` (`unit_testing`, `integration_testing` always; `contract_testing` when services integrate) grounded in fowler-test-pyramid / enterprise-integration-patterns; `dependencies` (`dependency_pinning`, `automated_dependency_updates`, `compatibility_testing`) grounded in semver / google-eng-practices; `identity` (`authentication`, `mfa`, `authorization_rbac`, `token_validation`) grounded in oauth2-oidc / owasp-asvs / nist-800-53; `storage` (`object_storage_encryption`, `public_access_block`, `bucket_versioning`, `lifecycle_policy`) grounded in nist-800-53 / aws-well-architected; `api` (`rest_api_gateway`, `rate_limiting`, `request_validation`, `api_versioning`) grounded in microsoft-rest-api-guidelines / enterprise-integration-patterns; `realtime` (`websocket_gateway`, `connection_auth`) grounded in enterprise-integration-patterns / oauth2-oidc; `edge` (`security_headers`, `cors_policy`) grounded in owasp-secure-headers. New pillar keys do not disturb the five Well-Architected pillars consumed by S-34/S-29.
+
+**Vocabulary additions for §25 fidelity audit (S-52):** `testing`, `unit_testing`, `integration_testing`, `contract_testing`, `dependencies`, `dependency_pinning`, `automated_dependency_updates`, `compatibility_testing`, `futureproofing`, `identity`, `authentication`, `mfa`, `authorization_rbac`, `token_validation`, `storage`, `object_storage_encryption`, `public_access_block`, `bucket_versioning`, `lifecycle_policy`, `api`, `rest_api_gateway`, `rate_limiting`, `request_validation`, `api_versioning`, `realtime`, `websocket_gateway`, `connection_auth`, `edge`, `security_headers`, `cors_policy`, `fowler-test-pyramid`, `semver`, `oauth2-oidc`, `owasp-asvs`, `owasp-secure-headers`, `microsoft-rest-api-guidelines`.
+
+**Anti-drift note (S-52).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-52-software-engineering-design-surfaces/`.
+
+**§20 sequencing (S-52).** v1.16 refinement of the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.26 Global delivery and frontend performance (additive amendment, 2026-06-08)
+
+Extends S-33 so the cloud-architect designs the full-stack, international, UI-responsive surface a public consumer app needs: a CDN and edge caching for fast requests, a multi-region footprint with latency-based routing for international users, and frontend hosting with HTTP compression for UI responsiveness. Grounded in the AWS Well-Architected + Reliability Pillar authorities (already secured).
+
+**Authoritative ID introduced:** S-53 (Phase S, §4). No collision with §1–§27.25 IDs.
+
+Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
+
+- **S-53** Global delivery and frontend performance (v1.16 refinement of S-33 — see §27.26). `commands/business-translate.sh` emits, when the workload is public-facing (and at scale for the global concerns), grounded tailored concerns: under performance-efficiency `cdn` and `edge_caching` (aws-well-architected) for fast requests; under reliability `multi_region` and `latency_based_routing` (aws-reliability-pillar) for international users at scale; under a `frontend` pillar `spa_hosting` and `http_compression` (aws-well-architected) for UI responsiveness. Tailored to the profile; cite-or-decline grounded.
+
+**Vocabulary additions for §25 fidelity audit (S-53):** `cdn`, `content_delivery_network`, `edge_caching`, `multi_region`, `latency_based_routing`, `frontend`, `spa_hosting`, `http_compression`, `global-delivery`, `ui_responsiveness`, `international`.
+
+**Anti-drift note (S-53).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-53-global-delivery-and-frontend-performance/`.
+
+**§20 sequencing (S-53).** v1.16 refinement of the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.27 Cloud-architect output conformance contract (additive amendment, 2026-06-08)
+
+STANDING CONTRACT: every cloud-architecture design the plugin produces for a user MUST conform to the world-class, fully-cited standard proven by the end-to-end integration suite. Conformance criteria, enforced by cite-or-decline and gated by the integration tests:
+
+1. **Every decision is cited.** Every emitted technical concern carries a `source_id` and `grounding=grounded`; the design has `needs_grounding=[]`. No decision is made on authority the plugin cannot cite.
+2. **World-class authorities.** The sources cited are the secured tier-1 authorities (AWS Well-Architected + pillars, NIST 800-53/DoD SCCA, OWASP ASVS/Secure Headers, OAuth 2.0, SemVer, Fowler, Google SRE, OpenTelemetry, Microsoft REST API Guidelines, Enterprise Integration Patterns, Patterns of Distributed Systems, FinOps, Azure/AWS data + reliability guidance).
+3. **Full-stack + cloud breadth.** A complete design spans frontend/UI, backend API, database, messaging, real-time, authentication/authorization, object storage, edge/headers, performance (CDN/edge), reliability/global delivery, security, observability (logging + analysis), testing, dependency versioning, distributed patterns, and cost.
+4. **Tailored + optimized.** Concerns fire per the founder's profile; options are scored against cost/performance/customer/shareholder objectives (S-46).
+5. **Test-first + enforceable.** Decisions become S-28 ADRs, S-29 red->green build units, and S-30 grounded convention enforcement.
+
+**Golden reference (persisted):** `standards/golden/fullstack-international-aws-profile.json` (the canonical vision), `standards/golden/fullstack-international-aws-requirements.json` (the machine design), and `docs/golden/fullstack-international-aws-architecture.md` (the human, cited design). Regenerable deterministically; the conformance suite (`cl465-conformance-*`) pins it, and the integration suites (`cl459-e2e`..`cl464-e2e`) are the definition-of-done gate.
+
+**§20 note.** Pure conformance contract over S-32..S-53; preserves the §21 definition-of-done (the integration suite is the gate).

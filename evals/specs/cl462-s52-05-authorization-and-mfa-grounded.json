@@ -1,0 +1,13 @@
+{
+  "name": "design surfaces: authorization RBAC and MFA are designed grounded in OWASP ASVS and NIST",
+  "command": "cat > p.json <<'JEOF'\n{\"complete\":true,\"answers\":{\"workload\":\"x\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"data_volume\":\"large\",\"read_write_pattern\":\"analytics\",\"integration_scope\":\"public\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile p.json --out req.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"req.json\",\"utf8\"));const has=(p,c)=>(j.pillars[p]||[]).some(x=>x.concern===c);const src=(p,c)=>((j.pillars[p]||[]).find(x=>x.concern===c)||{}).source_id;process.exit(has(\"identity\",\"authorization_rbac\")&&src(\"identity\",\"authorization_rbac\")===\"owasp-asvs\"&&has(\"identity\",\"mfa\")?0:1)' && echo authz 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "authz"
+    ]
+  }
+}

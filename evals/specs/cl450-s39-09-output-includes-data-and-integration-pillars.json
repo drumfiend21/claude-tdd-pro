@@ -1,0 +1,13 @@
+{
+  "name": "data translation: the output includes the new data and integration pillar groupings",
+  "command": "cat > p1.json <<'JEOF'\n{\"complete\":true,\"answers\":{\"workload\":\"w\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"data_volume\":\"large\",\"read_write_pattern\":\"analytics\",\"integration_scope\":\"external-partner\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile p1.json --out tr.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tr.json\",\"utf8\"));const flat=Object.values(j.pillars).flat();process.exit(Object.keys(j.pillars).includes(\"data\")&&Object.keys(j.pillars).includes(\"integration\")?0:1)' && echo new-pillars 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "new-pillars"
+    ]
+  }
+}

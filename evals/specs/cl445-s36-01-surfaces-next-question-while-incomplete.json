@@ -1,0 +1,14 @@
+{
+  "name": "architect session: surfaces the next unanswered question while the profile is incomplete",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"a booking app\" --answer criticality=important --out-dir sess --now 2026-06-08T12:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "session_complete=false",
+      "next_question="
+    ]
+  }
+}

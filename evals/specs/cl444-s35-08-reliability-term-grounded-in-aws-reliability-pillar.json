@@ -1,0 +1,13 @@
+{
+  "name": "plain-language explainer: a reliability term is grounded in the AWS Reliability Pillar",
+  "command": "cat > opts.json <<'JEOF'\n{\"options\":[{\"option_id\":\"opt-balanced\",\"patterns\":[\"encryption_at_rest\",\"audit_logging\",\"multi_az\",\"autoscaling\",\"rightsizing\",\"monitoring\"]}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --annotate opts.json --out exp.md --now 2026-06-08T12:00:00Z 2>/dev/null\ngrep -E 'multi_az.*aws-reliability-pillar' exp.md >/dev/null && echo reliability-glossed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reliability-glossed"
+    ]
+  }
+}

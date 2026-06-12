@@ -1,0 +1,13 @@
+{
+  "name": "data sources: the data-architecture catalog includes Azure and GCP data guidance",
+  "command": "grep -q azure-data-architecture-guide \"$CLAUDE_PLUGIN_ROOT/standards/data-architecture-sources.yaml\" && grep -q gcp-data-architecture \"$CLAUDE_PLUGIN_ROOT/standards/data-architecture-sources.yaml\" && echo data-azure-gcp 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-azure-gcp"
+    ]
+  }
+}

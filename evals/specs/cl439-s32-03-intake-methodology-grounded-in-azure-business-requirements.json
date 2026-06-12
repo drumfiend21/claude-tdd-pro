@@ -1,0 +1,13 @@
+{
+  "name": "business intake: the workload elicitation question is grounded in the Azure business-requirements methodology",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --list-questions 2>/dev/null | node -e 'const q=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(q.find(x=>x.key===\"workload\").source_id===\"azure-waf-business-requirements\"?0:1)' && echo intake-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "intake-grounded"
+    ]
+  }
+}

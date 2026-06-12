@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: a complete data-aware profile records the consistency and communication answers",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --answers '{\"workload\":\"w\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"write-heavy\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"external-partner\",\"data_cadence\":\"real-time\"}' --out p.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const p=JSON.parse(require(\"fs\").readFileSync(\"p.json\",\"utf8\"));process.exit(p.complete===true&&p.answers.consistency_need===\"strong\"&&p.answers.communication_style===\"event-driven\"?0:1)' && echo data-recorded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-recorded"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: the consistency question is grounded in Patterns of Distributed Systems",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --list-questions 2>/dev/null | node -e 'const q=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(q.find(x=>x.key===\"consistency_need\").source_id===\"patterns-of-distributed-systems\"?0:1)' && echo consistency-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "consistency-grounded"
+    ]
+  }
+}

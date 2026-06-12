@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: the with-data flag adds the data-aware questions",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --list-questions 2>/dev/null | node -e 'const q=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(q.length===15&&q.map(x=>x.key).includes(\"data_volume\")&&q.map(x=>x.key).includes(\"consistency_need\")?0:1)' && echo data-questions 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-questions"
+    ]
+  }
+}

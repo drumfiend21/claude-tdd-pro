@@ -1,0 +1,13 @@
+{
+  "name": "aws boundary: an apply on an invalid handoff is blocked before any external call is made",
+  "command": "cat > bad.json <<'JEOF'\n{\"platform\":\"azure\",\"selected_option\":{\"option_id\":\"opt-x\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/aws-boundary.sh\" --handoff bad.json --apply --out r.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "external_call=blocked-validation-failed"
+    ]
+  }
+}

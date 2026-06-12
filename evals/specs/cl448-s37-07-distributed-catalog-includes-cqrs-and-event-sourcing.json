@@ -1,0 +1,13 @@
+{
+  "name": "distributed sources: the catalog includes CQRS and Event Sourcing references",
+  "command": "grep -q fowler-cqrs \"$CLAUDE_PLUGIN_ROOT/standards/distributed-systems-sources.yaml\" && grep -q fowler-event-sourcing \"$CLAUDE_PLUGIN_ROOT/standards/distributed-systems-sources.yaml\" && echo cqrs-es 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cqrs-es"
+    ]
+  }
+}

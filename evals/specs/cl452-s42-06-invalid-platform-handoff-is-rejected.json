@@ -1,0 +1,13 @@
+{
+  "name": "aws boundary: an invalid platform handoff is rejected before any external call",
+  "command": "cat > bad.json <<'JEOF'\n{\"platform\":\"azure\",\"selected_option\":{\"option_id\":\"opt-x\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/aws-boundary.sh\" --handoff bad.json --out r.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "validation_failed=wrong-platform"
+    ]
+  }
+}

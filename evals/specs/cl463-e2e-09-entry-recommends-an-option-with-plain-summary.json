@@ -1,0 +1,13 @@
+{
+  "name": "master e2e: the entry recommends an option and writes a plain-language session summary",
+  "command": "cat > profile.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"a public patient-facing telehealth platform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"analytics\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"public telehealth platform\" --profile profile.json --out-dir sess --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const s=JSON.parse(require(\"fs\").readFileSync(\"sess/session.json\",\"utf8\"));process.exit(s.recommended_option_id?0:1)' && grep -q 'Your Architecture Session' sess/session.md && echo recommend-summary 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "recommend-summary"
+    ]
+  }
+}

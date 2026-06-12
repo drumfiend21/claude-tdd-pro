@@ -1,0 +1,13 @@
+{
+  "name": "master e2e: testing and dependency-versioning futureproofing flow through the entry",
+  "command": "cat > profile.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"a public patient-facing telehealth platform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"analytics\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"public telehealth platform\" --profile profile.json --out-dir sess --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"sess/technical-requirements.json\",\"utf8\"));const P=p=>(j.pillars[p]||[]).map(c=>c.concern);const has=(p,c)=>P(p).includes(c);const groups=Object.keys(j.pillars).filter(p=>(j.pillars[p]||[]).length>0);process.exit(has(\"testing\",\"unit_testing\")&&has(\"testing\",\"integration_testing\")&&has(\"dependencies\",\"dependency_pinning\")&&has(\"dependencies\",\"compatibility_testing\")?0:1)' && echo testing-futureproof 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "testing-futureproof"
+    ]
+  }
+}

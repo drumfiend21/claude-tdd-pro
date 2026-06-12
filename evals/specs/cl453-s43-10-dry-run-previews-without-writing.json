@@ -1,0 +1,14 @@
+{
+  "name": "azure boundary: a dry-run previews without writing the response",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"azure\",\"route\":\"azure-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\"]},\"iac_targets\":[\"bicep\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > native.json <<'JEOF'\n{\"review_ref\":\"native-review/azure-rg-1\",\"recommendations\":[{\"recommendationId\":\"adv-1\",\"category\":\"Security\",\"impact\":\"High\",\"shortDescription\":{\"solution\":\"Enable encryption on storage accounts\"}},{\"recommendationId\":\"adv-2\",\"category\":\"HighAvailability\",\"impact\":\"Medium\",\"shortDescription\":{\"solution\":\"Use availability zones\"}}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/azure-boundary.sh\" --handoff h.json --out r.json --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e r.json ] && echo no-file 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-file"
+    ]
+  }
+}

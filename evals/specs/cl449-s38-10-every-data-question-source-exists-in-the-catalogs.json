@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: every data question cites a source that exists in the S-37 catalogs",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --list-questions 2>/dev/null > q.json\nruby -ryaml -rjson -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; ids={}; [r+\"/standards/data-architecture-sources.yaml\", r+\"/standards/distributed-systems-sources.yaml\"].each{|fp| YAML.unsafe_load_file(fp).each{|e| ids[e[\"id\"]]=true}}; qs=JSON.parse(File.read(\"q.json\")); dataq=qs.select{|x| %w[data_volume read_write_pattern consistency_need communication_style integration_scope data_cadence].include?(x[\"key\"])}; exit(dataq.all?{|x| ids[x[\"source_id\"]]} ? 0 : 1)' && echo all-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-grounded"
+    ]
+  }
+}

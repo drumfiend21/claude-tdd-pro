@@ -1,0 +1,13 @@
+{
+  "name": "decision package: includes a toolchain summary when the toolchain is provided",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":2,\"recommended_option_id\":\"opt-balanced\",\"options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\",\"monitoring\"]},{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized\",\"build_requirements\":[\"encryption_at_rest\",\"backup\"]}]}\nJEOF\ncat > scoring.json <<'JEOF'\n{\"recommended_option_id\":\"opt-balanced\",\"scored_options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"scores\":{\"cost_effective\":0.6,\"performance_optimized\":0.6,\"customer_centric\":0.85,\"shareholder_centric\":0.7},\"total_score\":0.7},{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized\",\"scores\":{\"cost_effective\":1.0,\"performance_optimized\":0.6,\"customer_centric\":0.5,\"shareholder_centric\":0.86},\"total_score\":0.74}]}\nJEOF\ncat > tc.json <<'JEOF'\n{\"platform\":\"aws\",\"recommendations\":[{\"category\":\"iac\",\"tool\":\"terraform\"},{\"category\":\"observability\",\"tool\":\"opentelemetry\"}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/decision-package.sh\" --options opts.json --scoring scoring.json --toolchain tc.json --out dp.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"dp.json\",\"utf8\"));process.exit(j.toolchain_summary.some(t=>t.category===\"iac\"&&t.primary_tool===\"terraform\")?0:1)' && echo toolchain 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "toolchain"
+    ]
+  }
+}

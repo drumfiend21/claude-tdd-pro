@@ -1,0 +1,14 @@
+{
+  "name": "gcp boundary: an apply on a valid validated handoff authorizes the external call",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"gcp\",\"route\":\"gcp-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\"]},\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > native.json <<'JEOF'\n{\"review_ref\":\"native-review/gcp-proj-1\",\"recommendations\":[{\"name\":\"rec-1\",\"primaryImpact\":{\"category\":\"SECURITY\"},\"description\":\"Enable CMEK encryption on buckets\",\"priority\":\"P1\"},{\"name\":\"rec-2\",\"primaryImpact\":{\"category\":\"COST\"},\"description\":\"Remove idle persistent disks\",\"priority\":\"P2\"}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/gcp-boundary.sh\" --handoff h.json --native-response native.json --apply --out r.json --now 2026-06-08T12:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "external_call=apply-authorized",
+      "validated=true"
+    ]
+  }
+}

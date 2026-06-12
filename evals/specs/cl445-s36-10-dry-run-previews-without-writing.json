@@ -1,0 +1,14 @@
+{
+  "name": "architect session: a dry-run previews without writing the session",
+  "command": "cat > prof.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"shop\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"uptime-first\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --profile prof.json --out-dir sess --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e sess/session.json ] && echo no-session 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-session"
+    ]
+  }
+}

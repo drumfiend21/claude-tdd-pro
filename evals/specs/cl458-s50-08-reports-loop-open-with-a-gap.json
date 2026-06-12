@@ -1,0 +1,13 @@
+{
+  "name": "decision package: reports the loop open with a named gap when build requirements are missing",
+  "command": "cat > o2.json <<'JEOF'\n{\"options\":[{\"option_id\":\"opt-x\",\"summary\":\"X\",\"build_requirements\":[]}]}\nJEOF\ncat > s2.json <<'JEOF'\n{\"recommended_option_id\":\"opt-x\",\"scored_options\":[{\"option_id\":\"opt-x\",\"scores\":{\"cost_effective\":0.5,\"performance_optimized\":0.5,\"customer_centric\":0.5,\"shareholder_centric\":0.5},\"total_score\":0.5}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/decision-package.sh\" --options o2.json --scoring s2.json --out dp.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"dp.json\",\"utf8\"));process.exit(j.loop_closed===false&&j.gaps.includes(\"no-build-requirements\")?0:1)' && echo loop-open 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "loop-open"
+    ]
+  }
+}

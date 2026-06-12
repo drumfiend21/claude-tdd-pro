@@ -1,0 +1,13 @@
+{
+  "name": "distributed sources: each distributed source carries a discipline tag and a curriculum phase",
+  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; d=YAML.unsafe_load_file(r+\"/standards/distributed-systems-sources.yaml\"); exit(d.all?{|e| (e[\"discipline\"]||[]).length>0 && (1..6).include?(e[\"curriculum_phase\"])} ? 0 : 1)' && echo dist-meta 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dist-meta"
+    ]
+  }
+}

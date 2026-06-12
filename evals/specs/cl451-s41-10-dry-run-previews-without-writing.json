@@ -1,0 +1,14 @@
+{
+  "name": "platform boundary: a dry-run previews without writing the handoff",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":2,\"options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\",\"monitoring\"]},{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized\",\"build_requirements\":[\"encryption_at_rest\",\"backup\"]}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/platform-boundary.sh\" --options opts.json --select opt-cost --platform aws --out h.json --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e h.json ] && echo no-file 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-file"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "plain-language explainer: an unknown term is declined rather than invented",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term frobnicate",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "unknown_term=frobnicate"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "plain alternatives: a managed paid option explains the cost/effort trade-off",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}\nJEOF\ncat > req.json <<'JEOF'\n{\"pillars\":{\"integration\":[{\"concern\":\"message_queue\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --requirements req.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;const ALL=R.flatMap(r=>r.alternatives);const cat=c=>R.find(r=>r.category===c);const alt=(c,t)=>cat(c).alternatives.find(a=>a.tool===t);process.exit(alt(\"observability\",\"datadog\").plain.includes(\"paid\")||alt(\"observability\",\"datadog\").plain.includes(\"subscription\")?0:1)' && echo tradeoff-plain 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tradeoff-plain"
+    ]
+  }
+}

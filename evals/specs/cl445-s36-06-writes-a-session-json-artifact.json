@@ -1,0 +1,13 @@
+{
+  "name": "architect session: writes a session json artifact referencing the parts",
+  "command": "cat > prof.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"shop\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"uptime-first\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --profile prof.json --out-dir sess --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"sess/session.json\",\"utf8\"));process.exit(j.options_ref&&j.explanation_ref&&j.requirements_ref?0:1)' && echo session-json 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "session-json"
+    ]
+  }
+}

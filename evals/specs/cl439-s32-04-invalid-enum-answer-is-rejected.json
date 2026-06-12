@@ -1,0 +1,13 @@
+{
+  "name": "business intake: an answer outside the allowed enum is rejected with the allowed values",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answer criticality=bogus --out p.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "invalid=criticality"
+    ]
+  }
+}

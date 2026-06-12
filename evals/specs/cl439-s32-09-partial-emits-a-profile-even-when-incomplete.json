@@ -1,0 +1,13 @@
+{
+  "name": "business intake: the partial option emits a profile even when the intake is incomplete",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answer workload=shop --partial --out p.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const p=JSON.parse(require(\"fs\").readFileSync(\"p.json\",\"utf8\"));process.exit(p.complete===false&&Array.isArray(p.unanswered)&&p.unanswered.length>0?0:1)' && echo partial-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "partial-ok"
+    ]
+  }
+}

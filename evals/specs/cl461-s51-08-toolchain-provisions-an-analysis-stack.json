@@ -1,0 +1,13 @@
+{
+  "name": "logging design: the toolchain provisions an observability analysis stack grounded in OpenTelemetry",
+  "command": "printf '{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}' > h.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const t=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const o=t.recommendations.find(r=>r.category===\"observability\");process.exit(o&&o.tool===\"opentelemetry\"&&o.source_id===\"opentelemetry-docs\"?0:1)' && echo analysis-stack 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "analysis-stack"
+    ]
+  }
+}

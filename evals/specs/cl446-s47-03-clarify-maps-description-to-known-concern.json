@@ -1,0 +1,14 @@
+{
+  "name": "clarification loop: clarifying a business description maps it to a known technical concern",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"thing=we keep overpaying for capacity we do not use\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "clarified=thing",
+      "mapped_to=rightsizing"
+    ]
+  }
+}

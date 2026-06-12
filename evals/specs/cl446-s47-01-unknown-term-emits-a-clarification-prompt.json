@@ -1,0 +1,14 @@
+{
+  "name": "clarification loop: an unrecognised term emits a clarification prompt instead of dead-ending",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term frobnicate",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "clarification_needed=frobnicate",
+      "clarification_prompt="
+    ]
+  }
+}

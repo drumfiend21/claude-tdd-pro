@@ -1,0 +1,13 @@
+{
+  "name": "e2e: the chosen design builds test-first, a build unit goes red then green after implementation",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" scaffold --decision-id d1 --pillar security --tool terraform --requirements \"encryption,multi_az,logging\" --build-dir bd --now 2026-06-08T12:00:00Z 2>/dev/null\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" check --build-dir bd --unit d1 2>&1 | grep -q 'conformance=red' || { echo not-red 1>&2; exit 1; }\nprintf 'resource x {\\n encryption=true\\n multi_az=true\\n logging=true\\n}\\n' >> bd/d1/main.tf\nbash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh\" check --build-dir bd --unit d1 2>&1 | grep -q 'conformance=green' && echo red-then-green 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "red-then-green"
+    ]
+  }
+}

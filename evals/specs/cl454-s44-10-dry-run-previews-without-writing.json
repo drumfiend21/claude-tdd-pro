@@ -1,0 +1,14 @@
+{
+  "name": "gcp boundary: a dry-run previews without writing the response",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"gcp\",\"route\":\"gcp-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\"]},\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > native.json <<'JEOF'\n{\"review_ref\":\"native-review/gcp-proj-1\",\"recommendations\":[{\"name\":\"rec-1\",\"primaryImpact\":{\"category\":\"SECURITY\"},\"description\":\"Enable CMEK encryption on buckets\",\"priority\":\"P1\"},{\"name\":\"rec-2\",\"primaryImpact\":{\"category\":\"COST\"},\"description\":\"Remove idle persistent disks\",\"priority\":\"P2\"}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/gcp-boundary.sh\" --handoff h.json --out r.json --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e r.json ] && echo no-file 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-file"
+    ]
+  }
+}

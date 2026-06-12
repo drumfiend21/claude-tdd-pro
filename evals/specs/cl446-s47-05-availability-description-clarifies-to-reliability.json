@@ -1,0 +1,14 @@
+{
+  "name": "clarification loop: an availability description clarifies to a reliability concern grounded in the AWS Reliability Pillar",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"uptime=the service must never go down even during an outage\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "mapped_to=multi_az",
+      "source=aws-reliability-pillar"
+    ]
+  }
+}

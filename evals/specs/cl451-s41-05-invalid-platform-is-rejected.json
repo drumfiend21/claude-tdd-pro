@@ -1,0 +1,13 @@
+{
+  "name": "platform boundary: an invalid platform is rejected",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":2,\"options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"build_requirements\":[\"encryption_at_rest\",\"multi_az\",\"monitoring\"]},{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized\",\"build_requirements\":[\"encryption_at_rest\",\"backup\"]}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/platform-boundary.sh\" --options opts.json --select opt-cost --platform oracle --out h.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "invalid --platform"
+    ]
+  }
+}

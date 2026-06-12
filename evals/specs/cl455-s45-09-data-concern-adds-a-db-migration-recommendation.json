@@ -1,0 +1,13 @@
+{
+  "name": "toolchain advisor: a data concern adds a database migration recommendation",
+  "command": "cat > h.json <<'JEOF'\n{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\",\"multi_az\"]}\nJEOF\ncat > req.json <<'JEOF'\n{\"pillars\":{\"integration\":[{\"concern\":\"message_queue\"}],\"data\":[{\"concern\":\"partitioning\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --requirements req.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;process.exit(R.some(r=>r.category===\"db-migrations\"&&r.tool===\"flyway\")?0:1)' && echo db-migration 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "db-migration"
+    ]
+  }
+}

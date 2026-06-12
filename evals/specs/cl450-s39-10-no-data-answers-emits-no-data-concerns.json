@@ -1,0 +1,13 @@
+{
+  "name": "data translation: a profile without data answers emits no data or distributed concerns",
+  "command": "cat > p3.json <<'JEOF'\n{\"complete\":true,\"answers\":{\"workload\":\"shop\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"cost-first\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile p3.json --out tr.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tr.json\",\"utf8\"));const flat=Object.values(j.pillars).flat();process.exit(!j.pillars.data&&!j.pillars.integration&&!j.pillars.distributed?0:1)' && echo no-data 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-data"
+    ]
+  }
+}

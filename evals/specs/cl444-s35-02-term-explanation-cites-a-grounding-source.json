@@ -1,0 +1,13 @@
+{
+  "name": "plain-language explainer: a term explanation cites its grounding source",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term encryption_at_rest",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "source=nist-800-53"
+    ]
+  }
+}

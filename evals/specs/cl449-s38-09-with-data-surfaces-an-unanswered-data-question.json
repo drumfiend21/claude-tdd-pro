@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: with the data flag an unanswered data question is surfaced",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --answer workload=w --out p.json 2>&1 | grep -E 'unanswered=' | grep -q consistency_need && echo data-unanswered 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-unanswered"
+    ]
+  }
+}

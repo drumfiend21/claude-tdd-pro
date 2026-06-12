@@ -1,0 +1,13 @@
+{
+  "name": "clarification loop: the clarification prompt asks for the meaning in plain business language",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --term frobnicate 2>&1 | grep -E 'clarification_prompt=' | grep -q 'plain terms' && echo business-question 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "business-question"
+    ]
+  }
+}

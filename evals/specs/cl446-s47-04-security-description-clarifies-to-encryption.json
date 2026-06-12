@@ -1,0 +1,14 @@
+{
+  "name": "clarification loop: a security description clarifies to encryption grounded in NIST 800-53",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"datasafe=our stored data must stay safe even if the disk is stolen\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "mapped_to=encryption_at_rest",
+      "source=nist-800-53"
+    ]
+  }
+}

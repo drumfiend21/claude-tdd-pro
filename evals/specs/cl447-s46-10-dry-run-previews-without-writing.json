@@ -1,0 +1,14 @@
+{
+  "name": "objective scoring: a dry-run previews without writing the scoring file",
+  "command": "cat > opts.json <<'JEOF'\n{\"option_count\":4,\"options\":[{\"option_id\":\"opt-cost\",\"summary\":\"Cost-optimized managed baseline\",\"trade_offs\":{\"cost\":\"low\",\"complexity\":\"low\",\"performance\":\"medium\",\"availability\":\"medium\",\"vendor_lock_in\":\"medium\"}},{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced hybrid\",\"trade_offs\":{\"cost\":\"medium\",\"complexity\":\"medium\",\"performance\":\"medium\",\"availability\":\"high\",\"vendor_lock_in\":\"low\"}},{\"option_id\":\"opt-resilient\",\"summary\":\"Resilient scale-out\",\"trade_offs\":{\"cost\":\"high\",\"complexity\":\"high\",\"performance\":\"high\",\"availability\":\"high\",\"vendor_lock_in\":\"medium\"}},{\"option_id\":\"opt-max\",\"summary\":\"Maximum-resilience multi-region\",\"trade_offs\":{\"cost\":\"high\",\"complexity\":\"high\",\"performance\":\"high\",\"availability\":\"very-high\",\"vendor_lock_in\":\"medium\"}}]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/optimize-options.sh\" --options opts.json --out sc.json --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e sc.json ] && echo no-file 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-file"
+    ]
+  }
+}

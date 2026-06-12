@@ -1,0 +1,13 @@
+{
+  "name": "fullstack e2e: the chosen design is deployable to AWS, the boundary validating and normalizing with terraform IaC",
+  "command": "cat > profile.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"a world-class full-stack consumer marketplace for international users\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"hyperscale\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"consistency_need\":\"eventual\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"international full-stack marketplace\" --profile profile.json --out-dir sess --now 2026-06-08T12:00:00Z 2>/dev/null\nbash \"$CLAUDE_PLUGIN_ROOT/commands/platform-boundary.sh\" --options sess/architecture-options.json --select opt-balanced --platform aws --out h.json 2>/dev/null\nprintf '{\"review_ref\":\"native-review/wl\",\"recommendations\":[{\"id\":\"PERF-1\",\"title\":\"Use a CDN for static assets\",\"pillar\":\"performance-efficiency\"}]}' > n.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/aws-boundary.sh\" --handoff h.json --native-response n.json --out b.json 2>/dev/null\nnode -e 'const b=JSON.parse(require(\"fs\").readFileSync(\"b.json\",\"utf8\"));process.exit(b.platform===\"aws\"&&b.validated===true&&b.iac_targets.includes(\"terraform\")?0:1)' && echo aws-deployable 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aws-deployable"
+    ]
+  }
+}

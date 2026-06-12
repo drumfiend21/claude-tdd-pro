@@ -1,0 +1,13 @@
+{
+  "name": "e2e config: the toolchain provisions database migration and messaging tooling for this workload",
+  "command": "cat > profile.json <<'JEOF'\n{\"complete\":true,\"answers\":{\"workload\":\"an online appointment booking app for a medical clinic\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"analytics\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"external-partner\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile profile.json --out req.json --now 2026-06-08T12:00:00Z 2>/dev/null\nprintf '{\"platform\":\"aws\",\"iac_targets\":[\"terraform\"]}' > h.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff h.json --requirements req.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const t=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const cats=t.recommendations.map(r=>r.category);process.exit(cats.includes(\"db-migrations\")&&cats.includes(\"messaging\")?0:1)' && echo toolchain-data-msg 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "toolchain-data-msg"
+    ]
+  }
+}

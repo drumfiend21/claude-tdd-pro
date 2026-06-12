@@ -1,0 +1,13 @@
+{
+  "name": "toolchain alternatives: for a gcp target the GKE container option is marked platform-native",
+  "command": "cat > hg.json <<'JEOF'\n{\"platform\":\"gcp\",\"iac_targets\":[\"terraform\"]}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/toolchain-advisor.sh\" --handoff hg.json --out tc.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"tc.json\",\"utf8\"));const R=j.recommendations;const cat=c=>R.find(r=>r.category===c);process.exit(cat(\"containers\").alternatives.find(a=>a.tool===\"google-gke\").platform_native===true?0:1)' && echo gcp-native 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gcp-native"
+    ]
+  }
+}

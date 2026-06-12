@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "complete": true,
+  "unanswered": [],
+  "vision": "a world-class full-stack consumer marketplace for international users, fast and responsive, scalable and cost-effective, deployed to AWS",
+  "answers": {
+    "workload": "a world-class full-stack consumer marketplace for international users",
+    "motivation": "revenue", "criticality": "mission-critical",
+    "availability_tolerance": "minutes", "data_loss_tolerance": "minutes",
+    "data_sensitivity": "confidential", "compliance_regime": "none",
+    "scale": "hyperscale", "budget_posture": "balanced",
+    "data_volume": "large", "read_write_pattern": "balanced", "consistency_need": "eventual",
+    "communication_style": "event-driven", "integration_scope": "public", "data_cadence": "real-time"
+  }
+}

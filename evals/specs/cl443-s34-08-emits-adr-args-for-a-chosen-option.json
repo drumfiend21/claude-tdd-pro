@@ -1,0 +1,13 @@
+{
+  "name": "architect recommend: emits S-28 ADR arguments for a chosen option",
+  "command": "cat > req.json <<'JEOF'\n{\"pillars\":{\"security\":[{\"concern\":\"encryption_at_rest\",\"driver\":\"data_sensitivity=regulated\",\"source_id\":\"nist-800-53\",\"grounding\":\"grounded\"},{\"concern\":\"audit_logging\",\"driver\":\"compliance_regime=il5\",\"source_id\":\"nist-800-53\",\"grounding\":\"grounded\"}],\"reliability\":[{\"concern\":\"multi_az\",\"driver\":\"criticality=mission-critical\",\"source_id\":\"aws-reliability-pillar\",\"grounding\":\"grounded\"},{\"concern\":\"synchronous_replication\",\"driver\":\"data_loss_tolerance=seconds\",\"source_id\":\"aws-rpo-rto-targets\",\"grounding\":\"grounded\"},{\"concern\":\"backup\",\"driver\":\"availability_tolerance=hours\",\"source_id\":\"aws-rpo-rto-targets\",\"grounding\":\"grounded\"}],\"performance-efficiency\":[{\"concern\":\"autoscaling\",\"driver\":\"scale=large\",\"source_id\":\"aws-well-architected\",\"grounding\":\"grounded\"}],\"cost-optimization\":[{\"concern\":\"rightsizing\",\"driver\":\"budget_posture=cost-first\",\"source_id\":\"finops-framework\",\"grounding\":\"grounded\"}],\"operational-excellence\":[{\"concern\":\"monitoring\",\"driver\":\"baseline\",\"source_id\":\"google-sre-book\",\"grounding\":\"grounded\"}]}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-recommend.sh\" --requirements req.json --emit-adr-args opt-balanced 2>/dev/null | grep -E -- '--title' | grep -q -- '--pillar' && echo adr-args 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "adr-args"
+    ]
+  }
+}

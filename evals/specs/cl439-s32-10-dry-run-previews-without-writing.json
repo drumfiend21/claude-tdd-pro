@@ -1,0 +1,14 @@
+{
+  "name": "business intake: a dry-run previews without writing the profile",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answer workload=ecommerce --answer motivation=revenue --answer criticality=mission-critical --answer availability_tolerance=minutes --answer data_loss_tolerance=minutes --answer data_sensitivity=regulated --answer compliance_regime=hipaa --answer scale=large --answer budget_posture=uptime-first --out p.json --dry-run --now 2026-06-08T12:00:00Z 2>&1 | grep -E 'dry_run=true' 1>&2\n{ [ ! -e p.json ] && echo no-file 1>&2; } || { echo FAIL 1>&2; exit 1; }",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry_run=true",
+      "no-file"
+    ]
+  }
+}

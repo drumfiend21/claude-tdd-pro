@@ -1,0 +1,13 @@
+{
+  "name": "data sources: every data source is tier 1 and applies to cloud-architecture",
+  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; d=YAML.unsafe_load_file(r+\"/standards/data-architecture-sources.yaml\"); exit(d.all?{|e| e[\"tier\"]==1 && (e[\"applies_to\"]||[]).include?(\"cloud-architecture\")} ? 0 : 1)' && echo data-tier1 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "data-tier1"
+    ]
+  }
+}

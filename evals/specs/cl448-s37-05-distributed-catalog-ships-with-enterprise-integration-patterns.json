@@ -1,0 +1,13 @@
+{
+  "name": "distributed sources: the catalog ships with the Enterprise Integration Patterns catalog",
+  "command": "grep -q enterprise-integration-patterns \"$CLAUDE_PLUGIN_ROOT/standards/distributed-systems-sources.yaml\" && echo eip 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "eip"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "logging design: a simple non-critical workload gets only baseline logging, evidencing tailoring to the user needs",
+  "command": "cat > ps.json <<'JEOF'\n{\"complete\":true,\"answers\":{\"workload\":\"personal blog\",\"criticality\":\"experimental\",\"availability_tolerance\":\"days\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"public\",\"compliance_regime\":\"none\",\"scale\":\"small\",\"budget_posture\":\"cost-first\",\"communication_style\":\"synchronous\",\"consistency_need\":\"eventual\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile ps.json --out req.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"req.json\",\"utf8\"));const O=(j.pillars[\"operational-excellence\"]||[]);const has=c=>O.some(x=>x.concern===c);const src=c=>(O.find(x=>x.concern===c)||{}).source_id;process.exit(has(\"monitoring\")&&has(\"centralized_logging\")&&!has(\"slo_alerting\")&&!has(\"audit_log_retention\")&&!has(\"access_logging\")?0:1)' && echo tailored 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tailored"
+    ]
+  }
+}

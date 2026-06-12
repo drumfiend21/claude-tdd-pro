@@ -1,0 +1,14 @@
+{
+  "name": "business intake: missing answers are surfaced as unanswered for agent follow-up",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answer workload=shop --out p.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "unanswered=",
+      "complete=false"
+    ]
+  }
+}

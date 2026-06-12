@@ -1,0 +1,13 @@
+{
+  "name": "business intake: the profile lists the catalog sources it is grounded in",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answer workload=ecommerce --answer motivation=revenue --answer criticality=mission-critical --answer availability_tolerance=minutes --answer data_loss_tolerance=minutes --answer data_sensitivity=regulated --answer compliance_regime=hipaa --answer scale=large --answer budget_posture=uptime-first --out p.json --now 2026-06-08T12:00:00Z 2>/dev/null\nnode -e 'const p=JSON.parse(require(\"fs\").readFileSync(\"p.json\",\"utf8\"));process.exit(p.grounded_in.includes(\"aws-rpo-rto-targets\")&&p.grounded_in.includes(\"nist-800-53\")?0:1)' && echo grounded-listed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "grounded-listed"
+    ]
+  }
+}

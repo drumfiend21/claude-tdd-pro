@@ -1,0 +1,13 @@
+{
+  "name": "clarification loop: a resolved clarification cites its grounding source",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/explain.sh\" --clarify \"x=we must keep an audit record of who did what\" 2>&1 | grep -E 'source=nist-800-53' 1>&2 && echo cited 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cited"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "data-aware intake: an invalid data enum answer is rejected",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --with-data --answer consistency_need=bogus --out p.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "invalid=consistency_need"
+    ]
+  }
+}

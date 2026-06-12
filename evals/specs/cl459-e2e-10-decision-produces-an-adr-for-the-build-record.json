@@ -1,0 +1,13 @@
+{
+  "name": "e2e: the decision produces a MADR ADR recording the chosen architecture",
+  "command": "cat > profile.json <<'JEOF'\n{\"schema_version\":\"1.0\",\"complete\":true,\"unanswered\":[],\"answers\":{\"workload\":\"an online appointment booking app for a medical clinic\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"external-partner\",\"data_cadence\":\"real-time\"}}\nJEOF\nbash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision \"medical booking app\" --profile profile.json --out-dir sess --now 2026-06-08T12:00:00Z 2>/dev/null\nARGS=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-recommend.sh\" --requirements sess/technical-requirements.json --profile profile.json --emit-adr-args opt-balanced 2>/dev/null)\neval \"bash \"$CLAUDE_PLUGIN_ROOT/commands/cloud-adr.sh\" $ARGS --slug e2e-booking --seq 1 --out-dir adr --now 2026-06-08T12:00:00Z\" 2>/dev/null\nls adr | grep -E '^[0-9]{4}-[a-z0-9-]+\\.md$' >/dev/null && echo adr-created 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "adr-created"
+    ]
+  }
+}

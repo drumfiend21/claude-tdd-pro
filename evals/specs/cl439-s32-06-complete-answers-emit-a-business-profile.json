@@ -1,0 +1,13 @@
+{
+  "name": "business intake: a complete set of answers emits a business-profile json",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answer workload=ecommerce --answer motivation=revenue --answer criticality=mission-critical --answer availability_tolerance=minutes --answer data_loss_tolerance=minutes --answer data_sensitivity=regulated --answer compliance_regime=hipaa --answer scale=large --answer budget_posture=uptime-first --out p.json --now 2026-06-08T12:00:00Z 2>/dev/null\ntest -f p.json && node -e 'process.exit(require(\"fs\").existsSync(\"p.json\")&&JSON.parse(require(\"fs\").readFileSync(\"p.json\",\"utf8\")).complete===true?0:1)' && echo profile-written 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "profile-written"
+    ]
+  }
+}
