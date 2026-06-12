@@ -6,6 +6,34 @@ This is a real, reproducible run of the plugin cloud-architect feature. A non-te
 
 > "A world-class full-stack consumer marketplace for international users — fast and responsive, scalable and cost-effective — deployed to AWS."
 
+## What the plugin designs from that one sentence (16 cited layers)
+
+```mermaid
+flowchart TB
+  subgraph Frontend["🖥️ Frontend / Edge"]
+    F1["SPA hosting · HTTP compression<br/>CDN · edge caching"]
+    F2["Security headers · CORS"]
+  end
+  subgraph API["🔌 Backend API"]
+    A1["REST gateway · rate limiting<br/>validation · versioning"]
+    A2["AuthN/AuthZ · token validation · RBAC"]
+  end
+  subgraph Data["🗄️ Data & Messaging"]
+    D1["Partitioning · sharding · consistency"]
+    D2["Queues · DLQ · outbox · saga · CQRS"]
+  end
+  subgraph Ops["⚙️ Reliability & Ops"]
+    O1["Multi-AZ · multi-region · failover · backups"]
+    O2["Logging · tracing · SLO alerting"]
+    O3["Unit · integration · contract testing"]
+  end
+  Frontend --> API --> Data --> Ops
+  classDef cited fill:#eaf2ff,stroke:#3b6fb6,color:#10314f;
+  class F1,F2,A1,A2,D1,D2,O1,O2,O3 cited;
+```
+
+*51 decisions across these layers — **every one cites a tier-1 source**, listed in full below.*
+
 ## Step 1 — the plugin guides the founder (Listen, Probe, Clarify)
 
 When the picture is incomplete, the entry function asks the next question instead of guessing:

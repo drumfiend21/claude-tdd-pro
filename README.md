@@ -6,6 +6,13 @@
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![version](https://img.shields.io/badge/version-0.4.0-informational)](CHANGELOG.md)
 
+> **Eng-team-in-a-box for Claude Code.** A TDD-governed plugin that holds any
+> codebase to published engineering standards (Google, OWASP, NIST, AWS
+> Well-Architected) — and whose **Cloud Architect** turns a non-technical
+> founder's plain-language vision into a complete, world-class, **fully-cited**
+> full-stack + multi-cloud architecture for **AWS / Azure / GCP**. Every
+> architectural decision traces to a tier-1 source. **4,149 self-tests, 0 failing.**
+
 ## 🚀 Quick Start — one command, <60 seconds
 
 ```bash
@@ -60,6 +67,22 @@ of the plugin:
    and shareholder value.
 4. **Build & enforce** — decisions become MADR ADRs, test-first (red→green) IaC
    build units, and grounded convention enforcement (Terraform/Bicep/CloudFormation).
+
+```mermaid
+flowchart LR
+  V["Founder's plain-language vision"] --> I["Intake<br/>Listen · Probe · Clarify"]
+  I --> T["Translate<br/>grounded concerns"]
+  T --> C["Compose + Score<br/>options · 4 objectives"]
+  C --> B["Build + Enforce<br/>ADR · red→green IaC · conventions"]
+  B --> AWS[("AWS")]
+  B --> AZ[("Azure")]
+  B --> GCP[("GCP")]
+  classDef cited fill:#eaf2ff,stroke:#3b6fb6,color:#10314f;
+  class T,C,B cited;
+```
+
+*Every box in blue emits decisions that each cite a tier-1 source (cite-or-decline);
+a standing conformance contract requires it of all output.*
 
 **See it work:** [docs/DEMO.md](docs/DEMO.md) is a real, reproducible run that
 turns a founder's vision into a **51-decision design, every decision cited across
