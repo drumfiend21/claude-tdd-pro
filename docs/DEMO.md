@@ -202,6 +202,62 @@ two more persisted, byte-reproducible golden references prove it:
 This is the difference between a template and an architect: the design changes
 because the *business profile* changed.
 
+## The enforcement half: catching drift, not just generating once
+
+Generation is only half the job. The same plugin **enforces** the architecture it
+designs: `cloud-conventions.sh` (S-30) lints the actual IaC against grounded
+convention rules — each rule citing a tier-1 source — and fails on drift. This is
+real, reproducible output:
+
+```mermaid
+flowchart LR
+  D["Cited design"] --> B["Build IaC<br/>(red→green, S-29)"]
+  B --> E{"Enforce<br/>cloud-conventions.sh"}
+  E -->|"drift: conventions=red"| F["Named, cited violations<br/>exit 1"]
+  F --> Fix["Fix the IaC"]
+  Fix --> E
+  E -->|"clean: conventions=green"| OK["exit 0 ✓"]
+  classDef cited fill:#eaf2ff,stroke:#3b6fb6,color:#10314f;
+  class D,B,E cited;
+```
+
+
+```bash
+# DRIFT: a Terraform file with an unrestricted-ingress rule and no version pin
+$ cat > main.tf <<'EOF'
+resource "aws_security_group" "web" {
+  ingress { cidr_blocks = ["0.0.0.0/0"] }
+}
+EOF
+$ bash commands/cloud-conventions.sh --tool terraform --iac main.tf
+violation=tf-pin-terraform-version
+violation=tf-declare-required-providers
+violation=tf-document-variables
+violation=tf-tag-resources
+violation=tf-no-unrestricted-ingress      # grounded in aws-prescriptive-security
+conventions=red
+convention_violations=5                    # exit 1
+```
+
+Fix the drift — pin the version, declare providers, describe variables, tag
+resources, restrict ingress — and the same gate goes green:
+
+```bash
+$ bash commands/cloud-conventions.sh --tool terraform --iac main.tf
+conventions=green
+convention_violations=0                     # exit 0
+```
+
+Every violation names the rule **and** the source that justifies it (cite-or-decline:
+a rule whose source isn't in any catalog is itself rejected). Rulesets ship for
+Terraform, Bicep, CloudFormation, observability, and DoD zero-trust
+(`standards/cloud-conventions/`).
+
+> **Status note (honest):** the enforcement *engine* is built, grounded, and
+> test-covered. Wiring it as an automatic gate inside `/doctor` and the CI
+> closed-loop workflow is the roadmap's M6 step and is **not yet wired** — it is
+> run explicitly, as above. That wiring is tracked, not claimed done.
+
 ## How this is guaranteed (not a one-off)
 
-A standing conformance contract (architecture section 27.27) requires **every** cloud-architecture design the plugin produces to be fully cited. It is enforced by cite-or-decline, gated by the end-to-end integration suites (`evals/specs/cl459-e2e-*` through `cl464-e2e-*`), and pinned by the golden reference in `standards/golden/` and `docs/golden/`. The full test suite is **4,149 passing / 0 failing**.
+A standing conformance contract (architecture section 27.27) requires **every** cloud-architecture design the plugin produces to be fully cited. It is enforced by cite-or-decline, gated by the end-to-end integration suites (`evals/specs/cl459-e2e-*` through `cl464-e2e-*`), and pinned by the golden reference in `standards/golden/` and `docs/golden/`. The full test suite is **4,159 passing / 0 failing**.
