@@ -1,0 +1,11 @@
+{
+  "name": "normalization: the Azure boundary maps an Advisor finding into the plugin-standard schema with source native-azure and source_api azure-advisor",
+  "command": "printf '{\"schema_version\":\"1.0\",\"platform\":\"azure\",\"route\":\"azure-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"build_requirements\":[\"encryption_at_rest\"]},\"iac_targets\":[\"bicep\"],\"build_units\":[\"encryption_at_rest\"],\"recommendations\":[],\"native_review_ref\":null}' > h.json && printf '{\"review_ref\":\"r\",\"recommendations\":[{\"id\":\"SEC-1\",\"title\":\"Enable encryption at rest\",\"pillar\":\"security\",\"severity\":\"HIGH\"}]}' > n.json && bash \"$CLAUDE_PLUGIN_ROOT\"/commands/azure-boundary.sh --handoff h.json --native-response n.json --out o.json && node -e 'const b=require(\"./o.json\");const r=b.normalized.recommendations[0];process.exit(b.source_api===\"azure-advisor\"&&r.source===\"native-azure\"&&r.grounding===\"grounded\"?0:1)' && echo azure-normalized-grounded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-normalized-grounded"
+    ]
+  }
+}

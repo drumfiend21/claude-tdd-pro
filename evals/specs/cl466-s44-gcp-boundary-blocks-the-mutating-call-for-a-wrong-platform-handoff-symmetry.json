@@ -1,0 +1,12 @@
+{
+  "name": "safety: the GCP boundary likewise blocks a mutating external call when --apply targets a non-gcp handoff (boundary-symmetric safety)",
+  "command": "printf '{\"schema_version\":\"1.0\",\"platform\":\"aws\",\"route\":\"aws-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"build_requirements\":[\"encryption_at_rest\"]},\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\"],\"recommendations\":[],\"native_review_ref\":null}' > h.json && printf '{\"review_ref\":\"r\",\"recommendations\":[{\"id\":\"SEC-1\",\"title\":\"Enable encryption at rest\",\"pillar\":\"security\",\"severity\":\"HIGH\"}]}' > n.json && bash \"$CLAUDE_PLUGIN_ROOT\"/commands/gcp-boundary.sh --handoff h.json --native-response n.json --apply --out o.json",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "external_call=blocked-validation-failed",
+      "validation_failed=wrong-platform"
+    ]
+  }
+}
