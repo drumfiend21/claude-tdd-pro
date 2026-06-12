@@ -1,0 +1,12 @@
+{
+  "name": "doctor: the cloud-conventions check does not mistake an ordinary package.json or config.yaml for IaC (no false positive, stays skipped)",
+  "command": "mkdir -p repo && printf '{\"name\":\"my-app\",\"scripts\":{\"test\":\"jest\"}}' > repo/package.json && printf 'key: value\\nlist:\\n  - a\\n' > repo/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no_cloud_iac=true",
+      "status=skipped"
+    ]
+  }
+}

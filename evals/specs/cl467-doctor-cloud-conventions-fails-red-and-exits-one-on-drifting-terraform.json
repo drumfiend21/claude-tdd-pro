@@ -1,0 +1,12 @@
+{
+  "name": "doctor: the cloud-conventions check fails red and exits 1 when discovered Terraform drifts from the grounded conventions",
+  "command": "mkdir -p repo && printf 'resource \"aws_security_group\" \"web\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > repo/main.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "tool=terraform",
+      "status=red"
+    ]
+  }
+}

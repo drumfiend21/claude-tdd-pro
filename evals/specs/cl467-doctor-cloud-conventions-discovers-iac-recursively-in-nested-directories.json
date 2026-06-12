@@ -1,0 +1,12 @@
+{
+  "name": "doctor: the cloud-conventions check discovers IaC recursively in nested module directories, not only at the repo root",
+  "command": "mkdir -p repo/infra/modules && printf 'resource \"aws_security_group\" \"x\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > repo/infra/modules/sg.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "file=repo/infra/modules/sg.tf",
+      "status=red"
+    ]
+  }
+}

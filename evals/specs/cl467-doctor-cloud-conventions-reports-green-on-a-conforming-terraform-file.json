@@ -1,0 +1,12 @@
+{
+  "name": "doctor: the cloud-conventions check reports green and exits 0 when the discovered Terraform conforms to the grounded rules",
+  "command": "mkdir -p repo && printf 'terraform {\\n  required_version = \">= 1.6.0\"\\n  required_providers { aws = { source = \"hashicorp/aws\" } }\\n}\\nvariable \"cidr\" { description = \"vpc cidr\" }\\nresource \"aws_s3_bucket\" \"b\" { tags = { Name = \"b\" } }\\n' > repo/main.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "status=green",
+      "convention_violations=0"
+    ]
+  }
+}

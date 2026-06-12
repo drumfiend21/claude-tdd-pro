@@ -1,0 +1,11 @@
+{
+  "name": "doctor: the cloud-conventions check aggregates a tree of one clean and one drifting file to an overall red with the correct file counts",
+  "command": "mkdir -p repo && printf 'terraform {\\n  required_version = \">= 1.6.0\"\\n  required_providers { aws = { source = \"hashicorp/aws\" } }\\n}\\nvariable \"cidr\" { description = \"vpc cidr\" }\\nresource \"aws_s3_bucket\" \"b\" { tags = { Name = \"b\" } }\\n' > repo/main.tf && printf 'resource \"aws_security_group\" \"bad\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > repo/bad.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "status=red files=2 red=1"
+    ]
+  }
+}
