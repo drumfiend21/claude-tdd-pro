@@ -1506,3 +1506,17 @@ Standard-form bullet (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (S-53).** ID used verbatim. Pending folder name MUST be exactly: `evals/pending/s/s-53-global-delivery-and-frontend-performance/`.
 
 **§20 sequencing (S-53).** v1.16 refinement of the translation layer. Governance-only ID addition; preserves the §21 definition-of-done.
+
+### §27.27 Cloud-architect output conformance contract (additive amendment, 2026-06-08)
+
+STANDING CONTRACT: every cloud-architecture design the plugin produces for a user MUST conform to the world-class, fully-cited standard proven by the end-to-end integration suite. Conformance criteria, enforced by cite-or-decline and gated by the integration tests:
+
+1. **Every decision is cited.** Every emitted technical concern carries a `source_id` and `grounding=grounded`; the design has `needs_grounding=[]`. No decision is made on authority the plugin cannot cite.
+2. **World-class authorities.** The sources cited are the secured tier-1 authorities (AWS Well-Architected + pillars, NIST 800-53/DoD SCCA, OWASP ASVS/Secure Headers, OAuth 2.0, SemVer, Fowler, Google SRE, OpenTelemetry, Microsoft REST API Guidelines, Enterprise Integration Patterns, Patterns of Distributed Systems, FinOps, Azure/AWS data + reliability guidance).
+3. **Full-stack + cloud breadth.** A complete design spans frontend/UI, backend API, database, messaging, real-time, authentication/authorization, object storage, edge/headers, performance (CDN/edge), reliability/global delivery, security, observability (logging + analysis), testing, dependency versioning, distributed patterns, and cost.
+4. **Tailored + optimized.** Concerns fire per the founder's profile; options are scored against cost/performance/customer/shareholder objectives (S-46).
+5. **Test-first + enforceable.** Decisions become S-28 ADRs, S-29 red->green build units, and S-30 grounded convention enforcement.
+
+**Golden reference (persisted):** `standards/golden/fullstack-international-aws-profile.json` (the canonical vision), `standards/golden/fullstack-international-aws-requirements.json` (the machine design), and `docs/golden/fullstack-international-aws-architecture.md` (the human, cited design). Regenerable deterministically; the conformance suite (`cl465-conformance-*`) pins it, and the integration suites (`cl459-e2e`..`cl464-e2e`) are the definition-of-done gate.
+
+**§20 note.** Pure conformance contract over S-32..S-53; preserves the §21 definition-of-done (the integration suite is the gate).

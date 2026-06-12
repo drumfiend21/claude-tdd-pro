@@ -1,0 +1,13 @@
+{
+  "name": "conformance: the live output meets or exceeds the golden decision coverage (no regression)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/standards/golden/fullstack-international-aws-profile.json\" --out req.json --now 2026-06-08T00:00:00Z 2>/dev/null\ncp \"$CLAUDE_PLUGIN_ROOT/standards/golden/fullstack-international-aws-requirements.json\" golden.json\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"req.json\",\"utf8\"));const g=JSON.parse(require(\"fs\").readFileSync(\"golden.json\",\"utf8\"));const a=Object.values(j.pillars).flat().length;const b=Object.values(g.pillars).flat().length;process.exit(a>=b?0:1)' && echo meets-golden 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "meets-golden"
+    ]
+  }
+}

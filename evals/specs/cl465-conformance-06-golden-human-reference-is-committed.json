@@ -1,0 +1,13 @@
+{
+  "name": "conformance: the human-readable golden cited-design reference is committed in the repo",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/docs/golden/fullstack-international-aws-architecture.md\" && grep -q 'justified by' \"$CLAUDE_PLUGIN_ROOT/docs/golden/fullstack-international-aws-architecture.md\" && echo golden-doc 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "golden-doc"
+    ]
+  }
+}

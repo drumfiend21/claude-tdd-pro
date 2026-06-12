@@ -1,0 +1,13 @@
+{
+  "name": "conformance: the committed golden requirements artifact is itself fully cited",
+  "command": "cp \"$CLAUDE_PLUGIN_ROOT/standards/golden/fullstack-international-aws-requirements.json\" golden.json\nnode -e 'const g=JSON.parse(require(\"fs\").readFileSync(\"golden.json\",\"utf8\"));const all=Object.values(g.pillars).flat();process.exit(g.needs_grounding.length===0&&all.length>=40&&all.every(c=>c.grounding===\"grounded\")?0:1)' && echo golden-cited 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "golden-cited"
+    ]
+  }
+}

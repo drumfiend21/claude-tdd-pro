@@ -1,0 +1,13 @@
+{
+  "name": "conformance: the cloud-architect output conforms - every decision is cited and grounded",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/standards/golden/fullstack-international-aws-profile.json\" --out req.json --now 2026-06-08T00:00:00Z 2>/dev/null\nnode -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"req.json\",\"utf8\"));const ALL=Object.values(j.pillars).flat();const groups=Object.keys(j.pillars).filter(p=>(j.pillars[p]||[]).length>0);const srcs=new Set(ALL.map(c=>c.source_id));process.exit(j.needs_grounding.length===0 && ALL.every(c=>typeof c.source_id===\"string\"&&c.source_id.length>0&&c.grounding===\"grounded\")?0:1)' && echo every-decision-cited 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-decision-cited"
+    ]
+  }
+}

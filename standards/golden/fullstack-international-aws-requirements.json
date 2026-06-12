@@ -1,0 +1,346 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-08T00:00:00Z",
+  "concerns_total": 51,
+  "needs_grounding": [
+
+  ],
+  "pillars": {
+    "reliability": [
+      {
+        "concern": "multi_az",
+        "driver": "criticality=mission-critical",
+        "source_id": "aws-reliability-pillar",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "automated_failover",
+        "driver": "criticality=mission-critical",
+        "source_id": "aws-reliability-pillar",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "health_check",
+        "driver": "criticality=mission-critical",
+        "source_id": "aws-reliability-pillar",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "frequent_backup",
+        "driver": "data_loss_tolerance=minutes",
+        "source_id": "aws-rpo-rto-targets",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "multi_region",
+        "driver": "international_users_at_scale",
+        "source_id": "aws-reliability-pillar",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "latency_based_routing",
+        "driver": "international_low_latency",
+        "source_id": "aws-reliability-pillar",
+        "grounding": "grounded"
+      }
+    ],
+    "security": [
+      {
+        "concern": "encryption_at_rest",
+        "driver": "data_sensitivity=confidential",
+        "source_id": "nist-800-53",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "encryption_in_transit",
+        "driver": "data_sensitivity=confidential",
+        "source_id": "nist-800-53",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "access_control",
+        "driver": "data_sensitivity=confidential",
+        "source_id": "nist-800-53",
+        "grounding": "grounded"
+      }
+    ],
+    "performance-efficiency": [
+      {
+        "concern": "autoscaling",
+        "driver": "scale=hyperscale",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "caching",
+        "driver": "scale=hyperscale",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "cdn",
+        "driver": "public_facing_fast_requests",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "edge_caching",
+        "driver": "public_facing_fast_requests",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      }
+    ],
+    "operational-excellence": [
+      {
+        "concern": "monitoring",
+        "driver": "baseline",
+        "source_id": "google-sre-book",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "centralized_logging",
+        "driver": "baseline",
+        "source_id": "opentelemetry-docs",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "distributed_tracing",
+        "driver": "criticality_or_event_driven",
+        "source_id": "opentelemetry-docs",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "slo_alerting",
+        "driver": "criticality=mission-critical",
+        "source_id": "google-sre-book",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "access_logging",
+        "driver": "data_sensitivity=confidential",
+        "source_id": "nist-800-53",
+        "grounding": "grounded"
+      }
+    ],
+    "testing": [
+      {
+        "concern": "unit_testing",
+        "driver": "baseline",
+        "source_id": "fowler-test-pyramid",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "integration_testing",
+        "driver": "baseline",
+        "source_id": "fowler-test-pyramid",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "contract_testing",
+        "driver": "services_integrate",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      }
+    ],
+    "dependencies": [
+      {
+        "concern": "dependency_pinning",
+        "driver": "baseline",
+        "source_id": "semver",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "automated_dependency_updates",
+        "driver": "baseline",
+        "source_id": "google-eng-practices",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "compatibility_testing",
+        "driver": "baseline",
+        "source_id": "semver",
+        "grounding": "grounded"
+      }
+    ],
+    "identity": [
+      {
+        "concern": "authentication",
+        "driver": "sensitive_or_exposed",
+        "source_id": "oauth2-oidc",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "authorization_rbac",
+        "driver": "data_sensitivity=confidential",
+        "source_id": "owasp-asvs",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "token_validation",
+        "driver": "integration_scope=public",
+        "source_id": "owasp-asvs",
+        "grounding": "grounded"
+      }
+    ],
+    "storage": [
+      {
+        "concern": "object_storage_encryption",
+        "driver": "data_at_rest",
+        "source_id": "nist-800-53",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "public_access_block",
+        "driver": "data_at_rest",
+        "source_id": "nist-800-53",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "bucket_versioning",
+        "driver": "data_volume=large",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "lifecycle_policy",
+        "driver": "data_volume=large",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      }
+    ],
+    "api": [
+      {
+        "concern": "rest_api_gateway",
+        "driver": "request_response_or_public",
+        "source_id": "microsoft-rest-api-guidelines",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "rate_limiting",
+        "driver": "integration_scope=public",
+        "source_id": "microsoft-rest-api-guidelines",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "request_validation",
+        "driver": "integration_scope=public",
+        "source_id": "microsoft-rest-api-guidelines",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "api_versioning",
+        "driver": "integration_scope=public",
+        "source_id": "microsoft-rest-api-guidelines",
+        "grounding": "grounded"
+      }
+    ],
+    "realtime": [
+      {
+        "concern": "websocket_gateway",
+        "driver": "data_cadence=real-time",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "connection_auth",
+        "driver": "data_cadence=real-time",
+        "source_id": "oauth2-oidc",
+        "grounding": "grounded"
+      }
+    ],
+    "edge": [
+      {
+        "concern": "security_headers",
+        "driver": "integration_scope=public",
+        "source_id": "owasp-secure-headers",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "cors_policy",
+        "driver": "integration_scope=public",
+        "source_id": "owasp-secure-headers",
+        "grounding": "grounded"
+      }
+    ],
+    "frontend": [
+      {
+        "concern": "spa_hosting",
+        "driver": "public_facing_ui",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "http_compression",
+        "driver": "ui_responsiveness",
+        "source_id": "aws-well-architected",
+        "grounding": "grounded"
+      }
+    ],
+    "data": [
+      {
+        "concern": "eventual_consistency",
+        "driver": "consistency_need=eventual",
+        "source_id": "patterns-of-distributed-systems",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "partitioning",
+        "driver": "data_volume=large",
+        "source_id": "azure-data-store-models",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "sharding",
+        "driver": "data_volume=large",
+        "source_id": "azure-data-store-models",
+        "grounding": "grounded"
+      }
+    ],
+    "integration": [
+      {
+        "concern": "message_queue",
+        "driver": "communication_style=event-driven",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "dead_letter_queue",
+        "driver": "communication_style=event-driven",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "outbox_pattern",
+        "driver": "communication_style=event-driven",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "anti_corruption_layer",
+        "driver": "integration_scope=public",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "contract_test",
+        "driver": "integration_scope=public",
+        "source_id": "enterprise-integration-patterns",
+        "grounding": "grounded"
+      }
+    ],
+    "distributed": [
+      {
+        "concern": "saga",
+        "driver": "event-driven+mission-critical",
+        "source_id": "fowler-event-sourcing",
+        "grounding": "grounded"
+      },
+      {
+        "concern": "event_sourcing",
+        "driver": "event-driven+mission-critical",
+        "source_id": "fowler-event-sourcing",
+        "grounding": "grounded"
+      }
+    ]
+  }
+}
