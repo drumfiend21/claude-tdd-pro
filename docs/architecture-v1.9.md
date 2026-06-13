@@ -1632,3 +1632,11 @@ Second-round review (A/A+/A/A- scores) converged on "ratify and build, S-54 firs
 5. **Symmetric build obligation (mirror of §28.10).** Each remaining v1.18 feature's spec set MUST ALSO include at least one behavior on a **cloud/IaC target** (a Terraform/Bicep fixture), so BOTH lanes — ordinary full-stack (§28.10) AND cloud-architect (§28.11) — are proven by the active suite. Every remaining v1.18 feature is therefore proven on a non-cloud app fixture and a cloud/IaC fixture.
 
 **Vocabulary additions for §25 fidelity audit (§28.11):** `eo-security`, `supply-chain`, `supply_chain_integrity`, `digest-pinned`, `image-pinning`, `kev-free`, `known-exploited`, `unsigned-artifact`, `attestation-required`, `remediation_sla`.
+
+### §28.12 Build progress log (append-only)
+
+Tracks the v1.18 substrate build as each CL lands (per §28.4). Append-only; never rewrite a prior line.
+
+- **CL-469 — S-54 EO security-governance source catalog.** `standards/eo-security-sources.yaml` (cisa-ssdf, nist-ai-rmf, slsa-framework, openssf-scorecard, cisa-kev) + 10 specs. Suite 4175→4185. (2026-06-13)
+- **CL-470 — §2.30 + H-14 dependency vulnerability scan + remediation gate.** `commands/vuln-scan.sh` (the EO Sec. 2 find-AND-fix gate) + 10 specs. Both lanes proven per §28.10/§28.11: app manifests (package.json, requirements.txt, go.mod, Cargo.toml) AND cloud IaC supply chain (`.terraform.lock.hcl` provider pins). critical/high block, medium/low warn, clean green no-op, no-manifest skipped; every blocked finding names `fixed_in`; `--emit` writes the C-23 disclosure record. Suite 4185→4195. (2026-06-13)
+- **Remaining (per §28.4):** C-23 (consume H-14 `--emit`), §2.31 + H-15, §2.32 + H-16, C-22, X-10, W-13, Q-13, and the §28.11 `standards/cloud-conventions/eo-security.yaml` S-30 ruleset.

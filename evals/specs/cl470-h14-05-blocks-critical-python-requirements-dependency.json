@@ -1,0 +1,14 @@
+{
+  "name": "vuln gate blocks a critical python requirements dependency",
+  "command": "printf %s '- component: lodash\n  affected: 4.17.20\n  severity: critical\n  fixed_in: 4.17.21\n  advisory_id: GHSA-app-lodash\n  source: cisa-kev\n- component: left-pad\n  severity: medium\n  fixed_in: 1.3.0\n  advisory_id: GHSA-app-leftpad\n  source: openssf-scorecard\n- component: flask\n  affected: 2.0.0\n  severity: critical\n  fixed_in: 2.0.1\n  advisory_id: GHSA-py-flask\n  source: cisa-kev\n- component: aws\n  affected: 5.0.0\n  severity: high\n  fixed_in: 5.31.0\n  advisory_id: GHSA-tf-aws\n  source: cisa-kev\n- component: openssl-sys\n  affected: 0.9.0\n  severity: critical\n  fixed_in: 0.9.60\n  advisory_id: RUSTSEC-openssl\n  source: cisa-kev\n' > adv.yaml\nprintf %s 'flask==2.0.0\n' > requirements.txt\nbash $CLAUDE_PLUGIN_ROOT/commands/vuln-scan.sh --manifest requirements.txt --advisories adv.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "vuln-scan status=red",
+      "component=flask"
+    ]
+  }
+}

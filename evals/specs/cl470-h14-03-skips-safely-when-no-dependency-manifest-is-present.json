@@ -1,0 +1,13 @@
+{
+  "name": "vuln gate skips safely when no dependency manifest is present",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/commands/vuln-scan.sh --manifest nonexistent.json --advisories adv.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no_dependencies=true status=skipped"
+    ]
+  }
+}
