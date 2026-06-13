@@ -1595,3 +1595,15 @@ Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal):
 **Anti-drift note (W-13 / Q-13).** IDs used verbatim. Pending folder names MUST be exactly: `evals/pending/w/w-13-adversarial-red-team-blue-team-review/`, `evals/pending/q/q-13-security-remediation-posture-metric/`.
 
 **§20 sequencing (W-13 / Q-13).** Both ship after their inputs: W-13 after H-16 + C-23; Q-13 after H-14 + C-23 — slotting at the end of the §28.4 order, after X-10. Governance-only ID additions; preserve the §21 definition-of-done.
+
+### §28.9 Leadership-panel refinement, round 2 (additive, 2026-06-13)
+
+Second-round review (A/A+/A/A- scores) converged on "ratify and build, S-54 first → H-14 → C-23" and added only micro-refinements — **zero new feature IDs** (restraint over inventing IDs to look responsive). Full text: design file §28.9. **Status:** PROPOSED. Append-only — no §1–§28.8 content altered.
+
+**Refinements (no new ID):** (a) H-16/W-13 — the §28.8 throwaway-branch-with-mandatory-reconciliation pattern is the sanctioned mode for internal frontier pre-release red-team spikes (no skip-gate flag; the §28.8 rejection stands). (b) Q-13 gains a **STRIDE threat-model coverage score** (from W-13 red/blue findings, reusing the multi-agent review output — no new engine) + deployment-frequency/security-score trend lines in COMPLIANCE-REPORT; local-only per Q-6; ties to §2.5 `aibom` + §2.8 manifest. (c) W-13/H-16 gain lightweight **data-minimization checklist items** grounded in nist-800-53 (full differential privacy stays deferred to a Phase-E/G rules CL). (d) W-13 may target an O-12 scaffold for a critical-infrastructure resilience pass (composition, no new scaffold engine).
+
+**Standing framing rule (extends §2.32 artifact-wide).** The §2.32 voluntary / non-mandatory framing (the EO Sec. 1 no-mandatory-licensing disclaimer) is a standing requirement for **every** v1.18 artifact — W-13 packs, C-22/C-23 exports, H-15 attestations all carry the disclaimer header. No new contract number; applies the existing §2.32 framing across the artifact set.
+
+**Vocabulary additions for §25 fidelity audit (§28.9):** `stride`, `threat-model`, `threat_model_coverage`, `deployment_frequency`, `security_score`, `data-minimization`, `data_minimization`, `pii`, `resilience`, `disclaimer`, `non-mandatory`.
+
+**§20 note.** Governance-only refinement; preserves the §21 definition-of-done. The convergent build order (ratify → S-54 → H-14 → C-23) matches §28.4 exactly; the first build CL on ratification is S-54.
