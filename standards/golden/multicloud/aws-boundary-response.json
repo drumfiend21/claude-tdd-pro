@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-08T00:00:00Z",
+  "platform": "aws",
+  "source_api": "aws-well-architected-tool",
+  "validated": true,
+  "applied": false,
+  "iac_targets": [
+    "terraform"
+  ],
+  "build_units": [
+    "encryption_at_rest",
+    "encryption_in_transit",
+    "access_control",
+    "multi_az",
+    "automated_failover",
+    "health_check",
+    "frequent_backup",
+    "multi_region",
+    "latency_based_routing",
+    "autoscaling",
+    "caching",
+    "cdn",
+    "edge_caching",
+    "monitoring",
+    "centralized_logging",
+    "distributed_tracing",
+    "slo_alerting",
+    "access_logging"
+  ],
+  "normalized": {
+    "recommendations": [
+      {
+        "id": "SEC-1",
+        "title": "Enable encryption at rest",
+        "pillar": "security",
+        "severity": "HIGH",
+        "source": "native-aws",
+        "mapped_concern": "encryption_at_rest",
+        "grounding": "grounded"
+      },
+      {
+        "id": "REL-1",
+        "title": "Enable multi-AZ redundancy",
+        "pillar": "reliability",
+        "severity": "MEDIUM",
+        "source": "native-aws",
+        "mapped_concern": "multi_az",
+        "grounding": "grounded"
+      }
+    ],
+    "native_review_ref": "native-review/marketplace-workload"
+  }
+}

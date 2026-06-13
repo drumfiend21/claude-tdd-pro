@@ -1,0 +1,11 @@
+{
+  "name": "doctor: the cloud-conventions check exits 2 with a usage error when no --root directory is supplied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "requires --root"
+    ]
+  }
+}

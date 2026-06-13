@@ -1,0 +1,11 @@
+{
+  "name": "safety: the platform dispatcher rejects an invalid platform name outside the aws/azure/gcp set before any external interaction",
+  "command": "printf '{\"schema_version\":\"1.0\",\"options\":[{\"option_id\":\"opt-balanced\",\"summary\":\"Balanced\",\"build_requirements\":[\"encryption_at_rest\"]}]}' > opts.json && bash \"$CLAUDE_PLUGIN_ROOT\"/commands/platform-boundary.sh --options opts.json --select opt-balanced --platform oracle --out h.json",
+  "setup": [],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "invalid --platform"
+    ]
+  }
+}

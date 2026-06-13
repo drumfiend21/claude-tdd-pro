@@ -1,10 +1,17 @@
 # claude-tdd-pro
 
 [![CI](https://github.com/drumfiend21/claude-tdd-pro/actions/workflows/rubric-check.yml/badge.svg?branch=main)](https://github.com/drumfiend21/claude-tdd-pro/actions/workflows/rubric-check.yml)
-[![specs](https://img.shields.io/badge/specs-4000_passed-brightgreen)](evals/specs/)
+[![specs](https://img.shields.io/badge/specs-4175_passed-brightgreen)](evals/specs/)
 [![architecture](https://img.shields.io/badge/architecture-v1.9.2_%2B_v1.10_%2B_v1.11-blue)](docs/architecture-v1.9.md)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![version](https://img.shields.io/badge/version-0.4.0-informational)](CHANGELOG.md)
+
+> **Eng-team-in-a-box for Claude Code.** A TDD-governed plugin that holds any
+> codebase to published engineering standards (Google, OWASP, NIST, AWS
+> Well-Architected) — and whose **Cloud Architect** turns a non-technical
+> founder's plain-language vision into a complete, world-class, **fully-cited**
+> full-stack + multi-cloud architecture for **AWS / Azure / GCP**. Every
+> architectural decision traces to a tier-1 source. **4,175 self-tests, 0 failing.**
 
 ## 🚀 Quick Start — one command, <60 seconds
 
@@ -35,6 +42,56 @@ every prompt is gated through the same RUBRIC.yaml so output is
 born-compliant.
 
 **Current version: 0.4.0** — see [CHANGELOG.md](CHANGELOG.md).
+
+## Cloud Architect — a grounded, eng-team-in-a-box for cloud architecture
+
+A non-technical founder can describe an app in **plain business language** and
+the plugin guides them to a **complete, world-class, fully-cited full-stack +
+cloud architecture** — deployable to **AWS, Azure, or GCP** — where *every
+decision is justified by a cited tier-1 authority* (AWS Well-Architected, NIST
+800-53, OWASP ASVS/Secure Headers, OAuth 2.0, SemVer, Google SRE, OpenTelemetry,
+Enterprise Integration Patterns, Patterns of Distributed Systems, and more).
+
+The flow runs through one entry function and the same TDD discipline as the rest
+of the plugin:
+
+1. **Intake** (`architect-session.sh`) — Listen → Probe → Clarify; asks the next
+   question until it understands the business need (it never guesses).
+2. **Translate** — maps the business need to grounded technical concerns across
+   database, scaling, security, identity (authn/authz), object storage, REST +
+   real-time APIs, messaging, distributed patterns, observability (logging +
+   analysis), testing, dependency versioning, edge/headers/CORS, and global
+   delivery (CDN, multi-region).
+3. **Compose & score** — generates multiple grounded options with trade-offs and
+   ranks them against four objectives: cost, performance, customer satisfaction,
+   and shareholder value.
+4. **Build & enforce** — decisions become MADR ADRs, test-first (red→green) IaC
+   build units, and grounded convention enforcement (Terraform/Bicep/CloudFormation).
+
+```mermaid
+flowchart LR
+  V["Founder's plain-language vision"] --> I["Intake<br/>Listen · Probe · Clarify"]
+  I --> T["Translate<br/>grounded concerns"]
+  T --> C["Compose + Score<br/>options · 4 objectives"]
+  C --> B["Build + Enforce<br/>ADR · red→green IaC · conventions"]
+  B --> AWS[("AWS")]
+  B --> AZ[("Azure")]
+  B --> GCP[("GCP")]
+  classDef cited fill:#eaf2ff,stroke:#3b6fb6,color:#10314f;
+  class T,C,B cited;
+```
+
+*Every box in blue emits decisions that each cite a tier-1 source (cite-or-decline);
+a standing conformance contract requires it of all output.*
+
+**See it work:** [docs/DEMO.md](docs/DEMO.md) is a real, reproducible run that
+turns a founder's vision into a **51-decision design, every decision cited across
+17 world-class authorities**. The canonical output is pinned as a golden
+reference in [`standards/golden/`](standards/golden/) and
+[`docs/golden/`](docs/golden/fullstack-international-aws-architecture.md), and a
+**standing conformance contract** (architecture §27.27) requires *all* output to
+be fully cited, gated by the end-to-end integration suites. The continuously-monitored
+source catalog is in [`standards/SOURCES.md`](standards/SOURCES.md).
 
 ## The two flows
 

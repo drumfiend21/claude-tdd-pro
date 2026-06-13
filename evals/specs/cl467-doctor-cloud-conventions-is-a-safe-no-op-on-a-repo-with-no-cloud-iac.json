@@ -1,0 +1,12 @@
+{
+  "name": "doctor: the cloud-conventions check is a safe no-op (status skipped, exit 0) on a repo with no cloud IaC, so non-cloud repos are never regressed",
+  "command": "mkdir -p repo && echo 'console.log(1)' > repo/app.js && printf '{\"name\":\"x\"}' > repo/package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no_cloud_iac=true",
+      "status=skipped"
+    ]
+  }
+}

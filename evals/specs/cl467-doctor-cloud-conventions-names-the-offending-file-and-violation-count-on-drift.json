@@ -1,0 +1,12 @@
+{
+  "name": "doctor: the cloud-conventions check names the offending file and a non-zero violation count in its red summary",
+  "command": "mkdir -p repo && printf 'resource \"aws_security_group\" \"web\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > repo/main.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "file=repo/main.tf",
+      "status=red files=1 red=1"
+    ]
+  }
+}

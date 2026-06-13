@@ -24,3 +24,10 @@ jobs:
       - name: Compliance closed-loop (C-21)
         if: hashFiles('compliance/closed-loop-validate.sh') != ''
         run: bash compliance/closed-loop-validate.sh --synthetic-framework ci-test-fw
+
+      - name: Cloud-architecture convention enforcement (S-30 / §27.28)
+        # Wires S-30 cloud-convention enforcement into the CI execution surface
+        # (the through-line: every enforcement runs in three surfaces with the same
+        # exit-code contract). Safe-by-default: a repo with no cloud IaC is a green
+        # no-op, so this never fails a non-cloud repo; it fails only on real IaC drift.
+        run: bash commands/doctor.sh --check cloud-conventions --root .

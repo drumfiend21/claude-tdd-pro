@@ -1,0 +1,11 @@
+{
+  "name": "CI closed-loop: the workflow runs S-30 cloud-convention enforcement via the doctor cloud-conventions check (M6 CI surface wired)",
+  "command": "grep -q \"doctor.sh --check cloud-conventions\" \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && echo ci-enforcement-wired 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ci-enforcement-wired"
+    ]
+  }
+}

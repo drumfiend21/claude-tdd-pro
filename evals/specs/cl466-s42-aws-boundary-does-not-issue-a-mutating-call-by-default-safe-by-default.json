@@ -1,0 +1,12 @@
+{
+  "name": "safety: the AWS boundary is safe-by-default and only normalizes (no mutating external call) unless --apply is given",
+  "command": "printf '{\"schema_version\":\"1.0\",\"platform\":\"aws\",\"route\":\"aws-boundary\",\"selected_option\":{\"option_id\":\"opt-balanced\",\"build_requirements\":[\"encryption_at_rest\"]},\"iac_targets\":[\"terraform\"],\"build_units\":[\"encryption_at_rest\"],\"recommendations\":[],\"native_review_ref\":null}' > h.json && printf '{\"review_ref\":\"r\",\"recommendations\":[{\"id\":\"SEC-1\",\"title\":\"Enable encryption at rest\",\"pillar\":\"security\",\"severity\":\"HIGH\"}]}' > n.json && bash \"$CLAUDE_PLUGIN_ROOT\"/commands/aws-boundary.sh --handoff h.json --native-response n.json --out o.json",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "validated=true",
+      "external_call=skipped-not-applied"
+    ]
+  }
+}

@@ -535,6 +535,56 @@ case "$CHECK" in
     '
     exit 0
     ;;
+  cloud-conventions)
+    # M6 completion (§27.28): wire S-30 cloud-architecture convention enforcement
+    # into the /doctor surface, honoring the through-line "every enforcement runs in
+    # three execution surfaces with the same exit-code contract" and the S-30
+    # contract (exit 0 green / 1 red). SAFE-BY-DEFAULT: a repo with no cloud IaC is a
+    # no-op (status=skipped, exit 0) so non-cloud repos are never regressed.
+    [[ -z "$ROOT" ]] && { echo "doctor: --check cloud-conventions requires --root <dir>" >&2; exit 2; }
+    [[ ! -d "$ROOT" ]] && { echo "doctor: --check cloud-conventions: root not found: $ROOT" >&2; exit 2; }
+    CC="$PLUGIN_ROOT/commands/cloud-conventions.sh"
+    files_checked=0
+    files_red=0
+    total_violations=0
+    # Discover IaC and map to its tool ruleset. .tf -> terraform, .bicep -> bicep are
+    # unambiguous; CloudFormation is detected ONLY when AWSTemplateFormatVersion appears
+    # as a real top-level key at the start of a line (optionally after a leading brace,
+    # quoted or not) -- so files that merely MENTION the marker (docs, test fixtures with
+    # an escaped \"AWSTemplateFormatVersion\") are never mistaken for IaC.
+    while IFS= read -r ccf; do
+      [[ -z "$ccf" ]] && continue
+      cctool=""
+      case "$ccf" in
+        *.tf) cctool="terraform" ;;
+        *.bicep) cctool="bicep" ;;
+        *.json|*.yaml|*.yml)
+          grep -qE '^[[:space:]]*[{]?[[:space:]]*"?AWSTemplateFormatVersion"?[[:space:]]*:' "$ccf" 2>/dev/null && cctool="cloudformation" ;;
+      esac
+      [[ -z "$cctool" ]] && continue
+      files_checked=$((files_checked + 1))
+      ccout=$(bash "$CC" --tool "$cctool" --iac "$ccf" 2>&1 >/dev/null); ccrc=$?
+      if [[ "$ccrc" -ne 0 ]]; then
+        ccn=$(printf '%s\n' "$ccout" | grep -oE 'convention_violations=[0-9]+' | tail -1 | grep -oE '[0-9]+')
+        [[ -z "$ccn" ]] && ccn=0
+        files_red=$((files_red + 1))
+        total_violations=$((total_violations + ccn))
+        echo "doctor: cloud-conventions file=$ccf tool=$cctool status=red convention_violations=$ccn" >&2
+      fi
+    done <<CCEOF
+$(find "$ROOT" -type d \( -name .git -o -name node_modules \) -prune -o -type f \( -name '*.tf' -o -name '*.bicep' -o -name '*.json' -o -name '*.yaml' -o -name '*.yml' \) -print 2>/dev/null)
+CCEOF
+    if [[ "$files_checked" -eq 0 ]]; then
+      echo "doctor: cloud-conventions no_cloud_iac=true status=skipped" >&2
+      exit 0
+    fi
+    if [[ "$files_red" -gt 0 ]]; then
+      echo "doctor: cloud-conventions status=red files=$files_checked red=$files_red convention_violations=$total_violations" >&2
+      exit 1
+    fi
+    echo "doctor: cloud-conventions status=green files=$files_checked convention_violations=0" >&2
+    exit 0
+    ;;
   *)
     echo "doctor: unknown check: $CHECK" >&2
     exit 2

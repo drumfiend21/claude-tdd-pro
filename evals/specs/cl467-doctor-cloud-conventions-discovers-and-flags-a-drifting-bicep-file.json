@@ -1,0 +1,11 @@
+{
+  "name": "doctor: the cloud-conventions check discovers a Bicep file and flags it red when it drifts from the grounded conventions",
+  "command": "mkdir -p repo && printf 'resource sg = { name: x }\\n' > repo/main.bicep && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check cloud-conventions --root repo",
+  "setup": [],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "status=red"
+    ]
+  }
+}

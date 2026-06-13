@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "complete": true,
+  "unanswered": [],
+  "vision": "an online appointment booking app for a medical clinic, secure and reliable, for regulated patient data",
+  "answers": {
+    "workload": "an online appointment booking app for a medical clinic",
+    "motivation": "revenue", "criticality": "mission-critical",
+    "availability_tolerance": "minutes", "data_loss_tolerance": "minutes",
+    "data_sensitivity": "regulated", "compliance_regime": "hipaa",
+    "scale": "large", "budget_posture": "balanced",
+    "data_volume": "large", "read_write_pattern": "balanced", "consistency_need": "strong",
+    "communication_style": "event-driven", "integration_scope": "external-partner", "data_cadence": "real-time"
+  }
+}
