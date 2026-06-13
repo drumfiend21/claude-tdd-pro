@@ -1,0 +1,9 @@
+{
+  "name": "EO catalog secures the NIST SSDF secure software development framework source",
+  "command": "grep -q 'id: cisa-ssdf' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && grep -q 'csrc.nist.gov/projects/ssdf' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && echo ssdf-secured 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ssdf-secured"]
+  }
+}

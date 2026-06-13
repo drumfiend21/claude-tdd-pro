@@ -1,0 +1,9 @@
+{
+  "name": "EO sources stay out of the default sources catalog preserving the seventeen-source baseline",
+  "command": "! grep -qE 'cisa-ssdf|cisa-kev|openssf-scorecard|slsa-framework' \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && echo baseline-preserved 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["baseline-preserved"]
+  }
+}

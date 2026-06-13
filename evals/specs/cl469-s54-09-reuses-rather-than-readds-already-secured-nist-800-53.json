@@ -1,0 +1,9 @@
+{
+  "name": "EO catalog reuses rather than re-adds the already-secured NIST 800-53 control source",
+  "command": "! grep -q 'id: nist-800-53' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && echo reuses-not-readds 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["reuses-not-readds"]
+  }
+}

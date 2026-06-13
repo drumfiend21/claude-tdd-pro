@@ -1,0 +1,9 @@
+{
+  "name": "EO catalog secures the SLSA supply-chain levels framework source for provenance grounding",
+  "command": "grep -q 'id: slsa-framework' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && grep -q 'slsa.dev' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && echo slsa-secured 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["slsa-secured"]
+  }
+}

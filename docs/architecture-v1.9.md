@@ -1551,6 +1551,8 @@ Additive amendment translating the White House executive order **"Promoting Adva
 
 **Status:** PROPOSED. Reference block appended without modifying any prior section. The substrate-and-spec build proceeds per the design file's §28.4 sequencing only after operator ratification; the §25 fidelity gate reads this file, so the §28.6 vocabulary below is authoritative now.
 
+**Ratified:** 2026-06-13 — operator approved ("Ratify + build S-54 now") after three convergent leadership-panel reviews. The PROPOSED status above is superseded by this additive note (per the append-only discipline, ratification is recorded as a new line, never by rewriting the prior one). Build commenced at S-54 (EO security-governance source catalog — the grounding fuel all other v1.18 features cite) per the §28.4 sequencing.
+
 **Authoritative IDs introduced by v1.18:** H-14, H-15, H-16 (Phase H, §11); S-54 (Phase S, §4); C-22, C-23 (Phase C); X-10 (Phase X, §14); §2.30, §2.31, §2.32 (cross-cutting contracts, §2). No collision with §1–§27 IDs (H stopped at H-13; S at S-53; C at C-21; X at X-9; contracts at §2.29).
 
 Standard-form bullets (for `^- \*\*[A-Z]-` grep traversal compatibility):

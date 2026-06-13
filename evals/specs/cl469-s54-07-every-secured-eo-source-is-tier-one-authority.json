@@ -1,0 +1,9 @@
+{
+  "name": "every secured EO security-governance source is marked a tier-one authority",
+  "command": "[ \"$(grep -cE '^[[:space:]]+tier: 1$' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\")\" -eq 5 ] && echo all-tier-one 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["all-tier-one"]
+  }
+}

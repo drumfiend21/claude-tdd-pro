@@ -1,0 +1,9 @@
+{
+  "name": "EO security-governance catalog secures exactly five tier-one authorities",
+  "command": "[ \"$(grep -cE '^- id:' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\")\" -eq 5 ] && echo five-sources 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["five-sources"]
+  }
+}

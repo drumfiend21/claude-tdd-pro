@@ -1,0 +1,62 @@
+# EO security-governance sources (S-54, v1.18 §28).
+#
+# Authoritative tier-1 security & governance authorities that ground the
+# EO-aligned features: H-14 (dependency vulnerability remediation gate),
+# H-15 (SBOM + signed provenance attestation), H-16 (frontier pre-release
+# governance readiness checklist), and C-22/C-23 (EO control mapping +
+# coordinated-disclosure evidence). Secured for the executive order
+# "Promoting Advanced Artificial Intelligence Innovation and Security"
+# (signed 2026-06-02; Fed. Reg. 2026-06-05).
+#
+# NIST SP 800-53 / 800-171 / RMF are ALREADY secured (§27.14) and are reused
+# by the EO features, not re-added here (reuse over duplication). This catalog
+# is kept SEPARATE from the S-1 catalog standards/sources.yaml so the S-1
+# "exactly 17 default sources" baseline is preserved unchanged (the S-23/S-30/
+# S-31/S-37 "own catalog file" pattern).
+#
+# §2.6 two-tier schema; applies_to: [security-governance]. URLs verified 2026-06-13.
+
+- id: cisa-ssdf
+  name: "NIST SP 800-218 Secure Software Development Framework (SSDF) v1.1"
+  url: "https://csrc.nist.gov/projects/ssdf"
+  tier: 1
+  applies_to: [security-governance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+
+- id: nist-ai-rmf
+  name: "NIST AI 100-1 Artificial Intelligence Risk Management Framework (AI RMF 1.0)"
+  url: "https://www.nist.gov/itl/ai-risk-management-framework"
+  tier: 1
+  applies_to: [security-governance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+
+- id: slsa-framework
+  name: "SLSA — Supply-chain Levels for Software Artifacts"
+  url: "https://slsa.dev/spec/v1.0/"
+  tier: 1
+  applies_to: [security-governance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+
+- id: openssf-scorecard
+  name: "OpenSSF Scorecard — security health metrics for open source"
+  url: "https://openssf.org/projects/scorecard/"
+  tier: 1
+  applies_to: [security-governance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1
+
+- id: cisa-kev
+  name: "CISA Known Exploited Vulnerabilities (KEV) Catalog"
+  url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+  tier: 1
+  applies_to: [security-governance]
+  fetch_frequency: daily
+  class: published-standard
+  authority_tier: 1

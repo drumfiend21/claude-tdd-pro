@@ -1,0 +1,9 @@
+{
+  "name": "EO catalog secures the OpenSSF Scorecard security-health metrics source",
+  "command": "grep -q 'id: openssf-scorecard' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && grep -q 'openssf.org/projects/scorecard' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && echo scorecard-secured 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["scorecard-secured"]
+  }
+}

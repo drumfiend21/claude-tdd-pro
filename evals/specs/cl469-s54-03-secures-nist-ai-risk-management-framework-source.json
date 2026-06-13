@@ -1,0 +1,9 @@
+{
+  "name": "EO catalog secures the NIST AI risk management framework source for governance grounding",
+  "command": "grep -q 'id: nist-ai-rmf' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && grep -q 'ai-risk-management-framework' \"$CLAUDE_PLUGIN_ROOT/standards/eo-security-sources.yaml\" && echo ai-rmf-secured 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": ["ai-rmf-secured"]
+  }
+}
