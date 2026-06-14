@@ -1,0 +1,18 @@
+source:
+  id: slsa-framework
+  authoritative_publisher: "OpenSSF / Linux Foundation"
+  authoritative_url: "https://slsa.dev/spec/v1.0/"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-13T00:00:00Z"
+  content_hash: "sha256:589c48e1f4f3540d25e649a8299e0a1ac7148d35ae9bdc84292d2df7fb1bb516"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use - (c) respective publisher"
+# Reading-source (S-54 / sec 28.11): EO security-governance authority imported into
+# the coding-features standards directory. No lint rules - the EO authorities ground
+# convention rules (S-30 eo-security.yaml) and the H-14/H-15/C-22 features, not
+# per-file lint, so empty rules per the reading-source shape.
+# name: SLSA - Supply-chain Levels for Software Artifacts
+rules: []
+recommended_set: []
+all_set: []

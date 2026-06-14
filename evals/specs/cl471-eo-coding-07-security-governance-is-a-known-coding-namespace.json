@@ -1,0 +1,13 @@
+{
+  "name": "the security-governance namespace is registered as a known coding namespace",
+  "command": "grep -q \"security-governance\" \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" && echo namespace-registered 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "namespace-registered"
+    ]
+  }
+}

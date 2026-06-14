@@ -1,0 +1,37 @@
+# EO security-governance convention ruleset (S-30 refinement, v1.18 §28.11).
+# Applies EO "Promoting Advanced AI Innovation and Security" (2026-06-02) patterning
+# to the Infrastructure-as-Code the cloud-architect builds. Grounded SOLELY in the
+# S-54 EO security-governance catalog (standards/eo-security-sources.yaml), which the
+# S-30 cloud-conventions engine imports per §28.11. Run via:
+#   cloud-conventions.sh --tool terraform --iac <file> --ruleset standards/cloud-conventions/eo-security.yaml
+# Every rule cites an EO authority; cite-or-decline is preserved.
+- id: eo-require-supply-chain-provenance
+  source_id: slsa-framework
+  kind: patterning
+  mode: require
+  token: "provenance"
+  message: "emit build provenance/attestation for the deployed artifact (SLSA supply-chain levels; EO Sec. 3 IP protection)"
+- id: eo-require-image-digest-pin
+  source_id: cisa-ssdf
+  kind: patterning
+  mode: require
+  token: "@sha256:"
+  message: "pin container/module artifacts by digest, not a mutable tag (NIST SSDF PS.3 supply-chain integrity)"
+- id: eo-require-vulnerability-scan-evidence
+  source_id: nist-ai-rmf
+  kind: patterning
+  mode: require
+  token: "scan"
+  message: "evidence a vulnerability scan runs against the workload (NIST AI RMF cyber-capability assessment; EO Sec. 2 find-and-fix)"
+- id: eo-forbid-known-exploited-open-ingress
+  source_id: cisa-kev
+  kind: patterning
+  mode: forbid
+  token: "0.0.0.0/0"
+  message: "no unrestricted ingress — a routinely known-exploited misconfiguration (CISA KEV)"
+- id: eo-forbid-mutable-latest-tag
+  source_id: cisa-ssdf
+  kind: patterning
+  mode: forbid
+  token: ":latest"
+  message: "no mutable :latest image tag; an unpinned artifact breaks supply-chain provenance (NIST SSDF)"

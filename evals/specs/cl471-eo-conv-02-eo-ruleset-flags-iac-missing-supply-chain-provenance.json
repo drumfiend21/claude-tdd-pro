@@ -1,0 +1,14 @@
+{
+  "name": "EO convention ruleset flags cloud IaC that lacks supply-chain provenance",
+  "command": "printf %s 'resource \"x\" \"y\" {\n  image = \"repo@sha256:abc\"\n  scan = \"trivy\"\n}\n' > bad.tf\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh --tool terraform --iac bad.tf --ruleset $CLAUDE_PLUGIN_ROOT/standards/cloud-conventions/eo-security.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "violation=eo-require-supply-chain-provenance source=slsa-framework",
+      "conventions=red"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "an ungrounded convention rule is still declined after the EO catalog import",
+  "command": "printf %s 'resource \"x\" \"y\" {\n  image = \"repo@sha256:abc\"\n  provenance = true\n  scan = \"trivy\"\n}\n' > green.tf\nprintf %s '- id: bogus\n  source_id: not-a-real-source\n  kind: patterning\n  mode: require\n  token: \"x\"\n  message: \"m\"\n' > bogus.yaml\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh --tool terraform --iac green.tf --ruleset bogus.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "ungrounded_rule=bogus source=not-a-real-source",
+      "conventions=error"
+    ]
+  }
+}

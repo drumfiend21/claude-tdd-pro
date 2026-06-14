@@ -1,0 +1,18 @@
+source:
+  id: openssf-scorecard
+  authoritative_publisher: "OpenSSF / Linux Foundation"
+  authoritative_url: "https://openssf.org/projects/scorecard/"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-13T00:00:00Z"
+  content_hash: "sha256:1d0cff2b5ccb56cd15340372b26648123bdcd1bb8047106d84c255a6171d359a"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use - (c) respective publisher"
+# Reading-source (S-54 / sec 28.11): EO security-governance authority imported into
+# the coding-features standards directory. No lint rules - the EO authorities ground
+# convention rules (S-30 eo-security.yaml) and the H-14/H-15/C-22 features, not
+# per-file lint, so empty rules per the reading-source shape.
+# name: OpenSSF Scorecard - security health metrics for open source
+rules: []
+recommended_set: []
+all_set: []

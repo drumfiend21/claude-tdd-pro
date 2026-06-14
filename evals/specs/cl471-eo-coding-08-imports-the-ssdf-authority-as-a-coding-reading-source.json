@@ -1,0 +1,13 @@
+{
+  "name": "the coding namespace imports the NIST SSDF authority as a reading source",
+  "command": "grep -q \"id: cisa-ssdf\" \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/cisa-ssdf.yaml\" && grep -q \"csrc.nist.gov/projects/ssdf\" \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/cisa-ssdf.yaml\" && echo ssdf-imported 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ssdf-imported"
+    ]
+  }
+}

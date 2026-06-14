@@ -1,0 +1,18 @@
+source:
+  id: cisa-kev
+  authoritative_publisher: "U.S. CISA"
+  authoritative_url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-13T00:00:00Z"
+  content_hash: "sha256:d60aafc3f5e7f79280c26d3af1b5f82bc7e935d171cef417bb4ead0b89cbceb7"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use - (c) respective publisher"
+# Reading-source (S-54 / sec 28.11): EO security-governance authority imported into
+# the coding-features standards directory. No lint rules - the EO authorities ground
+# convention rules (S-30 eo-security.yaml) and the H-14/H-15/C-22 features, not
+# per-file lint, so empty rules per the reading-source shape.
+# name: CISA Known Exploited Vulnerabilities (KEV) Catalog
+rules: []
+recommended_set: []
+all_set: []

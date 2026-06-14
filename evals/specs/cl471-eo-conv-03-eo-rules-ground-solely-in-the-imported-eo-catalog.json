@@ -1,0 +1,13 @@
+{
+  "name": "EO convention rules ground in the imported EO catalog even with empty arch and engineering catalogs",
+  "command": "printf %s 'resource \"x\" \"y\" {\n  image = \"repo@sha256:abc\"\n  provenance = true\n  scan = \"trivy\"\n}\n' > green.tf\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh --tool terraform --iac green.tf --ruleset $CLAUDE_PLUGIN_ROOT/standards/cloud-conventions/eo-security.yaml --catalog /dev/null --eng-catalog /dev/null",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conventions=green"
+    ]
+  }
+}

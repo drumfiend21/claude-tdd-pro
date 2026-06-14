@@ -1,6 +1,6 @@
 {
   "name": "secured-source expansion: every shipped convention ruleset is fully grounded in a catalog source",
-  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; ids={}; [r+\"/standards/cloud-architecture-sources.yaml\", r+\"/standards/cloud-engineering-sources.yaml\"].each{|f| YAML.unsafe_load_file(f).each{|e| ids[e[\"id\"]]=true}}; bad=[]; Dir[r+\"/standards/cloud-conventions/*.yaml\"].each{|rf| YAML.unsafe_load_file(rf).each{|x| bad<<x[\"id\"] unless ids[x[\"source_id\"]]}}; exit(bad.empty? ? 0 : 1)' && echo all-grounded 1>&2",
+  "command": "ruby -ryaml -e 'Encoding.default_external=Encoding::UTF_8; r=ENV[\"CLAUDE_PLUGIN_ROOT\"]; ids={}; [r+\"/standards/cloud-architecture-sources.yaml\", r+\"/standards/cloud-engineering-sources.yaml\", r+\"/standards/eo-security-sources.yaml\"].each{|f| YAML.unsafe_load_file(f).each{|e| ids[e[\"id\"]]=true}}; bad=[]; Dir[r+\"/standards/cloud-conventions/*.yaml\"].each{|rf| YAML.unsafe_load_file(rf).each{|x| bad<<x[\"id\"] unless ids[x[\"source_id\"]]}}; exit(bad.empty? ? 0 : 1)' && echo all-grounded 1>&2",
   "setup": [
 
   ],

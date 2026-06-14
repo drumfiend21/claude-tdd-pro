@@ -1,0 +1,18 @@
+source:
+  id: nist-ai-rmf
+  authoritative_publisher: "U.S. NIST"
+  authoritative_url: "https://www.nist.gov/itl/ai-risk-management-framework"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-13T00:00:00Z"
+  content_hash: "sha256:cff1b41cb7b34a028ec661f297b421d18b6df044915d96354aa634db648392b7"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use - (c) respective publisher"
+# Reading-source (S-54 / sec 28.11): EO security-governance authority imported into
+# the coding-features standards directory. No lint rules - the EO authorities ground
+# convention rules (S-30 eo-security.yaml) and the H-14/H-15/C-22 features, not
+# per-file lint, so empty rules per the reading-source shape.
+# name: NIST AI 100-1 Artificial Intelligence Risk Management Framework (AI RMF 1.0)
+rules: []
+recommended_set: []
+all_set: []

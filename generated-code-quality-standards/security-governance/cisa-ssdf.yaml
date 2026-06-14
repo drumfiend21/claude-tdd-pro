@@ -1,0 +1,18 @@
+source:
+  id: cisa-ssdf
+  authoritative_publisher: "U.S. NIST"
+  authoritative_url: "https://csrc.nist.gov/projects/ssdf"
+  registry_link: "STANDARDS-URLS.yaml"
+  fetched_at: "2026-06-13T00:00:00Z"
+  content_hash: "sha256:6cae5730ee0ca9ec336348102d5287c54c849f524775b15425f273f7d13e72a4"
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: "Reference/educational use - (c) respective publisher"
+# Reading-source (S-54 / sec 28.11): EO security-governance authority imported into
+# the coding-features standards directory. No lint rules - the EO authorities ground
+# convention rules (S-30 eo-security.yaml) and the H-14/H-15/C-22 features, not
+# per-file lint, so empty rules per the reading-source shape.
+# name: NIST SP 800-218 Secure Software Development Framework (SSDF) v1.1
+rules: []
+recommended_set: []
+all_set: []

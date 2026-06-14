@@ -60,7 +60,7 @@ VALIDATE_SOURCE_FILE="$PLUGIN_ROOT/rubric/detectors/validate-source-file.sh"
 # G-1: reject unknown top-level folders. Operator-added namespaces live under
 # _operator/<my-org>/, community plugins under _community/<plugin-id>/. Any
 # other unrecognized top-level folder is an authoring error.
-KNOWN_NAMESPACES=(google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory aws azure gcp hashicorp _universal _operator _community _meta)
+KNOWN_NAMESPACES=(google us-government european-union finance-industry owasp w3c web-vitals react node typescript slsa linux-foundation industry-self-regulatory aws azure gcp hashicorp security-governance _universal _operator _community _meta)
 for ns_dir in "$ROOT"/*/; do
   [[ -d "$ns_dir" ]] || continue
   ns_name=$(basename "$ns_dir")

@@ -27,7 +27,7 @@
 
 set -uo pipefail
 
-TOOL=""; IAC=""; UNIT=""; BUILD_DIR=""; RULESET=""; CATALOG=""; ENG_CATALOG=""
+TOOL=""; IAC=""; UNIT=""; BUILD_DIR=""; RULESET=""; CATALOG=""; ENG_CATALOG=""; EO_CATALOG=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -38,8 +38,9 @@ while [ $# -gt 0 ]; do
     --ruleset)     RULESET="${2-}";     shift 2 ;;
     --catalog)     CATALOG="${2-}";     shift 2 ;;
     --eng-catalog) ENG_CATALOG="${2-}"; shift 2 ;;
+    --eo-catalog)  EO_CATALOG="${2-}";  shift 2 ;;
     -h|--help)
-      echo "Usage: cloud-conventions.sh --tool <t> --iac <file> | --unit <id> --build-dir <dir> [--ruleset <path>]" >&2
+      echo "Usage: cloud-conventions.sh --tool <t> --iac <file> | --unit <id> --build-dir <dir> [--ruleset <path>] [--eo-catalog <path>]" >&2
       exit 0
       ;;
     *) echo "cloud-conventions: unknown arg: $1" >&2; exit 2 ;;
@@ -52,14 +53,19 @@ resolve() { # echo first existing of: $1, $PLUGIN_ROOT/$1
 }
 if [ -z "$CATALOG" ]; then CATALOG="standards/cloud-architecture-sources.yaml"; fi
 if [ -z "$ENG_CATALOG" ]; then ENG_CATALOG="standards/cloud-engineering-sources.yaml"; fi
-CATALOG=$(resolve "$CATALOG"); ENG_CATALOG=$(resolve "$ENG_CATALOG")
+# v1.18 §28.11: import the EO security-governance catalog (S-54) as an additional
+# grounding source so EO-grounded convention rules pass cite-or-decline. Additive —
+# loading a third catalog only EXPANDS the grounded id set; it never makes a
+# previously-grounded rule ungrounded (no-regression).
+if [ -z "$EO_CATALOG" ]; then EO_CATALOG="standards/eo-security-sources.yaml"; fi
+CATALOG=$(resolve "$CATALOG"); ENG_CATALOG=$(resolve "$ENG_CATALOG"); EO_CATALOG=$(resolve "$EO_CATALOG")
 
 TOOL="$TOOL" IAC="$IAC" UNIT="$UNIT" BUILD_DIR="$BUILD_DIR" RULESET="$RULESET" \
-CATALOG="$CATALOG" ENG_CATALOG="$ENG_CATALOG" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
+CATALOG="$CATALOG" ENG_CATALOG="$ENG_CATALOG" EO_CATALOG="$EO_CATALOG" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
   tool=ENV["TOOL"]; iac=ENV["IAC"]; unit=ENV["UNIT"]; build_dir=ENV["BUILD_DIR"]
-  ruleset=ENV["RULESET"]; catalog=ENV["CATALOG"]; eng=ENV["ENG_CATALOG"]; root=ENV["PLUGIN_ROOT"]
+  ruleset=ENV["RULESET"]; catalog=ENV["CATALOG"]; eng=ENV["ENG_CATALOG"]; eo=ENV["EO_CATALOG"]; root=ENV["PLUGIN_ROOT"]
 
   # Resolve the IaC file + tool from a build unit when --unit is given.
   if !unit.empty?
@@ -96,9 +102,10 @@ CATALOG="$CATALOG" ENG_CATALOG="$ENG_CATALOG" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -r
     STDERR.puts "cloud-conventions: ruleset is not a list of rules"; exit 2
   end
 
-  # Grounded source ids = ids from both catalogs.
+  # Grounded source ids = ids from the architecture (S-23), engineering (S-30/S-31),
+  # AND the EO security-governance (S-54, §28.11) catalogs.
   grounded = {}
-  [catalog, eng].each do |c|
+  [catalog, eng, eo].each do |c|
     next unless File.exist?(c)
     doc = begin; YAML.unsafe_load_file(c); rescue; nil; end
     next unless doc.is_a?(Array)
