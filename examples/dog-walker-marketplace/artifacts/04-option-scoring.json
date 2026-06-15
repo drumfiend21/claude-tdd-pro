@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-15T05:24:42Z",
+  "weights": {
+    "cost_effective": 0.2,
+    "performance_optimized": 0.2,
+    "customer_centric": 0.4,
+    "shareholder_centric": 0.2
+  },
+  "objectives": [
+    {
+      "objective": "cost_effective",
+      "source_id": "finops-framework",
+      "grounding": "grounded"
+    },
+    {
+      "objective": "performance_optimized",
+      "source_id": "aws-well-architected",
+      "grounding": "grounded"
+    },
+    {
+      "objective": "customer_centric",
+      "source_id": "aws-reliability-pillar",
+      "grounding": "grounded"
+    },
+    {
+      "objective": "shareholder_centric",
+      "source_id": "google-eng-practices",
+      "grounding": "grounded"
+    }
+  ],
+  "needs_grounding": [
+
+  ],
+  "ranked": [
+    "opt-balanced",
+    "opt-max",
+    "opt-cost",
+    "opt-resilient"
+  ],
+  "recommended_option_id": "opt-balanced",
+  "scored_options": [
+    {
+      "option_id": "opt-balanced",
+      "summary": "Balanced hybrid",
+      "scores": {
+        "cost_effective": 0.6,
+        "performance_optimized": 0.6,
+        "customer_centric": 0.85,
+        "shareholder_centric": 0.733
+      },
+      "total_score": 0.727,
+      "rationale": {
+        "cost_effective": "scored on the cost trade-off; lower spend is more cost-effective (FinOps + AWS WAF Cost Optimization)",
+        "performance_optimized": "scored on the performance trade-off (AWS WAF Performance Efficiency)",
+        "customer_centric": "scored on availability/uptime, which customers feel directly (AWS Reliability Pillar)",
+        "shareholder_centric": "scored on cost efficiency, low maintenance complexity, and low vendor lock-in (Google Eng Practices + FinOps)"
+      }
+    },
+    {
+      "option_id": "opt-max",
+      "summary": "Maximum-resilience multi-region",
+      "scores": {
+        "cost_effective": 0.3,
+        "performance_optimized": 0.9,
+        "customer_centric": 1.0,
+        "shareholder_centric": 0.4
+      },
+      "total_score": 0.72,
+      "rationale": {
+        "cost_effective": "scored on the cost trade-off; lower spend is more cost-effective (FinOps + AWS WAF Cost Optimization)",
+        "performance_optimized": "scored on the performance trade-off (AWS WAF Performance Efficiency)",
+        "customer_centric": "scored on availability/uptime, which customers feel directly (AWS Reliability Pillar)",
+        "shareholder_centric": "scored on cost efficiency, low maintenance complexity, and low vendor lock-in (Google Eng Practices + FinOps)"
+      }
+    },
+    {
+      "option_id": "opt-cost",
+      "summary": "Cost-optimized managed baseline",
+      "scores": {
+        "cost_effective": 1.0,
+        "performance_optimized": 0.6,
+        "customer_centric": 0.5,
+        "shareholder_centric": 0.867
+      },
+      "total_score": 0.693,
+      "rationale": {
+        "cost_effective": "scored on the cost trade-off; lower spend is more cost-effective (FinOps + AWS WAF Cost Optimization)",
+        "performance_optimized": "scored on the performance trade-off (AWS WAF Performance Efficiency)",
+        "customer_centric": "scored on availability/uptime, which customers feel directly (AWS Reliability Pillar)",
+        "shareholder_centric": "scored on cost efficiency, low maintenance complexity, and low vendor lock-in (Google Eng Practices + FinOps)"
+      }
+    },
+    {
+      "option_id": "opt-resilient",
+      "summary": "Resilient scale-out",
+      "scores": {
+        "cost_effective": 0.3,
+        "performance_optimized": 0.9,
+        "customer_centric": 0.85,
+        "shareholder_centric": 0.4
+      },
+      "total_score": 0.66,
+      "rationale": {
+        "cost_effective": "scored on the cost trade-off; lower spend is more cost-effective (FinOps + AWS WAF Cost Optimization)",
+        "performance_optimized": "scored on the performance trade-off (AWS WAF Performance Efficiency)",
+        "customer_centric": "scored on availability/uptime, which customers feel directly (AWS Reliability Pillar)",
+        "shareholder_centric": "scored on cost efficiency, low maintenance complexity, and low vendor lock-in (Google Eng Practices + FinOps)"
+      }
+    }
+  ]
+}

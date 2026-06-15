@@ -2,6 +2,12 @@
 
 # Getting Started
 
+**First, see it work end-to-end:** the
+**[dog-walker-marketplace walkthrough](../examples/dog-walker-marketplace/)** is a real,
+reproducible run where a non-technical founder describes an app in plain English and the
+plugin delivers a complete, world-class, fully-cited architecture. It is the fastest way
+to understand what this plugin does. ([all examples →](../examples/))
+
 Welcome to Claude TDD Pro. Quick Start:
 
 1. Run `/init-guardrails --emit-baseline .claude-tdd-pro/telemetry-baseline.json`

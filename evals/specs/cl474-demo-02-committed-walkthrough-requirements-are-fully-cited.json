@@ -1,0 +1,13 @@
+{
+  "name": "the committed walkthrough requirements artifact is fully cited",
+  "command": "ruby -rjson -e 'd=JSON.parse(File.read(ARGV[0])); abort unless (d[\"needs_grounding\"]||[]).empty? && d[\"concerns_total\"].to_i>0' \"$CLAUDE_PLUGIN_ROOT/examples/dog-walker-marketplace/artifacts/02-technical-requirements.json\" && echo committed-design-cited 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "committed-design-cited"
+    ]
+  }
+}

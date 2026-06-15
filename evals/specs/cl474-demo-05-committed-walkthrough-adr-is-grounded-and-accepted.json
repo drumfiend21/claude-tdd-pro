@@ -1,0 +1,13 @@
+{
+  "name": "the committed walkthrough ADR is grounded and accepted",
+  "command": "f=$(ls $CLAUDE_PLUGIN_ROOT/examples/dog-walker-marketplace/artifacts/08-adr/*.json); ruby -rjson -e 'd=JSON.parse(File.read(ARGV[0])); abort unless (d[\"grounding\"]==\"grounded\" || (d[\"grounding_sources\"]||[]).size>0)' \"$f\" && grep -q \"Status: accepted\" $CLAUDE_PLUGIN_ROOT/examples/dog-walker-marketplace/artifacts/08-adr/*.md && echo adr-grounded-accepted 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "adr-grounded-accepted"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the dog-walker walkthrough regenerates a fully cited architecture design",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/examples/dog-walker-marketplace/regenerate.sh --out out 2>/dev/null\nruby -rjson -e 'd=JSON.parse(File.read(\"out/02-technical-requirements.json\")); abort unless (d[\"needs_grounding\"]||[]).empty? && d[\"concerns_total\"].to_i>=30' && echo regenerated-fully-cited 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "regenerated-fully-cited"
+    ]
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-08T12:00:00Z",
+  "option_count": 4,
+  "recommended_option_id": "opt-balanced",
+  "needs_grounding": [
+
+  ],
+  "options": [
+    {
+      "option_id": "opt-cost",
+      "summary": "Cost-optimized managed baseline",
+      "posture": "managed-simple",
+      "patterns": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "health_check",
+        "frequent_backup",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ],
+      "pillar_coverage": [
+        "security",
+        "reliability",
+        "operational-excellence"
+      ],
+      "trade_offs": {
+        "cost": "low",
+        "complexity": "low",
+        "performance": "medium",
+        "availability": "medium",
+        "vendor_lock_in": "medium"
+      },
+      "drivers": [
+        "data_sensitivity=confidential",
+        "criticality=mission-critical",
+        "data_loss_tolerance=minutes",
+        "baseline",
+        "criticality_or_event_driven"
+      ],
+      "grounding": [
+        "aws-reliability-pillar",
+        "aws-rpo-rto-targets",
+        "google-sre-book",
+        "nist-800-53",
+        "opentelemetry-docs"
+      ],
+      "suggested_adr_title": "Adopt cost-optimized managed baseline for a marketplace app connecting dog owners with trusted local dog walkers",
+      "build_requirements": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "health_check",
+        "frequent_backup",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ]
+    },
+    {
+      "option_id": "opt-balanced",
+      "summary": "Balanced hybrid",
+      "posture": "balanced-hybrid",
+      "patterns": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "multi_az",
+        "automated_failover",
+        "health_check",
+        "frequent_backup",
+        "multi_region",
+        "latency_based_routing",
+        "autoscaling",
+        "caching",
+        "cdn",
+        "edge_caching",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ],
+      "pillar_coverage": [
+        "security",
+        "reliability",
+        "performance-efficiency",
+        "operational-excellence"
+      ],
+      "trade_offs": {
+        "cost": "medium",
+        "complexity": "medium",
+        "performance": "medium",
+        "availability": "high",
+        "vendor_lock_in": "low"
+      },
+      "drivers": [
+        "data_sensitivity=confidential",
+        "criticality=mission-critical",
+        "data_loss_tolerance=minutes",
+        "international_users_at_scale",
+        "international_low_latency",
+        "scale=large",
+        "public_facing_fast_requests",
+        "baseline",
+        "criticality_or_event_driven"
+      ],
+      "grounding": [
+        "aws-reliability-pillar",
+        "aws-rpo-rto-targets",
+        "aws-well-architected",
+        "google-sre-book",
+        "nist-800-53",
+        "opentelemetry-docs"
+      ],
+      "suggested_adr_title": "Adopt balanced hybrid for a marketplace app connecting dog owners with trusted local dog walkers",
+      "build_requirements": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "multi_az",
+        "automated_failover",
+        "health_check",
+        "frequent_backup",
+        "multi_region",
+        "latency_based_routing",
+        "autoscaling",
+        "caching",
+        "cdn",
+        "edge_caching",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ]
+    },
+    {
+      "option_id": "opt-resilient",
+      "summary": "Resilient scale-out",
+      "posture": "scale-out",
+      "patterns": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "multi_az",
+        "automated_failover",
+        "health_check",
+        "frequent_backup",
+        "multi_region",
+        "latency_based_routing",
+        "autoscaling",
+        "caching",
+        "cdn",
+        "edge_caching",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ],
+      "pillar_coverage": [
+        "security",
+        "reliability",
+        "performance-efficiency",
+        "operational-excellence"
+      ],
+      "trade_offs": {
+        "cost": "high",
+        "complexity": "high",
+        "performance": "high",
+        "availability": "high",
+        "vendor_lock_in": "medium"
+      },
+      "drivers": [
+        "data_sensitivity=confidential",
+        "criticality=mission-critical",
+        "data_loss_tolerance=minutes",
+        "international_users_at_scale",
+        "international_low_latency",
+        "scale=large",
+        "public_facing_fast_requests",
+        "baseline",
+        "criticality_or_event_driven"
+      ],
+      "grounding": [
+        "aws-reliability-pillar",
+        "aws-rpo-rto-targets",
+        "aws-well-architected",
+        "google-sre-book",
+        "nist-800-53",
+        "opentelemetry-docs"
+      ],
+      "suggested_adr_title": "Adopt resilient scale-out for a marketplace app connecting dog owners with trusted local dog walkers",
+      "build_requirements": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "multi_az",
+        "automated_failover",
+        "health_check",
+        "frequent_backup",
+        "multi_region",
+        "latency_based_routing",
+        "autoscaling",
+        "caching",
+        "cdn",
+        "edge_caching",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ]
+    },
+    {
+      "option_id": "opt-max",
+      "summary": "Maximum-resilience multi-region",
+      "posture": "max-resilience",
+      "patterns": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "multi_az",
+        "automated_failover",
+        "health_check",
+        "frequent_backup",
+        "multi_region",
+        "latency_based_routing",
+        "autoscaling",
+        "caching",
+        "cdn",
+        "edge_caching",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ],
+      "pillar_coverage": [
+        "security",
+        "reliability",
+        "performance-efficiency",
+        "operational-excellence"
+      ],
+      "trade_offs": {
+        "cost": "high",
+        "complexity": "high",
+        "performance": "high",
+        "availability": "very-high",
+        "vendor_lock_in": "medium"
+      },
+      "drivers": [
+        "data_sensitivity=confidential",
+        "criticality=mission-critical",
+        "data_loss_tolerance=minutes",
+        "international_users_at_scale",
+        "international_low_latency",
+        "scale=large",
+        "public_facing_fast_requests",
+        "baseline",
+        "criticality_or_event_driven"
+      ],
+      "grounding": [
+        "aws-reliability-pillar",
+        "aws-rpo-rto-targets",
+        "aws-well-architected",
+        "google-sre-book",
+        "nist-800-53",
+        "opentelemetry-docs"
+      ],
+      "suggested_adr_title": "Adopt maximum-resilience multi-region for a marketplace app connecting dog owners with trusted local dog walkers",
+      "build_requirements": [
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_control",
+        "multi_az",
+        "automated_failover",
+        "health_check",
+        "frequent_backup",
+        "multi_region",
+        "latency_based_routing",
+        "autoscaling",
+        "caching",
+        "cdn",
+        "edge_caching",
+        "monitoring",
+        "centralized_logging",
+        "distributed_tracing",
+        "slo_alerting",
+        "access_logging"
+      ]
+    }
+  ]
+}

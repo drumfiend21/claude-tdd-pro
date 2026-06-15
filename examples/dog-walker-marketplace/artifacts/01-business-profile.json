@@ -1,0 +1,21 @@
+{
+  "complete": true,
+  "vision": "a marketplace app connecting dog owners with trusted local dog walkers",
+  "answers": {
+    "workload": "a marketplace app connecting dog owners with trusted local dog walkers",
+    "motivation": "revenue",
+    "criticality": "mission-critical",
+    "availability_tolerance": "minutes",
+    "data_loss_tolerance": "minutes",
+    "data_sensitivity": "confidential",
+    "compliance_regime": "none",
+    "scale": "large",
+    "budget_posture": "balanced",
+    "data_volume": "large",
+    "read_write_pattern": "balanced",
+    "consistency_need": "eventual",
+    "communication_style": "event-driven",
+    "integration_scope": "public",
+    "data_cadence": "real-time"
+  }
+}

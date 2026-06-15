@@ -1,0 +1,13 @@
+{
+  "name": "the end-to-end walkthrough is surfaced from the repo front-page documentation",
+  "command": "grep -q \"examples/dog-walker-marketplace\" \"$CLAUDE_PLUGIN_ROOT/README.md\" && grep -q \"examples/dog-walker-marketplace\" \"$CLAUDE_PLUGIN_ROOT/docs/getting-started.md\" && echo walkthrough-surfaced 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "walkthrough-surfaced"
+    ]
+  }
+}

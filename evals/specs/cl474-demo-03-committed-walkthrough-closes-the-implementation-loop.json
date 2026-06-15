@@ -1,0 +1,13 @@
+{
+  "name": "the committed walkthrough decision package closes the implementation loop",
+  "command": "ruby -rjson -e 'd=JSON.parse(File.read(ARGV[0])); abort unless d[\"loop_closed\"]==true && (d.dig(\"next_steps\",\"build_requirements\")||[]).size>0' \"$CLAUDE_PLUGIN_ROOT/examples/dog-walker-marketplace/artifacts/07-decision-package.json\" && echo loop-closed-with-build-reqs 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "loop-closed-with-build-reqs"
+    ]
+  }
+}

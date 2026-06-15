@@ -13,6 +13,13 @@
 > full-stack + multi-cloud architecture for **AWS / Azure / GCP**. Every
 > architectural decision traces to a tier-1 source. **4,175 self-tests, 0 failing.**
 
+> ### 👉 New here? See it work end-to-end
+> **[examples/dog-walker-marketplace/](examples/dog-walker-marketplace/)** — a real,
+> reproducible run: a non-technical founder describes an app in plain English, the
+> plugin interviews them, explains every term in business language, and delivers a
+> complete, **world-class, fully-cited** architecture with a red→green build plan.
+> The fastest way to understand what this does. ([all examples →](examples/))
+
 ## 🚀 Quick Start — one command, <60 seconds
 
 ```bash
