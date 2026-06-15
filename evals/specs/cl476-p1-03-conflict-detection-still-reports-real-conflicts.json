@@ -1,0 +1,13 @@
+{
+  "name": "install conflict detection still reports a real conflict when one is present",
+  "command": "fn=$(sed -n '/^detect_conflicts() {/,/^}/p' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\")\nd=$(mktemp -d); touch \"$d/.cursorrules\"\nout=$(bash -uc \"$fn\"$'\\n'\"detect_conflicts \\\"$d\\\"\" 2>&1)\nrm -rf \"$d\"\necho \"$out\" | grep -q \"another source\" && echo conflict-reported 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conflict-reported"
+    ]
+  }
+}

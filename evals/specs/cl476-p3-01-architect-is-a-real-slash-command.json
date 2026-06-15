@@ -1,0 +1,13 @@
+{
+  "name": "architect is registered as a real slash command with command frontmatter",
+  "command": "grep -qE \"^name: architect$\" \"$CLAUDE_PLUGIN_ROOT/commands/architect.md\" && echo architect-command-present 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "architect-command-present"
+    ]
+  }
+}

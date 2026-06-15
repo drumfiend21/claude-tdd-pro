@@ -1679,3 +1679,13 @@ Tracks the v1.18 substrate build as each CL lands (per §28.4). Append-only; nev
 **Vocabulary additions for §25 fidelity audit (§28.15):** `promote-cloud-rules`, `cloud-guidance-rule`, `cloud-guidance-rules`, `iac-enforcement`, `layer-a`, `activation`, `promoted`, `detector-rule`, `enforced`, `guidance-corpus`, `required_version`, `required_providers`, `livenessProbe`.
 
 **§20 note (§28.15).** S-7 promotion over the already-secured cloud/EO source corpora; preserves the §21 definition-of-done (extends enforcement surface; reuses §2.1/§2.2/S-7, adds no new product feature). Composes with §2.33.
+
+### §28.16 Install-surface fixes from downstream (GCTP) install testing (2026-06-15)
+
+A downstream consumer (GCTP) ran a clean-machine install test and routed CTP-side findings upstream. Fixed here (CL-476), test-pinned, no regression:
+
+- **P-1 — bash 3.2 empty-array crash (`scripts/install.sh`).** `detect_conflicts` ended with `printf '%s\n' "${conflicts[@]}"`; under `set -u` on stock-macOS **bash 3.2**, an empty `conflicts` array raises "unbound variable" and aborts the installer before clone. Guarded on `${#conflicts[@]} -gt 0` (project bash-3.2 portability gotcha #5). A clean target now reports no conflicts and exits 0; a real conflict is still reported.
+- **P-3 — `/architect` is now a real slash command.** The architect feature shipped `commands/architect.sh` + `skills/architect` + `agents/architect.md` but **no `commands/architect.md`**, so `/architect` was not a slash command (a docs/usage inaccuracy the install test surfaced). Added `commands/architect.md` (loads the `architect` skill, mirroring `onboard.md`), making `/architect` first-class.
+- **P-2 — ruby preflight** was verified ALREADY correct: `preflight_check` hard-stops (`exit 3`) on ruby `<3.0` or missing. No change.
+
+5 specs (`cl476-p1-01..03`, `cl476-p3-01..02`). Governance + bugfix; no new feature ID / contract. Suite 4253→4258.

@@ -230,7 +230,11 @@ detect_conflicts() {
     fi
   fi
 
-  printf '%s\n' "${conflicts[@]}"
+  # bash 3.2 (stock macOS) errors on "${arr[@]}" for an empty array under `set -u`;
+  # guard on element count so a no-conflict run prints nothing instead of crashing.
+  if [[ ${#conflicts[@]} -gt 0 ]]; then
+    printf '%s\n' "${conflicts[@]}"
+  fi
 }
 
 # ──────────────────────────────────────────────────────────────────────

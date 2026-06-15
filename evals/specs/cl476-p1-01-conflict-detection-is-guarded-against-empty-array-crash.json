@@ -1,0 +1,13 @@
+{
+  "name": "install conflict detection is guarded against the bash 3.2 empty-array crash",
+  "command": "grep -q \"stock macOS\" \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo conflicts-guarded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conflicts-guarded"
+    ]
+  }
+}

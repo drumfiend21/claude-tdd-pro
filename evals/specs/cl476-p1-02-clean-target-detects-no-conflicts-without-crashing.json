@@ -1,0 +1,13 @@
+{
+  "name": "a clean install target reports no conflicts without crashing under set -u",
+  "command": "fn=$(sed -n '/^detect_conflicts() {/,/^}/p' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\")\nd=$(mktemp -d)\nout=$(bash -uc \"$fn\"$'\\n'\"detect_conflicts \\\"$d\\\"\" 2>&1)\nrc=$?\nrm -rf \"$d\"\n[ \"$rc\" = 0 ] && [ -z \"$out\" ] && echo clean-no-crash 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "clean-no-crash"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the architect slash command loads the architect skill",
+  "command": "grep -q \"Loads the architect skill\" \"$CLAUDE_PLUGIN_ROOT/commands/architect.md\" && echo architect-loads-skill 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "architect-loads-skill"
+    ]
+  }
+}
