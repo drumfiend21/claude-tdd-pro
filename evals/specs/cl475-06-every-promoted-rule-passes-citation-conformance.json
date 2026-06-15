@@ -1,0 +1,13 @@
+{
+  "name": "every promoted cloud rule carries grounded provenance under citation conformance",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh 2>&1 | grep -q 'surface=coding-rules status=green' && echo promoted-rules-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "promoted-rules-grounded"
+    ]
+  }
+}

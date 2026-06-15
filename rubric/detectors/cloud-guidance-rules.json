@@ -1,0 +1,117 @@
+{
+  "generated_by": "promote-cloud-rules.sh",
+  "rules": {
+    "g-aws-no-unrestricted-ingress": {
+      "token": "0.0.0.0/0",
+      "mode": "forbid",
+      "applies": "*.tf",
+      "source": "aws-prescriptive-security",
+      "namespace": "aws",
+      "severity": "P0"
+    },
+    "g-aws-tag-resources": {
+      "token": "tags",
+      "mode": "require",
+      "applies": "*.tf",
+      "source": "aws-well-architected",
+      "namespace": "aws",
+      "severity": "P2"
+    },
+    "g-azure-no-unrestricted-ingress": {
+      "token": "0.0.0.0/0",
+      "mode": "forbid",
+      "applies": "*.bicep,*.tf",
+      "source": "azure-well-architected",
+      "namespace": "azure",
+      "severity": "P0"
+    },
+    "g-azure-encrypt-at-rest": {
+      "token": "encryption",
+      "mode": "require",
+      "applies": "*.bicep,*.tf",
+      "source": "azure-well-architected",
+      "namespace": "azure",
+      "severity": "P1"
+    },
+    "g-gcp-no-unrestricted-ingress": {
+      "token": "0.0.0.0/0",
+      "mode": "forbid",
+      "applies": "*.tf",
+      "source": "gcp-architecture-framework",
+      "namespace": "gcp",
+      "severity": "P0"
+    },
+    "g-gcp-enable-audit-logs": {
+      "token": "audit",
+      "mode": "require",
+      "applies": "*.tf",
+      "source": "gcp-architecture-framework",
+      "namespace": "gcp",
+      "severity": "P1"
+    },
+    "g-hashicorp-pin-required-version": {
+      "token": "required_version",
+      "mode": "require",
+      "applies": "*.tf",
+      "source": "terraform-docs",
+      "namespace": "hashicorp",
+      "severity": "P1"
+    },
+    "g-hashicorp-declare-required-providers": {
+      "token": "required_providers",
+      "mode": "require",
+      "applies": "*.tf",
+      "source": "terraform-docs",
+      "namespace": "hashicorp",
+      "severity": "P1"
+    },
+    "g-linux-foundation-set-resource-limits": {
+      "token": "resources",
+      "mode": "require",
+      "applies": "*.yaml,*.yml",
+      "source": "cncf-cloud-native",
+      "namespace": "linux-foundation",
+      "severity": "P1"
+    },
+    "g-linux-foundation-liveness-probe": {
+      "token": "livenessProbe",
+      "mode": "require",
+      "applies": "*.yaml,*.yml",
+      "source": "cncf-cloud-native",
+      "namespace": "linux-foundation",
+      "severity": "P2"
+    },
+    "g-security-governance-require-provenance": {
+      "token": "provenance",
+      "mode": "require",
+      "applies": "*.tf,*.bicep",
+      "source": "slsa-framework",
+      "namespace": "security-governance",
+      "severity": "P1"
+    },
+    "g-security-governance-no-known-exploited-ingress": {
+      "token": "0.0.0.0/0",
+      "mode": "forbid",
+      "applies": "*.tf,*.bicep",
+      "source": "cisa-kev",
+      "namespace": "security-governance",
+      "severity": "P0"
+    },
+    "g-us-government-encrypt-at-rest": {
+      "token": "encrypt",
+      "mode": "require",
+      "applies": "*.tf,*.bicep",
+      "source": "nist-zero-trust",
+      "namespace": "us-government",
+      "severity": "P1"
+    },
+    "g-us-government-audit-logging": {
+      "token": "logging",
+      "mode": "require",
+      "applies": "*.tf,*.bicep",
+      "source": "dod-scca",
+      "namespace": "us-government",
+      "severity": "P1"
+    }
+  }
+}

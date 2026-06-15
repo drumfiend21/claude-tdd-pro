@@ -1,0 +1,56 @@
+---
+source:
+  id: nist-zero-trust
+  authoritative_publisher: U.S. NIST
+  authoritative_url: https://csrc.nist.gov/pubs/sp/800/207/final
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:us-government-iac-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) U.S. NIST
+rules:
+- id: g-us-government-encrypt-at-rest
+  name: encrypt-at-rest
+  description: Federal-system data must be encrypted at rest (NIST/Zero Trust).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://csrc.nist.gov/pubs/sp/800/207/final
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: nist-zero-trust
+    section: convention
+- id: g-us-government-audit-logging
+  name: audit-logging
+  description: Federal systems must enable audit logging at the boundary (DoD SCCA).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://csrc.nist.gov/pubs/sp/800/207/final
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: dod-scca
+    section: convention
+recommended_set:
+- g-us-government-encrypt-at-rest
+- g-us-government-audit-logging
+all_set:
+- g-us-government-encrypt-at-rest
+- g-us-government-audit-logging

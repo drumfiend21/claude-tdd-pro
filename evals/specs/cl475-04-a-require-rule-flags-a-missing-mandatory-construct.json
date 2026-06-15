@@ -1,0 +1,13 @@
+{
+  "name": "a require-rule flags terraform that is missing a mandatory construct",
+  "command": "printf 'resource \"x\" {}\\n' > a.tf\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/cloud-guidance-rule.sh --rule g-hashicorp-pin-required-version --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-hashicorp-pin-required-version status=red"
+    ]
+  }
+}

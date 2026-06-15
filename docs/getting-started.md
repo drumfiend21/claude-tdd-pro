@@ -3,10 +3,10 @@
 # Getting Started
 
 **First, see it work end-to-end:** the
-**[dog-walker-marketplace walkthrough](../examples/dog-walker-marketplace/)** is a real,
+**[dog-walker-marketplace walkthrough](../examples/dog-walker-marketplace/README.md)** is a real,
 reproducible run where a non-technical founder describes an app in plain English and the
 plugin delivers a complete, world-class, fully-cited architecture. It is the fastest way
-to understand what this plugin does. ([all examples →](../examples/))
+to understand what this plugin does. ([all examples →](../examples/README.md))
 
 Welcome to Claude TDD Pro. Quick Start:
 

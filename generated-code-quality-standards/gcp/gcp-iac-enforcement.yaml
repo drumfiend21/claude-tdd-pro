@@ -1,0 +1,56 @@
+---
+source:
+  id: gcp-architecture-framework
+  authoritative_publisher: Google Cloud
+  authoritative_url: https://cloud.google.com/architecture/framework
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:gcp-iac-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) Google Cloud
+rules:
+- id: g-gcp-no-unrestricted-ingress
+  name: no-unrestricted-ingress
+  description: Firewall rules must not allow unrestricted 0.0.0.0/0 ingress.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://cloud.google.com/architecture/framework
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gcp-architecture-framework
+    section: convention
+- id: g-gcp-enable-audit-logs
+  name: enable-audit-logs
+  description: Projects and services must enable audit logging for accountability.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://cloud.google.com/architecture/framework
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gcp-architecture-framework
+    section: convention
+recommended_set:
+- g-gcp-no-unrestricted-ingress
+- g-gcp-enable-audit-logs
+all_set:
+- g-gcp-no-unrestricted-ingress
+- g-gcp-enable-audit-logs

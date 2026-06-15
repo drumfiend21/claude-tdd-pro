@@ -1,0 +1,13 @@
+{
+  "name": "fourteen enforced detector rules span the cloud and governance namespaces",
+  "command": "[ \"$(grep -hE '^- id: g-' $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/azure/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/gcp/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/hashicorp/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/linux-foundation/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/us-government/*-iac-enforcement.yaml | wc -l | tr -d ' ')\" -eq 14 ] && echo fourteen-rules 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "fourteen-rules"
+    ]
+  }
+}

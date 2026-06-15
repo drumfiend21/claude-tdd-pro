@@ -1,0 +1,58 @@
+---
+source:
+  id: aws-well-architected
+  authoritative_publisher: Amazon Web Services
+  authoritative_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:aws-iac-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) Amazon Web Services
+rules:
+- id: g-aws-no-unrestricted-ingress
+  name: no-unrestricted-ingress
+  description: Security groups and firewall rules must not allow unrestricted 0.0.0.0/0
+    ingress; expose only the ports and CIDRs a workload requires.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: aws-prescriptive-security
+    section: convention
+- id: g-aws-tag-resources
+  name: tag-resources
+  description: Cloud resources must carry tags so ownership, cost allocation, and
+    governance are traceable.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: aws-well-architected
+    section: convention
+recommended_set:
+- g-aws-no-unrestricted-ingress
+- g-aws-tag-resources
+all_set:
+- g-aws-no-unrestricted-ingress
+- g-aws-tag-resources

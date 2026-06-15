@@ -1,0 +1,13 @@
+{
+  "name": "the detector check manifest stays in sync with the promoted rule ids",
+  "command": "ok=1; for id in $(grep -hoE 'g-[a-z-]+' $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/*-iac-enforcement.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/*-iac-enforcement.yaml | grep -E '^g-(aws|security-governance)-' | sort -u); do grep -q \"\\\"$id\\\"\" \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/cloud-guidance-rules.json\" || ok=0; done; [ \"$ok\" = 1 ] && echo manifest-in-sync 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "manifest-in-sync"
+    ]
+  }
+}

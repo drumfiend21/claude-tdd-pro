@@ -1,6 +1,6 @@
 {
   "name": "the coding namespace imports all five EO security-governance authorities",
-  "command": "[ \"$(ls $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/*.yaml | wc -l | tr -d ' ')\" -eq 5 ] && echo five-authorities 1>&2",
+  "command": "for s in cisa-ssdf nist-ai-rmf slsa-framework openssf-scorecard cisa-kev; do grep -q \"id: $s\" \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/$s.yaml\" || exit 1; done && echo five-authorities 1>&2",
   "setup": [
 
   ],

@@ -1,0 +1,13 @@
+{
+  "name": "promoted aws rules are g-prefixed and cite an authoritative source",
+  "command": "grep -qE '^- id: g-aws-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/aws-iac-enforcement.yaml\" && grep -qE 'source: aws-(well-architected|prescriptive-security)' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/aws-iac-enforcement.yaml\" && echo grounded-and-prefixed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "grounded-and-prefixed"
+    ]
+  }
+}

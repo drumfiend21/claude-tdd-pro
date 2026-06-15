@@ -1,0 +1,13 @@
+{
+  "name": "re-running the promotion reproduces the committed rule files byte-for-byte",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/commands/promote-cloud-rules.sh --root t 2>/dev/null\ndiff t/generated-code-quality-standards/aws/aws-iac-enforcement.yaml \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/aws-iac-enforcement.yaml\" >/dev/null && echo reproducible 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reproducible"
+    ]
+  }
+}

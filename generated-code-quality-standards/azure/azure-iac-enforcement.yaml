@@ -1,0 +1,57 @@
+---
+source:
+  id: azure-well-architected
+  authoritative_publisher: Microsoft
+  authoritative_url: https://learn.microsoft.com/azure/well-architected/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:azure-iac-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) Microsoft
+rules:
+- id: g-azure-no-unrestricted-ingress
+  name: no-unrestricted-ingress
+  description: Network security groups must not permit unrestricted 0.0.0.0/0 inbound
+    access.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://learn.microsoft.com/azure/well-architected/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: azure-well-architected
+    section: convention
+- id: g-azure-encrypt-at-rest
+  name: encrypt-at-rest
+  description: Data stores must declare encryption at rest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://learn.microsoft.com/azure/well-architected/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: azure-well-architected
+    section: convention
+recommended_set:
+- g-azure-no-unrestricted-ingress
+- g-azure-encrypt-at-rest
+all_set:
+- g-azure-no-unrestricted-ingress
+- g-azure-encrypt-at-rest

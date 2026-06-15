@@ -1,0 +1,13 @@
+{
+  "name": "all seven cloud and governance namespaces now carry enforced detector rules",
+  "command": "n=0; for ns in aws azure gcp hashicorp linux-foundation security-governance us-government; do grep -qE '^- id: g-' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/$ns/$ns-iac-enforcement.yaml\" && n=$((n+1)); done; [ \"$n\" -eq 7 ] && echo seven-namespaces-enforced 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "seven-namespaces-enforced"
+    ]
+  }
+}

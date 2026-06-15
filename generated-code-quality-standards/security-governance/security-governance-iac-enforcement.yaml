@@ -1,0 +1,57 @@
+---
+source:
+  id: cisa-ssdf
+  authoritative_publisher: U.S. NIST
+  authoritative_url: https://csrc.nist.gov/projects/ssdf
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:security-governance-iac-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) U.S. NIST
+rules:
+- id: g-security-governance-require-provenance
+  name: require-provenance
+  description: Build/deploy units must emit supply-chain provenance/attestation (SLSA).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://csrc.nist.gov/projects/ssdf
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: slsa-framework
+    section: convention
+- id: g-security-governance-no-known-exploited-ingress
+  name: no-known-exploited-ingress
+  description: Forbid unrestricted 0.0.0.0/0 ingress - a routinely known-exploited
+    misconfiguration (CISA KEV).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://csrc.nist.gov/projects/ssdf
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cisa-kev
+    section: convention
+recommended_set:
+- g-security-governance-require-provenance
+- g-security-governance-no-known-exploited-ingress
+all_set:
+- g-security-governance-require-provenance
+- g-security-governance-no-known-exploited-ingress

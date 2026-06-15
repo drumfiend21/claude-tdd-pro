@@ -1,0 +1,58 @@
+---
+source:
+  id: cncf-cloud-native
+  authoritative_publisher: Cloud Native Computing Foundation
+  authoritative_url: https://www.cncf.io/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:linux-foundation-iac-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) CNCF
+rules:
+- id: g-linux-foundation-set-resource-limits
+  name: set-resource-limits
+  description: Kubernetes workloads must declare resource requests and limits to protect
+    cluster stability.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://www.cncf.io/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cncf-cloud-native
+    section: convention
+- id: g-linux-foundation-liveness-probe
+  name: liveness-probe
+  description: Kubernetes workloads should declare a livenessProbe so the platform
+    can self-heal.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://www.cncf.io/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cncf-cloud-native
+    section: convention
+recommended_set:
+- g-linux-foundation-set-resource-limits
+- g-linux-foundation-liveness-probe
+all_set:
+- g-linux-foundation-set-resource-limits
+- g-linux-foundation-liveness-probe

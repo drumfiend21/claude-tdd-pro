@@ -1,0 +1,13 @@
+{
+  "name": "the aws ingress rule passes compliant IaC with no open ingress",
+  "command": "printf 'resource \"x\" { tags = {} }\\n' > ok.tf\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/cloud-guidance-rule.sh --rule g-aws-no-unrestricted-ingress --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule=g-aws-no-unrestricted-ingress status=green"
+    ]
+  }
+}

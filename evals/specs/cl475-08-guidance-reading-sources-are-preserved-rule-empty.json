@@ -1,0 +1,13 @@
+{
+  "name": "the original guidance reading-sources are preserved as rule-empty",
+  "command": "grep -qE '^rules: \\[\\]' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/aws-well-architected.yaml\" && grep -qE '^rules: \\[\\]' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/security-governance/cisa-ssdf.yaml\" && echo guidance-preserved 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "guidance-preserved"
+    ]
+  }
+}

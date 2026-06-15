@@ -1,0 +1,13 @@
+{
+  "name": "the azure namespace enforces encryption at rest on IaC",
+  "command": "printf 'resource x {}\\n' > a.bicep\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/cloud-guidance-rule.sh --rule g-azure-encrypt-at-rest --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-azure-encrypt-at-rest status=red"
+    ]
+  }
+}

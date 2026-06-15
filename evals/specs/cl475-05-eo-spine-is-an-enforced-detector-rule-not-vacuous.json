@@ -1,0 +1,13 @@
+{
+  "name": "the EO security spine is now an enforced detector rule rather than vacuous",
+  "command": "printf 'resource \"x\" { cidr = \"0.0.0.0/0\" }\\n' > bad.tf\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/cloud-guidance-rule.sh --rule g-security-governance-no-known-exploited-ingress --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-security-governance-no-known-exploited-ingress status=red"
+    ]
+  }
+}
