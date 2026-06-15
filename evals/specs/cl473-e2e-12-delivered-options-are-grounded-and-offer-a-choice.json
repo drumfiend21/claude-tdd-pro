@@ -1,0 +1,13 @@
+{
+  "name": "the delivered architecture options are grounded and offer the founder a choice",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"marketplace connecting dog owners with walkers\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"eventual\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"dog-walker marketplace\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>/dev/null\nruby -rjson -e 'o=JSON.parse(File.read(\"s/architecture-options.json\")); abort unless (o[\"needs_grounding\"]||[]).empty? && o[\"option_count\"].to_i>=2 && o[\"recommended_option_id\"].to_s.size>0' && echo options-grounded-and-multiple 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "options-grounded-and-multiple"
+    ]
+  }
+}

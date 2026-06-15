@@ -1,0 +1,13 @@
+{
+  "name": "a simple low-budget content site is tailored down and not over-engineered",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"cost-reduction\",\"availability_tolerance\":\"days\",\"data_loss_tolerance\":\"hours\",\"budget_posture\":\"cost-first\",\"data_volume\":\"small\",\"read_write_pattern\":\"read-heavy\",\"data_cadence\":\"batch\",\"workload\":\"a newsletter and event signup page for my community group\",\"criticality\":\"experimental\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"small\",\"consistency_need\":\"eventual\",\"communication_style\":\"synchronous\",\"integration_scope\":\"internal-only\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"community newsletter site\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>/dev/null\nruby -rjson -e 'd=JSON.parse(File.read(\"s/technical-requirements.json\")); f=d[\"pillars\"].values.flatten.map{|c| c[\"concern\"]}; ng=(d[\"needs_grounding\"]||[]).size; pk=d[\"pillars\"].keys; abort unless d[\"concerns_total\"].to_i<=20 && !f.include?(\"multi_region\") && !f.include?(\"audit_logging\") && !f.include?(\"mfa\")' && echo content-site-not-overbuilt 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "content-site-not-overbuilt"
+    ]
+  }
+}

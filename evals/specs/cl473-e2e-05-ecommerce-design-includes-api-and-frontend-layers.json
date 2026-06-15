@@ -1,0 +1,13 @@
+{
+  "name": "the e-commerce design includes a REST API gateway and a frontend hosting layer",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"online store for handmade goods\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"hyperscale\",\"consistency_need\":\"eventual\",\"communication_style\":\"synchronous\",\"integration_scope\":\"public\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"online store for handmade goods\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>/dev/null\nruby -rjson -e 'd=JSON.parse(File.read(\"s/technical-requirements.json\")); f=d[\"pillars\"].values.flatten.map{|c| c[\"concern\"]}; ng=(d[\"needs_grounding\"]||[]).size; pk=d[\"pillars\"].keys; abort unless %w[rest_api_gateway rate_limiting spa_hosting http_compression].all?{|x| f.include?(x)}' && echo ecommerce-api-and-frontend-layer 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ecommerce-api-and-frontend-layer"
+    ]
+  }
+}

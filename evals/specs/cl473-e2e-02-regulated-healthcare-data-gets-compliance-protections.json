@@ -1,0 +1,13 @@
+{
+  "name": "regulated healthcare data drives encryption audit-logging and mfa into the design",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"appointment booking for my clinic\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"external-partner\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"appointment booking for my clinic\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>/dev/null\nruby -rjson -e 'd=JSON.parse(File.read(\"s/technical-requirements.json\")); f=d[\"pillars\"].values.flatten.map{|c| c[\"concern\"]}; ng=(d[\"needs_grounding\"]||[]).size; pk=d[\"pillars\"].keys; abort unless %w[encryption_at_rest audit_logging mfa strong_consistency].all?{|x| f.include?(x)}' && echo healthcare-compliance-tailored 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "healthcare-compliance-tailored"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the delivered cloud design builds test-first and starts red until implemented",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh scaffold --decision-id d1 --pillar security --requirements \"encryption_at_rest,multi_az\" --build-dir bd 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh check --build-dir bd --unit d1",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "conformance=red"
+    ]
+  }
+}

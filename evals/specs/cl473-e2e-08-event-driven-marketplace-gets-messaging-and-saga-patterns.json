@@ -1,0 +1,13 @@
+{
+  "name": "an event-driven marketplace drives message queues dead-letter queues and event sourcing",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"marketplace connecting dog owners with walkers\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"eventual\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"dog-walker marketplace\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>/dev/null\nruby -rjson -e 'd=JSON.parse(File.read(\"s/technical-requirements.json\")); f=d[\"pillars\"].values.flatten.map{|c| c[\"concern\"]}; ng=(d[\"needs_grounding\"]||[]).size; pk=d[\"pillars\"].keys; abort unless %w[message_queue dead_letter_queue event_sourcing].all?{|x| f.include?(x)}' && echo marketplace-event-driven-tailored 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "marketplace-event-driven-tailored"
+    ]
+  }
+}

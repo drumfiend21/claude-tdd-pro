@@ -1,0 +1,13 @@
+{
+  "name": "distinct founder visions yield measurably distinct tailored designs",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"appointment booking for my clinic\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"hipaa\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"external-partner\"}}' > h.json\nprintf %s '{\"complete\":true,\"answers\":{\"motivation\":\"cost-reduction\",\"availability_tolerance\":\"days\",\"data_loss_tolerance\":\"hours\",\"budget_posture\":\"cost-first\",\"data_volume\":\"small\",\"read_write_pattern\":\"read-heavy\",\"data_cadence\":\"batch\",\"workload\":\"a newsletter and event signup page for my community group\",\"criticality\":\"experimental\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"small\",\"consistency_need\":\"eventual\",\"communication_style\":\"synchronous\",\"integration_scope\":\"internal-only\"}}' > c.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"appointment booking for my clinic\" --profile h.json --out-dir hh --now 2026-06-08T12:00:00Z 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"community newsletter site\" --profile c.json --out-dir cc --now 2026-06-08T12:00:00Z 2>/dev/null\nruby -rjson -e 'a=JSON.parse(File.read(\"hh/technical-requirements.json\"))[\"concerns_total\"].to_i; b=JSON.parse(File.read(\"cc/technical-requirements.json\"))[\"concerns_total\"].to_i; abort unless a>b && a>0 && b>0' && echo distinct-visions-distinct-designs 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "distinct-visions-distinct-designs"
+    ]
+  }
+}

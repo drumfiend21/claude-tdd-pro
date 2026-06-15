@@ -1,0 +1,13 @@
+{
+  "name": "the delivered design closes the vision to implementation loop with build requirements",
+  "command": "printf %s '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"marketplace connecting dog owners with walkers\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"eventual\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"dog-walker marketplace\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/optimize-options.sh --options s/architecture-options.json --profile p.json --out scoring.json 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/decision-package.sh --options s/architecture-options.json --scoring scoring.json --out dp.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "loop_closed=true"
+    ]
+  }
+}
