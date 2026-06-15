@@ -1,0 +1,13 @@
+{
+  "name": "the conformance auditor flags an ungrounded cloud convention rule",
+  "command": "mkdir -p standards/cloud-conventions\nprintf %s '- id: bad\n  source_id: not-in-any-catalog\n  kind: patterning\n  mode: require\n  token: \"x\"\n  message: \"m\"\n' > standards/cloud-conventions/bad.yaml\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "surface=cloud-conventions status=red"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the conformance auditor flags a coding rule that is missing provenance",
+  "command": "mkdir -p generated-code-quality-standards/google\nprintf %s 'source:\n  id: x\nrules:\n  - id: nop\n    name: n\n    severity: P1\n' > generated-code-quality-standards/google/bad.yaml\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "surface=coding-rules status=red"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the compliance registry ships a regulatory framework authority",
+  "command": "grep -q \"nist-ai-rmf\" \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/COMPLIANCE-URLS.yaml\" && echo compliance-registry-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "compliance-registry-grounded"
+    ]
+  }
+}

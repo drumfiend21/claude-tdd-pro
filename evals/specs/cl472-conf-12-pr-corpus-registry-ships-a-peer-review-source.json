@@ -1,0 +1,13 @@
+{
+  "name": "the pr-corpus registry ships a federal peer-review source",
+  "command": "grep -q \"cfpb-consumerfinance\" \"$CLAUDE_PLUGIN_ROOT/pr-corpus/PR-SOURCES-DEFAULT.yaml\" && echo pr-corpus-registry-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pr-corpus-registry-grounded"
+    ]
+  }
+}

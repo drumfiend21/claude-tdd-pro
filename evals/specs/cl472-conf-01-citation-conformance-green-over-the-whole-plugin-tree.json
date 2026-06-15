@@ -1,0 +1,13 @@
+{
+  "name": "every producing surface in the whole plugin tree passes citation conformance",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root \"$CLAUDE_PLUGIN_ROOT\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "citation-conformance status=green surfaces=5 ungrounded=0"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "every reading-source file carries an authoritative source header",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root \"$CLAUDE_PLUGIN_ROOT\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "surface=reading-sources status=green"
+    ]
+  }
+}

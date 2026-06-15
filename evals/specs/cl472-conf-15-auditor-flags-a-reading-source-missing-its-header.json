@@ -1,0 +1,13 @@
+{
+  "name": "the conformance auditor flags a reading-source missing its source header",
+  "command": "mkdir -p generated-code-quality-standards/google\nprintf %s 'rules: []\nrecommended_set: []\nall_set: []\n' > generated-code-quality-standards/google/headerless.yaml\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "surface=reading-sources status=red"
+    ]
+  }
+}

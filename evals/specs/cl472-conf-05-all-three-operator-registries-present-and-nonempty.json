@@ -1,0 +1,13 @@
+{
+  "name": "all three operator registries are present and non-empty",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root \"$CLAUDE_PLUGIN_ROOT\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "surface=registries status=green items=3"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "a convention rule citing the cloud-architecture catalog is grounded",
+  "command": "printf %s 'resource \"x\" \"y\" {}\n' > green.tf\nprintf %s '- id: t1\n  source_id: aws-well-architected\n  kind: patterning\n  mode: require\n  token: \"resource\"\n  message: \"m\"\n' > rs.yaml\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-conventions.sh --tool terraform --iac green.tf --ruleset rs.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "conventions=green"
+    ]
+  }
+}

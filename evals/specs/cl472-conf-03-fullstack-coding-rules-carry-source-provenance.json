@@ -1,0 +1,13 @@
+{
+  "name": "every full-stack coding rule carries source provenance",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-citation-conformance.sh --root \"$CLAUDE_PLUGIN_ROOT\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "surface=coding-rules status=green"
+    ]
+  }
+}

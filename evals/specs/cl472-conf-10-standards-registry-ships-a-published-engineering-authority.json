@@ -1,0 +1,13 @@
+{
+  "name": "the standards registry ships a published engineering authority",
+  "command": "grep -q \"google-tsguide\" \"$CLAUDE_PLUGIN_ROOT/standards/sources.yaml\" && echo standards-registry-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "standards-registry-grounded"
+    ]
+  }
+}
