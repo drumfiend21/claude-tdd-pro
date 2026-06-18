@@ -1,0 +1,13 @@
+{
+  "name": "the allow-any affordance still suppresses a justified any annotation",
+  "command": "printf '// allow-any: legacy boundary\\nexport const y: any = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=pass"
+    ]
+  }
+}

@@ -187,14 +187,16 @@ TRUNCATED=false
 EXTRA_STDERR=""
 while IFS= read -r f; do
   [ -z "$f" ] || [ ! -f "$f" ] && continue
-  # Quick filter: skip files that don't contain "any" pattern.
-  grep -qE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' "$f" 2>/dev/null || continue
+  # Quick filter: skip files that don't contain "any" pattern. Strip `//` line
+  # comments first so `: any` inside a comment (e.g. "// Fail-closed: any error")
+  # is never a finding — only real annotations count (false-positive fix).
+  sed 's,//.*,,' "$f" 2>/dev/null | grep -qE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' 2>/dev/null || continue
 
   # allow-any comment affordance: each `// allow-any: <reason>` comment
   # covers one `: any` annotation in the same file (one-for-one). Only
   # the UNCOVERED count yields findings.
   ALLOW_COUNT=$(grep -cE '^[[:space:]]*//[[:space:]]*allow-any:' "$f" 2>/dev/null | tr -d ' \n')
-  ANY_COUNT=$(grep -cE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' "$f" 2>/dev/null | tr -d ' \n')
+  ANY_COUNT=$(sed 's,//.*,,' "$f" 2>/dev/null | grep -cE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' 2>/dev/null | tr -d ' \n')
   : "${ALLOW_COUNT:=0}"
   : "${ANY_COUNT:=0}"
   UNCOVERED=$((ANY_COUNT - ALLOW_COUNT))
@@ -232,7 +234,7 @@ while IFS= read -r f; do
       ' >> "$FINDINGS_TMP"
       VIOLATION_COUNT=$((VIOLATION_COUNT + 1))
       EMITTED_FOR_FILE=$((EMITTED_FOR_FILE + 1))
-    done < <(grep -nE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' "$f" 2>/dev/null)
+    done < <(sed 's,//.*,,' "$f" 2>/dev/null | grep -nE ':[[:space:]]*any\b|<any>|as[[:space:]]+any\b' 2>/dev/null)
   fi
 
   # max_per_file: too many allow-any comments is a code smell even when

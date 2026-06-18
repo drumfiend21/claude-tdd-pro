@@ -1712,3 +1712,9 @@ The downstream consumer (GCTP) found the CL-477 tri-state was insufficient: a de
 - **Aggregate exit:** `0` iff every rule is `pass` or `not_applicable`; `1` any fail; `3` no fail but ≥1 `not_enforced` (never collapses to success); `2` usage/unknown. Markers: `enforce rule=<id> detector=<d> verdict=<v> files_evaluated=<n>` + `enforce status=<green|red|incomplete> pass=<> fail=<> not_applicable=<> not_enforced=<>`.
 
 5 specs (`cl478-01..05`) + `cl477-e-03` updated to the 4-state meaning. No new feature ID / contract. Suite 4266→4271.
+
+### §28.19 `no-any` comment/string false-positive fix ("Fix G", 2026-06-15)
+
+The kata build reported the TypeScript "fails `no-any`" — but the single finding was on a *comment* (`// Fail-closed: any policy error…`): the grep `:[[:space:]]*any\b|<any>|as[[:space:]]+any\b` matched `: any` inside the comment text (0 real `any` annotations in the code; corroborated by GCTP's independent run). CL-479 strips `//` line comments (`sed 's,//.*,,'`, preserving line numbers) before the three `: any` greps (quick-filter, count, per-line) so a `: any` / `as any` / `<any>` inside a `//` comment is never a finding; real `x: any` annotations and the `// allow-any:` affordance are unchanged. Net: the kata `confidence_gate/index.ts` now passes `no-any` (`enforce --rule g-ts-001` → `verdict=pass`), removing inflated non-conformance.
+
+3 specs (`cl479-g-01..03`: ignores comment any · still flags real any · allow-any still suppresses). Detector-precision fix; no new feature ID / contract. **CTP-side remaining after this: Fix F only** (prose/Markdown detectors flowing through the standards catalog per §28.17 Correction 4). Suite 4271→4274.

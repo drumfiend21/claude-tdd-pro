@@ -1,0 +1,13 @@
+{
+  "name": "no-any still flags a real any type annotation in code",
+  "command": "printf 'export const y: any = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "verdict=fail"
+    ]
+  }
+}
