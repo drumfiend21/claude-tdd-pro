@@ -1,0 +1,13 @@
+{
+  "name": "a rule with no matching files is not_applicable rather than a vacuous pass",
+  "command": "printf 'resource x {}\\n' > main.tf\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule=g-ts-001 detector=no-any.sh verdict=not_applicable files_evaluated=0"
+    ]
+  }
+}

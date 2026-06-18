@@ -1701,3 +1701,14 @@ A downstream consumer (GCTP) built a real O'Reilly-kata submission and found tha
 - **Correction 4 (for Fix F, not yet built)** — any new doc/prose detectors MUST be emitted into `generated-code-quality-standards/` with an `id` + `source_namespace` so `standards-sync` carries them into `active.json`; otherwise a consumer can never scope them into `applicable_rules`.
 
 8 specs (`cl477-e-01..08`): external-tree run; catalog dispatch (g-ts-001→no-any, g-ts-006→type-test-coverage — the collision proof); clean pass; tri-state not_enforced; cloud-rule generalization; per-rule verdicts; unknown-rule + missing-root usage errors. No new feature ID / contract (reuses §2.2 detectors). **Remaining CTP-side:** Fix F (prose/Markdown/Python detectors flowing through the standards catalog — recommended) and Fix G (the `no-any` comment/string false positive). Consumer-side (NOT this repo): Fix A decompose-union, Fix B inner-loop runs `enforce.sh`, Fix C dynamic re-run gate, Fix D `app_root` model. Suite 4258→4266.
+
+### §28.18 `enforce.sh` 4-state verdict + `files_evaluated` (vacuous-green fix; freezes the Fix-E contract, 2026-06-15)
+
+The downstream consumer (GCTP) found the CL-477 tri-state was insufficient: a detector that *ran but matched no files* exits 0 → reported `pass` — a **vacuous green** indistinguishable from a real clean pass (verified: `g-ts-001` on a `.tf`-only tree, and an EO cloud rule on a pure-`.ts` tree, both returned `pass`). That is the same false-green disease the whole effort targets, one layer down. CL-478 closes it and **freezes the `enforce.sh` contract** that the consumer's Fix B/C build against.
+
+- **Four verdict states per rule** (was three): `pass` = ran AND ≥1 file evaluated AND 0 findings · `fail` = ≥1 finding · **`not_applicable`** = 0 files matched the rule's scope (NEUTRAL, distinct from pass) · `not_enforced` = files existed but the detector could not verify (tool/model absent) → RED. `enforce.sh` determines applicability by **counting matching files itself** (robust; not by overloading the detector exit-3).
+- **`files_evaluated` count per rule** in the stderr marker + `--json`, so a consumer's re-run gate can assert *every green rule actually touched a file* — "pass" is now falsifiable.
+- **EO semantics (agreed on the record):** EO rules use `cloud-guidance-rule.sh`'s IaC `applies` glob, so on a pure-code ticket they return `not_applicable` ("EO-by-attestation covers the rest"), never a vacuous green and never red.
+- **Aggregate exit:** `0` iff every rule is `pass` or `not_applicable`; `1` any fail; `3` no fail but ≥1 `not_enforced` (never collapses to success); `2` usage/unknown. Markers: `enforce rule=<id> detector=<d> verdict=<v> files_evaluated=<n>` + `enforce status=<green|red|incomplete> pass=<> fail=<> not_applicable=<> not_enforced=<>`.
+
+5 specs (`cl478-01..05`) + `cl477-e-03` updated to the 4-state meaning. No new feature ID / contract. Suite 4266→4271.

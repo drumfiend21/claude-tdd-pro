@@ -1,0 +1,14 @@
+{
+  "name": "an all-not-applicable run is green and not a failure",
+  "command": "printf 'resource x {}\\n' > main.tf\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001 --rule g-react-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "status=green",
+      "not_applicable=2"
+    ]
+  }
+}

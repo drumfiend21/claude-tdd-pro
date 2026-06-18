@@ -1,0 +1,13 @@
+{
+  "name": "a genuine pass reports a non-zero files_evaluated count so it is falsifiable",
+  "command": "printf 'export const x: number = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=pass files_evaluated=1"
+    ]
+  }
+}

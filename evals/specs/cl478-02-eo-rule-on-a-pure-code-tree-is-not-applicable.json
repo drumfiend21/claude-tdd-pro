@@ -1,0 +1,13 @@
+{
+  "name": "an EO cloud rule on a pure-code tree is not_applicable, verified elsewhere by attestation",
+  "command": "printf 'export const x = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-aws-no-unrestricted-ingress",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule=g-aws-no-unrestricted-ingress detector=cloud-guidance-rule.sh verdict=not_applicable"
+    ]
+  }
+}

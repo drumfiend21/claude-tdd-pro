@@ -62,55 +62,80 @@ ruby -ryaml -rjson -e '
     d = (YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
     (d["rules"] || []).each { |r| catalog[r["id"]] = r["detector"] if r.is_a?(Hash) && r["id"] && r["detector"] }
   end
+  # cloud rule -> applies glob(s), from the §28.15 detector manifest (its own scope).
+  cloud_applies = {}
+  cm = File.join(plugin, "rubric", "detectors", "cloud-guidance-rules.json")
+  if File.exist?(cm)
+    (JSON.parse(File.read(cm))["rules"] || {}).each { |id, s| cloud_applies[id] = s["applies"].to_s }
+  end
 
-  # default file glob per rule namespace when --paths is not supplied
-  def default_glob(root, id)
+  # default single file glob per rule namespace when --paths is not supplied
+  def ns_glob(id)
     case id
-    when /^g-react-/ then "#{root}/**/*.tsx"
-    when /^g-ts-/, /^g-node-/ then "#{root}/**/*.ts"
-    else "#{root}/**/*"
+    when /^g-react-/ then "*.tsx"
+    when /^g-ts-/, /^g-node-/ then "*.ts"
+    else "*"
     end
+  end
+  def count_files(globs)
+    globs.flat_map { |g| Dir.glob(g) }.uniq.select { |p| File.file?(p) }.size
   end
 
   results = []
   rules.each do |id|
     det = catalog[id]
     unless det
-      results << { "rule" => id, "detector" => nil, "verdict" => "unknown_rule", "exit" => 2 }
+      results << { "rule" => id, "detector" => nil, "verdict" => "unknown_rule", "files_evaluated" => 0, "exit" => 2 }
       next
     end
     det_path = File.join(plugin, "rubric", "detectors", det)
-    if det == "cloud-guidance-rule.sh"
-      # the working external-tree-by-rule-id precedent: --rule <id> --root <dir>
-      cmd = ["bash", det_path, "--rule", id, "--root", root]
+    is_cloud = (det == "cloud-guidance-rule.sh")
+    # scope = full glob string(s) this rule legitimately evaluates, used identically
+    # for the file count AND the detector. Cloud rules use their OWN IaC applies-glob
+    # (so an EO rule on a pure-code tree is not_applicable, never a vacuous green);
+    # code rules use --paths (as given) or the namespace default under root.
+    if is_cloud
+      globs = (cloud_applies[id].to_s.empty? ? ["*"] : cloud_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
+    elsif user_paths.empty?
+      globs = [File.join(root, "**", ns_glob(id))]
     else
-      glob = user_paths.empty? ? default_glob(root, id) : user_paths
-      cmd = ["bash", det_path, "--paths", glob]
+      globs = user_paths.split(",").map(&:strip)
     end
+    files = count_files(globs)
+
+    if files.zero?
+      # 0 files matched the rule scope -> not_applicable (NEUTRAL, distinct from pass).
+      # This kills the vacuous-green class: "nothing to check" is never a pass.
+      results << { "rule" => id, "detector" => det, "verdict" => "not_applicable", "files_evaluated" => 0, "exit" => 0 }
+      next
+    end
+
+    cmd = is_cloud ? ["bash", det_path, "--rule", id, "--root", root] \
+                   : ["bash", det_path, "--paths", (user_paths.empty? ? globs[0] : user_paths)]
     system(*cmd, out: File::NULL, err: File::NULL)
     ec = $?.exitstatus
     verdict = case ec
-              when 0 then "pass"
-              when 1 then "fail"
-              else "not_enforced"   # 3 = skip/not-applicable/deferred, 2 = tool/usage -> could not enforce
+              when 0 then "pass"          # ran, >=1 file evaluated, 0 findings
+              when 1 then "fail"          # ran, >=1 finding
+              else "not_enforced"          # had files, detector could not verify (tool/model absent) -> RED, never a pass
               end
-    results << { "rule" => id, "detector" => det, "verdict" => verdict, "exit" => ec }
+    results << { "rule" => id, "detector" => det, "verdict" => verdict, "files_evaluated" => files, "exit" => ec }
   end
 
-  npass = results.count { |r| r["verdict"] == "pass" }
-  nfail = results.count { |r| r["verdict"] == "fail" }
-  nunk  = results.count { |r| r["verdict"] == "unknown_rule" }
-  nun   = results.count { |r| r["verdict"] == "not_enforced" }
+  cnt = ->(v) { results.count { |r| r["verdict"] == v } }
+  npass, nfail, nna, nun, nunk = cnt["pass"], cnt["fail"], cnt["not_applicable"], cnt["not_enforced"], cnt["unknown_rule"]
 
-  results.each { |r| STDERR.puts "enforce rule=#{r["rule"]} detector=#{r["detector"]} verdict=#{r["verdict"]}" }
-  status = nfail.zero? && nun.zero? && nunk.zero? ? "green" : (nfail.positive? || nunk.positive? ? "red" : "incomplete")
-  STDERR.puts "enforce status=#{status} pass=#{npass} fail=#{nfail} not_enforced=#{nun}"
+  results.each { |r| STDERR.puts "enforce rule=#{r["rule"]} detector=#{r["detector"]} verdict=#{r["verdict"]} files_evaluated=#{r["files_evaluated"]}" }
+  status = (nfail.positive? || nunk.positive?) ? "red" : (nun.positive? ? "incomplete" : "green")
+  STDERR.puts "enforce status=#{status} pass=#{npass} fail=#{nfail} not_applicable=#{nna} not_enforced=#{nun}"
 
   if want_json
     puts JSON.generate({ "root" => root, "results" => results,
-                         "summary" => { "pass" => npass, "fail" => nfail, "not_enforced" => nun, "unknown_rule" => nunk } })
+                         "summary" => { "pass" => npass, "fail" => nfail, "not_applicable" => nna,
+                                        "not_enforced" => nun, "unknown_rule" => nunk } })
   end
 
+  # exit 0 iff every rule is pass OR not_applicable; fail/unknown -> 1/2; not_enforced -> 3 (never collapses to success)
   exit 2 if nunk.positive?
   exit 1 if nfail.positive?
   exit 3 if nun.positive?

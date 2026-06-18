@@ -1,0 +1,15 @@
+{
+  "name": "the summary reports distinct counts for the four verdict states",
+  "command": "printf 'export const x: any = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001 --rule g-aws-no-unrestricted-ingress",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "status=red",
+      "fail=1",
+      "not_applicable=1"
+    ]
+  }
+}
