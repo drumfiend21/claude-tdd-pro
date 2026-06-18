@@ -1,0 +1,15 @@
+{
+  "name": "enforce reports a distinct verdict for each rule across multiple rules",
+  "command": "printf 'export const x: any = 1;\\nexport function f() { throw new Error(\"x\"); }\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001 --rule g-node-002",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "enforce rule=g-ts-001 detector=no-any.sh verdict=fail",
+      "enforce rule=g-node-002 detector=naked-throw.sh verdict=fail",
+      "fail=2"
+    ]
+  }
+}

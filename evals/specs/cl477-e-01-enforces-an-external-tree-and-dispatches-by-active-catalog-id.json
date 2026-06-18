@@ -1,0 +1,13 @@
+{
+  "name": "enforce runs against an external tree and dispatches g-ts-001 to the no-any detector",
+  "command": "printf 'export const x: any = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "enforce rule=g-ts-001 detector=no-any.sh verdict=fail"
+    ]
+  }
+}

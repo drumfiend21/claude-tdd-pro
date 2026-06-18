@@ -1,0 +1,13 @@
+{
+  "name": "enforce generalizes the cloud-guidance-rule root contract for an IaC rule",
+  "command": "printf 'resource x { cidr = \"0.0.0.0/0\" }\\n' > bad.tf\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-aws-no-unrestricted-ingress",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "enforce rule=g-aws-no-unrestricted-ingress detector=cloud-guidance-rule.sh verdict=fail"
+    ]
+  }
+}

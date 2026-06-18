@@ -1,0 +1,14 @@
+{
+  "name": "enforce reports a detector that cannot run as not_enforced rather than a pass",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-001 --paths './x/**/*.go'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 3,
+    "stderr_contains": [
+      "verdict=not_enforced",
+      "status=incomplete"
+    ]
+  }
+}

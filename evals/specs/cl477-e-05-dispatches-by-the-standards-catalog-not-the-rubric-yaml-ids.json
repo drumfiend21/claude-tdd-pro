@@ -1,0 +1,13 @@
+{
+  "name": "enforce dispatches g-ts-006 to type-test-coverage per the standards catalog not RUBRIC.yaml",
+  "command": "printf 'export const x: any = 1;\\n' > a.ts\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-ts-006",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "enforce rule=g-ts-006 detector=type-test-coverage.sh"
+    ]
+  }
+}

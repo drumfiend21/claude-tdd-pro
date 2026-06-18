@@ -1,0 +1,13 @@
+{
+  "name": "enforce treats an unknown rule id as a usage error rather than a silent pass",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-not-a-real-rule",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "verdict=unknown_rule"
+    ]
+  }
+}
