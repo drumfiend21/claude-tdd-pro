@@ -1,0 +1,13 @@
+{
+  "name": "the documentation rules are registered in the standards catalog and cite a source",
+  "command": "grep -q 'id: g-doc-001' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/documentation/doc-enforcement.yaml\" && grep -q 'source: madr' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/documentation/doc-enforcement.yaml\" && echo doc-rules-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "doc-rules-grounded"
+    ]
+  }
+}

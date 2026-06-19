@@ -1,0 +1,13 @@
+{
+  "name": "enforce does not flag ordinary non-ADR markdown such as a README",
+  "command": "printf '# Readme\\nhello world\\n' > README.md\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-doc-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule=g-doc-001 detector=adr-structure.sh verdict=pass"
+    ]
+  }
+}

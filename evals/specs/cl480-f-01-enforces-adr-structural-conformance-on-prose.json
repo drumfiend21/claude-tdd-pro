@@ -1,0 +1,13 @@
+{
+  "name": "enforce applies ADR structural conformance to a well-formed decision record",
+  "command": "printf '# 0001. choose x\\n- Status: accepted\\n## Context\\nwhy.\\n## Decision\\nchose x. Grounding sources: aws-well-architected.\\n## Consequences\\ntrade-offs.\\n' > 0001-x.md\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-doc-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule=g-doc-001 detector=adr-structure.sh verdict=pass"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+---
+source:
+  id: madr
+  authoritative_publisher: MADR (Markdown Any Decision Records)
+  authoritative_url: https://adr.github.io/madr/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:madr-placeholder-content-hash-for-bootstrap
+  fetch_frequency: monthly
+  fragility_tier: low
+  license_note: Reference/educational use - (c) MADR project (CC0)
+rules: []
+recommended_set: []
+all_set: []

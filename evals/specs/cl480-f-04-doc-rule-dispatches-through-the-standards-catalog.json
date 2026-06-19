@@ -1,0 +1,13 @@
+{
+  "name": "enforce dispatches the documentation rule through the standards catalog to its detector",
+  "command": "printf '# 0001. choose x\\n- Status: accepted\\n## Context\\nwhy.\\n## Decision\\nchose x. Grounding sources: aws-well-architected.\\n## Consequences\\ntrade-offs.\\n' > 0001-x.md\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-doc-001 --json 2>/dev/null | grep -q 'adr-structure.sh' && echo doc-rule-in-catalog 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "doc-rule-in-catalog"
+    ]
+  }
+}

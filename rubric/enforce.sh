@@ -74,6 +74,7 @@ ruby -ryaml -rjson -e '
     case id
     when /^g-react-/ then "*.tsx"
     when /^g-ts-/, /^g-node-/ then "*.ts"
+    when /^g-doc-/ then "*.md"
     else "*"
     end
   end

@@ -1,0 +1,58 @@
+---
+source:
+  id: madr
+  authoritative_publisher: MADR (Markdown Any Decision Records)
+  authoritative_url: https://adr.github.io/madr/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:doc-enforcement-placeholder-content-hash-for-bootstrap
+  fetch_frequency: monthly
+  fragility_tier: low
+  license_note: Reference/educational use - (c) MADR project (CC0)
+rules:
+- id: g-doc-001
+  name: adr-structural-conformance
+  description: Architecture Decision Records must carry the MADR sections Status,
+    Context, Decision, and Consequences.
+  detector: adr-structure.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://adr.github.io/madr/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: madr
+    section: ADR-template
+- id: g-doc-002
+  name: adr-citation-presence
+  description: Every Architecture Decision Record must cite at least one grounding
+    source (cite-or-decline on prose).
+  detector: doc-citation-presence.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://adr.github.io/madr/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: madr
+    section: ADR-template
+recommended_set:
+- g-doc-001
+- g-doc-002
+all_set:
+- g-doc-001
+- g-doc-002

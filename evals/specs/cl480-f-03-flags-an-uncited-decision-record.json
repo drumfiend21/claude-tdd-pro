@@ -1,0 +1,13 @@
+{
+  "name": "enforce flags an Architecture Decision Record that cites no grounding source",
+  "command": "printf '# 0001. choose x\\n- Status: accepted\\n## Context\\nwhy.\\n## Decision\\nchose option x.\\n## Consequences\\ntrade-offs.\\n' > 0001-x.md\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-doc-002",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-doc-002 detector=doc-citation-presence.sh verdict=fail"
+    ]
+  }
+}

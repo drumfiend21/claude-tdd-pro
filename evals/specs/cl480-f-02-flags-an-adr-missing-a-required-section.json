@@ -1,0 +1,13 @@
+{
+  "name": "enforce flags an ADR that is missing a required MADR section",
+  "command": "printf '# 0001. choose x\\n- Status: accepted\\n## Context\\nwhy.\\n## Decision\\nchose x. Grounding sources: aws-well-architected.\\n' > 0001-x.md\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-doc-001",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-doc-001 detector=adr-structure.sh verdict=fail"
+    ]
+  }
+}
