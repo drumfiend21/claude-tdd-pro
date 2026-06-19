@@ -1,0 +1,13 @@
+{
+  "name": "the session-start hook runs the source refresh each session",
+  "command": "grep -q 'initial-refresh.sh' \"$CLAUDE_PLUGIN_ROOT/hooks/hooks.json\" && echo hook-wired 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "hook-wired"
+    ]
+  }
+}

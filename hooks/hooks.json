@@ -12,6 +12,11 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/sync-memory.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/standards/initial-refresh.sh --quiet",
+            "timeout": 15
           }
         ]
       }

@@ -470,6 +470,26 @@ cmd_init() {
   WITH_GROK="${WITH_GROK:-0}"
   WITH_LSP="${WITH_LSP:-1}"
 
+  if [[ -z "${REFRESH_FREQ:-}" ]]; then
+    describe \
+      "Standards refresh — why this matters" \
+      "" \
+      "This plugin does not enforce arbitrary opinions. Every rule, pattern, and" \
+      "standard it enforces on your architecture and code is DERIVED FROM first-class" \
+      "published sources — OWASP, Google, NIST, US/federal, SLSA, AWS Well-Architected." \
+      "Those sources are SCRAPED from their live URLs, and the rules are generated and" \
+      "cited from them (cite-or-decline)." \
+      "" \
+      "Upstream guidance changes over time. The plugin RE-SCRAPES the sources on a" \
+      "schedule and refreshes the enforced rules so you are never held to a stale" \
+      "standard — and so new guidance becomes new enforcement automatically." \
+      "" \
+      "How often should it refresh?  <N><unit>  unit = m(min) h(hour) d(day) w(week) mo(month)" \
+      "  examples: 30m · 6h · 1d (default — every day) · 1w · 1mo"
+    prompt REFRESH_FREQ "Refresh frequency" "1d"
+  fi
+  REFRESH_FREQ="${REFRESH_FREQ:-1d}"
+
   if [[ "$PROMPTS_AVAILABLE" -eq 1 ]]; then
     cat >&2 <<PLAN
 
@@ -479,6 +499,7 @@ Plan:
   scope:    $SCOPE
   grok:     $( [[ $WITH_GROK -eq 1 ]] && echo yes || echo no )
   lsp:      $( [[ $WITH_LSP  -eq 1 ]] && echo yes || echo no )
+  refresh:  every $REFRESH_FREQ (re-scrape sources -> refresh enforced rules)
   pin:      $( [[ -n "$PIN" ]] && echo "$PIN" || echo "main HEAD" )
 
 PLAN
@@ -554,6 +575,16 @@ PLAN
   fi
 
   ( bash "$CLONE_DIR/evals/runner.sh" >"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
+  disown 2>/dev/null || true
+
+  # Step 8b — record the chosen refresh cadence (S-22) and BEGIN refreshing the sources
+  # immediately, in the background (network-tolerant, never blocks/breaks install).
+  bash "$CLONE_DIR/commands/set-refresh-frequency.sh" "${REFRESH_FREQ:-1d}" \
+    --config "$CLONE_DIR/.claude-tdd-pro/FETCH-FREQUENCIES.yaml" >/dev/null 2>&1 \
+    || bash "$CLONE_DIR/commands/set-refresh-frequency.sh" "1d" \
+       --config "$CLONE_DIR/.claude-tdd-pro/FETCH-FREQUENCIES.yaml" >/dev/null 2>&1 || true
+  ( CLAUDE_PLUGIN_ROOT="$CLONE_DIR" bash "$CLONE_DIR/standards/initial-refresh.sh" \
+      >>"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
   disown 2>/dev/null || true
 
   local elapsed=$(($SECONDS - $START_SECONDS))

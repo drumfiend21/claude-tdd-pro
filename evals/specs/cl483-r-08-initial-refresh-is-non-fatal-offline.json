@@ -1,0 +1,13 @@
+{
+  "name": "the initial refresh is non-fatal when the state directory cannot be created",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/standards/initial-refresh.sh --state-dir /nonexistent/x/y --quiet --now z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+
+    ]
+  }
+}

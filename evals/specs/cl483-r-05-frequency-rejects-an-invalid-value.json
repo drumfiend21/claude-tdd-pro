@@ -1,0 +1,13 @@
+{
+  "name": "the refresh frequency rejects an invalid value",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/commands/set-refresh-frequency.sh bogus --config ff.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "invalid frequency"
+    ]
+  }
+}

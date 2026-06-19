@@ -1,0 +1,13 @@
+{
+  "name": "the default refresh frequency is every day",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/commands/set-refresh-frequency.sh --config ff.yaml >/dev/null 2>&1 && grep -q 'default: daily' ff.yaml && echo default-daily 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "default-daily"
+    ]
+  }
+}

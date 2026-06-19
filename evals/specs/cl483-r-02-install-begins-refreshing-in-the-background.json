@@ -1,0 +1,13 @@
+{
+  "name": "the installer begins refreshing the sources in the background on install",
+  "command": "grep -q 'standards/initial-refresh.sh' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -q 'set-refresh-frequency.sh' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo install-kicks-off-refresh 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "install-kicks-off-refresh"
+    ]
+  }
+}

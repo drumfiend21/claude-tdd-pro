@@ -1,0 +1,13 @@
+{
+  "name": "the installer prompts for refresh frequency and explains why the sources matter",
+  "command": "grep -q 'Refresh frequency' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -q 'DERIVED FROM' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -q 'RE-SCRAPES' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo explains-and-prompts 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "explains-and-prompts"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the initial refresh seeds a freshness baseline so tracking begins",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/standards/initial-refresh.sh --state-dir st --quiet --now 2026-06-15T00:00:00Z >/dev/null 2>&1; [ \"$(ls st | wc -l | tr -d ' ')\" -gt 0 ] && echo baseline-seeded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "baseline-seeded"
+    ]
+  }
+}

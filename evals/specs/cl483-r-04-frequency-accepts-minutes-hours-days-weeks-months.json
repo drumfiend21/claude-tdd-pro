@@ -1,0 +1,13 @@
+{
+  "name": "the refresh frequency accepts minutes, hours, days, weeks, and months",
+  "command": "ok=1; for v in 30m 6h 2d 1w 3mo; do bash $CLAUDE_PLUGIN_ROOT/commands/set-refresh-frequency.sh $v --config ff.yaml >/dev/null 2>&1 || ok=0; done; [ $ok = 1 ] && echo all-units-accepted 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-units-accepted"
+    ]
+  }
+}
