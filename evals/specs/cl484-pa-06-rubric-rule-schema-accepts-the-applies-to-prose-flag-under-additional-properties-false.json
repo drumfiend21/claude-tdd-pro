@@ -1,0 +1,13 @@
+{
+  "name": "rubric-rule schema accepts the applies_to_prose flag while additionalProperties stays false",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-rubric-rule.sh\" rule.yaml 2>verr.txt; rc=$?; cp rule.yaml bad.yaml && printf 'invented_field_not_in_schema: true\\n' >> bad.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-rubric-rule.sh\" bad.yaml 2>berr.txt; brc=$?; [ \"$rc\" -eq 0 ] && [ \"$brc\" -eq 2 ] && grep -q additionalProperties berr.txt && echo prose-flag-whitelisted 1>&2",
+  "setup": [
+    "cat > rule.yaml <<'YAMLEOF'\nid: g-aws-no-unrestricted-ingress\nname: no-ingress\ndescription: forbids unrestricted ingress in prose and code\ndetector: rubric/detectors/prose-judge.sh\ntype: problem\nfixable:\nhas_suggestions: false\ndeprecated: false\nreplaced_by: []\ndocs_url: https://example.com\nrequires_type_checking: false\nrecommended: true\nseverity: P0\nversion: 1.0.0\nsemver: 1.0.0\nrule_state: warn-only\napplies_to_prose: true\napplies_to_prose_kinds: [architecture, adr]\nprovenance:\n- source: commonmark\n  url: https://e.com\n  fetched_at: '2026-06-19T00:00:00Z'\nYAMLEOF"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-flag-whitelisted"
+    ]
+  }
+}

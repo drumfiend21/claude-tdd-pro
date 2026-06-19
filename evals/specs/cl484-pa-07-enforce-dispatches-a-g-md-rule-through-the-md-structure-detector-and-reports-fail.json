@@ -1,0 +1,14 @@
+{
+  "name": "enforce dispatches a g-md rule through the md-structure detector and reports fail on a bad doc",
+  "command": "printf '# Title\\n\\n```\\necho hi\\n```\\n' > README.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-md-fenced-code-language-declared",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "detector=md-structure.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

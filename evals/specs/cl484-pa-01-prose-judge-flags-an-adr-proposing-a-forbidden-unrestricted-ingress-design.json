@@ -1,0 +1,14 @@
+{
+  "name": "prose-judge flags an ADR whose decision proposes a design that violates a code rule",
+  "command": "mkdir -p docs/adr && printf '# 0099. Dev cluster networking\\n\\n## Decision\\n\\nWe will leave dev-cluster ingress unrestricted (0.0.0.0/0) for convenience.\\n' > docs/adr/0099.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths docs/adr/0099.md",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "verdict=violates",
+      "status=red"
+    ]
+  }
+}

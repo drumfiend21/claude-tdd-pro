@@ -1,0 +1,14 @@
+{
+  "name": "prose-judge falls back to not_enforced rather than a silent green when it cannot judge the prose",
+  "command": "mkdir -p docs/adr && printf '# 0098. Cluster networking\\n\\n## Decision\\n\\nIngress is restricted to the office CIDR only.\\n' > docs/adr/0098.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths docs/adr/0098.md",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 3,
+    "stderr_contains": [
+      "verdict=not_enforced",
+      "status=incomplete"
+    ]
+  }
+}

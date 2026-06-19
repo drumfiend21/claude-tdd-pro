@@ -1,0 +1,14 @@
+{
+  "name": "md-structure flags a fenced code block that declares no language per markdownlint MD040",
+  "command": "printf '# Title\\n\\n```\\nplain text\\n```\\n' > doc.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/md-structure.sh\" --rule g-md-fenced-code-language-declared --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-md-fenced-code-language-declared status=red",
+      "findings=1"
+    ]
+  }
+}

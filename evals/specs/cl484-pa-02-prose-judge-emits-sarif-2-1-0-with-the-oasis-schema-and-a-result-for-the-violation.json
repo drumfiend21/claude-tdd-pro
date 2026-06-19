@@ -1,0 +1,13 @@
+{
+  "name": "prose-judge emits SARIF 2.1.0 with the OASIS schema and a result for the violation",
+  "command": "mkdir -p docs/adr && printf '# 0099. Dev cluster networking\\n\\n## Decision\\n\\nWe will leave dev-cluster ingress unrestricted (0.0.0.0/0) for convenience.\\n' > docs/adr/0099.md && out=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths docs/adr/0099.md --json 2>/dev/null); echo \"$out\" | grep -q '\"version\":\"2.1.0\"' && echo \"$out\" | grep -q 'sarif-schema-2.1.0' && echo \"$out\" | grep -q '\"ruleId\":\"g-aws-no-unrestricted-ingress\"' && echo sarif-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "sarif-ok"
+    ]
+  }
+}

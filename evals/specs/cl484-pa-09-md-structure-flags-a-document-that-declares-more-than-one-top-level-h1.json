@@ -1,0 +1,14 @@
+{
+  "name": "md-structure flags a document that declares more than one top-level H1 per markdownlint MD025",
+  "command": "printf '# First Heading\\n\\nbody\\n\\n# Second Heading\\n' > doc.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/md-structure.sh\" --rule g-md-single-h1 --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-md-single-h1 status=red",
+      "findings=1"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "prose-judge rejects a rule id that resolves to no known rule body with a usage exit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-not-a-real-rule-xyz --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "unknown rule"
+    ]
+  }
+}

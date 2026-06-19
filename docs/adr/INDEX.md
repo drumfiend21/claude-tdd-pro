@@ -1,17 +1,11 @@
 # ADR Index
 
-Per architecture §16 W-4: every architectural decision is captured as an
-ADR (Architecture Decision Record) under `docs/adr/`. Commits touching
-ADR-tracked areas include a `Decision: <adr-id>` trailer. The full
-trail surfaces in `/audit-pack` as the **Decision Trail** section,
-which satisfies EU AI Act Art.12 record-keeping.
+Auto-regenerated per W-4. Source of truth: docs/adr/.
 
-## Regeneration
-
-Run `bash docs/adr/regenerate-index.sh --adr-dir docs/adr --index docs/adr/INDEX.md`
-to pick up new ADR files. The W-1 architect skill auto-emits ADRs into
-this directory; this index is rebuilt on every CL commit.
-
-## Records
-
-<!-- Auto-generated; do not hand-edit below this marker. -->
+- [0001-bash-runner-and-orchestration](0001-bash-runner-and-orchestration.md) — 0001. Bash + node-eval for the runner and orchestration substrate
+- [0002-npm-style-installer-with-lockfile](0002-npm-style-installer-with-lockfile.md) — 0002. npm-style installer with lockfile, preflight, and conflict detection
+- [0003-drift-band-closure-cycle](0003-drift-band-closure-cycle.md) — 0003. Drift-band closure cycle as the project's reconciliation loop
+- [0004-formal-semantic-verification](0004-formal-semantic-verification.md) — 0004. Formal semantic verification of architectural invariants
+- [0005-claude-code-upgrade-handling](0005-claude-code-upgrade-handling.md) — 0005. Intelligent Claude Code upgrade handling
+- [0006-static-context-injection-for-external-planners](0006-static-context-injection-for-external-planners.md) — 0006. Static context injection for external planners (rejecting per-feature consultation)
+- [0007-yaml-json-md-corpora-and-prose-judge](0007-yaml-json-md-corpora-and-prose-judge.md) — 0007. YAML/JSON/MD rule corpora and the prose-as-code judge (`prose-judge.sh`)

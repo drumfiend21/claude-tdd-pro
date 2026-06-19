@@ -1,0 +1,13 @@
+{
+  "name": "prose-judge caches each verdict keyed by rule-body and prose-section hash across runs",
+  "command": "mkdir -p docs/adr && printf '# 0099. Dev cluster networking\\n\\n## Decision\\n\\nWe will leave dev-cluster ingress unrestricted (0.0.0.0/0) for convenience.\\n' > docs/adr/0099.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths docs/adr/0099.md >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths docs/adr/0099.md 2>run2.err; ls .claude-tdd-pro/cache/prose-judge/*.verdict >/dev/null 2>&1 && grep -q 'verdict=violates' run2.err && echo cache-stable 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cache-stable"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the md namespace validates structurally and is registered as a known namespace grounded in commonmark",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-source-file.sh\" --file \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/md/md-standards.yaml\" 2>v.txt; grep -q 'valid=true' v.txt && grep -q 'source: commonmark' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/md/md-standards.yaml\" && grep -q ' md ' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/validate-all.sh\" && echo md-registered-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "md-registered-grounded"
+    ]
+  }
+}

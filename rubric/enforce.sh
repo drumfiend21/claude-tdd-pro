@@ -70,14 +70,14 @@ ruby -ryaml -rjson -e '
     next unless File.exist?(mp)
     (JSON.parse(File.read(mp))["rules"] || {}).each { |id, s| mf_applies[id] = s["applies"].to_s }
   end
-  RULE_DRIVEN = %w[cloud-guidance-rule.sh universal-pattern-rule.sh]
+  RULE_DRIVEN = %w[cloud-guidance-rule.sh universal-pattern-rule.sh md-structure.sh]
 
   # default single file glob per rule namespace when --paths is not supplied
   def ns_glob(id)
     case id
     when /^g-react-/ then "*.tsx"
     when /^g-ts-/, /^g-node-/ then "*.ts"
-    when /^g-doc-/ then "*.md"
+    when /^g-doc-/, /^g-md-/ then "*.md"
     else "*"
     end
   end
@@ -100,7 +100,7 @@ ruby -ryaml -rjson -e '
     # is not_applicable, and a universal rule spans every source language); code
     # detectors use --paths (as given) or the namespace default under root.
     if is_cloud
-      globs = (mf_applies[id].to_s.empty? ? ["*"] : mf_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
+      globs = (mf_applies[id].to_s.empty? ? [ns_glob(id)] : mf_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
     elsif user_paths.empty?
       globs = [File.join(root, "**", ns_glob(id))]
     else

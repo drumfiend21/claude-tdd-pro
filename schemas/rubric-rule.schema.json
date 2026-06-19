@@ -212,6 +212,15 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Backwards-compat: v0.3 substrate language tags. Will be deprecated in favor of applies_to."
+    },
+    "applies_to_prose": {
+      "type": "boolean",
+      "description": "When true (default false), this rule also binds architectural Markdown prose (ADR/architecture docs) via rubric/detectors/prose-judge.sh, not only its code-shape detector. The prose-as-code principle (ADR-0007 / §28.24)."
+    },
+    "applies_to_prose_kinds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Which Markdown section kinds (frontmatter kind:, default [architecture, adr]) prose-judge evaluates this rule against. Only meaningful when applies_to_prose is true."
     }
   }
 }
