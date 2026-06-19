@@ -1,0 +1,13 @@
+{
+  "name": "adding a principle to the catalog promotes a g-universal rule with no code change",
+  "command": "mkdir -p generated-code-quality-standards/_universal rubric/detectors standards\nprintf '%s' '{\"principles\":[{\"id\":\"g-universal-zzz-test\",\"name\":\"t\",\"description\":\"d\",\"source\":\"owasp-asvs\",\"section\":\"x\",\"severity\":\"P2\",\"mode\":\"forbid\",\"classification\":\"universal\",\"patterns\":[\"ZZZSECRET\"]}]}' > standards/universal-standards-catalog.json\nbash $CLAUDE_PLUGIN_ROOT/commands/promote-universal-rules.sh --root . >/dev/null 2>&1\ngrep -q 'id: g-universal-zzz-test' generated-code-quality-standards/_universal/universal-standards.yaml && echo catalog-driven 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "catalog-driven"
+    ]
+  }
+}

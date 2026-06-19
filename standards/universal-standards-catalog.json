@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "note": "Curated catalog of generally-applicable, language-agnostic standards. Adding coverage = appending a principle here (DATA, no code edit). source_content_hash is the upstream hash when the principle was last reviewed; universal-coverage-sync re-promotes only when a source hash diverges (S-21/S-5 gated).",
+  "principles": [
+    {
+      "id": "g-universal-no-hardcoded-secrets",
+      "name": "no-hardcoded-secrets",
+      "description": "No credential, key, or token literal may be committed to source in any language; load secrets from the environment or a secret store.",
+      "source": "owasp-asvs",
+      "section": "V2.10",
+      "severity": "P0",
+      "mode": "forbid",
+      "classification": "universal",
+      "source_content_hash": "sha256:owasp-asvs-placeholder-content-hash-for-bootstrap",
+      "patterns": [
+        "AKIA[0-9A-Z]{16}",
+        "BEGIN [A-Z ]*PRIVATE KEY",
+        "(password|passwd|secret|api_?key|access_?key|auth_?token|client_?secret|token)[\"'`]?\\s*[:=]{1,2}\\s*[\"'`][^\"'`]{6,}[\"'`]"
+      ]
+    },
+    {
+      "id": "g-universal-no-debug-output",
+      "name": "no-debug-output-in-source",
+      "description": "No raw debug print/console output in production source in any language; use a structured logger.",
+      "source": "google-eng-practices",
+      "section": "logging",
+      "severity": "P2",
+      "mode": "forbid",
+      "classification": "universal",
+      "source_content_hash": "sha256:google-eng-practices-placeholder-content-hash-for-bootstrap",
+      "patterns": [
+        "console\\.(log|debug|info|warn)\\s*\\(",
+        "\\bprint\\s*\\(",
+        "fmt\\.Print",
+        "System\\.out\\.print",
+        "println!\\s*\\(",
+        "Console\\.WriteLine"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "only the changed source does work; an unchanged source in the same run is skipped",
+  "command": "mkdir -p state\nprintf '{\"content_hash\":\"sha256:NEW\"}' > state/owasp-asvs.json\nbash $CLAUDE_PLUGIN_ROOT/commands/universal-coverage-sync.sh --state-dir state --ledger l.jsonl --no-promote --now 2026-06-15T01:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "source=google-eng-practices status=unchanged-skipped",
+      "changed=1"
+    ]
+  }
+}

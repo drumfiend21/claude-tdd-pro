@@ -1,0 +1,13 @@
+{
+  "name": "the sync is resumable: once a changed hash is recorded it is not reprocessed next run",
+  "command": "mkdir -p state\nprintf '{\"content_hash\":\"sha256:NEW\"}' > state/owasp-asvs.json\nbash $CLAUDE_PLUGIN_ROOT/commands/universal-coverage-sync.sh --state-dir state --ledger l.jsonl --no-promote --now 2026-06-15T01:00:00Z >/dev/null 2>&1\nbash $CLAUDE_PLUGIN_ROOT/commands/universal-coverage-sync.sh --state-dir state --ledger l.jsonl --no-promote --now 2026-06-15T02:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "changed=0"
+    ]
+  }
+}

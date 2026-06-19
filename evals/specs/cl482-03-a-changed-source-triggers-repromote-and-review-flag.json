@@ -1,0 +1,14 @@
+{
+  "name": "a source whose upstream hash changed is re-promoted and flagged for new-principle review",
+  "command": "mkdir -p state\nprintf '{\"content_hash\":\"sha256:NEW\"}' > state/owasp-asvs.json\nbash $CLAUDE_PLUGIN_ROOT/commands/universal-coverage-sync.sh --state-dir state --ledger l.jsonl --no-promote --now 2026-06-15T01:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "source=owasp-asvs status=changed-repromoted",
+      "needs-classification=review-new-sections"
+    ]
+  }
+}

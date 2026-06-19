@@ -1,0 +1,13 @@
+{
+  "name": "a refresh with no upstream change skips every source and does no redundant work",
+  "command": "mkdir -p state\nbash $CLAUDE_PLUGIN_ROOT/commands/universal-coverage-sync.sh --state-dir state --ledger l.jsonl --no-promote --now 2026-06-15T00:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "changed=0 needs_classification=0"
+    ]
+  }
+}

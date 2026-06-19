@@ -1,0 +1,13 @@
+{
+  "name": "the sync records a resumable ledger entry per source with the processed content hash",
+  "command": "mkdir -p state\nbash $CLAUDE_PLUGIN_ROOT/commands/universal-coverage-sync.sh --state-dir state --ledger l.jsonl --no-promote --now 2026-06-15T00:00:00Z >/dev/null 2>&1\ngrep -q '\"source\":\"owasp-asvs\"' l.jsonl && grep -q 'content_hash' l.jsonl && echo ledger-recorded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ledger-recorded"
+    ]
+  }
+}
