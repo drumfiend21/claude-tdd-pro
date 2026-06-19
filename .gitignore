@@ -29,3 +29,8 @@ space/.local/
 
 # Per-session scheduled-task lock (machine/session state, not source)
 .claude/scheduled_tasks.lock
+
+# Universal-coverage refresh runtime state (§28.22/§28.23) — never committed
+standards/universal-coverage-ledger.jsonl
+.claude-tdd-pro/standards-last-fetch/
+.claude-tdd-pro/FETCH-FREQUENCIES.yaml
