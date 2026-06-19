@@ -1,0 +1,14 @@
+{
+  "name": "the gate rejects a rule withheld without the complete conjunction justification",
+  "command": "mkdir -p owasp\nprintf 'source:\\n  id: x\\nrules:\\n  - id: g-bad\\n    enforcement:\\n      mode: withheld\\n      reason: x\\nrecommended_set: []\\nall_set: []\\n' > owasp/bad.yaml\nbash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-universality-coverage.sh --root .",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "verdict=incomplete-withhold",
+      "status=red"
+    ]
+  }
+}

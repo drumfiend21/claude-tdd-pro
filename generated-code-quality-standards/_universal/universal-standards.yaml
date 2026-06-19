@@ -1,0 +1,58 @@
+---
+source:
+  id: owasp-asvs
+  authoritative_publisher: OWASP Foundation / cross-source
+  authoritative_url: https://owasp.org/www-project-application-security-verification-standard/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-15T00:00:00Z'
+  content_hash: sha256:universal-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: monthly
+  fragility_tier: low
+  license_note: Reference/educational use - (c) respective publishers
+rules:
+- id: g-universal-no-hardcoded-secrets
+  name: no-hardcoded-secrets
+  description: No credential, key, or token literal may be committed to source in
+    any language; load secrets from the environment or a secret store.
+  detector: universal-pattern-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://owasp.org/www-project-application-security-verification-standard/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: owasp-asvs
+    section: V2.10
+- id: g-universal-no-debug-output
+  name: no-debug-output-in-source
+  description: No raw debug print/console output in production source in any language;
+    use a structured logger.
+  detector: universal-pattern-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://owasp.org/www-project-application-security-verification-standard/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: google-eng-practices
+    section: logging
+recommended_set:
+- g-universal-no-hardcoded-secrets
+- g-universal-no-debug-output
+all_set:
+- g-universal-no-hardcoded-secrets
+- g-universal-no-debug-output

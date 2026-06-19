@@ -1,0 +1,13 @@
+{
+  "name": "clean source in any language passes the universal standard",
+  "command": "printf 'package main\\nfunc main() {}\\n' > main.go\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-universal-no-hardcoded-secrets",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=pass files_evaluated=1"
+    ]
+  }
+}

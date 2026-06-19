@@ -1,0 +1,30 @@
+{
+  "generated_by": "promote-universal-rules.sh",
+  "rules": {
+    "g-universal-no-hardcoded-secrets": {
+      "mode": "forbid",
+      "patterns": [
+        "AKIA[0-9A-Z]{16}",
+        "BEGIN [A-Z ]*PRIVATE KEY",
+        "(password|passwd|secret|api_?key|access_?key|auth_?token|client_?secret|token)[\"'`]?\\s*[:=]{1,2}\\s*[\"'`][^\"'`]{6,}[\"'`]"
+      ],
+      "applies": "*.js,*.jsx,*.ts,*.tsx,*.py,*.go,*.rs,*.java,*.rb,*.cs,*.php,*.kt,*.swift,*.scala,*.c,*.cpp,*.cc,*.h",
+      "source": "owasp-asvs",
+      "message": "no-hardcoded-secrets (owasp-asvs)"
+    },
+    "g-universal-no-debug-output": {
+      "mode": "forbid",
+      "patterns": [
+        "console\\.(log|debug|info|warn)\\s*\\(",
+        "\\bprint\\s*\\(",
+        "fmt\\.Print",
+        "System\\.out\\.print",
+        "println!\\s*\\(",
+        "Console\\.WriteLine"
+      ],
+      "applies": "*.js,*.jsx,*.ts,*.tsx,*.py,*.go,*.rs,*.java,*.rb,*.cs,*.php,*.kt,*.swift,*.scala,*.c,*.cpp,*.cc,*.h",
+      "source": "google-eng-practices",
+      "message": "no-debug-output-in-source (google-eng-practices)"
+    }
+  }
+}

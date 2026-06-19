@@ -1,0 +1,13 @@
+{
+  "name": "the universal rules are registered in the catalog and cite their source authority",
+  "command": "grep -q 'id: g-universal-no-hardcoded-secrets' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_universal/universal-standards.yaml\" && grep -q 'source: owasp-asvs' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/_universal/universal-standards.yaml\" && echo universal-rules-grounded 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "universal-rules-grounded"
+    ]
+  }
+}

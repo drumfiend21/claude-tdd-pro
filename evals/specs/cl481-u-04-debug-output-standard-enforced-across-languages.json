@@ -1,0 +1,13 @@
+{
+  "name": "the no-debug-output standard is enforced across multiple languages at once",
+  "command": "printf 'fmt.Println(\"x\")\\n' > a.go\nprintf 'print(\"x\")\\n' > b.py\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-universal-no-debug-output",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-universal-no-debug-output detector=universal-pattern-rule.sh verdict=fail"
+    ]
+  }
+}

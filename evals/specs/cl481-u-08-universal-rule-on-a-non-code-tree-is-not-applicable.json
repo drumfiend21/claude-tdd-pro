@@ -1,0 +1,13 @@
+{
+  "name": "a universal code standard on a docs-only tree is not_applicable not a vacuous pass",
+  "command": "printf '# notes\\n' > README.md\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-universal-no-hardcoded-secrets",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule=g-universal-no-hardcoded-secrets detector=universal-pattern-rule.sh verdict=not_applicable"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the same universal standard is enforced on Go source",
+  "command": "printf 'apiKey := \"abcdef123456\"\\n' > main.go\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-universal-no-hardcoded-secrets",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-universal-no-hardcoded-secrets detector=universal-pattern-rule.sh verdict=fail"
+    ]
+  }
+}

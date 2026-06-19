@@ -1,0 +1,15 @@
+{
+  "name": "the apply-by-default gate is green and every corpus rule is applied not withheld",
+  "command": "bash $CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-universality-coverage.sh",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "universality status=green",
+      "withheld=0",
+      "bad=0"
+    ]
+  }
+}

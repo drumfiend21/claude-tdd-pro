@@ -1729,3 +1729,14 @@ The kata showed CTP enforced code + IaC but **prose** (the ADRs/docs that are mo
 - Verified against the kata's real 14 ADRs: `enforce --root docs/adr --rule g-doc-001 --rule g-doc-002` → both `pass` (files_evaluated=14) — prose is now enforced through the same external-tree contract; a malformed/uncited ADR is red; code-only trees are `not_applicable`.
 
 6 specs (`cl480-f-01..06`). No new feature ID / contract (reuses §2.2 + the S-7 catalog pattern). **This completes the CTP-side scope: Fix E (CL-477/478) + Fix G (CL-479) + Fix F (CL-480) all landed. Consumer-side Fix A–D remain in GCTP.** Suite 4274→4280.
+
+### §28.21 Universal coverage — apply all rules to all generated software, withhold only the conjunction (foundation, 2026-06-15)
+
+Operator directive: **apply every enforced rule from the curated first-class sources to ALL generated software-engineering content (architecture, design, ADRs, IaC, config, code) across all languages/frameworks/technologies; withhold a rule from a target only when it is BOTH not-agnostic AND not-a-generally-applicable rule.** Full ticket: `docs/memory/architecture-backlog-language-agnostic-standards-coverage.md`. CL-481 lands the **foundation + the consumable contract** GCTP needs to begin; further standards × languages extend it per-CL.
+
+- **Apply-by-default classification + gate.** `rubric/detectors/audit-universality-coverage.sh` (in `/doctor` + CI): every rule is **applied** unless it carries `enforcement: {mode: withheld, reason, bound_to, not_general_because}` — the complete conjunction justification; a withhold missing any conjunct is **rejected**. Forgetting to classify can only over-enforce, never drop a source standard. Green on today's corpus: **46 rules, 46 applied, 0 withheld.**
+- **Polyglot enforcement.** `rubric/detectors/universal-pattern-rule.sh` (§2.2, rule-id-driven like `cloud-guidance-rule.sh`) enforces one standard's pattern set across **every** source language (18 extensions: `.py/.go/.rs/.java/.ts/.rb/.cs/…`). `commands/promote-universal-rules.sh` generates the `g-universal-*` §2.1 rules (in `_universal/`, originating-source provenance preserved → pass §2.33; coding-rules 44→46) + the detector manifest from one source of truth.
+- **First two universal standards (proof of the contract):** `g-universal-no-hardcoded-secrets` (OWASP ASVS, P0) and `g-universal-no-debug-output` (Google eng-practices, P2) — both enforced identically on Python/Go/Rust/Java/JS/TS.
+- **Through the frozen §28.17/§28.18 contract:** `enforce.sh --root <app> --rule g-universal-<id>` dispatches the polyglot detector and returns the 4-state verdict; a code standard on a docs-only tree is `not_applicable` (no vacuous green); a present language with no backend would be `not_enforced` (RED).
+
+8 specs (`cl481-u-01..08`). No new feature ID / contract (reuses §2.2 + the S-7 pattern + the §28.17 dispatch). Suite 4280→4288.

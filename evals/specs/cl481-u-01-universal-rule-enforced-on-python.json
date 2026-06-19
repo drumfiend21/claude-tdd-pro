@@ -1,0 +1,13 @@
+{
+  "name": "a universal standard is enforced on Python source through the contract",
+  "command": "printf 'api_key = \"abcdef123456\"\\n' > app.py\nbash $CLAUDE_PLUGIN_ROOT/rubric/enforce.sh --root . --rule g-universal-no-hardcoded-secrets",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-universal-no-hardcoded-secrets detector=universal-pattern-rule.sh verdict=fail"
+    ]
+  }
+}

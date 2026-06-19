@@ -62,12 +62,15 @@ ruby -ryaml -rjson -e '
     d = (YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
     (d["rules"] || []).each { |r| catalog[r["id"]] = r["detector"] if r.is_a?(Hash) && r["id"] && r["detector"] }
   end
-  # cloud rule -> applies glob(s), from the §28.15 detector manifest (its own scope).
-  cloud_applies = {}
-  cm = File.join(plugin, "rubric", "detectors", "cloud-guidance-rules.json")
-  if File.exist?(cm)
-    (JSON.parse(File.read(cm))["rules"] || {}).each { |id, s| cloud_applies[id] = s["applies"].to_s }
+  # rule-id-driven detectors (cloud + universal-polyglot) carry their own applies-glob
+  # in a manifest and are invoked `--rule <id> --root <dir>`. Merge both manifests.
+  mf_applies = {}
+  %w[cloud-guidance-rules.json universal-pattern-rules.json].each do |mfn|
+    mp = File.join(plugin, "rubric", "detectors", mfn)
+    next unless File.exist?(mp)
+    (JSON.parse(File.read(mp))["rules"] || {}).each { |id, s| mf_applies[id] = s["applies"].to_s }
   end
+  RULE_DRIVEN = %w[cloud-guidance-rule.sh universal-pattern-rule.sh]
 
   # default single file glob per rule namespace when --paths is not supplied
   def ns_glob(id)
@@ -90,13 +93,14 @@ ruby -ryaml -rjson -e '
       next
     end
     det_path = File.join(plugin, "rubric", "detectors", det)
-    is_cloud = (det == "cloud-guidance-rule.sh")
+    is_cloud = RULE_DRIVEN.include?(det)
     # scope = full glob string(s) this rule legitimately evaluates, used identically
-    # for the file count AND the detector. Cloud rules use their OWN IaC applies-glob
-    # (so an EO rule on a pure-code tree is not_applicable, never a vacuous green);
-    # code rules use --paths (as given) or the namespace default under root.
+    # for the file count AND the detector. Rule-driven detectors (cloud IaC, universal
+    # polyglot) use their OWN manifest applies-glob (so a cloud rule on a pure-code tree
+    # is not_applicable, and a universal rule spans every source language); code
+    # detectors use --paths (as given) or the namespace default under root.
     if is_cloud
-      globs = (cloud_applies[id].to_s.empty? ? ["*"] : cloud_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
+      globs = (mf_applies[id].to_s.empty? ? ["*"] : mf_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
     elsif user_paths.empty?
       globs = [File.join(root, "**", ns_glob(id))]
     else
