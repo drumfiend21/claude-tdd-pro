@@ -18,6 +18,7 @@ node_modules/
 # pr-corpus/, lsp/, scaffolds/, vscode-tdd-pro/, community/,
 # community-shared/ derives a fresh key and invalidates the cache.
 .claude-tdd-pro/eval-cache/
+.claude-tdd-pro/cache/
 
 # Q-6 SPACE local data — gitignored by default per privacy posture.
 # Only the user-data subtree is private; substrate scripts under space/ are

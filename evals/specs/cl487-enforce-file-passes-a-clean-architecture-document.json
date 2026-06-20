@@ -1,0 +1,13 @@
+{
+  "name": "enforce-file passes a clean architecture document with a resolved decision",
+  "command": "printf '# 0002. Storage\\n\\n## Decision\\n\\nUse Postgres with encrypted volumes.\\n' > 0002-store.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file 0002-store.md",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "status=green"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "enforce-file blocks a forbidden P0 pattern (privileged container) in a written config file",
+  "command": "printf 'spec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-k8s-no-privileged-container severity=P0",
+      "verdict=fail",
+      "status=red"
+    ]
+  }
+}

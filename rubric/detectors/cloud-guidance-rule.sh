@@ -55,7 +55,12 @@ RULE="$RULE" PATHS="$PATHS" ROOT="$ROOT" JSON="$JSON" MANIFEST="$MANIFEST" CONFI
   globs = ENV["PATHS"].to_s.empty? ? applies.split(",") : ENV["PATHS"].split(",")
 
   files = []
-  globs.each { |g| files.concat(Dir.glob(File.join(root, "**", g.strip))) }
+  globs.each do |g|
+    g = g.strip
+    files.concat(Dir.glob(File.join(root, "**", g)))  # bare pattern under root (tree scan)
+    files.concat(Dir.glob(g))                          # direct path/glob (absolute or cwd-relative,
+                                                        # e.g. a single file handed by enforce-file.sh)
+  end
   files = files.uniq.select { |f| File.file?(f) }
 
   findings = []

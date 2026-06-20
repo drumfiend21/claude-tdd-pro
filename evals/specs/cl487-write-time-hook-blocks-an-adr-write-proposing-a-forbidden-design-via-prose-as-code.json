@@ -1,0 +1,14 @@
+{
+  "name": "the write-time hook blocks an ADR write proposing a forbidden design via prose-as-code",
+  "command": "printf '# 0001. Net\\n\\n## Decision\\n\\nLeave ingress unrestricted (0.0.0.0/0).\\n' > 0001-net.md && printf '{\"tool_input\":{\"file_path\":\"%s/0001-net.md\"}}' \"$PWD\" | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "blocking CTP rule violation",
+      "prose-judge.sh"
+    ]
+  }
+}

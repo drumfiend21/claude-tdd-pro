@@ -1,0 +1,13 @@
+{
+  "name": "the write-time standards-enforcement hook is registered on PostToolUse for Edit/Write",
+  "command": "grep -q 'enforce-standards-on-save.sh' \"$CLAUDE_PLUGIN_ROOT/hooks/hooks.json\" && echo registered 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "registered"
+    ]
+  }
+}

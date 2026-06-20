@@ -1,0 +1,14 @@
+{
+  "name": "enforce-file blocks a malformed JSON document as not well-formed",
+  "command": "printf '%s\\n' '{ broken,, }' > broken.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file broken.json",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-json-well-formed",
+      "verdict=fail"
+    ]
+  }
+}

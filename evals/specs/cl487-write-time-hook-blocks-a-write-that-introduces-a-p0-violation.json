@@ -1,0 +1,14 @@
+{
+  "name": "the write-time hook blocks a write that introduces a P0 violation and surfaces it to the model",
+  "command": "printf 'spec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf '{\"tool_input\":{\"file_path\":\"%s/pod.yaml\"}}' \"$PWD\" | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\"",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 2,
+    "stderr_contains": [
+      "blocking CTP rule violation",
+      "verdict=fail"
+    ]
+  }
+}

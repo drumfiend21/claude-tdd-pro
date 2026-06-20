@@ -1,0 +1,14 @@
+{
+  "name": "enforce-file treats a presumptive require-rule on a non-matching file as advisory, not a blocking false positive",
+  "command": "printf 'name: my-app\\nversion: 1.0.0\\nsettings:\\n  debug: false\\n' > config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file config.yaml",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "status=advisory",
+      "blocking=0"
+    ]
+  }
+}

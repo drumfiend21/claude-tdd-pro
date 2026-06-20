@@ -1,0 +1,14 @@
+{
+  "name": "enforce-file applies prose-as-code to an ADR proposing a forbidden unrestricted-ingress design",
+  "command": "printf '# 0001. Net\\n\\n## Decision\\n\\nLeave ingress unrestricted (0.0.0.0/0).\\n' > 0001-net.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file 0001-net.md",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-aws-no-unrestricted-ingress severity=P0 detector=prose-judge.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

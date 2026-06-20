@@ -1,0 +1,14 @@
+{
+  "name": "the architect runs standards enforcement on every ADR it generates",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" 'build a service' --decisions-stub storage,auth --adr-out adrs --now 2026-06-20T00:00:00Z",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "architect: enforce-file",
+      "status=green"
+    ]
+  }
+}

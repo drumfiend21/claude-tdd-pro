@@ -85,6 +85,22 @@ if [[ -n "$DECISIONS_STUB" && -n "$ADR_OUT" && "$DRY" -ne 1 ]]; then
       echo "Propagates to /spec, then /plan-first, then /feature."
     } > "$f"
     echo "architect: wrote ADR $f" >&2
+    # §28.27 generation-time enforcement: every ADR the architect emits is run through the
+    # CTP rule corpus + the §28.24 prose-as-code rules (an ADR proposing a design that
+    # violates a rule red-flags at generation). P0/P1 -> the architect surfaces and exits 1;
+    # P2/P3 are advisory.
+    ENFORCER="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}/rubric/enforce-file.sh"
+    if [[ -f "$ENFORCER" ]]; then
+      set +e
+      ENF_OUT=$(bash "$ENFORCER" --file "$f" 2>&1); ENF_EC=$?
+      set -e
+      [[ -n "$ENF_OUT" ]] && printf '%s\n' "$ENF_OUT" | sed 's/^/architect: /' >&2
+      [[ "$ENF_EC" -eq 1 ]] && ARCH_VIOLATION=1   # only P0/P1 blocks; not_enforced (3) does not
+    fi
     i=$((i + 1))
   done
+  if [[ "${ARCH_VIOLATION:-0}" -eq 1 ]]; then
+    echo "architect: generated architecture violates one or more P0/P1 rules (see above); resolve before handoff" >&2
+    exit 1
+  fi
 fi

@@ -1,0 +1,13 @@
+{
+  "name": "the write-time standards hook ignores JS/TS files that lint-on-save handles",
+  "command": "printf 'const x = 1;\\n' > a.ts && printf '{\"tool_input\":{\"file_path\":\"%s/a.ts\"}}' \"$PWD\" | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\" && echo skipped 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "skipped"
+    ]
+  }
+}

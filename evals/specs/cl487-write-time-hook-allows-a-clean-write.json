@@ -1,0 +1,13 @@
+{
+  "name": "the write-time hook allows a clean write without blocking",
+  "command": "printf '# 0002. Storage\\n\\n## Decision\\n\\nUse Postgres with encrypted volumes.\\n' > 0002-store.md && printf '{\"tool_input\":{\"file_path\":\"%s/0002-store.md\"}}' \"$PWD\" | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\" && echo allowed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "allowed"
+    ]
+  }
+}
