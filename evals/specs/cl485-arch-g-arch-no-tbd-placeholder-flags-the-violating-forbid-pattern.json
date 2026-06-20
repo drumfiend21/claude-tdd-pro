@@ -1,0 +1,14 @@
+{
+  "name": "arch enforcement flags a forbid-rule violation: arch no tbd placeholder",
+  "command": "printf '%s\\n' 'meta: fixture\nTBD\nmore: data' > 'fixture.md' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-arch-no-tbd-placeholder",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-arch-no-tbd-placeholder detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

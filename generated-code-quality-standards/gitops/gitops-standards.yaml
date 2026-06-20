@@ -1,0 +1,56 @@
+---
+source:
+  id: opengitops-principles
+  authoritative_publisher: OpenGitOps / Argo / Flux
+  authoritative_url: https://raw.githubusercontent.com/open-gitops/documents/main/PRINCIPLES.md
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:gitops-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - OpenGitOps Apache 2.0
+rules:
+- id: g-gitops-pin-target-revision
+  name: pin-target-revision
+  description: Argo CD Applications must pin targetRevision, not track mutable HEAD.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://raw.githubusercontent.com/open-gitops/documents/main/PRINCIPLES.md
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: opengitops-principles
+    section: convention
+- id: g-gitops-no-plaintext-secret
+  name: no-plaintext-secret
+  description: GitOps repos must not commit raw Secret manifests; use SealedSecret/SOPS.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://raw.githubusercontent.com/open-gitops/documents/main/PRINCIPLES.md
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: opengitops-principles
+    section: convention
+recommended_set:
+- g-gitops-pin-target-revision
+- g-gitops-no-plaintext-secret
+all_set:
+- g-gitops-pin-target-revision
+- g-gitops-no-plaintext-secret

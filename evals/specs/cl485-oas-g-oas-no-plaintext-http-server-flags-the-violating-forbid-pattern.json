@@ -1,0 +1,14 @@
+{
+  "name": "oas enforcement flags a forbid-rule violation: oas no plaintext http server",
+  "command": "printf '%s\\n' 'meta: fixture\nhttp://\nmore: data' > 'openapi.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-oas-no-plaintext-http-server",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-oas-no-plaintext-http-server detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

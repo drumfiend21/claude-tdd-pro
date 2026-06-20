@@ -1,0 +1,14 @@
+{
+  "name": "compose enforcement flags a require-rule violation: compose drop capabilities",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > 'docker-compose.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-compose-drop-capabilities",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-compose-drop-capabilities detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

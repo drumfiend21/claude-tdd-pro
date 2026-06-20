@@ -1,0 +1,78 @@
+---
+source:
+  id: madr-arc42
+  authoritative_publisher: MADR / arc42 / C4
+  authoritative_url: https://adr.github.io/madr/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:arch-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - MADR MIT/CC0; arc42 CC-BY-SA 4.0
+rules:
+- id: g-arch-no-tbd-placeholder
+  name: no-tbd-placeholder
+  description: Architecture docs must not ship unresolved TBD placeholders in place
+    of a decision.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://adr.github.io/madr/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: madr-arc42
+    section: convention
+- id: g-arch-no-fixme-marker
+  name: no-fixme-marker
+  description: Architecture docs must not ship FIXME markers in committed decisions.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://adr.github.io/madr/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: madr-arc42
+    section: convention
+- id: g-arch-no-decision-pending
+  name: no-decision-pending
+  description: An ADR must record a decision, not defer it with DECISION PENDING.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://adr.github.io/madr/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: madr-arc42
+    section: convention
+recommended_set:
+- g-arch-no-tbd-placeholder
+- g-arch-no-fixme-marker
+- g-arch-no-decision-pending
+all_set:
+- g-arch-no-tbd-placeholder
+- g-arch-no-fixme-marker
+- g-arch-no-decision-pending

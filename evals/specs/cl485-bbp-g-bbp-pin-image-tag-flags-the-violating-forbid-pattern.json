@@ -1,0 +1,14 @@
+{
+  "name": "bbp enforcement flags a forbid-rule violation: bbp pin image tag",
+  "command": "printf '%s\\n' 'meta: fixture\n:latest\nmore: data' > 'bitbucket-pipelines.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-bbp-pin-image-tag",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-bbp-pin-image-tag detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

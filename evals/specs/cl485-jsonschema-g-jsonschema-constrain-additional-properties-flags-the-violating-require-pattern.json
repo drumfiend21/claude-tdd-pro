@@ -1,0 +1,14 @@
+{
+  "name": "jsonschema enforcement flags a require-rule violation: jsonschema constrain additional properties",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > 'fixture.schema.json' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-jsonschema-constrain-additional-properties",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-jsonschema-constrain-additional-properties detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

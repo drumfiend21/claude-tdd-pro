@@ -1,0 +1,14 @@
+{
+  "name": "sarif enforcement flags a require-rule violation: sarif include runs",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > 'fixture.sarif' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-sarif-include-runs",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-sarif-include-runs detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

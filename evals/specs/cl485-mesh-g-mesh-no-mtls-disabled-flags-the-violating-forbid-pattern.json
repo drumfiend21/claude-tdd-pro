@@ -1,0 +1,14 @@
+{
+  "name": "mesh enforcement flags a forbid-rule violation: mesh no mtls disabled",
+  "command": "printf '%s\\n' 'meta: fixture\nmode: DISABLE\nmore: data' > 'fixture.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-mesh-no-mtls-disabled",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-mesh-no-mtls-disabled detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+---
+source:
+  id: checkov-policy-index
+  authoritative_publisher: Checkov / Trivy
+  authoritative_url: https://raw.githubusercontent.com/bridgecrewio/checkov/main/docs/5.Policy%20Index/all.md
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:iac-linter-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Checkov/Trivy Apache 2.0
+rules:
+- id: g-iac-linter-no-blanket-skip
+  name: no-blanket-skip
+  description: IaC linter config must not blanket-skip every check.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://raw.githubusercontent.com/bridgecrewio/checkov/main/docs/5.Policy%20Index/all.md
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: checkov-policy-index
+    section: convention
+- id: g-iac-linter-no-soft-fail
+  name: no-soft-fail
+  description: IaC scanning must not be configured soft-fail (findings ignored).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://raw.githubusercontent.com/bridgecrewio/checkov/main/docs/5.Policy%20Index/all.md
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: checkov-policy-index
+    section: convention
+recommended_set:
+- g-iac-linter-no-blanket-skip
+- g-iac-linter-no-soft-fail
+all_set:
+- g-iac-linter-no-blanket-skip
+- g-iac-linter-no-soft-fail

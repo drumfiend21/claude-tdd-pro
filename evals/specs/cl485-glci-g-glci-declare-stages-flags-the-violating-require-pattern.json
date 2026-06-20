@@ -1,0 +1,14 @@
+{
+  "name": "glci enforcement flags a require-rule violation: glci declare stages",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > '.gitlab-ci.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-glci-declare-stages",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-glci-declare-stages detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

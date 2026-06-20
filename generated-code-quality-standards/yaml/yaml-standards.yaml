@@ -1,0 +1,37 @@
+---
+source:
+  id: yamllint
+  authoritative_publisher: adrienverge/yamllint + YAML 1.2.2
+  authoritative_url: https://yamllint.readthedocs.io/en/stable/rules.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:yaml-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: low
+  license_note: Reference/educational use - yamllint GPLv3 (config-only); YAML spec
+    permissive
+rules:
+- id: g-yaml-well-formed
+  name: well-formed
+  description: Every YAML document must parse without a syntax error per the YAML
+    1.2.2 spec.
+  detector: yaml-syntax.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://yamllint.readthedocs.io/en/stable/rules.html
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: yamllint
+    section: convention
+recommended_set:
+- g-yaml-well-formed
+all_set:
+- g-yaml-well-formed

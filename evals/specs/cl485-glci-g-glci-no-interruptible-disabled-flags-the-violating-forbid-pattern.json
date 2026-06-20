@@ -1,0 +1,14 @@
+{
+  "name": "glci enforcement flags a forbid-rule violation: glci no interruptible disabled",
+  "command": "printf '%s\\n' 'meta: fixture\ninterruptible: false\nmore: data' > '.gitlab-ci.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-glci-no-interruptible-disabled",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-glci-no-interruptible-disabled detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+---
+source:
+  id: prometheus-config
+  authoritative_publisher: Prometheus / OpenTelemetry
+  authoritative_url: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:observability-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Prometheus Apache 2.0 + docs CC-BY 4.0
+rules:
+- id: g-observability-no-insecure-endpoint
+  name: no-insecure-endpoint
+  description: 'Collector/exporter endpoints must not disable TLS via insecure: true.'
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: prometheus-config
+    section: convention
+- id: g-observability-define-alerting
+  name: define-alerting
+  description: Monitoring config should define alerting rules, not only scrape.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: prometheus-config
+    section: convention
+recommended_set:
+- g-observability-no-insecure-endpoint
+- g-observability-define-alerting
+all_set:
+- g-observability-no-insecure-endpoint
+- g-observability-define-alerting

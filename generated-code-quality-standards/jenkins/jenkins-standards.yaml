@@ -1,0 +1,57 @@
+---
+source:
+  id: jenkins-pipeline
+  authoritative_publisher: Jenkins
+  authoritative_url: https://plugins.jenkins.io/pipeline-as-yaml/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:jenkins-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Jenkins plugin MIT
+rules:
+- id: g-jenkins-pin-image-tag
+  name: pin-image-tag
+  description: Agent images must be pinned, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://plugins.jenkins.io/pipeline-as-yaml/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: jenkins-pipeline
+    section: convention
+- id: g-jenkins-no-plaintext-credentials
+  name: no-plaintext-credentials
+  description: Pipelines must not embed plaintext passwords; use the credentials()
+    binding.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://plugins.jenkins.io/pipeline-as-yaml/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: jenkins-pipeline
+    section: convention
+recommended_set:
+- g-jenkins-pin-image-tag
+- g-jenkins-no-plaintext-credentials
+all_set:
+- g-jenkins-pin-image-tag
+- g-jenkins-no-plaintext-credentials

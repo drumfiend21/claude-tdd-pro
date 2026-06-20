@@ -1,0 +1,35 @@
+---
+source:
+  id: rfc-8259
+  authoritative_publisher: IETF RFC 8259
+  authoritative_url: https://datatracker.ietf.org/doc/html/rfc8259
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:json-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: low
+  license_note: IETF Trust (public)
+rules:
+- id: g-json-well-formed
+  name: well-formed
+  description: Every JSON document must parse as RFC 8259 JSON.
+  detector: json-syntax.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://datatracker.ietf.org/doc/html/rfc8259
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: rfc-8259
+    section: convention
+recommended_set:
+- g-json-well-formed
+all_set:
+- g-json-well-formed

@@ -1,0 +1,13 @@
+{
+  "name": "a Kubernetes deployment violating multiple security rules is reported red across all of them",
+  "command": "printf 'spec:\\n  hostNetwork: true\\n  containers:\\n  - image: app:latest\\n    securityContext:\\n      privileged: true\\n' > deploy.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-k8s-no-privileged-container --rule g-k8s-no-host-network --rule g-k8s-no-latest-image-tag",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "pass=0 fail=3"
+    ]
+  }
+}

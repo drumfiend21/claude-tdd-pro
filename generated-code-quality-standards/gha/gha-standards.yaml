@@ -1,0 +1,122 @@
+---
+source:
+  id: gha-security-hardening
+  authoritative_publisher: GitHub
+  authoritative_url: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:gha-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - GitHub docs CC-BY 4.0
+rules:
+- id: g-gha-no-pull-request-target
+  name: no-pull-request-target
+  description: Workflows must avoid pull_request_target with untrusted checkout (privilege-escalation
+    sink).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gha-security-hardening
+    section: convention
+- id: g-gha-pin-actions-to-sha
+  name: pin-actions-to-sha
+  description: Third-party actions must be pinned to a full commit SHA, not a mutable
+    @master ref.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gha-security-hardening
+    section: convention
+- id: g-gha-no-unpinned-main-ref
+  name: no-unpinned-main-ref
+  description: Third-party actions must not reference a mutable @main ref.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gha-security-hardening
+    section: convention
+- id: g-gha-set-minimal-permissions
+  name: set-minimal-permissions
+  description: Workflows must declare a minimal permissions block for GITHUB_TOKEN.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gha-security-hardening
+    section: convention
+- id: g-gha-no-script-injection
+  name: no-script-injection
+  description: Workflows must not interpolate untrusted issue/PR titles directly into
+    run scripts.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gha-security-hardening
+    section: convention
+recommended_set:
+- g-gha-no-pull-request-target
+- g-gha-pin-actions-to-sha
+- g-gha-no-unpinned-main-ref
+- g-gha-set-minimal-permissions
+- g-gha-no-script-injection
+all_set:
+- g-gha-no-pull-request-target
+- g-gha-pin-actions-to-sha
+- g-gha-no-unpinned-main-ref
+- g-gha-set-minimal-permissions
+- g-gha-no-script-injection

@@ -1,0 +1,14 @@
+{
+  "name": "the yaml Layer-1 detector passes a well-formed YAML document as green",
+  "command": "printf 'name: app\\nversion: 1.2.3\\n' > good.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-yaml-well-formed",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "detector=yaml-syntax.sh verdict=pass",
+      "status=green"
+    ]
+  }
+}

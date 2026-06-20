@@ -1,0 +1,14 @@
+{
+  "name": "cfn enforcement flags a forbid-rule violation: cfn no public read bucket",
+  "command": "printf '%s\\n' 'meta: fixture\nPublicRead\nmore: data' > 'fixture.cfn.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-cfn-no-public-read-bucket",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-cfn-no-public-read-bucket detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

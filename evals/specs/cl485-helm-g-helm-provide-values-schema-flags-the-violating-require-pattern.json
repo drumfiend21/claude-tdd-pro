@@ -1,0 +1,14 @@
+{
+  "name": "helm enforcement flags a require-rule violation: helm provide values schema",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > 'values.schema.json' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-helm-provide-values-schema",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-helm-provide-values-schema detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+---
+source:
+  id: helm-best-practices
+  authoritative_publisher: Helm
+  authoritative_url: https://helm.sh/docs/chart_best_practices/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:helm-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Helm docs Apache 2.0
+rules:
+- id: g-helm-no-latest-tag
+  name: no-latest-tag
+  description: Chart values must pin image tags, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://helm.sh/docs/chart_best_practices/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: helm-best-practices
+    section: convention
+- id: g-helm-declare-resources
+  name: declare-resources
+  description: Chart values should declare container resources.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://helm.sh/docs/chart_best_practices/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: helm-best-practices
+    section: convention
+- id: g-helm-provide-values-schema
+  name: provide-values-schema
+  description: Charts should ship a values.schema.json to validate operator input.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://helm.sh/docs/chart_best_practices/
+  requires_type_checking: false
+  recommended: true
+  severity: P3
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: helm-best-practices
+    section: convention
+recommended_set:
+- g-helm-no-latest-tag
+- g-helm-declare-resources
+- g-helm-provide-values-schema
+all_set:
+- g-helm-no-latest-tag
+- g-helm-declare-resources
+- g-helm-provide-values-schema

@@ -1,0 +1,56 @@
+---
+source:
+  id: circleci-config
+  authoritative_publisher: CircleCI
+  authoritative_url: https://circleci.com/docs/configuration-reference/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:circleci-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - CircleCI docs Apache 2.0
+rules:
+- id: g-circleci-pin-image-tag
+  name: pin-image-tag
+  description: Executor images must be pinned, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://circleci.com/docs/configuration-reference/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: circleci-config
+    section: convention
+- id: g-circleci-pin-orb-version
+  name: pin-orb-version
+  description: Orbs must be pinned to an explicit version, not @volatile.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://circleci.com/docs/configuration-reference/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: circleci-config
+    section: convention
+recommended_set:
+- g-circleci-pin-image-tag
+- g-circleci-pin-orb-version
+all_set:
+- g-circleci-pin-image-tag
+- g-circleci-pin-orb-version

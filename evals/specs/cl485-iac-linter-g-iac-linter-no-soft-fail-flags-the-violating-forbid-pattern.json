@@ -1,0 +1,14 @@
+{
+  "name": "iac-linter enforcement flags a forbid-rule violation: iac linter no soft fail",
+  "command": "printf '%s\\n' 'meta: fixture\nsoft_fail: true\nmore: data' > '.checkov.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-iac-linter-no-soft-fail",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-iac-linter-no-soft-fail detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "mesh enforcement flags a forbid-rule violation: mesh no wildcard host",
+  "command": "printf '%s\\n' 'meta: fixture\n- \"*\"\nmore: data' > 'fixture.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-mesh-no-wildcard-host",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-mesh-no-wildcard-host detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

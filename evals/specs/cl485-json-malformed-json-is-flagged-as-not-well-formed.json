@@ -1,0 +1,13 @@
+{
+  "name": "the json Layer-1 detector flags a malformed JSON document as not well-formed",
+  "command": "printf '%s\\n' '{ not: valid json,, }' > broken.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-json-well-formed",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "detector=json-syntax.sh verdict=fail"
+    ]
+  }
+}

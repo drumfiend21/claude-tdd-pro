@@ -1,0 +1,13 @@
+{
+  "name": "the yaml Layer-1 detector flags a malformed YAML document as not well-formed",
+  "command": "printf '%s\\n' 'a: b: c: : :' > broken.yaml && printf 'key: \"unterminated\\n' >> broken.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-yaml-well-formed",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "detector=yaml-syntax.sh verdict=fail"
+    ]
+  }
+}

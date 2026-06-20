@@ -1,0 +1,78 @@
+---
+source:
+  id: cfn-best-practices
+  authoritative_publisher: AWS
+  authoritative_url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:cfn-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) AWS (cite-link)
+rules:
+- id: g-cfn-no-wildcard-iam-action
+  name: no-wildcard-iam-action
+  description: 'CloudFormation IAM policies must not grant Action: *.'
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cfn-best-practices
+    section: convention
+- id: g-cfn-no-public-read-bucket
+  name: no-public-read-bucket
+  description: S3 buckets must not be declared PublicRead.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cfn-best-practices
+    section: convention
+- id: g-cfn-no-hardcoded-password
+  name: no-hardcoded-password
+  description: Templates must not hardcode passwords; use Secrets Manager or NoEcho
+    parameters.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cfn-best-practices
+    section: convention
+recommended_set:
+- g-cfn-no-wildcard-iam-action
+- g-cfn-no-public-read-bucket
+- g-cfn-no-hardcoded-password
+all_set:
+- g-cfn-no-wildcard-iam-action
+- g-cfn-no-public-read-bucket
+- g-cfn-no-hardcoded-password

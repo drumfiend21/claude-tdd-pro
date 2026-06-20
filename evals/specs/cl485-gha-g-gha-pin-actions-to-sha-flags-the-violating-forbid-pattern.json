@@ -1,0 +1,14 @@
+{
+  "name": "gha enforcement flags a forbid-rule violation: gha pin actions to sha",
+  "command": "mkdir -p '.github/workflows' && printf '%s\\n' 'meta: fixture\n@master\nmore: data' > '.github/workflows/fixture.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-gha-pin-actions-to-sha",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-gha-pin-actions-to-sha detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

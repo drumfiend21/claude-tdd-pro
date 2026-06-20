@@ -1,0 +1,77 @@
+---
+source:
+  id: openapi-spec
+  authoritative_publisher: OpenAPI Initiative
+  authoritative_url: https://spec.openapis.org/oas/v3.1.0.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:oas-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - OpenAPI Spec Apache 2.0
+rules:
+- id: g-oas-declare-security-schemes
+  name: declare-security-schemes
+  description: APIs must declare securitySchemes so endpoints can require auth.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://spec.openapis.org/oas/v3.1.0.html
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: openapi-spec
+    section: convention
+- id: g-oas-no-plaintext-http-server
+  name: no-plaintext-http-server
+  description: API server URLs must use https, not plaintext http.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://spec.openapis.org/oas/v3.1.0.html
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: openapi-spec
+    section: convention
+- id: g-oas-declare-spec-version
+  name: declare-spec-version
+  description: Documents must declare the openapi version field.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://spec.openapis.org/oas/v3.1.0.html
+  requires_type_checking: false
+  recommended: true
+  severity: P3
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: openapi-spec
+    section: convention
+recommended_set:
+- g-oas-declare-security-schemes
+- g-oas-no-plaintext-http-server
+- g-oas-declare-spec-version
+all_set:
+- g-oas-declare-security-schemes
+- g-oas-no-plaintext-http-server
+- g-oas-declare-spec-version

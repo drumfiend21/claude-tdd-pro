@@ -1,0 +1,14 @@
+{
+  "name": "ansible enforcement flags a forbid-rule violation: ansible pin package version",
+  "command": "printf '%s\\n' 'meta: fixture\n:latest\nmore: data' > 'fixture.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-ansible-pin-package-version",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-ansible-pin-package-version detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "oas enforcement flags a require-rule violation: oas declare security schemes",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > 'openapi.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-oas-declare-security-schemes",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-oas-declare-security-schemes detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

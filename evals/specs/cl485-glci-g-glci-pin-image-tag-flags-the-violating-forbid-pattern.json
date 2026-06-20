@@ -1,0 +1,14 @@
+{
+  "name": "glci enforcement flags a forbid-rule violation: glci pin image tag",
+  "command": "printf '%s\\n' 'meta: fixture\n:latest\nmore: data' > '.gitlab-ci.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-glci-pin-image-tag",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-glci-pin-image-tag detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

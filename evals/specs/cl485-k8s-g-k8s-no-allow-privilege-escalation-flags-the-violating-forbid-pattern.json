@@ -1,0 +1,14 @@
+{
+  "name": "k8s enforcement flags a forbid-rule violation: k8s no allow privilege escalation",
+  "command": "printf '%s\\n' 'meta: fixture\nallowPrivilegeEscalation: true\nmore: data' > 'fixture.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-k8s-no-allow-privilege-escalation",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-k8s-no-allow-privilege-escalation detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "compose enforcement flags a forbid-rule violation: compose no host network",
+  "command": "printf '%s\\n' 'meta: fixture\nnetwork_mode: host\nmore: data' > 'docker-compose.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-compose-no-host-network",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-compose-no-host-network detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

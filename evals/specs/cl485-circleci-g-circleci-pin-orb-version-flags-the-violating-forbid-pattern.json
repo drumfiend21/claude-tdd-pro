@@ -1,0 +1,14 @@
+{
+  "name": "circleci enforcement flags a forbid-rule violation: circleci pin orb version",
+  "command": "mkdir -p '.circleci' && printf '%s\\n' 'meta: fixture\n@volatile\nmore: data' > '.circleci/config.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-circleci-pin-orb-version",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-circleci-pin-orb-version detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

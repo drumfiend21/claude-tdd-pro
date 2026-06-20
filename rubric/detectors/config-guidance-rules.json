@@ -1,0 +1,548 @@
+{
+  "rules": {
+    "g-k8s-no-privileged-container": {
+      "token": "privileged: true",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P0"
+    },
+    "g-k8s-no-host-network": {
+      "token": "hostNetwork: true",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P0"
+    },
+    "g-k8s-no-host-pid": {
+      "token": "hostPID: true",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P0"
+    },
+    "g-k8s-no-host-ipc": {
+      "token": "hostIPC: true",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P0"
+    },
+    "g-k8s-no-allow-privilege-escalation": {
+      "token": "allowPrivilegeEscalation: true",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P1"
+    },
+    "g-k8s-no-latest-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P1"
+    },
+    "g-k8s-run-as-non-root": {
+      "token": "runAsNonRoot",
+      "mode": "require",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P1"
+    },
+    "g-k8s-set-resource-limits": {
+      "token": "resources:",
+      "mode": "require",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P2"
+    },
+    "g-k8s-read-only-root-filesystem": {
+      "token": "readOnlyRootFilesystem",
+      "mode": "require",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P2"
+    },
+    "g-k8s-drop-all-capabilities": {
+      "token": "drop:",
+      "mode": "require",
+      "applies": "*.yaml,*.yml",
+      "source": "k8s-pod-security-standards",
+      "namespace": "k8s",
+      "severity": "P2"
+    },
+    "g-helm-no-latest-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "*.yaml,*.tpl",
+      "source": "helm-best-practices",
+      "namespace": "helm",
+      "severity": "P1"
+    },
+    "g-helm-declare-resources": {
+      "token": "resources:",
+      "mode": "require",
+      "applies": "values.yaml",
+      "source": "helm-best-practices",
+      "namespace": "helm",
+      "severity": "P2"
+    },
+    "g-helm-provide-values-schema": {
+      "token": "$schema",
+      "mode": "require",
+      "applies": "values.schema.json",
+      "source": "helm-best-practices",
+      "namespace": "helm",
+      "severity": "P3"
+    },
+    "g-compose-no-privileged": {
+      "token": "privileged: true",
+      "mode": "forbid",
+      "applies": "docker-compose.yml,docker-compose.yaml,compose.yml,compose.yaml",
+      "source": "compose-spec",
+      "namespace": "compose",
+      "severity": "P0"
+    },
+    "g-compose-no-host-network": {
+      "token": "network_mode: host",
+      "mode": "forbid",
+      "applies": "docker-compose.yml,docker-compose.yaml,compose.yml,compose.yaml",
+      "source": "compose-spec",
+      "namespace": "compose",
+      "severity": "P1"
+    },
+    "g-compose-pin-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "docker-compose.yml,docker-compose.yaml,compose.yml,compose.yaml",
+      "source": "compose-spec",
+      "namespace": "compose",
+      "severity": "P1"
+    },
+    "g-compose-no-host-pid": {
+      "token": "pid: host",
+      "mode": "forbid",
+      "applies": "docker-compose.yml,docker-compose.yaml,compose.yml,compose.yaml",
+      "source": "compose-spec",
+      "namespace": "compose",
+      "severity": "P1"
+    },
+    "g-compose-drop-capabilities": {
+      "token": "cap_drop",
+      "mode": "require",
+      "applies": "docker-compose.yml,docker-compose.yaml,compose.yml,compose.yaml",
+      "source": "compose-spec",
+      "namespace": "compose",
+      "severity": "P2"
+    },
+    "g-gha-no-pull-request-target": {
+      "token": "pull_request_target",
+      "mode": "forbid",
+      "applies": ".github/workflows/*.yml,.github/workflows/*.yaml",
+      "source": "gha-security-hardening",
+      "namespace": "gha",
+      "severity": "P1"
+    },
+    "g-gha-pin-actions-to-sha": {
+      "token": "@master",
+      "mode": "forbid",
+      "applies": ".github/workflows/*.yml,.github/workflows/*.yaml",
+      "source": "gha-security-hardening",
+      "namespace": "gha",
+      "severity": "P1"
+    },
+    "g-gha-no-unpinned-main-ref": {
+      "token": "@main",
+      "mode": "forbid",
+      "applies": ".github/workflows/*.yml,.github/workflows/*.yaml",
+      "source": "gha-security-hardening",
+      "namespace": "gha",
+      "severity": "P1"
+    },
+    "g-gha-set-minimal-permissions": {
+      "token": "permissions:",
+      "mode": "require",
+      "applies": ".github/workflows/*.yml,.github/workflows/*.yaml",
+      "source": "gha-security-hardening",
+      "namespace": "gha",
+      "severity": "P2"
+    },
+    "g-gha-no-script-injection": {
+      "token": "${{ github.event.issue.title }}",
+      "mode": "forbid",
+      "applies": ".github/workflows/*.yml,.github/workflows/*.yaml",
+      "source": "gha-security-hardening",
+      "namespace": "gha",
+      "severity": "P1"
+    },
+    "g-glci-pin-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": ".gitlab-ci.yml,.gitlab-ci.yaml",
+      "source": "gitlab-ci-yaml",
+      "namespace": "glci",
+      "severity": "P1"
+    },
+    "g-glci-declare-stages": {
+      "token": "stages:",
+      "mode": "require",
+      "applies": ".gitlab-ci.yml,.gitlab-ci.yaml",
+      "source": "gitlab-ci-yaml",
+      "namespace": "glci",
+      "severity": "P3"
+    },
+    "g-glci-no-interruptible-disabled": {
+      "token": "interruptible: false",
+      "mode": "forbid",
+      "applies": ".gitlab-ci.yml,.gitlab-ci.yaml",
+      "source": "gitlab-ci-yaml",
+      "namespace": "glci",
+      "severity": "P3"
+    },
+    "g-azdo-pin-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "azure-pipelines.yml,azure-pipelines.yaml",
+      "source": "azure-pipelines-yaml",
+      "namespace": "azdo",
+      "severity": "P1"
+    },
+    "g-azdo-no-plaintext-secret": {
+      "token": "password:",
+      "mode": "forbid",
+      "applies": "azure-pipelines.yml,azure-pipelines.yaml",
+      "source": "azure-pipelines-yaml",
+      "namespace": "azdo",
+      "severity": "P2"
+    },
+    "g-circleci-pin-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": ".circleci/config.yml,.circleci/config.yaml",
+      "source": "circleci-config",
+      "namespace": "circleci",
+      "severity": "P1"
+    },
+    "g-circleci-pin-orb-version": {
+      "token": "@volatile",
+      "mode": "forbid",
+      "applies": ".circleci/config.yml,.circleci/config.yaml",
+      "source": "circleci-config",
+      "namespace": "circleci",
+      "severity": "P1"
+    },
+    "g-bbp-pin-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "bitbucket-pipelines.yml,bitbucket-pipelines.yaml",
+      "source": "bitbucket-pipelines",
+      "namespace": "bbp",
+      "severity": "P1"
+    },
+    "g-bbp-no-plaintext-secret": {
+      "token": "password:",
+      "mode": "forbid",
+      "applies": "bitbucket-pipelines.yml,bitbucket-pipelines.yaml",
+      "source": "bitbucket-pipelines",
+      "namespace": "bbp",
+      "severity": "P2"
+    },
+    "g-jenkins-pin-image-tag": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "Jenkinsfile,*.jenkinsfile",
+      "source": "jenkins-pipeline",
+      "namespace": "jenkins",
+      "severity": "P1"
+    },
+    "g-jenkins-no-plaintext-credentials": {
+      "token": "password:",
+      "mode": "forbid",
+      "applies": "Jenkinsfile,*.jenkinsfile",
+      "source": "jenkins-pipeline",
+      "namespace": "jenkins",
+      "severity": "P2"
+    },
+    "g-ansible-no-plaintext-password": {
+      "token": "ansible_password:",
+      "mode": "forbid",
+      "applies": "*.yml,*.yaml",
+      "source": "ansible-lint-rules",
+      "namespace": "ansible",
+      "severity": "P1"
+    },
+    "g-ansible-no-validate-certs-disabled": {
+      "token": "validate_certs: false",
+      "mode": "forbid",
+      "applies": "*.yml,*.yaml",
+      "source": "ansible-lint-rules",
+      "namespace": "ansible",
+      "severity": "P1"
+    },
+    "g-ansible-pin-package-version": {
+      "token": ":latest",
+      "mode": "forbid",
+      "applies": "*.yml,*.yaml",
+      "source": "ansible-lint-rules",
+      "namespace": "ansible",
+      "severity": "P2"
+    },
+    "g-cfn-no-wildcard-iam-action": {
+      "token": "\"Action\": \"*\"",
+      "mode": "forbid",
+      "applies": "*.cfn.yaml,*.cfn.json,*.template",
+      "source": "cfn-best-practices",
+      "namespace": "cfn",
+      "severity": "P0"
+    },
+    "g-cfn-no-public-read-bucket": {
+      "token": "PublicRead",
+      "mode": "forbid",
+      "applies": "*.cfn.yaml,*.cfn.json,*.template",
+      "source": "cfn-best-practices",
+      "namespace": "cfn",
+      "severity": "P1"
+    },
+    "g-cfn-no-hardcoded-password": {
+      "token": "Password:",
+      "mode": "forbid",
+      "applies": "*.cfn.yaml,*.cfn.json,*.template",
+      "source": "cfn-best-practices",
+      "namespace": "cfn",
+      "severity": "P2"
+    },
+    "g-oas-declare-security-schemes": {
+      "token": "securitySchemes",
+      "mode": "require",
+      "applies": "openapi.yaml,openapi.json,swagger.yaml,swagger.json",
+      "source": "openapi-spec",
+      "namespace": "oas",
+      "severity": "P1"
+    },
+    "g-oas-no-plaintext-http-server": {
+      "token": "http://",
+      "mode": "forbid",
+      "applies": "openapi.yaml,openapi.json,swagger.yaml,swagger.json",
+      "source": "openapi-spec",
+      "namespace": "oas",
+      "severity": "P2"
+    },
+    "g-oas-declare-spec-version": {
+      "token": "openapi:",
+      "mode": "require",
+      "applies": "openapi.yaml,swagger.yaml",
+      "source": "openapi-spec",
+      "namespace": "oas",
+      "severity": "P3"
+    },
+    "g-gitops-pin-target-revision": {
+      "token": "targetRevision: HEAD",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "opengitops-principles",
+      "namespace": "gitops",
+      "severity": "P1"
+    },
+    "g-gitops-no-plaintext-secret": {
+      "token": "kind: Secret",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "opengitops-principles",
+      "namespace": "gitops",
+      "severity": "P2"
+    },
+    "g-observability-no-insecure-endpoint": {
+      "token": "insecure: true",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "prometheus-config",
+      "namespace": "observability",
+      "severity": "P1"
+    },
+    "g-observability-define-alerting": {
+      "token": "alert:",
+      "mode": "require",
+      "applies": "*.rules.yml,*.rules.yaml,prometheus.yml",
+      "source": "prometheus-config",
+      "namespace": "observability",
+      "severity": "P2"
+    },
+    "g-mesh-no-mtls-disabled": {
+      "token": "mode: DISABLE",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "istio-config",
+      "namespace": "mesh",
+      "severity": "P1"
+    },
+    "g-mesh-no-wildcard-host": {
+      "token": "- \"*\"",
+      "mode": "forbid",
+      "applies": "*.yaml,*.yml",
+      "source": "istio-config",
+      "namespace": "mesh",
+      "severity": "P2"
+    },
+    "g-iac-linter-no-blanket-skip": {
+      "token": "skip-check: \"*\"",
+      "mode": "forbid",
+      "applies": ".checkov.yaml,.checkov.yml,.trivy.yaml",
+      "source": "checkov-policy-index",
+      "namespace": "iac-linter",
+      "severity": "P2"
+    },
+    "g-iac-linter-no-soft-fail": {
+      "token": "soft_fail: true",
+      "mode": "forbid",
+      "applies": ".checkov.yaml,.checkov.yml,.trivy.yaml",
+      "source": "checkov-policy-index",
+      "namespace": "iac-linter",
+      "severity": "P2"
+    },
+    "g-iam-no-wildcard-action": {
+      "token": "\"Action\": \"*\"",
+      "mode": "forbid",
+      "applies": "*.json",
+      "source": "aws-iam-best-practices",
+      "namespace": "iam",
+      "severity": "P0"
+    },
+    "g-iam-no-wildcard-resource": {
+      "token": "\"Resource\": \"*\"",
+      "mode": "forbid",
+      "applies": "*.json",
+      "source": "aws-iam-best-practices",
+      "namespace": "iam",
+      "severity": "P0"
+    },
+    "g-iam-no-wildcard-principal": {
+      "token": "\"Principal\": \"*\"",
+      "mode": "forbid",
+      "applies": "*.json",
+      "source": "aws-iam-best-practices",
+      "namespace": "iam",
+      "severity": "P0"
+    },
+    "g-iam-no-full-admin": {
+      "token": "\"*:*\"",
+      "mode": "forbid",
+      "applies": "*.json",
+      "source": "aws-iam-best-practices",
+      "namespace": "iam",
+      "severity": "P0"
+    },
+    "g-jwt-no-alg-none-compact": {
+      "token": "\"alg\":\"none\"",
+      "mode": "forbid",
+      "applies": "*.json,*.yaml,*.yml",
+      "source": "rfc-8725-jwt-bcp",
+      "namespace": "jwt",
+      "severity": "P0"
+    },
+    "g-jwt-no-alg-none-spaced": {
+      "token": "\"alg\": \"none\"",
+      "mode": "forbid",
+      "applies": "*.json,*.yaml,*.yml",
+      "source": "rfc-8725-jwt-bcp",
+      "namespace": "jwt",
+      "severity": "P0"
+    },
+    "g-jwt-no-hardcoded-secret": {
+      "token": "\"secret\":",
+      "mode": "forbid",
+      "applies": "*.json,*.yaml,*.yml",
+      "source": "rfc-8725-jwt-bcp",
+      "namespace": "jwt",
+      "severity": "P1"
+    },
+    "g-sbom-declare-spec-version": {
+      "token": "specVersion",
+      "mode": "require",
+      "applies": "*.cdx.json,bom.json,sbom.json",
+      "source": "cyclonedx-spec",
+      "namespace": "sbom",
+      "severity": "P2"
+    },
+    "g-sbom-include-components": {
+      "token": "components",
+      "mode": "require",
+      "applies": "*.cdx.json,bom.json,sbom.json",
+      "source": "cyclonedx-spec",
+      "namespace": "sbom",
+      "severity": "P2"
+    },
+    "g-sarif-declare-version": {
+      "token": "\"version\": \"2.1.0\"",
+      "mode": "require",
+      "applies": "*.sarif,*.sarif.json",
+      "source": "sarif-2-1-0",
+      "namespace": "sarif",
+      "severity": "P2"
+    },
+    "g-sarif-include-runs": {
+      "token": "\"runs\"",
+      "mode": "require",
+      "applies": "*.sarif,*.sarif.json",
+      "source": "sarif-2-1-0",
+      "namespace": "sarif",
+      "severity": "P2"
+    },
+    "g-sarif-declare-schema": {
+      "token": "$schema",
+      "mode": "require",
+      "applies": "*.sarif,*.sarif.json",
+      "source": "sarif-2-1-0",
+      "namespace": "sarif",
+      "severity": "P3"
+    },
+    "g-jsonschema-declare-schema": {
+      "token": "$schema",
+      "mode": "require",
+      "applies": "*.schema.json",
+      "source": "json-schema-2020-12",
+      "namespace": "jsonschema",
+      "severity": "P2"
+    },
+    "g-jsonschema-constrain-additional-properties": {
+      "token": "additionalProperties",
+      "mode": "require",
+      "applies": "*.schema.json",
+      "source": "json-schema-2020-12",
+      "namespace": "jsonschema",
+      "severity": "P3"
+    },
+    "g-arch-no-tbd-placeholder": {
+      "token": "TBD",
+      "mode": "forbid",
+      "applies": "*.md",
+      "source": "madr-arc42",
+      "namespace": "arch",
+      "severity": "P2"
+    },
+    "g-arch-no-fixme-marker": {
+      "token": "FIXME",
+      "mode": "forbid",
+      "applies": "*.md",
+      "source": "madr-arc42",
+      "namespace": "arch",
+      "severity": "P2"
+    },
+    "g-arch-no-decision-pending": {
+      "token": "DECISION PENDING",
+      "mode": "forbid",
+      "applies": "*.md",
+      "source": "madr-arc42",
+      "namespace": "arch",
+      "severity": "P2"
+    }
+  }
+}

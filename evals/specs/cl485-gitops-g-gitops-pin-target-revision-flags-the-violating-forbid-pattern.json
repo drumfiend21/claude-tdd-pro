@@ -1,0 +1,14 @@
+{
+  "name": "gitops enforcement flags a forbid-rule violation: gitops pin target revision",
+  "command": "printf '%s\\n' 'meta: fixture\ntargetRevision: HEAD\nmore: data' > 'fixture.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-gitops-pin-target-revision",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-gitops-pin-target-revision detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

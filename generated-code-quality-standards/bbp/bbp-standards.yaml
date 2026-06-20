@@ -1,0 +1,56 @@
+---
+source:
+  id: bitbucket-pipelines
+  authoritative_publisher: Atlassian
+  authoritative_url: https://support.atlassian.com/bitbucket-cloud/docs/bitbucket-pipelines-configuration-reference/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:bbp-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) Atlassian (cite-link)
+rules:
+- id: g-bbp-pin-image-tag
+  name: pin-image-tag
+  description: Pipeline images must be pinned, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://support.atlassian.com/bitbucket-cloud/docs/bitbucket-pipelines-configuration-reference/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: bitbucket-pipelines
+    section: convention
+- id: g-bbp-no-plaintext-secret
+  name: no-plaintext-secret
+  description: Pipelines must not declare plaintext passwords; use secured variables.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://support.atlassian.com/bitbucket-cloud/docs/bitbucket-pipelines-configuration-reference/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: bitbucket-pipelines
+    section: convention
+recommended_set:
+- g-bbp-pin-image-tag
+- g-bbp-no-plaintext-secret
+all_set:
+- g-bbp-pin-image-tag
+- g-bbp-no-plaintext-secret

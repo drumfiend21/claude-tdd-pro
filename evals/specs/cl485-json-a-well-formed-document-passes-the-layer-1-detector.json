@@ -1,0 +1,14 @@
+{
+  "name": "the json Layer-1 detector passes a well-formed JSON document as green",
+  "command": "printf '%s\\n' '{\"ok\": true, \"n\": 1}' > good.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-json-well-formed",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "detector=json-syntax.sh verdict=pass",
+      "status=green"
+    ]
+  }
+}

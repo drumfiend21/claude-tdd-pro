@@ -1,0 +1,14 @@
+{
+  "name": "cfn enforcement flags a forbid-rule violation: cfn no wildcard iam action",
+  "command": "printf '%s\\n' 'meta: fixture\n\"Action\": \"*\"\nmore: data' > 'fixture.cfn.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-cfn-no-wildcard-iam-action",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-cfn-no-wildcard-iam-action detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

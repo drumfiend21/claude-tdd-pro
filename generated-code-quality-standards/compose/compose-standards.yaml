@@ -1,0 +1,119 @@
+---
+source:
+  id: compose-spec
+  authoritative_publisher: Compose Spec / Docker
+  authoritative_url: https://docs.docker.com/reference/compose-file/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:compose-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Compose Spec Apache 2.0
+rules:
+- id: g-compose-no-privileged
+  name: no-privileged
+  description: Compose services must not run privileged.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.docker.com/reference/compose-file/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: compose-spec
+    section: convention
+- id: g-compose-no-host-network
+  name: no-host-network
+  description: Compose services must not use host network mode.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.docker.com/reference/compose-file/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: compose-spec
+    section: convention
+- id: g-compose-pin-image-tag
+  name: pin-image-tag
+  description: Compose images must be pinned, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.docker.com/reference/compose-file/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: compose-spec
+    section: convention
+- id: g-compose-no-host-pid
+  name: no-host-pid
+  description: Compose services must not share the host PID namespace.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.docker.com/reference/compose-file/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: compose-spec
+    section: convention
+- id: g-compose-drop-capabilities
+  name: drop-capabilities
+  description: Compose services should drop unneeded Linux capabilities.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.docker.com/reference/compose-file/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: compose-spec
+    section: convention
+recommended_set:
+- g-compose-no-privileged
+- g-compose-no-host-network
+- g-compose-pin-image-tag
+- g-compose-no-host-pid
+- g-compose-drop-capabilities
+all_set:
+- g-compose-no-privileged
+- g-compose-no-host-network
+- g-compose-pin-image-tag
+- g-compose-no-host-pid
+- g-compose-drop-capabilities

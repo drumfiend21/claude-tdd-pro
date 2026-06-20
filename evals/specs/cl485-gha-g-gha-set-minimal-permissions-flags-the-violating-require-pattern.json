@@ -1,0 +1,14 @@
+{
+  "name": "gha enforcement flags a require-rule violation: gha set minimal permissions",
+  "command": "mkdir -p '.github/workflows' && printf '%s\\n' 'meta: fixture\nother: value' > '.github/workflows/fixture.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-gha-set-minimal-permissions",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-gha-set-minimal-permissions detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

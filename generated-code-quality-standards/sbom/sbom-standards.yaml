@@ -1,0 +1,56 @@
+---
+source:
+  id: cyclonedx-spec
+  authoritative_publisher: OWASP CycloneDX / SPDX
+  authoritative_url: https://cyclonedx.org/specification/overview/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:sbom-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - CycloneDX Apache 2.0; SPDX CC-BY 3.0
+rules:
+- id: g-sbom-declare-spec-version
+  name: declare-spec-version
+  description: SBOMs must declare their spec version (specVersion / spdxVersion).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://cyclonedx.org/specification/overview/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cyclonedx-spec
+    section: convention
+- id: g-sbom-include-components
+  name: include-components
+  description: SBOMs must enumerate components/packages.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://cyclonedx.org/specification/overview/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: cyclonedx-spec
+    section: convention
+recommended_set:
+- g-sbom-declare-spec-version
+- g-sbom-include-components
+all_set:
+- g-sbom-declare-spec-version
+- g-sbom-include-components

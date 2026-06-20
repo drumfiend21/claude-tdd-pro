@@ -65,19 +65,21 @@ ruby -ryaml -rjson -e '
   # rule-id-driven detectors (cloud + universal-polyglot) carry their own applies-glob
   # in a manifest and are invoked `--rule <id> --root <dir>`. Merge both manifests.
   mf_applies = {}
-  %w[cloud-guidance-rules.json universal-pattern-rules.json].each do |mfn|
+  %w[cloud-guidance-rules.json config-guidance-rules.json universal-pattern-rules.json].each do |mfn|
     mp = File.join(plugin, "rubric", "detectors", mfn)
     next unless File.exist?(mp)
     (JSON.parse(File.read(mp))["rules"] || {}).each { |id, s| mf_applies[id] = s["applies"].to_s }
   end
-  RULE_DRIVEN = %w[cloud-guidance-rule.sh universal-pattern-rule.sh md-structure.sh]
+  RULE_DRIVEN = %w[cloud-guidance-rule.sh universal-pattern-rule.sh md-structure.sh json-syntax.sh yaml-syntax.sh]
 
   # default single file glob per rule namespace when --paths is not supplied
   def ns_glob(id)
     case id
     when /^g-react-/ then "*.tsx"
     when /^g-ts-/, /^g-node-/ then "*.ts"
-    when /^g-doc-/, /^g-md-/ then "*.md"
+    when /^g-doc-/, /^g-md-/, /^g-arch-/ then "*.md"
+    when /^g-json-/ then "*.json"
+    when /^g-yaml-/ then "*.yaml,*.yml"
     else "*"
     end
   end
@@ -100,7 +102,7 @@ ruby -ryaml -rjson -e '
     # is not_applicable, and a universal rule spans every source language); code
     # detectors use --paths (as given) or the namespace default under root.
     if is_cloud
-      globs = (mf_applies[id].to_s.empty? ? [ns_glob(id)] : mf_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
+      globs = (mf_applies[id].to_s.empty? ? ns_glob(id).split(",") : mf_applies[id].split(",")).map { |g| File.join(root, "**", g.strip) }
     elsif user_paths.empty?
       globs = [File.join(root, "**", ns_glob(id))]
     else

@@ -1,0 +1,14 @@
+{
+  "name": "an architecture doc with a resolved decision passes the no-TBD placeholder rule",
+  "command": "printf '# 0001. Title\\n\\n## Decision\\n\\nWe will use Postgres.\\n' > 0001-x.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-arch-no-tbd-placeholder",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=pass",
+      "status=green"
+    ]
+  }
+}

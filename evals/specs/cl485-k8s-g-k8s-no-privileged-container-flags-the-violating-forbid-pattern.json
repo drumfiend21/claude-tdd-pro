@@ -1,0 +1,14 @@
+{
+  "name": "k8s enforcement flags a forbid-rule violation: k8s no privileged container",
+  "command": "printf '%s\\n' 'meta: fixture\nprivileged: true\nmore: data' > 'fixture.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-k8s-no-privileged-container",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-k8s-no-privileged-container detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

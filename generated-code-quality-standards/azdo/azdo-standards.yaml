@@ -1,0 +1,56 @@
+---
+source:
+  id: azure-pipelines-yaml
+  authoritative_publisher: Microsoft
+  authoritative_url: https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:azdo-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) Microsoft (cite-link)
+rules:
+- id: g-azdo-pin-image-tag
+  name: pin-image-tag
+  description: Pipeline container images must be pinned, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: azure-pipelines-yaml
+    section: convention
+- id: g-azdo-no-plaintext-secret
+  name: no-plaintext-secret
+  description: Pipelines must not declare plaintext passwords; use secret variables.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: azure-pipelines-yaml
+    section: convention
+recommended_set:
+- g-azdo-pin-image-tag
+- g-azdo-no-plaintext-secret
+all_set:
+- g-azdo-pin-image-tag
+- g-azdo-no-plaintext-secret

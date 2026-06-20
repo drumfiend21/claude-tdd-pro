@@ -1,0 +1,14 @@
+{
+  "name": "compose enforcement flags a forbid-rule violation: compose pin image tag",
+  "command": "printf '%s\\n' 'meta: fixture\n:latest\nmore: data' > 'docker-compose.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-compose-pin-image-tag",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-compose-pin-image-tag detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

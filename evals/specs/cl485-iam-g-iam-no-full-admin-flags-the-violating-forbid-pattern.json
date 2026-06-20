@@ -1,0 +1,14 @@
+{
+  "name": "iam enforcement flags a forbid-rule violation: iam no full admin",
+  "command": "printf '%s\\n' 'meta: fixture\n\"*:*\"\nmore: data' > 'fixture.json' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-iam-no-full-admin",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-iam-no-full-admin detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

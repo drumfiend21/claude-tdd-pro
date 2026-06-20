@@ -1,0 +1,56 @@
+---
+source:
+  id: istio-config
+  authoritative_publisher: Istio / Envoy
+  authoritative_url: https://istio.io/latest/docs/reference/config/networking/virtual-service/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:mesh-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Istio docs Apache 2.0
+rules:
+- id: g-mesh-no-mtls-disabled
+  name: no-mtls-disabled
+  description: PeerAuthentication must not DISABLE mutual TLS.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://istio.io/latest/docs/reference/config/networking/virtual-service/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: istio-config
+    section: convention
+- id: g-mesh-no-wildcard-host
+  name: no-wildcard-host
+  description: VirtualService/Gateway hosts must not be an open wildcard.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://istio.io/latest/docs/reference/config/networking/virtual-service/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: istio-config
+    section: convention
+recommended_set:
+- g-mesh-no-mtls-disabled
+- g-mesh-no-wildcard-host
+all_set:
+- g-mesh-no-mtls-disabled
+- g-mesh-no-wildcard-host

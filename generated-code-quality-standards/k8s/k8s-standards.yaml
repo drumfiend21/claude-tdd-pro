@@ -1,0 +1,228 @@
+---
+source:
+  id: k8s-pod-security-standards
+  authoritative_publisher: Kubernetes / kube-linter
+  authoritative_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:k8s-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - Kubernetes docs CC-BY 4.0; kube-linter
+    Apache 2.0
+rules:
+- id: g-k8s-no-privileged-container
+  name: no-privileged-container
+  description: Containers must not run in privileged mode; a privileged container
+    shares the host kernel namespaces.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-no-host-network
+  name: no-host-network
+  description: Pods must not share the host network namespace (hostNetwork).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-no-host-pid
+  name: no-host-pid
+  description: Pods must not share the host PID namespace (hostPID).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-no-host-ipc
+  name: no-host-ipc
+  description: Pods must not share the host IPC namespace (hostIPC).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-no-allow-privilege-escalation
+  name: no-allow-privilege-escalation
+  description: Containers must set allowPrivilegeEscalation to false.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-no-latest-image-tag
+  name: no-latest-image-tag
+  description: Container images must be pinned to an explicit tag or digest, never
+    :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-run-as-non-root
+  name: run-as-non-root
+  description: Pods and containers must declare runAsNonRoot so they do not run as
+    uid 0.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-set-resource-limits
+  name: set-resource-limits
+  description: Containers must declare resource requests and limits.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-read-only-root-filesystem
+  name: read-only-root-filesystem
+  description: Containers should mount their root filesystem read-only.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+- id: g-k8s-drop-all-capabilities
+  name: drop-all-capabilities
+  description: Containers must drop Linux capabilities they do not need.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: k8s-pod-security-standards
+    section: convention
+recommended_set:
+- g-k8s-no-privileged-container
+- g-k8s-no-host-network
+- g-k8s-no-host-pid
+- g-k8s-no-host-ipc
+- g-k8s-no-allow-privilege-escalation
+- g-k8s-no-latest-image-tag
+- g-k8s-run-as-non-root
+- g-k8s-set-resource-limits
+- g-k8s-read-only-root-filesystem
+- g-k8s-drop-all-capabilities
+all_set:
+- g-k8s-no-privileged-container
+- g-k8s-no-host-network
+- g-k8s-no-host-pid
+- g-k8s-no-host-ipc
+- g-k8s-no-allow-privilege-escalation
+- g-k8s-no-latest-image-tag
+- g-k8s-run-as-non-root
+- g-k8s-set-resource-limits
+- g-k8s-read-only-root-filesystem
+- g-k8s-drop-all-capabilities

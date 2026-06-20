@@ -1,0 +1,56 @@
+---
+source:
+  id: json-schema-2020-12
+  authoritative_publisher: json-schema.org
+  authoritative_url: https://json-schema.org/draft/2020-12/release-notes
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:jsonschema-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - JSON Schema BSD-2-Clause
+rules:
+- id: g-jsonschema-declare-schema
+  name: declare-schema
+  description: Schemas must declare the $schema dialect.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://json-schema.org/draft/2020-12/release-notes
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: json-schema-2020-12
+    section: convention
+- id: g-jsonschema-constrain-additional-properties
+  name: constrain-additional-properties
+  description: Object schemas should constrain additionalProperties.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://json-schema.org/draft/2020-12/release-notes
+  requires_type_checking: false
+  recommended: true
+  severity: P3
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: json-schema-2020-12
+    section: convention
+recommended_set:
+- g-jsonschema-declare-schema
+- g-jsonschema-constrain-additional-properties
+all_set:
+- g-jsonschema-declare-schema
+- g-jsonschema-constrain-additional-properties

@@ -1,0 +1,14 @@
+{
+  "name": "helm enforcement flags a require-rule violation: helm declare resources",
+  "command": "printf '%s\\n' 'meta: fixture\nother: value' > 'values.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-helm-declare-resources",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-helm-declare-resources detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

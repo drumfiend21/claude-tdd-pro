@@ -1,0 +1,14 @@
+{
+  "name": "observability enforcement flags a forbid-rule violation: observability no insecure endpoint",
+  "command": "printf '%s\\n' 'meta: fixture\ninsecure: true\nmore: data' > 'fixture.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-observability-no-insecure-endpoint",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-observability-no-insecure-endpoint detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

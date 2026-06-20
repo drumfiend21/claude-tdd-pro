@@ -1,0 +1,13 @@
+{
+  "name": "an IAM rule on a tree with no JSON policy files is not_applicable rather than a vacuous green",
+  "command": "printf 'just text\\n' > notes.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-iam-no-wildcard-action",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=not_applicable"
+    ]
+  }
+}

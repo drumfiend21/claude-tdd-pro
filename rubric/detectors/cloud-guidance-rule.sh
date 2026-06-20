@@ -31,13 +31,22 @@ done
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
 MANIFEST="$PLUGIN_ROOT/rubric/detectors/cloud-guidance-rules.json"
+# config-guidance-rules.json is the SECOND manifest (PROPOSAL-003 / §28.24 config &
+# markup namespaces). Both feed the same require/forbid-token check; merged here so the
+# two generators (promote-cloud-rules.sh / promote-config-rules.sh) never clobber.
+CONFIG_MANIFEST="$PLUGIN_ROOT/rubric/detectors/config-guidance-rules.json"
 [ -f "$MANIFEST" ] || { echo "cloud-guidance-rule: manifest missing: $MANIFEST" >&2; exit 2; }
 
-RULE="$RULE" PATHS="$PATHS" ROOT="$ROOT" JSON="$JSON" MANIFEST="$MANIFEST" ruby -rjson -e '
+RULE="$RULE" PATHS="$PATHS" ROOT="$ROOT" JSON="$JSON" MANIFEST="$MANIFEST" CONFIG_MANIFEST="$CONFIG_MANIFEST" ruby -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   rule = ENV["RULE"]; root = ENV["ROOT"]; want_json = ENV["JSON"] == "1"
   m = JSON.parse(File.read(ENV["MANIFEST"]))
-  spec = (m["rules"] || {})[rule]
+  all_rules = (m["rules"] || {})
+  cm = ENV["CONFIG_MANIFEST"].to_s
+  if !cm.empty? && File.exist?(cm)
+    (JSON.parse(File.read(cm))["rules"] || {}).each { |k, v| all_rules[k] ||= v }
+  end
+  spec = all_rules[rule]
   unless spec
     STDERR.puts "cloud-guidance-rule: unknown rule #{rule}"; exit 2
   end

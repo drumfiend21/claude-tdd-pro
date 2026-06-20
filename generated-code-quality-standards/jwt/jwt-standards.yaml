@@ -1,0 +1,77 @@
+---
+source:
+  id: rfc-8725-jwt-bcp
+  authoritative_publisher: IETF
+  authoritative_url: https://datatracker.ietf.org/doc/html/rfc8725
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:jwt-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: IETF Trust (public)
+rules:
+- id: g-jwt-no-alg-none-compact
+  name: no-alg-none-compact
+  description: JWT config must not accept the unsecured alg none (RFC 8725).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://datatracker.ietf.org/doc/html/rfc8725
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: rfc-8725-jwt-bcp
+    section: convention
+- id: g-jwt-no-alg-none-spaced
+  name: no-alg-none-spaced
+  description: JWT config must not accept the unsecured alg none (RFC 8725).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://datatracker.ietf.org/doc/html/rfc8725
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: rfc-8725-jwt-bcp
+    section: convention
+- id: g-jwt-no-hardcoded-secret
+  name: no-hardcoded-secret
+  description: JWT signing secrets must not be hardcoded in config.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://datatracker.ietf.org/doc/html/rfc8725
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: rfc-8725-jwt-bcp
+    section: convention
+recommended_set:
+- g-jwt-no-alg-none-compact
+- g-jwt-no-alg-none-spaced
+- g-jwt-no-hardcoded-secret
+all_set:
+- g-jwt-no-alg-none-compact
+- g-jwt-no-alg-none-spaced
+- g-jwt-no-hardcoded-secret

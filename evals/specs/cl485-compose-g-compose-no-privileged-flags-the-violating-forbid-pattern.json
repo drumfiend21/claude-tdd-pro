@@ -1,0 +1,14 @@
+{
+  "name": "compose enforcement flags a forbid-rule violation: compose no privileged",
+  "command": "printf '%s\\n' 'meta: fixture\nprivileged: true\nmore: data' > 'docker-compose.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-compose-no-privileged",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-compose-no-privileged detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

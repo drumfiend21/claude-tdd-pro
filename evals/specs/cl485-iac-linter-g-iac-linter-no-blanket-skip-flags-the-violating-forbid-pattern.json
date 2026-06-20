@@ -1,0 +1,14 @@
+{
+  "name": "iac-linter enforcement flags a forbid-rule violation: iac linter no blanket skip",
+  "command": "printf '%s\\n' 'meta: fixture\nskip-check: \"*\"\nmore: data' > '.checkov.yaml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-iac-linter-no-blanket-skip",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-iac-linter-no-blanket-skip detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

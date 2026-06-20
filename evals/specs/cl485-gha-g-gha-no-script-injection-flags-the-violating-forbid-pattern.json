@@ -1,0 +1,14 @@
+{
+  "name": "gha enforcement flags a forbid-rule violation: gha no script injection",
+  "command": "mkdir -p '.github/workflows' && printf '%s\\n' 'meta: fixture\n${{ github.event.issue.title }}\nmore: data' > '.github/workflows/fixture.yml' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-gha-no-script-injection",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-gha-no-script-injection detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

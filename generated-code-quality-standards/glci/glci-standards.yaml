@@ -1,0 +1,77 @@
+---
+source:
+  id: gitlab-ci-yaml
+  authoritative_publisher: GitLab
+  authoritative_url: https://docs.gitlab.com/ci/yaml/
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:glci-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - GitLab docs CC-BY-SA 4.0
+rules:
+- id: g-glci-pin-image-tag
+  name: pin-image-tag
+  description: GitLab CI job images must be pinned, never :latest.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.gitlab.com/ci/yaml/
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gitlab-ci-yaml
+    section: convention
+- id: g-glci-declare-stages
+  name: declare-stages
+  description: Pipelines should declare an explicit stages list for ordering.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.gitlab.com/ci/yaml/
+  requires_type_checking: false
+  recommended: true
+  severity: P3
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gitlab-ci-yaml
+    section: convention
+- id: g-glci-no-interruptible-disabled
+  name: no-interruptible-disabled
+  description: Jobs should remain interruptible to save runners on superseded pipelines.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.gitlab.com/ci/yaml/
+  requires_type_checking: false
+  recommended: true
+  severity: P3
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gitlab-ci-yaml
+    section: convention
+recommended_set:
+- g-glci-pin-image-tag
+- g-glci-declare-stages
+- g-glci-no-interruptible-disabled
+all_set:
+- g-glci-pin-image-tag
+- g-glci-declare-stages
+- g-glci-no-interruptible-disabled

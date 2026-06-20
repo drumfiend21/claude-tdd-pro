@@ -1,0 +1,98 @@
+---
+source:
+  id: aws-iam-best-practices
+  authoritative_publisher: AWS / GCP / Azure IAM
+  authoritative_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:iam-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: Reference/educational use - (c) AWS (cite-link)
+rules:
+- id: g-iam-no-wildcard-action
+  name: no-wildcard-action
+  description: 'IAM policies must not grant Action: * (least privilege).'
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: aws-iam-best-practices
+    section: convention
+- id: g-iam-no-wildcard-resource
+  name: no-wildcard-resource
+  description: 'IAM policies must not grant Resource: * for write actions.'
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: aws-iam-best-practices
+    section: convention
+- id: g-iam-no-wildcard-principal
+  name: no-wildcard-principal
+  description: 'Resource policies must not grant Principal: * (anonymous access).'
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: aws-iam-best-practices
+    section: convention
+- id: g-iam-no-full-admin
+  name: no-full-admin
+  description: IAM statements must not grant the *:* full-admin action.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: aws-iam-best-practices
+    section: convention
+recommended_set:
+- g-iam-no-wildcard-action
+- g-iam-no-wildcard-resource
+- g-iam-no-wildcard-principal
+- g-iam-no-full-admin
+all_set:
+- g-iam-no-wildcard-action
+- g-iam-no-wildcard-resource
+- g-iam-no-wildcard-principal
+- g-iam-no-full-admin

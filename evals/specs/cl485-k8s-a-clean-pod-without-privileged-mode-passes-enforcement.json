@@ -1,0 +1,14 @@
+{
+  "name": "a clean Kubernetes pod without privileged mode passes enforcement as green",
+  "command": "printf 'spec:\\n  containers:\\n  - image: app:1.2.3\\n    securityContext:\\n      privileged: false\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-k8s-no-privileged-container",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=pass",
+      "status=green"
+    ]
+  }
+}

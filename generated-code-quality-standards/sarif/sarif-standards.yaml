@@ -1,0 +1,77 @@
+---
+source:
+  id: sarif-2-1-0
+  authoritative_publisher: OASIS
+  authoritative_url: https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html
+  registry_link: STANDARDS-URLS.yaml
+  fetched_at: '2026-06-19T00:00:00Z'
+  content_hash: sha256:sarif-standards-placeholder-content-hash-for-bootstrap
+  fetch_frequency: daily
+  fragility_tier: medium
+  license_note: OASIS RF
+rules:
+- id: g-sarif-declare-version
+  name: declare-version
+  description: SARIF logs must declare version 2.1.0 (self-conformance).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: sarif-2-1-0
+    section: convention
+- id: g-sarif-include-runs
+  name: include-runs
+  description: SARIF logs must contain a runs array.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html
+  requires_type_checking: false
+  recommended: true
+  severity: P2
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: sarif-2-1-0
+    section: convention
+- id: g-sarif-declare-schema
+  name: declare-schema
+  description: SARIF logs should reference the OASIS $schema.
+  detector: cloud-guidance-rule.sh
+  type: suggestion
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html
+  requires_type_checking: false
+  recommended: true
+  severity: P3
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: sarif-2-1-0
+    section: convention
+recommended_set:
+- g-sarif-declare-version
+- g-sarif-include-runs
+- g-sarif-declare-schema
+all_set:
+- g-sarif-declare-version
+- g-sarif-include-runs
+- g-sarif-declare-schema

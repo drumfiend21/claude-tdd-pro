@@ -1,0 +1,14 @@
+{
+  "name": "iam enforcement flags a forbid-rule violation: iam no wildcard resource",
+  "command": "printf '%s\\n' 'meta: fixture\n\"Resource\": \"*\"\nmore: data' > 'fixture.json' && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-iam-no-wildcard-resource",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-iam-no-wildcard-resource detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}
