@@ -1,0 +1,13 @@
+{
+  "name": "prose-judge resolves a config-namespace rule body from the second manifest, not unknown",
+  "command": "printf '# Design\\n\\n## Decision\\n\\nGrant a wildcard admin policy.\\n' > d.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-iam-no-wildcard-action --root . >/dev/null 2>&1; rc=$?; [ \"$rc\" != \"2\" ] && echo resolved 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resolved"
+    ]
+  }
+}

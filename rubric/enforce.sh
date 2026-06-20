@@ -58,9 +58,14 @@ ruby -ryaml -rjson -e '
   # id -> detector, from generated-code-quality-standards/ (the catalog a consumer
   # holds via active.json) -- NOT RUBRIC.yaml.
   catalog = {}
+  prose = {}   # id -> true when the rule also binds architectural prose (§28.24 applies_to_prose)
   Dir[File.join(plugin, "generated-code-quality-standards", "*", "*.yaml")].each do |f|
     d = (YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
-    (d["rules"] || []).each { |r| catalog[r["id"]] = r["detector"] if r.is_a?(Hash) && r["id"] && r["detector"] }
+    (d["rules"] || []).each do |r|
+      next unless r.is_a?(Hash) && r["id"]
+      catalog[r["id"]] = r["detector"] if r["detector"]
+      prose[r["id"]] = true if r["applies_to_prose"] == true
+    end
   end
   # rule-id-driven detectors (cloud + universal-polyglot) carry their own applies-glob
   # in a manifest and are invoked `--rule <id> --root <dir>`. Merge both manifests.
@@ -111,22 +116,48 @@ ruby -ryaml -rjson -e '
     files = count_files(globs)
 
     if files.zero?
-      # 0 files matched the rule scope -> not_applicable (NEUTRAL, distinct from pass).
+      # 0 files matched the primary (code-shape) scope -> not_applicable on that surface.
       # This kills the vacuous-green class: "nothing to check" is never a pass.
-      results << { "rule" => id, "detector" => det, "verdict" => "not_applicable", "files_evaluated" => 0, "exit" => 0 }
-      next
+      verdict = "not_applicable"; ec = 0
+    else
+      cmd = is_cloud ? ["bash", det_path, "--rule", id, "--root", root] \
+                     : ["bash", det_path, "--paths", (user_paths.empty? ? globs[0] : user_paths)]
+      system(*cmd, out: File::NULL, err: File::NULL)
+      ec = $?.exitstatus
+      verdict = case ec
+                when 0 then "pass"          # ran, >=1 file evaluated, 0 findings
+                when 1 then "fail"          # ran, >=1 finding
+                else "not_enforced"          # had files, detector could not verify (tool/model absent) -> RED, never a pass
+                end
     end
 
-    cmd = is_cloud ? ["bash", det_path, "--rule", id, "--root", root] \
-                   : ["bash", det_path, "--paths", (user_paths.empty? ? globs[0] : user_paths)]
-    system(*cmd, out: File::NULL, err: File::NULL)
-    ec = $?.exitstatus
-    verdict = case ec
-              when 0 then "pass"          # ran, >=1 file evaluated, 0 findings
-              when 1 then "fail"          # ran, >=1 finding
-              else "not_enforced"          # had files, detector could not verify (tool/model absent) -> RED, never a pass
-              end
-    results << { "rule" => id, "detector" => det, "verdict" => verdict, "files_evaluated" => files, "exit" => ec }
+    # §28.24 prose-as-code: a rule flagged applies_to_prose ALSO binds architectural
+    # Markdown prose via prose-judge.sh -- the SAME rule, projected onto a second surface
+    # (ADR/design docs), so a design that violates it red-flags before the code exists.
+    # The prose surface can only ADD a catch (escalate to fail on a prose violation); it
+    # never downgrades a clean code result to incomplete.
+    prose_det = nil
+    if prose[id]
+      md_count = count_files([File.join(root, "**", "*.md")])
+      if md_count > 0
+        system("bash", File.join(plugin, "rubric", "detectors", "prose-judge.sh"),
+               "--rule", id, "--root", root, out: File::NULL, err: File::NULL)
+        pj = $?.exitstatus
+        prose_det = "prose-judge.sh"
+        if pj == 1                                   # prose proposes a violating design
+          verdict = "fail"; ec = 1
+        elsif verdict == "not_applicable" && pj == 0 # no code surface, prose clean -> pass
+          verdict = "pass"; ec = 0
+        elsif verdict == "not_applicable" && pj == 3 # no code, prose touches rule but unjudgeable
+          verdict = "not_enforced"; ec = 3
+        end
+        files += md_count
+      end
+    end
+
+    rec = { "rule" => id, "detector" => det, "verdict" => verdict, "files_evaluated" => files, "exit" => ec }
+    rec["prose_detector"] = prose_det if prose_det
+    results << rec
   end
 
   cnt = ->(v) { results.count { |r| r["verdict"] == v } }

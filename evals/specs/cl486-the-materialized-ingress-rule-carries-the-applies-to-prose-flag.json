@@ -1,0 +1,13 @@
+{
+  "name": "the materialized unrestricted-ingress rule carries the applies_to_prose flag in the catalog",
+  "command": "grep -q 'applies_to_prose: true' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/aws/aws-iac-enforcement.yaml\" && echo prose-bound 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-bound"
+    ]
+  }
+}

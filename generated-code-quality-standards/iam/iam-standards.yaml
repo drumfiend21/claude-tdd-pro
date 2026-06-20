@@ -29,6 +29,10 @@ rules:
   provenance:
   - source: aws-iam-best-practices
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-iam-no-wildcard-resource
   name: no-wildcard-resource
   description: 'IAM policies must not grant Resource: * for write actions.'
@@ -86,6 +90,10 @@ rules:
   provenance:
   - source: aws-iam-best-practices
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 recommended_set:
 - g-iam-no-wildcard-action
 - g-iam-no-wildcard-resource

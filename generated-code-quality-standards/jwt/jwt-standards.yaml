@@ -29,6 +29,10 @@ rules:
   provenance:
   - source: rfc-8725-jwt-bcp
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-jwt-no-alg-none-spaced
   name: no-alg-none-spaced
   description: JWT config must not accept the unsecured alg none (RFC 8725).

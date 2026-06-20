@@ -30,6 +30,10 @@ rules:
   provenance:
   - source: aws-prescriptive-security
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-aws-tag-resources
   name: tag-resources
   description: Cloud resources must carry tags so ownership, cost allocation, and

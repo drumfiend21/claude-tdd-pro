@@ -29,6 +29,10 @@ rules:
   provenance:
   - source: gcp-architecture-framework
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-gcp-enable-audit-logs
   name: enable-audit-logs
   description: Projects and services must enable audit logging for accountability.

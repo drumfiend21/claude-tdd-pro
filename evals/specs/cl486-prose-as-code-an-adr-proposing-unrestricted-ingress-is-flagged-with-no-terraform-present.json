@@ -1,0 +1,14 @@
+{
+  "name": "prose-as-code: an ADR proposing 0.0.0.0/0 ingress is flagged by enforce with no Terraform present",
+  "command": "mkdir -p docs/adr && printf '# 0050. Dev cluster\\n\\n## Decision\\n\\nWe will leave dev-cluster ingress unrestricted (0.0.0.0/0).\\n' > docs/adr/0050.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-aws-no-unrestricted-ingress",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "rule=g-aws-no-unrestricted-ingress detector=cloud-guidance-rule.sh verdict=fail",
+      "status=red"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the prose surface catches a violating design even when the Terraform code itself is clean",
+  "command": "printf 'resource \"x\" { cidr_blocks = [\"10.0.0.0/8\"] }\\n' > main.tf && mkdir -p docs && printf '# Design\\n\\n## Decision\\n\\nExpose the API via 0.0.0.0/0 for now.\\n' > docs/design.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-aws-no-unrestricted-ingress",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "verdict=fail"
+    ]
+  }
+}

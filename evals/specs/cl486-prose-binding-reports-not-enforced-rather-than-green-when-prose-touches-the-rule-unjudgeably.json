@@ -1,0 +1,14 @@
+{
+  "name": "prose binding reports not_enforced rather than a silent green when prose touches the rule unjudgeably",
+  "command": "mkdir -p docs && printf '# Design\\n\\n## Decision\\n\\nWe will run a privileged container workload in dev.\\n' > docs/d.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-k8s-no-privileged-container",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 3,
+    "stderr_contains": [
+      "verdict=not_enforced",
+      "status=incomplete"
+    ]
+  }
+}

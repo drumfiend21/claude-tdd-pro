@@ -101,10 +101,14 @@ ROOT="$ROOT" ruby -ryaml -rjson -rdigest -rfileutils -e '
       "fragility_tier" => "medium",
       "license_note" => n[:lic],
     }
+    # §28.24 Wave-3 prose-as-code: the unrestricted-ingress rules carry a literal
+    # 0.0.0.0/0 token that appears verbatim in architecture prose, so an ADR proposing
+    # it red-flags via the prose-judge keyword tier before any Terraform is written.
+    prose_ids = %w[g-aws-no-unrestricted-ingress g-gcp-no-unrestricted-ingress g-azure-no-unrestricted-ingress]
     doc["rules"] = n[:rules].map do |id, name, desc, token, mode, applies, source, sev, type|
       manifest["rules"][id] = { "token" => token, "mode" => mode, "applies" => applies,
                                 "source" => source, "namespace" => n[:ns], "severity" => sev }
-      {
+      rule = {
         "id" => id, "name" => name, "description" => desc,
         "detector" => "cloud-guidance-rule.sh",
         "type" => type, "fixable" => nil, "has_suggestions" => false,
@@ -114,6 +118,11 @@ ROOT="$ROOT" ruby -ryaml -rjson -rdigest -rfileutils -e '
         "rule_state" => "stable",
         "provenance" => [ { "source" => source, "section" => "convention" } ],
       }
+      if prose_ids.include?(id)
+        rule["applies_to_prose"] = true
+        rule["applies_to_prose_kinds"] = ["architecture", "adr"]
+      end
+      rule
     end
     doc["recommended_set"] = ids
     doc["all_set"] = ids.dup

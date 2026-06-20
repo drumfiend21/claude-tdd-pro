@@ -1,0 +1,13 @@
+{
+  "name": "a rule not flagged applies_to_prose stays not_applicable on a docs-only tree with no prose escalation",
+  "command": "mkdir -p docs && printf '# Notes\\n\\ntags are good\\n' > docs/notes.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-aws-tag-resources",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verdict=not_applicable"
+    ]
+  }
+}

@@ -31,6 +31,10 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-k8s-no-host-network
   name: no-host-network
   description: Pods must not share the host network namespace (hostNetwork).
@@ -50,6 +54,10 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-k8s-no-host-pid
   name: no-host-pid
   description: Pods must not share the host PID namespace (hostPID).

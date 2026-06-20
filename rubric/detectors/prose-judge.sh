@@ -47,7 +47,7 @@ RULE="$RULE" PATHS="$PATHS" ROOT="$ROOT" JSON="$JSON" LLMJ="$LLMJ" PLUGIN_ROOT="
     d=(YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
     (d["rules"]||[]).each { |r| body=r["description"].to_s if r.is_a?(Hash) && r["id"]==rule }
   end
-  %w[cloud-guidance-rules.json universal-pattern-rules.json].each do |mfn|
+  %w[cloud-guidance-rules.json config-guidance-rules.json universal-pattern-rules.json].each do |mfn|
     mp=File.join(plugin,"rubric","detectors",mfn); next unless File.exist?(mp)
     s=(JSON.parse(File.read(mp))["rules"]||{})[rule]
     next unless s

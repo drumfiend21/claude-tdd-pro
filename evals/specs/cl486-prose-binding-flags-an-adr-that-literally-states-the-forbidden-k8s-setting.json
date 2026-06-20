@@ -1,0 +1,14 @@
+{
+  "name": "prose binding flags an ADR that literally states the forbidden Kubernetes privileged setting",
+  "command": "mkdir -p docs && printf '# Design\\n\\n## Decision\\n\\nThe sidecar sets securityContext privileged: true.\\n' > docs/d.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-k8s-no-privileged-container",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "verdict=fail",
+      "status=red"
+    ]
+  }
+}

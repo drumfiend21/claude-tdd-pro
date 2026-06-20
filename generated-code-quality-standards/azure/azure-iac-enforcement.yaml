@@ -30,6 +30,10 @@ rules:
   provenance:
   - source: azure-well-architected
     section: convention
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
 - id: g-azure-encrypt-at-rest
   name: encrypt-at-rest
   description: Data stores must declare encryption at rest.

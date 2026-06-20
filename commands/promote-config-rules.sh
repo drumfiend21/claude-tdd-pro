@@ -215,6 +215,15 @@ ROOT="$ROOT" ruby -ryaml -rjson -rdigest -rfileutils -e '
       ] },
   ]
 
+  # §28.24 Wave-3 prose-as-code activation: these rules ALSO bind architectural prose
+  # (an ADR/design doc proposing the violating design red-flags before code exists).
+  PROSE = %w[
+    g-iam-no-wildcard-action g-iam-no-full-admin
+    g-jwt-no-alg-none-compact
+    g-k8s-no-privileged-container g-k8s-no-host-network
+    g-gha-no-pull-request-target
+  ]
+
   manifest = { "rules" => {} }
   total = 0
   NS.each do |n|
@@ -234,7 +243,7 @@ ROOT="$ROOT" ruby -ryaml -rjson -rdigest -rfileutils -e '
     doc["rules"] = n[:rules].map do |id, name, desc, token, mode, applies, source, sev, type|
       manifest["rules"][id] = { "token" => token, "mode" => mode, "applies" => applies,
                                 "source" => source, "namespace" => n[:ns], "severity" => sev }
-      {
+      rule = {
         "id" => id, "name" => name, "description" => desc,
         "detector" => "cloud-guidance-rule.sh",
         "type" => type, "fixable" => nil, "has_suggestions" => false,
@@ -244,6 +253,11 @@ ROOT="$ROOT" ruby -ryaml -rjson -rdigest -rfileutils -e '
         "rule_state" => "stable",
         "provenance" => [ { "source" => source, "section" => "convention" } ],
       }
+      if PROSE.include?(id)
+        rule["applies_to_prose"] = true
+        rule["applies_to_prose_kinds"] = ["architecture", "adr"]
+      end
+      rule
     end
     doc["recommended_set"] = ids
     doc["all_set"] = ids.dup

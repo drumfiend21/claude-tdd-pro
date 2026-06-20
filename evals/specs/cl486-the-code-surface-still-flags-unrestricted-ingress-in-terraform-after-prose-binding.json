@@ -1,0 +1,14 @@
+{
+  "name": "the code surface still flags unrestricted ingress in Terraform after the rule also binds prose",
+  "command": "printf 'resource \"x\" { cidr_blocks = [\"0.0.0.0/0\"] }\\n' > main.tf && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce.sh\" --root . --rule g-aws-no-unrestricted-ingress",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 1,
+    "stderr_contains": [
+      "verdict=fail",
+      "status=red"
+    ]
+  }
+}
