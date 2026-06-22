@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: prometheus-config
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-observability-define-alerting
   name: define-alerting
   description: Monitoring config should define alerting rules, not only scrape.
@@ -48,6 +55,13 @@ rules:
   provenance:
   - source: prometheus-config
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-observability-no-insecure-endpoint
 - g-observability-define-alerting

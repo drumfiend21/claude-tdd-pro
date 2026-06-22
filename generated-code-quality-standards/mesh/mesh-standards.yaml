@@ -29,6 +29,15 @@ rules:
   provenance:
   - source: istio-config
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-mesh-no-wildcard-host
   name: no-wildcard-host
   description: VirtualService/Gateway hosts must not be an open wildcard.
@@ -48,6 +57,15 @@ rules:
   provenance:
   - source: istio-config
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-mesh-no-mtls-disabled
 - g-mesh-no-wildcard-host

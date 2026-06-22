@@ -29,6 +29,15 @@ rules:
   provenance:
   - source: helm-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - helm
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-helm-declare-resources
   name: declare-resources
   description: Chart values should declare container resources.
@@ -48,6 +57,15 @@ rules:
   provenance:
   - source: helm-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - helm
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-helm-provide-values-schema
   name: provide-values-schema
   description: Charts should ship a values.schema.json to validate operator input.
@@ -67,6 +85,15 @@ rules:
   provenance:
   - source: helm-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - helm
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-helm-no-latest-tag
 - g-helm-declare-resources

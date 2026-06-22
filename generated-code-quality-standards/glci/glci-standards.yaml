@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: gitlab-ci-yaml
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-glci-declare-stages
   name: declare-stages
   description: Pipelines should declare an explicit stages list for ordering.
@@ -48,6 +55,13 @@ rules:
   provenance:
   - source: gitlab-ci-yaml
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-glci-no-interruptible-disabled
   name: no-interruptible-disabled
   description: Jobs should remain interruptible to save runners on superseded pipelines.
@@ -67,6 +81,13 @@ rules:
   provenance:
   - source: gitlab-ci-yaml
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-glci-pin-image-tag
 - g-glci-declare-stages

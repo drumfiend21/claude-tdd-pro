@@ -1,0 +1,13 @@
+{
+  "name": "a Kubernetes namespace rule is bound to the kubernetes IaC dialect axis",
+  "command": "GCS=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" ruby -ryaml -e 'r=YAML.unsafe_load_file(ENV[\"GCS\"]+\"/k8s/k8s-standards.yaml\")[\"rules\"][0];a=(r[\"applies_to\"]||{});exit 1 unless Array(a[\"iac_dialects\"]).include?(\"kubernetes\");STDERR.puts \"k8s-bound-kubernetes\"'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "k8s-bound-kubernetes"
+    ]
+  }
+}

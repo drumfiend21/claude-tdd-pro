@@ -34,6 +34,17 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
+  - bundle: architectural-content
 - id: g-aws-tag-resources
   name: tag-resources
   description: Cloud resources must carry tags so ownership, cost allocation, and
@@ -54,6 +65,16 @@ rules:
   provenance:
   - source: aws-well-architected
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 recommended_set:
 - g-aws-no-unrestricted-ingress
 - g-aws-tag-resources

@@ -29,6 +29,12 @@ rules:
   provenance:
   - source: rfc-8259
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: json-syntax.sh
+    required: true
 recommended_set:
 - g-json-well-formed
 all_set:

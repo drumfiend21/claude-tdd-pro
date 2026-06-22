@@ -29,6 +29,16 @@ rules:
   provenance:
   - source: nist-zero-trust
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 - id: g-us-government-audit-logging
   name: audit-logging
   description: Federal systems must enable audit logging at the boundary (DoD SCCA).
@@ -48,6 +58,16 @@ rules:
   provenance:
   - source: dod-scca
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 recommended_set:
 - g-us-government-encrypt-at-rest
 - g-us-government-audit-logging

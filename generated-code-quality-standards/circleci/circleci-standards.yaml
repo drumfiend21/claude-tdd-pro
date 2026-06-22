@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: circleci-config
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-circleci-pin-orb-version
   name: pin-orb-version
   description: Orbs must be pinned to an explicit version, not @volatile.
@@ -48,6 +55,13 @@ rules:
   provenance:
   - source: circleci-config
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-circleci-pin-image-tag
 - g-circleci-pin-orb-version

@@ -1,0 +1,13 @@
+{
+  "name": "the namespace-axis binding map (or its default) covers every namespace that carries rules",
+  "command": "GCS=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" MAP=\"$CLAUDE_PLUGIN_ROOT/standards/namespace-axis-binding.yaml\" ruby -ryaml -e 'm=YAML.unsafe_load_file(ENV[\"MAP\"]);has_default=!m[\"default\"].nil?;exit 1 unless has_default;ns=Dir[ENV[\"GCS\"]+\"/*/*.yaml\"].select{|f|d=YAML.unsafe_load_file(f) rescue next;d.is_a?(Hash)&&Array(d[\"rules\"]).any?}.map{|f|f.split(\"/\")[-2]}.uniq;STDERR.puts \"namespaces=#{ns.size} default_present=true\"' ",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "default_present=true"
+    ]
+  }
+}

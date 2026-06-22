@@ -30,6 +30,16 @@ rules:
   provenance:
   - source: cncf-cloud-native
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-linux-foundation-liveness-probe
   name: liveness-probe
   description: Kubernetes workloads should declare a livenessProbe so the platform
@@ -50,6 +60,16 @@ rules:
   provenance:
   - source: cncf-cloud-native
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 recommended_set:
 - g-linux-foundation-set-resource-limits
 - g-linux-foundation-liveness-probe

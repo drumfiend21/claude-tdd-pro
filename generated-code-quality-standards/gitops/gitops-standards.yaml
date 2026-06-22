@@ -29,6 +29,16 @@ rules:
   provenance:
   - source: opengitops-principles
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-gitops-no-plaintext-secret
   name: no-plaintext-secret
   description: GitOps repos must not commit raw Secret manifests; use SealedSecret/SOPS.
@@ -48,6 +58,16 @@ rules:
   provenance:
   - source: opengitops-principles
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 recommended_set:
 - g-gitops-pin-target-revision
 - g-gitops-no-plaintext-secret

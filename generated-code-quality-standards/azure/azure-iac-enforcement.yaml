@@ -34,6 +34,17 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
+  - bundle: architectural-content
 - id: g-azure-encrypt-at-rest
   name: encrypt-at-rest
   description: Data stores must declare encryption at rest.
@@ -53,6 +64,16 @@ rules:
   provenance:
   - source: azure-well-architected
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 recommended_set:
 - g-azure-no-unrestricted-ingress
 - g-azure-encrypt-at-rest

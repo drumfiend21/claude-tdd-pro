@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: jenkins-pipeline
     section: convention
+  applies_to:
+    linguist_aliases:
+    - groovy
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: semgrep
 - id: g-jenkins-no-plaintext-credentials
   name: no-plaintext-credentials
   description: Pipelines must not embed plaintext passwords; use the credentials()
@@ -49,6 +56,13 @@ rules:
   provenance:
   - source: jenkins-pipeline
     section: convention
+  applies_to:
+    linguist_aliases:
+    - groovy
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: semgrep
 recommended_set:
 - g-jenkins-pin-image-tag
 - g-jenkins-no-plaintext-credentials

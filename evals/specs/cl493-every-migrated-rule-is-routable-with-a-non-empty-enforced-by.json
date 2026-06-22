@@ -1,0 +1,13 @@
+{
+  "name": "every migrated rule is routable with a non-empty enforced_by binding",
+  "command": "GCS=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" ruby -ryaml -e 'bad=0;n=0;Dir[ENV[\"GCS\"]+\"/*/*.yaml\"].each{|f|d=YAML.unsafe_load_file(f) rescue next;next unless d.is_a?(Hash);(d[\"rules\"]||[]).each{|r|next unless r.is_a?(Hash)&&r[\"id\"];n+=1;bad+=1 unless r[\"enforced_by\"].is_a?(Array)&&!r[\"enforced_by\"].empty?}};STDERR.puts(bad.zero? ? \"all-routable n=#{n}\" : \"unrouted=#{bad}\");exit(bad.zero? ? 0:1)'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-routable n=118"
+    ]
+  }
+}

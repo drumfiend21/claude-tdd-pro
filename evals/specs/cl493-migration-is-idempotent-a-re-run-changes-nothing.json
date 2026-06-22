@@ -1,0 +1,13 @@
+{
+  "name": "the applies_to migration is idempotent — a dry-run over the migrated tree changes nothing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rules-to-applies-to.sh\" --dry-run 2>e.txt; grep -q 'migrated_rules=0' e.txt && echo idempotent 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "idempotent"
+    ]
+  }
+}

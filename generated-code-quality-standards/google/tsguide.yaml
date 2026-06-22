@@ -1,108 +1,145 @@
+---
 source:
   id: google-tsguide
   authoritative_publisher: Google (google.github.io/styleguide/tsguide.html)
-  authoritative_url: "https://google.github.io/styleguide/tsguide.html"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:google-tsguide-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://google.github.io/styleguide/tsguide.html
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:google-tsguide-placeholder-content-hash-for-bootstrap
   fetch_frequency: monthly
   fragility_tier: low
-  license_note: "CC-BY 3.0 (Google style guides)"
+  license_note: CC-BY 3.0 (Google style guides)
 rules:
-  - id: g-ts-001
-    name: any-requires-allow-comment
-    description: "Explicit any annotation requires an // allow-any: <reason> comment so the type-safety affordance is reviewable. Use unknown plus narrowing per typescript-handbook for genuinely-unknown types."
-    detector: no-any.sh
-    type: problem
-    fixable: code
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://google.github.io/styleguide/tsguide.html#any"
-    requires_type_checking: true
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-      properties:
-        allow_with_comment_pattern:
+- id: g-ts-001
+  name: any-requires-allow-comment
+  description: 'Explicit any annotation requires an // allow-any: <reason> comment
+    so the type-safety affordance is reviewable. Use unknown plus narrowing per typescript-handbook
+    for genuinely-unknown types.'
+  detector: no-any.sh
+  type: problem
+  fixable: code
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://google.github.io/styleguide/tsguide.html#any
+  requires_type_checking: true
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      allow_with_comment_pattern:
+        type: string
+      max_per_file:
+        type: integer
+        minimum: 0
+  messages:
+    anyWithoutAllow: 'any annotation at {{location}} lacks an // allow-any: <reason>
+      comment (google-tsguide §5.2)'
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: google-tsguide
+    section: "§5.2"
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: no-any.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
+- id: g-ts-002
+  name: as-requires-allow-cast-comment
+  description: 'Explicit `as <Type>` cast requires an // allow-cast: <reason> comment
+    so the type-safety affordance is reviewable. Prefer schema-validated parse where
+    possible.'
+  detector: no-any.sh
+  type: problem
+  fixable: code
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://google.github.io/styleguide/tsguide.html#type-assertions
+  requires_type_checking: true
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      allow_with_comment_pattern:
+        type: string
+      allowed_for:
+        type: array
+        items:
           type: string
-        max_per_file:
-          type: integer
-          minimum: 0
-    messages:
-      anyWithoutAllow: "any annotation at {{location}} lacks an // allow-any: <reason> comment (google-tsguide §5.2)"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: google-tsguide
-        section: "§5.2"
-  - id: g-ts-002
-    name: as-requires-allow-cast-comment
-    description: "Explicit `as <Type>` cast requires an // allow-cast: <reason> comment so the type-safety affordance is reviewable. Prefer schema-validated parse where possible."
-    detector: no-any.sh
-    type: problem
-    fixable: code
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://google.github.io/styleguide/tsguide.html#type-assertions"
-    requires_type_checking: true
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-      properties:
-        allow_with_comment_pattern:
-          type: string
-        allowed_for:
-          type: array
-          items:
-            type: string
-    messages:
-      castWithoutAllow: "`as` cast at {{location}} lacks an // allow-cast: <reason> comment (google-tsguide §5.5)"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: google-tsguide
-        section: "§5.5"
-  - id: g-ts-007
-    name: no-Function-no-object
-    description: "Banned types Function and object lose static checking; use a specific function signature or Record<string, unknown>. Wraps @typescript-eslint/no-empty-object-type via E-15 ESLint integration."
-    detector: no-any.sh
-    type: suggestion
-    fixable: code
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://google.github.io/styleguide/tsguide.html#banned-types"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      bannedType: "banned type {{type}} at {{location}}; use a specific function signature or Record<string, unknown> (google-tsguide §5.3)"
-    severity: P2
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    detector_config:
-      eslint_rule: "@typescript-eslint/no-empty-object-type"
-      eslint_plugin_npm: "@typescript-eslint/eslint-plugin"
-      wrap_method: "E-15"
-    provenance:
-      - source: google-tsguide
-        section: "§5.3"
+  messages:
+    castWithoutAllow: "`as` cast at {{location}} lacks an // allow-cast: <reason>
+      comment (google-tsguide §5.5)"
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: google-tsguide
+    section: "§5.5"
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: no-any.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
+- id: g-ts-007
+  name: no-Function-no-object
+  description: Banned types Function and object lose static checking; use a specific
+    function signature or Record<string, unknown>. Wraps @typescript-eslint/no-empty-object-type
+    via E-15 ESLint integration.
+  detector: no-any.sh
+  type: suggestion
+  fixable: code
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://google.github.io/styleguide/tsguide.html#banned-types
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    bannedType: banned type {{type}} at {{location}}; use a specific function signature
+      or Record<string, unknown> (google-tsguide §5.3)
+  severity: P2
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  detector_config:
+    eslint_rule: "@typescript-eslint/no-empty-object-type"
+    eslint_plugin_npm: "@typescript-eslint/eslint-plugin"
+    wrap_method: E-15
+  provenance:
+  - source: google-tsguide
+    section: "§5.3"
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: no-any.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
 recommended_set:
-  - g-ts-001
-  - g-ts-002
-  - g-ts-007
+- g-ts-001
+- g-ts-002
+- g-ts-007
 all_set:
-  - g-ts-001
-  - g-ts-002
-  - g-ts-007
+- g-ts-001
+- g-ts-002
+- g-ts-007

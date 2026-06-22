@@ -34,6 +34,17 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - github_actions
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: zizmor
+  - tool: checkov
+  - bundle: architectural-content
 - id: g-gha-pin-actions-to-sha
   name: pin-actions-to-sha
   description: Third-party actions must be pinned to a full commit SHA, not a mutable
@@ -54,6 +65,16 @@ rules:
   provenance:
   - source: gha-security-hardening
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - github_actions
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: zizmor
+  - tool: checkov
 - id: g-gha-no-unpinned-main-ref
   name: no-unpinned-main-ref
   description: Third-party actions must not reference a mutable @main ref.
@@ -73,6 +94,16 @@ rules:
   provenance:
   - source: gha-security-hardening
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - github_actions
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: zizmor
+  - tool: checkov
 - id: g-gha-set-minimal-permissions
   name: set-minimal-permissions
   description: Workflows must declare a minimal permissions block for GITHUB_TOKEN.
@@ -92,6 +123,16 @@ rules:
   provenance:
   - source: gha-security-hardening
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - github_actions
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: zizmor
+  - tool: checkov
 - id: g-gha-no-script-injection
   name: no-script-injection
   description: Workflows must not interpolate untrusted issue/PR titles directly into
@@ -112,6 +153,16 @@ rules:
   provenance:
   - source: gha-security-hardening
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - github_actions
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: zizmor
+  - tool: checkov
 recommended_set:
 - g-gha-no-pull-request-target
 - g-gha-pin-actions-to-sha

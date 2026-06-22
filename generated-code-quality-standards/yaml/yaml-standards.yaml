@@ -31,6 +31,12 @@ rules:
   provenance:
   - source: yamllint
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: yaml-syntax.sh
+    required: true
 recommended_set:
 - g-yaml-well-formed
 all_set:

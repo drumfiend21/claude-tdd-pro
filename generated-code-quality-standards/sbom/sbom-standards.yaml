@@ -29,6 +29,12 @@ rules:
   provenance:
   - source: cyclonedx-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
 - id: g-sbom-include-components
   name: include-components
   description: SBOMs must enumerate components/packages.
@@ -48,6 +54,12 @@ rules:
   provenance:
   - source: cyclonedx-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
 recommended_set:
 - g-sbom-declare-spec-version
 - g-sbom-include-components

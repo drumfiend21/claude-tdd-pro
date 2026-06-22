@@ -33,6 +33,14 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - bundle: architectural-content
 - id: g-iam-no-wildcard-resource
   name: no-wildcard-resource
   description: 'IAM policies must not grant Resource: * for write actions.'
@@ -52,6 +60,13 @@ rules:
   provenance:
   - source: aws-iam-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-iam-no-wildcard-principal
   name: no-wildcard-principal
   description: 'Resource policies must not grant Principal: * (anonymous access).'
@@ -71,6 +86,13 @@ rules:
   provenance:
   - source: aws-iam-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-iam-no-full-admin
   name: no-full-admin
   description: IAM statements must not grant the *:* full-admin action.
@@ -94,6 +116,14 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - bundle: architectural-content
 recommended_set:
 - g-iam-no-wildcard-action
 - g-iam-no-wildcard-resource

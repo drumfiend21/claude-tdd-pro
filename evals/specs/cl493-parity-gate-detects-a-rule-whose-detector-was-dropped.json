@@ -1,0 +1,13 @@
+{
+  "name": "the parity gate flags a rule whose original detector was dropped from enforced_by",
+  "command": "mkdir -p generated-code-quality-standards/x && printf 'source:\\n  id: t\\nrules:\\n- id: g-x-bad\\n  detector: cloud-guidance-rule.sh\\n  enforced_by:\\n  - tool: checkov\\n' > generated-code-quality-standards/x/x.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-applies-to-parity.sh\" --root . 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'detector-not-preserved' e.txt && echo parity-catches-drop 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "parity-catches-drop"
+    ]
+  }
+}

@@ -35,6 +35,17 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
+  - bundle: architectural-content
 - id: g-k8s-no-host-network
   name: no-host-network
   description: Pods must not share the host network namespace (hostNetwork).
@@ -58,6 +69,17 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
+  - bundle: architectural-content
 - id: g-k8s-no-host-pid
   name: no-host-pid
   description: Pods must not share the host PID namespace (hostPID).
@@ -77,6 +99,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-no-host-ipc
   name: no-host-ipc
   description: Pods must not share the host IPC namespace (hostIPC).
@@ -96,6 +128,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-no-allow-privilege-escalation
   name: no-allow-privilege-escalation
   description: Containers must set allowPrivilegeEscalation to false.
@@ -115,6 +157,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-no-latest-image-tag
   name: no-latest-image-tag
   description: Container images must be pinned to an explicit tag or digest, never
@@ -135,6 +187,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-run-as-non-root
   name: run-as-non-root
   description: Pods and containers must declare runAsNonRoot so they do not run as
@@ -155,6 +217,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-set-resource-limits
   name: set-resource-limits
   description: Containers must declare resource requests and limits.
@@ -174,6 +246,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-read-only-root-filesystem
   name: read-only-root-filesystem
   description: Containers should mount their root filesystem read-only.
@@ -193,6 +275,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 - id: g-k8s-drop-all-capabilities
   name: drop-all-capabilities
   description: Containers must drop Linux capabilities they do not need.
@@ -212,6 +304,16 @@ rules:
   provenance:
   - source: k8s-pod-security-standards
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - kubernetes
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: kubescape
 recommended_set:
 - g-k8s-no-privileged-container
 - g-k8s-no-host-network

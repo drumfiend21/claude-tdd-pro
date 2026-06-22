@@ -29,6 +29,12 @@ rules:
   provenance:
   - source: json-schema-2020-12
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
 - id: g-jsonschema-constrain-additional-properties
   name: constrain-additional-properties
   description: Object schemas should constrain additionalProperties.
@@ -48,6 +54,12 @@ rules:
   provenance:
   - source: json-schema-2020-12
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
 recommended_set:
 - g-jsonschema-declare-schema
 - g-jsonschema-constrain-additional-properties

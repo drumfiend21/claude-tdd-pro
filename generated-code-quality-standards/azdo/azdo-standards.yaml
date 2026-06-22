@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: azure-pipelines-yaml
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-azdo-no-plaintext-secret
   name: no-plaintext-secret
   description: Pipelines must not declare plaintext passwords; use secret variables.
@@ -48,6 +55,13 @@ rules:
   provenance:
   - source: azure-pipelines-yaml
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-azdo-pin-image-tag
 - g-azdo-no-plaintext-secret

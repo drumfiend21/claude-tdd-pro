@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: checkov-policy-index
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-iac-linter-no-soft-fail
   name: no-soft-fail
   description: IaC scanning must not be configured soft-fail (findings ignored).
@@ -48,6 +55,13 @@ rules:
   provenance:
   - source: checkov-policy-index
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-iac-linter-no-blanket-skip
 - g-iac-linter-no-soft-fail

@@ -30,6 +30,13 @@ rules:
   provenance:
   - source: madr
     section: ADR-template
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: adr-structure.sh
+    required: true
+  - tool: markdownlint
 - id: g-doc-002
   name: adr-citation-presence
   description: Every Architecture Decision Record must cite at least one grounding
@@ -50,6 +57,13 @@ rules:
   provenance:
   - source: madr
     section: ADR-template
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: doc-citation-presence.sh
+    required: true
+  - tool: markdownlint
 recommended_set:
 - g-doc-001
 - g-doc-002

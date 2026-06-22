@@ -29,6 +29,15 @@ rules:
   provenance:
   - source: ansible-lint-rules
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - ansible
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-ansible-no-validate-certs-disabled
   name: no-validate-certs-disabled
   description: Modules must not disable TLS certificate validation.
@@ -48,6 +57,15 @@ rules:
   provenance:
   - source: ansible-lint-rules
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - ansible
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-ansible-pin-package-version
   name: pin-package-version
   description: Package installs should pin a version rather than tracking latest.
@@ -67,6 +85,15 @@ rules:
   provenance:
   - source: ansible-lint-rules
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - ansible
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-ansible-no-plaintext-password
 - g-ansible-no-validate-certs-disabled

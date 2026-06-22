@@ -30,6 +30,16 @@ rules:
   provenance:
   - source: terraform-docs
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 - id: g-hashicorp-declare-required-providers
   name: declare-required-providers
   description: Terraform configurations must declare required_providers with version
@@ -50,6 +60,16 @@ rules:
   provenance:
   - source: terraform-docs
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 recommended_set:
 - g-hashicorp-pin-required-version
 - g-hashicorp-declare-required-providers

@@ -29,6 +29,16 @@ rules:
   provenance:
   - source: slsa-framework
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 - id: g-security-governance-no-known-exploited-ingress
   name: no-known-exploited-ingress
   description: Forbid unrestricted 0.0.0.0/0 ingress - a routinely known-exploited
@@ -49,6 +59,16 @@ rules:
   provenance:
   - source: cisa-kev
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 recommended_set:
 - g-security-governance-require-provenance
 - g-security-governance-no-known-exploited-ingress

@@ -1,0 +1,13 @@
+{
+  "name": "the migrated rule files carry no YAML anchors (clean, parser-safe output)",
+  "command": "if grep -rEl '&[0-9]+$|: \\*[0-9]+' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/*/*.yaml >/dev/null 2>&1; then echo anchors-found 1>&2; else echo no-anchors 1>&2; fi",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-anchors"
+    ]
+  }
+}

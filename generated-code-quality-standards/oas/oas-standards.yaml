@@ -29,6 +29,16 @@ rules:
   provenance:
   - source: openapi-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+    iac_dialects:
+    - openapi
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: spectral
 - id: g-oas-no-plaintext-http-server
   name: no-plaintext-http-server
   description: API server URLs must use https, not plaintext http.
@@ -48,6 +58,16 @@ rules:
   provenance:
   - source: openapi-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+    iac_dialects:
+    - openapi
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: spectral
 - id: g-oas-declare-spec-version
   name: declare-spec-version
   description: Documents must declare the openapi version field.
@@ -67,6 +87,16 @@ rules:
   provenance:
   - source: openapi-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+    iac_dialects:
+    - openapi
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: spectral
 recommended_set:
 - g-oas-declare-security-schemes
 - g-oas-no-plaintext-http-server

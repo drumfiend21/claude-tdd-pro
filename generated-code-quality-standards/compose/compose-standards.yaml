@@ -29,6 +29,15 @@ rules:
   provenance:
   - source: compose-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - dockerfile
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-compose-no-host-network
   name: no-host-network
   description: Compose services must not use host network mode.
@@ -48,6 +57,15 @@ rules:
   provenance:
   - source: compose-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - dockerfile
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-compose-pin-image-tag
   name: pin-image-tag
   description: Compose images must be pinned, never :latest.
@@ -67,6 +85,15 @@ rules:
   provenance:
   - source: compose-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - dockerfile
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-compose-no-host-pid
   name: no-host-pid
   description: Compose services must not share the host PID namespace.
@@ -86,6 +113,15 @@ rules:
   provenance:
   - source: compose-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - dockerfile
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-compose-drop-capabilities
   name: drop-capabilities
   description: Compose services should drop unneeded Linux capabilities.
@@ -105,6 +141,15 @@ rules:
   provenance:
   - source: compose-spec
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+    iac_dialects:
+    - dockerfile
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-compose-no-privileged
 - g-compose-no-host-network

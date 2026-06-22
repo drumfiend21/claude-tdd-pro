@@ -1,39 +1,51 @@
+---
 source:
   id: nextjs-docs
   authoritative_publisher: Vercel (Next.js documentation)
-  authoritative_url: "https://nextjs.org/docs"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:nextjs-docs-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://nextjs.org/docs
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:nextjs-docs-placeholder-content-hash-for-bootstrap
   fetch_frequency: weekly
   fragility_tier: medium
-  license_note: "MIT (next.js documentation)"
+  license_note: MIT (next.js documentation)
 rules:
-  - id: g-react-009
-    name: no-client-fetch-where-server-equivalent-exists
-    description: "When a server-side data-fetching primitive exists for the same data (server component, route handler, server action), client-side fetching is forbidden. Reduces waterfall latency and protects API keys."
-    detector: rsc-boundary.sh
-    type: problem
-    fixable: code
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://nextjs.org/docs/app/building-your-application/data-fetching"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      clientFetchWithServerEq: "client fetch to {{endpoint}} has a server equivalent ({{serverPath}}); move fetch to server component"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: nextjs-docs
-        section: "data-fetching"
+- id: g-react-009
+  name: no-client-fetch-where-server-equivalent-exists
+  description: When a server-side data-fetching primitive exists for the same data
+    (server component, route handler, server action), client-side fetching is forbidden.
+    Reduces waterfall latency and protects API keys.
+  detector: rsc-boundary.sh
+  type: problem
+  fixable: code
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://nextjs.org/docs/app/building-your-application/data-fetching
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    clientFetchWithServerEq: client fetch to {{endpoint}} has a server equivalent
+      ({{serverPath}}); move fetch to server component
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: nextjs-docs
+    section: data-fetching
+  applies_to:
+    linguist_aliases:
+    - tsx
+    - typescript
+  enforced_by:
+  - tool: rsc-boundary.sh
+    required: true
+  - tool: eslint
 recommended_set:
-  - g-react-009
+- g-react-009
 all_set:
-  - g-react-009
+- g-react-009

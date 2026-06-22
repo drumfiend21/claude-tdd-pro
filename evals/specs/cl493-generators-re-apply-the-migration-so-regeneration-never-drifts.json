@@ -1,0 +1,13 @@
+{
+  "name": "the rule generators re-apply the migration at their tail so regeneration never drops applies_to",
+  "command": "grep -q 'migrate-rules-to-applies-to.sh' \"$CLAUDE_PLUGIN_ROOT/commands/promote-config-rules.sh\" && grep -q 'migrate-rules-to-applies-to.sh' \"$CLAUDE_PLUGIN_ROOT/commands/promote-cloud-rules.sh\" && echo no-drift-wired 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-drift-wired"
+    ]
+  }
+}

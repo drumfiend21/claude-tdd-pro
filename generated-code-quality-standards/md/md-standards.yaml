@@ -31,6 +31,13 @@ rules:
   provenance:
   - source: commonmark
     section: MD040
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: md-structure.sh
+    required: true
+  - tool: markdownlint
 - id: g-md-single-h1
   name: single-h1
   description: A Markdown document must have exactly one top-level H1 heading (markdownlint
@@ -51,6 +58,13 @@ rules:
   provenance:
   - source: commonmark
     section: MD025
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: md-structure.sh
+    required: true
+  - tool: markdownlint
 recommended_set:
 - g-md-fenced-code-language-declared
 - g-md-single-h1

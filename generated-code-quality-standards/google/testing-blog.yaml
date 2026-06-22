@@ -1,74 +1,100 @@
+---
 source:
   id: google-testing-blog
   authoritative_publisher: Google (testing.googleblog.com)
-  authoritative_url: "https://testing.googleblog.com"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:google-testing-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://testing.googleblog.com
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:google-testing-placeholder-content-hash-for-bootstrap
   fetch_frequency: monthly
   fragility_tier: medium
-  license_note: "Google blog content (informational; cite the post)"
+  license_note: Google blog content (informational; cite the post)
 rules:
-  - id: g-react-007
-    name: component-test-required
-    description: "Every React component must have at least one component-level test (Vitest + Testing Library or Playwright component tests). Snapshot-only tests do not count as coverage unless options.allow_snapshot_only is true."
-    detector: rsc-boundary.sh
-    type: problem
-    fixable: null
-    has_suggestions: false
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://testing.googleblog.com/2018/02/testing-on-toilet-cheap-tests-vs-good.html"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-      properties:
-        test_runner:
-          type: string
-          enum: ["vitest", "playwright"]
-        allow_snapshot_only:
-          type: boolean
-    messages:
-      noTest: "component {{component}} has no associated test file (looked for {{paths}})"
-      snapshotOnly: "component {{component}} only has snapshot tests; require at least one behavioral assertion"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: google-testing-blog
-        section: "cheap-tests-vs-good-tests"
-      - source: google-tsguide
-        section: "§testing"
-  - id: g-ts-004
-    name: public-api-types-have-type-tests
-    description: "Every exported function or type from a library must have at least one compile-time type test (expectTypeOf or tsd) so callers cannot silently break when types change."
-    detector: type-test-coverage.sh
-    type: problem
-    fixable: null
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://google.github.io/styleguide/tsguide.html#testing"
-    requires_type_checking: true
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      missingTypeTest: "exported {{kind}} {{name}} has no type test (google-tsguide §testing)"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: google-tsguide
-        section: "§testing"
+- id: g-react-007
+  name: component-test-required
+  description: Every React component must have at least one component-level test (Vitest
+    + Testing Library or Playwright component tests). Snapshot-only tests do not count
+    as coverage unless options.allow_snapshot_only is true.
+  detector: rsc-boundary.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://testing.googleblog.com/2018/02/testing-on-toilet-cheap-tests-vs-good.html
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      test_runner:
+        type: string
+        enum:
+        - vitest
+        - playwright
+      allow_snapshot_only:
+        type: boolean
+  messages:
+    noTest: component {{component}} has no associated test file (looked for {{paths}})
+    snapshotOnly: component {{component}} only has snapshot tests; require at least
+      one behavioral assertion
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: google-testing-blog
+    section: cheap-tests-vs-good-tests
+  - source: google-tsguide
+    section: "§testing"
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: rsc-boundary.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
+- id: g-ts-004
+  name: public-api-types-have-type-tests
+  description: Every exported function or type from a library must have at least one
+    compile-time type test (expectTypeOf or tsd) so callers cannot silently break
+    when types change.
+  detector: type-test-coverage.sh
+  type: problem
+  fixable:
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://google.github.io/styleguide/tsguide.html#testing
+  requires_type_checking: true
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    missingTypeTest: exported {{kind}} {{name}} has no type test (google-tsguide §testing)
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: google-tsguide
+    section: "§testing"
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: type-test-coverage.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
 recommended_set:
-  - g-react-007
-  - g-ts-004
+- g-react-007
+- g-ts-004
 all_set:
-  - g-react-007
-  - g-ts-004
+- g-react-007
+- g-ts-004

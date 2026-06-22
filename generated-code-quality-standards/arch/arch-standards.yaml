@@ -30,6 +30,13 @@ rules:
   provenance:
   - source: madr-arc42
     section: convention
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: markdownlint
 - id: g-arch-no-fixme-marker
   name: no-fixme-marker
   description: Architecture docs must not ship FIXME markers in committed decisions.
@@ -49,6 +56,13 @@ rules:
   provenance:
   - source: madr-arc42
     section: convention
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: markdownlint
 - id: g-arch-no-decision-pending
   name: no-decision-pending
   description: An ADR must record a decision, not defer it with DECISION PENDING.
@@ -68,6 +82,13 @@ rules:
   provenance:
   - source: madr-arc42
     section: convention
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: markdownlint
 recommended_set:
 - g-arch-no-tbd-placeholder
 - g-arch-no-fixme-marker

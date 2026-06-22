@@ -1,78 +1,103 @@
+---
 source:
   id: node-best-practices
   authoritative_publisher: nodebestpractices community (Yoni Goldberg et al.)
-  authoritative_url: "https://github.com/goldbergyoni/nodebestpractices"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:nodebestpractices-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://github.com/goldbergyoni/nodebestpractices
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:nodebestpractices-placeholder-content-hash-for-bootstrap
   fetch_frequency: weekly
   fragility_tier: medium
-  license_note: "CC-BY-SA 4.0 (nodebestpractices)"
+  license_note: CC-BY-SA 4.0 (nodebestpractices)
 rules:
-  - id: g-node-002
-    name: typed-error-taxonomy
-    description: "Errors thrown across module boundaries must be instances of a named Error subclass with a stable kind/code. Naked throw of strings or plain Errors prevents callers from typed handling."
-    detector: naked-throw.sh
-    type: suggestion
-    fixable: null
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/errorhandling/centralizedhandling.md"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      nakedThrow: "throw at {{location}} is not a typed Error subclass; introduce a named class (nodebestpractices 2.4)"
-    severity: P2
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: node-docs
-        section: "errors"
-      - source: node-best-practices
-        section: "2.4"
-  - id: g-node-004
-    name: structured-logging
-    description: "All logging in src/ must use a structured logger (pino, winston) with leveled output and PII redaction. console.log produces logs that are unparseable by production log aggregators and exposes user data."
-    detector: console-in-src.sh
-    type: problem
-    fixable: code
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/production/logging.md"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-      properties:
-        allowed_loggers:
-          type: array
-          items:
-            type: string
-        cli_paths:
-          type: array
-          items:
-            type: string
-    messages:
-      consoleInSrc: "console.{{method}} at {{location}} in src/; use a structured logger (nodebestpractices 5.1)"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: node-best-practices
-        section: "5.1"
-      - source: owasp-asvs
-        section: "V7"
+- id: g-node-002
+  name: typed-error-taxonomy
+  description: Errors thrown across module boundaries must be instances of a named
+    Error subclass with a stable kind/code. Naked throw of strings or plain Errors
+    prevents callers from typed handling.
+  detector: naked-throw.sh
+  type: suggestion
+  fixable:
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/errorhandling/centralizedhandling.md
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    nakedThrow: throw at {{location}} is not a typed Error subclass; introduce a named
+      class (nodebestpractices 2.4)
+  severity: P2
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: node-docs
+    section: errors
+  - source: node-best-practices
+    section: '2.4'
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: naked-throw.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
+- id: g-node-004
+  name: structured-logging
+  description: All logging in src/ must use a structured logger (pino, winston) with
+    leveled output and PII redaction. console.log produces logs that are unparseable
+    by production log aggregators and exposes user data.
+  detector: console-in-src.sh
+  type: problem
+  fixable: code
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/production/logging.md
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      allowed_loggers:
+        type: array
+        items:
+          type: string
+      cli_paths:
+        type: array
+        items:
+          type: string
+  messages:
+    consoleInSrc: console.{{method}} at {{location}} in src/; use a structured logger
+      (nodebestpractices 5.1)
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: node-best-practices
+    section: '5.1'
+  - source: owasp-asvs
+    section: V7
+  applies_to:
+    linguist_aliases:
+    - typescript
+    - javascript
+  enforced_by:
+  - tool: console-in-src.sh
+    required: true
+  - tool: eslint
+  - tool: semgrep
 recommended_set:
-  - g-node-002
-  - g-node-004
+- g-node-002
+- g-node-004
 all_set:
-  - g-node-002
-  - g-node-004
+- g-node-002
+- g-node-004

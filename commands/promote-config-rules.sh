@@ -274,3 +274,7 @@ ROOT="$ROOT" ruby -ryaml -rjson -rdigest -rfileutils -e '
              JSON.pretty_generate(manifest) + "\n")
   STDERR.puts "promote-config-rules: #{NS.size} namespaces activated, #{total} detector rules"
 '
+# Re-apply the ADR-0008 Wave 2 4-axis migration so re-generation never drops applies_to/enforced_by.
+[ -x "$(dirname "$0")/migrate-rules-to-applies-to.sh" ] && \
+  bash "$(dirname "$0")/migrate-rules-to-applies-to.sh" --root "$ROOT" >/dev/null 2>&1 || true
+exit 0

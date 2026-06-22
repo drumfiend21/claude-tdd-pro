@@ -1,45 +1,60 @@
+---
 source:
   id: react-rsc-rfc
   authoritative_publisher: React core team (RFC repo)
-  authoritative_url: "https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:rsc-rfc-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://github.com/reactjs/rfcs/blob/main/text/0188-server-components.md
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:rsc-rfc-placeholder-content-hash-for-bootstrap
   fetch_frequency: weekly
   fragility_tier: medium
-  license_note: "CC-BY-4.0 (React RFC text)"
+  license_note: CC-BY-4.0 (React RFC text)
 rules:
-  - id: g-react-001
-    name: rsc-boundary-integrity
-    description: "Enforces React Server Components boundary integrity: no client-only imports in server scope, no server-only imports in client scope, only serializable props cross the boundary, async only on server components, Suspense boundaries around async server components."
-    detector: rsc-boundary.sh
-    type: problem
-    fixable: code
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://nextjs.org/docs/app/building-your-application/rendering/server-components"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      clientImportInServer: "client-only import {{symbol}} in server boundary file"
-      serverImportInClient: "server-only import {{symbol}} in client boundary file"
-      asyncClientComponent: "client component declared async (only server components may be async)"
-      missingSuspense: "async server component {{component}} not wrapped in a Suspense boundary"
-      nonSerializableProp: "non-serializable prop {{prop}} crossing server-to-client boundary"
-    severity: P1
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: react-rsc-rfc
-        section: "§3"
-      - source: nextjs-docs
-        section: "server-components"
+- id: g-react-001
+  name: rsc-boundary-integrity
+  description: 'Enforces React Server Components boundary integrity: no client-only
+    imports in server scope, no server-only imports in client scope, only serializable
+    props cross the boundary, async only on server components, Suspense boundaries
+    around async server components.'
+  detector: rsc-boundary.sh
+  type: problem
+  fixable: code
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://nextjs.org/docs/app/building-your-application/rendering/server-components
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    clientImportInServer: client-only import {{symbol}} in server boundary file
+    serverImportInClient: server-only import {{symbol}} in client boundary file
+    asyncClientComponent: client component declared async (only server components
+      may be async)
+    missingSuspense: async server component {{component}} not wrapped in a Suspense
+      boundary
+    nonSerializableProp: non-serializable prop {{prop}} crossing server-to-client
+      boundary
+  severity: P1
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: react-rsc-rfc
+    section: "§3"
+  - source: nextjs-docs
+    section: server-components
+  applies_to:
+    linguist_aliases:
+    - tsx
+    - typescript
+  enforced_by:
+  - tool: rsc-boundary.sh
+    required: true
+  - tool: eslint
 recommended_set:
-  - g-react-001
+- g-react-001
 all_set:
-  - g-react-001
+- g-react-001

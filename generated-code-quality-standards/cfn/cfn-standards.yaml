@@ -29,6 +29,17 @@ rules:
   provenance:
   - source: cfn-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+    iac_dialects:
+    - cloudformation
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: cfn-lint
+  - tool: checkov
 - id: g-cfn-no-public-read-bucket
   name: no-public-read-bucket
   description: S3 buckets must not be declared PublicRead.
@@ -48,6 +59,17 @@ rules:
   provenance:
   - source: cfn-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+    iac_dialects:
+    - cloudformation
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: cfn-lint
+  - tool: checkov
 - id: g-cfn-no-hardcoded-password
   name: no-hardcoded-password
   description: Templates must not hardcode passwords; use Secrets Manager or NoEcho
@@ -68,6 +90,17 @@ rules:
   provenance:
   - source: cfn-best-practices
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+    iac_dialects:
+    - cloudformation
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: cfn-lint
+  - tool: checkov
 recommended_set:
 - g-cfn-no-wildcard-iam-action
 - g-cfn-no-public-read-bucket

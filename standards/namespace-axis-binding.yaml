@@ -1,0 +1,68 @@
+# standards/namespace-axis-binding.yaml — ADR-0008 Wave 2 parity migration.
+#
+# Maps each rule namespace to its 4-axis canonical binding + the FOSS tool(s) the composite
+# engine should route it to. commands/migrate-rules-to-applies-to.sh applies this to every rule
+# in generated-code-quality-standards/, ADDITIVELY: it adds `applies_to` (4-axis) + `enforced_by`
+# while PRESERVING each rule's existing `detector` (which is recorded as the first enforced_by
+# entry, required:true — so the existing enforcement is provably preserved = parity).
+#
+# Tool licenses are governed by rubric/runners/toolchain.json (all open-source; GPL/LGPL
+# invoke-only). A namespace with empty linguist/iac applies everywhere (e.g. _universal); its
+# rules still bind their own detector + any polyglot tool.
+
+default:
+  linguist_aliases: []
+  iac_dialects: []
+  foss_tools: [semgrep]            # polyglot fallback so nothing is left unroutable
+
+namespaces:
+  # --- IaC: terraform/HCL ---
+  aws:                 { linguist_aliases: [hcl], iac_dialects: [terraform], foss_tools: [checkov, trivy] }
+  gcp:                 { linguist_aliases: [hcl], iac_dialects: [terraform], foss_tools: [checkov, trivy] }
+  azure:               { linguist_aliases: [hcl], iac_dialects: [terraform], foss_tools: [checkov, trivy] }
+  hashicorp:           { linguist_aliases: [hcl], iac_dialects: [terraform], foss_tools: [checkov, trivy] }
+  security-governance: { linguist_aliases: [hcl], iac_dialects: [terraform], foss_tools: [checkov, trivy] }
+  us-government:       { linguist_aliases: [hcl], iac_dialects: [terraform], foss_tools: [checkov, trivy] }
+  # --- IaC: kubernetes / helm ---
+  k8s:                 { linguist_aliases: [yaml], iac_dialects: [kubernetes], foss_tools: [checkov, kubescape] }
+  linux-foundation:    { linguist_aliases: [yaml], iac_dialects: [kubernetes], foss_tools: [checkov, kubescape] }
+  helm:                { linguist_aliases: [yaml], iac_dialects: [helm], foss_tools: [checkov] }
+  gitops:              { linguist_aliases: [yaml], iac_dialects: [kubernetes], foss_tools: [checkov, kubescape] }
+  mesh:                { linguist_aliases: [yaml], iac_dialects: [kubernetes], foss_tools: [checkov] }
+  # --- CI/CD ---
+  gha:                 { linguist_aliases: [yaml], iac_dialects: [github_actions], foss_tools: [zizmor, checkov] }
+  glci:                { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [checkov] }
+  azdo:                { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [checkov] }
+  circleci:            { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [checkov] }
+  bbp:                 { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [checkov] }
+  jenkins:             { linguist_aliases: [groovy], iac_dialects: [], foss_tools: [semgrep] }
+  # --- containers / other IaC ---
+  compose:             { linguist_aliases: [yaml], iac_dialects: [dockerfile], foss_tools: [checkov] }
+  ansible:             { linguist_aliases: [yaml], iac_dialects: [ansible], foss_tools: [checkov] }
+  cfn:                 { linguist_aliases: [json, yaml], iac_dialects: [cloudformation], foss_tools: [cfn-lint, checkov] }
+  oas:                 { linguist_aliases: [json, yaml], iac_dialects: [openapi], foss_tools: [spectral] }
+  observability:       { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [checkov] }
+  iac-linter:          { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [checkov] }
+  # --- JSON family ---
+  iam:                 { linguist_aliases: [json], iac_dialects: [], foss_tools: [checkov] }
+  jwt:                 { linguist_aliases: [json, yaml], iac_dialects: [], foss_tools: [semgrep] }
+  sbom:                { linguist_aliases: [json], iac_dialects: [], foss_tools: [] }
+  sarif:               { linguist_aliases: [json], iac_dialects: [], foss_tools: [] }
+  jsonschema:          { linguist_aliases: [json], iac_dialects: [], foss_tools: [] }
+  json:                { linguist_aliases: [json], iac_dialects: [], foss_tools: [] }
+  yaml:                { linguist_aliases: [yaml], iac_dialects: [], foss_tools: [] }
+  # --- Markdown / prose / architecture (architectural-content bundle) ---
+  md:                  { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [markdownlint] }
+  arch:                { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [markdownlint] }
+  documentation:       { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [markdownlint] }
+  # --- TypeScript / JavaScript / React ---
+  typescript:          { linguist_aliases: [typescript], iac_dialects: [], foss_tools: [eslint, semgrep] }
+  google:              { linguist_aliases: [typescript, javascript], iac_dialects: [], foss_tools: [eslint, semgrep] }
+  node:                { linguist_aliases: [typescript, javascript], iac_dialects: [], foss_tools: [eslint, semgrep] }
+  react:               { linguist_aliases: [tsx, typescript], iac_dialects: [], foss_tools: [eslint] }
+  web-vitals:          { linguist_aliases: [typescript, javascript], iac_dialects: [], foss_tools: [eslint] }
+  # --- cross-cutting (apply everywhere; polyglot) ---
+  _universal:          { linguist_aliases: [], iac_dialects: [], foss_tools: [semgrep] }
+  owasp:               { linguist_aliases: [], iac_dialects: [], foss_tools: [semgrep] }
+  slsa:                { linguist_aliases: [], iac_dialects: [], foss_tools: [] }
+  w3c:                 { linguist_aliases: [], iac_dialects: [], foss_tools: [] }

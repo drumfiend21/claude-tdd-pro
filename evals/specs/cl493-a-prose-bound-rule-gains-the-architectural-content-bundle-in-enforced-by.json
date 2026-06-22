@@ -1,0 +1,13 @@
+{
+  "name": "a prose-bound rule gains the architectural-content bundle in its enforced_by",
+  "command": "GCS=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" ruby -ryaml -e 'found=false;ok=false;Dir[ENV[\"GCS\"]+\"/*/*.yaml\"].each{|f|d=YAML.unsafe_load_file(f) rescue next;next unless d.is_a?(Hash);(d[\"rules\"]||[]).each{|r|next unless r.is_a?(Hash)&&r[\"applies_to_prose\"]==true;found=true;ok=true if Array(r[\"enforced_by\"]).any?{|e|e.is_a?(Hash)&&e[\"bundle\"]==\"architectural-content\"}}};STDERR.puts((found&&ok) ? \"prose-bundle-bound\" : \"missing\");exit((found&&ok) ? 0:1)'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-bundle-bound"
+    ]
+  }
+}

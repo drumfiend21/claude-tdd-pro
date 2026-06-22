@@ -1,0 +1,13 @@
+{
+  "name": "the applies_to parity gate is green across all 118 migrated rules",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-applies-to-parity.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -qE 'status=green rules=118 parity_fail=0 unrouted=0' e.txt && echo parity-green 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "parity-green"
+    ]
+  }
+}

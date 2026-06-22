@@ -33,6 +33,15 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: semgrep
+  - bundle: architectural-content
 - id: g-jwt-no-alg-none-spaced
   name: no-alg-none-spaced
   description: JWT config must not accept the unsecured alg none (RFC 8725).
@@ -52,6 +61,14 @@ rules:
   provenance:
   - source: rfc-8725-jwt-bcp
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: semgrep
 - id: g-jwt-no-hardcoded-secret
   name: no-hardcoded-secret
   description: JWT signing secrets must not be hardcoded in config.
@@ -71,6 +88,14 @@ rules:
   provenance:
   - source: rfc-8725-jwt-bcp
     section: convention
+  applies_to:
+    linguist_aliases:
+    - json
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: semgrep
 recommended_set:
 - g-jwt-no-alg-none-compact
 - g-jwt-no-alg-none-spaced

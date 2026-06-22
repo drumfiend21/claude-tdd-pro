@@ -1,41 +1,48 @@
+---
 source:
   id: slsa
   authoritative_publisher: SLSA project (Linux Foundation)
-  authoritative_url: "https://slsa.dev/spec/v1.0/"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:slsa-v1-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://slsa.dev/spec/v1.0/
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:slsa-v1-placeholder-content-hash-for-bootstrap
   fetch_frequency: monthly
   fragility_tier: low
-  license_note: "CC-BY 4.0 (SLSA specification)"
+  license_note: CC-BY 4.0 (SLSA specification)
 rules:
-  - id: g-node-010
-    name: supply-chain-check
-    description: "Every Node.js dependency in package.json must have SLSA build provenance attestation at level 2 or above; introduce of new direct dependency without attestation blocks. CI step verifies."
-    detector: supply-chain.sh
-    type: problem
-    fixable: null
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://slsa.dev/spec/v1.0/levels"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      noProvenance: "dependency {{name}}@{{version}} has no SLSA build provenance attestation (slsa build §)"
-    severity: P0
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: slsa
-        section: "build"
-      - source: owasp-asvs
-        section: "V14.2"
+- id: g-node-010
+  name: supply-chain-check
+  description: Every Node.js dependency in package.json must have SLSA build provenance
+    attestation at level 2 or above; introduce of new direct dependency without attestation
+    blocks. CI step verifies.
+  detector: supply-chain.sh
+  type: problem
+  fixable:
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://slsa.dev/spec/v1.0/levels
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    noProvenance: dependency {{name}}@{{version}} has no SLSA build provenance attestation
+      (slsa build §)
+  severity: P0
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: slsa
+    section: build
+  - source: owasp-asvs
+    section: V14.2
+  enforced_by:
+  - tool: supply-chain.sh
+    required: true
 recommended_set:
-  - g-node-010
+- g-node-010
 all_set:
-  - g-node-010
+- g-node-010

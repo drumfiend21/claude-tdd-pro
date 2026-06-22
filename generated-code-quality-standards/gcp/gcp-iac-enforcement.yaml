@@ -33,6 +33,17 @@ rules:
   applies_to_prose_kinds:
   - architecture
   - adr
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
+  - bundle: architectural-content
 - id: g-gcp-enable-audit-logs
   name: enable-audit-logs
   description: Projects and services must enable audit logging for accountability.
@@ -52,6 +63,16 @@ rules:
   provenance:
   - source: gcp-architecture-framework
     section: convention
+  applies_to:
+    linguist_aliases:
+    - hcl
+    iac_dialects:
+    - terraform
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
+  - tool: trivy
 recommended_set:
 - g-gcp-no-unrestricted-ingress
 - g-gcp-enable-audit-logs

@@ -29,6 +29,13 @@ rules:
   provenance:
   - source: bitbucket-pipelines
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 - id: g-bbp-no-plaintext-secret
   name: no-plaintext-secret
   description: Pipelines must not declare plaintext passwords; use secured variables.
@@ -48,6 +55,13 @@ rules:
   provenance:
   - source: bitbucket-pipelines
     section: convention
+  applies_to:
+    linguist_aliases:
+    - yaml
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  - tool: checkov
 recommended_set:
 - g-bbp-pin-image-tag
 - g-bbp-no-plaintext-secret

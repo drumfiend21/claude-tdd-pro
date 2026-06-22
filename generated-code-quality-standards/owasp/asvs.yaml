@@ -1,80 +1,97 @@
+---
 source:
   id: owasp-asvs
   authoritative_publisher: OWASP Foundation
-  authoritative_url: "https://owasp.org/www-project-application-security-verification-standard/"
-  registry_link: "_meta/STANDARDS-URLS.yaml"
-  fetched_at: "2026-05-04T00:00:00Z"
-  content_hash: "sha256:owasp-asvs-placeholder-content-hash-for-bootstrap"
+  authoritative_url: https://owasp.org/www-project-application-security-verification-standard/
+  registry_link: _meta/STANDARDS-URLS.yaml
+  fetched_at: '2026-05-04T00:00:00Z'
+  content_hash: sha256:owasp-asvs-placeholder-content-hash-for-bootstrap
   fetch_frequency: monthly
   fragility_tier: low
-  license_note: "CC-BY-SA 4.0 (OWASP ASVS)"
+  license_note: CC-BY-SA 4.0 (OWASP ASVS)
 rules:
-  - id: g-node-001
-    name: schema-validation-at-boundary
-    description: "Every request body, query, header, or path param that flows into a downstream operation (DB, shell, fs, RPC) must be validated with a real schema (zod, ajv, joi, valibot). Hand-rolled type checks miss coercion gaps and prototype injection. Wraps the canonical eslint-plugin-security and zod patterns via E-15 ESLint integration."
-    detector: boundary-schema.sh
-    type: problem
-    fixable: null
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://owasp.org/www-project-application-security-verification-standard/"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-      properties:
-        schema_libs:
-          type: array
-          items:
-            type: string
-    messages:
-      unvalidatedBoundaryInput: "request {{source}} flows into {{sink}} without schema validation (owasp-asvs V5.1.3)"
-    severity: P0
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: owasp-asvs
-        section: "V5.1"
-    controls:
-      - framework: soc2-tsc
-        section: "PI1.1"
-      - framework: pci-dss-v4
-        section: "§6.2"
-  - id: g-node-008
-    name: secrets-via-env
-    description: "Secrets (API keys, DB passwords, signing keys) must come from environment variables or a secrets manager, never hardcoded in source. The detector flags string literals matching common secret patterns."
-    detector: boundary-schema.sh
-    type: problem
-    fixable: null
-    has_suggestions: true
-    deprecated: false
-    replaced_by: []
-    docs_url: "https://owasp.org/www-project-application-security-verification-standard/"
-    requires_type_checking: false
-    recommended: true
-    options_schema:
-      type: object
-      additionalProperties: false
-    messages:
-      hardcodedSecret: "secret-shaped literal {{kind}} in source; move to environment variable or secrets manager (owasp-asvs V2.10)"
-    severity: P0
-    version: "1.0.0"
-    semver: "0.1.0"
-    rule_state: stable
-    provenance:
-      - source: owasp-asvs
-        section: "V2.10"
-    controls:
-      - framework: soc2-tsc
-        section: "CC6.1"
-      - framework: pci-dss-v4
-        section: "§3.5"
+- id: g-node-001
+  name: schema-validation-at-boundary
+  description: Every request body, query, header, or path param that flows into a
+    downstream operation (DB, shell, fs, RPC) must be validated with a real schema
+    (zod, ajv, joi, valibot). Hand-rolled type checks miss coercion gaps and prototype
+    injection. Wraps the canonical eslint-plugin-security and zod patterns via E-15
+    ESLint integration.
+  detector: boundary-schema.sh
+  type: problem
+  fixable:
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://owasp.org/www-project-application-security-verification-standard/
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      schema_libs:
+        type: array
+        items:
+          type: string
+  messages:
+    unvalidatedBoundaryInput: request {{source}} flows into {{sink}} without schema
+      validation (owasp-asvs V5.1.3)
+  severity: P0
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: owasp-asvs
+    section: V5.1
+  controls:
+  - framework: soc2-tsc
+    section: PI1.1
+  - framework: pci-dss-v4
+    section: "§6.2"
+  enforced_by:
+  - tool: boundary-schema.sh
+    required: true
+  - tool: semgrep
+- id: g-node-008
+  name: secrets-via-env
+  description: Secrets (API keys, DB passwords, signing keys) must come from environment
+    variables or a secrets manager, never hardcoded in source. The detector flags
+    string literals matching common secret patterns.
+  detector: boundary-schema.sh
+  type: problem
+  fixable:
+  has_suggestions: true
+  deprecated: false
+  replaced_by: []
+  docs_url: https://owasp.org/www-project-application-security-verification-standard/
+  requires_type_checking: false
+  recommended: true
+  options_schema:
+    type: object
+    additionalProperties: false
+  messages:
+    hardcodedSecret: secret-shaped literal {{kind}} in source; move to environment
+      variable or secrets manager (owasp-asvs V2.10)
+  severity: P0
+  version: 1.0.0
+  semver: 0.1.0
+  rule_state: stable
+  provenance:
+  - source: owasp-asvs
+    section: V2.10
+  controls:
+  - framework: soc2-tsc
+    section: CC6.1
+  - framework: pci-dss-v4
+    section: "§3.5"
+  enforced_by:
+  - tool: boundary-schema.sh
+    required: true
+  - tool: semgrep
 recommended_set:
-  - g-node-001
-  - g-node-008
+- g-node-001
+- g-node-008
 all_set:
-  - g-node-001
-  - g-node-008
+- g-node-001
+- g-node-008
