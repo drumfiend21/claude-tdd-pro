@@ -37,6 +37,7 @@ set -uo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
 TARGET=""
+TEXT_INLINE=""
 RULE_ID=""
 MODEL=""
 DRY_RUN=0
@@ -45,13 +46,14 @@ EXPLAIN=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --target) TARGET="$2"; shift 2 ;;
+    --text) TEXT_INLINE="$2"; shift 2 ;;   # P-8 fix: judge inline prose (prose-judge.sh tier-2)
     --rule) RULE_ID="$2"; shift 2 ;;
     --model) MODEL="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
     --explain) EXPLAIN=1; shift ;;
     -h|--help)
       cat >&2 <<USAGE
-Usage: llm-judge.sh --target <file> --rule <rule-id>
+Usage: llm-judge.sh (--target <file> | --text <prose>) --rule <rule-id>
                     [--model claude|grok|auto]
                     [--dry-run] [--explain]
 
@@ -67,8 +69,17 @@ USAGE
   esac
 done
 
+# P-8 fix: --text materializes inline prose into a tempfile so all downstream $TARGET
+# logic (prompt, model dispatch, messages) works unchanged. prose-judge.sh tier-2 passes
+# a prose section here; the temp is cleaned on exit.
+if [[ -n "$TEXT_INLINE" ]]; then
+  TARGET=$(mktemp "${TMPDIR:-/tmp}/llm-judge-text.XXXXXX") || { echo "llm-judge: mktemp failed" >&2; exit 2; }
+  trap 'rm -f "$TARGET"' EXIT
+  printf '%s' "$TEXT_INLINE" > "$TARGET"
+fi
+
 [[ -z "$TARGET" || -z "$RULE_ID" ]] && {
-  echo "llm-judge: --target + --rule required" >&2; exit 2;
+  echo "llm-judge: (--target | --text) + --rule required" >&2; exit 2;
 }
 [[ -f "$TARGET" ]] || { echo "llm-judge: target not found: $TARGET" >&2; exit 2; }
 

@@ -1,0 +1,13 @@
+{
+  "name": "llm-judge still rejects an unknown flag with a usage error after the --text extension",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/llm-judge.sh\" --bogus x --rule g-aws-no-unrestricted-ingress 2>err.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'unknown arg' err.txt && echo rejects-unknown 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rejects-unknown"
+    ]
+  }
+}

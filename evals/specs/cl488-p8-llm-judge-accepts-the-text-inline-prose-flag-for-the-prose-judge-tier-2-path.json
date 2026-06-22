@@ -1,0 +1,13 @@
+{
+  "name": "llm-judge accepts the --text inline-prose flag so prose-judge tier-2 reaches model dispatch (P-8 fix)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/llm-judge.sh\" --text 'leave ingress unrestricted' --rule g-aws-no-unrestricted-ingress --dry-run 2>err.txt; rc=$?; [ \"$rc\" -ne 2 ] && grep -q 'would invoke model' err.txt && echo text-accepted 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "text-accepted"
+    ]
+  }
+}
