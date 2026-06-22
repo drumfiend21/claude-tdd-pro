@@ -1,0 +1,13 @@
+{
+  "name": "the extractor exits source-unreadable (3) when the local file is missing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source /no/such/file.md 2>e.txt; rc=$?; [ \"$rc\" -eq 3 ] && echo unreadable-3 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unreadable-3"
+    ]
+  }
+}

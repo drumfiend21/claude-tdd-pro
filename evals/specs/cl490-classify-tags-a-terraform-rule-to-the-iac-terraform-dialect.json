@@ -1,0 +1,13 @@
+{
+  "name": "the classifier tags a Terraform rule to the terraform IaC dialect",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'No open ingress' --prose 'Terraform resource blocks in .tf must not allow 0.0.0.0/0.' --json > c.json 2>e.txt; node -e 'const c=require(process.cwd()+\"/c.json\");if(!c.applies_to.iac_dialects.includes(\"terraform\"))process.exit(1)' && echo tf-classified 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tf-classified"
+    ]
+  }
+}

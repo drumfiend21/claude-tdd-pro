@@ -1,0 +1,13 @@
+{
+  "name": "the classifier flags an unrecognized rule for the Tier-2 LLM rather than silently dropping it",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Be excellent' --prose 'Always strive for quality and kindness.' --json > c.json 2>e.txt; grep -q 'confidence=low' e.txt && node -e 'const c=require(process.cwd()+\"/c.json\");if(c.needs_tier2_llm!==true)process.exit(1)' && echo flagged-not-dropped 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "flagged-not-dropped"
+    ]
+  }
+}

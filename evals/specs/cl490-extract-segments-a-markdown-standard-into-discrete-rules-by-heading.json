@@ -1,0 +1,13 @@
+{
+  "name": "the extractor segments a markdown standard into discrete candidate rules by heading",
+  "command": "printf '# Guide\\n\\n## Use const not var\\nAlways use const in TypeScript.\\n\\n## Prefer interfaces\\nUse an interface.\\n' > g.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source g.md --source-id g --json > out.json 2>e.txt; grep -q 'rules=2' e.txt && node -e 'const r=require(process.cwd()+\"/out.json\");if(r.length!==2)process.exit(1)' && echo extracted-2 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "extracted-2"
+    ]
+  }
+}

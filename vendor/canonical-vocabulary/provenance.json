@@ -1,33 +1,33 @@
 {
-  "refreshed_at": "2026-06-22T18:55:19Z",
+  "refreshed_at": "2026-06-22T19:07:15Z",
   "license_posture": "all mirrors permissively licensed (MIT/Apache-2.0); free to use, distribute, and use commercially",
   "mirrors": {
     "linguist-languages.json": {
       "authority": "GitHub Linguist",
       "url": "https://github.com/github-linguist/linguist",
       "license": "MIT",
-      "fetched_at": "2026-06-22T18:55:19Z",
+      "fetched_at": "2026-06-22T19:07:15Z",
       "content_hash": "sha256:f3fffffa9a2bc0a3b65f8eff0c864eab3da3186a0013ea71c9e5386eb16fa4fa"
     },
     "purl-types.json": {
       "authority": "package-url/purl-spec",
       "url": "https://github.com/package-url/purl-spec",
       "license": "MIT",
-      "fetched_at": "2026-06-22T18:55:19Z",
+      "fetched_at": "2026-06-22T19:07:15Z",
       "content_hash": "sha256:e0951959b835eacd6d1637c0662bf5d8a03e55be602f4680c17a7e21e4d64660"
     },
     "k8s-gvks.json": {
       "authority": "Kubernetes",
       "url": "https://github.com/kubernetes/kubernetes",
       "license": "Apache-2.0",
-      "fetched_at": "2026-06-22T18:55:19Z",
+      "fetched_at": "2026-06-22T19:07:15Z",
       "content_hash": "sha256:303709d1cbf29cab227ab3a537690147d80b72c803c6c91c80df7855d264c82b"
     },
     "iac-dialects.json": {
       "authority": "Checkov/Trivy/Kubescape",
       "url": "https://www.checkov.io/",
       "license": "Apache-2.0",
-      "fetched_at": "2026-06-22T18:55:19Z",
+      "fetched_at": "2026-06-22T19:07:15Z",
       "content_hash": "sha256:495b0e68635cbd004798bd50bbf825a0bb21a52240e35a94618fcbcc673b1d26"
     }
   }

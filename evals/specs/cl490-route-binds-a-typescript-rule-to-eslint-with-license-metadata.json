@@ -1,0 +1,13 @@
+{
+  "name": "the router binds a TypeScript rule to eslint and carries the tool license metadata",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'x' --prose 'TypeScript .ts interface rule' --json > c.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c.json --json > r.json 2>/dev/null; node -e 'const r=require(process.cwd()+\"/r.json\").enforced_by;const e=r.find(x=>x.tool===\"eslint\");if(!e||e.license!==\"MIT\")process.exit(1)' && echo routed-eslint-mit 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-eslint-mit"
+    ]
+  }
+}

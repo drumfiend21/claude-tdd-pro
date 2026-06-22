@@ -1,0 +1,13 @@
+{
+  "name": "end-to-end: a Google TS guide ingest routes a code rule to eslint and an ADR rule to the bundle",
+  "command": "printf '# Google TS\\n\\n## Use const not var\\nUse const in TypeScript .ts source.\\n\\n## Record an ADR\\nSignificant design decisions are recorded as an architecture decision record.\\n' > g.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source g.md --source-id google-ts --json > rules.json 2>/dev/null; node -e 'const r=require(process.cwd()+\"/rules.json\");r.forEach((x,i)=>require(\"fs\").writeFileSync(\"seg\"+i+\".json\",JSON.stringify(x)))'; bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --in seg0.json --json > c0.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c0.json --json > r0.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --in seg1.json --json > c1.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c1.json --json > r1.json 2>/dev/null; node -e 'const a=require(process.cwd()+\"/r0.json\").enforced_by,b=require(process.cwd()+\"/r1.json\").enforced_by;if(!a.some(x=>x.tool===\"eslint\"))process.exit(1);if(!b.some(x=>x.bundle===\"architectural-content\"))process.exit(1)' && echo e2e-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e-ok"
+    ]
+  }
+}

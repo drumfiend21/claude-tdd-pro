@@ -1,0 +1,13 @@
+{
+  "name": "the classifier tags a TypeScript rule to the linguist typescript axis with high confidence",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Use const not var' --prose 'Always use const in TypeScript .ts files.' --json > c.json 2>e.txt; grep -q 'confidence=high' e.txt && node -e 'const c=require(process.cwd()+\"/c.json\");if(!c.applies_to.linguist_aliases.includes(\"typescript\"))process.exit(1)' && echo ts-classified 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ts-classified"
+    ]
+  }
+}

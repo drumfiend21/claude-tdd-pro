@@ -1,0 +1,13 @@
+{
+  "name": "the extractor treats the H1 document title as context, not a rule",
+  "command": "printf '# Big Title\\n\\nintro prose\\n\\n## Only Real Rule\\nbody.\\n' > g.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source g.md --source-id g 2>&1 | grep -q 'rules=1' && echo h1-skipped 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h1-skipped"
+    ]
+  }
+}

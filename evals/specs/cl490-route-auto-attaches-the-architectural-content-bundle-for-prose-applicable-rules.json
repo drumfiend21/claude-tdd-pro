@@ -1,0 +1,13 @@
+{
+  "name": "the router auto-attaches the architectural-content bundle for a prose-applicable rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'ADR' --prose 'design decision recorded as an architecture decision record' --json > c.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c.json --json > r.json 2>e.txt; grep -q 'bundle=true' e.txt && node -e 'const r=require(process.cwd()+\"/r.json\").enforced_by;if(!r.some(x=>x.bundle===\"architectural-content\"))process.exit(1)' && echo bundle-attached 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bundle-attached"
+    ]
+  }
+}

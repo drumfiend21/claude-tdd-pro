@@ -1,0 +1,13 @@
+{
+  "name": "the routing table names only open-source tools, with any GPL/LGPL marked invoke-only",
+  "command": "R=\"$CLAUDE_PLUGIN_ROOT/standards/kind-to-tool-routing.yaml\" ruby -ryaml -e 'd=YAML.unsafe_load_file(ENV[\"R\"]); bad=[]; walk=lambda{|n| case n; when Hash; if n[\"tool\"]||n[\"bundle\"]; lic=n[\"license\"].to_s; bad<<n if n[\"tool\"] && lic.empty?; bad<<n if lic=~/GPL/ && n[\"invoke_only\"]!=true; else; n.each_value{|v| walk.call(v)}; end; when Array; n.each{|v| walk.call(v)}; end}; walk.call(d); if bad.any?; STDERR.puts \"bad=\"+bad.inspect; exit 1; end; STDERR.puts \"all-foss-ok\"'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-foss-ok"
+    ]
+  }
+}

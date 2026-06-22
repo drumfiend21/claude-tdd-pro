@@ -1,0 +1,13 @@
+{
+  "name": "the extractor supports the numbered-list document shape",
+  "command": "printf '1. First rule here\\n2. Second rule here\\n3. Third rule here\\n' > n.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source n.txt --source-id n --shape numbered-list 2>&1 | grep -q 'rules=3' && echo numbered-3 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "numbered-3"
+    ]
+  }
+}

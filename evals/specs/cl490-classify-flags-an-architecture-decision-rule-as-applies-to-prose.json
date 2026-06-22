@@ -1,0 +1,13 @@
+{
+  "name": "the classifier flags an architecture-decision rule as applies_to_prose",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Record an ADR' --prose 'Any significant design decision must be recorded as an architecture decision record with its rationale.' --json > c.json 2>e.txt; node -e 'const c=require(process.cwd()+\"/c.json\");if(c.applies_to_prose!==true)process.exit(1)' && echo prose-flagged 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-flagged"
+    ]
+  }
+}
