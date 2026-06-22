@@ -1,0 +1,13 @@
+{
+  "name": "the runner normalizes a present tool's findings to SARIF (live, opportunistic)",
+  "command": "printf 'resource \"aws_security_group\" \"x\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > main.tf && if command -v checkov >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool checkov --file main.tf --json > s.sarif 2>e.txt; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"s.sarif\",\"utf8\"));if(j.version!==\"2.1.0\")process.exit(1)' && grep -q 'tool=checkov' e.txt && echo runner-verified 1>&2; else echo runner-verified 1>&2; fi",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runner-verified"
+    ]
+  }
+}

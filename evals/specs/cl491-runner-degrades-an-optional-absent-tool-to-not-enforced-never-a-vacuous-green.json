@@ -1,0 +1,13 @@
+{
+  "name": "the runner degrades an optional absent tool to not_enforced, never a vacuous green",
+  "command": "printf 'x\\n' > f.md && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool checkov --file f.md 2>e.txt; rc=$?; [ \"$rc\" -eq 3 ] && grep -q 'status=not_enforced' e.txt && echo not-enforced-3 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "not-enforced-3"
+    ]
+  }
+}

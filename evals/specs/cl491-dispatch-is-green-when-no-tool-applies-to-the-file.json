@@ -1,0 +1,13 @@
+{
+  "name": "the composite dispatch is green when no tool applies to the file kind",
+  "command": "printf 'plain text\\n' > notes.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file notes.txt 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'status=green' e.txt && echo dispatch-green 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dispatch-green"
+    ]
+  }
+}

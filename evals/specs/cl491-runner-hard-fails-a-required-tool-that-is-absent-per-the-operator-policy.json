@@ -1,0 +1,13 @@
+{
+  "name": "the runner hard-fails (blocks) a required tool that is absent, per the §28.28 operator policy",
+  "command": "printf 'x\\n' > f.md && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool checkov --file f.md --required 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'status=hard-fail' e.txt && echo hard-fail-1 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "hard-fail-1"
+    ]
+  }
+}

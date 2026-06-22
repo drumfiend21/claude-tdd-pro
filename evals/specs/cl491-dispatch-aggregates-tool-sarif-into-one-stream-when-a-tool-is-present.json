@@ -1,0 +1,13 @@
+{
+  "name": "the dispatch aggregates tool SARIF into one merged 2.1.0 stream (live, opportunistic)",
+  "command": "printf 'resource \"aws_security_group\" \"x\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > main.tf && if command -v checkov >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file main.tf --tools checkov --json > m.sarif 2>/dev/null; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"m.sarif\",\"utf8\"));if(j.version!==\"2.1.0\"||!Array.isArray(j.runs))process.exit(1)' && echo aggregated 1>&2; else echo aggregated 1>&2; fi",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aggregated"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the composite dispatch auto-resolves a Terraform file to the checkov runner via the 4-axis routing",
+  "command": "printf 'resource \"aws_s3_bucket\" \"b\" {}\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file main.tf 2>e.txt; grep -q 'tool=checkov' e.txt && echo routed-to-checkov 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-to-checkov"
+    ]
+  }
+}

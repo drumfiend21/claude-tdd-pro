@@ -1,0 +1,13 @@
+{
+  "name": "the runner emits a SARIF 2.1.0 error result when a required tool is absent",
+  "command": "printf 'x\\n' > f.md && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool checkov --file f.md --required --json > s.sarif 2>/dev/null; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"s.sarif\",\"utf8\"));if(j.version!==\"2.1.0\")process.exit(1);if(j.runs[0].results[0].level!==\"error\")process.exit(1)' && echo sarif-error 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "sarif-error"
+    ]
+  }
+}

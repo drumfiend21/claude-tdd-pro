@@ -35,3 +35,5 @@ space/.local/
 standards/universal-coverage-ledger.jsonl
 .claude-tdd-pro/standards-last-fetch/
 .claude-tdd-pro/FETCH-FREQUENCIES.yaml
+results.sarif
+results_sarif.sarif

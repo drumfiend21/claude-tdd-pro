@@ -1,0 +1,13 @@
+{
+  "name": "the composite dispatch reports red and exit 1 when a required tool is absent (hard-fail)",
+  "command": "printf 'resource \"x\" \"y\" {}\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file main.tf --tools checkov --required-tools checkov 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'status=red' e.txt && echo dispatch-red 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dispatch-red"
+    ]
+  }
+}

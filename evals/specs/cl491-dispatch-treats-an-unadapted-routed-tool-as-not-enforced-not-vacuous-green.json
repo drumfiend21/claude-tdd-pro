@@ -1,0 +1,13 @@
+{
+  "name": "the dispatch treats an unadapted routed tool as not_enforced rather than a vacuous green",
+  "command": "printf 'plain\\n' > f.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file f.md --tools trivy 2>e.txt; rc=$?; [ \"$rc\" -eq 3 ] && grep -q 'tool=trivy verdict=not_enforced' e.txt && echo unadapted-not-enforced 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unadapted-not-enforced"
+    ]
+  }
+}

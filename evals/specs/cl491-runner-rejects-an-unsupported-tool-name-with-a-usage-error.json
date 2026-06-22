@@ -1,0 +1,13 @@
+{
+  "name": "the runner rejects an unsupported tool name with a usage error",
+  "command": "printf 'x\\n' > f.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool not-a-tool --file f.md 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'unknown tool' e.txt && echo usage-2 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usage-2"
+    ]
+  }
+}
