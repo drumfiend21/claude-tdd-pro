@@ -1,0 +1,13 @@
+{
+  "name": "the review queue routes a high-confidence zero-gap rule to auto-stage",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-clean --tool eslint --prose 'Never use var.' --json > d.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --in d.json 2>e.txt; grep -q 'rule=g-clean confidence=high gaps=0 queue=auto-stage' e.txt && echo auto-staged 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "auto-staged"
+    ]
+  }
+}

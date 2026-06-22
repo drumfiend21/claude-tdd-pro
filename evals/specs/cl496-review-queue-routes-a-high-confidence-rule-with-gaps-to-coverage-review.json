@@ -1,0 +1,13 @@
+{
+  "name": "the review queue routes a high-confidence rule that has coverage gaps to coverage-review",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-gap --tool eslint --prose 'Never use var. The code should read nicely.' --json > d.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --in d.json 2>e.txt; grep -q 'rule=g-gap confidence=high gaps=1 queue=coverage-review' e.txt && echo coverage-review 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "coverage-review"
+    ]
+  }
+}

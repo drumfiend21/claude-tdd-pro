@@ -1903,3 +1903,14 @@ Completes ADR-0008: the whole-or-nothing architectural-content bundle + the two-
 - **§25 fidelity vocabulary additions:** `run-bundle`, `composite-audit`, `architectural-content`, `whole-or-nothing`, `two-phase`, `audit-time`, `write-time`.
 
 8 specs (`cl495-*`): bundle reads members + runs whole-or-nothing · bundle never vacuous green (clean→incomplete) · bundle flags malformed md (never green) · bundle requires --file · audit-time walks tree + flags · audit-time aggregates per-file · audit-time requires --root · write-time runs the bundle on md edits. Composes §28.24/§28.31; no new feature ID / contract. Suite 4470→4478.
+
+### §28.36 Auto-classification — ADR-0009 Wave 3: review-queue CLI (pipeline complete) (2026-06-20)
+
+Completes ADR-0009: the human-in-the-loop review queue (stage 6) that gates drafted rules before they reach `active.json`. With this, the full six-stage pipeline (extract → classify → route → architectural-content auto-bind → four-layer draft → review-queue) is built. **No new §2.X contract.**
+
+- **`commands/review-queue.sh (--in <draft.json> | --dir <dir>) [--auto-accept]`** — routes each draft (draft-custom-rule.sh output) by confidence + coverage: **high-confidence + zero-gap → auto-stage** (batched commit), **high-confidence + gaps → coverage-review**, **low/medium → side-by-side-review**. `confidence=high` iff ≥1 clause got a deterministic tool DSL (`clauses_covered>0`); a "gap" is a clause flagged `unenforceable` (needs operator sign-off). Default is human-in-the-loop (stages nothing); `--auto-accept` opts a high-trust operator into auto-staging the high-confidence zero-gap rules.
+- **§25 fidelity vocabulary additions:** `review-queue`, `auto-stage`, `coverage-review`, `side-by-side-review`, `auto-accept`, `human-in-the-loop`.
+
+8 specs (`cl496-*`): auto-stage high+zero-gap · coverage-review high+gaps · side-by-side low · default human-in-the-loop (staged=0) · --auto-accept stages · routes a directory · requires input · end-to-end draft→review-queue. Composes §28.30/§28.34; no new feature ID / contract. Suite 4478→4486.
+
+**ADR-0008 and ADR-0009 are now fully built** (§28.28–§28.36): composite engine (4-axis vocabulary + SARIF bus + runners + dispatch + bundle + two-phase) and the auto-classification + four-layer-fidelity drafting + review-queue pipeline, with the 118-rule parity migration and the install-time FOSS toolchain. All material open-source and free for commercial use.

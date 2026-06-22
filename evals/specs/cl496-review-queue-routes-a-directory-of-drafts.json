@@ -1,0 +1,13 @@
+{
+  "name": "the review queue routes a whole directory of drafts into the three queues",
+  "command": "mkdir -p drafts && bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-a --tool eslint --prose 'Never use var.' --json > drafts/a.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-b --tool semgrep --prose 'Tenants must be isolated across regions.' --json > drafts/b.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --dir drafts 2>e.txt; grep -q 'total=2' e.txt && echo routed-dir 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-dir"
+    ]
+  }
+}

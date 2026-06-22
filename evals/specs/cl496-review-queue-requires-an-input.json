@@ -1,0 +1,13 @@
+{
+  "name": "the review queue requires --in or --dir",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'required' e.txt && echo usage-checked 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usage-checked"
+    ]
+  }
+}

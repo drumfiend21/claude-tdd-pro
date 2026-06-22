@@ -1,0 +1,13 @@
+{
+  "name": "the review queue --auto-accept stages the high-confidence zero-gap rules for batched commit",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-clean --tool eslint --prose 'Never use var.' --json > d.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --in d.json --auto-accept --json > q.json 2>e.txt; grep -q 'staged=1' e.txt && node -e 'const j=require(process.cwd()+\"/q.json\");if(!j.staged.includes(\"g-clean\"))process.exit(1)' && echo auto-accepted 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "auto-accepted"
+    ]
+  }
+}

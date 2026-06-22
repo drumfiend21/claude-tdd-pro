@@ -1,0 +1,13 @@
+{
+  "name": "the review queue routes a low-confidence (all-fallback) rule to side-by-side review",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-fb --tool semgrep --prose 'Tenants must be isolated across regions for resilience.' --json > d.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --in d.json 2>e.txt; grep -q 'rule=g-fb confidence=low .* queue=side-by-side-review' e.txt && echo side-by-side 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "side-by-side"
+    ]
+  }
+}

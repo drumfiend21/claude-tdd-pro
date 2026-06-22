@@ -1,0 +1,13 @@
+{
+  "name": "end-to-end: drafting then review-queue completes the ADR-0009 six-stage pipeline to a queue decision",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-e2e --tool checkov --prose 'Security groups must not allow unrestricted ingress (0.0.0.0/0).' --json > d.json 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --in d.json 2>e.txt; grep -qE 'rule=g-e2e .* queue=(auto-stage|coverage-review)' e.txt && echo pipeline-complete 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pipeline-complete"
+    ]
+  }
+}
