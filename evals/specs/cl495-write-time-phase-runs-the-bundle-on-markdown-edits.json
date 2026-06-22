@@ -1,0 +1,13 @@
+{
+  "name": "the write-time phase runs the architectural-content bundle on Markdown edits (two-phase wiring)",
+  "command": "grep -q 'run-bundle.sh' \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\" && echo write-time-bundle-wired 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "write-time-bundle-wired"
+    ]
+  }
+}

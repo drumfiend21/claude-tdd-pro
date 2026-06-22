@@ -1,0 +1,13 @@
+{
+  "name": "the audit-time phase walks the whole tree and flags files with violations (never a silent green)",
+  "command": "mkdir -p app && printf '# T\\n\\n```\\nx\\n```\\n' > app/doc.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root app 2>e.txt; rc=$?; [ \"$rc\" -ne 0 ] && grep -qE 'composite-audit .* status=(red|incomplete)' e.txt && echo audit-flags 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-flags"
+    ]
+  }
+}

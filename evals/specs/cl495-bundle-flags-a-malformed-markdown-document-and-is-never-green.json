@@ -1,0 +1,13 @@
+{
+  "name": "the bundle flags a malformed Markdown document and is never green",
+  "command": "printf '# T\\n\\n```\\nx\\n```\\n' > bad.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-bundle.sh\" --file bad.md 2>e.txt; rc=$?; [ \"$rc\" -ne 0 ] && echo bundle-not-green 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bundle-not-green"
+    ]
+  }
+}

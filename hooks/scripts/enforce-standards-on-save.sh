@@ -85,4 +85,27 @@ if [[ "$EC" -eq 1 ]]; then
   exit 2
 fi
 
+# ADR-0008 Wave 3, write-time phase (pragmatic): a Markdown file also runs the whole-or-nothing
+# architectural-content bundle. Write-time surfaces a bundle VIOLATION (red) but is lenient on
+# not_enforced/incomplete (unadapted members) — the strict gate is the audit-time phase.
+case "$REAL_FILE" in
+  *.md|*.markdown)
+    BUNDLE="$PLUGIN_ROOT/rubric/runners/run-bundle.sh"
+    if [[ -f "$BUNDLE" ]]; then
+      set +e
+      BOUT=$(bash "$BUNDLE" --file "$REAL_FILE" 2>&1); BEC=$?
+      set -e
+      if [[ "$BEC" -eq 1 ]]; then
+        {
+          echo "[enforce-standards-on-save] architectural-content bundle violation(s) in:"
+          echo "  $REAL_FILE"
+          echo
+          echo "$BOUT"
+        } >&2
+        exit 2
+      fi
+    fi
+    ;;
+esac
+
 exit 0

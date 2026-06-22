@@ -1,0 +1,13 @@
+{
+  "name": "the bundle runner requires a --file argument",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-bundle.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'file required' e.txt && echo usage-checked 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usage-checked"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the bundle is never a vacuous green — unadapted/absent members leave a clean doc incomplete",
+  "command": "printf '# Clean Title\\n\\nWell written prose.\\n' > clean.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-bundle.sh\" --file clean.md 2>e.txt; rc=$?; [ \"$rc\" -eq 3 ] && grep -q 'status=incomplete' e.txt && echo never-vacuous-green 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "never-vacuous-green"
+    ]
+  }
+}

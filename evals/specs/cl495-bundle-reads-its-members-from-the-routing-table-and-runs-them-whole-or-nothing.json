@@ -1,0 +1,13 @@
+{
+  "name": "the architectural-content bundle reads its members from the routing table and runs them whole-or-nothing",
+  "command": "printf '# T\\n\\nbody\\n' > d.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-bundle.sh\" --file d.md 2>e.txt; grep -qE 'members=[1-9]' e.txt && echo bundle-has-members 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bundle-has-members"
+    ]
+  }
+}

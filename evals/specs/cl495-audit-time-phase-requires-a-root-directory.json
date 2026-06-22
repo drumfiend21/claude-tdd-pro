@@ -1,0 +1,13 @@
+{
+  "name": "the audit-time phase requires a --root directory",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'root required' e.txt && echo audit-usage 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-usage"
+    ]
+  }
+}

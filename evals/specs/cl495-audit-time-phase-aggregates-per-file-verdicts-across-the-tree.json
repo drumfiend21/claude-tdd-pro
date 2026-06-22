@@ -1,0 +1,13 @@
+{
+  "name": "the audit-time phase aggregates per-file verdicts across the tree",
+  "command": "mkdir -p app && printf '# A\\n\\n```\\nx\\n```\\n' > app/a.md && printf '# B\\n\\n```\\ny\\n```\\n' > app/b.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root app 2>e.txt; grep -qE 'files_flagged=[1-9]' e.txt && echo aggregates 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aggregates"
+    ]
+  }
+}

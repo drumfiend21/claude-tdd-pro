@@ -1891,3 +1891,15 @@ ADR-0009 stage 5: translate a rule's prose into a tool DSL through the four-laye
 - **§25 fidelity vocabulary additions:** `draft-custom-rule`, `four-layer-fidelity`, `layer_a_prompt`, `coverage_report`, `no_clause_dropped`, `needs_operator_signoff`, `covered`/`fallback`/`unenforceable`.
 
 8 specs (`cl494-*`): DSL-covers an enforceable clause · Layer-D fallback to prose-judge (never dropped) · advisory clause→sign-off · Layer-A prompt emitted · positive+negative fixtures · no-clause-dropped contract (sum==total) · prose-judge in enforced_by on fallback · requires --rule-id/--prose/--tool. Composes §28.24 (prose-judge) + §28.30 (classify); no new feature ID / contract. Suite 4462→4470.
+
+### §28.35 Composite engine — ADR-0008 Wave 3: architectural-content bundle + two-phase wiring (2026-06-20)
+
+Completes ADR-0008: the whole-or-nothing architectural-content bundle + the two-phase (write-time / audit-time) enforcement that ties the engine together. **No new §2.X contract.** All bundle members are open-source (MIT/Apache-2.0); the in-repo `prose-judge.sh` is the per-rule semantic path.
+
+- **`rubric/runners/run-bundle.sh --file <md>`** — runs EVERY member of a bundle (read from `kind-to-tool-routing.yaml bundles.<name>`; the operator cannot pick/choose) via `run-tool.sh` and aggregates their SARIF. Whole-or-nothing verdict (never vacuous green): **red** if any member found a violation; **incomplete** if a member could not run (absent/unadapted → not_enforced); **green** only if every member ran clean. Auto-attached when a rule is `applies_to_prose:true`.
+- **Two-phase wiring (same engine, two moments):**
+  - **Audit-time (whole-tree, strict zero-violation gate):** `rubric/composite-audit.sh --root <tree>` walks the tree, drives `composite-dispatch.sh` (code-shape tools) per file + `run-bundle.sh` for every Markdown file, and aggregates one tree verdict (red on any violation; incomplete on any not_enforced). Exit 0/1/3.
+  - **Write-time (per-file, pragmatic):** `hooks/scripts/enforce-standards-on-save.sh` now also runs the bundle on each Markdown Edit/Write — surfacing a bundle violation (red → exit 2) but lenient on incomplete/not_enforced (the strict gate is audit-time).
+- **§25 fidelity vocabulary additions:** `run-bundle`, `composite-audit`, `architectural-content`, `whole-or-nothing`, `two-phase`, `audit-time`, `write-time`.
+
+8 specs (`cl495-*`): bundle reads members + runs whole-or-nothing · bundle never vacuous green (clean→incomplete) · bundle flags malformed md (never green) · bundle requires --file · audit-time walks tree + flags · audit-time aggregates per-file · audit-time requires --root · write-time runs the bundle on md edits. Composes §28.24/§28.31; no new feature ID / contract. Suite 4470→4478.
