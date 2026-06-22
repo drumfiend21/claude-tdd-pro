@@ -1,0 +1,13 @@
+{
+  "name": "the installer marks binary-distributed tools as manual with an upstream URL (dry-run)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/install-toolchain.sh\" --dry-run 2>e.txt; grep -qE 'tool=trivy .*status=(manual|present)' e.txt && grep -q 'github.com' e.txt && echo binary-manual 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "binary-manual"
+    ]
+  }
+}

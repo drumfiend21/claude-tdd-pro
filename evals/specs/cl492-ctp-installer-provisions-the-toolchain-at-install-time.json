@@ -1,0 +1,13 @@
+{
+  "name": "the CTP installer provisions the composite-engine toolchain at install time",
+  "command": "grep -q 'install-toolchain.sh' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo installer-wired 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "installer-wired"
+    ]
+  }
+}

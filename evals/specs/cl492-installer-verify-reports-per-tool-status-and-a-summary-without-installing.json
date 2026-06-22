@@ -1,0 +1,13 @@
+{
+  "name": "the toolchain installer --verify reports per-tool status and a summary without installing",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/install-toolchain.sh\" --verify 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'toolchain present=' e.txt && ! grep -q 'status=installed' e.txt && echo verify-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verify-ok"
+    ]
+  }
+}

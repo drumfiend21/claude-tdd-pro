@@ -1,0 +1,13 @@
+{
+  "name": "the toolchain manifest marks every GPL/LGPL copyleft tool as invoke_only (never bundled)",
+  "command": "MAN=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.env.MAN,\"utf8\"));const bad=m.tools.filter(t=>/GPL/.test(t.license)&&t.invoke_only!==true);if(bad.length){console.error(\"copyleft-not-invoke-only:\",bad.map(t=>t.tool));process.exit(1)}console.error(\"copyleft-invoke-only-ok\")'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "copyleft-invoke-only-ok"
+    ]
+  }
+}

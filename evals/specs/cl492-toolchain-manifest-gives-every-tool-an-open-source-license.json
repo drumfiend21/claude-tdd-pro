@@ -1,0 +1,13 @@
+{
+  "name": "the composite-engine toolchain manifest gives every tool an open-source license",
+  "command": "MAN=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.env.MAN,\"utf8\"));const bad=m.tools.filter(t=>!t.license);if(bad.length){console.error(\"unlicensed:\",bad.map(t=>t.tool));process.exit(1)}console.error(\"all-licensed count=\"+m.tools.length)'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-licensed count="
+    ]
+  }
+}

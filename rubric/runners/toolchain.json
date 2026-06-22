@@ -1,0 +1,22 @@
+{
+  "_doc": "Composite-engine FOSS toolchain manifest (ADR-0008 Wave 2 / §28.x). Source of truth for install-toolchain.sh AND the doctor/verify check. Installed at CTP install time (and, by extension, in GCTP via its consumption of CTP), so the §28.28 hard-require policy treats a missing required tool as a broken install, not normal operation.",
+  "_license_policy": "Every tool is open-source and free for commercial use. Permissive (MIT/Apache-2.0/BSD/ISC/MPL/MIT-0) tools install by default. GPL/LGPL tools are invoke_only (run as arms-length subprocesses, never bundled/redistributed by CTP; their commercial USE is unrestricted) and are still installed unless --permissive-only is passed.",
+  "tools": [
+    { "tool": "eslint",            "installer": "npm",    "package": "eslint",                  "license": "MIT",        "kinds": ["typescript", "javascript"] },
+    { "tool": "markdownlint",      "installer": "npm",    "package": "markdownlint-cli2",        "license": "MIT",        "bin": "markdownlint-cli2", "kinds": ["markdown", "architectural-content"] },
+    { "tool": "cspell",            "installer": "npm",    "package": "cspell",                   "license": "MIT",        "kinds": ["architectural-content"] },
+    { "tool": "textlint",          "installer": "npm",    "package": "textlint",                 "license": "MIT",        "kinds": ["architectural-content"] },
+    { "tool": "remark",            "installer": "npm",    "package": "remark-cli",               "license": "MIT",        "bin": "remark", "kinds": ["architectural-content"] },
+    { "tool": "spectral",          "installer": "npm",    "package": "@stoplight/spectral-cli",  "license": "Apache-2.0", "bin": "spectral", "kinds": ["openapi"] },
+    { "tool": "checkov",           "installer": "pipx",   "package": "checkov",                  "license": "Apache-2.0", "kinds": ["terraform", "kubernetes", "cloudformation", "dockerfile", "github_actions"] },
+    { "tool": "cfn-lint",          "installer": "pipx",   "package": "cfn-lint",                 "license": "MIT-0",      "kinds": ["cloudformation"] },
+    { "tool": "semgrep",           "installer": "pipx",   "package": "semgrep",                  "license": "LGPL-2.1",   "invoke_only": true, "kinds": ["typescript", "javascript", "python", "go"] },
+    { "tool": "trivy",             "installer": "binary", "package": "aquasecurity/trivy",       "license": "Apache-2.0", "install_url": "https://github.com/aquasecurity/trivy/releases", "kinds": ["terraform", "kubernetes"] },
+    { "tool": "kubescape",         "installer": "binary", "package": "kubescape/kubescape",      "license": "Apache-2.0", "install_url": "https://github.com/kubescape/kubescape/releases", "kinds": ["kubernetes"] },
+    { "tool": "zizmor",            "installer": "binary", "package": "zizmorcore/zizmor",        "license": "MIT",        "install_url": "https://github.com/zizmorcore/zizmor/releases", "kinds": ["github_actions"] },
+    { "tool": "osv-scanner",       "installer": "binary", "package": "google/osv-scanner",       "license": "Apache-2.0", "install_url": "https://github.com/google/osv-scanner/releases", "kinds": ["npm", "pypi", "maven"] },
+    { "tool": "vale",              "installer": "binary", "package": "errata-ai/vale",           "license": "MIT",        "install_url": "https://github.com/errata-ai/vale/releases", "kinds": ["architectural-content"] },
+    { "tool": "lychee",            "installer": "binary", "package": "lycheeverse/lychee",       "license": "Apache-2.0 OR MIT", "install_url": "https://github.com/lycheeverse/lychee/releases", "kinds": ["architectural-content"] },
+    { "tool": "hadolint",          "installer": "binary", "package": "hadolint/hadolint",        "license": "GPL-3.0",    "invoke_only": true, "install_url": "https://github.com/hadolint/hadolint/releases", "kinds": ["dockerfile"] }
+  ]
+}

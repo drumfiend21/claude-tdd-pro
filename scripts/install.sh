@@ -587,6 +587,17 @@ PLAN
       >>"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
   disown 2>/dev/null || true
 
+  # Step 8c — provision the composite-engine FOSS toolchain (ADR-0008 §28.32), backgrounded
+  # and best-effort so it never blocks/breaks install. All tools open-source; the §28.28
+  # hard-require policy then treats a missing required tool as a broken install. GCTP inherits
+  # the toolchain by consuming CTP. --permissive-only is honored via CTP_TOOLCHAIN_PERMISSIVE_ONLY.
+  if [ -x "$CLONE_DIR/rubric/runners/install-toolchain.sh" ]; then
+    _po=""; [ "${CTP_TOOLCHAIN_PERMISSIVE_ONLY:-0}" = "1" ] && _po="--permissive-only"
+    ( CLAUDE_PLUGIN_ROOT="$CLONE_DIR" bash "$CLONE_DIR/rubric/runners/install-toolchain.sh" $_po \
+        >>"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
+    disown 2>/dev/null || true
+  fi
+
   local elapsed=$(($SECONDS - $START_SECONDS))
   cat >&2 <<DONE
 

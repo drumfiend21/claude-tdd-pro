@@ -1,0 +1,13 @@
+{
+  "name": "the toolchain installer --permissive-only skips the GPL/LGPL tools",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/install-toolchain.sh\" --verify --permissive-only 2>e.txt; grep -q 'tool=semgrep license=LGPL-2.1 status=skipped' e.txt && grep -q 'tool=hadolint license=GPL-3.0 status=skipped' e.txt && echo permissive-skips 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "permissive-skips"
+    ]
+  }
+}

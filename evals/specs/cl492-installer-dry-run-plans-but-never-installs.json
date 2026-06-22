@@ -1,0 +1,13 @@
+{
+  "name": "the toolchain installer --dry-run prints a plan but never installs anything",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/install-toolchain.sh\" --dry-run 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'toolchain present=' e.txt && ! grep -q 'status=installed' e.txt && echo dry-run-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dry-run-ok"
+    ]
+  }
+}
