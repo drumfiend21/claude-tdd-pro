@@ -1914,3 +1914,14 @@ Completes ADR-0009: the human-in-the-loop review queue (stage 6) that gates draf
 8 specs (`cl496-*`): auto-stage high+zero-gap · coverage-review high+gaps · side-by-side low · default human-in-the-loop (staged=0) · --auto-accept stages · routes a directory · requires input · end-to-end draft→review-queue. Composes §28.30/§28.34; no new feature ID / contract. Suite 4478→4486.
 
 **ADR-0008 and ADR-0009 are now fully built** (§28.28–§28.36): composite engine (4-axis vocabulary + SARIF bus + runners + dispatch + bundle + two-phase) and the auto-classification + four-layer-fidelity drafting + review-queue pipeline, with the 118-rule parity migration and the install-time FOSS toolchain. All material open-source and free for commercial use.
+
+### §28.37 Commercial-sale license gate — CTP/GCTP sellable with no conflict (2026-06-20)
+
+Operator requirement: CTP and GCTP must be usable, distributable, and **sellable commercially** with no licensing conflict — every dependency open-source and free to use, distribute, and sell. This makes that guarantee authoritative + machine-enforced. **No new §2.X contract.**
+
+- **`rubric/detectors/audit-commercial-license.sh`** (/doctor + CI) — the bright-line gate: **BUNDLED** content (data shipped in the plugin) must be permissive/attribution (MIT/Apache/BSD/ISC/MPL/CC0/CC-BY — never GPL/AGPL/LGPL source, CC-BY-**SA**, CC-**NC**, or proprietary); **INVOKE-ONLY** tools (installed separately by the user's package manager, never shipped) may carry any OSI license incl. GPL/LGPL provided they are flagged `invoke_only`; **CITED** sources (provenance only — CTP authors original rule prose and cites the authority, never redistributing its text) may carry any license. Green on the repo: bundled=4 (all MIT/Apache), tools=16 (14 permissive + semgrep LGPL/hadolint GPL both invoke_only), violations=0.
+- **`COMMERCIAL-USE.md`** — the policy doc: bundled→permissive-only, invoke-only→tools-not-shipped (GPL/LGPL commercial *use* unrestricted; `--permissive-only` gives a zero-copyleft footprint), cited→provenance-not-redistribution, and GCTP-inherits-by-construction.
+- Defense-in-depth: the narrower `cl489` (vocab) / `cl490` (routing) / `cl492` (toolchain) license guards remain.
+- **§25 fidelity vocabulary additions:** `audit-commercial-license`, `invoke_only`, `bundled`, `cited`, `permissive-only`, `commercial-sale`.
+
+6 specs (`cl497-*`): gate confirms commercial-safe · rejects bundled copyleft · rejects unflagged copyleft tool · accepts invoke_only copyleft tool · default toolchain copyleft all invoke_only · policy documented. Composes §28.29/§28.32; no new feature ID / contract. Suite 4486→4492.

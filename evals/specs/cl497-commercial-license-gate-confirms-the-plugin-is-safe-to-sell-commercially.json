@@ -1,0 +1,13 @@
+{
+  "name": "the commercial-license gate confirms the plugin's bundled content + toolchain are safe to sell commercially",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-commercial-license.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'status=green' e.txt && grep -q 'violations=0' e.txt && echo commercial-safe 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "commercial-safe"
+    ]
+  }
+}

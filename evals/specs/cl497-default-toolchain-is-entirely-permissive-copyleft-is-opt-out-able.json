@@ -1,0 +1,13 @@
+{
+  "name": "the default toolchain's only copyleft tools are invoke_only and can be skipped with --permissive-only",
+  "command": "MAN=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.env.MAN,\"utf8\"));const cl=m.tools.filter(t=>/GPL/.test(t.license));if(cl.some(t=>t.invoke_only!==true))process.exit(1);console.error(\"copyleft-tools=\"+cl.length+\" all-invoke-only\")'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-invoke-only"
+    ]
+  }
+}

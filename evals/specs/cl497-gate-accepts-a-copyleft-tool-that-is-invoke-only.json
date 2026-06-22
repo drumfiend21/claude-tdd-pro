@@ -1,0 +1,13 @@
+{
+  "name": "the gate accepts a copyleft tool that is correctly flagged invoke_only (installed separately, not bundled)",
+  "command": "mkdir -p vendor/canonical-vocabulary rubric/runners && printf '%s' '{\"mirrors\":{}}' > vendor/canonical-vocabulary/provenance.json && printf '%s' '{\"tools\":[{\"tool\":\"semgrep\",\"license\":\"LGPL-2.1\",\"invoke_only\":true}]}' > rubric/runners/toolchain.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-commercial-license.sh\" --root . 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'status=green' e.txt && echo invoke-only-accepted 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "invoke-only-accepted"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the commercial-use licensing policy is documented for buyers/sellers of the plugin",
+  "command": "grep -qi 'sell.*commercial' \"$CLAUDE_PLUGIN_ROOT/COMMERCIAL-USE.md\" && grep -q 'invoke-only' \"$CLAUDE_PLUGIN_ROOT/COMMERCIAL-USE.md\" && echo policy-documented 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "policy-documented"
+    ]
+  }
+}

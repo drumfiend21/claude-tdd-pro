@@ -1,0 +1,13 @@
+{
+  "name": "the gate rejects a copyleft tool that is not flagged invoke_only",
+  "command": "mkdir -p vendor/canonical-vocabulary rubric/runners && printf '%s' '{\"mirrors\":{}}' > vendor/canonical-vocabulary/provenance.json && printf '%s' '{\"tools\":[{\"tool\":\"hadolint\",\"license\":\"GPL-3.0\"}]}' > rubric/runners/toolchain.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-commercial-license.sh\" --root . 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'copyleft-tool-not-flagged-invoke_only' e.txt && echo unflagged-copyleft-rejected 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unflagged-copyleft-rejected"
+    ]
+  }
+}
