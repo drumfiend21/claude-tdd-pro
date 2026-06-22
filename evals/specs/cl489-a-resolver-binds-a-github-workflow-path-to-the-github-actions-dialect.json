@@ -1,0 +1,13 @@
+{
+  "name": "the resolver binds a .github/workflows path to the github_actions dialect via glob",
+  "command": "mkdir -p .github/workflows && printf 'on: push\\n' > .github/workflows/ci.yml && bash $CLAUDE_PLUGIN_ROOT/vendor/canonical-vocabulary/resolve.sh --file .github/workflows/ci.yml 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac_dialects=github_actions"
+    ]
+  }
+}

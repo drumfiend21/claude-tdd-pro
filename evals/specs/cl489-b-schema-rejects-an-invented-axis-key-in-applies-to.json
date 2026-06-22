@@ -1,0 +1,13 @@
+{
+  "name": "the schema rejects an invented axis key in the applies_to object (no CTP-native invention)",
+  "command": "printf 'id: g-test-axis\\nname: axis-rule\\ndescription: a rule for testing the 4-axis schema\\ndetector: rubric/detectors/cloud-guidance-rule.sh\\ntype: problem\\nfixable:\\nhas_suggestions: false\\ndeprecated: false\\nreplaced_by: []\\ndocs_url: https://e.com\\nrequires_type_checking: false\\nrecommended: true\\nseverity: P0\\nversion: 1.0.0\\nsemver: 1.0.0\\nrule_state: warn-only\\nprovenance:\\n- source: x\\n  url: https://e.com\\n  fetched_at: \\\"2026-06-20T00:00:00Z\\\"\\napplies_to:\\n  bogus_axis: [x]\\n' > r.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-rubric-rule.sh\" r.yaml 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'applies_to' e.txt && echo rejected-invented 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rejected-invented"
+    ]
+  }
+}

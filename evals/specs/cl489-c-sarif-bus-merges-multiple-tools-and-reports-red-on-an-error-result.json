@@ -1,0 +1,13 @@
+{
+  "name": "the SARIF bus merges multiple tools into one 2.1.0 log and reports red on an error-level result",
+  "command": "printf 'id: g-test-axis\\nname: axis-rule\\ndescription: a rule for testing the 4-axis schema\\ndetector: rubric/detectors/cloud-guidance-rule.sh\\ntype: problem\\nfixable:\\nhas_suggestions: false\\ndeprecated: false\\nreplaced_by: []\\ndocs_url: https://e.com\\nrequires_type_checking: false\\nrecommended: true\\nseverity: P0\\nversion: 1.0.0\\nsemver: 1.0.0\\nrule_state: warn-only\\nprovenance:\\n- source: x\\n  url: https://e.com\\n  fetched_at: \\\"2026-06-20T00:00:00Z\\\"\\n' >/dev/null; printf '# 0001\\n\\n## Decision\\n\\nLeave ingress unrestricted (0.0.0.0/0).\\n' > a.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths a.md --json > pj.sarif 2>/dev/null; printf '# T\\n\\n```\\nx\\n```\\n' > b.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/md-structure.sh\" --rule g-md-fenced-code-language-declared --root . --paths b.md --json > md.sarif 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in pj.sarif --in md.sarif --json > merged.sarif 2>sum.txt; rc=$?; node -e 'const d=JSON.parse(require(\"fs\").readFileSync(\"merged.sarif\"));if(d.version!==\"2.1.0\"||d.runs.length<2)process.exit(1)' && [ \"$rc\" -eq 1 ] && grep -q 'status=red' sum.txt && echo bus-merged-red 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bus-merged-red"
+    ]
+  }
+}

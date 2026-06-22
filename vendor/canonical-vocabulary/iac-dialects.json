@@ -1,0 +1,135 @@
+{
+  "_authority": "Checkov / Trivy / Kubescape (dialect consensus)",
+  "_license": "Apache-2.0",
+  "_source": "bridgecrewio/checkov + aquasecurity/trivy + kubescape/kubescape",
+  "_count": 18,
+  "dialects": {
+    "terraform": {
+      "extensions": [
+        ".tf",
+        ".tf.json"
+      ]
+    },
+    "terraform_plan": {
+      "extensions": [
+        ".json"
+      ],
+      "markers": [
+        "planned_values"
+      ]
+    },
+    "cloudformation": {
+      "extensions": [
+        ".template",
+        ".cfn.yaml",
+        ".cfn.json"
+      ],
+      "markers": [
+        "AWSTemplateFormatVersion"
+      ]
+    },
+    "kubernetes": {
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "markers": [
+        "apiVersion",
+        "kind"
+      ]
+    },
+    "helm": {
+      "extensions": [
+        ".yaml",
+        ".tpl"
+      ],
+      "markers": [
+        "Chart.yaml"
+      ]
+    },
+    "kustomize": {
+      "filenames": [
+        "kustomization.yaml",
+        "kustomization.yml"
+      ]
+    },
+    "dockerfile": {
+      "filenames": [
+        "Dockerfile"
+      ],
+      "extensions": [
+        ".dockerfile"
+      ]
+    },
+    "github_actions": {
+      "globs": [
+        ".github/workflows/*.yml",
+        ".github/workflows/*.yaml"
+      ]
+    },
+    "gitlab_ci": {
+      "filenames": [
+        ".gitlab-ci.yml"
+      ]
+    },
+    "azure_pipelines": {
+      "filenames": [
+        "azure-pipelines.yml",
+        "azure-pipelines.yaml"
+      ]
+    },
+    "circleci": {
+      "globs": [
+        ".circleci/config.yml"
+      ]
+    },
+    "bitbucket_pipelines": {
+      "filenames": [
+        "bitbucket-pipelines.yml"
+      ]
+    },
+    "ansible": {
+      "extensions": [
+        ".yml",
+        ".yaml"
+      ],
+      "markers": [
+        "hosts:",
+        "tasks:"
+      ]
+    },
+    "serverless": {
+      "filenames": [
+        "serverless.yml",
+        "serverless.yaml"
+      ]
+    },
+    "arm": {
+      "extensions": [
+        ".json"
+      ],
+      "markers": [
+        "$schema",
+        "resources"
+      ]
+    },
+    "bicep": {
+      "extensions": [
+        ".bicep"
+      ]
+    },
+    "openapi": {
+      "filenames": [
+        "openapi.yaml",
+        "openapi.json",
+        "swagger.yaml",
+        "swagger.json"
+      ]
+    },
+    "cdk": {
+      "markers": [
+        "aws-cdk-lib"
+      ]
+    }
+  }
+}

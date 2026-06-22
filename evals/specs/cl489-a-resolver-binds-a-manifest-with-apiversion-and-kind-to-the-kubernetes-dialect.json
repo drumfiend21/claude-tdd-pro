@@ -1,0 +1,13 @@
+{
+  "name": "the resolver binds a YAML manifest carrying apiVersion and kind to the kubernetes dialect",
+  "command": "printf 'apiVersion: apps/v1\\nkind: Deployment\\n' > deploy.yaml && bash $CLAUDE_PLUGIN_ROOT/vendor/canonical-vocabulary/resolve.sh --file deploy.yaml 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac_dialects=kubernetes"
+    ]
+  }
+}

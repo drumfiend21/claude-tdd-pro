@@ -1,0 +1,13 @@
+{
+  "name": "the schema accepts enforced_by with a required hard-fail tool and the architectural-content bundle",
+  "command": "printf 'id: g-test-axis\\nname: axis-rule\\ndescription: a rule for testing the 4-axis schema\\ndetector: rubric/detectors/cloud-guidance-rule.sh\\ntype: problem\\nfixable:\\nhas_suggestions: false\\ndeprecated: false\\nreplaced_by: []\\ndocs_url: https://e.com\\nrequires_type_checking: false\\nrecommended: true\\nseverity: P0\\nversion: 1.0.0\\nsemver: 1.0.0\\nrule_state: warn-only\\nprovenance:\\n- source: x\\n  url: https://e.com\\n  fetched_at: \\\"2026-06-20T00:00:00Z\\\"\\nenforced_by:\\n- tool: semgrep\\n  required: true\\n- bundle: architectural-content\\n' > r.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/validate-rubric-rule.sh\" r.yaml && echo enforced-by-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "enforced-by-ok"
+    ]
+  }
+}

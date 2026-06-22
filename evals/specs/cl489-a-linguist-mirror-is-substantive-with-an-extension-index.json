@@ -1,0 +1,13 @@
+{
+  "name": "the Linguist language mirror is substantive and carries a by-extension index",
+  "command": "VOCAB=\"$CLAUDE_PLUGIN_ROOT/vendor/canonical-vocabulary\" node -e 'const d=require(process.env.VOCAB+\"/linguist-languages.json\");if(d._count<100)process.exit(1);if(!d.by_extension[\".py\"]||!d.by_extension[\".ts\"])process.exit(1);console.error(\"linguist-langs=\"+d._count)'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "linguist-langs="
+    ]
+  }
+}

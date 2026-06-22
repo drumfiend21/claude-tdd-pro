@@ -1,0 +1,15 @@
+{
+  "name": "the vocabulary resolver binds a Terraform file to the HCL language and the terraform IaC dialect",
+  "command": "printf 'resource \"aws_s3_bucket\" \"b\" {}\\n' > main.tf && bash $CLAUDE_PLUGIN_ROOT/vendor/canonical-vocabulary/resolve.sh --file main.tf 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "linguist_aliases=",
+      "terraform",
+      "iac_dialects=terraform"
+    ]
+  }
+}

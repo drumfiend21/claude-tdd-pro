@@ -72,5 +72,12 @@ if [ -x "$ROOT/commands/universal-coverage-sync.sh" ]; then
   bash "$ROOT/commands/universal-coverage-sync.sh" --root "$ROOT" --state-dir "$STATE_DIR" --no-promote --now "$NOW" >/dev/null 2>&1 || true
 fi
 
+# 4) Refresh the ADR-0008 4-axis canonical vocabulary mirrors (§28.28 Wave 1). Backgrounded,
+# best-effort: Linguist is live-fetched, the curated axes are re-emitted; offline -> keep mirror.
+if [ -x "$ROOT/vendor/canonical-vocabulary/refresh-vocabulary.sh" ]; then
+  ( bash "$ROOT/vendor/canonical-vocabulary/refresh-vocabulary.sh" >/dev/null 2>&1 || true ) &
+  disown 2>/dev/null || true
+fi
+
 [ "$QUIET" -eq 1 ] || echo "initial-refresh status=armed seeded=${SEEDED:-0} state_dir=$STATE_DIR" >&2
 exit 0

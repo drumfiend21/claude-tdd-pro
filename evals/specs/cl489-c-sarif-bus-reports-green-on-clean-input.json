@@ -1,0 +1,13 @@
+{
+  "name": "the SARIF bus reports green and exit 0 when no tool produced a blocking result",
+  "command": "printf '# Clean\\n\\n## Decision\\n\\nUse Postgres.\\n' > c.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule g-aws-no-unrestricted-ingress --root . --paths c.md --json > c.sarif 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in c.sarif 2>&1 | grep -q 'status=green'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+
+    ]
+  }
+}

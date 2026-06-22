@@ -1,0 +1,13 @@
+{
+  "name": "the SARIF bus exits with a usage error when given no valid SARIF 2.1.0 input",
+  "command": "printf 'not sarif\\n' > x.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in x.txt 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'no valid SARIF' e.txt && echo usage-exit 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usage-exit"
+    ]
+  }
+}

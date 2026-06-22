@@ -1,0 +1,13 @@
+{
+  "name": "all four canonical-vocabulary mirrors are permissively licensed (free for commercial use)",
+  "command": "VOCAB=\"$CLAUDE_PLUGIN_ROOT/vendor/canonical-vocabulary\" node -e 'const p=require(process.env.VOCAB+\"/provenance.json\");const ok=[\"MIT\",\"Apache-2.0\",\"BSD-2-Clause\",\"BSD-3-Clause\",\"ISC\",\"MPL-2.0\",\"CC-BY-4.0\",\"CC0-1.0\"];const bad=Object.entries(p.mirrors).filter(([k,v])=>!ok.includes(v.license));if(bad.length){console.error(\"non-permissive:\",JSON.stringify(bad));process.exit(1)}console.error(\"all-permissive count=\"+Object.keys(p.mirrors).length)'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-permissive count=4"
+    ]
+  }
+}

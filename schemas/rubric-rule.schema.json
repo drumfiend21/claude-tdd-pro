@@ -204,9 +204,34 @@
       }
     },
     "applies_to": {
+      "description": "Either legacy stack/use-case tags (array of strings) OR the ADR-0008 4-axis canonical binding (object). The 4-axis form binds a rule to tools via industry authorities (GitHub Linguist languages, IaC-scanner dialect consensus, PURL package types, Kubernetes GVKs) instead of CTP-invented strings. Mirrors live in vendor/canonical-vocabulary/.",
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "linguist_aliases": { "type": "array", "items": { "type": "string" }, "description": "GitHub Linguist (MIT) language names/aliases (e.g. typescript, python, hcl)." },
+            "iac_dialects": { "type": "array", "items": { "type": "string" }, "description": "IaC dialects per the Checkov/Trivy/Kubescape consensus (terraform, kubernetes, cloudformation, github_actions, ...)." },
+            "purl_uses": { "type": "array", "items": { "type": "string" }, "description": "PURL (MIT) package types/coordinates the rule targets (e.g. pkg:npm/react, npm, pypi)." },
+            "k8s_gvks": { "type": "array", "items": { "type": "string" }, "description": "Kubernetes (Apache-2.0) Group/Version/Kind targets (e.g. apps/v1/Deployment)." }
+          }
+        }
+      ]
+    },
+    "enforced_by": {
       "type": "array",
-      "items": { "type": "string" },
-      "description": "Stack/use-case tags (typescript, react, node, python, universal, ai-features, etc.)."
+      "description": "ADR-0008 composite-engine tool bindings, walked in order (first matching binding wins per file). Each entry names a FOSS tool runner or the architectural-content bundle.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tool": { "type": "string", "description": "Tool runner id (e.g. semgrep, eslint, checkov) or a detector path." },
+          "bundle": { "type": "string", "description": "Bundle id (e.g. architectural-content) auto-attached when applies_to_prose is true." },
+          "config": { "type": "string", "description": "Tool config / ruleset reference." },
+          "required": { "type": "boolean", "description": "When true a missing tool HARD-FAILS (blocks) per the ADR-0008 operator policy; when false/absent the tool is optional and degrades to not_enforced (§28.17)." }
+        }
+      }
     },
     "languages": {
       "type": "array",

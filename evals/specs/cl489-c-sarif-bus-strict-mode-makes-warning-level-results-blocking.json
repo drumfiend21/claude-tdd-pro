@@ -1,0 +1,13 @@
+{
+  "name": "the SARIF bus --strict makes warning-level results blocking for the audit-time gate",
+  "command": "printf '# T\\n\\n```\\nx\\n```\\n' > b.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/md-structure.sh\" --rule g-md-fenced-code-language-declared --root . --paths b.md --json > md.sarif 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in md.sarif 2>/dev/null; lax=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in md.sarif --strict 2>/dev/null; strict=$?; [ \"$lax\" -eq 0 ] && [ \"$strict\" -eq 1 ] && echo strict-gate-ok 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "strict-gate-ok"
+    ]
+  }
+}
