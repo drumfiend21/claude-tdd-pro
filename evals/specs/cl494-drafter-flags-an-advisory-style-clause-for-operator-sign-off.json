@@ -1,0 +1,13 @@
+{
+  "name": "the drafter flags an advisory-style clause as unenforceable needing operator sign-off",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-y --tool eslint --prose 'The code should read clearly and be pleasant.' --json > d.json 2>e.txt; node -e 'const d=require(process.cwd()+\"/d.json\");if(d.needs_operator_signoff!==true)process.exit(1);if(d.clauses_unenforceable<1)process.exit(1)' && echo signoff-flagged 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "signoff-flagged"
+    ]
+  }
+}

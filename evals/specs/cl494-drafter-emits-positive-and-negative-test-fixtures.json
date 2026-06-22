@@ -1,0 +1,13 @@
+{
+  "name": "the drafter emits positive and negative test fixtures (Layer C)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-z --tool eslint --prose 'Never use var.' --json > d.json 2>/dev/null; node -e 'const d=require(process.cwd()+\"/d.json\");if(!d.fixtures.positive||!d.fixtures.negative)process.exit(1)' && echo fixtures-emitted 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "fixtures-emitted"
+    ]
+  }
+}

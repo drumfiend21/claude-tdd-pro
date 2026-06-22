@@ -1,0 +1,13 @@
+{
+  "name": "the drafter accounts for every clause exactly once — the no-language-silently-dropped contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-multi --tool eslint --prose 'Never use var. Avoid console.log. The names should be clear. Use strict equality.' --json > d.json 2>e.txt; rc=$?; node -e 'const d=require(process.cwd()+\"/d.json\");const s=d.clauses_covered+d.clauses_fallback+d.clauses_unenforceable;if(s!==d.clauses_total)process.exit(1);if(d.no_clause_dropped!==true)process.exit(1)' && [ \"$rc\" -eq 0 ] && echo no-clause-dropped 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-clause-dropped"
+    ]
+  }
+}

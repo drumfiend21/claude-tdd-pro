@@ -1,0 +1,13 @@
+{
+  "name": "the drafter emits the Layer-A drafting prompt that demands every clause be translated or flagged",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-z --tool eslint --prose 'Never use var.' --json > d.json 2>/dev/null; node -e 'const d=require(process.cwd()+\"/d.json\");if(!/do not silently drop any clause/i.test(d.layer_a_prompt))process.exit(1)' && echo layer-a-prompt 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "layer-a-prompt"
+    ]
+  }
+}

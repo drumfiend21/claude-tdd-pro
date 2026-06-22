@@ -1,0 +1,13 @@
+{
+  "name": "the drafter falls uncovered clauses back to prose-judge (Layer D), never dropping them",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-x --tool semgrep --prose 'The deployment topology must isolate tenants across availability zones.' --json > d.json 2>/dev/null; node -e 'const d=require(process.cwd()+\"/d.json\");if(d.clauses_fallback<1)process.exit(1);if(!d.coverage_report.some(c=>c.status===\"fallback\"&&c.binding.tool===\"prose-judge.sh\"))process.exit(1)' && echo layer-d-fallback 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "layer-d-fallback"
+    ]
+  }
+}

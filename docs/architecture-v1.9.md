@@ -1881,3 +1881,13 @@ Completes ADR-0008 Wave 2: the existing 118-rule corpus is migrated to the 4-axi
 - **§25 fidelity vocabulary additions:** `namespace-axis-binding`, `migrate-rules-to-applies-to`, `audit-applies-to-parity`, `foss_tools`, `parity-diff`.
 
 10 specs (`cl493-*`): parity gate green (118/0/0) · every rule routable · detector preserved as required first binding · k8s→kubernetes dialect · migration idempotent · prose rule→bundle · parity gate catches a dropped detector · generators re-apply (no drift) · no YAML anchors · binding map covers every namespace. Composes §28.29/§28.31 + §28.28; no new feature ID / contract. Suite 4452→4462.
+
+### §28.34 Auto-classification — ADR-0009 Wave 2: LLM rule-drafter with four-layer fidelity (2026-06-20)
+
+ADR-0009 stage 5: translate a rule's prose into a tool DSL through the four-layer fidelity discipline that makes the **"no language silently dropped"** contract auditable. Deterministic by construction (Layer D guarantees coverage without a model); the LLM tier extends it when a model is present. **No new §2.X contract.**
+
+- **`commands/draft-custom-rule.sh --rule-id --prose --tool [--llm]`** — four layers: **Layer A** emits the drafting prompt (the instruction that every clause be translated or flagged); **Layer B** the round-trip coverage diff maps each clause to `covered` (a deterministic tool-DSL line), `fallback` (Layer D), or `unenforceable`; **Layer C** emits positive + negative fixtures; **Layer D** binds every not-covered clause to `prose-judge.sh` (the semantic moat) so no clause is dropped even without a model. Advisory-style clauses (should/prefer, no must/never) are flagged `unenforceable` → `needs_operator_signoff`.
+- **The contract (machine-checked):** `clauses_total == covered + fallback + unenforceable`, and `no_clause_dropped` is asserted (exit 1 if ever false — should never happen). `enforced_by` carries the tool (for covered clauses) + `prose-judge.sh` (for fallback clauses).
+- **§25 fidelity vocabulary additions:** `draft-custom-rule`, `four-layer-fidelity`, `layer_a_prompt`, `coverage_report`, `no_clause_dropped`, `needs_operator_signoff`, `covered`/`fallback`/`unenforceable`.
+
+8 specs (`cl494-*`): DSL-covers an enforceable clause · Layer-D fallback to prose-judge (never dropped) · advisory clause→sign-off · Layer-A prompt emitted · positive+negative fixtures · no-clause-dropped contract (sum==total) · prose-judge in enforced_by on fallback · requires --rule-id/--prose/--tool. Composes §28.24 (prose-judge) + §28.30 (classify); no new feature ID / contract. Suite 4462→4470.

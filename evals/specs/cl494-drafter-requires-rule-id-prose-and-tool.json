@@ -1,0 +1,13 @@
+{
+  "name": "the drafter requires --rule-id, --prose, and --tool",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id x --tool eslint 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'prose required' e.txt && echo usage-checked 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usage-checked"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the rule drafter covers an enforceable clause with a deterministic tool DSL rule (Layer B)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-ts-no-var --tool eslint --prose 'Never use var; use const or let.' --json > d.json 2>/dev/null; node -e 'const d=require(process.cwd()+\"/d.json\");if(d.clauses_covered<1)process.exit(1);if(!d.coverage_report.some(c=>c.status===\"covered\"&&c.binding.dsl_rule===\"no-var\"))process.exit(1)' && echo dsl-covered 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dsl-covered"
+    ]
+  }
+}

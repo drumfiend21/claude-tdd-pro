@@ -1,0 +1,13 @@
+{
+  "name": "the drafter binds prose-judge in enforced_by when any clause falls back to semantic enforcement",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-fb --tool semgrep --prose 'Tenants must remain isolated across regions for resilience.' --json > d.json 2>/dev/null; node -e 'const d=require(process.cwd()+\"/d.json\");if(!d.enforced_by.some(e=>e.tool===\"prose-judge.sh\"))process.exit(1)' && echo prose-judge-bound 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-judge-bound"
+    ]
+  }
+}
