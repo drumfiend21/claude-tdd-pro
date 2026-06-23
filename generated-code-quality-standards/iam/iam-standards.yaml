@@ -41,6 +41,7 @@ rules:
     required: true
   - tool: checkov
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-iam-no-wildcard-resource
   name: no-wildcard-resource
   description: 'IAM policies must not grant Resource: * for write actions.'
@@ -67,6 +68,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-iam-no-wildcard-principal
   name: no-wildcard-principal
   description: 'Resource policies must not grant Principal: * (anonymous access).'
@@ -93,6 +95,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-iam-no-full-admin
   name: no-full-admin
   description: IAM statements must not grant the *:* full-admin action.
@@ -124,6 +127,7 @@ rules:
     required: true
   - tool: checkov
   - bundle: architectural-content
+  introduced_in: baseline
 recommended_set:
 - g-iam-no-wildcard-action
 - g-iam-no-wildcard-resource

@@ -52,6 +52,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-ts-002
   name: as-requires-allow-cast-comment
   description: 'Explicit `as <Type>` cast requires an // allow-cast: <reason> comment
@@ -95,6 +96,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-ts-007
   name: no-Function-no-object
   description: Banned types Function and object lose static checking; use a specific
@@ -135,6 +137,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-ts-001
 - g-ts-002

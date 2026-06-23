@@ -54,6 +54,7 @@ rules:
   - tool: rsc-boundary.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 recommended_set:
 - g-react-001
 all_set:

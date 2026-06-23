@@ -1,0 +1,51 @@
+{
+  "_doc": "Field semantics registry (Consumer Compatibility Contract, §28.40). For every OPTIONAL rule-schema field that participates in a consumer's enforcement derivation, declares its `absent_default` (what a consumer reading OLD data — where the field is missing — MUST assume) and its `enforcement_relevant` flag (whether a consumer gate derives requirements from it). This makes a consumer's dual-read shim unambiguous: a field added on the CTP side is only safe if its absent-default is defined here, so legacy consumer state reads a defined answer instead of a new requirement.",
+  "_contract": "CTP-side invariant: every NEW optional, enforcement-relevant rule field MUST be registered here with an absent_default in the same CL that adds it (audit-consumer-compatibility.sh enforces this). Consumers MUST treat a missing field as its absent_default and MUST NOT derive a new floor requirement from a field whose absent_default makes the rule inapplicable.",
+  "fields": {
+    "introduced_in": {
+      "absent_default": "baseline",
+      "enforcement_relevant": true,
+      "consumer_note": "Missing => 'baseline' (pre-contract, grandfathered). Gate floors by epoch: enforce a floor only on tickets/content whose issue-epoch >= the rule's introduced_in epoch."
+    },
+    "applies_to_prose": {
+      "absent_default": false,
+      "enforcement_relevant": true,
+      "consumer_note": "Missing => false. A rule is on the prose-projection floor ONLY when this is true; never derive a .md floor requirement from a rule where it is absent."
+    },
+    "applies_to_prose_kinds": {
+      "absent_default": ["architecture", "adr"],
+      "enforcement_relevant": true,
+      "consumer_note": "Only meaningful when applies_to_prose is true."
+    },
+    "applies_to": {
+      "absent_default": "applies-to-all (no language/dialect restriction)",
+      "enforcement_relevant": true,
+      "consumer_note": "Missing => the rule applies everywhere (no 4-axis restriction); routing falls back to the rule's own detector via enforced_by[0]."
+    },
+    "enforced_by": {
+      "absent_default": "[{ tool: <the rule's detector>, required: true }]",
+      "enforcement_relevant": true,
+      "consumer_note": "Missing => the rule is enforced solely by its in-repo detector (parity). A `required` tool that is absent HARD-FAILS; an optional/absent tool is not_enforced (advisory) — a consumer treating not_enforced as red must read this flag."
+    },
+    "languages": {
+      "absent_default": "[]",
+      "enforcement_relevant": false,
+      "consumer_note": "Legacy v0.3 tags; superseded by applies_to. Not a floor input."
+    },
+    "controls": {
+      "absent_default": "[]",
+      "enforcement_relevant": false,
+      "consumer_note": "Compliance control mappings; informational."
+    },
+    "rule_state_history": {
+      "absent_default": "[]",
+      "enforcement_relevant": false,
+      "consumer_note": "Audit trail; not a floor input."
+    },
+    "options_schema": {
+      "absent_default": "no options",
+      "enforcement_relevant": false,
+      "consumer_note": "Operator override schema; informational."
+    }
+  }
+}

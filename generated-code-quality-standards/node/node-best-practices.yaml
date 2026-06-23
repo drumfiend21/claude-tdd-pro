@@ -48,6 +48,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-node-004
   name: structured-logging
   description: All logging in src/ must use a structured logger (pino, winston) with
@@ -95,6 +96,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-node-002
 - g-node-004

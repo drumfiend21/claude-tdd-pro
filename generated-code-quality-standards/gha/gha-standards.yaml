@@ -45,6 +45,7 @@ rules:
   - tool: zizmor
   - tool: checkov
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-gha-pin-actions-to-sha
   name: pin-actions-to-sha
   description: Third-party actions must be pinned to a full commit SHA, not a mutable
@@ -75,6 +76,7 @@ rules:
     required: true
   - tool: zizmor
   - tool: checkov
+  introduced_in: baseline
 - id: g-gha-no-unpinned-main-ref
   name: no-unpinned-main-ref
   description: Third-party actions must not reference a mutable @main ref.
@@ -104,6 +106,7 @@ rules:
     required: true
   - tool: zizmor
   - tool: checkov
+  introduced_in: baseline
 - id: g-gha-set-minimal-permissions
   name: set-minimal-permissions
   description: Workflows must declare a minimal permissions block for GITHUB_TOKEN.
@@ -133,6 +136,7 @@ rules:
     required: true
   - tool: zizmor
   - tool: checkov
+  introduced_in: baseline
 - id: g-gha-no-script-injection
   name: no-script-injection
   description: Workflows must not interpolate untrusted issue/PR titles directly into
@@ -163,6 +167,7 @@ rules:
     required: true
   - tool: zizmor
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-gha-no-pull-request-target
 - g-gha-pin-actions-to-sha

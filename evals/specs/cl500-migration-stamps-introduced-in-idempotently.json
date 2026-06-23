@@ -1,0 +1,13 @@
+{
+  "name": "the migration stamps introduced_in and a re-run changes nothing (idempotent)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/migrate-rules-to-applies-to.sh\" --dry-run 2>e.txt; grep -q 'migrated_rules=0' e.txt && echo migration-idempotent 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "migration-idempotent"
+    ]
+  }
+}

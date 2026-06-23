@@ -36,6 +36,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-circleci-pin-orb-version
   name: pin-orb-version
   description: Orbs must be pinned to an explicit version, not @volatile.
@@ -62,6 +63,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-circleci-pin-image-tag
 - g-circleci-pin-orb-version

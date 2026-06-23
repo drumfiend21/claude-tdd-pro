@@ -45,6 +45,7 @@ rules:
   - tool: checkov
   - tool: trivy
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-aws-tag-resources
   name: tag-resources
   description: Cloud resources must carry tags so ownership, cost allocation, and
@@ -75,6 +76,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 recommended_set:
 - g-aws-no-unrestricted-ingress
 - g-aws-tag-resources

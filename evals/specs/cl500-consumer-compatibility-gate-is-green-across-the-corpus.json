@@ -1,0 +1,13 @@
+{
+  "name": "the consumer-compatibility gate is green: every rule epoch-tagged, every enforcement field has an absent_default, contract present",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-consumer-compatibility.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'status=green rules=118 untagged=0 undeclared_fields=0' e.txt && echo consumer-compat-green 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "consumer-compat-green"
+    ]
+  }
+}

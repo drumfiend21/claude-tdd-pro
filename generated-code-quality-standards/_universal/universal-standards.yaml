@@ -34,6 +34,7 @@ rules:
   - tool: universal-pattern-rule.sh
     required: true
   - tool: semgrep
+  introduced_in: baseline
 - id: g-universal-no-debug-output
   name: no-debug-output-in-source
   description: No raw debug print/console output in production source in any language;
@@ -58,6 +59,7 @@ rules:
   - tool: universal-pattern-rule.sh
     required: true
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-universal-no-hardcoded-secrets
 - g-universal-no-debug-output

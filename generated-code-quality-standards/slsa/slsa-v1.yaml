@@ -42,6 +42,7 @@ rules:
   enforced_by:
   - tool: supply-chain.sh
     required: true
+  introduced_in: baseline
 recommended_set:
 - g-node-010
 all_set:

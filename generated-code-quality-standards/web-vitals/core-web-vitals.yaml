@@ -58,6 +58,7 @@ rules:
   - tool: bundle-budget.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 - id: g-react-010
   name: image-and-font-optimization
   description: Images and fonts must use platform-optimized loaders (next/image, next/font,
@@ -94,6 +95,7 @@ rules:
   - tool: bundle-budget.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 recommended_set:
 - g-react-008
 - g-react-010

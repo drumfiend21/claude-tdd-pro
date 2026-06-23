@@ -36,6 +36,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-observability-define-alerting
   name: define-alerting
   description: Monitoring config should define alerting rules, not only scrape.
@@ -62,6 +63,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-observability-no-insecure-endpoint
 - g-observability-define-alerting

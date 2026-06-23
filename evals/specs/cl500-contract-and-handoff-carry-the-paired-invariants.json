@@ -1,0 +1,13 @@
+{
+  "name": "the contract doc and the GCTP handoff carry the paired invariants (epoch + absent-default + epoch-aware adoption)",
+  "command": "grep -qi 'schema-additive with epoch' \"$CLAUDE_PLUGIN_ROOT/docs/consumer-compatibility-contract.md\" && grep -qi 'epoch-aware enforcement' \"$CLAUDE_PLUGIN_ROOT/docs/consumer-compatibility-contract.md\" && grep -q 'consumer_compatibility:' \"$CLAUDE_PLUGIN_ROOT/docs/consumer-compatibility-contract.md\" && grep -qi 'floors by epoch' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo contract-and-handoff 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "contract-and-handoff"
+    ]
+  }
+}

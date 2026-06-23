@@ -40,6 +40,7 @@ rules:
     required: true
   - tool: cfn-lint
   - tool: checkov
+  introduced_in: baseline
 - id: g-cfn-no-public-read-bucket
   name: no-public-read-bucket
   description: S3 buckets must not be declared PublicRead.
@@ -70,6 +71,7 @@ rules:
     required: true
   - tool: cfn-lint
   - tool: checkov
+  introduced_in: baseline
 - id: g-cfn-no-hardcoded-password
   name: no-hardcoded-password
   description: Templates must not hardcode passwords; use Secrets Manager or NoEcho
@@ -101,6 +103,7 @@ rules:
     required: true
   - tool: cfn-lint
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-cfn-no-wildcard-iam-action
 - g-cfn-no-public-read-bucket

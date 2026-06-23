@@ -40,6 +40,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 - id: g-hashicorp-declare-required-providers
   name: declare-required-providers
   description: Terraform configurations must declare required_providers with version
@@ -70,6 +71,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 recommended_set:
 - g-hashicorp-pin-required-version
 - g-hashicorp-declare-required-providers

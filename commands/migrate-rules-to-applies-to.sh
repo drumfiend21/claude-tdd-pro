@@ -60,11 +60,19 @@ ROOT="$ROOT" MAP="$MAP" DRY="$DRY" ruby -ryaml -e '
       foss.each { |t| eb << { "tool" => t } }
       eb << { "bundle" => "architectural-content" } if r["applies_to_prose"] == true
 
-      if r["applies_to"] == (axis.empty? ? nil : axis) && r["enforced_by"] == eb
-        next   # idempotent: already migrated to the current binding
+      # Consumer Compatibility Contract (§28.40): the introduced_in epoch tag. Existing
+      # (pre-contract) rules => "baseline" (grandfathered); new rules carry their introducing pin
+      # set in the generator catalog. The tag lets consumers gate enforcement floors by epoch.
+      need_epoch = r["introduced_in"].to_s.empty?
+
+      if r["applies_to"] == (axis.empty? ? nil : axis) && r["enforced_by"] == eb && !need_epoch
+        next   # idempotent: already migrated to the current binding + already epoch-tagged
       end
       r["applies_to"] = axis unless axis.empty?
       r["enforced_by"] = eb
+      # assigned LAST so field order is identical whether the rule is freshly generated or
+      # re-migrated (keeps generator output byte-deterministic).
+      r["introduced_in"] = "baseline" if need_epoch
       changed = true
     end
 

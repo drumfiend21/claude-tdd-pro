@@ -37,6 +37,7 @@ rules:
   enforced_by:
   - tool: yaml-syntax.sh
     required: true
+  introduced_in: baseline
 recommended_set:
 - g-yaml-well-formed
 all_set:

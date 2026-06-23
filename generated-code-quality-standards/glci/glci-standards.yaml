@@ -36,6 +36,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-glci-declare-stages
   name: declare-stages
   description: Pipelines should declare an explicit stages list for ordering.
@@ -62,6 +63,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-glci-no-interruptible-disabled
   name: no-interruptible-disabled
   description: Jobs should remain interruptible to save runners on superseded pipelines.
@@ -88,6 +90,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-glci-pin-image-tag
 - g-glci-declare-stages

@@ -44,6 +44,7 @@ rules:
   - tool: checkov
   - tool: trivy
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-gcp-enable-audit-logs
   name: enable-audit-logs
   description: Projects and services must enable audit logging for accountability.
@@ -73,6 +74,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 recommended_set:
 - g-gcp-no-unrestricted-ingress
 - g-gcp-enable-audit-logs

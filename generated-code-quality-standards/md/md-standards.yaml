@@ -38,6 +38,7 @@ rules:
   - tool: md-structure.sh
     required: true
   - tool: markdownlint
+  introduced_in: baseline
 - id: g-md-single-h1
   name: single-h1
   description: A Markdown document must have exactly one top-level H1 heading (markdownlint
@@ -65,6 +66,7 @@ rules:
   - tool: md-structure.sh
     required: true
   - tool: markdownlint
+  introduced_in: baseline
 recommended_set:
 - g-md-fenced-code-language-declared
 - g-md-single-h1

@@ -38,6 +38,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-mesh-no-wildcard-host
   name: no-wildcard-host
   description: VirtualService/Gateway hosts must not be an open wildcard.
@@ -66,6 +67,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-mesh-no-mtls-disabled
 - g-mesh-no-wildcard-host

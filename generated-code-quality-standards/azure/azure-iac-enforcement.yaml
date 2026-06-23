@@ -45,6 +45,7 @@ rules:
   - tool: checkov
   - tool: trivy
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-azure-encrypt-at-rest
   name: encrypt-at-rest
   description: Data stores must declare encryption at rest.
@@ -74,6 +75,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 recommended_set:
 - g-azure-no-unrestricted-ingress
 - g-azure-encrypt-at-rest

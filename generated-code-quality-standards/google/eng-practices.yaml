@@ -46,6 +46,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-node-007
 all_set:

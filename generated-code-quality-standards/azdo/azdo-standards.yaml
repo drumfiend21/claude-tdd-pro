@@ -36,6 +36,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-azdo-no-plaintext-secret
   name: no-plaintext-secret
   description: Pipelines must not declare plaintext passwords; use secret variables.
@@ -62,6 +63,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-azdo-pin-image-tag
 - g-azdo-no-plaintext-secret

@@ -51,6 +51,7 @@ rules:
   enforced_by:
   - tool: a11y-axe.sh
     required: true
+  introduced_in: baseline
 recommended_set:
 - g-react-003
 all_set:

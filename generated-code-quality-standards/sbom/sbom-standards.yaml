@@ -35,6 +35,7 @@ rules:
   enforced_by:
   - tool: cloud-guidance-rule.sh
     required: true
+  introduced_in: baseline
 - id: g-sbom-include-components
   name: include-components
   description: SBOMs must enumerate components/packages.
@@ -60,6 +61,7 @@ rules:
   enforced_by:
   - tool: cloud-guidance-rule.sh
     required: true
+  introduced_in: baseline
 recommended_set:
 - g-sbom-declare-spec-version
 - g-sbom-include-components

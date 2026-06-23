@@ -1,0 +1,13 @@
+{
+  "name": "every rule carries an introduced_in epoch tag so consumers can grandfather pre-epoch state",
+  "command": "GCS=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" ruby -ryaml -e 'n=0;bad=0;Dir[ENV[\"GCS\"]+\"/*/*.yaml\"].each{|f|d=YAML.unsafe_load_file(f) rescue next;next unless d.is_a?(Hash);(d[\"rules\"]||[]).each{|r|next unless r.is_a?(Hash)&&r[\"id\"];n+=1;bad+=1 if r[\"introduced_in\"].to_s.empty?}};STDERR.puts(bad.zero? ? \"all-epoch-tagged n=#{n}\":\"untagged=#{bad}\");exit(bad.zero? ? 0 : 1)'",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-epoch-tagged n=118"
+    ]
+  }
+}

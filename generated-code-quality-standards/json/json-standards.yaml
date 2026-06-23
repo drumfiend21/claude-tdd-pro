@@ -35,6 +35,7 @@ rules:
   enforced_by:
   - tool: json-syntax.sh
     required: true
+  introduced_in: baseline
 recommended_set:
 - g-json-well-formed
 all_set:

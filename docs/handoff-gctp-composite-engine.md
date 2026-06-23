@@ -85,6 +85,39 @@ keep consuming `enforce.sh`'s 4-state verdict unchanged.
 
 ---
 
+## 4a. Consumer Compatibility Contract — epoch-aware adoption (READ before re-baselining)
+
+The previous handoff was consumer-compatible at the *CLI-signature* layer but **not at the
+enforcement-STATE layer**: additive rule fields (e.g. `applies_to_prose`) instantly add floor
+requirements that red a consumer's legacy pin-keyed state (completed-ticket records, baselines,
+smoke fixtures). CTP now ships the **Consumer Compatibility Contract**
+([`docs/consumer-compatibility-contract.md`](consumer-compatibility-contract.md)) to make that
+asymmetry explicit and gate-able:
+
+- **Every rule now carries `introduced_in`** (epoch tag; existing rules = `baseline`). **Gate your
+  floors by epoch:** a floor requirement applies only to tickets/content whose issue-epoch ≥ the
+  rule's `introduced_in`. This is the single fix for the "9 prose rules → 205 reds on legacy req.json"
+  pattern — grandfather pre-epoch tickets instead of mass-rewriting.
+- **`schemas/field-semantics.json`** declares the `absent_default` for every enforcement-relevant
+  optional field (`applies_to_prose` absent ⇒ false; `enforced_by` absent ⇒ `[detector required]`;
+  etc.). Make your dual-read shim read these — never derive a floor from a field whose absent-default
+  makes the rule inapplicable.
+- **`not_enforced` ≠ red.** A `required` tool absent hard-fails; an optional/absent tool is
+  `not_enforced` (advisory). If your standards-enforced gate treats `not_enforced` as red, read the
+  `required` flag (see §4).
+- **Pin-keyed baselines are the pin-bump CL's scope.** Re-baseline `cross-references-baseline.txt`,
+  `hook-security-baseline.txt`, the plugin-surface registry, etc. as part of the bump CL, with the
+  diff visible in your ADR-0068/0069. The plugin-tree additions to declare this pin are listed in the
+  retro-filled `consumer_compatibility` block in the contract doc (`vendor/`, `COMMERCIAL-USE.md`,
+  `schemas/field-semantics.json`).
+- **Smoke fixtures:** no clean toy file newly fails any universal rule at this pin (asserted in the
+  contract's `smoke_fixture_stable`); the new detectors only fire on real violations.
+
+The filled `consumer_compatibility:` block for this line (new rule classes, detector behavior
+changes, plugin-tree additions, smoke-fixture-stable assertion) is in the contract doc. Every future
+rule-schema-touching CTP ADR will carry one — `audit-consumer-compatibility.sh` fails CTP's build
+if it doesn't.
+
 ## 5. GCTP adoption steps
 
 1. **Bump the CTP pin** to `230e99d…` in whatever GCTP uses (lockfile / submodule SHA / `sync-plugin.sh`).

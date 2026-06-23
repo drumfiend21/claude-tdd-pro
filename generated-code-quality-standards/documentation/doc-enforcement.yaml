@@ -37,6 +37,7 @@ rules:
   - tool: adr-structure.sh
     required: true
   - tool: markdownlint
+  introduced_in: baseline
 - id: g-doc-002
   name: adr-citation-presence
   description: Every Architecture Decision Record must cite at least one grounding
@@ -64,6 +65,7 @@ rules:
   - tool: doc-citation-presence.sh
     required: true
   - tool: markdownlint
+  introduced_in: baseline
 recommended_set:
 - g-doc-001
 - g-doc-002

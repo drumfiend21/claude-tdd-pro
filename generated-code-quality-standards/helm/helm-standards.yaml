@@ -38,6 +38,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-helm-declare-resources
   name: declare-resources
   description: Chart values should declare container resources.
@@ -66,6 +67,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-helm-provide-values-schema
   name: provide-values-schema
   description: Charts should ship a values.schema.json to validate operator input.
@@ -94,6 +96,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-helm-no-latest-tag
 - g-helm-declare-resources

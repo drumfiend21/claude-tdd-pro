@@ -50,6 +50,7 @@ rules:
   - tool: exhaustive-deps.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 - id: g-react-004
   name: no-effect-for-derived-state
   description: Derived state (values computable from props or state) must not be stored
@@ -84,6 +85,7 @@ rules:
   - tool: rsc-boundary.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 - id: g-react-005
   name: suspense-around-async
   description: Every async server component must be wrapped in a Suspense boundary
@@ -118,6 +120,7 @@ rules:
   - tool: rsc-boundary.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 - id: g-react-006
   name: error-boundary-on-routes
   description: Every route segment must have an error boundary so unhandled errors
@@ -151,6 +154,7 @@ rules:
   - tool: rsc-boundary.sh
     required: true
   - tool: eslint
+  introduced_in: baseline
 recommended_set:
 - g-react-002
 - g-react-004

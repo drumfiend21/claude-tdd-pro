@@ -36,6 +36,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-iac-linter-no-soft-fail
   name: no-soft-fail
   description: IaC scanning must not be configured soft-fail (findings ignored).
@@ -62,6 +63,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-iac-linter-no-blanket-skip
 - g-iac-linter-no-soft-fail

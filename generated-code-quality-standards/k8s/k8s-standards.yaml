@@ -46,6 +46,7 @@ rules:
   - tool: checkov
   - tool: kubescape
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-k8s-no-host-network
   name: no-host-network
   description: Pods must not share the host network namespace (hostNetwork).
@@ -80,6 +81,7 @@ rules:
   - tool: checkov
   - tool: kubescape
   - bundle: architectural-content
+  introduced_in: baseline
 - id: g-k8s-no-host-pid
   name: no-host-pid
   description: Pods must not share the host PID namespace (hostPID).
@@ -109,6 +111,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-no-host-ipc
   name: no-host-ipc
   description: Pods must not share the host IPC namespace (hostIPC).
@@ -138,6 +141,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-no-allow-privilege-escalation
   name: no-allow-privilege-escalation
   description: Containers must set allowPrivilegeEscalation to false.
@@ -167,6 +171,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-no-latest-image-tag
   name: no-latest-image-tag
   description: Container images must be pinned to an explicit tag or digest, never
@@ -197,6 +202,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-run-as-non-root
   name: run-as-non-root
   description: Pods and containers must declare runAsNonRoot so they do not run as
@@ -227,6 +233,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-set-resource-limits
   name: set-resource-limits
   description: Containers must declare resource requests and limits.
@@ -256,6 +263,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-read-only-root-filesystem
   name: read-only-root-filesystem
   description: Containers should mount their root filesystem read-only.
@@ -285,6 +293,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-k8s-drop-all-capabilities
   name: drop-all-capabilities
   description: Containers must drop Linux capabilities they do not need.
@@ -314,6 +323,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 recommended_set:
 - g-k8s-no-privileged-container
 - g-k8s-no-host-network

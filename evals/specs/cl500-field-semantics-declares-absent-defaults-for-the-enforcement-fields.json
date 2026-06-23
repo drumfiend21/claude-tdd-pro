@@ -1,0 +1,13 @@
+{
+  "name": "field-semantics.json declares the absent_default for applies_to_prose, enforced_by, and introduced_in",
+  "command": "node -e 'const s=require(process.argv[1]).fields;if(s.applies_to_prose.absent_default!==false)process.exit(1);if(!s.enforced_by||!(\"absent_default\" in s.enforced_by))process.exit(1);if(s.introduced_in.absent_default!==\"baseline\")process.exit(1)' \"$CLAUDE_PLUGIN_ROOT/schemas/field-semantics.json\" && echo absent-defaults-declared 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "absent-defaults-declared"
+    ]
+  }
+}

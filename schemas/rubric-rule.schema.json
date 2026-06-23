@@ -233,6 +233,10 @@
         }
       }
     },
+    "introduced_in": {
+      "type": "string",
+      "description": "Consumer-compatibility epoch tag (§28.40): the CTP pin/version at which this rule first appeared. 'baseline' = present before the Consumer Compatibility Contract (grandfathered). Consumers gate enforcement floors by epoch — a floor requirement applies only to tickets/content issued at or after the rule's introduced_in epoch — so an additive rule never retroactively reds legacy consumer state."
+    },
     "languages": {
       "type": "array",
       "items": { "type": "string" },

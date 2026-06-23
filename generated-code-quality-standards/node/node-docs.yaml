@@ -55,6 +55,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-node-005
   name: using-for-disposables
   description: TypeScript 5.2 introduced `using` and `await using` for explicit disposal.
@@ -92,6 +93,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-node-006
   name: stream-backpressure
   description: Producers writing to a Node.js Writable must respect backpressure (check
@@ -127,6 +129,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-node-009
   name: no-process-exit-outside-main
   description: process.exit() in library code prevents callers from cleaning up; only
@@ -162,6 +165,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-node-003
 - g-node-005

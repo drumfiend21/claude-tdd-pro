@@ -53,6 +53,7 @@ rules:
   - tool: boundary-schema.sh
     required: true
   - tool: semgrep
+  introduced_in: baseline
 - id: g-node-008
   name: secrets-via-env
   description: Secrets (API keys, DB passwords, signing keys) must come from environment
@@ -89,6 +90,7 @@ rules:
   - tool: boundary-schema.sh
     required: true
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-node-001
 - g-node-008

@@ -45,6 +45,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-ts-005
   name: library-boundaries-use-branded-types
   description: 'Library API boundaries should use branded types (e.g. UserId = string
@@ -80,6 +81,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-ts-006
   name: strict-tsconfig-flags
   description: tsconfig.json must enable noUncheckedIndexedAccess, exactOptionalPropertyTypes,
@@ -114,6 +116,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-ts-008
   name: re-exports-use-export-type
   description: Re-exporting a type using `export { Foo }` rather than `export type
@@ -149,6 +152,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-ts-003
 - g-ts-005

@@ -39,6 +39,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 - id: g-gitops-no-plaintext-secret
   name: no-plaintext-secret
   description: GitOps repos must not commit raw Secret manifests; use SealedSecret/SOPS.
@@ -68,6 +69,7 @@ rules:
     required: true
   - tool: checkov
   - tool: kubescape
+  introduced_in: baseline
 recommended_set:
 - g-gitops-pin-target-revision
 - g-gitops-no-plaintext-secret

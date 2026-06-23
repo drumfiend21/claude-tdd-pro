@@ -38,6 +38,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-compose-no-host-network
   name: no-host-network
   description: Compose services must not use host network mode.
@@ -66,6 +67,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-compose-pin-image-tag
   name: pin-image-tag
   description: Compose images must be pinned, never :latest.
@@ -94,6 +96,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-compose-no-host-pid
   name: no-host-pid
   description: Compose services must not share the host PID namespace.
@@ -122,6 +125,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-compose-drop-capabilities
   name: drop-capabilities
   description: Compose services should drop unneeded Linux capabilities.
@@ -150,6 +154,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-compose-no-privileged
 - g-compose-no-host-network

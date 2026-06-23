@@ -57,6 +57,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 - id: g-ts-004
   name: public-api-types-have-type-tests
   description: Every exported function or type from a library must have at least one
@@ -92,6 +93,7 @@ rules:
     required: true
   - tool: eslint
   - tool: semgrep
+  introduced_in: baseline
 recommended_set:
 - g-react-007
 - g-ts-004

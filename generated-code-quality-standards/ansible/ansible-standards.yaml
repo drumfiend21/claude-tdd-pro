@@ -38,6 +38,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-ansible-no-validate-certs-disabled
   name: no-validate-certs-disabled
   description: Modules must not disable TLS certificate validation.
@@ -66,6 +67,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 - id: g-ansible-pin-package-version
   name: pin-package-version
   description: Package installs should pin a version rather than tracking latest.
@@ -94,6 +96,7 @@ rules:
   - tool: cloud-guidance-rule.sh
     required: true
   - tool: checkov
+  introduced_in: baseline
 recommended_set:
 - g-ansible-no-plaintext-password
 - g-ansible-no-validate-certs-disabled

@@ -39,6 +39,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 - id: g-us-government-audit-logging
   name: audit-logging
   description: Federal systems must enable audit logging at the boundary (DoD SCCA).
@@ -68,6 +69,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 recommended_set:
 - g-us-government-encrypt-at-rest
 - g-us-government-audit-logging

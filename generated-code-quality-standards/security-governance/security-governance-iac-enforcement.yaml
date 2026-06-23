@@ -39,6 +39,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 - id: g-security-governance-no-known-exploited-ingress
   name: no-known-exploited-ingress
   description: Forbid unrestricted 0.0.0.0/0 ingress - a routinely known-exploited
@@ -69,6 +70,7 @@ rules:
     required: true
   - tool: checkov
   - tool: trivy
+  introduced_in: baseline
 recommended_set:
 - g-security-governance-require-provenance
 - g-security-governance-no-known-exploited-ingress

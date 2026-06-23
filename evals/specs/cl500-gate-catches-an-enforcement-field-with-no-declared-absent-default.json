@@ -1,0 +1,13 @@
+{
+  "name": "the gate catches an enforcement-relevant field that has no declared absent_default",
+  "command": "mkdir -p generated-code-quality-standards/z schemas docs && cp \"$CLAUDE_PLUGIN_ROOT/schemas/rubric-rule.schema.json\" schemas/ && cp \"$CLAUDE_PLUGIN_ROOT/docs/consumer-compatibility-contract.md\" docs/ && node -e 'const s=require(process.argv[1]);delete s.fields.enforced_by;require(\"fs\").writeFileSync(\"schemas/field-semantics.json\",JSON.stringify(s))' \"$CLAUDE_PLUGIN_ROOT/schemas/field-semantics.json\" && printf 'source:\\n  id: t\\nrules:\\n- id: g-z\\n  detector: x.sh\\n  introduced_in: baseline\\n' > generated-code-quality-standards/z/z.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-consumer-compatibility.sh\" --root . 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'surface=absent-default item=enforced_by' e.txt && echo catches-undeclared-field 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "catches-undeclared-field"
+    ]
+  }
+}
