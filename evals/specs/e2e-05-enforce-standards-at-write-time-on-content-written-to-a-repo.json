@@ -1,0 +1,13 @@
+{
+  "name": "E2E: the write-time hook (in-repo rules + bundle + routed composite tools) blocks a violating write and allows a conformant write",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf '{\"tool_input\":{\"file_path\":\"%s/pod.yaml\"}}' \"$PWD\" | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\" >/dev/null 2>blk.txt; bec=$?; printf 'name: app\\nversion: 1.0.0\\n' > clean.yaml && printf '{\"tool_input\":{\"file_path\":\"%s/clean.yaml\"}}' \"$PWD\" | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-on-save.sh\" >/dev/null 2>/dev/null; cec=$?; [ \"$bec\" -eq 2 ] && [ \"$cec\" -eq 0 ] && echo e2e5-write-time-enforced 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e5-write-time-enforced"
+    ]
+  }
+}

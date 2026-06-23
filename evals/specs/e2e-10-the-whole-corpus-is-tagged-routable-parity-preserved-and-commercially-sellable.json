@@ -1,0 +1,13 @@
+{
+  "name": "E2E: the full 118-rule corpus is 4-axis-tagged + routable with enforcement parity preserved, and the whole plugin is commercial-sale safe",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-applies-to-parity.sh\" 2>p.txt; pe=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-commercial-license.sh\" 2>cl.txt; ce=$?; [ \"$pe\" -eq 0 ] && grep -q 'status=green rules=118 parity_fail=0 unrouted=0' p.txt && [ \"$ce\" -eq 0 ] && grep -q 'commercial-license status=green' cl.txt && echo e2e10-end-state-guarantee 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e10-end-state-guarantee"
+    ]
+  }
+}

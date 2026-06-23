@@ -108,4 +108,25 @@ case "$REAL_FILE" in
     ;;
 esac
 
+# ADR-0008 write-time phase (the COMPOSITE ENGINE): also run the routed FOSS tools on the file,
+# so a rule scraped from a source URL is enforced at write-time by the proper dependency
+# (checkov/eslint/...). resolve(file 4-axis) -> route -> run-tool -> SARIF -> verdict. A routed-tool
+# violation (red) surfaces inline (exit 2); a missing/unadapted tool (incomplete) is lenient at
+# write-time -- the strict whole-tree gate is the audit-time phase (composite-audit.sh).
+DISPATCH="$PLUGIN_ROOT/rubric/composite-dispatch.sh"
+if [[ -f "$DISPATCH" ]]; then
+  set +e
+  DOUT=$(bash "$DISPATCH" --file "$REAL_FILE" 2>&1); DEC=$?
+  set -e
+  if [[ "$DEC" -eq 1 ]]; then
+    {
+      echo "[enforce-standards-on-save] composite-engine (routed FOSS tool) violation(s) in:"
+      echo "  $REAL_FILE"
+      echo
+      echo "$DOUT"
+    } >&2
+    exit 2
+  fi
+fi
+
 exit 0

@@ -1,0 +1,13 @@
+{
+  "name": "E2E: each kind is routed to the proper FOSS enforcement tool — typescript→eslint, terraform→checkov, prose→architectural-content bundle",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title x --prose 'TypeScript .ts interface rule' --json > c.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c.json --json > r.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title y --prose 'Terraform .tf resource block rule' --json > c2.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c2.json --json > r2.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title z --prose 'design decision architecture decision record rationale' --json > c3.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c3.json --json > r3.json 2>/dev/null && node -e 'const a=require(process.cwd()+\"/r.json\").enforced_by,b=require(process.cwd()+\"/r2.json\").enforced_by,c=require(process.cwd()+\"/r3.json\").enforced_by;const e=a.find(x=>x.tool===\"eslint\");if(!e||e.license!==\"MIT\")process.exit(1);if(!b.some(x=>x.tool===\"checkov\"))process.exit(1);if(!c.some(x=>x.bundle===\"architectural-content\"))process.exit(1)' && echo e2e3-routed-to-proper-tools 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e3-routed-to-proper-tools"
+    ]
+  }
+}

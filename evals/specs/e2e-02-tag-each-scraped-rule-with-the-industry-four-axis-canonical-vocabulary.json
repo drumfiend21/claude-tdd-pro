@@ -1,0 +1,13 @@
+{
+  "name": "E2E: each scraped rule is tagged with the industry four-axis canonical vocabulary (Linguist / IaC dialect / prose), not CTP-invented strings",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Use const not var' --prose 'Use const in TypeScript .ts files.' --json > ts.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Pin versions' --prose 'Terraform .tf must pin required_version.' --json > tf.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Record ADR' --prose 'Design decisions are recorded as an architecture decision record.' --json > adr.json 2>/dev/null && node -e 'const ts=require(process.cwd()+\"/ts.json\"),tf=require(process.cwd()+\"/tf.json\"),adr=require(process.cwd()+\"/adr.json\");if(!ts.applies_to.linguist_aliases.includes(\"typescript\"))process.exit(1);if(!tf.applies_to.iac_dialects.includes(\"terraform\"))process.exit(1);if(adr.applies_to_prose!==true)process.exit(1)' && echo e2e2-four-axis-tagged 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e2-four-axis-tagged"
+    ]
+  }
+}

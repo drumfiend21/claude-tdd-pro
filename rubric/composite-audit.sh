@@ -30,6 +30,7 @@ done
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 DISPATCH="$PLUGIN_ROOT/rubric/composite-dispatch.sh"
 BUNDLE="$PLUGIN_ROOT/rubric/runners/run-bundle.sh"
+ENFORCER="$PLUGIN_ROOT/rubric/enforce-file.sh"
 
 # Enumerate candidate files (skip vendor/build/VCS).
 FILES="$(ROOT="$ROOT" node -e '
@@ -45,11 +46,15 @@ sa="$STRICT"; nred=0; ninc=0; nfiles=0
 while IFS= read -r f; do
   [ -z "$f" ] && continue
   v=""
-  # code-shape tools (composite-dispatch resolves + routes + runs)
+  # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic)
+  bash "$ENFORCER" --file "$f" --quiet >/dev/null 2>/dev/null
+  estat=$?
+  case "$estat" in 1) v=red ;; 3) [ -z "$v" ] && v=incomplete ;; esac
+  # routed FOSS tools (composite-dispatch resolves + routes + runs)
   da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict)
   bash "$DISPATCH" "${da[@]}" >/dev/null 2>/tmp/_ca.$$ || true
   dstat=$(grep -oE 'status=[a-z]+' /tmp/_ca.$$ 2>/dev/null | tail -1 | cut -d= -f2)
-  case "$dstat" in red) v=red ;; incomplete) v=incomplete ;; esac
+  case "$dstat" in red) v=red ;; incomplete) [ "$v" != "red" ] && v=incomplete ;; esac
   # architectural-content bundle for Markdown
   case "$f" in
     *.md|*.markdown)

@@ -1,0 +1,13 @@
+{
+  "name": "E2E: the audit-time whole-tree gate flags every non-conformant file (yaml/json/prose) across a repo and passes a fully-conformant repo",
+  "command": "mkdir -p repo && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > repo/pod.yaml && printf '%s' '{ broken,, }' > repo/broken.json && printf '# 0001\\n\\n## Decision\\n\\nLeave ingress unrestricted (0.0.0.0/0).\\n' > repo/adr.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root repo 2>au.txt; aec=$?; mkdir -p clean && printf 'name: app\\n' > clean/config.yaml && printf '%s' '{\"ok\":true}' > clean/good.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root clean 2>cl.txt; cec=$?; [ \"$aec\" -eq 1 ] && grep -qE 'status=red .*red=3' au.txt && [ \"$cec\" -eq 0 ] && grep -q 'status=green' cl.txt && echo e2e6-audit-conformance 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e6-audit-conformance"
+    ]
+  }
+}

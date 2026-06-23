@@ -1,0 +1,13 @@
+{
+  "name": "E2E: an operator extends the default sources with a new URL (ESLint-style), which registers into the operator standards registry",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-add.sh\" 'https://team.example.com/our-standard' --id team-standard --tier 1 --dry-run 2>e.txt; grep -q 'would append id=team-standard' e.txt && grep -q 'url=https://team.example.com/our-standard' e.txt && grep -q 'STANDARDS-URLS.yaml' e.txt && echo e2e7-extensible-eslint-style 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e7-extensible-eslint-style"
+    ]
+  }
+}

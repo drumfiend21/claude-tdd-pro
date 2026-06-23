@@ -1,0 +1,13 @@
+{
+  "name": "E2E: a multi-clause rule is drafted with every clause accounted for (no language silently dropped) and then routed to a review queue",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/draft-custom-rule.sh\" --rule-id g-multi --tool eslint --prose 'Never use var. Avoid console.log. Names should be clear. Use strict equality.' --json > d.json 2>dr.txt; drc=$?; node -e 'const d=require(process.cwd()+\"/d.json\");const s=d.clauses_covered+d.clauses_fallback+d.clauses_unenforceable;if(s!==d.clauses_total)process.exit(1);if(d.no_clause_dropped!==true)process.exit(1)' && [ \"$drc\" -eq 0 ] && bash \"$CLAUDE_PLUGIN_ROOT/commands/review-queue.sh\" --in d.json 2>rq.txt && grep -qE 'rule=g-multi .* queue=(auto-stage|coverage-review|side-by-side-review)' rq.txt && echo e2e9-no-language-dropped 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e9-no-language-dropped"
+    ]
+  }
+}

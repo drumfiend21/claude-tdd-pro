@@ -1,0 +1,13 @@
+{
+  "name": "E2E: a rule scraped from a source (no-privileged-containers) routes by kind to checkov/kubescape AND the materialized rule blocks a privileged pod — source to enforcement",
+  "command": "printf '# K8s Security\\n\\n## No privileged containers\\nKubernetes pods must not run privileged containers.\\n' > k.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source k.md --source-id k8s-sec --json > rules.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'No privileged' --prose 'Kubernetes pods must not run privileged containers.' --json > c.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c.json --json > r.json 2>/dev/null && node -e 'const c=require(process.cwd()+\"/c.json\"),r=require(process.cwd()+\"/r.json\");if(!c.applies_to.iac_dialects.includes(\"kubernetes\"))process.exit(1);if(!r.enforced_by.some(x=>x.tool===\"checkov\"||x.tool===\"kubescape\"))process.exit(1)' && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml 2>ef.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'g-k8s-no-privileged-container' ef.txt && echo e2e4-source-to-enforcement 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e4-source-to-enforcement"
+    ]
+  }
+}

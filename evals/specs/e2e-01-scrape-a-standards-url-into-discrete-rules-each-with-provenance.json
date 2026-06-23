@@ -1,0 +1,13 @@
+{
+  "name": "E2E: a scraped standards source (Google-SWE-style) is segmented into discrete rules, each with a content-hash provenance",
+  "command": "printf '# Google SWE Standards\\n\\n## Use const not var\\nUse const in TypeScript.\\n\\n## Pin Terraform versions\\nTerraform must pin required_version.\\n\\n## Record an ADR\\nDesign decisions are recorded as an architecture decision record.\\n' > src.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source src.md --source-id google-swe --json > rules.json 2>e.txt && grep -q 'rules=3' e.txt && node -e 'const r=require(process.cwd()+\"/rules.json\");if(r.length!==3)process.exit(1);if(!r.every(x=>x.content_hash&&/^sha256:/.test(x.content_hash)&&x.source===\"google-swe\"))process.exit(1)' && echo e2e1-scrape-extract-provenance 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "e2e1-scrape-extract-provenance"
+    ]
+  }
+}

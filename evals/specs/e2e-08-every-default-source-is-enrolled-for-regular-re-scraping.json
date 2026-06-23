@@ -1,0 +1,14 @@
+{
+  "name": "E2E: every default standards source carries a fetch_frequency and is enrolled for regular re-scraping (refresh-driven enforcement)",
+  "command": "GCS=\"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" ruby -ryaml -e 'n=0;ok=0;Dir[ENV[\"GCS\"]+\"/*/*.yaml\"].each{|f|d=YAML.unsafe_load_file(f) rescue next;next unless d.is_a?(Hash)&&d[\"source\"].is_a?(Hash);n+=1;ok+=1 if d[\"source\"][\"fetch_frequency\"]};STDERR.puts(n>40&&ok==n ? \"all-refreshable sources=#{n}\" : \"gap n=#{n} ok=#{ok}\");exit(n>40&&ok==n ?0:1)' && [ -x \"$CLAUDE_PLUGIN_ROOT/standards/auto-refresh-daily.sh\" ] && echo e2e8-refresh-enrolled 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-refreshable",
+      "e2e8-refresh-enrolled"
+    ]
+  }
+}
