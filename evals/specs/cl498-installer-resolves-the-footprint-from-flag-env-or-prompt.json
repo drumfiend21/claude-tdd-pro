@@ -1,0 +1,13 @@
+{
+  "name": "the installer resolves the footprint from the flag, the env var, or the prompt",
+  "command": "grep -q 'PERMISSIVE_ONLY=\"${PERMISSIVE_ONLY:-${CTP_TOOLCHAIN_PERMISSIVE_ONLY:-}}\"' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo resolved-from-all 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resolved-from-all"
+    ]
+  }
+}

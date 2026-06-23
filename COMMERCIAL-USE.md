@@ -60,6 +60,38 @@ GCTP consumes CTP as a pinned plugin. The contract surface that moves (`active.j
 provisioned at install time the same way (CTP's installer), so GCTP is commercially sellable on the
 same basis. **CTP does not edit GCTP and GCTP does not edit CTP.**
 
+## Installing — choosing your license footprint
+
+The installer makes this an explicit, informed choice. During `init` it **prompts**:
+
+```
+Dependency license footprint — commercial-resale safety
+  ...
+  • FULL (default)        — all FOSS tools; maximum enforcement coverage.
+  • PERMISSIVE-ONLY       — ZERO-COPYLEFT footprint; skips semgrep + hadolint
+                            (the engine still runs on the all-permissive subset).
+Use a permissive-only (zero-copyleft) toolchain? [y/N]:
+```
+
+- **FULL (default)** — installs every FOSS tool, including the two invoke-only copyleft tools
+  (`semgrep`, `hadolint`). Still fully commercial-resale safe — they are invoked, never bundled.
+- **PERMISSIVE-ONLY** — a **zero-copyleft footprint**: the two copyleft tools are not installed at
+  all; the composite engine runs on the all-permissive subset (eslint, markdownlint, cspell,
+  checkov, cfn-lint, spectral, …). Choose this if you want nothing copyleft on the machine even as
+  an invoked subprocess.
+
+Non-interactively this is selected by flag or env (the prompt is skipped under `--yes`/CI):
+
+```bash
+install.sh init --permissive-only          # zero-copyleft toolchain
+install.sh init --full-toolchain           # default; all FOSS tools
+CTP_TOOLCHAIN_PERMISSIVE_ONLY=1 install.sh init --yes
+```
+
+The choice is shown back in the install plan (`license:` line) and applied to the install-time
+toolchain provisioning. It can be changed later by re-running
+`rubric/runners/install-toolchain.sh [--permissive-only]`.
+
 ## Enforcement
 
 `audit-commercial-license.sh` runs in CI and `/doctor` and **fails the build** on any bundled

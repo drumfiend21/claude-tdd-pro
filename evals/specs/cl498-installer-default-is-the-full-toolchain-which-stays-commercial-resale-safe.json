@@ -1,0 +1,13 @@
+{
+  "name": "the license prompt defaults to the full toolchain (permissive-only is opt-in, default N)",
+  "command": "grep -q 'prompt_yn _PO \"Use a permissive-only (zero-copyleft) toolchain?\" \"n\"' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo default-full 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "default-full"
+    ]
+  }
+}

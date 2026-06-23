@@ -1,0 +1,13 @@
+{
+  "name": "the license-footprint prompt explains commercial-resale safety and the zero-copyleft option",
+  "command": "grep -qi 'sell' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -qi 'zero-copyleft' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -qi 'invoke' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo explains-significance 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "explains-significance"
+    ]
+  }
+}

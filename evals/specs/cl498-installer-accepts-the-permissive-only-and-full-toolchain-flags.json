@@ -1,0 +1,13 @@
+{
+  "name": "the installer accepts --permissive-only and --full-toolchain flags",
+  "command": "grep -q -- '--permissive-only) PERMISSIVE_ONLY=1' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -q -- '--full-toolchain)  PERMISSIVE_ONLY=0' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo flags-parsed 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "flags-parsed"
+    ]
+  }
+}

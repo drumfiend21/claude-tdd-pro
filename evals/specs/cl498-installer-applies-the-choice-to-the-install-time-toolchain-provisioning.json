@@ -1,0 +1,13 @@
+{
+  "name": "the installer applies the chosen footprint to the install-time toolchain provisioning",
+  "command": "grep -q '\\[ \"${PERMISSIVE_ONLY:-0}\" = \"1\" \\] && _po=\"--permissive-only\"' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo choice-applied 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "choice-applied"
+    ]
+  }
+}

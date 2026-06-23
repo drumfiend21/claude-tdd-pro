@@ -1,0 +1,13 @@
+{
+  "name": "the COMMERCIAL-USE doc explains the install-time license-footprint choice",
+  "command": "grep -qi 'choosing your license footprint' \"$CLAUDE_PLUGIN_ROOT/COMMERCIAL-USE.md\" && grep -q 'permissive-only' \"$CLAUDE_PLUGIN_ROOT/COMMERCIAL-USE.md\" && echo doc-explains-install 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "doc-explains-install"
+    ]
+  }
+}

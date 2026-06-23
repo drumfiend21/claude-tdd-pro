@@ -1,0 +1,13 @@
+{
+  "name": "the installer prompts the operator about the dependency license footprint during init",
+  "command": "grep -q 'Dependency license footprint' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && grep -q 'Use a permissive-only (zero-copyleft) toolchain' \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" && echo prompt-present 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prompt-present"
+    ]
+  }
+}

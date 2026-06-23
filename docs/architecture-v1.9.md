@@ -1925,3 +1925,13 @@ Operator requirement: CTP and GCTP must be usable, distributable, and **sellable
 - **§25 fidelity vocabulary additions:** `audit-commercial-license`, `invoke_only`, `bundled`, `cited`, `permissive-only`, `commercial-sale`.
 
 6 specs (`cl497-*`): gate confirms commercial-safe · rejects bundled copyleft · rejects unflagged copyleft tool · accepts invoke_only copyleft tool · default toolchain copyleft all invoke_only · policy documented. Composes §28.29/§28.32; no new feature ID / contract. Suite 4486→4492.
+
+### §28.38 Install-time license-footprint prompt — zero-copyleft option (2026-06-23)
+
+Operator requirement: at install time the user must understand the commercial-resale license posture and be **prompted with an option** to configure a zero-copyleft footprint. Builds on §28.32 (toolchain at install) + §28.37 (commercial-sale gate). **No new §2.X contract.**
+
+- **`scripts/install.sh`** now PROMPTS during `init` (a `describe` block + `prompt_yn`, mirroring the §28.23 refresh-cadence prompt): explains that every dependency is open-source and free to sell commercially, that the engine INVOKES FOSS tools (never bundles them), and offers **FULL** (default — all FOSS incl. the two invoke-only copyleft tools semgrep/hadolint, still resale-safe) vs **PERMISSIVE-ONLY** (zero-copyleft footprint — skips those two; engine runs on the all-permissive subset). The choice is resolved from `--permissive-only`/`--full-toolchain` flag, `CTP_TOOLCHAIN_PERMISSIVE_ONLY` env, or the prompt (default = full); shown back in the install plan (`license:` line) and applied to the §28.32 Step-8c toolchain provisioning.
+- **`COMMERCIAL-USE.md`** gains an "Installing — choosing your license footprint" section (prompt text + flags + env). Install help documents the flags + env var.
+- **§25 fidelity vocabulary additions:** `permissive-only`, `full-toolchain`, `zero-copyleft`, `license-footprint`, `CTP_TOOLCHAIN_PERMISSIVE_ONLY`.
+
+8 specs (`cl498-*`): flags parsed · prompts during init · explains resale + zero-copyleft · defaults to full (opt-in) · applies the choice to provisioning · resolves from flag/env/prompt · help documents flags · COMMERCIAL-USE explains the install choice. Composes §28.32/§28.37; no new feature ID / contract. Suite 4492→4500.

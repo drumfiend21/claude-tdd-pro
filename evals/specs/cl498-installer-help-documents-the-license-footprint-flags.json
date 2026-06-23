@@ -1,0 +1,13 @@
+{
+  "name": "the installer help text documents the license-footprint flags and env var",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\" help 2>&1); echo \"$out\" | grep -q -- '--permissive-only' && echo \"$out\" | grep -q -- '--full-toolchain' && echo \"$out\" | grep -q 'CTP_TOOLCHAIN_PERMISSIVE_ONLY' && echo help-documented 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "help-documented"
+    ]
+  }
+}

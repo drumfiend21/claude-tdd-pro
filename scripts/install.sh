@@ -65,6 +65,8 @@ while [[ $# -gt 0 ]]; do
     --with-lsp)      WITH_LSP=1; shift ;;
     --no-lsp)        WITH_LSP=0; shift ;;
     --pin)           PIN="$2"; shift 2 ;;
+    --permissive-only) PERMISSIVE_ONLY=1; shift ;;
+    --full-toolchain)  PERMISSIVE_ONLY=0; shift ;;
     --offline)       OFFLINE=1; shift ;;
     -h|--help)       SUBCMD="help"; shift ;;
     *) echo "install: unknown flag: $1" >&2; exit 2 ;;
@@ -327,11 +329,16 @@ Options:
   --with-lsp              Symlink LSP binary into ~/.local/bin
   --no-lsp                Skip LSP symlink
   --pin <commit>          Pin to specific commit (default: main HEAD)
+  --permissive-only       Zero-copyleft toolchain: skip the invoke-only GPL/LGPL tools
+                          (semgrep, hadolint). Maximally clean for commercial resale.
+  --full-toolchain        Install all FOSS tools incl. the two invoke-only copyleft ones
+                          (default; still commercial-resale safe — they are never bundled).
   --offline               Skip network operations; use cached clone
 
 Environment:
-  CLAUDE_TDD_PRO_HOME     Plugin clone location (default: ~/.claude-tdd-pro)
-  GROK_TDD_PRO_HOME       Harness clone location (default: ~/.grok-claude-tdd-pro)
+  CLAUDE_TDD_PRO_HOME            Plugin clone location (default: ~/.claude-tdd-pro)
+  GROK_TDD_PRO_HOME             Harness clone location (default: ~/.grok-claude-tdd-pro)
+  CTP_TOOLCHAIN_PERMISSIVE_ONLY 1 = zero-copyleft toolchain (same as --permissive-only)
 
 Examples:
   curl ... | bash                                    # interactive init
@@ -490,6 +497,31 @@ cmd_init() {
   fi
   REFRESH_FREQ="${REFRESH_FREQ:-1d}"
 
+  # Dependency license footprint (commercial-resale safety). Resolve from flag / env / prompt.
+  PERMISSIVE_ONLY="${PERMISSIVE_ONLY:-${CTP_TOOLCHAIN_PERMISSIVE_ONLY:-}}"
+  if [[ -z "$PERMISSIVE_ONLY" ]]; then
+    describe \
+      "Dependency license footprint — commercial-resale safety" \
+      "" \
+      "Every CTP dependency is open-source and free to use, distribute, and SELL" \
+      "commercially. The composite engine INVOKES FOSS tools (eslint, checkov, …) that" \
+      "your package manager installs from upstream — they are never bundled into the" \
+      "plugin you ship, so reselling CTP/GCTP carries no licensing conflict." \
+      "" \
+      "The default toolchain is entirely permissive (MIT/Apache) EXCEPT two invoke-only" \
+      "copyleft tools: semgrep (LGPL-2.1) and hadolint (GPL-3.0). Invoking a GPL/LGPL tool" \
+      "as a subprocess does NOT encumber your plugin, and commercial USE of them is" \
+      "unrestricted — so they are safe to keep even when reselling." \
+      "" \
+      "  • FULL (default)        — all FOSS tools; maximum enforcement coverage." \
+      "  • PERMISSIVE-ONLY       — ZERO-COPYLEFT footprint; skips semgrep + hadolint" \
+      "                            (the engine still runs on the all-permissive subset)." \
+      "  See COMMERCIAL-USE.md for the full policy."
+    prompt_yn _PO "Use a permissive-only (zero-copyleft) toolchain?" "n"
+    PERMISSIVE_ONLY="$_PO"
+  fi
+  PERMISSIVE_ONLY="${PERMISSIVE_ONLY:-0}"
+
   if [[ "$PROMPTS_AVAILABLE" -eq 1 ]]; then
     cat >&2 <<PLAN
 
@@ -500,6 +532,7 @@ Plan:
   grok:     $( [[ $WITH_GROK -eq 1 ]] && echo yes || echo no )
   lsp:      $( [[ $WITH_LSP  -eq 1 ]] && echo yes || echo no )
   refresh:  every $REFRESH_FREQ (re-scrape sources -> refresh enforced rules)
+  license:  $( [[ ${PERMISSIVE_ONLY:-0} -eq 1 ]] && echo "permissive-only (zero-copyleft footprint)" || echo "full FOSS toolchain (incl. invoke-only copyleft; commercial-resale safe)" )
   pin:      $( [[ -n "$PIN" ]] && echo "$PIN" || echo "main HEAD" )
 
 PLAN
@@ -590,9 +623,10 @@ PLAN
   # Step 8c — provision the composite-engine FOSS toolchain (ADR-0008 §28.32), backgrounded
   # and best-effort so it never blocks/breaks install. All tools open-source; the §28.28
   # hard-require policy then treats a missing required tool as a broken install. GCTP inherits
-  # the toolchain by consuming CTP. --permissive-only is honored via CTP_TOOLCHAIN_PERMISSIVE_ONLY.
+  # the toolchain by consuming CTP. Zero-copyleft footprint (PERMISSIVE_ONLY) is chosen by the
+  # install prompt / --permissive-only flag / CTP_TOOLCHAIN_PERMISSIVE_ONLY env.
   if [ -x "$CLONE_DIR/rubric/runners/install-toolchain.sh" ]; then
-    _po=""; [ "${CTP_TOOLCHAIN_PERMISSIVE_ONLY:-0}" = "1" ] && _po="--permissive-only"
+    _po=""; [ "${PERMISSIVE_ONLY:-0}" = "1" ] && _po="--permissive-only"
     ( CLAUDE_PLUGIN_ROOT="$CLONE_DIR" bash "$CLONE_DIR/rubric/runners/install-toolchain.sh" $_po \
         >>"$HOME/.claude-tdd-pro-install.log" 2>&1 ) &
     disown 2>/dev/null || true
