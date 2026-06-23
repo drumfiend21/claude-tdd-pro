@@ -1,0 +1,13 @@
+{
+  "name": "the handoff references the Consumer Compatibility Contract and tells GCTP to gate floors by epoch",
+  "command": "grep -q 'consumer-compatibility-contract.md' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'field-semantics.json' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -qi 'by epoch' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo consumer-compat-referenced 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "consumer-compat-referenced"
+    ]
+  }
+}

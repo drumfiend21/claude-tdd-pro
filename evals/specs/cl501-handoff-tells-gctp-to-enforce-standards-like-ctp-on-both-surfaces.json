@@ -1,0 +1,13 @@
+{
+  "name": "the handoff tells GCTP to enforce standards like CTP on both its own repo and the apps it builds",
+  "command": "grep -q 'GCTP enforces standards like CTP' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -qi \"GCTP's own repo\" \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -qi 'every app GCTP builds' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo enforce-like-ctp 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "enforce-like-ctp"
+    ]
+  }
+}

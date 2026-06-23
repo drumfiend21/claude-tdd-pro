@@ -1,0 +1,13 @@
+{
+  "name": "both composite-engine ADRs carry a Build status (fully implemented) section",
+  "command": "grep -q '^## Build status' \"$CLAUDE_PLUGIN_ROOT/docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md\" && grep -q '^## Build status' \"$CLAUDE_PLUGIN_ROOT/docs/adr/0009-auto-classification-and-rule-drafting-pipeline.md\" && echo build-status-both 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "build-status-both"
+    ]
+  }
+}

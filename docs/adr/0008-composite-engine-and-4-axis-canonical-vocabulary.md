@@ -146,3 +146,20 @@ paired GCTP ADR.
 - `docs/architecture-v1.9.md` §28.28 — the append-only amendment registering this roadmap + the P-8 fix.
 - `rubric/detectors/llm-judge.sh` — the P-8 `--text` fix landed in this CL.
 - `rubric/enforce.sh` / `rubric/enforce-file.sh` — the §28.17/§28.27 contracts the composite engine will generalize.
+
+## Consumer compatibility contract (amended 2026-06-23, §28.40)
+
+Post-build, the consuming harness (GCTP) reported that this ADR's additions were **consumer-compatible at the CLI-signature layer but not at the enforcement-STATE layer**: a schema-additive rule field (e.g. `applies_to_prose`, `enforced_by`) instantly adds *floor requirements* that a consumer derives from `active.json`'s shape, retroactively red-flagging the consumer's pin-keyed historical state (completed-ticket records, baselines, smoke fixtures). The two compatibilities are different, and the original handoff only guaranteed the first.
+
+This ADR therefore adopts a binding **consumer compatibility contract** that any future composite-engine (or rule-schema-touching) ADR MUST honor — "schema-additive with epoch + default":
+
+1. **Every rule carries an `introduced_in` epoch tag** (existing rules = `baseline`); consumers gate enforcement floors by epoch (`ticket-epoch ≥ rule.introduced_in`) so an additive rule never reds legacy state.
+2. **Every new optional, enforcement-relevant field declares its `absent_default`** in `schemas/field-semantics.json` (consumers reading old data get a defined answer, not a new requirement).
+3. **No detector tightens behavior on previously-passing input** without a `since:`/deprecation-window note recorded in the ADR's `consumer_compatibility` block.
+4. **Top-level plugin-tree additions are explicit in the handoff.**
+
+Enforced by `rubric/detectors/audit-consumer-compatibility.sh` (CI + `/doctor`). The full policy, the required `consumer_compatibility:` block template, and the retro-fill for this line are in `docs/consumer-compatibility-contract.md`. The paired consumer-side responsibility (epoch-aware floors, pin-keyed baselines) is GCTP's, recorded in GCTP ADR-0068.
+
+## Build status — fully implemented (§28.28–§28.40)
+
+Built and on `main`, suite green: 4-axis vocabulary mirrors + `applies_to.*` schema + SARIF bus (§28.29); per-tool runners + dispatch loop (§28.31); FOSS toolchain provisioned at install with a permissive/zero-copyleft prompt (§28.32, §28.38); the 118-rule corpus migrated to `applies_to.*` + `enforced_by` with a parity-diff gate proving no enforcement was dropped (§28.33); the whole-or-nothing architectural-content bundle + two-phase (write-time + audit-time) enforcement (§28.35); the commercial-sale license gate (§28.37); and the consumer compatibility contract above (§28.40). The deferred PreToolUse "never on disk in violating form" hook (CTP-D-7a) and the per-tool adapters for the binary-distributed tools remain incremental follow-on density.

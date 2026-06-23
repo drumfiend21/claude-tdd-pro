@@ -15,14 +15,25 @@ commercial-license posture.
 | Repo | `drumfiend21/claude-tdd-pro` |
 | Branch | `main` |
 | **Pin from** | `39903da` (ADR-0007 / PROPOSAL-003 line) |
-| **Pin to** | **`230e99d864bfba0b54ea9168ecc825a65bbecf70`** |
-| Plugin version | `0.3.0` (unchanged; additive §28.28–§28.39 amendments) |
-| Landed | ADR-0008 + ADR-0009, fully built (composite engine + auto-classification pipeline) |
-| CTP self-suite at pin | 4510/4510 green |
+| **Pin to** | **current `main` HEAD** (composite-engine + consumer-compatibility line; ≥ `eaa70d2`) |
+| Plugin version | `0.3.0` (unchanged; additive §28.28–§28.41 amendments) |
+| Landed | ADR-0008 + ADR-0009 **fully built**, + the §28.40 Consumer Compatibility Contract (epoch tags) |
+| CTP self-suite at pin | 4500+ green |
 
-Everything is **additive**. No existing CTP contract signature changed, so the bump is
-non-breaking; adopting each *new* surface is opt-in — **except** the one consumer-visible
-semantics change in §4 (hard-require), which needs a paired GCTP ADR before you rely on it.
+Everything is **additive at the schema layer**. No existing CTP CLI signature changed. But adopting
+this line is *not* free at your **enforcement-STATE** layer — read §4a (Consumer Compatibility
+Contract) before re-baselining, and §4b (enforce standards like CTP). The two consumer-visible
+items that need a paired GCTP ADR-0068 are the **hard-require** verdict (§4) and the **epoch-gated
+floors** (§4a).
+
+### What's new since the previous pin (`230e99d`)
+- **Recent standards/rules work:** the full 118-rule corpus is migrated to the 4-axis vocabulary
+  with `enforced_by[]` routing **and** every rule now carries an **`introduced_in` epoch tag**
+  (§28.40). New standing gates: `audit-applies-to-parity.sh` (no enforcement dropped),
+  `audit-commercial-license.sh` (sellable), `audit-consumer-compatibility.sh` (epoch + absent-default).
+- **Consumer Compatibility Contract** (`docs/consumer-compatibility-contract.md`) +
+  `schemas/field-semantics.json` (absent-default registry) — the metadata you need for epoch-aware,
+  non-breaking adoption (§4a).
 
 ---
 
@@ -118,6 +129,46 @@ changes, plugin-tree additions, smoke-fixture-stable assertion) is in the contra
 rule-schema-touching CTP ADR will carry one — `audit-consumer-compatibility.sh` fails CTP's build
 if it doesn't.
 
+## 4b. GCTP enforces standards like CTP (the core of this handoff)
+
+GCTP should not merely *consume* CTP's rules — it should **enforce them the same way CTP enforces
+them on itself**, on two surfaces: **(A) GCTP's own repository**, and **(B) every application GCTP
+builds**. CTP enforces on itself through three mechanisms; GCTP wires the same three using the same
+engine entrypoints (no re-implementation):
+
+| CTP self-enforcement mechanism | What GCTP wires (same scripts) |
+|---|---|
+| **Write-time** — `hooks.json` PostToolUse `enforce-standards-on-save.sh` runs on every Edit/Write | Load CTP's `hooks/hooks.json` in the GCTP plugin set **or** call `rubric/enforce-file.sh --file <path>` + `rubric/composite-dispatch.sh --file <path>` from GCTP's own write hook. Blocks a violating write inline. |
+| **Audit-time** — whole-tree conformance gate | `rubric/composite-audit.sh --root <tree>` (in-repo rules **+** routed FOSS tools **+** prose bundle; exit 0 green / 1 red / 3 incomplete). Run in GCTP CI on the GCTP repo, and as the harness's delivery gate on each generated app tree. |
+| **CI audit gates** — standing invariants | Run CTP's gates in GCTP CI: `audit-commercial-license.sh` (keep GCTP sellable), `audit-consumer-compatibility.sh`, and your own parity/coverage gates. |
+
+### A. Enforce on GCTP's own repo
+1. Add CTP's PostToolUse enforcement to GCTP's hook set (load `hooks/hooks.json`, or mirror the one
+   line that calls `enforce-standards-on-save.sh`). Now every file GCTP writes is held to the same
+   standards CTP holds itself to — code via the routed tools, prose/ADRs via the architectural-content
+   bundle + prose-judge, IaC via checkov/etc.
+2. In GCTP CI: `bash <ctp>/rubric/composite-audit.sh --root .` — fail the build on `red`. This is the
+   GCTP analogue of CTP's own green-suite invariant.
+
+### B. Enforce on every app GCTP builds (the harness's job)
+1. **During generation (write-time):** as the harness writes app files, run
+   `rubric/enforce-file.sh --file <path>` (+ `composite-dispatch.sh` for the routed tools) so violating
+   content is caught as it is produced — exactly the "enforcement on the writing of all content" the
+   composite engine provides.
+2. **At delivery (audit-time):** gate ticket/feature completion on
+   `bash <ctp>/rubric/composite-audit.sh --root <generated-app-tree>` returning green. A `red` means the
+   generated app violates a standard; an `incomplete` means a required tool was absent (a broken
+   toolchain install — see §4 hard-require). Do not mark a ticket done on a non-green audit.
+3. **Same rule set, same verdict:** the rules come from the synced `active.json` (4-axis-tagged,
+   `enforced_by`-routed); the verdict is the §28.17 4-state. GCTP enforces *identically* to CTP because
+   it runs the *same* engine over the *same* catalog.
+
+### Epoch-aware gating (so this is not breaking — see §4a)
+When GCTP derives a *floor* (e.g. "every .md must satisfy every `applies_to_prose` rule"), gate it by
+the rule's `introduced_in` epoch: enforce the floor only on content/tickets issued at or after the
+rule's epoch. Read `schemas/field-semantics.json` for each field's `absent_default`. This lets GCTP
+adopt the full enforcement posture **without** retroactively red-flagging its legacy state.
+
 ## 5. GCTP adoption steps
 
 1. **Bump the CTP pin** to `230e99d…` in whatever GCTP uses (lockfile / submodule SHA / `sync-plugin.sh`).
@@ -128,13 +179,14 @@ if it doesn't.
 4. **Toolchain:** CTP's installer provisions the FOSS tools at install time and GCTP inherits them by
    consuming CTP. If GCTP installs separately, run `rubric/runners/install-toolchain.sh`
    (`--permissive-only` for a zero-copyleft footprint; see `COMMERCIAL-USE.md`).
-5. **Wire the new enforcement surface** (opt-in):
-   - **Write-time, per file:** `rubric/composite-dispatch.sh --file <path>` (routed FOSS tools) and/or
-     `rubric/enforce-file.sh --file <path>` (in-repo rules + prose + bundle). If GCTP loads CTP's
-     `hooks/hooks.json`, the PostToolUse `enforce-standards-on-save.sh` already runs all three stages.
-   - **Audit-time, whole tree:** `rubric/composite-audit.sh --root <app>` (in-repo rules + routed
-     tools + bundle; exit 0 green / 1 red / 3 incomplete).
-   - **Tree, in-repo rules only (unchanged):** `rubric/enforce.sh --root <app> --rule <id>`.
+5. **Enforce standards like CTP — wire BOTH surfaces (see §4b, the core step):**
+   - **GCTP's own repo:** add CTP's PostToolUse `enforce-standards-on-save.sh` to GCTP's hook set
+     (write-time), and run `rubric/composite-audit.sh --root .` in GCTP CI (gate on green).
+   - **Every app GCTP builds:** run `rubric/enforce-file.sh --file <path>` during generation and gate
+     ticket/feature completion on `rubric/composite-audit.sh --root <generated-app>` returning green.
+   - Entrypoints: `composite-dispatch.sh` (routed FOSS tools, per file), `enforce-file.sh` (in-repo
+     rules + prose + bundle, per file), `composite-audit.sh` (comprehensive whole-tree), `enforce.sh`
+     (tree, in-repo rules, unchanged signature). Gate floors by `introduced_in` epoch (§4a).
 6. **Commercial-license gate (recommended in GCTP CI):** `rubric/detectors/audit-commercial-license.sh`
    fails the build on any bundled non-permissive license — keep GCTP sellable too.
 7. **Refresh:** `standards/initial-refresh.sh` enrolls all sources + the vocabulary mirrors for
@@ -168,9 +220,12 @@ and exercise the full chain GCTP relies on.
 
 ## 7. References (in the pinned CTP tree)
 
-- ADRs: `docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md`,
+- ADRs (updated 2026-06-23 with a **Consumer compatibility contract** + **Build status**):
+  `docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md`,
   `docs/adr/0009-auto-classification-and-rule-drafting-pipeline.md` (and `0007` for the prose line).
-- Architecture amendments (append-only): `docs/architecture-v1.9.md` **§28.28–§28.39**.
+- **Consumer Compatibility Contract:** `docs/consumer-compatibility-contract.md` +
+  `schemas/field-semantics.json` (absent-default registry). Gate: `rubric/detectors/audit-consumer-compatibility.sh`.
+- Architecture amendments (append-only): `docs/architecture-v1.9.md` **§28.28–§28.41**.
 - Commercial policy: `COMMERCIAL-USE.md`. Source manifest: `docs/standards-source-manifest.md`.
 - Prior handoff (ADR-0007 line): `docs/handoff-gctp-adr-0007.md`.
 

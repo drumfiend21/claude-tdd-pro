@@ -1957,3 +1957,14 @@ Post-handoff analysis from GCTP surfaced a real defect class: a CTP change can b
 - **§25 fidelity vocabulary additions:** `introduced_in`, `epoch`, `absent_default`, `field-semantics`, `consumer-compatibility`, `enforcement-state`, `baseline`, `grandfather`.
 
 8 specs (`cl500-*`): gate green (118 tagged) · every rule epoch-tagged · gate catches missing epoch · gate catches undeclared field · field-semantics declares the enforcement defaults · schema accepts introduced_in · migration stamps it idempotently · contract doc + handoff carry the invariants. Composes §28.29/§28.33; no new feature ID / contract. Suite 4510→4518.
+
+### §28.41 ADRs + GCTP handoff updated — enforce-like-CTP + consumer-compatibility (2026-06-23)
+
+Updates the previous ADRs and the GCTP handoff so the consuming harness gets the latest CTP (composite engine + the §28.40 Consumer Compatibility Contract + the recent 118-rule 4-axis/epoch standards work) and builds the integration to **enforce standards and rules the way CTP does**. Doc-only; **no new §2.X contract / no code change**.
+
+- **ADR-0008** gains (additive) a **Consumer compatibility contract** section (adopting the "schema-additive with epoch + default" invariant + the required `consumer_compatibility:` block) and a **Build status** section (fully implemented, §28.28–§28.40).
+- **ADR-0009** gains a **Build status** section (six stages built; drafted rules carry `introduced_in`).
+- **`docs/handoff-gctp-composite-engine.md`** updated: pin → current `main` HEAD (consumer-compatibility line, ≥ `eaa70d2`); a "what's new since `230e99d`" note (epoch tags + the new gates); and a new **§4b "GCTP enforces standards like CTP"** — the core of the handoff: GCTP wires the SAME three mechanisms CTP uses on itself (write-time `enforce-standards-on-save.sh`, audit-time `composite-audit.sh`, CI audit gates) over the SAME catalog, on BOTH (A) its own repo and (B) every app it builds, with floors gated by `introduced_in` epoch so adoption is non-breaking.
+- **§25 fidelity vocabulary additions:** `enforce-like-ctp`, `build-status`, `self-enforcement`.
+
+6 specs (`cl501-*`): ADR-0008 has the consumer-compatibility section · ADR-0008/0009 have build-status · handoff §4b enforce-like-CTP (both surfaces) · handoff names the engine entrypoints · handoff references the consumer-compatibility contract · handoff pin updated off the stale 230e99d-only. Composes §28.40; no new feature ID / contract. Suite 4518→4524.

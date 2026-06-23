@@ -116,3 +116,7 @@ the engine.
 - `docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md` — the paired engine ADR.
 - `docs/architecture-v1.9.md` §28.28 — the append-only amendment.
 - `rubric/detectors/prose-judge.sh` / `rubric/detectors/llm-judge.sh` — Layer-D semantic fallback + the P-8 fix.
+
+## Build status — fully implemented (§28.30, §28.34, §28.36)
+
+The six-stage pipeline is built and on `main`, suite green: extract → classify (4-axis) → route → architectural-content auto-bind (§28.30); the four-layer-fidelity LLM drafter with the machine-checked "no language silently dropped" contract (§28.34); and the confidence-routed review-queue CLI gating drafts before `active.json` (§28.36). Newly drafted rules carry the `introduced_in` epoch tag (the §28.40 Consumer Compatibility Contract — see ADR-0008) so a consumer can grandfather pre-epoch state. The Tier-2 LLM classifier/drafter tiers activate when a model CLI is present; the deterministic Tier-1 is the floor. Worked example (Google TS style guide ingest) is in `evals/specs/e2e-*` and `cl490-*`.

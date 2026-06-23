@@ -1,0 +1,13 @@
+{
+  "name": "ADR-0008 carries the Consumer compatibility contract section (schema-additive with epoch + default)",
+  "command": "grep -q '^## Consumer compatibility contract' \"$CLAUDE_PLUGIN_ROOT/docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md\" && grep -qi 'schema-additive with epoch' \"$CLAUDE_PLUGIN_ROOT/docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md\" && grep -q 'introduced_in' \"$CLAUDE_PLUGIN_ROOT/docs/adr/0008-composite-engine-and-4-axis-canonical-vocabulary.md\" && echo adr8-consumer-contract 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "adr8-consumer-contract"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "the handoff names the same engine entrypoints GCTP calls to enforce like CTP",
+  "command": "grep -q 'composite-audit.sh' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'enforce-file.sh' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'enforce-standards-on-save.sh' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo entrypoints-named 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "entrypoints-named"
+    ]
+  }
+}

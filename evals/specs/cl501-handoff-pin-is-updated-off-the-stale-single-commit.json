@@ -1,0 +1,13 @@
+{
+  "name": "the handoff pin is updated to the current composite + consumer-compatibility line (not the stale 230e99d-only)",
+  "command": "grep -qi 'consumer-compatibility line' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'eaa70d2' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -qi 'since the previous pin' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo pin-updated 1>&2",
+  "setup": [
+
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pin-updated"
+    ]
+  }
+}
