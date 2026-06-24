@@ -1,0 +1,11 @@
+{
+  "name": "E2E: every tool in the manifest is wired into the runner and obeys the missing-tool policy (required-absent hard-fails, optional-absent degrades)",
+  "command": "TD=\"$(mktemp -d)\"; printf 'x\\n' > \"$TD/f.txt\"; n=0; fail=0; for t in $(node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));process.stdout.write(m.tools.map(x=>x.tool).join(\"\\n\"))' \"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\"); do n=$((n+1)); RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool \"$t\" --file \"$TD/f.txt\" --json >/dev/null 2>/dev/null; o=$?; RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool \"$t\" --file \"$TD/f.txt\" --required --json >/dev/null 2>/dev/null; r=$?; [ \"$o\" -ne 3 ] && fail=$((fail+1)); [ \"$r\" -ne 1 ] && fail=$((fail+1)); done; rm -rf \"$TD\"; [ \"$n\" -ge 80 ] && [ \"$fail\" -eq 0 ] && echo every-tool-policy-wired 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-tool-policy-wired"
+    ]
+  }
+}

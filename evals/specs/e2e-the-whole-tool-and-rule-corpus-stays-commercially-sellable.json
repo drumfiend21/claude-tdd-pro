@@ -1,0 +1,11 @@
+{
+  "name": "E2E: every tool in the manifest and every tool any rule binds to is FOSS and free to sell commercially, with all copyleft (GPL/AGPL/LGPL) tools marked invoke_only — the whole catalog is resale-safe",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-commercial-license.sh\" 2>cl.txt; ce=$?; ruby -ryaml -rjson -e 'lic={}; JSON.parse(File.read(ARGV[0]))[\"tools\"].each{|t| lic[t[\"tool\"]]=[t[\"license\"].to_s,t[\"invoke_only\"]]}; cl=/GPL|AGPL|LGPL/; bad=[]; Dir[File.join(ARGV[1],\"generated-code-quality-standards\",\"*\",\"*.yaml\")].each{|f| d=(YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash); (d[\"rules\"]||[]).each{|ru| Array(ru[\"enforced_by\"]).each{|b| t=b[\"tool\"]; next unless t && lic[t]; bad<<\"#{ru[\"id\"]}:#{t}\" if cl=~lic[t][0] && !lic[t][1]}}}; exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" \"$CLAUDE_PLUGIN_ROOT\" >/dev/null 2>&1; re=$?; [ \"$ce\" -eq 0 ] && grep -q 'commercial-license status=green' cl.txt && [ \"$re\" -eq 0 ] && echo whole-corpus-sellable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "whole-corpus-sellable"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "E2E pipeline: an architecture-decision rule scraped from a source is tagged applies_to_prose, routed to the architectural-content bundle, and the whole-tree audit flags an ADR Markdown file that leaves ingress unrestricted — scrape to audit for the prose axis",
+  "command": "printf '# ADR Policy\\n\\n## Restrict ingress\\nArchitecture decision records must not leave ingress unrestricted.\\n' > p.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source p.md --source-id adr-policy --json > rules.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'Restrict ingress' --prose 'record an architecture decision record rationale for ingress' --json > c.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c.json --json > r.json 2>/dev/null && node -e 'const c=require(process.cwd()+\"/c.json\"),r=require(process.cwd()+\"/r.json\");if(c.applies_to_prose!==true)process.exit(1);if(!r.enforced_by.some(x=>x.bundle===\"architectural-content\"))process.exit(1)' && mkdir -p doc && printf '# 0001\\n\\n## Decision\\n\\nLeave ingress unrestricted (0.0.0.0/0).\\n' > doc/adr.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root doc 2>d.txt; de=$?; [ \"$de\" -eq 1 ] && grep -q 'status=red' d.txt && echo pipeline-prose-url-to-audit 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pipeline-prose-url-to-audit"
+    ]
+  }
+}

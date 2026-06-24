@@ -1,0 +1,11 @@
+{
+  "name": "E2E pipeline: a Kubernetes rule scraped from a source is tagged to the kubernetes IaC dialect, routed to a container scanner, and the whole-tree audit flags a privileged-pod repo red while passing a compliant repo green — scrape to audit for the IaC axis",
+  "command": "printf '# K8s Security\\n\\n## No privileged containers\\nKubernetes pods must not run privileged containers.\\n' > k.md && bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source k.md --source-id k8s-sec --json > rules.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-rule.sh\" --title 'No privileged' --prose 'Kubernetes pods must not run privileged containers.' --json > c.json 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/route-rule.sh\" --in c.json --json > r.json 2>/dev/null && node -e 'const c=require(process.cwd()+\"/c.json\"),r=require(process.cwd()+\"/r.json\");if(!c.applies_to.iac_dialects.includes(\"kubernetes\"))process.exit(1);if(!r.enforced_by.some(x=>x.tool===\"checkov\"||x.tool===\"kubescape\"||x.tool===\"trivy\"))process.exit(1)' && mkdir -p bad && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > bad/pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root bad 2>b.txt; be=$?; mkdir -p ok && printf 'name: app\\n' > ok/config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root ok 2>o.txt; oe=$?; [ \"$be\" -eq 1 ] && grep -q 'status=red' b.txt && [ \"$oe\" -eq 0 ] && grep -q 'status=green' o.txt && echo pipeline-iac-url-to-audit 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pipeline-iac-url-to-audit"
+    ]
+  }
+}
