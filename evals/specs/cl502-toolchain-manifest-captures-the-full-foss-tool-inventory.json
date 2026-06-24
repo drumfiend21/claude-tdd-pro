@@ -1,0 +1,6 @@
+{
+  "name": "the toolchain manifest captures the full FOSS tool inventory, not a 16-tool subset",
+  "command": "MAN=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.env.MAN,\"utf8\"));if(m.tools.length<80){console.error(\"too-few=\"+m.tools.length);process.exit(1)}console.error(\"toolchain-inventory count=\"+m.tools.length)'",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["toolchain-inventory count="] }
+}

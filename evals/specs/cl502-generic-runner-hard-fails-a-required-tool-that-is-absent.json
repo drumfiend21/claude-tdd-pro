@@ -1,0 +1,6 @@
+{
+  "name": "the generic runner hard-fails a required non-bespoke tool that is absent per the operator policy",
+  "command": "printf 'x\\n' > f.txt && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool ruff --file f.txt --required --json >/dev/null 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=hard-fail' e.txt && echo generic-required-absent-hard-fail 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["generic-required-absent-hard-fail"] }
+}

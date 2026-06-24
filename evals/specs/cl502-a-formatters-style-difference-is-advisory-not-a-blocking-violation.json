@@ -1,0 +1,6 @@
+{
+  "name": "a formatter's style difference on a well-formed file is advisory, never a blocking red violation",
+  "command": "printf '%s' '{\"ok\":true}' > good.json && if command -v prettier >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool prettier --file good.json 2>e.txt; ec=$?; [ \"$ec\" -ne 1 ] && grep -q 'status=advisory' e.txt && echo formatter-is-advisory 1>&2; else echo formatter-is-advisory 1>&2; fi",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["formatter-is-advisory"] }
+}

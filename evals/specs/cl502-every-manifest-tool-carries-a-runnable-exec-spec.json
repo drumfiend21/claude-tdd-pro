@@ -1,0 +1,6 @@
+{
+  "name": "every tool in the manifest carries a runnable exec spec with a bin and a known mode",
+  "command": "MAN=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.env.MAN,\"utf8\"));const ok=[\"sarif\",\"sarif-file\",\"exit\"];const bad=m.tools.filter(t=>!t.bin||!t.exec||!ok.includes(t.exec.mode));if(bad.length){console.error(\"unrunnable:\",bad.map(t=>t.tool).join(\",\"));process.exit(1)}console.error(\"every-tool-runnable count=\"+m.tools.length)'",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["every-tool-runnable count="] }
+}

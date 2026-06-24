@@ -1,0 +1,6 @@
+{
+  "name": "the generic runner resolves a non-bespoke manifest tool and normalizes its output to sarif",
+  "command": "printf 'import os\\n' > x.py && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool ruff --file x.py --json > s.sarif 2>e.txt; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"s.sarif\",\"utf8\"));if(j.version!==\"2.1.0\")process.exit(1)' && grep -q 'tool=ruff' e.txt && echo generic-runner-ran 1>&2; else echo generic-runner-ran 1>&2; fi",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["generic-runner-ran"] }
+}

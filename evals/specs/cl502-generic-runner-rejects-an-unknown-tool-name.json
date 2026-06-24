@@ -1,0 +1,6 @@
+{
+  "name": "the generic runner rejects a tool name that is not in the manifest with a usage error",
+  "command": "printf 'x\\n' > f.txt && bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool no-such-tool-zzz --file f.txt 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'unknown tool' e.txt && echo unknown-tool-rejected 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["unknown-tool-rejected"] }
+}

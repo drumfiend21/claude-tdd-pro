@@ -45,27 +45,31 @@ FILES="$(ROOT="$ROOT" node -e '
 sa="$STRICT"; nred=0; ninc=0; nfiles=0
 while IFS= read -r f; do
   [ -z "$f" ] && continue
-  v=""
+  # A file is RED on any violation; GREEN once it has been VERIFIED (the always-present in-repo
+  # detectors ran clean, or any present routed tool ran clean) — absent OPTIONAL tools do not make
+  # it incomplete; INCOMPLETE only when nothing could verify it. (Never a vacuous green: the
+  # dependency-free in-repo detectors always run and give a real verdict.)
+  red=0; verified=0
   # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic)
   bash "$ENFORCER" --file "$f" --quiet >/dev/null 2>/dev/null
   estat=$?
-  case "$estat" in 1) v=red ;; 3) [ -z "$v" ] && v=incomplete ;; esac
+  case "$estat" in 1) red=1 ;; 0) verified=1 ;; esac
   # routed FOSS tools (composite-dispatch resolves + routes + runs)
   da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict)
   bash "$DISPATCH" "${da[@]}" >/dev/null 2>/tmp/_ca.$$ || true
   dstat=$(grep -oE 'status=[a-z]+' /tmp/_ca.$$ 2>/dev/null | tail -1 | cut -d= -f2)
-  case "$dstat" in red) v=red ;; incomplete) [ "$v" != "red" ] && v=incomplete ;; esac
+  case "$dstat" in red) red=1 ;; green) verified=1 ;; esac
   # architectural-content bundle for Markdown
   case "$f" in
     *.md|*.markdown)
       ba=(--file "$f"); [ "$sa" -eq 1 ] && ba+=(--strict)
       bash "$BUNDLE" "${ba[@]}" >/dev/null 2>/tmp/_cb.$$ || true
       bstat=$(grep -oE 'status=[a-z]+' /tmp/_cb.$$ 2>/dev/null | tail -1 | cut -d= -f2)
-      case "$bstat" in red) v=red ;; incomplete) [ "$v" != "red" ] && v=incomplete ;; esac
+      case "$bstat" in red) red=1 ;; green) verified=1 ;; esac
       rm -f /tmp/_cb.$$ ;;
   esac
   rm -f /tmp/_ca.$$
-  [ -z "$v" ] && v=na
+  if [ "$red" -eq 1 ]; then v=red; elif [ "$verified" -eq 1 ]; then v=green; else v=incomplete; fi
   case "$v" in
     red) nred=$((nred+1)); nfiles=$((nfiles+1)); echo "audit file=$f verdict=red" >&2 ;;
     incomplete) ninc=$((ninc+1)); nfiles=$((nfiles+1)); echo "audit file=$f verdict=incomplete" >&2 ;;

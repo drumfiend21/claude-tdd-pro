@@ -1,22 +1,1304 @@
 {
-  "_doc": "Composite-engine FOSS toolchain manifest (ADR-0008 Wave 2 / §28.x). Source of truth for install-toolchain.sh AND the doctor/verify check. Installed at CTP install time (and, by extension, in GCTP via its consumption of CTP), so the §28.28 hard-require policy treats a missing required tool as a broken install, not normal operation.",
-  "_license_policy": "Every tool is open-source and free for commercial use. Permissive (MIT/Apache-2.0/BSD/ISC/MPL/MIT-0) tools install by default. GPL/LGPL tools are invoke_only (run as arms-length subprocesses, never bundled/redistributed by CTP; their commercial USE is unrestricted) and are still installed unless --permissive-only is passed.",
+  "_doc": "Composite-engine FOSS toolchain manifest (install + SARIF exec spec). Source of truth: commands/promote-toolchain.js. Read by install-toolchain.sh (install), run-tool.sh (exec), audit-commercial-license.sh (license).",
+  "_license_policy": "Every tool open-source + free for commercial use. Permissive installs by default; GPL/AGPL/LGPL are invoke_only (arms-length subprocess, never bundled/redistributed).",
+  "_count": 80,
   "tools": [
-    { "tool": "eslint",            "installer": "npm",    "package": "eslint",                  "license": "MIT",        "kinds": ["typescript", "javascript"] },
-    { "tool": "markdownlint",      "installer": "npm",    "package": "markdownlint-cli2",        "license": "MIT",        "bin": "markdownlint-cli2", "kinds": ["markdown", "architectural-content"] },
-    { "tool": "cspell",            "installer": "npm",    "package": "cspell",                   "license": "MIT",        "kinds": ["architectural-content"] },
-    { "tool": "textlint",          "installer": "npm",    "package": "textlint",                 "license": "MIT",        "kinds": ["architectural-content"] },
-    { "tool": "remark",            "installer": "npm",    "package": "remark-cli",               "license": "MIT",        "bin": "remark", "kinds": ["architectural-content"] },
-    { "tool": "spectral",          "installer": "npm",    "package": "@stoplight/spectral-cli",  "license": "Apache-2.0", "bin": "spectral", "kinds": ["openapi"] },
-    { "tool": "checkov",           "installer": "pipx",   "package": "checkov",                  "license": "Apache-2.0", "kinds": ["terraform", "kubernetes", "cloudformation", "dockerfile", "github_actions"] },
-    { "tool": "cfn-lint",          "installer": "pipx",   "package": "cfn-lint",                 "license": "MIT-0",      "kinds": ["cloudformation"] },
-    { "tool": "semgrep",           "installer": "pipx",   "package": "semgrep",                  "license": "LGPL-2.1",   "invoke_only": true, "kinds": ["typescript", "javascript", "python", "go"] },
-    { "tool": "trivy",             "installer": "binary", "package": "aquasecurity/trivy",       "license": "Apache-2.0", "install_url": "https://github.com/aquasecurity/trivy/releases", "kinds": ["terraform", "kubernetes"] },
-    { "tool": "kubescape",         "installer": "binary", "package": "kubescape/kubescape",      "license": "Apache-2.0", "install_url": "https://github.com/kubescape/kubescape/releases", "kinds": ["kubernetes"] },
-    { "tool": "zizmor",            "installer": "binary", "package": "zizmorcore/zizmor",        "license": "MIT",        "install_url": "https://github.com/zizmorcore/zizmor/releases", "kinds": ["github_actions"] },
-    { "tool": "osv-scanner",       "installer": "binary", "package": "google/osv-scanner",       "license": "Apache-2.0", "install_url": "https://github.com/google/osv-scanner/releases", "kinds": ["npm", "pypi", "maven"] },
-    { "tool": "vale",              "installer": "binary", "package": "errata-ai/vale",           "license": "MIT",        "install_url": "https://github.com/errata-ai/vale/releases", "kinds": ["architectural-content"] },
-    { "tool": "lychee",            "installer": "binary", "package": "lycheeverse/lychee",       "license": "Apache-2.0 OR MIT", "install_url": "https://github.com/lycheeverse/lychee/releases", "kinds": ["architectural-content"] },
-    { "tool": "hadolint",          "installer": "binary", "package": "hadolint/hadolint",        "license": "GPL-3.0",    "invoke_only": true, "install_url": "https://github.com/hadolint/hadolint/releases", "kinds": ["dockerfile"] }
+    {
+      "tool": "semgrep",
+      "installer": "pipx",
+      "package": "semgrep",
+      "bin": "semgrep",
+      "license": "LGPL-2.1",
+      "kinds": [
+        "typescript",
+        "javascript",
+        "python",
+        "go",
+        "java",
+        "ruby",
+        "php",
+        "rust",
+        "scala",
+        "kotlin"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "--sarif --quiet --config auto"
+      },
+      "invoke_only": true
+    },
+    {
+      "tool": "trivy",
+      "installer": "binary",
+      "package": "aquasecurity/trivy",
+      "bin": "trivy",
+      "license": "Apache-2.0",
+      "kinds": [
+        "terraform",
+        "kubernetes",
+        "dockerfile",
+        "npm",
+        "pypi"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "fs --format sarif --quiet"
+      },
+      "install_url": "https://github.com/aquasecurity/trivy/releases"
+    },
+    {
+      "tool": "osv-scanner",
+      "installer": "binary",
+      "package": "google/osv-scanner",
+      "bin": "osv-scanner",
+      "license": "Apache-2.0",
+      "kinds": [
+        "npm",
+        "pypi",
+        "maven",
+        "cargo",
+        "go"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "--lockfile"
+      },
+      "install_url": "https://github.com/google/osv-scanner/releases"
+    },
+    {
+      "tool": "syft",
+      "installer": "binary",
+      "package": "anchore/syft",
+      "bin": "syft",
+      "license": "Apache-2.0",
+      "kinds": [
+        "sbom"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "scan"
+      },
+      "install_url": "https://github.com/anchore/syft/releases"
+    },
+    {
+      "tool": "grype",
+      "installer": "binary",
+      "package": "anchore/grype",
+      "bin": "grype",
+      "license": "Apache-2.0",
+      "kinds": [
+        "npm",
+        "pypi",
+        "maven",
+        "sbom"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "-o sarif"
+      },
+      "install_url": "https://github.com/anchore/grype/releases"
+    },
+    {
+      "tool": "gitleaks",
+      "installer": "binary",
+      "package": "gitleaks/gitleaks",
+      "bin": "gitleaks",
+      "license": "MIT",
+      "kinds": [
+        "secrets"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "detect --no-git --source"
+      },
+      "install_url": "https://github.com/gitleaks/gitleaks/releases"
+    },
+    {
+      "tool": "detect-secrets",
+      "installer": "pipx",
+      "package": "detect-secrets",
+      "bin": "detect-secrets",
+      "license": "Apache-2.0",
+      "kinds": [
+        "secrets"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "scan"
+      }
+    },
+    {
+      "tool": "trufflehog",
+      "installer": "binary",
+      "package": "trufflesecurity/trufflehog",
+      "bin": "trufflehog",
+      "license": "AGPL-3.0",
+      "kinds": [
+        "secrets"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "filesystem"
+      },
+      "invoke_only": true,
+      "install_url": "https://github.com/trufflesecurity/trufflehog/releases"
+    },
+    {
+      "tool": "conftest",
+      "installer": "binary",
+      "package": "open-policy-agent/conftest",
+      "bin": "conftest",
+      "license": "Apache-2.0",
+      "kinds": [
+        "rego",
+        "kubernetes"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "test"
+      },
+      "install_url": "https://github.com/open-policy-agent/conftest/releases"
+    },
+    {
+      "tool": "regal",
+      "installer": "binary",
+      "package": "open-policy-agent/regal",
+      "bin": "regal",
+      "license": "Apache-2.0",
+      "kinds": [
+        "rego"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      },
+      "install_url": "https://github.com/open-policy-agent/regal/releases"
+    },
+    {
+      "tool": "scorecard",
+      "installer": "binary",
+      "package": "ossf/scorecard",
+      "bin": "scorecard",
+      "license": "Apache-2.0",
+      "kinds": [
+        "supply-chain"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "--local"
+      },
+      "install_url": "https://github.com/ossf/scorecard/releases"
+    },
+    {
+      "tool": "eslint",
+      "installer": "npm",
+      "package": "eslint",
+      "bin": "eslint",
+      "license": "MIT",
+      "kinds": [
+        "typescript",
+        "javascript"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "biome",
+      "installer": "npm",
+      "package": "@biomejs/biome",
+      "bin": "biome",
+      "license": "MIT",
+      "kinds": [
+        "typescript",
+        "javascript"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      }
+    },
+    {
+      "tool": "oxlint",
+      "installer": "npm",
+      "package": "oxlint",
+      "bin": "oxlint",
+      "license": "MIT",
+      "kinds": [
+        "typescript",
+        "javascript"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "prettier",
+      "installer": "npm",
+      "package": "prettier",
+      "bin": "prettier",
+      "license": "MIT",
+      "kinds": [
+        "typescript",
+        "javascript",
+        "css",
+        "html",
+        "json",
+        "yaml",
+        "markdown"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "--check"
+      },
+      "advisory": true
+    },
+    {
+      "tool": "graphql-schema-linter",
+      "installer": "npm",
+      "package": "graphql-schema-linter",
+      "bin": "graphql-schema-linter",
+      "license": "MIT",
+      "kinds": [
+        "graphql"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "stylelint",
+      "installer": "npm",
+      "package": "stylelint",
+      "bin": "stylelint",
+      "license": "MIT",
+      "kinds": [
+        "css",
+        "scss",
+        "less"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "htmlhint",
+      "installer": "npm",
+      "package": "htmlhint",
+      "bin": "htmlhint",
+      "license": "MIT",
+      "kinds": [
+        "html"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "html-validate",
+      "installer": "npm",
+      "package": "html-validate",
+      "bin": "html-validate",
+      "license": "MIT",
+      "kinds": [
+        "html"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "pa11y",
+      "installer": "npm",
+      "package": "pa11y",
+      "bin": "pa11y",
+      "license": "MIT",
+      "kinds": [
+        "html",
+        "accessibility"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "lighthouse",
+      "installer": "npm",
+      "package": "lighthouse",
+      "bin": "lighthouse",
+      "license": "Apache-2.0",
+      "kinds": [
+        "html",
+        "accessibility",
+        "performance"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "--quiet"
+      }
+    },
+    {
+      "tool": "checkov",
+      "installer": "pipx",
+      "package": "checkov",
+      "bin": "checkov",
+      "license": "Apache-2.0",
+      "kinds": [
+        "terraform",
+        "kubernetes",
+        "cloudformation",
+        "helm",
+        "dockerfile",
+        "github_actions",
+        "ansible"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif-file",
+        "args": "-f",
+        "out": "results_sarif.sarif"
+      }
+    },
+    {
+      "tool": "tfsec",
+      "installer": "binary",
+      "package": "aquasecurity/tfsec",
+      "bin": "tfsec",
+      "license": "MIT",
+      "kinds": [
+        "terraform"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "--format sarif"
+      },
+      "install_url": "https://github.com/aquasecurity/tfsec/releases"
+    },
+    {
+      "tool": "terrascan",
+      "installer": "binary",
+      "package": "tenable/terrascan",
+      "bin": "terrascan",
+      "license": "Apache-2.0",
+      "kinds": [
+        "terraform",
+        "kubernetes"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "scan"
+      },
+      "install_url": "https://github.com/tenable/terrascan/releases"
+    },
+    {
+      "tool": "tflint",
+      "installer": "binary",
+      "package": "terraform-linters/tflint",
+      "bin": "tflint",
+      "license": "MPL-2.0",
+      "kinds": [
+        "terraform"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/terraform-linters/tflint/releases"
+    },
+    {
+      "tool": "cfn-lint",
+      "installer": "pipx",
+      "package": "cfn-lint",
+      "bin": "cfn-lint",
+      "license": "MIT-0",
+      "kinds": [
+        "cloudformation"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "--format sarif"
+      }
+    },
+    {
+      "tool": "kubescape",
+      "installer": "binary",
+      "package": "kubescape/kubescape",
+      "bin": "kubescape",
+      "license": "Apache-2.0",
+      "kinds": [
+        "kubernetes"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "scan --format sarif --format-version v2"
+      },
+      "install_url": "https://github.com/kubescape/kubescape/releases"
+    },
+    {
+      "tool": "kube-linter",
+      "installer": "binary",
+      "package": "stackrox/kube-linter",
+      "bin": "kube-linter",
+      "license": "Apache-2.0",
+      "kinds": [
+        "kubernetes"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "lint --format sarif"
+      },
+      "install_url": "https://github.com/stackrox/kube-linter/releases"
+    },
+    {
+      "tool": "kubeconform",
+      "installer": "binary",
+      "package": "yannh/kubeconform",
+      "bin": "kubeconform",
+      "license": "Apache-2.0",
+      "kinds": [
+        "kubernetes"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/yannh/kubeconform/releases"
+    },
+    {
+      "tool": "polaris",
+      "installer": "binary",
+      "package": "FairwindsOps/polaris",
+      "bin": "polaris",
+      "license": "Apache-2.0",
+      "kinds": [
+        "kubernetes"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "audit --audit-path"
+      },
+      "install_url": "https://github.com/FairwindsOps/polaris/releases"
+    },
+    {
+      "tool": "spectral",
+      "installer": "npm",
+      "package": "@stoplight/spectral-cli",
+      "bin": "spectral",
+      "license": "Apache-2.0",
+      "kinds": [
+        "openapi"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      }
+    },
+    {
+      "tool": "vacuum",
+      "installer": "npm",
+      "package": "@quobix/vacuum",
+      "bin": "vacuum",
+      "license": "Apache-2.0",
+      "kinds": [
+        "openapi"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      }
+    },
+    {
+      "tool": "redocly",
+      "installer": "npm",
+      "package": "@redocly/cli",
+      "bin": "redocly",
+      "license": "MIT",
+      "kinds": [
+        "openapi"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      }
+    },
+    {
+      "tool": "zizmor",
+      "installer": "binary",
+      "package": "zizmorcore/zizmor",
+      "bin": "zizmor",
+      "license": "Apache-2.0",
+      "kinds": [
+        "github_actions"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "--format sarif"
+      },
+      "install_url": "https://github.com/zizmorcore/zizmor/releases"
+    },
+    {
+      "tool": "actionlint",
+      "installer": "binary",
+      "package": "rhysd/actionlint",
+      "bin": "actionlint",
+      "license": "MIT",
+      "kinds": [
+        "github_actions"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/rhysd/actionlint/releases"
+    },
+    {
+      "tool": "hadolint",
+      "installer": "binary",
+      "package": "hadolint/hadolint",
+      "bin": "hadolint",
+      "license": "GPL-3.0",
+      "kinds": [
+        "dockerfile"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "--format sarif"
+      },
+      "invoke_only": true,
+      "install_url": "https://github.com/hadolint/hadolint/releases"
+    },
+    {
+      "tool": "yamllint",
+      "installer": "pipx",
+      "package": "yamllint",
+      "bin": "yamllint",
+      "license": "GPL-3.0",
+      "kinds": [
+        "yaml"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "-f parsable"
+      },
+      "invoke_only": true
+    },
+    {
+      "tool": "ajv",
+      "installer": "npm",
+      "package": "ajv-cli",
+      "bin": "ajv",
+      "license": "MIT",
+      "kinds": [
+        "jsonschema"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "validate -s"
+      }
+    },
+    {
+      "tool": "clippy",
+      "installer": "cargo",
+      "package": "clippy",
+      "bin": "cargo-clippy",
+      "license": "MIT",
+      "kinds": [
+        "rust"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "clippy"
+      }
+    },
+    {
+      "tool": "cargo-audit",
+      "installer": "cargo",
+      "package": "cargo-audit",
+      "bin": "cargo-audit",
+      "license": "MIT",
+      "kinds": [
+        "rust"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "audit"
+      }
+    },
+    {
+      "tool": "cargo-deny",
+      "installer": "cargo",
+      "package": "cargo-deny",
+      "bin": "cargo-deny",
+      "license": "MIT",
+      "kinds": [
+        "rust"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "check"
+      }
+    },
+    {
+      "tool": "golangci-lint",
+      "installer": "binary",
+      "package": "golangci/golangci-lint",
+      "bin": "golangci-lint",
+      "license": "MIT",
+      "kinds": [
+        "go"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "run --out-format sarif"
+      },
+      "install_url": "https://github.com/golangci/golangci-lint/releases"
+    },
+    {
+      "tool": "govulncheck",
+      "installer": "go",
+      "package": "golang.org/x/vuln/cmd/govulncheck",
+      "bin": "govulncheck",
+      "license": "BSD-3-Clause",
+      "kinds": [
+        "go"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "gosec",
+      "installer": "go",
+      "package": "github.com/securego/gosec/v2/cmd/gosec",
+      "bin": "gosec",
+      "license": "Apache-2.0",
+      "kinds": [
+        "go"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "-fmt sarif"
+      }
+    },
+    {
+      "tool": "staticcheck",
+      "installer": "go",
+      "package": "honnef.co/go/tools/cmd/staticcheck",
+      "bin": "staticcheck",
+      "license": "MIT",
+      "kinds": [
+        "go"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "ruff",
+      "installer": "pipx",
+      "package": "ruff",
+      "bin": "ruff",
+      "license": "MIT",
+      "kinds": [
+        "python"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "check --output-format sarif"
+      }
+    },
+    {
+      "tool": "bandit",
+      "installer": "pipx",
+      "package": "bandit",
+      "bin": "bandit",
+      "license": "Apache-2.0",
+      "kinds": [
+        "python"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": "-f sarif"
+      }
+    },
+    {
+      "tool": "mypy",
+      "installer": "pipx",
+      "package": "mypy",
+      "bin": "mypy",
+      "license": "MIT",
+      "kinds": [
+        "python"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "pip-audit",
+      "installer": "pipx",
+      "package": "pip-audit",
+      "bin": "pip-audit",
+      "license": "Apache-2.0",
+      "kinds": [
+        "python",
+        "pypi"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "spotbugs",
+      "installer": "binary",
+      "package": "spotbugs/spotbugs",
+      "bin": "spotbugs",
+      "license": "LGPL-2.1",
+      "kinds": [
+        "java"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "sarif",
+        "args": ""
+      },
+      "invoke_only": true,
+      "install_url": "https://github.com/spotbugs/spotbugs/releases"
+    },
+    {
+      "tool": "pmd",
+      "installer": "binary",
+      "package": "pmd/pmd",
+      "bin": "pmd",
+      "license": "BSD-2-Clause",
+      "kinds": [
+        "java"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "check"
+      },
+      "install_url": "https://github.com/pmd/pmd/releases"
+    },
+    {
+      "tool": "ktlint",
+      "installer": "binary",
+      "package": "pinterest/ktlint",
+      "bin": "ktlint",
+      "license": "MIT",
+      "kinds": [
+        "kotlin"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/pinterest/ktlint/releases"
+    },
+    {
+      "tool": "detekt",
+      "installer": "binary",
+      "package": "detekt/detekt",
+      "bin": "detekt",
+      "license": "Apache-2.0",
+      "kinds": [
+        "kotlin"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/detekt/detekt/releases"
+    },
+    {
+      "tool": "swiftlint",
+      "installer": "binary",
+      "package": "realm/SwiftLint",
+      "bin": "swiftlint",
+      "license": "MIT",
+      "kinds": [
+        "swift"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/realm/SwiftLint/releases"
+    },
+    {
+      "tool": "rubocop",
+      "installer": "gem",
+      "package": "rubocop",
+      "bin": "rubocop",
+      "license": "MIT",
+      "kinds": [
+        "ruby"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "brakeman",
+      "installer": "gem",
+      "package": "brakeman",
+      "bin": "brakeman",
+      "license": "MIT",
+      "kinds": [
+        "ruby"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "credo",
+      "installer": "manual",
+      "package": "credo",
+      "bin": "credo",
+      "license": "MIT",
+      "kinds": [
+        "elixir"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "phpstan",
+      "installer": "manual",
+      "package": "phpstan/phpstan",
+      "bin": "phpstan",
+      "license": "MIT",
+      "kinds": [
+        "php"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "analyse"
+      }
+    },
+    {
+      "tool": "psalm",
+      "installer": "manual",
+      "package": "vimeo/psalm",
+      "bin": "psalm",
+      "license": "MIT",
+      "kinds": [
+        "php"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "slither",
+      "installer": "pipx",
+      "package": "slither-analyzer",
+      "bin": "slither",
+      "license": "AGPL-3.0",
+      "kinds": [
+        "solidity"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "invoke_only": true
+    },
+    {
+      "tool": "solhint",
+      "installer": "npm",
+      "package": "solhint",
+      "bin": "solhint",
+      "license": "MIT",
+      "kinds": [
+        "solidity"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "shellcheck",
+      "installer": "binary",
+      "package": "koalaman/shellcheck",
+      "bin": "shellcheck",
+      "license": "GPL-3.0",
+      "kinds": [
+        "shell"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "invoke_only": true,
+      "install_url": "https://github.com/koalaman/shellcheck/releases"
+    },
+    {
+      "tool": "shfmt",
+      "installer": "binary",
+      "package": "mvdan/sh",
+      "bin": "shfmt",
+      "license": "BSD-3-Clause",
+      "kinds": [
+        "shell"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "-d"
+      },
+      "advisory": true,
+      "install_url": "https://github.com/mvdan/sh/releases"
+    },
+    {
+      "tool": "sqlfluff",
+      "installer": "pipx",
+      "package": "sqlfluff",
+      "bin": "sqlfluff",
+      "license": "MIT",
+      "kinds": [
+        "sql"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      }
+    },
+    {
+      "tool": "buf",
+      "installer": "binary",
+      "package": "bufbuild/buf",
+      "bin": "buf",
+      "license": "Apache-2.0",
+      "kinds": [
+        "protobuf"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      },
+      "install_url": "https://github.com/bufbuild/buf/releases"
+    },
+    {
+      "tool": "protolint",
+      "installer": "binary",
+      "package": "yoheimuta/protolint",
+      "bin": "protolint",
+      "license": "MIT",
+      "kinds": [
+        "protobuf"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      },
+      "install_url": "https://github.com/yoheimuta/protolint/releases"
+    },
+    {
+      "tool": "markdownlint",
+      "installer": "npm",
+      "package": "markdownlint-cli2",
+      "bin": "markdownlint-cli2",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "remark",
+      "installer": "npm",
+      "package": "remark-cli",
+      "bin": "remark",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "--quiet --frail"
+      }
+    },
+    {
+      "tool": "vale",
+      "installer": "binary",
+      "package": "errata-ai/vale",
+      "bin": "vale",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "install_url": "https://github.com/errata-ai/vale/releases"
+    },
+    {
+      "tool": "textlint",
+      "installer": "npm",
+      "package": "textlint",
+      "bin": "textlint",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "alex",
+      "installer": "npm",
+      "package": "alex",
+      "bin": "alex",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "write-good",
+      "installer": "npm",
+      "package": "write-good",
+      "bin": "write-good",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "cspell",
+      "installer": "npm",
+      "package": "cspell",
+      "bin": "cspell",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "--no-progress --no-summary"
+      }
+    },
+    {
+      "tool": "codespell",
+      "installer": "pipx",
+      "package": "codespell",
+      "bin": "codespell",
+      "license": "GPL-2.0",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      },
+      "invoke_only": true
+    },
+    {
+      "tool": "lychee",
+      "installer": "binary",
+      "package": "lycheeverse/lychee",
+      "bin": "lychee",
+      "license": "Apache-2.0 OR MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "--no-progress"
+      },
+      "install_url": "https://github.com/lycheeverse/lychee/releases"
+    },
+    {
+      "tool": "markdown-link-check",
+      "installer": "npm",
+      "package": "markdown-link-check",
+      "bin": "markdown-link-check",
+      "license": "MIT",
+      "kinds": [
+        "markdown",
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": ""
+      }
+    },
+    {
+      "tool": "reuse",
+      "installer": "pipx",
+      "package": "reuse",
+      "bin": "reuse",
+      "license": "GPL-3.0",
+      "kinds": [
+        "architectural-content"
+      ],
+      "sarif_native": true,
+      "exec": {
+        "mode": "exit",
+        "args": "lint"
+      },
+      "invoke_only": true
+    },
+    {
+      "tool": "mmdc",
+      "installer": "npm",
+      "package": "@mermaid-js/mermaid-cli",
+      "bin": "mmdc",
+      "license": "MIT",
+      "kinds": [
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "-i"
+      }
+    },
+    {
+      "tool": "commitlint",
+      "installer": "npm",
+      "package": "@commitlint/cli",
+      "bin": "commitlint",
+      "license": "MIT",
+      "kinds": [
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "--edit"
+      }
+    },
+    {
+      "tool": "adr-tools",
+      "installer": "binary",
+      "package": "npryce/adr-tools",
+      "bin": "adr",
+      "license": "MIT",
+      "kinds": [
+        "architectural-content"
+      ],
+      "sarif_native": false,
+      "exec": {
+        "mode": "exit",
+        "args": "list"
+      },
+      "install_url": "https://github.com/npryce/adr-tools/releases"
+    }
   ]
 }

@@ -59,7 +59,7 @@ fi
 is_required() { case ",$REQ," in *,"$1",*) return 0 ;; *) return 1 ;; esac; }
 
 SARIF_DIR="$(mktemp -d)"
-nred=0; nunenf=0; ntools=0
+nred=0; nunenf=0; ngreen=0; ntools=0
 IFS=',' read -r -a _tlist <<<"$TOOLS"
 for t in "${_tlist[@]}"; do
   [ -z "$t" ] && continue
@@ -69,9 +69,10 @@ for t in "${_tlist[@]}"; do
   ec=$?
   case "$ec" in
     1) nred=$((nred + 1));   echo "dispatch tool=$t verdict=red" >&2 ;;
-    0) echo "dispatch tool=$t verdict=green" >&2 ;;
-    # exit 3 (optional absent) OR any other (e.g. an unadapted routed tool) -> not_enforced.
-    # Never a vacuous green: a tool we routed to but could not run leaves the file incomplete.
+    0) ngreen=$((ngreen + 1)); echo "dispatch tool=$t verdict=green" >&2 ;;
+    # exit 3 (optional absent) OR an unadapted tool -> not_enforced (advisory). An ABSENT OPTIONAL
+    # tool does not make the file incomplete if some other tool verified it — only "nothing could
+    # run" is incomplete (never a vacuous green, but a partial toolchain still yields green).
     *) nunenf=$((nunenf + 1)); echo "dispatch tool=$t verdict=not_enforced" >&2 ;;
   esac
 done
@@ -82,8 +83,9 @@ if [ "$JSON" -eq 1 ]; then bash "$AGG" "${AGG_ARGS[@]}" --json 2>/dev/null; fi
 bash "$AGG" "${AGG_ARGS[@]}" >/dev/null 2>&1 || true
 rm -rf "$SARIF_DIR"
 
-if [ "$nred" -gt 0 ]; then status="red"; rc=1
-elif [ "$nunenf" -gt 0 ]; then status="incomplete"; rc=3
+if [ "$nred" -gt 0 ]; then status="red"; rc=1            # a real violation
+elif [ "$ngreen" -gt 0 ]; then status="green"; rc=0      # >=1 routed tool ran clean
+elif [ "$nunenf" -gt 0 ]; then status="incomplete"; rc=3 # nothing could run (all absent/unadapted)
 else status="green"; rc=0; fi
 echo "dispatch file=$FILE status=$status tools=$ntools red=$nred not_enforced=$nunenf" >&2
 exit $rc
