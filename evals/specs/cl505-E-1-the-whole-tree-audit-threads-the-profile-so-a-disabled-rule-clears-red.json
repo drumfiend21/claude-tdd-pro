@@ -1,0 +1,11 @@
+{
+  "name": "the whole-tree audit threads the profile to the per-file enforcer, so disabling the offending rule clears a repo that would otherwise be flagged red",
+  "command": "mkdir -p repo && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > repo/pod.yaml && printf 'name: t\\nextends: []\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > prof.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root repo --profile \"$PWD/prof.yaml\" 2>a.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'status=green' a.txt && echo audit-honors-profile 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-honors-profile"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the whole-tree audit without a profile flags the violating repo red exactly as before (default-preserving across the audit path)",
+  "command": "mkdir -p repo && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > repo/pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root repo 2>a.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' a.txt && echo audit-baseline-unchanged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-baseline-unchanged"
+    ]
+  }
+}

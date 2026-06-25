@@ -11,19 +11,27 @@
 # cloud/config manifests that enforce.sh uses, so write-time and tree-time enforce the
 # identical rule set.
 #
-# CLI:  --file <path> [--root <dir>] [--quiet]
+# The §16 config plane (E-1 severity / enable-disable, E-3 glob overrides) is OPTIONAL and
+# threaded via --profile <profile.yaml>: when given, the effective per-file config is resolved
+# through profiles/active.sh --emit-resolved (the §2.5 resolver) and applied BEFORE enforcement --
+# a rule resolved to `off`/`false` is skipped (disabled); `error`/`warn` force the grade. When
+# --profile is ABSENT, behaviour is byte-identical to before (every catalog rule active at its
+# native severity), so the config plane is purely additive and cannot regress existing verdicts.
+#
+# CLI:  --file <path> [--root <dir>] [--profile <profile.yaml>] [--quiet]
 # stderr: per finding `enforce-file file=<f> rule=<id> verdict=<fail|not_enforced>`;
 #         summary `enforce-file file=<f> status=<green|red|incomplete> fail=<n> not_enforced=<n>`
 # Exit: 0 clean / 1 >=1 fail / 3 no fail but >=1 not_enforced / 2 usage.
 
 set -uo pipefail
-FILE=""; ROOT=""; QUIET=0
+FILE=""; ROOT=""; QUIET=0; PROFILE=""
 while [ $# -gt 0 ]; do
   case "$1" in
-    --file)  FILE="${2-}"; shift 2 ;;
-    --root)  ROOT="${2-}"; shift 2 ;;
-    --quiet) QUIET=1; shift ;;
-    -h|--help) echo "Usage: enforce-file.sh --file <path> [--root <dir>] [--quiet]" >&2; exit 0 ;;
+    --file)    FILE="${2-}"; shift 2 ;;
+    --root)    ROOT="${2-}"; shift 2 ;;
+    --profile) PROFILE="${2-}"; shift 2 ;;
+    --quiet)   QUIET=1; shift ;;
+    -h|--help) echo "Usage: enforce-file.sh --file <path> [--root <dir>] [--profile <profile.yaml>] [--quiet]" >&2; exit 0 ;;
     *) echo "enforce-file: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -33,9 +41,10 @@ done
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
 
-FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
+FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   file = ENV["FILE"]; plugin = ENV["PLUGIN_ROOT"]; quiet = ENV["QUIET"] == "1"
+  profile = ENV["PROFILE"].to_s
   base = File.basename(file)
 
   # --- catalog: id -> detector, severity, and the prose-bound id set -------------------
@@ -60,6 +69,30 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml 
       sev[id] = s["severity"].to_s if sev[id].to_s.empty? && s["severity"]
     end
   end
+  # --- §16 config plane (E-1/E-3): resolve effective per-file config via the §2.5 resolver -----
+  # disabled[id] => skip the rule entirely (resolved to off/false/0); forced[id] => override the
+  # blocking grade (error -> block, warn -> advisory). Empty unless --profile given => no-op.
+  disabled = {}; forced = {}
+  unless profile.empty?
+    tmp = File.join((ENV["TMPDIR"] || "/tmp"), "ef-resolve-#{Process.pid}.json")
+    system("bash", File.join(plugin, "profiles", "active.sh"), profile, "--tree",
+           File.join(plugin, "generated-code-quality-standards"), "--emit-resolved",
+           "--for-file", file, out: File::NULL, err: tmp)
+    raw = (File.read(tmp) rescue ""); (File.delete(tmp) rescue nil)
+    doc = nil
+    raw.each_line { |ln| ln = ln.strip; next unless ln.start_with?("{"); (doc = JSON.parse(ln)) rescue next }
+    off_vals  = ["false", "off", "0", "none", "0.0"]
+    warn_vals = ["warn", "warning", "1"]
+    err_vals  = ["error", "2"]
+    ((doc && doc["rules"]) || {}).each do |id, h|
+      s = h.is_a?(Hash) ? h["severity"].to_s : h.to_s
+      if    off_vals.include?(s)  then disabled[id] = true
+      elsif err_vals.include?(s)  then forced[id] = "block"
+      elsif warn_vals.include?(s) then forced[id] = "warn"
+      end
+    end
+  end
+
   # Blocking (error) vs advisory (warning) at write/generation time:
   #   * a violation blocks only when it is P0/P1 AND NOT a `require`-mode rule.
   #   * `require`-mode rules (e.g. "a pod should declare resources:") are presumptive --
@@ -67,7 +100,12 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml 
   #     file matched by a k8s *.yml rule), so a require-absent is always advisory, never a
   #     blocking false-positive. forbid/wrapper/prose violations (privileged: true present,
   #     0.0.0.0/0 in an ADR, malformed JSON) are unambiguous and block.
-  blocking = ->(id) { %w[P0 P1].include?(sev[id].to_s) && mode[id].to_s != "require" }
+  #   * a §16 profile override wins: forced "block"/"warn" supersedes the native grade.
+  blocking = ->(id) {
+    return true  if forced[id] == "block"
+    return false if forced[id] == "warn"
+    %w[P0 P1].include?(sev[id].to_s) && mode[id].to_s != "require"
+  }
 
   def glob_for(id, det)
     # rules with no manifest applies-glob are the Layer-1 wrappers / structural detectors,
@@ -92,6 +130,7 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml 
   # --- which rules apply to THIS file ------------------------------------------------
   applicable = []   # [id, detector]
   catalog.each do |id, det|
+    next if disabled[id]          # §16: rule resolved to off/false for this file -> skip
     g = applies[id].to_s.empty? ? glob_for(id, det) : applies[id]
     next if g.nil? || g.empty?
     applicable << [id, det] if matches?(file, base, g)
@@ -111,6 +150,7 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml 
   if base.end_with?(".md")
     pj = File.join(plugin, "rubric", "detectors", "prose-judge.sh")
     prose.keys.each do |id|
+      next if disabled[id]          # §16: prose rule disabled for this file -> skip
       next unless File.exist?(pj)
       system("bash", pj, "--rule", id, "--paths", file, out: File::NULL, err: File::NULL)
       ec = $?.exitstatus
@@ -127,7 +167,8 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml 
     warn_fails.each  { |id, det| STDERR.puts "enforce-file file=#{file} rule=#{id} severity=#{sev[id]} detector=#{det} verdict=warn" }
     unenf.each       { |id, det| STDERR.puts "enforce-file file=#{file} rule=#{id} detector=#{det} verdict=not_enforced" }
     status = block_fails.any? ? "red" : (unenf.any? ? "incomplete" : (warn_fails.any? ? "advisory" : "green"))
-    STDERR.puts "enforce-file file=#{file} status=#{status} rules_checked=#{applicable.size} blocking=#{block_fails.size} warn=#{warn_fails.size} not_enforced=#{unenf.size}"
+    prof = profile.empty? ? "" : " profile=#{File.basename(profile)} disabled=#{disabled.size}"
+    STDERR.puts "enforce-file file=#{file} status=#{status} rules_checked=#{applicable.size} blocking=#{block_fails.size} warn=#{warn_fails.size} not_enforced=#{unenf.size}#{prof}"
   end
   # exit 1 only on a BLOCKING (P0/P1) violation; advisory P2/P3 warnings never block a write.
   exit(block_fails.any? ? 1 : (unenf.any? ? 3 : 0))

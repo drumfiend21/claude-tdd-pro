@@ -14,13 +14,14 @@
 # Exit: 0 green | 1 red (zero-violation gate) | 3 incomplete | 2 usage.
 
 set -uo pipefail
-ROOT=""; STRICT=0; JSON=0
+ROOT=""; STRICT=0; JSON=0; PROFILE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --root) ROOT="${2-}"; shift 2 ;;
     --strict) STRICT=1; shift ;;
+    --profile) PROFILE="${2-}"; shift 2 ;;
     --json) JSON=1; shift ;;
-    -h|--help) echo "Usage: composite-audit.sh --root <dir> [--strict] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: composite-audit.sh --root <dir> [--strict] [--profile <profile.yaml>] [--json]" >&2; exit 0 ;;
     *) echo "composite-audit: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -50,8 +51,11 @@ while IFS= read -r f; do
   # it incomplete; INCOMPLETE only when nothing could verify it. (Never a vacuous green: the
   # dependency-free in-repo detectors always run and give a real verdict.)
   red=0; verified=0
-  # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic)
-  bash "$ENFORCER" --file "$f" --quiet >/dev/null 2>/dev/null
+  # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic).
+  # The §16 config plane is threaded through: --profile resolves effective per-file severity /
+  # enable-disable / overrides before enforcement (no-op when --profile is absent).
+  ea=(--file "$f" --quiet); [ -n "$PROFILE" ] && ea+=(--profile "$PROFILE")
+  bash "$ENFORCER" "${ea[@]}" >/dev/null 2>/dev/null
   estat=$?
   case "$estat" in 1) red=1 ;; 0) verified=1 ;; esac
   # routed FOSS tools (composite-dispatch resolves + routes + runs)

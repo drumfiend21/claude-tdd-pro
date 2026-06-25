@@ -1,0 +1,11 @@
+{
+  "name": "a malformed profile does not crash the enforcer; it falls back to native enforcement so the violation still blocks",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: t\\nrules: [this is: not a valid mapping\\n' > prof.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile prof.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && echo malformed-profile-safe-fallback 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "malformed-profile-safe-fallback"
+    ]
+  }
+}

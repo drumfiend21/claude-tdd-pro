@@ -1,0 +1,11 @@
+{
+  "name": "an overrides[].files glob that does not match the file does not disable the rule, so the violation still blocks (override scope respected)",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: t\\nextends: []\\nrules:\\n  g-k8s-no-privileged-container: error\\noverrides:\\n  - files: [\"**/*.test.yaml\"]\\n    rules:\\n      g-k8s-no-privileged-container: off\\n' > prof.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile prof.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && grep -q 'disabled=0' e.txt && echo override-glob-nomatch-enforced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "override-glob-nomatch-enforced"
+    ]
+  }
+}
