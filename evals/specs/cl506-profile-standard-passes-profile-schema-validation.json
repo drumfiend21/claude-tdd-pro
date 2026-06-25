@@ -1,0 +1,11 @@
+{
+  "name": "the standard profile passes profile-schema validation (it is a well-formed §2.5 profile)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-profile.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/profiles/standard.yaml\" 2>v.txt; ec=$?; [ \"$ec\" -eq 0 ] && echo standard-validates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "standard-validates"
+    ]
+  }
+}

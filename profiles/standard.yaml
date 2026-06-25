@@ -1,0 +1,14 @@
+name: standard
+description: "Standard profile: the recommended cross-cutting rule set. Ships as the default editable configuration (per architecture section 21). Users extend or override this in ctp.config.yaml / their named profile. Resolves to rubric:recommended -- every rule flagged recommended: true or listed in a source file's recommended_set."
+
+extends:
+  - rubric:recommended
+
+# Severity overrides and per-file overrides go here, ESLint-style, keyed by G-3 rule IDs, e.g.:
+#   rules:
+#     g-k8s-no-privileged-container: error
+#   overrides:
+#     - files: ["**/*.test.yaml"]
+#       rules: { g-k8s-no-privileged-container: off }
+rules: {}
+overrides: []

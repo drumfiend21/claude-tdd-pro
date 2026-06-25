@@ -1,0 +1,11 @@
+{
+  "name": "the standard profile ships at profiles/standard.yaml as the default editable configuration (per the v1.9 definition of done)",
+  "command": "[ -f \"$CLAUDE_PLUGIN_ROOT/profiles/standard.yaml\" ] && echo standard-profile-ships 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "standard-profile-ships"
+    ]
+  }
+}

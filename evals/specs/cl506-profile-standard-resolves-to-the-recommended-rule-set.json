@@ -1,0 +1,11 @@
+{
+  "name": "the standard profile resolves correctly: the §2.5 resolver emits the recommended rule set rather than an empty document",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/standard.yaml\" --tree \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" --emit-resolved 2>r.txt >/dev/null; node -e 'const s=require(\"fs\").readFileSync(\"r.txt\",\"utf8\");const m=s.match(/\\{\"rules\".*\\}/);if(!m)process.exit(1);const j=JSON.parse(m[0]);process.exit(Object.keys(j.rules||{}).length>0?0:1)' && echo standard-resolves-nonempty 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "standard-resolves-nonempty"
+    ]
+  }
+}
