@@ -1,0 +1,11 @@
+{
+  "name": "the grouping ties each rule to the tool whose execution produced the report, so the finding bubbles up to its enforcing function",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"gitleaks\"}},\"results\":[{\"ruleId\":\"aws-key\",\"level\":\"error\",\"message\":{\"text\":\"secret\"}}]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . --json 2>/dev/null | node -e 'const j=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(j.rules[\"gitleaks/aws-key\"].tools[0]===\"gitleaks\"?0:1)' && echo rule-tied-to-tool 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule-tied-to-tool"
+    ]
+  }
+}

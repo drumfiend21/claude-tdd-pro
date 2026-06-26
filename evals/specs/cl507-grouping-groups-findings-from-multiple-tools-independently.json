@@ -1,0 +1,11 @@
+{
+  "name": "findings from multiple different tools are each grouped under their own rule key in a single report",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"checkov\"}},\"results\":[{\"ruleId\":\"CKV_K8S_16\",\"level\":\"error\",\"message\":{\"text\":\"x\"}}]}]}' > a.sarif && printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"ruff\"}},\"results\":[{\"ruleId\":\"F401\",\"level\":\"error\",\"message\":{\"text\":\"y\"}}]}]}' > b.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . 2>e.txt; grep -q 'group-by-rule rules=2 findings=2' e.txt && grep -q 'rule=checkov/CKV_K8S_16' e.txt && grep -q 'rule=ruff/F401' e.txt && echo multi-tool-grouped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "multi-tool-grouped"
+    ]
+  }
+}

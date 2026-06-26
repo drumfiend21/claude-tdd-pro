@@ -1,0 +1,11 @@
+{
+  "name": "the grouping records the highest severity level seen for each rule across its findings",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"vale\"}},\"results\":[{\"ruleId\":\"Spelling\",\"level\":\"note\",\"message\":{\"text\":\"a\"}},{\"ruleId\":\"Spelling\",\"level\":\"error\",\"message\":{\"text\":\"b\"}}]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . 2>e.txt; grep -q 'rule=vale/Spelling tools=vale count=2 level=error' e.txt && echo records-max-level 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "records-max-level"
+    ]
+  }
+}

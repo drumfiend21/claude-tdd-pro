@@ -1,0 +1,11 @@
+{
+  "name": "distinct reporting ids emitted by the same tool are grouped as distinct rules, not merged",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"checkov\"}},\"results\":[{\"ruleId\":\"CKV_K8S_16\",\"level\":\"error\",\"message\":{\"text\":\"x\"}},{\"ruleId\":\"CKV_K8S_20\",\"level\":\"warning\",\"message\":{\"text\":\"y\"}}]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . 2>e.txt; grep -q 'group-by-rule rules=2 findings=2' e.txt && echo distinct-ids-distinct-rules 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "distinct-ids-distinct-rules"
+    ]
+  }
+}

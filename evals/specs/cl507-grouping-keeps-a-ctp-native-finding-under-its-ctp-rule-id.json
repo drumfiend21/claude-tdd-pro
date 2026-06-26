@@ -1,0 +1,11 @@
+{
+  "name": "a CTP native detector finding (rule id starting g-) groups under that CTP rule id directly rather than being namespaced",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"json-syntax\"}},\"results\":[{\"ruleId\":\"g-json-valid\",\"level\":\"error\",\"message\":{\"text\":\"invalid\"}}]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . --json 2>/dev/null | node -e 'const j=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(j.rules[\"g-json-valid\"]?0:1)' && echo ctp-native-keeps-its-id 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ctp-native-keeps-its-id"
+    ]
+  }
+}
