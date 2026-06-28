@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch with a profile on a file with no findings stays green and surfaces the active profile",
+  "command": "printf 'name: app\\n' > config.yaml && printf 'name: t\\nextends: []\\nrules: {}\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file config.yaml --profile p.yaml 2>e.txt; ec=$?; [ \"$ec\" -ne 1 ] && grep -q 'profile=p.yaml' e.txt && echo routed-clean-stays-green 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-clean-stays-green"
+    ]
+  }
+}

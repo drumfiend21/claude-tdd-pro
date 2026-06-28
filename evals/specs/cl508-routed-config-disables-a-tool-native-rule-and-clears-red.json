@@ -1,0 +1,11 @@
+{
+  "name": "a profile that disables a tool-native rule id clears that tool's red verdict on the routed path",
+  "command": "printf 'import os\\n' > x.py && printf 'name: t\\nextends: []\\nrules:\\n  ruff/F401: off\\n' > p.yaml && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file x.py 2>b.txt; bc=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file x.py --profile p.yaml 2>e.txt; ec=$?; [ \"$bc\" -eq 1 ] && grep -q 'status=red' b.txt && [ \"$ec\" -eq 0 ] && grep -q 'status=green' e.txt && grep -q 'disabled=1' e.txt && echo routed-config-disables 1>&2; else echo routed-config-disables 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-config-disables"
+    ]
+  }
+}

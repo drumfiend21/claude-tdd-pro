@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch without a profile produces its routed verdict with no profile marker (the config plane is purely additive)",
+  "command": "printf 'name: app\\n' > config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file config.yaml 2>e.txt; ! grep -q 'profile=' e.txt && grep -q 'dispatch file=' e.txt && echo routed-baseline-unchanged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-baseline-unchanged"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch accepts the --profile flag as part of its routed-path configuration interface",
+  "command": "printf 'name: app\\n' > config.yaml && printf 'name: t\\nrules: {}\\n' > p.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file config.yaml --profile p.yaml >/dev/null 2>e.txt; ec=$?; [ \"$ec\" -ne 2 ] && echo dispatch-accepts-profile 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dispatch-accepts-profile"
+    ]
+  }
+}

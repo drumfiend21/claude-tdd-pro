@@ -58,8 +58,9 @@ while IFS= read -r f; do
   bash "$ENFORCER" "${ea[@]}" >/dev/null 2>/dev/null
   estat=$?
   case "$estat" in 1) red=1 ;; 0) verified=1 ;; esac
-  # routed FOSS tools (composite-dispatch resolves + routes + runs)
-  da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict)
+  # routed FOSS tools (composite-dispatch resolves + routes + runs). The §16 config plane is
+  # threaded here too: --profile drops disabled rules / regrades by severity on the routed path.
+  da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict); [ -n "$PROFILE" ] && da+=(--profile "$PROFILE")
   bash "$DISPATCH" "${da[@]}" >/dev/null 2>/tmp/_ca.$$ || true
   dstat=$(grep -oE 'status=[a-z]+' /tmp/_ca.$$ 2>/dev/null | tail -1 | cut -d= -f2)
   case "$dstat" in red) red=1 ;; green) verified=1 ;; esac
