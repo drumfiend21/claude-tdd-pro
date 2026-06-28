@@ -98,13 +98,14 @@ if [ -n "$PROFILE" ]; then
     const fs=require("fs");
     let groups={rules:{}}; try{groups=JSON.parse(fs.readFileSync(process.env.GJSON,"utf8"))}catch(e){}
     let eff={}; try{const raw=fs.readFileSync(process.env.EJSON,"utf8");for(const l of raw.split("\n")){const t=l.trim();if(!t.startsWith("{"))continue;try{const j=JSON.parse(t);if(j.rules){eff=j.rules;break}}catch(e){}}}catch(e){}
-    const off=new Set(["false","off","0","none","0.0"]); const warn=new Set(["warn","warning","1"]);
+    const off=new Set(["false","off","0","none","0.0"]); const warn=new Set(["warn","warning","1"]); const err=new Set(["error","2"]);
     let red=0, dis=0;
     for(const[key,g]of Object.entries(groups.rules||{})){
       const e=eff[key]||eff[g.ctp_rule]; const sev=e?String(e.severity):"";
       if(off.has(sev)){dis++;continue;}        // disabled -> dropped
       if(warn.has(sev))continue;               // advisory -> not red
-      if((g.count||0)>0)red++;                 // error override OR no override -> keep tool signal
+      if(err.has(sev)){ if((g.count||0)>0)red++; continue; }   // forced error -> red on any finding
+      if(g.level==="error")red++;              // no override -> only error-level is red (note/advisory is not)
     }
     process.stdout.write(red+" "+dis);
   ' 2>/dev/null)
