@@ -1,0 +1,11 @@
+{
+  "name": "the whole-tree audit auto-discovers ctp.config.yaml at the audit root and applies it without an explicit flag",
+  "command": "mkdir -p repo && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > repo/pod.yaml && printf 'name: my\\nextends:\\n  - standard\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > repo/ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root repo 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'status=green' e.txt && echo audit-auto-discovers 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-auto-discovers"
+    ]
+  }
+}

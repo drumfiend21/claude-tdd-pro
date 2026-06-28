@@ -28,6 +28,10 @@ done
 [ -z "$ROOT" ] && { echo "composite-audit: --root required" >&2; exit 2; }
 [ -d "$ROOT" ] || { echo "composite-audit: not a directory: $ROOT" >&2; exit 2; }
 
+# Auto-discover the single config surface (ctp.config.yaml) at the audit root when no --profile was
+# given. Default-preserving: none found => no config applied.
+[ -z "$PROFILE" ] && [ -f "$ROOT/ctp.config.yaml" ] && PROFILE="$ROOT/ctp.config.yaml"
+
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 DISPATCH="$PLUGIN_ROOT/rubric/composite-dispatch.sh"
 BUNDLE="$PLUGIN_ROOT/rubric/runners/run-bundle.sh"

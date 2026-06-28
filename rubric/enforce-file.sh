@@ -41,6 +41,19 @@ done
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
 
+# Auto-discover the single config surface (ctp.config.yaml, a §2.5 profile) when no --profile was
+# given — ESLint-style: walk up from the file's directory to a repo (.git) boundary. Default-
+# preserving: if none is found, PROFILE stays empty and enforcement is byte-identical to before.
+if [ -z "$PROFILE" ]; then
+  _d="$(cd "$(dirname "$FILE")" 2>/dev/null && pwd -P)"; _lim=0
+  while [ -n "$_d" ] && [ "$_lim" -lt 30 ]; do
+    if [ -f "$_d/ctp.config.yaml" ]; then PROFILE="$_d/ctp.config.yaml"; break; fi
+    [ -d "$_d/.git" ] && break
+    [ "$_d" = "/" ] && break
+    _d="$(dirname "$_d")"; _lim=$((_lim + 1))
+  done
+fi
+
 FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   file = ENV["FILE"]; plugin = ENV["PLUGIN_ROOT"]; quiet = ENV["QUIET"] == "1"

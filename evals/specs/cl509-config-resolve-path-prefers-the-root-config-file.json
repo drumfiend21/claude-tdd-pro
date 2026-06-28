@@ -1,0 +1,11 @@
+{
+  "name": "config resolve-path returns the root ctp.config.yaml as the active config when it is present",
+  "command": "printf 'name: x\\nextends: [standard]\\n' > ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/config.sh\" resolve-path --root . 2>/dev/null | grep -q 'ctp.config.yaml' && echo resolve-prefers-root-config 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resolve-prefers-root-config"
+    ]
+  }
+}

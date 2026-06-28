@@ -1,0 +1,11 @@
+{
+  "name": "with no ctp.config.yaml present the enforcer behaves exactly as before, applying no profile",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && ! grep -q 'profile=' e.txt && echo no-config-unchanged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-config-unchanged"
+    ]
+  }
+}

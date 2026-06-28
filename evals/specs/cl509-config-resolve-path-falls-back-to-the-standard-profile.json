@@ -1,0 +1,11 @@
+{
+  "name": "config resolve-path falls back to the shipped standard profile when no root config and no userConfig.profile is set",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config.sh\" resolve-path --root . 2>/dev/null | grep -q 'profiles/standard.yaml' && echo resolve-falls-back-to-standard 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resolve-falls-back-to-standard"
+    ]
+  }
+}

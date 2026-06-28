@@ -1,0 +1,11 @@
+{
+  "name": "config init scaffolds ctp.config.yaml listing every active rule grouped by source namespace with src and enforcing-tool annotations",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config.sh\" init 2>e.txt; grep -qE 'rules_listed=[0-9]+ namespaces=[0-9]+' e.txt && [ -f ctp.config.yaml ] && grep -q 'enforced_by:' ctp.config.yaml && echo init-scaffolds-rules 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "init-scaffolds-rules"
+    ]
+  }
+}
