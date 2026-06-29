@@ -20,14 +20,14 @@ paradigms:
 
 tools:
   # ---- A. ESLint-semantics linters: per-rule [severity, options] ----
-  eslint:        { paradigm: eslint_semantics, option_form: "{ <ruleId>: [severity, <options>] }", emit: "eslint flat-config rules[ruleId]", examples: { complexity: ["error", { max: 10 }], "max-len": ["error", { code: 100, tabWidth: 2 }] } }
+  eslint: { paradigm: eslint_semantics, option_form: "{ <ruleId>: [severity, <options>] }", emit: "eslint flat-config rules[ruleId]", examples: { complexity: ["error", { max: 10 }], "max-len": ["error", { code: 100, tabWidth: 2 }] } , render: { fmt: json, file: ".eslintrc.json", flag: "--config" } }
   oxlint:        { paradigm: eslint_semantics, option_form: "{ rules: { <ruleId>: [severity, <options>] } }", emit: ".oxlintrc.json rules", examples: { "no-console": ["error", { allow: ["warn"] }] } }
-  biome:         { paradigm: eslint_semantics, option_form: "{ linter.rules.<group>.<rule>: { level, options } }", emit: "biome.json linter.rules", examples: { "complexity.noExcessiveCognitiveComplexity": { level: "error", options: { maxAllowedComplexity: 15 } } } }
-  stylelint:     { paradigm: eslint_semantics, option_form: "{ <rule>: [primary, { secondary }] }", emit: ".stylelintrc rules", examples: { "max-nesting-depth": [3, { severity: "warning" }] } }
+  biome: { paradigm: eslint_semantics, option_form: "{ linter.rules.<group>.<rule>: { level, options } }", emit: "biome.json linter.rules", examples: { "complexity.noExcessiveCognitiveComplexity": { level: "error", options: { maxAllowedComplexity: 15 } } } , render: { fmt: json, file: "biome.json", flag: "--config-path" } }
+  stylelint: { paradigm: eslint_semantics, option_form: "{ <rule>: [primary, { secondary }] }", emit: ".stylelintrc rules", examples: { "max-nesting-depth": [3, { severity: "warning" }] } , render: { fmt: json, file: ".stylelintrc.json", flag: "--config" } }
   htmlhint:      { paradigm: eslint_semantics, option_form: "{ <ruleId>: <value> }", emit: ".htmlhintrc", examples: { "attr-value-double-quotes": true } }
   html-validate: { paradigm: eslint_semantics, option_form: "{ rules: { <ruleId>: [severity, <options>] } }", emit: ".htmlvalidate.json", examples: { "element-permitted-content": "error" } }
-  markdownlint:  { paradigm: eslint_semantics, option_form: "{ <MDxxx>: <bool|object> }", emit: ".markdownlint.json", examples: { MD013: { line_length: 100 }, MD033: false } }
-  cspell:        { paradigm: eslint_semantics, option_form: "{ words: [...], ignoreRegExpList: [...] }", emit: "cspell.json", examples: { words: ["CTP", "rubric"] } }
+  markdownlint: { paradigm: eslint_semantics, option_form: "{ <MDxxx>: <bool|object> }", emit: ".markdownlint.json", examples: { MD013: { line_length: 100 }, MD033: false } , render: { fmt: json, file: ".markdownlint.json", flag: "--config" } }
+  cspell: { paradigm: eslint_semantics, option_form: "{ words: [...], ignoreRegExpList: [...] }", emit: "cspell.json", examples: { words: ["CTP", "rubric"] } , render: { fmt: json, file: "cspell.json", flag: "--config" } }
   textlint:      { paradigm: eslint_semantics, option_form: "{ rules: { <rule>: <options> } }", emit: ".textlintrc", examples: { "sentence-length": { max: 120 } } }
   remark:        { paradigm: eslint_semantics, option_form: "{ plugins: [[<plugin>, <options>]] }", emit: ".remarkrc", examples: { "remark-lint-maximum-line-length": 100 } }
   alex:          { paradigm: eslint_semantics, option_form: "{ allow: [...], deny: [...] }", emit: ".alexrc", examples: { allow: ["host-hostess"] } }
@@ -36,20 +36,20 @@ tools:
   graphql-schema-linter: { paradigm: eslint_semantics, option_form: "{ rules: [...], schemaPaths: [...] }", emit: ".graphql-schema-linterrc" }
 
   # ---- B. Config-file toggle linters: per-rule keys in TOML/YAML ----
-  ruff:          { paradigm: config_toggle, option_form: "[tool.ruff.lint.<plugin>] <key> = <value>", emit: "pyproject.toml [tool.ruff.lint.*]", examples: { "mccabe.max-complexity": 10, "pylint.max-args": 5, "isort.known-first-party": ["myapp"] } }
-  rubocop:       { paradigm: config_toggle, option_form: "{ <Dept/Cop>: { <Option>: <value> } }", emit: ".rubocop.yml", examples: { "Metrics/MethodLength": { Max: 15 }, "Style/StringLiterals": { EnforcedStyle: "single_quotes" } } }
+  ruff: { paradigm: config_toggle, option_form: "[tool.ruff.lint.<plugin>] <key> = <value>", emit: "pyproject.toml [tool.ruff.lint.*]", examples: { "mccabe.max-complexity": 10, "pylint.max-args": 5, "isort.known-first-party": ["myapp"] } , render: { fmt: toml, file: "ruff.toml", flag: "--config" } }
+  rubocop: { paradigm: config_toggle, option_form: "{ <Dept/Cop>: { <Option>: <value> } }", emit: ".rubocop.yml", examples: { "Metrics/MethodLength": { Max: 15 }, "Style/StringLiterals": { EnforcedStyle: "single_quotes" } } , render: { fmt: yaml, file: ".rubocop.yml", flag: "--config" } }
   clippy:        { paradigm: config_toggle, option_form: "clippy.toml <key> = <value>", emit: "clippy.toml", examples: { cognitive-complexity-threshold: 30, too-many-arguments-threshold: 8 } }
-  golangci-lint: { paradigm: config_toggle, option_form: "{ linters-settings.<linter>.<key> }", emit: ".golangci.yml linters-settings", examples: { "gocyclo.min-complexity": 15, "lll.line-length": 120 } }
-  yamllint:      { paradigm: config_toggle, option_form: "{ rules: { <rule>: { level, <opts> } } }", emit: ".yamllint", examples: { "line-length": { max: 120, level: "warning" } } }
+  golangci-lint: { paradigm: config_toggle, option_form: "{ linters-settings.<linter>.<key> }", emit: ".golangci.yml linters-settings", examples: { "gocyclo.min-complexity": 15, "lll.line-length": 120 } , render: { fmt: yaml, file: ".golangci.yml", flag: "-c" } }
+  yamllint: { paradigm: config_toggle, option_form: "{ rules: { <rule>: { level, <opts> } } }", emit: ".yamllint", examples: { "line-length": { max: 120, level: "warning" } } , render: { fmt: yaml, file: ".yamllint.yml", flag: "-c" } }
   vale:          { paradigm: config_toggle, option_form: "{ <Style.Rule>: <severity|opts> }", emit: ".vale.ini + styles", examples: { "Vale.Spelling": "error" } }
-  swiftlint:     { paradigm: config_toggle, option_form: "{ <rule>: { severity, <opts> } }", emit: ".swiftlint.yml", examples: { line_length: { warning: 120, error: 200 } } }
+  swiftlint: { paradigm: config_toggle, option_form: "{ <rule>: { severity, <opts> } }", emit: ".swiftlint.yml", examples: { line_length: { warning: 120, error: 200 } } , render: { fmt: yaml, file: ".swiftlint.yml", flag: "--config" } }
   shellcheck:    { paradigm: config_toggle, option_form: "enable/disable + severity (-S)", emit: ".shellcheckrc / flags", examples: { enable: ["all"], "disable": ["SC2034"] } }
   detekt:        { paradigm: config_toggle, option_form: "{ <Ruleset>.<Rule>: { active, <opts> } }", emit: "detekt.yml", examples: { "complexity.LongMethod": { threshold: 60 } } }
   ktlint:        { paradigm: config_toggle, option_form: ".editorconfig ktlint_* keys", emit: ".editorconfig", examples: { max_line_length: 120 } }
   phpstan:       { paradigm: config_toggle, option_form: "{ parameters.<key> }", emit: "phpstan.neon", examples: { level: 8 } }
   psalm:         { paradigm: config_toggle, option_form: "psalm.xml attributes", emit: "psalm.xml", examples: { errorLevel: 2 } }
   sqlfluff:      { paradigm: config_toggle, option_form: "[sqlfluff:rules:<rule>] <key>", emit: ".sqlfluff", examples: { "L010.capitalisation_policy": "upper" } }
-  mypy:          { paradigm: config_toggle, option_form: "[mypy] <key> = <value>", emit: "mypy.ini / pyproject", examples: { disallow_untyped_defs: true, strict: true } }
+  mypy: { paradigm: config_toggle, option_form: "[mypy] <key> = <value>", emit: "mypy.ini / pyproject", examples: { disallow_untyped_defs: true, strict: true } , render: { fmt: ini, file: "mypy.ini", flag: "--config-file" } }
   bandit:        { paradigm: config_toggle, option_form: "{ <check>: { <param> } }", emit: ".bandit / pyproject", examples: { "B101.skips": [] } }
   semgrep:       { paradigm: config_toggle, option_form: "rule yaml: severity + metavariable conditions", emit: "--config <ref> + rule metadata", examples: { severity: "ERROR" } }
   brakeman:      { paradigm: config_toggle, option_form: "{ <key>: <value> } (brakeman.yml)", emit: "config/brakeman.yml", examples: { min_confidence: 2, skip_checks: ["CheckExecute"] } }

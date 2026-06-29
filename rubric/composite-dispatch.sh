@@ -63,12 +63,21 @@ is_required() { case ",$REQ," in *,"$1",*) return 0 ;; *) return 1 ;; esac; }
 
 SARIF_DIR="$(mktemp -d)"
 nred=0; nunenf=0; ngreen=0; ntools=0
+# §28.51 Layer-2: the single config's `tool_options:` map (per-tool NATIVE options) is read from the
+# active profile and passed to each tool's runner, which emits + injects the tool's native config.
+TOOL_OPTS_MAP="{}"
+if [ -n "$PROFILE" ] && [ -f "$PROFILE" ]; then
+  TOOL_OPTS_MAP="$(PF="$PROFILE" ruby -ryaml -rjson -e 'd=YAML.unsafe_load_file(ENV["PF"]) rescue {}; print JSON.generate((d.is_a?(Hash) && d["tool_options"].is_a?(Hash)) ? d["tool_options"] : {})' 2>/dev/null)"
+  [ -z "$TOOL_OPTS_MAP" ] && TOOL_OPTS_MAP="{}"
+fi
 IFS=',' read -r -a _tlist <<<"$TOOLS"
 for t in "${_tlist[@]}"; do
   [ -z "$t" ] && continue
   ntools=$((ntools + 1))
   ra=(); is_required "$t" && ra=(--required)
-  bash "$RUNNER" --tool "$t" --file "$FILE" "${ra[@]}" --json > "$SARIF_DIR/$t.sarif" 2>/dev/null
+  toa=(); _topt="$(MAP="$TOOL_OPTS_MAP" T="$t" node -e 'try{const m=JSON.parse(process.env.MAP);const o=m[process.env.T];if(o&&Object.keys(o).length)process.stdout.write(JSON.stringify(o))}catch(e){}' 2>/dev/null)"
+  [ -n "$_topt" ] && toa=(--tool-options "$_topt")
+  bash "$RUNNER" --tool "$t" --file "$FILE" "${ra[@]}" "${toa[@]}" --json > "$SARIF_DIR/$t.sarif" 2>/dev/null
   ec=$?
   case "$ec" in
     1) nred=$((nred + 1));   echo "dispatch tool=$t verdict=red" >&2 ;;

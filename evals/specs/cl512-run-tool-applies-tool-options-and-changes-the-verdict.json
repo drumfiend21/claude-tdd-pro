@@ -1,0 +1,11 @@
+{
+  "name": "run-tool emits the tool-native options and the configured option changes the tool's verdict (ruff ignore makes a finding disappear)",
+  "command": "printf 'import os\\n' > x.py && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool ruff --file x.py 2>b.txt; bc=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool ruff --file x.py --tool-options '{\"lint.ignore\":[\"F401\"]}' 2>e.txt; ec=$?; [ \"$bc\" -eq 1 ] && grep -q 'status=red' b.txt && [ \"$ec\" -eq 0 ] && grep -q 'status=green' e.txt && echo run-tool-applies-options 1>&2; else echo run-tool-applies-options 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "run-tool-applies-options"
+    ]
+  }
+}

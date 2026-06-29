@@ -1,0 +1,11 @@
+{
+  "name": "run-tool with empty tool-options injects nothing and the tool runs exactly as before",
+  "command": "printf 'import os\\n' > x.py && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool ruff --file x.py --tool-options '{}' 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && echo run-tool-empty-unchanged 1>&2; else echo run-tool-empty-unchanged 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "run-tool-empty-unchanged"
+    ]
+  }
+}

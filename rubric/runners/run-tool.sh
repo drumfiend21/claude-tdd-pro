@@ -17,14 +17,15 @@
 # Exit: 0 green | 1 red/hard-fail | 3 not_enforced | 2 usage.
 
 set -uo pipefail
-TOOL=""; FILE=""; REQUIRED=0; JSON=0
+TOOL=""; FILE=""; REQUIRED=0; JSON=0; TOOL_OPTIONS=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --tool) TOOL="${2-}"; shift 2 ;;
     --file) FILE="${2-}"; shift 2 ;;
+    --tool-options) TOOL_OPTIONS="${2-}"; shift 2 ;;
     --required) REQUIRED=1; shift ;;
     --json) JSON=1; shift ;;
-    -h|--help) echo "Usage: run-tool.sh --tool <name> --file <path> [--required] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: run-tool.sh --tool <name> --file <path> [--tool-options <json>] [--required] [--json]" >&2; exit 0 ;;
     *) echo "run-tool: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -53,6 +54,20 @@ case "$TOOL" in
     EXEC_ARGS="$(printf '%s' "$EXEC_ARGS" | sed 's/^"//; s/"$//')"  # unquote
     ;;
 esac
+
+# Layer-2 (§28.51): emit the tool-NATIVE options from the single config layer into the tool's own
+# config file and inject the tool's config flag, so options written once in CTP take effect in the
+# real tool. Generic path only (bespoke adapters carry their own config handling). No options => no-op.
+CFG_INJECT=""; CFG_DIR=""
+if [ -n "$TOOL_OPTIONS" ] && [ "$TOOL_OPTIONS" != "{}" ] && [ "$BESPOKE" -eq 0 ]; then
+  CFG_DIR="$(mktemp -d)"
+  _cfgpath="$(bash "$PLUGIN_ROOT/rubric/runners/emit-tool-config.sh" --tool "$TOOL" --options "$TOOL_OPTIONS" --out "$CFG_DIR" 2>/dev/null)"
+  if [ -n "$_cfgpath" ] && [ -f "$_cfgpath" ]; then
+    _flag="$(CAT="$PLUGIN_ROOT/standards/tool-option-surfaces.yaml" TOOL="$TOOL" ruby -ryaml -e 'r=((YAML.unsafe_load_file(ENV["CAT"])["tools"]||{})[ENV["TOOL"]]||{})["render"]; print((r && r["flag"]) ? r["flag"] : "")' 2>/dev/null)"
+    [ -n "$_flag" ] && CFG_INJECT="$_flag $_cfgpath"
+  fi
+fi
+trap '[ -n "${CFG_DIR:-}" ] && rm -rf "$CFG_DIR" 2>/dev/null' EXIT
 
 emit_sarif() { # $1=level $2=message $3=ruleId
   FILE="$FILE" LV="$1" MSG="$2" RID="$3" TOOL="$TOOL" node -e '
@@ -103,13 +118,13 @@ else
   # shellcheck disable=SC2086
   case "$EXEC_MODE" in
     sarif)
-      OUT="$("$BIN" $EXEC_ARGS "$FILE" 2>/dev/null || true)"
+      OUT="$("$BIN" $EXEC_ARGS $CFG_INJECT "$FILE" 2>/dev/null || true)"
       if printf '%s' "$OUT" | node -e 'let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>{try{const j=JSON.parse(s);process.exit(j&&j.version==="2.1.0"?0:1)}catch(e){process.exit(1)}})' 2>/dev/null; then
         printf '%s' "$OUT" > "$TMP_SARIF"
         N=$(node -e 'try{const j=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log((j.runs||[]).reduce((a,r)=>a+(r.results||[]).length,0))}catch(e){console.log(0)}' "$TMP_SARIF")
       else RAN=0; fi ;;
     *)  # exit-code mode: 0 clean, non-0 findings -> synthesize SARIF from output lines
-      set +e; OUT="$("$BIN" $EXEC_ARGS "$FILE" 2>&1)"; EC=$?; set -e
+      set +e; OUT="$("$BIN" $EXEC_ARGS $CFG_INJECT "$FILE" 2>&1)"; EC=$?; set -e
       if [ "$EC" -eq 0 ]; then : > "$TMP_SARIF"; N=0
         FILE="$FILE" TOOL="$TOOL" node -e 'process.stdout.write(JSON.stringify({version:"2.1.0",runs:[{tool:{driver:{name:process.env.TOOL,version:"runner"}},results:[]}]}))' > "$TMP_SARIF"
       elif [ "$ADVISORY" -eq 1 ]; then
