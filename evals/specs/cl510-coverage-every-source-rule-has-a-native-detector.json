@@ -1,0 +1,11 @@
+{
+  "name": "every rule scraped from every source namespace is bound to a native detector for write-time/audit-time enforcement",
+  "command": "ruby -ryaml -e 'n=0; Dir[ARGV[0]+\"/*/*.yaml\"].each{|f| d=YAML.unsafe_load_file(f) rescue next; next unless d.is_a?(Hash); (d[\"rules\"]||[]).each{|r| eb=r[\"enforced_by\"]||[]; n+=1 unless eb.any?{|b| (b[\"tool\"]||\"\").end_with?(\".sh\")}}}; STDERR.puts(\"rules_without_native=#{n}\"); exit(n==0 ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" && echo every-rule-has-native-detector 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-rule-has-native-detector"
+    ]
+  }
+}

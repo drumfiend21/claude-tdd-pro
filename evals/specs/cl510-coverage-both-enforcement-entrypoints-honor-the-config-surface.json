@@ -1,0 +1,11 @@
+{
+  "name": "both the write-time enforcer and the audit-time gate auto-discover and honor the same ctp.config.yaml",
+  "command": "mkdir -p repo && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > repo/pod.yaml && printf 'name: c\\nextends: [standard]\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > repo/ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file repo/pod.yaml 2>w.txt; wc=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root repo 2>a.txt; ac=$?; [ \"$wc\" -eq 0 ] && grep -q 'profile=ctp.config.yaml' w.txt && [ \"$ac\" -eq 0 ] && grep -q 'status=green' a.txt && echo both-entrypoints-honor-config 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "both-entrypoints-honor-config"
+    ]
+  }
+}

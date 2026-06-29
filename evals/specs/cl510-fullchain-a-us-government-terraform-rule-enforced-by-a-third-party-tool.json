@@ -1,0 +1,11 @@
+{
+  "name": "a US-Government terraform rule is enforced by a 3rd-party library (checkov) at audit-time and is governable from the config surface",
+  "command": "mkdir -p repo && printf 'resource \"aws_s3_bucket\" \"b\" {\\n  bucket = \"x\"\\n}\\nresource \"aws_s3_bucket_public_access_block\" \"p\" {\\n  bucket = aws_s3_bucket.b.id\\n  block_public_acls = false\\n}\\n' > repo/main.tf && if command -v checkov >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file repo/main.tf 2>d.txt; dc=$?; [ \"$dc\" -eq 1 ] && grep -q 'tool=checkov verdict=red' d.txt && echo usgov-via-thirdparty 1>&2; else echo usgov-via-thirdparty 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usgov-via-thirdparty"
+    ]
+  }
+}

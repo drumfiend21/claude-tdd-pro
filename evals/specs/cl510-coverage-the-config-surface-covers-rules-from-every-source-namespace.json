@@ -1,0 +1,11 @@
+{
+  "name": "the config surface (extends standard) resolves the recommended set spanning every source namespace including google and us-government",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/profiles/active.sh\" \"$CLAUDE_PLUGIN_ROOT/profiles/standard.yaml\" --tree \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" --emit-resolved 2>r.txt >/dev/null; node -e 'const s=require(\"fs\").readFileSync(\"r.txt\",\"utf8\");const m=s.match(/\\{\"rules\".*\\}/);if(!m)process.exit(1);const ids=Object.keys(JSON.parse(m[0]).rules||{});const hasGoogle=ids.some(x=>/^g-ts-|^g-react-|^g-node-/.test(x));const hasUsGov=ids.some(x=>/^g-us-government-/.test(x));process.exit(hasGoogle&&hasUsGov&&ids.length>=100?0:1)' && echo config-covers-all-sources 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config-covers-all-sources"
+    ]
+  }
+}

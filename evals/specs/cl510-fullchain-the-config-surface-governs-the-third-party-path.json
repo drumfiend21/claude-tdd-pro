@@ -1,0 +1,11 @@
+{
+  "name": "the config surface governs the routed 3rd-party path: disabling a tool-native check clears the routed verdict",
+  "command": "printf 'import os\\n' > x.py && printf 'name: c\\nextends: [standard]\\nrules:\\n  ruff/F401: off\\n' > ctp.config.yaml && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file x.py --profile ctp.config.yaml 2>d.txt; dc=$?; [ \"$dc\" -eq 0 ] && grep -q 'disabled=1' d.txt && echo config-governs-thirdparty 1>&2; else echo config-governs-thirdparty 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config-governs-thirdparty"
+    ]
+  }
+}
