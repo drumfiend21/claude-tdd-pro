@@ -1,0 +1,11 @@
+{
+  "name": "a single rule binding block carries distinct tool-native options for each enforcing tool (eslint and ruff) at once, validated structurally by the schema",
+  "command": "node -e 'const s=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));const props=s.properties.enforced_by.items.properties;const rule={enforced_by:[{tool:\"eslint\",options:{complexity:[\"error\",{max:10}]}},{tool:\"ruff\",options:{\"mccabe.max-complexity\":10}}]};const ok=rule.enforced_by.every(b=>(!b.options||typeof b.options===\"object\")&&(!Object.keys(b).some(k=>!props[k])));process.exit(ok?0:1)' \"$CLAUDE_PLUGIN_ROOT/schemas/rubric-rule.schema.json\" && echo rule-carries-multitool-options 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rule-carries-multitool-options"
+    ]
+  }
+}

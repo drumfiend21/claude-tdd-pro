@@ -1,0 +1,11 @@
+{
+  "name": "the catalog records each tool's own native option vocabulary (ruff tool.ruff.lint keys, rubocop Cop/Option, eslint rule arrays) rather than a transformed CTP abstraction",
+  "command": "ruby -ryaml -e 't=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; ok = t[\"ruff\"][\"option_form\"].include?(\"tool.ruff.lint\") && t[\"rubocop\"][\"option_form\"].include?(\"Option\") && t[\"eslint\"][\"examples\"][\"complexity\"]; exit(ok ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo options-are-tool-native 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "options-are-tool-native"
+    ]
+  }
+}
