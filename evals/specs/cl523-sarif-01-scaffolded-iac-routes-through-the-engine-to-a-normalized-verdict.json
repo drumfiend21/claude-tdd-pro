@@ -1,0 +1,11 @@
+{
+  "name": "scaffolded IaC routes through the composite engine to one normalized per-file verdict",
+  "command": "printf 'resource \"aws_s3_bucket\" \"b\" {}\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file main.tf 2>e.txt; grep -qE 'dispatch file=.* status=(green|red|incomplete) tools=[0-9]+' e.txt && echo routed-normalized-verdict 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-normalized-verdict"
+    ]
+  }
+}

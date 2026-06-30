@@ -1,0 +1,11 @@
+{
+  "name": "the SARIF bus stays green when a tool's normalized stream carries no blocking findings",
+  "command": "node -e 'process.stdout.write(JSON.stringify({version:\"2.1.0\",runs:[{tool:{driver:{name:\"checkov\"}},results:[]}]}))' > clean.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in clean.sarif 2>e.txt; grep -q 'sarif-aggregate status=green' e.txt && echo bus-green-no-blocking 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bus-green-no-blocking"
+    ]
+  }
+}

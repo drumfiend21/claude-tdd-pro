@@ -1,0 +1,11 @@
+{
+  "name": "an architect-generated ADR tree audits through the composite engine to one normalized tree verdict",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" 'build a booking service' --decisions-stub storage,auth --adr-out adrs --now 2026-06-20T00:00:00Z 2>/dev/null; RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root adrs 2>e.txt; grep -qE 'composite-audit root=.* status=(green|incomplete)' e.txt && echo architect-tree-audited 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "architect-tree-audited"
+    ]
+  }
+}

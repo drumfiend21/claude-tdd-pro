@@ -1,0 +1,11 @@
+{
+  "name": "a routed tool emits a valid SARIF 2.1.0 document even when the tool binary is absent (tool-independent stream)",
+  "command": "printf 'resource \"aws_s3_bucket\" \"b\" {}\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool tfsec --file main.tf --json 2>/dev/null > t.sarif; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"t.sarif\",\"utf8\"));process.exit(j.version===\"2.1.0\"&&Array.isArray(j.runs)?0:1)' && echo absent-tool-valid-sarif 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "absent-tool-valid-sarif"
+    ]
+  }
+}

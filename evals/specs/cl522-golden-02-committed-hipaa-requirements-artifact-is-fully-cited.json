@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the committed HIPAA requirements artifact is itself fully cited and grounded",
+  "command": "node -e 'const g=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));const all=Object.values(g.pillars).flat();process.exit(g.needs_grounding.length===0&&all.length>=40&&all.every(c=>typeof c.source_id===\"string\"&&c.source_id.length>0&&c.grounding===\"grounded\")?0:1)' \"$CLAUDE_PLUGIN_ROOT/standards/golden/healthcare-booking-hipaa-requirements.json\" && echo hipaa-golden-cited 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "hipaa-golden-cited"
+    ]
+  }
+}

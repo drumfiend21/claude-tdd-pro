@@ -1,0 +1,11 @@
+{
+  "name": "the SARIF bus deduplicates an identical finding reported in two separate tool documents",
+  "command": "node -e 'process.stdout.write(JSON.stringify({version:\"2.1.0\",runs:[{tool:{driver:{name:\"checkov\"}},results:[{ruleId:\"CKV_AWS_18\",level:\"error\",message:{text:\"S3 access logging disabled\"},locations:[{physicalLocation:{artifactLocation:{uri:\"main.tf\"},region:{startLine:1}}}]}]}]}))' > red.sarif; cp red.sarif red2.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in red.sarif --in red2.sarif 2>e.txt; grep -qE 'sarif-aggregate status=red tools=1 error=1 ' e.txt && echo bus-dedup-identical 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bus-dedup-identical"
+    ]
+  }
+}

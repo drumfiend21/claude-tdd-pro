@@ -1,0 +1,11 @@
+{
+  "name": "an architect-generated ADR flows through run-tool into the SARIF bus and yields a normalized verdict",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect.sh\" 'build a booking service' --decisions-stub storage,auth --adr-out adrs --now 2026-06-20T00:00:00Z 2>/dev/null; ADR=$(ls adrs/*.md 2>/dev/null | head -1); RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool markdownlint --file \"$ADR\" --json 2>/dev/null > adr.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in adr.sarif 2>e.txt; grep -qE 'sarif-aggregate status=(green|red)' e.txt && echo architect-output-to-sarif-bus 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "architect-output-to-sarif-bus"
+    ]
+  }
+}

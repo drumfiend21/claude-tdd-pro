@@ -1,0 +1,11 @@
+{
+  "name": "an error-level finding from any tool turns the SARIF bus verdict red",
+  "command": "node -e 'process.stdout.write(JSON.stringify({version:\"2.1.0\",runs:[{tool:{driver:{name:\"checkov\"}},results:[{ruleId:\"CKV_AWS_18\",level:\"error\",message:{text:\"S3 access logging disabled\"},locations:[{physicalLocation:{artifactLocation:{uri:\"main.tf\"},region:{startLine:1}}}]}]}]}))' > red.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in red.sarif 2>e.txt; grep -q 'sarif-aggregate status=red' e.txt && echo bus-error-turns-red 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bus-error-turns-red"
+    ]
+  }
+}

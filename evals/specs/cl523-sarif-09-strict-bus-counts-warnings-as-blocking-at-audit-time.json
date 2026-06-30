@@ -1,0 +1,11 @@
+{
+  "name": "the strict (audit-time) SARIF bus counts a warning-level finding as blocking and goes red",
+  "command": "node -e 'process.stdout.write(JSON.stringify({version:\"2.1.0\",runs:[{tool:{driver:{name:\"tflint\"}},results:[{ruleId:\"terraform_deprecated\",level:\"warning\",message:{text:\"deprecated syntax\"},locations:[{physicalLocation:{artifactLocation:{uri:\"main.tf\"},region:{startLine:1}}}]}]}]}))' > warn.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in warn.sarif --strict 2>e.txt; grep -q 'sarif-aggregate status=red' e.txt && echo strict-warn-blocks 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "strict-warn-blocks"
+    ]
+  }
+}
