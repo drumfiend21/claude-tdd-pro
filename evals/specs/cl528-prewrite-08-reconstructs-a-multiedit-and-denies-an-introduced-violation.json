@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor reconstructs a MultiEdit and denies a violation the edits would introduce",
+  "command": "printf 'a = 1\\nb = 2\\n' > c.tf && printf '%s' '{\"tool_name\":\"MultiEdit\",\"tool_input\":{\"file_path\":\"c.tf\",\"edits\":[{\"old_string\":\"a = 1\",\"new_string\":\"resource \\\"aws_security_group\\\" \\\"g\\\" { ingress { cidr_blocks = [\\\"0.0.0.0/0\\\"] } }\"}]}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'g-aws-no-unrestricted-ingress' e.txt && echo multiedit-denied 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "multiedit-denied"
+    ]
+  }
+}

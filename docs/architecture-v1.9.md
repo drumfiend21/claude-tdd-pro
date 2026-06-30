@@ -2187,3 +2187,14 @@ Closes the two integration-coverage gaps found by the post-§28.54 inverted depe
 - **§25 fidelity vocabulary additions:** `options-view`, `config-options-view`, `persisted`, `cache-if-no-change`, `content-hash`, `re-materialize`, `incremental`, `cache-hit`.
 
 8 specs (`cl527-view-01..08`): view-persisted / objects-hashed / cache-noop / view-byte-identical / only-changed-updates / unchanged-from-cache / committed-view-complete / view-has-options-data. **§20 note:** persistence/cache refinement; preserves §21 dod. Suite 4757→4765.
+
+### §28.60 Govern-before-write — enforce proposed content in memory before it is saved (operator-directed, 2026-06-30)
+
+**STANDING INVARIANT (operator-directed): enforcement runs BEFORE the write — the proposed content is governed in memory and a blocking violation denies the write, so a violating file is never persisted.** Refines §28.27 (which enforced after save). Detail: `docs/design/v1.18-govern-before-write.md`. **No new feature ID, no new §2.X contract** (a write-time-phase refinement over §28.27 + the §28.57 native enforcer).
+
+- **The governor.** `hooks/scripts/enforce-standards-pre-write.sh` (PreToolUse, matcher `Edit|Write|MultiEdit`) reconstructs the proposed content — Write → `content`; Edit → current file with `old_string`→`new_string` (honors `replace_all`); MultiEdit → all edits applied — writes it to an in-memory scratch file with the target basename (so §2.1 `applies` globs match), and runs `rubric/enforce-file.sh`. A P0/P1 blocking violation → **exit 2 (deny)**, surfaced to the model; the file is never written and the on-disk target is unchanged (the governor only evaluates). Clean/advisory → exit 0.
+- **Two moments, one engine.** PreToolUse govern-before-write (deterministic native gate, blocks the write) + PostToolUse `enforce-standards-on-save.sh` after-write backstop (routed FOSS tools + architectural-content bundle + resolved profile). With §28.56–§28.59 the native gate enforces any applicable rule on any file type, so content is governed as it is generated to memory.
+- **Fail-open** like the other write hooks: unparseable input / missing dep / defense-trip → exit 0 (never a spurious block). Governs the config/markup/IaC kinds (`*.yaml/json/md/tf/bicep/...`); JS/Py stay with lint-on-save.
+- **§25 fidelity vocabulary additions:** `govern-before-write`, `pre-write`, `pretooluse`, `proposed-content`, `in-memory`, `deny-write`, `reconstruct`, `before-save`, `write-time-phase`.
+
+10 specs (`cl528-prewrite-01..10`): denies-blocking-write / allows-clean / governed-in-memory(no file created) / edit-reconstruct-denied / file-unchanged-on-deny / edit-clean-allowed / adr-prose-denied / multiedit-denied / registered-pretooluse / fails-open. Deterministic + tool-independent (native enforce-file). **§20 note:** write-time-phase refinement; preserves §21 dod. Suite 4765→4775.

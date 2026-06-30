@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor denies a Write whose proposed content has a blocking rule violation, before it is saved",
+  "command": "printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"main.tf\",\"content\":\"resource \\\"aws_security_group\\\" \\\"b\\\" {\\n  ingress { cidr_blocks = [\\\"0.0.0.0/0\\\"] }\\n}\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'write denied before save' e.txt && grep -q 'g-aws-no-unrestricted-ingress' e.txt && echo prewrite-denies 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prewrite-denies"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor reconstructs an Edit and denies a violation the edit would introduce",
+  "command": "printf 'resource \"aws_security_group\" \"b\" {\\n  ingress { cidr_blocks = [\"10.0.0.0/8\"] }\\n}\\n' > main.tf && printf '%s' '{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"main.tf\",\"old_string\":\"10.0.0.0/8\",\"new_string\":\"0.0.0.0/0\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'g-aws-no-unrestricted-ingress' e.txt && echo edit-violation-denied 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "edit-violation-denied"
+    ]
+  }
+}

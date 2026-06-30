@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor denies an ADR whose proposed prose proposes a forbidden design, before save",
+  "command": "printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"0001-x.md\",\"content\":\"# ADR\\nWe will leave ingress unrestricted at 0.0.0.0/0.\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'write denied before save' e.txt && echo adr-prose-denied 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "adr-prose-denied"
+    ]
+  }
+}

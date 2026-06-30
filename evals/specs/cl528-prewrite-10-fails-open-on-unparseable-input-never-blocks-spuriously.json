@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor fails open (allows) on unparseable input so it never blocks spuriously",
+  "command": "printf '%s' 'not json at all' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && echo fails-open 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "fails-open"
+    ]
+  }
+}
