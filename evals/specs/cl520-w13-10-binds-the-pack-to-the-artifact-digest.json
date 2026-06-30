@@ -1,0 +1,11 @@
+{
+  "name": "the red-team pack binds to a deterministic digest of the reviewed artifact",
+  "command": "printf 'resource x {}\\n' > a.tf && a=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --artifact a.tf --emit json 2>/dev/null | node -e 'const j=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.stdout.write(j.artifact_digest)'); b=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --artifact a.tf --emit json 2>/dev/null | node -e 'const j=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.stdout.write(j.artifact_digest)'); [ -n \"$a\" ] && [ \"$a\" = \"$b\" ] && echo w13-artifact-digest 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "w13-artifact-digest"
+    ]
+  }
+}

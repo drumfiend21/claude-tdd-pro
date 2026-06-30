@@ -1,0 +1,11 @@
+{
+  "name": "redteam-review can scope the pass to a single lens (red only)",
+  "command": "printf 'resource x {}\\n' > a.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --artifact a.tf --lens red --emit json 2>e.txt; grep -q 'blue=0 red=2' e.txt && echo w13-single-lens 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "w13-single-lens"
+    ]
+  }
+}

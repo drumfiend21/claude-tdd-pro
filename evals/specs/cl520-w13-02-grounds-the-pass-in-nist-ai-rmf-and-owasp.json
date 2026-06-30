@@ -1,0 +1,11 @@
+{
+  "name": "redteam-review grounds the adversarial pass in NIST AI RMF red-teaming and OWASP",
+  "command": "printf 'resource x {}\\n' > a.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --artifact a.tf --emit md 2>e.txt; grep -q 'grounded=nist-ai-rmf,owasp' e.txt && echo w13-grounded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "w13-grounded"
+    ]
+  }
+}

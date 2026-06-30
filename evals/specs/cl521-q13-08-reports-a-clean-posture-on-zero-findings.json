@@ -1,0 +1,11 @@
+{
+  "name": "security-posture reports a clean posture and zero density when there are no findings",
+  "command": "printf '[]' > e.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/security-posture.sh\" --findings e.json --deps 100 --json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(j.vulnerability_density===0&&j.posture===\"clean\"?0:1)' && echo q13-clean 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "q13-clean"
+    ]
+  }
+}

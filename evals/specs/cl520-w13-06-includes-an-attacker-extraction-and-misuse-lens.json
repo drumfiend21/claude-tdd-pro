@@ -1,0 +1,11 @@
+{
+  "name": "the red-team lens simulates model/IP extraction and misuse paths (EO Sec. 3 pre-release red-teaming)",
+  "command": "printf 'resource x {}\\n' > a.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --artifact a.tf --emit md 2>/dev/null | grep -qiE 'extraction|misuse' && echo w13-attacker-lens 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "w13-attacker-lens"
+    ]
+  }
+}
