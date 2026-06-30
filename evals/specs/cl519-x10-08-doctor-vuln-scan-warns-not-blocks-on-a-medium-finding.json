@@ -1,6 +1,6 @@
 {
   "name": "doctor --check vuln-scan warns (exit 0) rather than blocking on a medium-severity finding",
-  "command": "printf '{\"dependencies\":{\"left-pad\":\"1.2.0\"}}' > package.json && printf '%s' '- component: left-pad\\n  affected: 1.2.0\\n  severity: medium\\n  fixed_in: 1.3.0\\n  advisory_id: GHSA-y\\n  source: osv\\n' > adv.yaml && ADVISORIES=adv.yaml bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root . 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'doctor check=vuln-scan exit=0' e.txt && echo x10-medium-warns 1>&2",
+  "command": "printf '{\"dependencies\":{\"left-pad\":\"1.2.0\"}}' > package.json && printf '%b' '- component: left-pad\\n  affected: 1.2.0\\n  severity: medium\\n  fixed_in: 1.3.0\\n  advisory_id: GHSA-y\\n  source: osv\\n' > adv.yaml && ADVISORIES=adv.yaml bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root . 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'doctor check=vuln-scan exit=0' e.txt && echo x10-medium-warns 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,
