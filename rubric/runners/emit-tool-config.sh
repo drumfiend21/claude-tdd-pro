@@ -7,9 +7,16 @@
 # The output format + filename + config flag come from standards/tool-option-surfaces.yaml
 # (`render: { fmt, file, flag }`). Supported fmt: json | yaml | toml | ini.
 #
+# §28.58 universal config object — second render METHOD: a tool configured by CLI FLAGS (not a config
+# file) declares `render: { method: cli, map: { <option-key>: <flag> } }`. Options then project to a
+# CLI flag string (boolean true -> bare flag; scalar -> `flag value`; array -> flag repeated; an
+# unmapped key -> generic `--<key> <value>`), emitted to `<tool>.flags` AND printed to stdout so the
+# runner can splice it. This makes the gap tools (checkov via file, semgrep/trivy via cli) and any
+# future tool projectable from the single config — no tool-specific option is unprovidable.
+#
 # CLI: --tool <name> --options <json> --out <dir>
-# stdout: the emitted config file path (empty if the tool has no render mapping / no options)
-# stderr: `emit-tool-config tool=<t> fmt=<f> file=<path>`
+# stdout: the emitted config file path, OR (cli method) the rendered flag string
+# stderr: `emit-tool-config tool=<t> fmt=<f> file=<path>` | `... method=cli flags=<n>`
 # Exit: 0 ok (incl. no-op) | 2 usage.
 set -uo pipefail
 TOOL=""; OPTS=""; OUT=""
@@ -37,6 +44,28 @@ CATALOG="$CAT" TOOL="$TOOL" OPTS="$OPTS" OUT="$OUT" ruby -ryaml -rjson -e '
   if !render.is_a?(Hash) then STDERR.puts("emit-tool-config tool=#{ENV["TOOL"]} fmt=- reason=no-render-mapping"); exit 0 end
   opts = JSON.parse(ENV["OPTS"]) rescue {}
   if !opts.is_a?(Hash) || opts.empty? then STDERR.puts("emit-tool-config tool=#{ENV["TOOL"]} fmt=#{render["fmt"]} reason=no-options"); exit 0 end
+
+  # §28.58 second render method: CLI-FLAG tools (semgrep, trivy, ...) project options to a flag string.
+  if render["method"].to_s == "cli"
+    map = render["map"].is_a?(Hash) ? render["map"] : {}
+    toks = []
+    opts.each do |k, v|
+      flag = map[k] ? map[k].to_s : "--#{k}"        # mapped flag, else generic --<key>
+      case v
+      when true        then toks << flag
+      when false, nil  then next                    # disabled option -> omit
+      when Array       then v.each { |x| toks << flag << x.to_s }
+      else                  toks << flag << v.to_s
+      end
+    end
+    flags = toks.join(" ")
+    ffile = File.join(ENV["OUT"], "#{ENV["TOOL"]}.flags")
+    File.write(ffile, flags + "\n")
+    STDERR.puts("emit-tool-config tool=#{ENV["TOOL"]} method=cli flags=#{opts.size} file=#{ffile}")
+    print flags
+    exit 0
+  end
+
   fmt = render["fmt"].to_s; file = render["file"].to_s
   path = File.join(ENV["OUT"], file)
 

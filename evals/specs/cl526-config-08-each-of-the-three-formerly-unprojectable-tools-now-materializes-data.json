@@ -1,0 +1,11 @@
+{
+  "name": "config-sync materializes real options data for checkov, semgrep, and trivy (the formerly unprojectable tools)",
+  "command": "ok=1; for t in checkov semgrep trivy; do bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --rule-id \"r-$t\" --enforced-by \"$t\" --json 2>/dev/null | node -e 'let s=\"\";const t=process.argv[1];process.stdin.on(\"data\",c=>s+=c);process.stdin.on(\"end\",()=>{const j=JSON.parse(s);const o=(Object.values(j)[0].options||{})[t];process.exit(o&&Object.keys(o).length>0?0:1)})' \"$t\" || ok=0; done; [ \"$ok\" -eq 1 ] && echo gap-tools-materialize 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gap-tools-materialize"
+    ]
+  }
+}

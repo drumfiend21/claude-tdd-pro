@@ -1,0 +1,11 @@
+{
+  "name": "config-sync --check confirms every catalog rule has projectable options for its third-party tools (nothing missing)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --check 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -qE 'config-sync rules=[0-9]+ materialized=[0-9]+ needs_mapping=0' e.txt && echo nothing-missing 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "nothing-missing"
+    ]
+  }
+}

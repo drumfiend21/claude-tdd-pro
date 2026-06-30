@@ -61,10 +61,15 @@ esac
 CFG_INJECT=""; CFG_DIR=""
 if [ -n "$TOOL_OPTIONS" ] && [ "$TOOL_OPTIONS" != "{}" ] && [ "$BESPOKE" -eq 0 ]; then
   CFG_DIR="$(mktemp -d)"
-  _cfgpath="$(bash "$PLUGIN_ROOT/rubric/runners/emit-tool-config.sh" --tool "$TOOL" --options "$TOOL_OPTIONS" --out "$CFG_DIR" 2>/dev/null)"
-  if [ -n "$_cfgpath" ] && [ -f "$_cfgpath" ]; then
+  _method="$(CAT="$PLUGIN_ROOT/standards/tool-option-surfaces.yaml" TOOL="$TOOL" ruby -ryaml -e 'r=((YAML.unsafe_load_file(ENV["CAT"])["tools"]||{})[ENV["TOOL"]]||{})["render"]; print((r && r["method"]) ? r["method"] : "")' 2>/dev/null)"
+  _out="$(bash "$PLUGIN_ROOT/rubric/runners/emit-tool-config.sh" --tool "$TOOL" --options "$TOOL_OPTIONS" --out "$CFG_DIR" 2>/dev/null)"
+  if [ "$_method" = "cli" ]; then
+    # §28.58 cli-method tool (e.g. semgrep, trivy): emit-tool-config returns the flag string directly.
+    [ -n "$_out" ] && CFG_INJECT="$_out"
+  elif [ -n "$_out" ] && [ -f "$_out" ]; then
+    # file-method tool: inject `<flag> <config-path>`.
     _flag="$(CAT="$PLUGIN_ROOT/standards/tool-option-surfaces.yaml" TOOL="$TOOL" ruby -ryaml -e 'r=((YAML.unsafe_load_file(ENV["CAT"])["tools"]||{})[ENV["TOOL"]]||{})["render"]; print((r && r["flag"]) ? r["flag"] : "")' 2>/dev/null)"
-    [ -n "$_flag" ] && CFG_INJECT="$_flag $_cfgpath"
+    [ -n "$_flag" ] && CFG_INJECT="$_flag $_out"
   fi
 fi
 trap '[ -n "${CFG_DIR:-}" ] && rm -rf "$CFG_DIR" 2>/dev/null' EXIT
@@ -96,7 +101,15 @@ if [ "$BESPOKE" -eq 1 ]; then
   case "$TOOL" in
     checkov)
       OUTDIR="$(mktemp -d)"
-      checkov -f "$FILE" -o sarif --output-file-path "$OUTDIR" --quiet >/dev/null 2>&1 || true
+      # §28.58: project the single-config checkov options into .checkov.yaml + inject --config-file.
+      CKV_CFG=""
+      if [ -n "$TOOL_OPTIONS" ] && [ "$TOOL_OPTIONS" != "{}" ]; then
+        CFG_DIR="$(mktemp -d)"
+        _ckp="$(bash "$PLUGIN_ROOT/rubric/runners/emit-tool-config.sh" --tool checkov --options "$TOOL_OPTIONS" --out "$CFG_DIR" 2>/dev/null)"
+        [ -n "$_ckp" ] && [ -f "$_ckp" ] && CKV_CFG="--config-file $_ckp"
+      fi
+      # shellcheck disable=SC2086
+      checkov -f "$FILE" $CKV_CFG -o sarif --output-file-path "$OUTDIR" --quiet >/dev/null 2>&1 || true
       if [ -f "$OUTDIR/results_sarif.sarif" ]; then cp "$OUTDIR/results_sarif.sarif" "$TMP_SARIF"
         N=$(node -e 'try{const j=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log((j.runs||[]).reduce((a,r)=>a+(r.results||[]).length,0))}catch(e){console.log(0)}' "$TMP_SARIF")
       else RAN=0; fi; rm -rf "$OUTDIR" ;;

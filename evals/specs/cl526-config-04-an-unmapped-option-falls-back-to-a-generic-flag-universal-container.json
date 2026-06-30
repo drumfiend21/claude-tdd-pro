@@ -1,0 +1,11 @@
+{
+  "name": "an option key with no explicit flag mapping projects via a generic flag, so any tool option is providable",
+  "command": "f=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool trivy --options '{\"scanners\":\"vuln,secret\"}' --out . 2>/dev/null); printf '%s' \"$f\" | grep -q -- '--scanners vuln,secret' && echo generic-flag-fallback 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "generic-flag-fallback"
+    ]
+  }
+}

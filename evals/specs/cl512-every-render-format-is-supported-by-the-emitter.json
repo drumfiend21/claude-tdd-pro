@@ -1,6 +1,6 @@
 {
   "name": "every render mapping either uses an emitter-supported serialization format (json, yaml, toml, ini) or is honestly marked unsupported",
-  "command": "ruby -ryaml -rset -e 'sup=[\"json\",\"yaml\",\"toml\",\"ini\"].to_set; bad=[]; YAML.unsafe_load_file(ARGV[0])[\"tools\"].each{|k,v| r=v[\"render\"]; next unless r; next if r[\"supported\"]==false; bad<<k unless sup.include?(r[\"fmt\"])}; exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo render-fmts-supported 1>&2",
+  "command": "ruby -ryaml -rset -e 'sup=[\"json\",\"yaml\",\"toml\",\"ini\"].to_set; bad=[]; YAML.unsafe_load_file(ARGV[0])[\"tools\"].each{|k,v| r=v[\"render\"]; next unless r; next if r[\"supported\"]==false; next if r[\"method\"]==\"cli\"; bad<<k unless sup.include?(r[\"fmt\"])}; exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo render-fmts-supported 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

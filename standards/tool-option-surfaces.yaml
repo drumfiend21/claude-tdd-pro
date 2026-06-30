@@ -51,7 +51,7 @@ tools:
   sqlfluff: { paradigm: config_toggle, option_form: "[sqlfluff:rules:<rule>] <key>", emit: ".sqlfluff", examples: { "L010.capitalisation_policy": "upper" } , render: { fmt: ini, file: ".sqlfluff", flag: "--config" } }
   mypy: { paradigm: config_toggle, option_form: "[mypy] <key> = <value>", emit: "mypy.ini / pyproject", examples: { disallow_untyped_defs: true, strict: true } , render: { fmt: ini, file: "mypy.ini", flag: "--config-file" } }
   bandit: { paradigm: config_toggle, option_form: "{ <check>: { <param> } }", emit: ".bandit / pyproject", examples: { "B101.skips": [] } , render: { fmt: yaml, file: "bandit.yaml", flag: "-c" } }
-  semgrep: { paradigm: config_toggle, option_form: "rule yaml: severity + metavariable conditions", emit: "--config <ref> + rule metadata", examples: { severity: "ERROR" } , render: { fmt: ref, file: "--config", supported: false } }
+  semgrep: { paradigm: config_toggle, option_form: "CLI flags: --severity --exclude --timeout --max-target-bytes (+ rule-body severity at draft time)", emit: "semgrep CLI flags", examples: { severity: "ERROR", exclude: ["vendor"] } , render: { method: cli, map: { severity: "--severity", exclude: "--exclude", timeout: "--timeout", max_target_bytes: "--max-target-bytes" } } }
   brakeman: { paradigm: config_toggle, option_form: "{ <key>: <value> } (brakeman.yml)", emit: "config/brakeman.yml", examples: { min_confidence: 2, skip_checks: ["CheckExecute"] } , render: { fmt: yaml, file: "brakeman.yml", flag: "-c" } }
   tflint: { paradigm: config_toggle, option_form: "{ rule \"<id>\" { enabled, <opts> } }", emit: ".tflint.hcl", examples: { "terraform_naming_convention": { format: "snake_case" } } , render: { fmt: hcl, file: ".tflint.hcl", flag: "--config", supported: false } }
   staticcheck: { paradigm: config_toggle, option_form: "staticcheck.conf checks", emit: "staticcheck.conf", examples: { checks: ["all", "-ST1000"] } , render: { fmt: conf, file: "staticcheck.conf", supported: false } }
@@ -70,7 +70,7 @@ tools:
   zizmor: { paradigm: config_toggle, option_form: "{ rules.<rule>.config }", emit: "zizmor.yml", examples: {} , render: { fmt: yaml, file: "zizmor.yml", flag: "--config" } }
 
   # ---- C. Policy-as-code scanners: skip-list + (limited) per-check vars ----
-  checkov: { paradigm: policy_as_code, option_form: "skip-check/severity + check vars (limited)", emit: ".checkov.yaml", examples: { soft_fail_on: ["LOW"] }, per_rule_options: limited , render: { fmt: yaml, file: ".checkov.yaml", supported: false } }
+  checkov: { paradigm: policy_as_code, option_form: "{ skip-check: [...], soft-fail-on: [...], severity, framework: [...] }", emit: ".checkov.yaml", examples: { soft-fail-on: ["LOW"], skip-check: ["CKV_AWS_20"] }, per_rule_options: limited , render: { fmt: yaml, file: ".checkov.yaml", flag: "--config-file" } }
   conftest: { paradigm: policy_as_code, option_form: "rego input + --data", emit: "conftest.toml / --data", per_rule_options: limited , render: { fmt: toml, file: "conftest.toml", flag: "--config" } }
   tfsec: { paradigm: policy_as_code, option_form: "{ minimum_severity, exclude }", emit: ".tfsec config", per_rule_options: limited , render: { fmt: json, file: "tfsec.json", flag: "--config-file" } }
   terrascan: { paradigm: policy_as_code, option_form: "{ severity, rules.skip-rules }", emit: "terrascan config", per_rule_options: limited , render: { fmt: yaml, file: "terrascan.yaml", flag: "--config-path" } }
@@ -81,7 +81,7 @@ tools:
   slither: { paradigm: policy_as_code, option_form: "--detect/--exclude + config json", emit: "slither.config.json", per_rule_options: limited , render: { fmt: json, file: "slither.config.json", flag: "--config-file" } }
 
   # ---- D. Vuln / secret scanners: severity threshold + allowlist, NO per-rule options ----
-  trivy:         { paradigm: vuln_scanner, per_rule_options: none, knobs: { severity_threshold: "--severity", ignore: ".trivyignore" } }
+  trivy:         { paradigm: vuln_scanner, per_rule_options: none, knobs: { severity_threshold: "--severity", ignore: ".trivyignore" }, examples: { severity: "CRITICAL,HIGH", ignore_unfixed: true } , render: { method: cli, map: { severity: "--severity", ignore_unfixed: "--ignore-unfixed", exit_code: "--exit-code" } } }
   grype:         { paradigm: vuln_scanner, per_rule_options: none, knobs: { fail_on: "--fail-on", ignore: ".grype.yaml" } }
   osv-scanner:   { paradigm: vuln_scanner, per_rule_options: none, knobs: { ignore: "osv-scanner.toml" } }
   pip-audit:     { paradigm: vuln_scanner, per_rule_options: none, knobs: { ignore: "--ignore-vuln" } }

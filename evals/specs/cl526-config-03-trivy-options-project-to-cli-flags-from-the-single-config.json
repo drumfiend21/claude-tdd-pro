@@ -1,0 +1,11 @@
+{
+  "name": "trivy options provided in the single config project to native CLI flags",
+  "command": "f=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool trivy --options '{\"severity\":\"CRITICAL,HIGH\",\"ignore_unfixed\":true}' --out . 2>/dev/null); printf '%s' \"$f\" | grep -q -- '--severity CRITICAL,HIGH' && printf '%s' \"$f\" | grep -q -- '--ignore-unfixed' && echo trivy-projects 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "trivy-projects"
+    ]
+  }
+}

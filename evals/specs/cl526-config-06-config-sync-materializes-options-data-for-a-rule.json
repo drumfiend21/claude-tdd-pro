@@ -1,0 +1,11 @@
+{
+  "name": "config-sync materializes a per-rule options object with real options data for a third-party tool",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --rule-id g-ts-no-any --enforced-by \"eslint,no-any.sh\" --json 2>/dev/null | node -e 'let s=\"\";process.stdin.on(\"data\",c=>s+=c);process.stdin.on(\"end\",()=>{const j=JSON.parse(s);const o=j[\"g-ts-no-any\"].options.eslint;process.exit(o&&Object.keys(o).length>0?0:1)})' && echo materializes-data 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "materializes-data"
+    ]
+  }
+}

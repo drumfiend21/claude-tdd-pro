@@ -1,6 +1,6 @@
 {
   "name": "the emitter is a no-op (empty output) for a tool with no render mapping, e.g. a vuln scanner",
-  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool trivy --options '{\"x\":1}' --out c 2>/dev/null); [ -z \"$out\" ] && echo emitter-noop-optionless 1>&2",
+  "command": "out=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool govulncheck --options '{\"x\":1}' --out c 2>/dev/null); [ -z \"$out\" ] && echo emitter-noop-optionless 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,
