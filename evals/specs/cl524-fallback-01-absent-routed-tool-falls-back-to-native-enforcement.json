@@ -1,0 +1,11 @@
+{
+  "name": "an absent routed tool falls back to native enforcement so the file is still enforced",
+  "command": "printf 'resource \"x\" \"y\" {}\\n' > ok.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file ok.tf --tools checkov 2>e.txt; grep -q 'dispatch native-fallback file=' e.txt && grep -q 'fallback=native' e.txt && echo absent-falls-back 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "absent-falls-back"
+    ]
+  }
+}

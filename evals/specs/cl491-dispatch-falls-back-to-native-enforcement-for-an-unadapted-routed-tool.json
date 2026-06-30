@@ -1,0 +1,11 @@
+{
+  "name": "the dispatch falls back to native enforcement for an unadapted routed tool rather than a vacuous green",
+  "command": "printf 'plain\\n' > f.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file f.md --tools trivy 2>e.txt; grep -q 'tool=trivy verdict=not_enforced' e.txt && grep -q 'fallback=native' e.txt && grep -qE 'status=(green|red|incomplete)' e.txt && echo unadapted-native-fallback 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unadapted-native-fallback"
+    ]
+  }
+}

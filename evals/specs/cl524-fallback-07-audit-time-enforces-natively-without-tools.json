@@ -1,0 +1,11 @@
+{
+  "name": "audit-time whole-tree enforcement catches a violation natively when no routed tool is available",
+  "command": "mkdir -p tree && printf 'resource \"aws_security_group\" \"b\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > tree/bad.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root tree 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'composite-audit root=.* status=red' e.txt && echo audit-native-enforced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-native-enforced"
+    ]
+  }
+}

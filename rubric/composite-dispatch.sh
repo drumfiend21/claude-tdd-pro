@@ -8,12 +8,18 @@
 # §28.29 bus (rubric/sarif-aggregate.sh) into one verdict.
 #
 # Verdict (never a vacuous green): red if any tool found a violation OR a REQUIRED tool was
-# absent (hard-fail); incomplete if no red but an OPTIONAL tool was absent (not_enforced); else
-# green. Tools may be explicitly listed with --tools (override) or auto-resolved (default).
+# absent (hard-fail); else green if any routed tool ran clean. When NO routed tool could produce a
+# verdict (no applicable tool, or every routed tool was absent/unadapted) the file falls back to
+# NATIVE enforcement (enforce-file.sh) — §28.56 invariant: a rule whose tool cannot be found is
+# enforced by the dependency-free native detectors instead, so no applicable rule is ever left
+# unenforced. The verdict stays `incomplete` ONLY when neither a tool NOR a native detector can
+# verify the file (the honest floor). Tools may be explicitly listed with --tools (override) or
+# auto-resolved (default).
 #
 # CLI: --file <path> [--tools <csv>] [--required-tools <csv>] [--strict] [--json]
-# stderr: `dispatch tool=<t> verdict=<green|red|not_enforced>` per tool; summary
-#         `dispatch file=<f> status=<green|red|incomplete> tools=<n> red=<r> not_enforced=<u>`
+# stderr: `dispatch tool=<t> verdict=<green|red|not_enforced>` per tool; on native fallback
+#         `dispatch native-fallback file=<f> verdict=<green|red|incomplete> rules_checked=<n>`; summary
+#         `dispatch file=<f> status=<green|red|incomplete> tools=<n> red=<r> not_enforced=<u> [fallback=native]`
 # Exit: 0 green | 1 red | 3 incomplete | 2 usage.
 
 set -uo pipefail
@@ -40,6 +46,32 @@ RUNNER="$PLUGIN_ROOT/rubric/runners/run-tool.sh"
 AGG="$PLUGIN_ROOT/rubric/sarif-aggregate.sh"
 GROUP="$PLUGIN_ROOT/rubric/group-findings-by-rule.sh"
 ACTIVE="$PLUGIN_ROOT/profiles/active.sh"
+ENFORCER="$PLUGIN_ROOT/rubric/enforce-file.sh"
+
+# §28.56 native-enforcement fallback (operator-directed refinement of the §28.28 missing-tool policy):
+# when the routed tool path cannot produce a verdict for a file, the file's applicable rules are STILL
+# enforced by the dependency-free native detectors (enforce-file.sh) rather than left not_enforced.
+# Invariant: a rule whose tool cannot be found falls back to native enforcement; no applicable rule is
+# ever silently unenforced. The verdict stays `incomplete` only when neither a tool NOR a native
+# detector can verify the file (the honest floor — never a vacuous green). Hard-require (§28.28) is
+# preserved: an explicitly --required tool that is absent still hard-fails to red before any fallback.
+NF_STATUS=""; NF_RC=0; NF_RULES=0
+native_fallback() {
+  local ea=(--file "$FILE") sumf estat
+  [ -n "$PROFILE" ] && ea+=(--profile "$PROFILE")
+  sumf="$(mktemp)"
+  # capture enforce-file's per-rule + summary stderr to the temp (not surfaced); the summary carries
+  # the real rules_checked count. --quiet is intentionally NOT passed (it suppresses the summary).
+  bash "$ENFORCER" "${ea[@]}" >/dev/null 2>"$sumf"; estat=$?
+  NF_RULES="$(grep -oE 'rules_checked=[0-9]+' "$sumf" 2>/dev/null | tail -1 | cut -d= -f2)"; [ -z "$NF_RULES" ] && NF_RULES=0
+  rm -f "$sumf"
+  case "$estat" in
+    1) NF_STATUS=red;        NF_RC=1 ;;
+    0) NF_STATUS=green;      NF_RC=0 ;;
+    *) NF_STATUS=incomplete; NF_RC=3 ;;   # native detector also could not verify -> honest floor
+  esac
+  echo "dispatch native-fallback file=$FILE verdict=$NF_STATUS rules_checked=$NF_RULES" >&2
+}
 
 # Determine the tool set: explicit --tools, or auto-resolve file -> 4-axis -> routed tools.
 if [ -z "$TOOLS" ] && [ -x "$RESOLVE" ]; then
@@ -56,7 +88,14 @@ if [ -z "$TOOLS" ] && [ -x "$RESOLVE" ]; then
     print tools.uniq.first(8).join(",")
   ' 2>/dev/null)"
 fi
-[ -z "$TOOLS" ] && { echo "composite-dispatch file=$FILE status=green tools=0 red=0 not_enforced=0 reason=no-applicable-tool" >&2; exit 0; }
+if [ -z "$TOOLS" ]; then
+  # No routed tool maps to this file's kind -> enforce its applicable rules natively (§28.56), never a
+  # vacuous green. Native green/red is a real verdict; native incomplete is the honest floor.
+  native_fallback
+  nfred=0; [ "$NF_STATUS" = red ] && nfred=1
+  echo "dispatch file=$FILE status=$NF_STATUS tools=0 red=$nfred not_enforced=0 fallback=native reason=no-applicable-tool" >&2
+  exit "$NF_RC"
+fi
 
 # required-tool set (membership test)
 is_required() { case ",$REQ," in *,"$1",*) return 0 ;; *) return 1 ;; esac; }
@@ -122,10 +161,16 @@ if [ -n "$PROFILE" ]; then
 fi
 rm -rf "$SARIF_DIR"
 
-if [ "$effred" -gt 0 ]; then status="red"; rc=1         # a real violation (after config)
+fell_back=0
+if [ "$effred" -gt 0 ]; then status="red"; rc=1         # a real violation (after config) / required-tool hard-fail
 elif [ "$ngreen" -gt 0 ]; then status="green"; rc=0     # >=1 routed tool ran clean
-elif [ "$nunenf" -gt 0 ]; then status="incomplete"; rc=3 # nothing could run (all absent/unadapted)
+elif [ "$nunenf" -gt 0 ]; then
+  # Every routed tool was absent/unadapted -> fall back to native enforcement (§28.56): the applicable
+  # rules are enforced by the dependency-free native detectors, so no rule is left unenforced. Stays
+  # incomplete only when the native detector also cannot verify the file.
+  native_fallback; status="$NF_STATUS"; rc="$NF_RC"; fell_back=1
 else status="green"; rc=0; fi
 prof=""; [ -n "$PROFILE" ] && prof=" profile=$(basename "$PROFILE") disabled=$cdis"
-echo "dispatch file=$FILE status=$status tools=$ntools red=$effred not_enforced=$nunenf$prof" >&2
-exit $rc
+fb=""; [ "$fell_back" -eq 1 ] && fb=" fallback=native"
+echo "dispatch file=$FILE status=$status tools=$ntools red=$effred not_enforced=$nunenf$fb$prof" >&2
+exit "$rc"

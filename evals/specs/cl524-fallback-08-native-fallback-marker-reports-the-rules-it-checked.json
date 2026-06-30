@@ -1,0 +1,11 @@
+{
+  "name": "the native fallback marker reports the count of rules it checked so coverage is observable",
+  "command": "printf 'resource \"aws_security_group\" \"b\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > bad.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file bad.tf 2>e.txt; node -e 'const s=require(\"fs\").readFileSync(\"e.txt\",\"utf8\");const m=s.match(/native-fallback file=\\S+ verdict=\\S+ rules_checked=(\\d+)/);process.exit(m&&Number(m[1])>=1?0:1)' && echo fallback-reports-count 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "fallback-reports-count"
+    ]
+  }
+}

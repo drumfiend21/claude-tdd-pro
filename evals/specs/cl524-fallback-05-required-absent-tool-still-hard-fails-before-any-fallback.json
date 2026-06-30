@@ -1,0 +1,11 @@
+{
+  "name": "an explicitly required tool that is absent still hard-fails to red before any native fallback (28.28 preserved)",
+  "command": "printf 'resource \"x\" \"y\" {}\\n' > ok.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file ok.tf --tools checkov --required-tools checkov 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'status=red' e.txt && ! grep -q 'fallback=native' e.txt && echo required-hard-fail-preserved 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "required-hard-fail-preserved"
+    ]
+  }
+}
