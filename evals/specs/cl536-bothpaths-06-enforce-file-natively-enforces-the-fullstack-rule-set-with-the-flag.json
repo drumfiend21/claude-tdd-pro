@@ -1,0 +1,11 @@
+{
+  "name": "enforce-file natively enforces the full-stack rule set on app code when --include-app-code is set",
+  "command": "printf 'const x: any = 1;\n' > a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file a.ts --include-app-code 2>e.txt; grep -qE 'status=red rules_checked=[0-9]+ blocking=[1-9]' e.txt && echo native-fullstack-enforced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "native-fullstack-enforced"
+    ]
+  }
+}

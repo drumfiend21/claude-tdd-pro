@@ -30,7 +30,7 @@ SCRATCH_FILE="$(printf '%s' "$INPUT" | SCRATCH="$SCRATCH" node -e '
     const fp=ti.file_path||ti.path||"";
     if(!/^[A-Za-z0-9._/\-~ ]+$/.test(fp)) process.exit(0);
     const base=path.basename(fp);
-    if(!/\.(ya?ml|json|md|markdown|tf|bicep|template|sarif|tpl)$|(^|\/)(Jenkinsfile)$/i.test(base)) process.exit(0);
+    if(!/\.(ya?ml|json|md|markdown|tf|bicep|template|sarif|tpl|ts|tsx|js|jsx|mjs|cjs|py|go|rb|rs|java|kt|php|cs|swift|scala|ex)$|(^|\/)(Jenkinsfile)$/i.test(base)) process.exit(0);
     const readCur=()=>{ try { return fs.readFileSync(fp,"utf8"); } catch { return ""; } };
     const applyOne=(s,o,n,all)=>{ if(o===undefined||o==="") return s; if(all) return s.split(o).join(n??"");
       const i=s.indexOf(o); return i<0 ? s : s.slice(0,i)+(n??"")+s.slice(i+o.length); };
@@ -49,8 +49,15 @@ SCRATCH_FILE="$(printf '%s' "$INPUT" | SCRATCH="$SCRATCH" node -e '
 [ -z "$SCRATCH_FILE" ] && exit 0
 [ -f "$SCRATCH_FILE" ] || exit 0
 
+# §28.68 both-paths governance: app-code kinds enforce the full-stack rule set natively in memory
+# (--include-app-code); config/markup/IaC/prose kinds enforce the IaC+cross-cutting set as before.
+# So BOTH development-path rule sets govern the proposed content before it is written.
+EA=(--file "$SCRATCH_FILE" --single-file-gate)   # pre-write is single-file in memory: skip tree-context rules
+case "$SCRATCH_FILE" in
+  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.py|*.go|*.rb|*.rs|*.java|*.kt|*.php|*.cs|*.swift|*.scala|*.ex) EA+=(--include-app-code) ;;
+esac
 set +e
-OUTPUT=$(bash "$ENFORCER" --file "$SCRATCH_FILE" 2>&1)
+OUTPUT=$(bash "$ENFORCER" "${EA[@]}" 2>&1)
 EC=$?
 set -e
 

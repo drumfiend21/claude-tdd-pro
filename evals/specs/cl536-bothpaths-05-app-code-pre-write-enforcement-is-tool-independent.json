@@ -1,0 +1,11 @@
+{
+  "name": "app-code pre-write enforcement is tool-independent (native detector, no ESLint installed)",
+  "command": "printf 'const x: any = 1;\n' > a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file a.ts --include-app-code 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'detector=no-any.sh' e.txt && echo tool-independent-fullstack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tool-independent-fullstack"
+    ]
+  }
+}

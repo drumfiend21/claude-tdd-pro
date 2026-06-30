@@ -34,14 +34,16 @@
 # Exit: 0 clean / 1 >=1 fail / 3 no fail but >=1 not_enforced / 2 usage.
 
 set -uo pipefail
-FILE=""; ROOT=""; QUIET=0; PROFILE=""; EXTRA=""
+FILE=""; ROOT=""; QUIET=0; PROFILE=""; EXTRA=""; APPCODE=0; SINGLEFILE=0
 while [ $# -gt 0 ]; do
   case "$1" in
-    --file)        FILE="${2-}"; shift 2 ;;
-    --root)        ROOT="${2-}"; shift 2 ;;
-    --profile)     PROFILE="${2-}"; shift 2 ;;
-    --extra-rules) EXTRA="${2-}"; shift 2 ;;
-    --quiet)       QUIET=1; shift ;;
+    --file)             FILE="${2-}"; shift 2 ;;
+    --root)             ROOT="${2-}"; shift 2 ;;
+    --profile)          PROFILE="${2-}"; shift 2 ;;
+    --extra-rules)      EXTRA="${2-}"; shift 2 ;;
+    --include-app-code) APPCODE=1; shift ;;
+    --single-file-gate) SINGLEFILE=1; shift ;;
+    --quiet)            QUIET=1; shift ;;
     -h|--help) echo "Usage: enforce-file.sh --file <path> [--root <dir>] [--profile <profile.yaml>] [--extra-rules <yaml>] [--quiet]" >&2; exit 0 ;;
     *) echo "enforce-file: unknown arg: $1" >&2; exit 2 ;;
   esac
@@ -65,16 +67,30 @@ if [ -z "$PROFILE" ]; then
   done
 fi
 
-FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
+FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCODE="$APPCODE" SINGLEFILE="$SINGLEFILE" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   file = ENV["FILE"]; plugin = ENV["PLUGIN_ROOT"]; quiet = ENV["QUIET"] == "1"
   profile = ENV["PROFILE"].to_s
+  appcode = ENV["APPCODE"] == "1"
+  singlefile = ENV["SINGLEFILE"] == "1"
+  # §28.68: detectors needing the whole tree (sibling test files etc.) are not decidable on a single
+  # proposed file in an isolated scratch — skipped at the per-file write/pre-write gate (audit-time keeps them).
+  TREE_LEVEL = ["type-test-coverage.sh"]
   base = File.basename(file)
+  # §28.68 language-agnostic application-code glob: derive a file glob from a rule mapping
+  # linguist_aliases (any language) to its extension(s). Enables enforce-file to natively enforce the
+  # full-stack app-code rule set (g-ts/g-react/g-node/g-python/g-go/...) when --include-app-code is set.
+  LING2EXT = {
+    "typescript"=>"*.ts","tsx"=>"*.tsx","javascript"=>"*.js","jsx"=>"*.jsx","python"=>"*.py","go"=>"*.go",
+    "java"=>"*.java","ruby"=>"*.rb","rust"=>"*.rs","php"=>"*.php","csharp"=>"*.cs","c#"=>"*.cs",
+    "kotlin"=>"*.kt","swift"=>"*.swift","scala"=>"*.scala","groovy"=>"*.groovy","elixir"=>"*.ex","c"=>"*.c","cpp"=>"*.cpp"
+  }
+  aliases_to_glob = lambda { |als| Array(als).map { |a| LING2EXT[a.to_s] }.compact.uniq.join(",") }
 
   # --- catalog: id -> detector, severity, prose-bound set; plus the detector-LESS (universal) set ----
   # A rule with a runnable deterministic detector goes in `catalog`. A rule WITHOUT one (e.g. enforced
   # only by a 3rd-party tool) goes in `universal` -> §28.57 universal native enforcer (prose-judge).
-  catalog = {}; prose = {}; sev = {}; mode = {}; desc = {}; tok = {}; universal = {}
+  catalog = {}; prose = {}; sev = {}; mode = {}; desc = {}; tok = {}; universal = {}; lings = {}
   load_rule = lambda do |r|
     return unless r.is_a?(Hash) && r["id"]
     id = r["id"]
@@ -82,6 +98,8 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" PLUGI
     sev[id]  = r["severity"].to_s if r["severity"]
     mode[id] = r["mode"].to_s if r["mode"]
     prose[id] = true if r["applies_to_prose"] == true
+    at = r["applies_to"]
+    lings[id] = at["linguist_aliases"] if at.is_a?(Hash) && at["linguist_aliases"].is_a?(Array)
     if r["detector"] && !r["detector"].to_s.empty?
       catalog[id] = r["detector"]
     else
@@ -174,7 +192,11 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" PLUGI
   catalog.each do |id, det|
     next if disabled[id]          # §16: rule resolved to off/false for this file -> skip
     g = applies[id].to_s.empty? ? glob_for(id, det) : applies[id]
+    # §28.68: when --include-app-code is set, a full-stack rule with no manifest glob derives its glob
+    # from its linguist_aliases (any language), so app code (.ts/.py/.go/...) is enforced natively.
+    g = aliases_to_glob.call(lings[id]) if (g.nil? || g.to_s.empty?) && appcode && lings[id]
     next if g.nil? || g.empty?
+    next if singlefile && TREE_LEVEL.include?(det.to_s)   # tree-context rule -> not decidable per-file
     applicable << [id, det] if matches?(file, base, g)
   end
 

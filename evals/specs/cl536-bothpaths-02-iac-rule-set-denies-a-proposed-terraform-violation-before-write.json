@@ -1,0 +1,11 @@
+{
+  "name": "the IaC rule set denies a proposed Terraform violation in memory before it is written",
+  "command": "printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"main.tf\",\"content\":\"resource \\\"aws_security_group\\\" \\\"b\\\" { ingress { cidr_blocks = [\\\"0.0.0.0/0\\\"] } }\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'g-aws-no-unrestricted-ingress' e.txt && echo iac-denied-prewrite 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac-denied-prewrite"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "clean IaC and clean app code both pass the pre-write governor (both paths, no false deny)",
+  "command": "printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"ok.tf\",\"content\":\"resource \\\"aws_s3_bucket\\\" \\\"b\\\" {}\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" >/dev/null 2>&1; tf=$?; printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"ok.ts\",\"content\":\"export const z = 1;\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" >/dev/null 2>&1; ts=$?; [ \"$tf\" -eq 0 ] && [ \"$ts\" -eq 0 ] && echo both-clean-pass 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "both-clean-pass"
+    ]
+  }
+}
