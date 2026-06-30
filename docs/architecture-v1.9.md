@@ -2251,3 +2251,11 @@ Closes the two integration-coverage gaps found by the post-§28.54 inverted depe
 - **§25 fidelity vocabulary additions:** `100-percent-coverage`, `file-coverage`, `usage-path`, `dev-tooling`, `coverage-gap`, `every-file-exercised`.
 
 12 specs (`cl533-cover-01..12`): list-detectors / bench / cl-build / cycle-time-bench / eval-perf-log / fitness-trend / pre-upgrade-check / side-by-side / verify-no-regression / lint-pending-specs usage + 2 eslint-template-valid. **§20 note:** coverage completion; preserves §21 dod. Suite 4823→4835.
+
+### §28.66 Deep+wide both-flow integration battery — 20 e2e tests exercising the full pipeline across IaC + full-stack (operator-directed, 2026-06-30)
+
+**20 deep, wide end-to-end integration tests (`cl534-bothflows-01..20`)** that each drive the ENTIRE pipeline across BOTH development flows (full-stack application + IaC/cloud), language/framework-agnostic. **No new feature ID, no new §2.X contract** (integration validation extending §28.14/§28.61/§28.62).
+
+- **Each test exercises 6 pipeline stages:** vision+answers → `architect-session` (design + guided decisions) → `optimize-options` → `decision-package` (`loop_closed`) → `codesign-build` (app units + infra units, reconciled, honoring an agnostic `--toolchain`) → `scaffold` (full-stack application) + `cloud-build` scaffold/check (IaC, test-first RED). Asserts: `needs_grounding=0`, ≥7 pillars, `loop_closed=true`, codesign **reconciled with both app_units>0 AND infra_units>0** (both flows present), the chosen backend stack honored (agnostic), the app scaffold produced a non-empty project, and the IaC build unit exists and starts RED.
+- **Wide:** 20 domains (telehealth, e-commerce, fintech, logistics, gaming, edtech, b2b-saas, ride-hailing, banking, social, IoT, adtech, streaming, gov, supply-chain, insurance, crypto, gig, ML, health-records) × 3 platforms (aws/gcp/azure) × **10 agnostic toolchains** (python-fastapi, go-gin, java-spring-boot, node-fastify, ruby-rails, rust-axum, python-django, dotnet-aspnet, elixir-phoenix, kotlin-ktor) × 4 scaffold kinds. Proves both flows + language agnosticism, not a Node/React template.
+- **§20 note:** integration validation over S-32..S-53 + S-29 + O-12 + §28.62 co-design; preserves §21 dod (the both-flow generative gate is broadened across 20 domains/10 languages). Suite 4835→4855.
