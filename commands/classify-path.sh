@@ -53,9 +53,10 @@ RID="$RID" AT="$AT" PROSE="$PROSE" AUDIT="$AUDIT" JSON="$JSON" PLUGIN_ROOT="$PLU
     if(prose){ p.add("iac"); p.add("fullstack"); }                 // design/arch governs both
     if(XCUT.test(id)){ p.add("iac"); p.add("fullstack"); }          // cross-cutting -> both
     if(p.size===0 && ling.some(l=>AMBIG.has(l))){ p.add("iac"); p.add("fullstack"); } // shared config/markup
-    if(p.size===0){                                                // namespace fallback (untagged)
-      if(/-node-|-react-|-ts-|-js-|-vue-|-angular-/.test(id)) p.add("fullstack");
-      else if(/-aws-|-gcp-|-azure-|-k8s-|-hashicorp-|-cfn-|-terraform-/.test(id)) p.add("iac");
+    if(p.size===0){                                                // namespace fallback (untagged) — language/framework-agnostic
+      // any application ecosystem with rules -> fullstack (not node/react-specific)
+      if(/-(node|react|vue|angular|svelte|next|nuxt|ts|js|typescript|javascript|python|django|flask|fastapi|go|golang|java|spring|kotlin|ruby|rails|rust|php|laravel|dotnet|csharp|swift|elixir|scala|deno|bun)-/.test(id)) p.add("fullstack");
+      else if(/-(aws|gcp|azure|k8s|kubernetes|hashicorp|terraform|cfn|cloudformation|bicep|helm|ansible|pulumi|gitops|argocd|cdk)-/.test(id)) p.add("iac");
       else { p.add("iac"); p.add("fullstack"); }                   // unknown -> both (enforced on everything)
     }
     return [...p].sort();

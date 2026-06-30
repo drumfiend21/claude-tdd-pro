@@ -1,0 +1,11 @@
+{
+  "name": "the co-design planner honors any frontend framework toolchain choice (e.g. Svelte, not React)",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"x\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision x --profile p.json --out-dir s --now 2026-06-08T00:00:00Z 2>/dev/null\nprintf '%s' '{\"stacks\":{\"frontend\":\"svelte-kit\"}}' > tc.json\nbash \"$CLAUDE_PLUGIN_ROOT/commands/codesign-build.sh\" --requirements s/technical-requirements.json --platform azure --toolchain tc.json --json 2>/dev/null > plan.json\nnode -e 'const f=require(\"./plan.json\").app_units.find(x=>x.unit===\"frontend\");process.exit(f&&f.stack===\"svelte-kit\"?0:1)' && echo honors-any-frontend 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "honors-any-frontend"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the co-design planner does not hardcode a language/framework: app unit stacks default to toolchain-selected",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"x\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision x --profile p.json --out-dir s --now 2026-06-08T00:00:00Z 2>/dev/null\nbash \"$CLAUDE_PLUGIN_ROOT/commands/codesign-build.sh\" --requirements s/technical-requirements.json --platform aws --json 2>/dev/null > plan.json\nnode -e 'const a=require(\"./plan.json\").app_units;const biased=a.some(x=>/node-api|react-spa/.test(x.stack));const neutral=a.every(x=>x.stack===\"toolchain-selected\");process.exit(!biased&&neutral?0:1)' && echo no-hardcoded-stack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-hardcoded-stack"
+    ]
+  }
+}

@@ -19,14 +19,15 @@
 #         summary `codesign platform=<p> app_units=<n> infra_units=<n> reconciled=<true|false>`
 # Exit: 0 reconciled | 1 not reconciled | 2 usage.
 set -uo pipefail
-REQ=""; PLATFORM=""; DID="d1"; JSON=0
+REQ=""; PLATFORM=""; DID="d1"; JSON=0; TOOLCHAIN=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --requirements) REQ="${2-}"; shift 2 ;;
     --platform)     PLATFORM="${2-}"; shift 2 ;;
     --decision-id)  DID="${2-}"; shift 2 ;;
+    --toolchain)    TOOLCHAIN="${2-}"; shift 2 ;;
     --json)         JSON=1; shift ;;
-    -h|--help) echo "Usage: codesign-build.sh --requirements <technical-requirements.json> --platform <aws|gcp|azure> [--decision-id <id>] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: codesign-build.sh --requirements <technical-requirements.json> --platform <aws|gcp|azure> [--decision-id <id>] [--toolchain <json>] [--json]" >&2; exit 0 ;;
     *) echo "codesign-build: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -34,7 +35,7 @@ done
 [ -f "$REQ" ] || { echo "codesign-build: not a file: $REQ" >&2; exit 2; }
 case "$PLATFORM" in aws|gcp|azure) : ;; *) echo "codesign-build: --platform aws|gcp|azure required" >&2; exit 2 ;; esac
 
-REQ="$REQ" PLATFORM="$PLATFORM" DID="$DID" JSON="$JSON" node -e '
+REQ="$REQ" PLATFORM="$PLATFORM" DID="$DID" JSON="$JSON" TOOLCHAIN="$TOOLCHAIN" node -e '
   const fs=require("fs");
   let tr; try{ tr=JSON.parse(fs.readFileSync(process.env.REQ,"utf8")); }catch(e){ process.stderr.write("codesign-build: requirements not valid json\n"); process.exit(2); }
   const pillars = tr.pillars||{};
@@ -46,13 +47,18 @@ REQ="$REQ" PLATFORM="$PLATFORM" DID="$DID" JSON="$JSON" node -e '
     gcp:   { compute:"cloud-run",   db:"cloud-sql", cdn:"cloud-cdn", ws:"cloud-run-websocket", sec:"secret-manager+iam" },
     azure: { compute:"container-apps", db:"azure-sql", cdn:"azure-cdn", ws:"web-pubsub", sec:"key-vault+rbac" },
   }[plat];
-  // application build unit -> (stack, required infra key). Derived from the full-stack design pillars.
+  // application build unit -> (component ROLE, required infra key). Derived from the full-stack design
+  // pillars. LANGUAGE/FRAMEWORK-AGNOSTIC: the unit names the component role, NOT a fixed stack — the
+  // actual language/framework is chosen by the S-45 toolchain-advisor per the problem + whatever rules
+  // were scraped (and may be overridden via --toolchain). `stack` defaults to `toolchain-selected`.
+  let tc = {}; try { if(process.env.TOOLCHAIN) tc = JSON.parse(fs.readFileSync(process.env.TOOLCHAIN,"utf8")); } catch(e){}
+  const stackFor = role => (tc.stacks && tc.stacks[role]) || (tc[role]) || "toolchain-selected";
   const APP = [];
-  if (has("api")||has("integration")) APP.push({unit:"backend-api", stack:"node-api", requires:["compute"]});
-  if (has("frontend")||has("edge"))   APP.push({unit:"frontend",    stack:"react-spa", requires:["cdn"]});
-  if (has("data")||has("storage"))    APP.push({unit:"database",    stack:"db-schema", requires:["db"]});
-  if (has("realtime"))                APP.push({unit:"realtime-service", stack:"node-api", requires:["compute","ws"]});
-  if (has("identity"))                APP.push({unit:"auth-service", stack:"node-api", requires:["sec"]});
+  if (has("api")||has("integration")) APP.push({unit:"backend-api", stack:stackFor("backend-api"), requires:["compute"]});
+  if (has("frontend")||has("edge"))   APP.push({unit:"frontend",    stack:stackFor("frontend"),    requires:["cdn"]});
+  if (has("data")||has("storage"))    APP.push({unit:"database",    stack:stackFor("database"),    requires:["db"]});
+  if (has("realtime"))                APP.push({unit:"realtime-service", stack:stackFor("realtime-service"), requires:["compute","ws"]});
+  if (has("identity"))                APP.push({unit:"auth-service", stack:stackFor("auth-service"), requires:["sec"]});
   // infra build unit per required infra key, annotated with which app unit(s) it serves.
   const infraKeys = [...new Set(APP.flatMap(a=>a.requires))];
   const INFRA = infraKeys.map(k=>({

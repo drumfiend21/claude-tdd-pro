@@ -1,0 +1,11 @@
+{
+  "name": "a Go rule is classified to the full-stack development path",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-go-no-panic --applies-to '{\"linguist_aliases\":[\"go\"]}' 2>e.txt; grep -q 'development_paths=fullstack' e.txt && echo go-fullstack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "go-fullstack"
+    ]
+  }
+}

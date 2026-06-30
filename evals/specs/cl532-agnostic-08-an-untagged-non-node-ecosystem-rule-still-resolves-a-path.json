@@ -1,0 +1,11 @@
+{
+  "name": "an untagged rule from a non-Node ecosystem (e.g. django, rails, spring) still resolves a development path",
+  "command": "ok=1; for r in g-django-x g-rails-x g-spring-x g-laravel-x; do bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id \"$r\" --applies-to '{}' 2>e.txt; grep -q 'development_paths=fullstack' e.txt || ok=0; done; [ \"$ok\" -eq 1 ] && echo non-node-ecosystems-pathed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "non-node-ecosystems-pathed"
+    ]
+  }
+}
