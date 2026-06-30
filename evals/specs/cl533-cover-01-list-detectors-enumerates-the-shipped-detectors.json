@@ -1,0 +1,11 @@
+{
+  "name": "rubric/list-detectors.sh enumerates the shipped detectors",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/list-detectors.sh\" 2>&1 | grep -q 'detector=' && echo list-detectors-runs 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "list-detectors-runs"
+    ]
+  }
+}

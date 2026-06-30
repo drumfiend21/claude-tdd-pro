@@ -1,0 +1,11 @@
+{
+  "name": "scripts/lint-pending-specs.js reports its usage on --help without mutating any spec (entry exercised)",
+  "command": "node \"$CLAUDE_PLUGIN_ROOT/scripts/lint-pending-specs.js\" --help 2>&1 | grep -qi 'usage' && echo lint-pending-usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "lint-pending-usage"
+    ]
+  }
+}

@@ -18,6 +18,8 @@
 
 set -uo pipefail
 
+case "${1:-}" in -h|--help) echo "Usage: verify-no-regression.sh <baseline-commit> <perf-commit> [--filter <name>]  (5 gates proving a perf commit preserved behavior)" >&2; exit 0;; esac
+
 PLUGIN_ROOT=$(cd "$(dirname "$0")/.." && pwd -P)
 PERF_COMMIT=${PERF_COMMIT:-b3205cd}   # the runner-optimization commit
 BASELINE_COMMIT=${BASELINE_COMMIT:-f14a986}  # last commit before perf

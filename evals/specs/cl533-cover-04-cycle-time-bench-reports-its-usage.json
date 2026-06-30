@@ -1,0 +1,11 @@
+{
+  "name": "scripts/cycle-time-bench.sh reports its usage on --help (entry exercised)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/scripts/cycle-time-bench.sh\" --help 2>&1 | grep -qi 'usage' && echo cycle-time-usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cycle-time-usage"
+    ]
+  }
+}

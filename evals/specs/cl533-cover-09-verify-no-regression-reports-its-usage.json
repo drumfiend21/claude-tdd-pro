@@ -1,0 +1,11 @@
+{
+  "name": "scripts/verify-no-regression.sh reports its usage on --help without running the suite (entry exercised)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/scripts/verify-no-regression.sh\" --help 2>&1 | grep -qi 'usage' && echo verify-no-regression-usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "verify-no-regression-usage"
+    ]
+  }
+}

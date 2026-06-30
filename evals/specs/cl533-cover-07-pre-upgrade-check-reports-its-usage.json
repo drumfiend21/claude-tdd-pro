@@ -1,0 +1,11 @@
+{
+  "name": "scripts/pre-upgrade-check.sh reports its usage on --help (entry exercised)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/scripts/pre-upgrade-check.sh\" --help 2>&1 | grep -qi 'usage' && echo pre-upgrade-usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pre-upgrade-usage"
+    ]
+  }
+}

@@ -23,6 +23,8 @@
 
 set -uo pipefail
 
+case "${1:-}" in -h|--help) echo "Usage: eval-perf-log.sh [--no-cache] [--no-parallel] [--label <s>]  (wraps evals/runner.sh under time, appends a JSONL perf record)" >&2; exit 0;; esac
+
 PLUGIN_ROOT=$(cd "$(dirname "$0")/.." && pwd -P)
 LOG_FILE="$PLUGIN_ROOT/.claude-tdd-pro/eval-perf.jsonl"
 mkdir -p "$(dirname "$LOG_FILE")"

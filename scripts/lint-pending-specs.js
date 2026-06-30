@@ -14,6 +14,11 @@
 const fs = require('fs');
 const path = require('path');
 
+if (process.argv.includes('--help') || process.argv.includes('-h')) {
+  process.stderr.write('Usage: lint-pending-specs.js [--help]  (idempotent spec-hygiene preprocessor over evals/pending/; does not touch evals/specs/)\n');
+  process.exit(0);
+}
+
 const ROOT = process.argv[2] || 'evals/pending';
 
 let scanned = 0;

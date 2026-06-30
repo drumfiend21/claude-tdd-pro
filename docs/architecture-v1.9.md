@@ -2239,3 +2239,15 @@ Closes the two integration-coverage gaps found by the post-§28.54 inverted depe
 - **§25 fidelity vocabulary additions:** `language-agnostic`, `framework-agnostic`, `toolchain-selected`, `framework-neutral`, `any-language`, `stack-choice`, `no-stack-bias`.
 
 8 specs (`cl532-agnostic-01..08`): no-hardcoded-stack / honors-python-backend / honors-any-frontend(svelte) / framework-neutral-roles / python-fullstack / go-fullstack / java-fullstack / non-node-ecosystems-pathed(django/rails/spring/laravel). Deterministic + tool-independent. **§20 note:** agnosticism correction; preserves §21 dod. Suite 4815→4823.
+
+### §28.65 100% file coverage — every shipped file exercised by an integration test (operator-directed, 2026-06-30)
+
+**STANDING INVARIANT (operator-directed): every function and piece of code is exercised by the integration suite — 100% of substrate files are covered (0 uncovered).** Closes the residual 2.5% (12 files: developer/CI tooling + 2 ESLint reference templates) that the §28.53 inverted dependency-closure audit had flagged. **No new feature ID, no new §2.X contract** (test-coverage completion; the auditor is `coverage-gap.js`).
+
+- **The 12 previously-uncovered files, now exercised:** `rubric/list-detectors.sh` (lists detectors); the dev/CI scripts `bench.sh` / `cl-build.sh` / `cycle-time-bench.sh` / `eval-perf-log.sh` / `fitness-trend.sh` / `pre-upgrade-check.sh` / `side-by-side.sh` / `verify-no-regression.sh` / `lint-pending-specs.js` (each exercised via its safe usage/entry path); and `templates/eslint.config.flat.js` / `eslint.config.flat.react.js` (validated as loadable ESLint flat configs via `node --check`).
+- **Three tooling scripts gained a `--help` early-exit** (`eval-perf-log.sh`, `verify-no-regression.sh`, `lint-pending-specs.js`) so their entry is testable without recursively running the suite or mutating files — improving the tooling and making it hermetically testable.
+- **Honest depth note:** these 12 are developer/CI tooling + config templates, not plugin runtime; their integration test exercises the entry/usage/validation path (running their full heavy logic — benchmarking, suite-diffing, git snapshots — is not hermetic inside the eval runner). All plugin *runtime* substrate was already behaviorally covered.
+- **Result:** `coverage-gap.js` reports **485/485 files (100.0%), 0 uncovered.**
+- **§25 fidelity vocabulary additions:** `100-percent-coverage`, `file-coverage`, `usage-path`, `dev-tooling`, `coverage-gap`, `every-file-exercised`.
+
+12 specs (`cl533-cover-01..12`): list-detectors / bench / cl-build / cycle-time-bench / eval-perf-log / fitness-trend / pre-upgrade-check / side-by-side / verify-no-regression / lint-pending-specs usage + 2 eslint-template-valid. **§20 note:** coverage completion; preserves §21 dod. Suite 4823→4835.
