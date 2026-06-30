@@ -42,10 +42,12 @@ REQ="$REQ" PLATFORM="$PLATFORM" DID="$DID" JSON="$JSON" TOOLCHAIN="$TOOLCHAIN" n
   const has = k => Array.isArray(pillars[k]) && pillars[k].length>0;
   const plat = process.env.PLATFORM;
   // platform-native infra names (the cloud the app is built FOR)
+  // platform-native infra for a full DISTRIBUTED SYSTEM: compute, relational (SQL) + document (NoSQL)
+  // databases, message broker (queues), CDN (frontend delivery), websocket, secrets.
   const NAT = {
-    aws:   { compute:"ecs-fargate", db:"rds", cdn:"cloudfront", ws:"api-gateway-websocket", sec:"secrets-manager+iam" },
-    gcp:   { compute:"cloud-run",   db:"cloud-sql", cdn:"cloud-cdn", ws:"cloud-run-websocket", sec:"secret-manager+iam" },
-    azure: { compute:"container-apps", db:"azure-sql", cdn:"azure-cdn", ws:"web-pubsub", sec:"key-vault+rbac" },
+    aws:   { compute:"ecs-fargate", sqldb:"rds", nosqldb:"dynamodb", mq:"sqs", cdn:"cloudfront", ws:"api-gateway-websocket", sec:"secrets-manager+iam" },
+    gcp:   { compute:"cloud-run",   sqldb:"cloud-sql", nosqldb:"firestore", mq:"pubsub", cdn:"cloud-cdn", ws:"cloud-run-websocket", sec:"secret-manager+iam" },
+    azure: { compute:"container-apps", sqldb:"azure-sql", nosqldb:"cosmos-db", mq:"service-bus", cdn:"azure-cdn", ws:"web-pubsub", sec:"key-vault+rbac" },
   }[plat];
   // application build unit -> (component ROLE, required infra key). Derived from the full-stack design
   // pillars. LANGUAGE/FRAMEWORK-AGNOSTIC: the unit names the component role, NOT a fixed stack — the
@@ -53,10 +55,13 @@ REQ="$REQ" PLATFORM="$PLATFORM" DID="$DID" JSON="$JSON" TOOLCHAIN="$TOOLCHAIN" n
   // were scraped (and may be overridden via --toolchain). `stack` defaults to `toolchain-selected`.
   let tc = {}; try { if(process.env.TOOLCHAIN) tc = JSON.parse(fs.readFileSync(process.env.TOOLCHAIN,"utf8")); } catch(e){}
   const stackFor = role => (tc.stacks && tc.stacks[role]) || (tc[role]) || "toolchain-selected";
+  const distributed = has("distributed")||has("integration")||has("realtime");  // polyglot persistence + messaging
   const APP = [];
-  if (has("api")||has("integration")) APP.push({unit:"backend-api", stack:stackFor("backend-api"), requires:["compute"]});
-  if (has("frontend")||has("edge"))   APP.push({unit:"frontend",    stack:stackFor("frontend"),    requires:["cdn"]});
-  if (has("data")||has("storage"))    APP.push({unit:"database",    stack:stackFor("database"),    requires:["db"]});
+  if (has("api")||has("integration")) APP.push({unit:"backend-api", stack:stackFor("backend-api"), requires:["compute"]});       // REST API / BE
+  if (has("frontend")||has("edge"))   APP.push({unit:"frontend",    stack:stackFor("frontend"),    requires:["cdn"]});           // FE
+  if (has("integration"))             APP.push({unit:"message-queue", stack:stackFor("message-queue"), requires:["mq"]});         // messaging queue
+  if (has("data")||has("storage"))    APP.push({unit:"sql-database",  stack:stackFor("sql-database"),  requires:["sqldb"]});      // relational (SQL)
+  if ((has("data")||has("storage")) && distributed) APP.push({unit:"nosql-database", stack:stackFor("nosql-database"), requires:["nosqldb"]}); // document (NoSQL)
   if (has("realtime"))                APP.push({unit:"realtime-service", stack:stackFor("realtime-service"), requires:["compute","ws"]});
   if (has("identity"))                APP.push({unit:"auth-service", stack:stackFor("auth-service"), requires:["sec"]});
   // infra build unit per required infra key, annotated with which app unit(s) it serves.
