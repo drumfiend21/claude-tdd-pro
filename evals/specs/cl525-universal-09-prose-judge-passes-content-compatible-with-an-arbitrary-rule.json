@@ -1,0 +1,11 @@
+{
+  "name": "the universal semantic detector passes content that is compatible with an arbitrary inline rule body",
+  "command": "printf 'const r = JSON.parse(x);\\n' > ok.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule any-rule --body \"code must never call eval\" --forbid \"eval(\" --paths ok.js 2>e.txt; grep -q 'status=green' e.txt && echo prose-judge-inline-green 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-judge-inline-green"
+    ]
+  }
+}

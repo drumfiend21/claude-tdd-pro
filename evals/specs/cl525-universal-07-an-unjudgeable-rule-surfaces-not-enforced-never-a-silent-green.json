@@ -1,0 +1,11 @@
+{
+  "name": "a rule the native enforcer cannot deterministically judge surfaces not_enforced rather than a silent green",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-idempotency' '    description: \"database migration scripts must implement idempotency safeguards thoroughly\"' '    severity: P1' '    applies: \"*.sql\"' '    enforced_by: [{tool: sqlfluff}]' > i.yaml && printf 'ALTER TABLE accounts ADD COLUMN idempotency_token TEXT;\\n' > m.sql && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file m.sql --extra-rules i.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 3 ] && grep -q 'rule=scraped-idempotency detector=prose-judge.sh verdict=not_enforced' e.txt && echo honest-floor-not-silent 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "honest-floor-not-silent"
+    ]
+  }
+}

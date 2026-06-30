@@ -18,20 +18,31 @@
 # --profile is ABSENT, behaviour is byte-identical to before (every catalog rule active at its
 # native severity), so the config plane is purely additive and cannot regress existing verdicts.
 #
-# CLI:  --file <path> [--root <dir>] [--profile <profile.yaml>] [--quiet]
+# §28.57 universal native enforcer: a rule that applies to the file but has NO runnable deterministic
+# detector -- a scraped rule whose only enforced_by is an (absent) 3rd-party tool, or a rule whose
+# detector file cannot be found -- is enforced by the universal semantic detector (prose-judge.sh)
+# against the file content instead of being silently skipped. So the native enforcer is capable of
+# enforcing ANY software-engineering / software-architecture rule when a 3rd-party tool cannot be
+# found; no applicable rule is ever left unenforced (an unjudgeable rule surfaces as not_enforced).
+#
+# CLI:  --file <path> [--root <dir>] [--profile <profile.yaml>] [--extra-rules <yaml>] [--quiet]
+#   --extra-rules <yaml>  merge additional ad-hoc rules ({rules:[{id,description,severity,applies,mode,
+#                         token[,detector]}]}) into the catalog (operator/test affordance; detector-less
+#                         rules exercise the §28.57 universal native enforcer).
 # stderr: per finding `enforce-file file=<f> rule=<id> verdict=<fail|not_enforced>`;
 #         summary `enforce-file file=<f> status=<green|red|incomplete> fail=<n> not_enforced=<n>`
 # Exit: 0 clean / 1 >=1 fail / 3 no fail but >=1 not_enforced / 2 usage.
 
 set -uo pipefail
-FILE=""; ROOT=""; QUIET=0; PROFILE=""
+FILE=""; ROOT=""; QUIET=0; PROFILE=""; EXTRA=""
 while [ $# -gt 0 ]; do
   case "$1" in
-    --file)    FILE="${2-}"; shift 2 ;;
-    --root)    ROOT="${2-}"; shift 2 ;;
-    --profile) PROFILE="${2-}"; shift 2 ;;
-    --quiet)   QUIET=1; shift ;;
-    -h|--help) echo "Usage: enforce-file.sh --file <path> [--root <dir>] [--profile <profile.yaml>] [--quiet]" >&2; exit 0 ;;
+    --file)        FILE="${2-}"; shift 2 ;;
+    --root)        ROOT="${2-}"; shift 2 ;;
+    --profile)     PROFILE="${2-}"; shift 2 ;;
+    --extra-rules) EXTRA="${2-}"; shift 2 ;;
+    --quiet)       QUIET=1; shift ;;
+    -h|--help) echo "Usage: enforce-file.sh --file <path> [--root <dir>] [--profile <profile.yaml>] [--extra-rules <yaml>] [--quiet]" >&2; exit 0 ;;
     *) echo "enforce-file: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -54,26 +65,44 @@ if [ -z "$PROFILE" ]; then
   done
 fi
 
-FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
+FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   file = ENV["FILE"]; plugin = ENV["PLUGIN_ROOT"]; quiet = ENV["QUIET"] == "1"
   profile = ENV["PROFILE"].to_s
   base = File.basename(file)
 
-  # --- catalog: id -> detector, severity, and the prose-bound id set -------------------
-  catalog = {}; prose = {}; sev = {}
+  # --- catalog: id -> detector, severity, prose-bound set; plus the detector-LESS (universal) set ----
+  # A rule with a runnable deterministic detector goes in `catalog`. A rule WITHOUT one (e.g. enforced
+  # only by a 3rd-party tool) goes in `universal` -> §28.57 universal native enforcer (prose-judge).
+  catalog = {}; prose = {}; sev = {}; mode = {}; desc = {}; tok = {}; universal = {}
+  load_rule = lambda do |r|
+    return unless r.is_a?(Hash) && r["id"]
+    id = r["id"]
+    desc[id] = r["description"].to_s if r["description"] && !r["description"].to_s.empty?
+    sev[id]  = r["severity"].to_s if r["severity"]
+    mode[id] = r["mode"].to_s if r["mode"]
+    prose[id] = true if r["applies_to_prose"] == true
+    if r["detector"] && !r["detector"].to_s.empty?
+      catalog[id] = r["detector"]
+    else
+      universal[id] = (r["applies"] || r["applies_glob"]).to_s   # scope glob (may be empty)
+      t = Array(r["token"] || r["forbid"]).reject { |x| x.to_s.empty? }
+      tok[id] = t.join(",") unless t.empty?
+    end
+  end
   Dir[File.join(plugin, "generated-code-quality-standards", "*", "*.yaml")].each do |f|
     d = (YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
-    (d["rules"] || []).each do |r|
-      next unless r.is_a?(Hash) && r["id"] && r["detector"]
-      catalog[r["id"]] = r["detector"]
-      sev[r["id"]] = r["severity"].to_s
-      prose[r["id"]] = true if r["applies_to_prose"] == true
-    end
+    (d["rules"] || []).each { |r| load_rule.call(r) }
+  end
+  # operator/test affordance: extra ad-hoc rules (including detector-less / tool-only rules).
+  unless ENV["EXTRA"].to_s.empty?
+    ex = (YAML.unsafe_load_file(ENV["EXTRA"]) rescue nil)
+    rules = ex.is_a?(Hash) ? (ex["rules"] || []) : (ex.is_a?(Array) ? ex : [])
+    rules.each { |r| load_rule.call(r) }
   end
 
   # --- applies-globs + severity + mode from the cloud + config manifests ---------------
-  applies = {}; mode = {}
+  applies = {}
   %w[cloud-guidance-rules.json config-guidance-rules.json universal-pattern-rules.json].each do |mfn|
     mp = File.join(plugin, "rubric", "detectors", mfn); next unless File.exist?(mp)
     (JSON.parse(File.read(mp))["rules"] || {}).each do |id, s|
@@ -149,19 +178,47 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" PLUGIN_ROOT="$PLUGIN
     applicable << [id, det] if matches?(file, base, g)
   end
 
+  pj = File.join(plugin, "rubric", "detectors", "prose-judge.sh")
+  # §28.57 universal native enforcer: project an (inline) rule body onto the file via prose-judge.
+  # exit 1 = violates (fail), 3 = not_enforced (honest floor), 0 = compatible, other = no body -> floor.
+  run_universal = lambda do |id|
+    return 3 unless File.exist?(pj)
+    b = desc[id].to_s
+    return 3 if b.strip.empty?            # no rule body to project -> not_enforced, never a silent skip
+    args = ["bash", pj, "--rule", id, "--body", b, "--paths", file]
+    args += ["--forbid", tok[id]] if tok[id] && !tok[id].to_s.empty?
+    system(*args, out: File::NULL, err: File::NULL)
+    $?.exitstatus
+  end
+
   fails = []; unenf = []
   applicable.each do |id, det|
     detp = File.join(plugin, "rubric", "detectors", det)
-    next unless File.exist?(detp)
-    system("bash", detp, "--rule", id, "--paths", file, out: File::NULL, err: File::NULL)
-    ec = $?.exitstatus
+    if File.exist?(detp)
+      system("bash", detp, "--rule", id, "--paths", file, out: File::NULL, err: File::NULL)
+      ec = $?.exitstatus
+    else
+      # the rule detector cannot be found -> universal native enforcer (§28.57), never a silent skip
+      ec = run_universal.call(id); det = "prose-judge.sh"
+    end
     fails << [id, det] if ec == 1
     unenf << [id, det] if ec == 3
   end
 
+  # --- detector-LESS rules (e.g. enforced only by an absent 3rd-party tool) -> universal enforcer ----
+  uni_applied = []
+  universal.each do |id, g|
+    next if disabled[id]
+    glob = g.to_s.empty? ? glob_for(id, nil) : g
+    next unless glob.nil? || glob.to_s.empty? || matches?(file, base, glob)   # no scope -> applies
+    uni_applied << id
+    ec = run_universal.call(id)
+    fails << [id, "prose-judge.sh"] if ec == 1
+    unenf << [id, "prose-judge.sh"] if ec == 3
+  end
+
   # --- prose-as-code: architectural Markdown also runs the applies_to_prose rules -----
   if base.end_with?(".md")
-    pj = File.join(plugin, "rubric", "detectors", "prose-judge.sh")
     prose.keys.each do |id|
       next if disabled[id]          # §16: prose rule disabled for this file -> skip
       next unless File.exist?(pj)
@@ -181,7 +238,7 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" PLUGIN_ROOT="$PLUGIN
     unenf.each       { |id, det| STDERR.puts "enforce-file file=#{file} rule=#{id} detector=#{det} verdict=not_enforced" }
     status = block_fails.any? ? "red" : (unenf.any? ? "incomplete" : (warn_fails.any? ? "advisory" : "green"))
     prof = profile.empty? ? "" : " profile=#{File.basename(profile)} disabled=#{disabled.size}"
-    STDERR.puts "enforce-file file=#{file} status=#{status} rules_checked=#{applicable.size} blocking=#{block_fails.size} warn=#{warn_fails.size} not_enforced=#{unenf.size}#{prof}"
+    STDERR.puts "enforce-file file=#{file} status=#{status} rules_checked=#{applicable.size + uni_applied.size} blocking=#{block_fails.size} warn=#{warn_fails.size} not_enforced=#{unenf.size}#{prof}"
   end
   # exit 1 only on a BLOCKING (P0/P1) violation; advisory P2/P3 warnings never block a write.
   exit(block_fails.any? ? 1 : (unenf.any? ? 3 : 0))

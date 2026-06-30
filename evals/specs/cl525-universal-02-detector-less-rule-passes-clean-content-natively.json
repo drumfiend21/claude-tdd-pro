@@ -1,0 +1,11 @@
+{
+  "name": "a detector-less rule passes clean content through the native universal enforcer (a real verdict, not a skip)",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-no-eval' '    description: \"JavaScript code must never call eval() because it enables code injection\"' '    severity: P0' '    mode: forbid' '    applies: \"*.js\"' '    token: \"eval(\"' '    enforced_by: [{tool: semgrep}]' > x.yaml && printf 'const r = JSON.parse(userInput);\\n' > ok.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file ok.js --extra-rules x.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'status=green' e.txt && echo clean-passes-natively 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "clean-passes-natively"
+    ]
+  }
+}
