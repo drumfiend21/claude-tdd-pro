@@ -51,7 +51,7 @@ if [[ "${1-}" == "--__worker" ]]; then
   if [[ "$USE_CACHE" == "1" ]]; then
     spec_sha=$(sha256sum "$spec_file" | cut -d' ' -f1)
     dep_hash=""
-    [[ -n "${DEPMAP:-}" && -f "${DEPMAP:-}" ]] && dep_hash=$(awk -F'\t' -v n="$spec_name" '$1==n{print $2; exit}' "$DEPMAP")
+    [[ -n "${DEPMAP:-}" && -f "${DEPMAP:-}/$spec_name" ]] && dep_hash=$(cat "$DEPMAP/$spec_name" 2>/dev/null)
     [[ -z "$dep_hash" || "$dep_hash" == "GLOBAL" ]] && dep_hash="$TREE_SHA"
     cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$dep_hash" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
     echo "$cache_key" > "$keyfile"
@@ -245,7 +245,7 @@ RUNNER_SHA=$(cat "${BASH_SOURCE[0]}" "$SCRIPT_DIR/dep-hash.js" 2>/dev/null | sha
 # "GLOBAL" and fall back to TREE_SHA below (conservative). Failure to build the map => TREE_SHA for all.
 DEPMAP=""
 if [[ "$USE_CACHE" -eq 1 ]]; then
-  DEPMAP=$(mktemp -t claude-tdd-pro-depmap.XXXXXX 2>/dev/null || echo "")
+  DEPMAP=$(mktemp -d -t claude-tdd-pro-depmap.XXXXXX 2>/dev/null || echo "")
   if [[ -n "$DEPMAP" ]]; then
     node "$SCRIPT_DIR/dep-hash.js" "$PLUGIN_ROOT" "$SPECS_DIR" "$DEPMAP" 2>/dev/null || DEPMAP=""
   fi
@@ -283,7 +283,7 @@ fi
 fi
 
 OUTDIR=$(mktemp -d -t claude-tdd-pro-runner.XXXXXX)
-trap 'rm -rf "$OUTDIR"' EXIT
+trap 'rm -rf "$OUTDIR" "${DEPMAP:-}"' EXIT
 
 export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA DEPMAP
 
