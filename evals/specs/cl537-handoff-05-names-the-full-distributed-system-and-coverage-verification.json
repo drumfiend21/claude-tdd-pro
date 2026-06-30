@@ -1,0 +1,11 @@
+{
+  "name": "the GCTP handoff names the full distributed system (SQL+NoSQL) and the 100% coverage verification",
+  "command": "grep -q 'SQL + NoSQL' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q '100% file coverage' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'classify-path.sh' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo handoff-distributed-coverage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "handoff-distributed-coverage"
+    ]
+  }
+}

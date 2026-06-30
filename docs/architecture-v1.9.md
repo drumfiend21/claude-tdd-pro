@@ -2281,3 +2281,14 @@ Updated `cl530-codesign-02` to assert the distributed-system unit set; regenerat
 - **§25 fidelity vocabulary additions:** `both-paths-enforcement`, `include-app-code`, `single-file-gate`, `tree-level-rule`, `in-memory-both-sets`, `app-code-native`, `write-time-pragmatic`, `language-agnostic-glob`.
 
 10 specs (`cl536-bothpaths-01..10`): fullstack-denied-prewrite / iac-denied-prewrite / clean-app-allowed / both-paths-govern / tool-independent-fullstack / native-fullstack-enforced / opt-in-default-unchanged / edit-app-violation-denied / app-file-unchanged / both-clean-pass. Deterministic + tool-independent. **§20 note:** write-time-phase deepening; preserves §21 dod. Suite 4855→4865.
+
+### §28.69 GCTP handoff updated — v1.18 capabilities (§28.56–§28.68) for the consuming harness (2026-06-30)
+
+Updates `docs/handoff-gctp-composite-engine.md` with a new **§9** naming the v1.18 capabilities GCTP adopts by re-vendoring the moved surface + wiring the PreToolUse govern-before-write hook alongside the existing write/audit entrypoints. Doc-only; **no new feature ID / §2.X contract / no code change.**
+
+- **Guaranteed enforcement:** §28.56 native fallback, §28.57 universal native enforcer, §28.60 govern-before-write, §28.68 both-paths pre-write (design → in-memory → write → audit).
+- **Single config surface:** §28.58 universal config object (all 9 tools project options; `config-sync --check` nothing-missing gate), §28.59 persisted/cached options-view.
+- **Two coupled language-agnostic flows:** §28.62/§28.67 co-design (full distributed system FE+BE+messaging+SQL+NoSQL+IaC), §28.63 development-path tagging (every rule iac/fullstack/both), §28.64 agnosticism.
+- **Verification GCTP mirrors:** 100% file coverage (§28.65), 50 both-flow integration tests. Epoch-aware adoption (§4a) + the ADR-0068/0069 boundary unchanged.
+
+5 specs (`cl537-handoff-01..05`): guaranteed-enforcement / prewrite / config / two-flows / distributed-coverage — assert the handoff names each capability + entrypoint. **§20 note:** doc handoff; preserves §21 dod. Suite 4865→4870.
