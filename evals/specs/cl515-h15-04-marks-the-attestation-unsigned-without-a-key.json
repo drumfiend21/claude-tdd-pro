@@ -1,0 +1,11 @@
+{
+  "name": "sbom marks the attestation unsigned and claims no provenance when no signing key is available",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . --sign 2>e.txt; grep -q 'attestation=unsigned' e.txt && echo h15-unsigned 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-unsigned"
+    ]
+  }
+}

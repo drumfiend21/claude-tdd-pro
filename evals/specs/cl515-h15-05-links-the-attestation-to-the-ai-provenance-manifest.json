@@ -1,0 +1,11 @@
+{
+  "name": "sbom links the provenance attestation to the §2.8 AI Provenance Manifest location",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && printf 'K' > k.pem && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . --key k.pem --json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(/provenance/.test(j.attestation.provenance_manifest)?0:1)' && echo h15-links-manifest 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-links-manifest"
+    ]
+  }
+}
