@@ -230,14 +230,20 @@ fi
 # user-data dirs (.claude-tdd-pro, .git, node_modules, evals) excluded.
 TREE_SHA="no-cache"
 if [[ "$USE_CACHE" -eq 1 ]]; then
-  TREE_SHA=$(cd "$PLUGIN_ROOT" && find \
+  # Hash git-TRACKED substrate only (respects .gitignore) so generated/ignored ledgers rewritten
+  # every run (e.g. standards/universal-coverage-ledger.jsonl) don't churn the hash and defeat the
+  # cache. Falls back to find if git is unavailable.
+  TREE_SHA=$(cd "$PLUGIN_ROOT" && { git ls-files -z -- \
       rubric commands agents skills hooks profiles schemas compliance \
       generated-code-quality-standards templates scripts space seed \
       migrations standards design-tokens prompts pr-corpus lsp scaffolds \
-      vscode-tdd-pro community community-shared \
-      -type f 2>/dev/null \
-    | LC_ALL=C sort \
-    | xargs -d '\n' sha256sum 2>/dev/null \
+      vscode-tdd-pro community community-shared 2>/dev/null \
+      || find rubric commands agents skills hooks profiles schemas compliance \
+         generated-code-quality-standards templates scripts space seed migrations \
+         standards design-tokens prompts pr-corpus lsp scaffolds vscode-tdd-pro \
+         community community-shared -type f -print0 2>/dev/null; } \
+    | LC_ALL=C sort -z \
+    | xargs -0 sha256sum 2>/dev/null \
     | sha256sum | cut -d' ' -f1)
 fi
 RUNNER_SHA=$(cat "${BASH_SOURCE[0]}" "$SCRIPT_DIR/dep-hash.js" 2>/dev/null | sha256sum | cut -d' ' -f1)

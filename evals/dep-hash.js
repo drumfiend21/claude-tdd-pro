@@ -27,14 +27,27 @@ const DIRS = ["rubric","commands","agents","skills","hooks","profiles","schemas"
   "generated-code-quality-standards","templates","scripts","space","seed","migrations","standards",
   "design-tokens","prompts","pr-corpus","lsp","scaffolds","vscode-tdd-pro","community","community-shared"];
 
-// 1) enumerate substrate files + per-file content sha
+// 1) enumerate substrate files + per-file content sha. Use git-TRACKED files (respects .gitignore)
+//    so generated/ignored ledgers (e.g. standards/*-ledger.jsonl, rewritten every run) DON'T churn
+//    the hash and defeat the cache. Fall back to an fs walk for non-git roots (the synthetic test
+//    substrates the cl514 specs build in a tmpdir).
 const fileSha = {};
 (function init(){
-  function walk(d){ let es; try{es=fs.readdirSync(path.join(ROOT,d),{withFileTypes:true})}catch(e){return}
-    for(const e of es){ const rp=d+"/"+e.name;
-      if(e.isDirectory()) walk(rp);
-      else if(e.isFile()){ try{ fileSha[rp]=crypto.createHash("sha256").update(fs.readFileSync(path.join(ROOT,rp))).digest("hex"); }catch(e){} } } }
-  for(const d of DIRS) walk(d);
+  let tracked = [];
+  try {
+    const out = require("child_process").execSync("git ls-files -z -- " + DIRS.join(" "),
+      { cwd: ROOT, maxBuffer: 1<<28 }).toString("utf8");
+    tracked = out.split("\0").filter(Boolean);
+  } catch(e) { tracked = []; }
+  if (tracked.length) {
+    for (const rp of tracked) { try { fileSha[rp]=crypto.createHash("sha256").update(fs.readFileSync(path.join(ROOT,rp))).digest("hex"); } catch(e){} }
+  } else {
+    function walk(d){ let es; try{es=fs.readdirSync(path.join(ROOT,d),{withFileTypes:true})}catch(e){return}
+      for(const e of es){ const rp=d+"/"+e.name;
+        if(e.isDirectory()) walk(rp);
+        else if(e.isFile()){ try{ fileSha[rp]=crypto.createHash("sha256").update(fs.readFileSync(path.join(ROOT,rp))).digest("hex"); }catch(e){} } } }
+    for(const d of DIRS) walk(d);
+  }
 })();
 const ALL = Object.keys(fileSha);
 const filesUnder = (p)=> ALL.filter(r=> r===p || r.startsWith(p+"/"));
