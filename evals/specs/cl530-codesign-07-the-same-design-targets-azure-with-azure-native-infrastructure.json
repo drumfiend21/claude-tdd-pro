@@ -1,0 +1,11 @@
+{
+  "name": "the same design targets Azure with Azure-native infrastructure (built for azure)",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\",\"workload\":\"a full-stack SaaS application\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"a full-stack SaaS application\" --profile p.json --out-dir s --now 2026-06-08T00:00:00Z 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/codesign-build.sh --requirements s/technical-requirements.json --platform azure 2>e.txt; grep -q 'infra=container-apps' e.txt && grep -q 'infra=azure-sql' e.txt && echo built-for-azure 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "built-for-azure"
+    ]
+  }
+}
