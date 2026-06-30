@@ -585,6 +585,31 @@ CCEOF
     echo "doctor: cloud-conventions status=green files=$files_checked convention_violations=0" >&2
     exit 0
     ;;
+  vuln-scan)
+    # X-10 (§28.1): vulnerability + SBOM CI gate via /doctor. Wires H-14 (vuln-scan) + H-15 (sbom)
+    # into the /doctor surface with the SAME exit-code contract (0 green / 1 red), exactly as the
+    # cloud-conventions S-30 check. SAFE-BY-DEFAULT: a repo with no declared dependencies and no IaC
+    # is a green no-op (vuln-scan reports no_dependencies status=skipped, exit 0) -- it can never
+    # turn a previously-green repo red.
+    [[ -z "$ROOT" ]] && { echo "doctor: --check vuln-scan requires --root <dir>" >&2; exit 2; }
+    [[ ! -d "$ROOT" ]] && { echo "doctor: --check vuln-scan: root not found: $ROOT" >&2; exit 2; }
+    va=(--root "$ROOT"); [[ -n "${ADVISORIES:-}" ]] && va+=(--advisories "$ADVISORIES")
+    bash "$PLUGIN_ROOT/commands/vuln-scan.sh" "${va[@]}" >&2
+    rc=$?
+    # emit an SBOM (H-15) for the same root -- advisory, never changes the gate verdict.
+    bash "$PLUGIN_ROOT/commands/sbom.sh" --root "$ROOT" >/dev/null 2>&1 || true
+    echo "doctor check=vuln-scan exit=$rc" >&2
+    exit $rc
+    ;;
+  sbom)
+    # X-10 (§28.1): SBOM emission via /doctor (H-15). Always green (advisory) -- it inventories, it
+    # does not gate.
+    [[ -z "$ROOT" ]] && { echo "doctor: --check sbom requires --root <dir>" >&2; exit 2; }
+    [[ ! -d "$ROOT" ]] && { echo "doctor: --check sbom: root not found: $ROOT" >&2; exit 2; }
+    bash "$PLUGIN_ROOT/commands/sbom.sh" --root "$ROOT" >&2
+    echo "doctor check=sbom exit=0" >&2
+    exit 0
+    ;;
   *)
     echo "doctor: unknown check: $CHECK" >&2
     exit 2

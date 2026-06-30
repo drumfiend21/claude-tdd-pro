@@ -1,0 +1,11 @@
+{
+  "name": "doctor --check vuln-scan also emits an SBOM for the same root as part of the X-10 surface",
+  "command": "printf '{\"dependencies\":{\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root . 2>e.txt; grep -q 'doctor check=vuln-scan' e.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . 2>e2.txt; grep -q 'sbom format' e2.txt && echo x10-emits-sbom 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-emits-sbom"
+    ]
+  }
+}

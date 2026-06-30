@@ -1,0 +1,11 @@
+{
+  "name": "the national-security-systems profile includes the eo-advanced-ai-2026 compliance framework",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); exit(d[\"include\"][\"compliance_frameworks\"].include?(\"eo-advanced-ai-2026\") ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/profiles/national-security-systems.yaml\" && echo c22-nss-eo-framework 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-nss-eo-framework"
+    ]
+  }
+}

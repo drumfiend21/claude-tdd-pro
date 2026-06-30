@@ -1,0 +1,24 @@
+# compliance/eo-control-mapping.yaml — C-22 EO control mapping (v1.18 §28.1; §2.9 control mapping).
+# Maps each directive of the Executive Order "Promoting Advanced AI Innovation and Security"
+# (2026-06-02) to the plugin control that satisfies it, cross-walked to NIST AI RMF / CISA SSDF /
+# NIST 800-53. Registered under the eo-advanced-ai-2026 framework; consumed by the national-security-
+# systems profile and exported via the §2.24 audit-pack.
+framework: eo-advanced-ai-2026
+title: "Executive Order: Promoting Advanced AI Innovation and Security (2026-06-02)"
+authority: us-government
+controls:
+  - id: eo-sec2-find-and-fix
+    section: 2
+    directive: "AI Cybersecurity Clearinghouse: find AND fix dependency vulnerabilities (the find-and-fix loop)."
+    maps_to: [H-14, H-15]
+    crosswalk: { nist-ai-rmf: "MANAGE-2.1", cisa-ssdf: "RV.1", nist-800-53: "RA-5" }
+  - id: eo-sec3-pre-release-governance
+    section: 3
+    directive: "Frontier-model pre-release voluntary governance + IP-protection condition on access."
+    maps_to: [H-16, H-15]
+    crosswalk: { nist-ai-rmf: "GOVERN-1.1", cisa-ssdf: "PO.1", nist-800-53: "SA-11" }
+  - id: eo-sec4-misuse-resistant-audit
+    section: 4
+    directive: "Misuse-resistant, tamper-evident audit trail for AI-assisted production."
+    maps_to: [C-4, L-14]
+    crosswalk: { nist-ai-rmf: "GOVERN-4.1", cisa-ssdf: "PS.1", nist-800-53: "AU-10" }

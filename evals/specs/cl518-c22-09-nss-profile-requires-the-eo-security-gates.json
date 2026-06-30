@@ -1,0 +1,11 @@
+{
+  "name": "the national-security-systems profile requires the EO security gates (vuln-remediation, signed provenance, audit-log signing)",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); r=d[\"include\"][\"require\"]; exit(r[\"vulnerability_remediation_gate\"]==true && r[\"signed_provenance_attestation\"]==true && r[\"audit_log_signing\"]==true ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/profiles/national-security-systems.yaml\" && echo c22-nss-gates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-nss-gates"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the national-security-systems profile extends the existing government profile",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); exit(d[\"extends\"].include?(\"government\") ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/profiles/national-security-systems.yaml\" && echo c22-nss-extends-gov 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-nss-extends-gov"
+    ]
+  }
+}

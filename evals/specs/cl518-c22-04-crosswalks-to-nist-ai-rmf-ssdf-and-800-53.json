@@ -1,0 +1,11 @@
+{
+  "name": "every EO control is cross-walked to NIST AI RMF, CISA SSDF and NIST 800-53",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); need=[\"nist-ai-rmf\",\"cisa-ssdf\",\"nist-800-53\"]; exit(d[\"controls\"].all?{|c| (need-(c[\"crosswalk\"]||{}).keys).empty?} ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/compliance/eo-control-mapping.yaml\" && echo c22-crosswalk 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-crosswalk"
+    ]
+  }
+}

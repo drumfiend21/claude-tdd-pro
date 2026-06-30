@@ -31,3 +31,10 @@ jobs:
         # exit-code contract). Safe-by-default: a repo with no cloud IaC is a green
         # no-op, so this never fails a non-cloud repo; it fails only on real IaC drift.
         run: bash commands/doctor.sh --check cloud-conventions --root .
+
+      - name: Vulnerability + SBOM gate (X-10 / §28.1)
+        # Wires H-14 (dependency vulnerability remediation gate) + H-15 (SBOM) into CI
+        # with the same exit-code contract. Safe-by-default: a repo with no declared
+        # dependencies is a green no-op, so this never fails a previously-green repo;
+        # it fails only on a real critical/high finding that names its fixed_in version.
+        run: bash commands/doctor.sh --check vuln-scan --root .

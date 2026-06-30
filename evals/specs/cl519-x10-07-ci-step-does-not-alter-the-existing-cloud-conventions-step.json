@@ -1,0 +1,11 @@
+{
+  "name": "the new CI gate step is appended without altering the existing cloud-conventions step",
+  "command": "grep -q 'Cloud-architecture convention enforcement' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && grep -q 'doctor.sh --check cloud-conventions --root' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && echo x10-ci-additive 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-ci-additive"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the EO control mapping is registered under the eo-advanced-ai-2026 framework",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); exit(d[\"framework\"]==\"eo-advanced-ai-2026\" ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/compliance/eo-control-mapping.yaml\" && echo c22-framework 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-framework"
+    ]
+  }
+}

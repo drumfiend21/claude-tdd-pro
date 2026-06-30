@@ -1,0 +1,11 @@
+{
+  "name": "each EO control id is prefixed by its section (eo-sec2-*, eo-sec3-*, eo-sec4-*)",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); exit(d[\"controls\"].all?{|c| c[\"id\"]=~/^eo-sec[234]-/} ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/compliance/eo-control-mapping.yaml\" && echo c22-id-prefix 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-id-prefix"
+    ]
+  }
+}

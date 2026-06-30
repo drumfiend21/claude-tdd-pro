@@ -1,0 +1,11 @@
+{
+  "name": "the mapping ties each EO section (2, 3, 4) to at least one plugin control that satisfies it",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); secs=d[\"controls\"].map{|c| c[\"section\"]}.uniq.sort; ok=([2,3,4]-secs).empty? && d[\"controls\"].all?{|c| (c[\"maps_to\"]||[]).size>0}; exit(ok ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/compliance/eo-control-mapping.yaml\" && echo c22-sections-map 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-sections-map"
+    ]
+  }
+}

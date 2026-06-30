@@ -1,0 +1,19 @@
+# profiles/national-security-systems.yaml — C-22 NSS profile (v1.18 §28.1; §2.5 profile system).
+# Layers the EO eo-advanced-ai-2026 controls over the existing government profile for
+# national-security-systems contexts: it inherits the government baseline and additionally requires
+# the EO Sec. 2/3/4 gates (find-and-fix, signed provenance, misuse-resistant audit).
+name: national-security-systems
+description: "National Security Systems profile (C-22): extends government with the EO eo-advanced-ai-2026 control mapping and its required gates."
+extends:
+  - government
+  - rubric:recommended
+  - us-government:*
+include:
+  compliance_frameworks: ["nist-csf-2", "fedramp", "nist-800-53", "eo-advanced-ai-2026"]
+  require:
+    sod_gate_on_critical_paths: true
+    audit_log_signing: true
+    vulnerability_remediation_gate: true
+    signed_provenance_attestation: true
+rules: {}
+overrides: []

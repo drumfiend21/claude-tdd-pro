@@ -1,0 +1,11 @@
+{
+  "name": "doctor --check vuln-scan blocks (exit 1) on a critical dependency finding via the same exit-code contract",
+  "command": "printf '{\"dependencies\":{\"lodash\":\"4.17.20\"}}' > package.json && printf '%s' '- component: lodash\\n  affected: 4.17.20\\n  severity: critical\\n  fixed_in: 4.17.21\\n  advisory_id: GHSA-x\\n  source: cisa-kev\\n' > adv.yaml && ADVISORIES=adv.yaml bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root . 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && echo x10-blocks-critical 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-blocks-critical"
+    ]
+  }
+}

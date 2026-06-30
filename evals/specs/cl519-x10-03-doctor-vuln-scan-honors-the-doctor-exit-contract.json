@@ -1,0 +1,11 @@
+{
+  "name": "doctor --check vuln-scan reports its result through the standard doctor check marker and exit code",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root . 2>e.txt; grep -q 'doctor check=vuln-scan exit=0' e.txt && echo x10-doctor-contract 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-doctor-contract"
+    ]
+  }
+}
