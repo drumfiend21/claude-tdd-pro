@@ -1,6 +1,6 @@
 {
-  "name": "every tool with a render mapping declares the native config flag used to inject the emitted config",
-  "command": "ruby -ryaml -e 'bad=[]; YAML.unsafe_load_file(ARGV[0])[\"tools\"].each{|k,v| r=v[\"render\"]; next unless r; bad<<k unless r[\"flag\"] && r[\"file\"] && r[\"fmt\"]}; STDERR.puts(\"incomplete_render=#{bad.inspect}\"); exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo render-tools-declare-flag 1>&2",
+  "name": "every supported render mapping declares the native config flag used to inject the emitted config",
+  "command": "ruby -ryaml -e 'bad=[]; YAML.unsafe_load_file(ARGV[0])[\"tools\"].each{|k,v| r=v[\"render\"]; next unless r; next if r[\"supported\"]==false; bad<<k unless r[\"flag\"] && r[\"file\"] && r[\"fmt\"]}; STDERR.puts(\"incomplete_render=#{bad.inspect}\"); exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo render-tools-declare-flag 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

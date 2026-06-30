@@ -1,0 +1,11 @@
+{
+  "name": "every option-bearing tool in the catalog now has a Layer-2 render mapping, so its options have a defined emission target",
+  "command": "ruby -ryaml -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; miss=c.select{|k,v| v[\"option_form\"] && !v[\"render\"]}.keys; STDERR.puts(\"without_render=#{miss.inspect}\"); exit(miss.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo every-option-tool-has-render 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-option-tool-has-render"
+    ]
+  }
+}
