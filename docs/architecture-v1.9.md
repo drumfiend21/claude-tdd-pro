@@ -2176,3 +2176,14 @@ Closes the two integration-coverage gaps found by the post-§28.54 inverted depe
 - **§25 fidelity vocabulary additions:** `config-object`, `config-sync`, `materialize`, `options-data`, `cli-method`, `render-method`, `projectable`, `needs_mapping`, `intake-stage`, `option-surface`, `universal-options-container`.
 
 10 specs (`cl526-config-01..10`): checkov-projects / semgrep-projects / trivy-projects / generic-flag-fallback / eslint-no-regression / materializes-data / nothing-missing(`--check` needs_mapping=0 over 118) / gap-tools-materialize / needs-mapping-surfaced / universal-container. **§20 note:** projection-completeness + intake refinement; preserves §21 dod. Suite 4747→4757.
+
+### §28.59 Persisted, cached options-view — re-materialized only when a rule changes (operator-directed, 2026-06-30)
+
+**STANDING INVARIANT (operator-directed): the materialized options-view is PERSISTED and only updated when a source or the rule for that object changes — if rules are unchanged the view is served from cache, byte-identical.** The cache-if-no-change discipline (mirrors the S-21 conditional-GET scrape layer) applied to the §28.58 config-object intake. Detail: `docs/design/v1.18-config-object-intake-and-universal-options.md` Part C. **No new feature ID, no new §2.X contract** (a persistence/cache refinement of the §28.58 `config-sync.sh`).
+
+- **Persisted artifact:** `standards/config-options-view.yaml` (committed; 118 rule objects). Each object carries `_hash = sha256(rule_id + sorted(enforced_by) + source content_hash + mapped tool surfaces)`.
+- **`config-sync --persist [--out <file>]`:** on re-run a rule whose `_hash` matches its persisted object is reused from cache (unchanged); a rule whose source / mapping / tool surface changed is re-materialized; rules no longer present are dropped. The file is rewritten ONLY on a delta (nothing changed → byte-identical, `wrote=0`). Marker `config-sync persisted=<file> total=<n> unchanged=<u> updated=<c> added=<a> removed=<r> wrote=<0|1>`.
+- **Trigger:** the §28.58 intake pipeline ends in `config-sync --persist`, so a source delta re-materializes exactly the affected rule objects and leaves the rest untouched (incremental, work-preserving).
+- **§25 fidelity vocabulary additions:** `options-view`, `config-options-view`, `persisted`, `cache-if-no-change`, `content-hash`, `re-materialize`, `incremental`, `cache-hit`.
+
+8 specs (`cl527-view-01..08`): view-persisted / objects-hashed / cache-noop / view-byte-identical / only-changed-updates / unchanged-from-cache / committed-view-complete / view-has-options-data. **§20 note:** persistence/cache refinement; preserves §21 dod. Suite 4757→4765.

@@ -1,0 +1,651 @@
+---
+rules:
+  g-universal-no-hardcoded-secrets:
+    severity: error
+    options:
+      semgrep: &1
+        severity: ERROR
+        exclude:
+        - vendor
+    _hash: ab44e3d822a6cd70604ad9d5e490cc564ad85f50a72272e7e3ab0c11c6713bdd
+  g-universal-no-debug-output:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: a34b58be2c765cd0cdfcb7db6a68c5aca7fa2d4d48cfed4ffe31bed8263ba156
+  g-ansible-no-plaintext-password:
+    severity: error
+    options:
+      checkov: &2
+        soft-fail-on:
+        - LOW
+        skip-check:
+        - CKV_AWS_20
+    _hash: dffa4585d6ca432dd657cc2fb5424bc7ac5dec7e3ddbc4f27511926c7237e29c
+  g-ansible-no-validate-certs-disabled:
+    severity: error
+    options:
+      checkov: *2
+    _hash: b4ad2fc284acbecd6ad426755b6b3ab084285a3bc39b84c1781ad5e992b0b027
+  g-ansible-pin-package-version:
+    severity: error
+    options:
+      checkov: *2
+    _hash: c08960a274ef6cce066ebd0a4fb9f5e7f631ef193411fc678b6d873f15e10d30
+  g-arch-no-tbd-placeholder:
+    severity: error
+    options:
+      markdownlint: &3
+        MD013:
+          line_length: 100
+        MD033: false
+    _hash: 1eb81cf6036be0d2f55981f0c584b0762bfe912c979b061e355a239160d5276f
+  g-arch-no-fixme-marker:
+    severity: error
+    options:
+      markdownlint: *3
+    _hash: 1c26b55e5a741b1077a509c3214b4132e011b6ac7bc1b61fd60a15ddcd4b61f0
+  g-arch-no-decision-pending:
+    severity: error
+    options:
+      markdownlint: *3
+    _hash: 8718f5cffb575465105b404cd9872175a56e0e1e377eb9593edd4a9de2dabb05
+  g-aws-no-unrestricted-ingress:
+    severity: error
+    options:
+      checkov: *2
+      trivy: &4
+        severity: CRITICAL,HIGH
+        ignore_unfixed: true
+    _hash: b404ea8347bb4fe763eae4ea43834304ea4ab67aca51671b116cd4db98a21ae8
+  g-aws-tag-resources:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: fcde7debc2ab1d28ff32904392bccfeb09fcc102a9043603be62ca7b71bbce58
+  g-azdo-pin-image-tag:
+    severity: error
+    options:
+      checkov: *2
+    _hash: '037339fb7fa1ea4c51cedad1c57d121e8fccf0d8b80baef345dd0b4c4fe0f68c'
+  g-azdo-no-plaintext-secret:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 3fea554c7d336d9be2e2a58437fede1ba384167fb5e0516c9a4e652ebc9fd7f2
+  g-azure-no-unrestricted-ingress:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 3eb28234aaea01f7b211890dea229341e951bfa22af32b56f10e1b5510f77ff1
+  g-azure-encrypt-at-rest:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 6f009b27a47d6c6ebdeedc51bebc620b4bec99b97b705a210034855af81a9a6b
+  g-bbp-pin-image-tag:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 13dd867055346d940ea29e7f62fb9fe81e824714e774bb203d5f6fd5e0052d5d
+  g-bbp-no-plaintext-secret:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 835fb77ee8329c3425c741a5cf770c62c771808bf6a526f138dc3c37a34048f8
+  g-cfn-no-wildcard-iam-action:
+    severity: error
+    options:
+      cfn-lint: &5 {}
+      checkov: *2
+    _hash: dbf89d6537bebc6a17595573c698aa1339aedcfb46d067c341942eb9ec8ad957
+  g-cfn-no-public-read-bucket:
+    severity: error
+    options:
+      cfn-lint: *5
+      checkov: *2
+    _hash: e6326feafe9222b2f0880307a8238aaa51be8188fce21dee01cc1016e3b48bd2
+  g-cfn-no-hardcoded-password:
+    severity: error
+    options:
+      cfn-lint: *5
+      checkov: *2
+    _hash: 48e4a7d23d474b783dc6d446c0f5befbc6f1706a40956905b5edca93888a517c
+  g-circleci-pin-image-tag:
+    severity: error
+    options:
+      checkov: *2
+    _hash: ca1ef2e60a7ba163ed4ae643651a87fdbc529e607580c81ecf650f7f7c8fc702
+  g-circleci-pin-orb-version:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 114aa57b4f8693ca63080dc444bf7dd28b9e9ba299d190b85b4906adfd818af9
+  g-compose-no-privileged:
+    severity: error
+    options:
+      checkov: *2
+    _hash: c27d716fab6dd8609d637dc3b088aff11d2b7dd74a07eca047f17d9cbcb2b7f9
+  g-compose-no-host-network:
+    severity: error
+    options:
+      checkov: *2
+    _hash: f9f00b946f3b5e199048cd357d7b6a8d601676a9b25c4f4b1c0a1da267312a95
+  g-compose-pin-image-tag:
+    severity: error
+    options:
+      checkov: *2
+    _hash: f50e5d35f49c30b9b86766d7122aae0f08669e855608aad1f728eae1075a2a8d
+  g-compose-no-host-pid:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 97a7e2b6d40e4e656f713fa406733acf1cba77f1fdf39f42f74d70c65a484873
+  g-compose-drop-capabilities:
+    severity: error
+    options:
+      checkov: *2
+    _hash: fd866b94ead91e1b38c75dd2ab3d402c06fcb6f9eeed7c49324181e72c0da2b6
+  g-doc-001:
+    severity: error
+    options:
+      markdownlint: *3
+    _hash: 0dc28c6fad0bac971fed10b03e8a67ac26dba3a9b38bbdac16eb6cc97fb4fe02
+  g-doc-002:
+    severity: error
+    options:
+      markdownlint: *3
+    _hash: a747df2ef6e0694dd72c08a86e07376ca88c7914a583d7ef44ac43495dbe6113
+  g-gcp-no-unrestricted-ingress:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 115fbaedb6d648e868c881652ed3ba8689525e74433fd254912923e02ab93306
+  g-gcp-enable-audit-logs:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: e840b2e45efa08128681d4a4d362a6ec8e2566dd23f3b36ff084aa3938cb2ea0
+  g-gha-no-pull-request-target:
+    severity: error
+    options:
+      zizmor: &6 {}
+      checkov: *2
+    _hash: ae94b65fdd9e84f687b6460d2ad27a69040912d2246368f0568b6a75ceb8292a
+  g-gha-pin-actions-to-sha:
+    severity: error
+    options:
+      zizmor: *6
+      checkov: *2
+    _hash: 2e6d0f18942c5f8a53306ce6550bf744b53f792eb249e58304669f564f4968f4
+  g-gha-no-unpinned-main-ref:
+    severity: error
+    options:
+      zizmor: *6
+      checkov: *2
+    _hash: e4fd47bac3f10fa9a77f3b9ce86be5ec2536fcb2836b4016c1b318984c7624e4
+  g-gha-set-minimal-permissions:
+    severity: error
+    options:
+      zizmor: *6
+      checkov: *2
+    _hash: f9af583c33805f716bdb72eb6e30d1bd9c6151af24768f1f7e9179775d9aba4d
+  g-gha-no-script-injection:
+    severity: error
+    options:
+      zizmor: *6
+      checkov: *2
+    _hash: '0048975242a5c85384de554470ed44fba1c8360216631a4972a7be5947ee880c'
+  g-gitops-pin-target-revision:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: d55bae3d7facc00002a86a3f2299bf0ad2f0d29c7ca551f90b61d27c1506e34b
+  g-gitops-no-plaintext-secret:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 9c2efe7667a4bf42c8ce59c202cf91b0b2e29fbdfad5067b05c2ed5e5bcb65bb
+  g-glci-pin-image-tag:
+    severity: error
+    options:
+      checkov: *2
+    _hash: a755f99cc7cc7452dced2d30190f5ddb428eaa6dec5631e21c0681430e314b18
+  g-glci-declare-stages:
+    severity: error
+    options:
+      checkov: *2
+    _hash: dbc6a48ae9ee7181cfbb4a88e71db1727cba5cc5709a545179a4e80b46d38f38
+  g-glci-no-interruptible-disabled:
+    severity: error
+    options:
+      checkov: *2
+    _hash: cf23f0d9a5a3acaa50940eaa6025ef6de636898ad15ddddcd6a504f011d75949
+  g-node-007:
+    severity: error
+    options:
+      eslint: &7
+        complexity:
+        - error
+        - max: 10
+        max-len:
+        - error
+        - code: 100
+          tabWidth: 2
+      semgrep: *1
+    _hash: daf8adb004461f1ef564b50d2c8de60b0eb578207f887e9651229ecc3125b604
+  g-react-007:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 25d03353f19c6addfadfff8c9a681717f0da26dc54847642f8db7621b1350f49
+  g-ts-004:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: a4a73c19f94294f2f02d91bf601639aa85a3c01d7ca3df5be0b371d7a71011a9
+  g-ts-001:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 5cb130f92717ef14391f438f40225f3ba248d2a2f21e235bdd35662229fb19d2
+  g-ts-002:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 0b81badf3e7c2f39fd1364a9542f67dec25bf546ded7ce1414943f65a807f23e
+  g-ts-007:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 0e07e5d3f04bab893a7257050b770b6fe4cbac01fce04dfa0da002429e39d438
+  g-hashicorp-pin-required-version:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 0ccfbda76bd9842c83ae8b1b2a72f99b946c9e5760482dd8199a28a5267646ff
+  g-hashicorp-declare-required-providers:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 61e29f9d2a5fc2c81dd2c5e832b6c756ce3b6944b13ca488ec9ec5f17fcbaf9a
+  g-helm-no-latest-tag:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 5b3ba69ead7e8b7c85afa4e6622a6439d77dedcd08756732ffa4e3ac398e8aab
+  g-helm-declare-resources:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 2c48eb3009ac4b1b0678cef1ec26f84d241a4e384ba4f954b4aa148ac57f8c89
+  g-helm-provide-values-schema:
+    severity: error
+    options:
+      checkov: *2
+    _hash: d15a313d03fddf2c22a1ffc9b39ff9fbf6be9c9e7b86da870b9dc1f06c2ee59b
+  g-iac-linter-no-blanket-skip:
+    severity: error
+    options:
+      checkov: *2
+    _hash: ec03ed3d876b3fbe3172a4d999758ba5459ec8ecb9bdfaa0dd850689cce04725
+  g-iac-linter-no-soft-fail:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 85d99370c29faaef3ec8a964bb64fb1d320a964eb8ae630f5105520d9ec85f5a
+  g-iam-no-wildcard-action:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 685c3a598383b13f814695ad2c098326dad128efc1165fa8130c29d6f8b11300
+  g-iam-no-wildcard-resource:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 93546516695afdf2b0b6a1fc5a749efd65c838d68b76db9e912801368a24e35d
+  g-iam-no-wildcard-principal:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 1e498ec8ad44864088f00a9ccf94076eee14b175d0268772c56c5a439a855dd8
+  g-iam-no-full-admin:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 7df5fdaed4997426233aee7ba1024a956d6f1d84df0941dc62e031e4fcd6b571
+  g-jenkins-pin-image-tag:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: 21f96d6079d3435fc0530a9f8b28d6211003ba4d66d30cad87af7fd1639ae736
+  g-jenkins-no-plaintext-credentials:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: 859a8bde341ea3354e550165bb195efce047f4b94696a3ae2ba424de29bafdeb
+  g-json-well-formed:
+    severity: error
+    options: {}
+    _hash: 9abb0d51552e1427ccd3cc37310a04ec568e2c48d978e2aa14df0044d8f5edb5
+  g-jsonschema-declare-schema:
+    severity: error
+    options: {}
+    _hash: f79d3ee27ee75ffeac8035cf2a6cae7b386ba74c20590805444efb0ded0757e8
+  g-jsonschema-constrain-additional-properties:
+    severity: error
+    options: {}
+    _hash: e584300e12d9c347ec95b9f70695164258d2e82743098bdf1a761c919996d545
+  g-jwt-no-alg-none-compact:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: 17db119c4e3d1ca94209ebfea6b7af82bd73cb6c1008f23bcb36640a9e04e45f
+  g-jwt-no-alg-none-spaced:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: c2dfb1d234788b0bbfe9b0774830246cd45026aeefe29ed03013404eccdc0314
+  g-jwt-no-hardcoded-secret:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: 6c8e10d5dfeaff9be433cb3234ae92627dbfbb1d4d0ac9b9e146c93585528ec8
+  g-k8s-no-privileged-container:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: ad0d6ba95ecee7826962e337a6f53da4623efadd663323f5db82a63cbdd84f6a
+  g-k8s-no-host-network:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 55538a98c89b43887a44323027f23a04199317d370979b0f6cad84f44202a05e
+  g-k8s-no-host-pid:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 2aabc9a46cd7523349fdddb90d2d69815f27faef47149d04c6474582288ae9f2
+  g-k8s-no-host-ipc:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 619c7ec998893fa6c785ad04adad33fa3053aca8412b124a097673f34fe3a6e1
+  g-k8s-no-allow-privilege-escalation:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 2110b96e463273ecabde368824672402f0f1d52014a1e387ae774ec6aaa355de
+  g-k8s-no-latest-image-tag:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 7b5fb99f735fafc6cd11cf1af7c83ba05ecc88391d0318e65ff385fdf782379b
+  g-k8s-run-as-non-root:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: bbb82e6085e52786a1b5edb9ef8121f8181fbbf97be9aad712d30734ec56c0fe
+  g-k8s-set-resource-limits:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: c5cd3f7f2c7bde19a98098f94c9652d389e1571830007e40291dda9518c273f8
+  g-k8s-read-only-root-filesystem:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: fd8414b91259491435907953d49217ca8a13a17a08145cd9f978f8ca433947a0
+  g-k8s-drop-all-capabilities:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: f0c3135ee240642280958f38135e14e0aaae66cc0d7e0202dc29f43f1a6ec932
+  g-linux-foundation-set-resource-limits:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: a0b63a0f4f2fedcf11a8985e26fd64d5bac2007096884966d1bf74cc3a07cb6f
+  g-linux-foundation-liveness-probe:
+    severity: error
+    options:
+      checkov: *2
+      kubescape: {}
+    _hash: 3664175449b75a6ac971d04b6631c22cb11c22c3e6896e1a5e7974b6c278ed63
+  g-md-fenced-code-language-declared:
+    severity: error
+    options:
+      markdownlint: *3
+    _hash: 88634c248a6f86b18323a54bb088c5c6ed1f0614366b9d58d60d38e62ae45f82
+  g-md-single-h1:
+    severity: error
+    options:
+      markdownlint: *3
+    _hash: 1f3e64f7d7640a3254eb944fba39b00672d142a93b5759adf35d73cc4530f3f2
+  g-mesh-no-mtls-disabled:
+    severity: error
+    options:
+      checkov: *2
+    _hash: ddd4c7e0c66bae5b10e2a208bfdbefed39057b4e1df9bc9c9302239d4130c050
+  g-mesh-no-wildcard-host:
+    severity: error
+    options:
+      checkov: *2
+    _hash: e4be708ef577f460aff2fd99befadf3867a030bed068d6fafdd49d33ee025221
+  g-node-002:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 5b6d9470c7e09feea93bd5536b0415d25412fd8d196c747a6d0ab51fd50f9277
+  g-node-004:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 9192a4b9135b827aea30c9c4c85672b1311a080cbc305d375c8fece421b44f37
+  g-node-003:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 24fb04f3e13885591fd7251842ba3c4dca32d6df564335d743eaa4971fc99be3
+  g-node-005:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 7880f78350d819ef0fbdc3e1098496c91d54d30357af1a8ff4e086f7867cb581
+  g-node-006:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: f0019e88b37e137a6f2b2f760193b40ff485dd3cc04a5f9a76afc5eb63dc489e
+  g-node-009:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: c4bb7d930cddc0b2138b4c67d6890910708a04a68141240b76517d3b2da54797
+  g-oas-declare-security-schemes:
+    severity: error
+    options:
+      spectral: &8
+        operation-description: warn
+    _hash: f73d2ca16cf65e36e0e19d80e83cd304dfee609f28925e1e8dbe6fa8097e4213
+  g-oas-no-plaintext-http-server:
+    severity: error
+    options:
+      spectral: *8
+    _hash: 969767d8d460da0bfcfe3a711629d7eb55c51a8b6aacb13bf05082a6799cba50
+  g-oas-declare-spec-version:
+    severity: error
+    options:
+      spectral: *8
+    _hash: 163fc34b57459b6b065ec9c5f405c12c848ac425fc56801105085363f059c0e4
+  g-observability-no-insecure-endpoint:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 550cf1201f95137e3603f084aa65705116f69a88f38227938d2c7872f0891c53
+  g-observability-define-alerting:
+    severity: error
+    options:
+      checkov: *2
+    _hash: 46954f859531765279c50a636d0ab24915ea03807cee9e68d04ea8994c7311f3
+  g-node-001:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: c1b4531eecd5f57ef3e1131743c33d776a1dfa8b83ba88f7d86d20026cf0e67d
+  g-node-008:
+    severity: error
+    options:
+      semgrep: *1
+    _hash: 49dcffe2db74ccd6410072e5cd18c21502c0d400e0c8d8ecb7a4492b2ba830f5
+  g-react-009:
+    severity: error
+    options:
+      eslint: *7
+    _hash: 25afbab868310fbbb4183fee0899e4eb8565f90db70f39e74896a5581fad70c0
+  g-react-002:
+    severity: error
+    options:
+      eslint: *7
+    _hash: a28f49014a16cd71e6569df1280d3e55cb13ba90e5572ac33a7b48fe3e72f4eb
+  g-react-004:
+    severity: error
+    options:
+      eslint: *7
+    _hash: 22bb441328d17469bca95ffa8f3307b9787f8ac84516d0f1105e96259b4cf8c7
+  g-react-005:
+    severity: error
+    options:
+      eslint: *7
+    _hash: cd8238f5d33ef6dc7e06775bf685b3859dc051f853feacdc3254e1c3faa9b5b4
+  g-react-006:
+    severity: error
+    options:
+      eslint: *7
+    _hash: 61b92c3ec22b0fba69ea0135370723f77a2c8699a1bcac1bf002b0073de50f25
+  g-react-001:
+    severity: error
+    options:
+      eslint: *7
+    _hash: 9354dbc664d163bc71622e9c8cc0e9ceb94734a4d0c9d2c39e88db4d5815c5f5
+  g-sarif-declare-version:
+    severity: error
+    options: {}
+    _hash: 2e0ea2b313ebd3455b4681133aa3e072cd40180a534883a5cd385ab31c9e3ca3
+  g-sarif-include-runs:
+    severity: error
+    options: {}
+    _hash: 6c30b705be1cea8093e054b6e7c733900229a643ce5790ccd312f0855ac85fbd
+  g-sarif-declare-schema:
+    severity: error
+    options: {}
+    _hash: 9a6a1fe321eaefa13967a1f8200a2d6473a8f7e968cc5b4491911b10b239e2c5
+  g-sbom-declare-spec-version:
+    severity: error
+    options: {}
+    _hash: f79bb3e5389ae4f44108f75c6acb3593674004dc88f59697eb74c95b61868597
+  g-sbom-include-components:
+    severity: error
+    options: {}
+    _hash: 7b845afab97f72a274927c155ae7eea5f355978381cefaf512931f6e24216340
+  g-security-governance-require-provenance:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: ba4bc92b1a9e6910b7a3396b8dc613e7d03fd007350e60d5e06b19e214008b13
+  g-security-governance-no-known-exploited-ingress:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 8a42269d77704e7dfe5a81128f7b137df392c75372326f25e0eec1746f226320
+  g-node-010:
+    severity: error
+    options: {}
+    _hash: 3c2712d1f20bde6a5a03630a8746379bef0c5016bc112474cb6d981f4e259446
+  g-ts-003:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: '091398af4eddbc61e6dfc56e9d377f77fdb8c78e65466276d0972fc67971bd05'
+  g-ts-005:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: b0f75fb73661f9792001fc2c357c9d55d0b7ef06bc320d1078dd31911bde50d8
+  g-ts-006:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: 57c412c23822d69f27c889cad4a73b84846c5d08e36cc9842a052c2984f4d8dc
+  g-ts-008:
+    severity: error
+    options:
+      eslint: *7
+      semgrep: *1
+    _hash: b212b09f4fc9d06494c02e78fb2a2181b54a97223cd427797bca109afb95bff1
+  g-us-government-encrypt-at-rest:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: da3838938911f3e8ed558c5a3159b0065976053b50a62a222504dddc10b7bc3e
+  g-us-government-audit-logging:
+    severity: error
+    options:
+      checkov: *2
+      trivy: *4
+    _hash: 8a43b1d6cec3a4f174398380e3af34c53b6f184c9c054408a8a0cc70c336d0aa
+  g-react-003:
+    severity: error
+    options: {}
+    _hash: 6418569e0a84c9d19bc74b4ea763c483b6545fbfca730b7541ba366e40562028
+  g-react-008:
+    severity: error
+    options:
+      eslint: *7
+    _hash: 455c06651c2fa812901ced313d700a245f6a271f968fc6e978f643db112a90a6
+  g-react-010:
+    severity: error
+    options:
+      eslint: *7
+    _hash: cad10cf1872134d4dda52e96cf85435352d1a732510e7fb247f4e759fda5752f
+  g-yaml-well-formed:
+    severity: error
+    options: {}
+    _hash: f0023d438aa36043c71be327264ca7288d69500b5b00d077c19c3f09587d9286

@@ -1,0 +1,11 @@
+{
+  "name": "re-persisting when nothing changed is a cache no-op: every rule is unchanged and the file is not rewritten",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>e.txt; grep -qE 'unchanged=[0-9]+ updated=0 added=0 removed=0 wrote=0' e.txt && echo cache-noop 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cache-noop"
+    ]
+  }
+}

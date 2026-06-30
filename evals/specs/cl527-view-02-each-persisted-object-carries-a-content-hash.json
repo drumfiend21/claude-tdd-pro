@@ -1,0 +1,11 @@
+{
+  "name": "each persisted rule object carries a content hash so changes can be detected",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; ruby -ryaml -e 'r=YAML.unsafe_load_file(\"view.yaml\")[\"rules\"]; exit(r.values.all?{|o| o[\"_hash\"].to_s.length>=16} ? 0 : 1)' && echo objects-hashed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "objects-hashed"
+    ]
+  }
+}

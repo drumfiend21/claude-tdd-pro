@@ -1,0 +1,11 @@
+{
+  "name": "the persisted options-view is byte-identical across runs when no rule has changed",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; cp view.yaml a.yaml; bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; diff -q a.yaml view.yaml >/dev/null && echo view-byte-identical 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "view-byte-identical"
+    ]
+  }
+}

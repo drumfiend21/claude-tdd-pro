@@ -1,0 +1,11 @@
+{
+  "name": "when one rule changes, only that rule is re-materialized and the rest are served from cache",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; ruby -ryaml -e 'd=YAML.unsafe_load_file(\"view.yaml\"); k=d[\"rules\"].keys.first; d[\"rules\"][k][\"_hash\"]=\"STALE\"; File.write(\"view.yaml\", YAML.dump(d))'; bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>e.txt; grep -qE 'unchanged=[0-9]+ updated=1 added=0' e.txt && echo only-changed-updates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "only-changed-updates"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the committed repository options-view contains a config object for every catalog rule",
+  "command": "ruby -ryaml -e 'exit(YAML.unsafe_load_file(ARGV[0])[\"rules\"].size>=118 ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/config-options-view.yaml\" && echo committed-view-complete 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "committed-view-complete"
+    ]
+  }
+}
