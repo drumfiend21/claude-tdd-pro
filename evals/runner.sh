@@ -49,11 +49,14 @@ if [[ "${1-}" == "--__worker" ]]; then
   # hash (scoped) rather than the whole-tree hash, falling back to TREE_SHA when the spec has no
   # resolvable substrate reference ("GLOBAL") or the dep map is unavailable.
   if [[ "$USE_CACHE" == "1" ]]; then
-    spec_sha=$(sha256sum "$spec_file" | cut -d' ' -f1)
-    dep_hash=""
-    [[ -n "${DEPMAP:-}" && -f "${DEPMAP:-}/$spec_name" ]] && dep_hash=$(cat "$DEPMAP/$spec_name" 2>/dev/null)
-    [[ -z "$dep_hash" || "$dep_hash" == "GLOBAL" ]] && dep_hash="$TREE_SHA"
-    cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$dep_hash" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
+    # Prefer the prepass-computed key (O(1) cat). Fall back to recomputing with the whole-tree hash
+    # when the dep map is unavailable.
+    cache_key=""
+    [[ -n "${DEPMAP:-}" && -f "${DEPMAP:-}/$spec_name" ]] && cache_key=$(cat "$DEPMAP/$spec_name" 2>/dev/null)
+    if [[ -z "$cache_key" || "$cache_key" == "GLOBAL" ]]; then
+      spec_sha=$(sha256sum "$spec_file" | cut -d' ' -f1)
+      cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$TREE_SHA" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
+    fi
     echo "$cache_key" > "$keyfile"
     marker="$CACHE_DIR/$cache_key.passed"
     if [[ -f "$marker" ]]; then
@@ -247,7 +250,9 @@ DEPMAP=""
 if [[ "$USE_CACHE" -eq 1 ]]; then
   DEPMAP=$(mktemp -d -t claude-tdd-pro-depmap.XXXXXX 2>/dev/null || echo "")
   if [[ -n "$DEPMAP" ]]; then
-    node "$SCRIPT_DIR/dep-hash.js" "$PLUGIN_ROOT" "$SPECS_DIR" "$DEPMAP" 2>/dev/null || DEPMAP=""
+    # Pass the cache args so the prepass also computes the exact per-spec cache KEY and pre-marks
+    # already-passing specs (<name>.hit) -> the runner skips them without spawning a worker.
+    node "$SCRIPT_DIR/dep-hash.js" "$PLUGIN_ROOT" "$SPECS_DIR" "$DEPMAP" "$RUNNER_SHA" "$TREE_SHA" "$CACHE_DIR" 2>/dev/null || DEPMAP=""
   fi
 fi
 
@@ -294,7 +299,18 @@ export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA DEPMAP
 # they false-fail. Detection is content-based (no schema change needed).
 parallel_specs=()
 serial_specs=()
+cached_n=0
 for spec in "${specs[@]}"; do
+  name=$(basename "$spec" .json)
+  # §28.53: a spec the prepass already found cached (<name>.hit) is tallied as PASS WITHOUT spawning
+  # a worker — this is what makes a warm full-suite run fast (no per-spec subprocess for cache hits).
+  if [[ "$USE_CACHE" == "1" && -n "${DEPMAP:-}" && -f "$DEPMAP/$name.hit" ]]; then
+    echo "  ✓ $name" > "$OUTDIR/$name.out"
+    echo "PASS" > "$OUTDIR/$name.status"
+    : > "$OUTDIR/$name.cachehit"
+    cached_n=$((cached_n+1))
+    continue
+  fi
   # Detect timing-sensitive specs: those using `date +%s` for epoch
   # arithmetic to assert a wall-time bound on a substrate call. These
   # must run with full CPU; under parallel contention they false-fail.
