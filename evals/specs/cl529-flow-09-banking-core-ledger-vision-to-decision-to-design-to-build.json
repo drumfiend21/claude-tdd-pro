@@ -1,0 +1,11 @@
+{
+  "name": "full flow: a banking core ledger vision is guided through decisions to a cited design and a test-first build",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"batch\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"regulated\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"consistency_need\":\"strong\",\"communication_style\":\"request-response\",\"integration_scope\":\"private\",\"workload\":\"a core banking ledger\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"a core banking ledger\" --profile p.json --out-dir s --now 2026-06-08T12:00:00Z 2>se.txt\nbash $CLAUDE_PLUGIN_ROOT/commands/optimize-options.sh --options s/architecture-options.json --profile p.json --out scoring.json 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/decision-package.sh --options s/architecture-options.json --scoring scoring.json --out dp.json 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh scaffold --decision-id d1 --pillar security --requirements \"encryption_at_rest,access_control\" --build-dir bd 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/cloud-build.sh check --build-dir bd --unit d1 2>/dev/null; cbrc=$?\ngrep -q 'session_complete=true' se.txt && CB=$cbrc node -e 'const fs=require(\"fs\");const tr=JSON.parse(fs.readFileSync(\"s/technical-requirements.json\",\"utf8\"));const ss=JSON.parse(fs.readFileSync(\"s/session.json\",\"utf8\"));const dp=JSON.parse(fs.readFileSync(\"dp.json\",\"utf8\"));const c=Object.values(tr.pillars).flat().map(x=>x.concern);const pillars=Object.keys(tr.pillars).filter(p=>tr.pillars[p].length).length;const rec=(ss.recommended_option_id||ss.recommended||\"\").toString();process.exit((tr.needs_grounding.length===0 && rec.length>0 && pillars>=7 && c.includes(\"strong_consistency\") && dp.loop_closed===true && process.env.CB===\"1\")?0:1);' && echo banking-core-ledger-flow-complete 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "banking-core-ledger-flow-complete"
+    ]
+  }
+}
