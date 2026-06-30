@@ -1,0 +1,11 @@
+{
+  "name": "a rule applying to an application language is tagged for the full-stack development path",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-ts-no-any --applies-to '{\"linguist_aliases\":[\"typescript\"]}' 2>e.txt; grep -q 'development_paths=fullstack' e.txt && echo fullstack-rule-tagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "fullstack-rule-tagged"
+    ]
+  }
+}

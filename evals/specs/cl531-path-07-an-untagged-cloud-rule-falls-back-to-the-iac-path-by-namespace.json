@@ -1,0 +1,11 @@
+{
+  "name": "an untagged cloud rule falls back to the IaC path by its namespace (never unpathed)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-aws-some-new-rule --applies-to '{}' 2>e.txt; grep -q 'development_paths=iac' e.txt && echo cloud-fallback-iac 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cloud-fallback-iac"
+    ]
+  }
+}

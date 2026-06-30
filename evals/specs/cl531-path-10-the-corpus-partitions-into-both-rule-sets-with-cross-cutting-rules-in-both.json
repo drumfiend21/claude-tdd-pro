@@ -1,0 +1,11 @@
+{
+  "name": "the corpus partitions into both rule sets with a non-empty IaC set, full-stack set, and shared both-set",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --audit 2>e.txt; node -e 'const s=require(\"fs\").readFileSync(\"e.txt\",\"utf8\");const m=s.match(/iac=(\\d+) fullstack=(\\d+) both=(\\d+)/);process.exit(m && +m[1]>0 && +m[2]>0 && +m[3]>0 ?0:1)' && echo both-rule-sets-present 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "both-rule-sets-present"
+    ]
+  }
+}

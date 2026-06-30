@@ -1,0 +1,11 @@
+{
+  "name": "a cross-cutting universal rule (e.g. no-hardcoded-secrets) is tagged for BOTH development paths",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-universal-no-hardcoded-secrets --applies-to '{}' 2>e.txt; grep -q 'development_paths=fullstack,iac' e.txt && echo universal-tagged-both 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "universal-tagged-both"
+    ]
+  }
+}
