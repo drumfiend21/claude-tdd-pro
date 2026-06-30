@@ -2089,3 +2089,15 @@ Completes the single config surface for options end-to-end: the tool-NATIVE opti
 - **Anti-drift:** catalog-driven serialization; generic-path injection (bespoke adapters unchanged); default-preserving (no options ⇒ tool runs with defaults); no new feature/contract.
 
 10 specs (`cl512-*`): emitter renders toml · renders json/yaml/ini · no-op optionless · no-op empty · run-tool applies options + changes verdict · run-tool empty unchanged · dispatch applies tool_options from the config · audit applies tool_options via auto-discovery · render tools declare a config flag · every render fmt supported. Composes §28.50 + §28.47; no new feature ID / contract. Suite 4611→4621.
+
+### §28.52 Layer-2 render coverage completed — every option-bearing tool mapped (2026-06-25)
+
+Completes the Layer-2 emitter coverage: **all 55 option-bearing tools** now carry a `render` mapping. **No new §2.X contract** — extends the §28.50 catalog + §28.51 emitter (data-only + spec). The single config's tool-native options now have a defined emission target for every tool that has options.
+
+- **41 tools fully wired** (`render: { fmt, file, flag }`, `supported: true` implicit) across all four emitter formats (json/yaml/toml/ini) — eslint, ruff, rubocop, mypy, vale, conftest, detekt, hadolint, spectral, redocly, bandit, gosec, slither, sqlfluff, … their options emit + inject at run time.
+- **14 tools honestly marked `supported: false`** — their native config uses a format the emitter does not yet serialize (xml: pmd/psalm/spotbugs; neon: phpstan; hcl: tflint; exs: credo; editorconfig: ktlint; custom/cli: staticcheck/shellcheck/semgrep/write-good/alex/clippy; bespoke-adapter: checkov). The emitter **no-ops gracefully** (the tool runs with its defaults; no crash) until a per-format serializer is added. Marked, not faked.
+- **Optionless tools (22)** correctly carry NO render block — nothing to emit.
+- **§25 fidelity vocabulary additions:** `render-coverage`, `supported-false`, `bespoke-serializer`, `graceful-noop`.
+- **Anti-drift:** data-only catalog expansion; supported entries assert the full `{fmt,file,flag}` triple; unsupported entries honestly marked; emitter unchanged; no new feature/contract.
+
+8 specs (`cl513-*`): every option-bearing tool has a render mapping · supported set spans all four formats · unsupported native formats honestly marked · emitter gracefully no-ops unsupported · every supported render declares the full triple · majority fully wired · a representative tool per format wired · optionless tools have no render block. Composes §28.50 + §28.51; no new feature ID / contract. Suite 4621→4629.
