@@ -45,10 +45,15 @@ if [[ "${1-}" == "--__worker" ]]; then
   : > "$out"
   : > "$err"
 
-  # Compute cache key (only when caching enabled)
+  # Compute cache key (only when caching enabled). §28.53: key on the spec's own dependency-closure
+  # hash (scoped) rather than the whole-tree hash, falling back to TREE_SHA when the spec has no
+  # resolvable substrate reference ("GLOBAL") or the dep map is unavailable.
   if [[ "$USE_CACHE" == "1" ]]; then
     spec_sha=$(sha256sum "$spec_file" | cut -d' ' -f1)
-    cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$TREE_SHA" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
+    dep_hash=""
+    [[ -n "${DEPMAP:-}" && -f "${DEPMAP:-}" ]] && dep_hash=$(awk -F'\t' -v n="$spec_name" '$1==n{print $2; exit}' "$DEPMAP")
+    [[ -z "$dep_hash" || "$dep_hash" == "GLOBAL" ]] && dep_hash="$TREE_SHA"
+    cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$dep_hash" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
     echo "$cache_key" > "$keyfile"
     marker="$CACHE_DIR/$cache_key.passed"
     if [[ -f "$marker" ]]; then
@@ -232,7 +237,19 @@ if [[ "$USE_CACHE" -eq 1 ]]; then
     | xargs -d '\n' sha256sum 2>/dev/null \
     | sha256sum | cut -d' ' -f1)
 fi
-RUNNER_SHA=$(sha256sum "${BASH_SOURCE[0]}" | cut -d' ' -f1)
+RUNNER_SHA=$(cat "${BASH_SOURCE[0]}" "$SCRIPT_DIR/dep-hash.js" 2>/dev/null | sha256sum | cut -d' ' -f1)
+
+# §28.53 scoped cache: compute a per-spec dependency hash over the TRANSITIVE substrate closure each
+# spec exercises. A unit test stays cached unless a function it (transitively) tests changes; an
+# integration test (broad closure) invalidates widely. Specs with no resolvable substrate ref get
+# "GLOBAL" and fall back to TREE_SHA below (conservative). Failure to build the map => TREE_SHA for all.
+DEPMAP=""
+if [[ "$USE_CACHE" -eq 1 ]]; then
+  DEPMAP=$(mktemp -t claude-tdd-pro-depmap.XXXXXX 2>/dev/null || echo "")
+  if [[ -n "$DEPMAP" ]]; then
+    node "$SCRIPT_DIR/dep-hash.js" "$PLUGIN_ROOT" "$SPECS_DIR" "$DEPMAP" 2>/dev/null || DEPMAP=""
+  fi
+fi
 
 # Worker count
 if [[ "$NO_PARALLEL" -eq 1 ]]; then
@@ -268,7 +285,7 @@ fi
 OUTDIR=$(mktemp -d -t claude-tdd-pro-runner.XXXXXX)
 trap 'rm -rf "$OUTDIR"' EXIT
 
-export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA
+export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA DEPMAP
 
 # Partition specs into parallel-safe vs timing-sensitive.
 # Timing-sensitive specs (those that assert wall-time bounds via `date +%s`
