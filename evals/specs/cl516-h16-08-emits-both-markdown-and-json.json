@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval emits both a markdown checklist and a json document",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit md 2>/dev/null | grep -q '# Frontier-model' && bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit json 2>/dev/null | node -e 'JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"))' && echo h16-md-and-json 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-md-and-json"
+    ]
+  }
+}

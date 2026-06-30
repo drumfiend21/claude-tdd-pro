@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record sets remediation_status=fixed when a finding names a fixed_in version, open otherwise",
+  "command": "printf '%s' '[{\"component\":\"lodash\",\"severity\":\"critical\",\"fixed_in\":\"4.17.21\",\"advisory_id\":\"GHSA-x\",\"source\":\"cisa-kev\"},{\"component\":\"left-pad\",\"severity\":\"medium\",\"advisory_id\":\"GHSA-y\",\"source\":\"osv\"}]' > f.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings f.json 2>e.txt; grep -qE 'GHSA-x .*status=fixed' e.txt && grep -qE 'GHSA-y .*status=open' e.txt && echo c23-status-enum 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-status-enum"
+    ]
+  }
+}

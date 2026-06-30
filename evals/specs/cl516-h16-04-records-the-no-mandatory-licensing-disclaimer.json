@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval records the EO Sec. 1 no-mandatory-licensing disclaimer in its header",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit md 2>/dev/null | grep -qiE 'voluntary.*no mandatory licensing|no mandatory licensing' && echo h16-disclaimer 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-disclaimer"
+    ]
+  }
+}

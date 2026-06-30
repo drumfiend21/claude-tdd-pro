@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval includes a cyber-capability self-assessment checklist, not just the control families",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(Array.isArray(j.self_assessment)&&j.self_assessment.length>=1?0:1)' && echo h16-self-assessment 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-self-assessment"
+    ]
+  }
+}

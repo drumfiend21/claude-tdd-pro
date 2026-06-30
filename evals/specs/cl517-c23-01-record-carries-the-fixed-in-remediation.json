@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record carries the fixed_in remediation version on each disclosure record (the 'and fix' half)",
+  "command": "printf '%s' '[{\"component\":\"lodash\",\"severity\":\"critical\",\"fixed_in\":\"4.17.21\",\"advisory_id\":\"GHSA-x\",\"source\":\"cisa-kev\"},{\"component\":\"left-pad\",\"severity\":\"medium\",\"advisory_id\":\"GHSA-y\",\"source\":\"osv\"}]' > f.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings f.json 2>e.txt; grep -qE 'advisory=GHSA-x .*fixed_in=4.17.21' e.txt && echo c23-fixed-in 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-fixed-in"
+    ]
+  }
+}

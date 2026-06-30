@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record consumes the H-14 vuln-scan findings shape and produces one record per finding",
+  "command": "printf '%s' '[{\"component\":\"lodash\",\"severity\":\"critical\",\"fixed_in\":\"4.17.21\",\"advisory_id\":\"GHSA-x\",\"source\":\"cisa-kev\"},{\"component\":\"left-pad\",\"severity\":\"medium\",\"advisory_id\":\"GHSA-y\",\"source\":\"osv\"}]' > f.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings f.json 2>e.txt; grep -q 'records=2' e.txt && echo c23-from-h14 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-from-h14"
+    ]
+  }
+}

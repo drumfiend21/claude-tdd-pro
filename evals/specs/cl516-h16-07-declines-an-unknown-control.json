@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval declines an unknown control family with a usage error",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --control bogus 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'unknown control' e.txt && echo h16-declines-unknown 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-declines-unknown"
+    ]
+  }
+}

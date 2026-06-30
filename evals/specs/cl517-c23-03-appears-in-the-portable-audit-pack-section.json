@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record labels its output with the coordinated-disclosure audit-pack section so it is exportable",
+  "command": "printf '%s' '[{\"component\":\"lodash\",\"severity\":\"critical\",\"fixed_in\":\"4.17.21\",\"advisory_id\":\"GHSA-x\",\"source\":\"cisa-kev\"},{\"component\":\"left-pad\",\"severity\":\"medium\",\"advisory_id\":\"GHSA-y\",\"source\":\"osv\"}]' > f.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings f.json --json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(j.audit_pack_section===\"coordinated-disclosure\"?0:1)' && echo c23-audit-pack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-audit-pack"
+    ]
+  }
+}

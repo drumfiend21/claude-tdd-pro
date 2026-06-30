@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval scopes the scaffold to a single control family when --control is given",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --control confidentiality 2>e.txt; [ \"$(grep -c 'control=' e.txt | head -1)\" -ge 1 ] && grep -q 'families=1' e.txt && echo h16-single-control 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-single-control"
+    ]
+  }
+}
