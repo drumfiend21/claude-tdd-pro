@@ -116,7 +116,10 @@ for t in "${_tlist[@]}"; do
   ra=(); is_required "$t" && ra=(--required)
   toa=(); _topt="$(MAP="$TOOL_OPTS_MAP" T="$t" node -e 'try{const m=JSON.parse(process.env.MAP);const o=m[process.env.T];if(o&&Object.keys(o).length)process.stdout.write(JSON.stringify(o))}catch(e){}' 2>/dev/null)"
   [ -n "$_topt" ] && toa=(--tool-options "$_topt")
-  bash "$RUNNER" --tool "$t" --file "$FILE" "${ra[@]}" "${toa[@]}" --json > "$SARIF_DIR/$t.sarif" 2>/dev/null
+  # bash 3.2 (macOS default) + `set -u`: expanding an EMPTY array as "${arr[@]}" throws
+  # `unbound variable`. ra/toa are empty in the common case (tool not --required, no options), so use
+  # the empty-safe `${arr[@]+"${arr[@]}"}` expansion (§28.70 / bash32-portability checklist #5).
+  bash "$RUNNER" --tool "$t" --file "$FILE" ${ra[@]+"${ra[@]}"} ${toa[@]+"${toa[@]}"} --json > "$SARIF_DIR/$t.sarif" 2>/dev/null
   ec=$?
   case "$ec" in
     1) nred=$((nred + 1));   echo "dispatch tool=$t verdict=red" >&2 ;;

@@ -1,0 +1,11 @@
+{
+  "name": "the empty-safe array expansion does not trip set -u when the array is empty (the bash 3.2 failure mode)",
+  "command": "bash -c 'set -uo pipefail; ra=(); toa=(); printf \"%s\\n\" ok ${ra[@]+\"${ra[@]}\"} ${toa[@]+\"${toa[@]}\"}' 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && ! grep -q 'unbound' e.txt && echo pattern-set-u-safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pattern-set-u-safe"
+    ]
+  }
+}

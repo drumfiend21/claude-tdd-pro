@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch uses the empty-safe array expansion for the optional per-tool args (bash 3.2 guard)",
+  "command": "grep -q 'ra\\[@\\]+' \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" && grep -q 'toa\\[@\\]+' \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" && echo empty-safe-expansion-present 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "empty-safe-expansion-present"
+    ]
+  }
+}
