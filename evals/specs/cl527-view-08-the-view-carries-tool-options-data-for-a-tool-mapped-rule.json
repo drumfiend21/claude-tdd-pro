@@ -1,0 +1,11 @@
+{
+  "name": "the persisted options-view carries real tool-options data for at least one third-party-tool-mapped rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; ruby -ryaml -e 'r=YAML.unsafe_load_file(\"view.yaml\")[\"rules\"]; ok=r.values.any?{|o| o[\"options\"].is_a?(Hash) && o[\"options\"].values.any?{|v| v.is_a?(Hash) && !v.empty?} }; exit(ok ? 0 : 1)' && echo view-has-options-data 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "view-has-options-data"
+    ]
+  }
+}

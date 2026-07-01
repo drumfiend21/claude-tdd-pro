@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the HIPAA and full-stack-AWS visions yield distinct tailored designs, proving tailoring not a fixed template",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/standards/golden/healthcare-booking-hipaa-profile.json\" --out h.json --now 2026-06-08T00:00:00Z 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/standards/golden/fullstack-international-aws-profile.json\" --out a.json --now 2026-06-08T00:00:00Z 2>/dev/null; node -e 'const H=new Set(Object.values(JSON.parse(require(\"fs\").readFileSync(\"h.json\",\"utf8\")).pillars).flat().map(c=>c.concern));const A=new Set(Object.values(JSON.parse(require(\"fs\").readFileSync(\"a.json\",\"utf8\")).pillars).flat().map(c=>c.concern));process.exit(H.has(\"audit_logging\")&&!A.has(\"audit_logging\")&&A.has(\"cdn\")&&!H.has(\"cdn\")?0:1)' && echo two-distinct-scenarios 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "two-distinct-scenarios"
+    ]
+  }
+}

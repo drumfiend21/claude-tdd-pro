@@ -1,0 +1,11 @@
+{
+  "name": "a user configuration extending the standard profile that does not mention a rule leaves it enforced at its recommended severity",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: my\\nextends:\\n  - standard\\nrules:\\n  some-other-rule: warn\\n' > ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile ctp.config.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && grep -q 'disabled=0' e.txt && echo config-keeps-unmentioned-enforced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config-keeps-unmentioned-enforced"
+    ]
+  }
+}

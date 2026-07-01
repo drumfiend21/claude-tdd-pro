@@ -1,0 +1,11 @@
+{
+  "name": "E2E: the two-phase contract holds — a privileged-pod file that the write-time per-file enforcer blocks is the same file the audit-time whole-tree gate flags red, and a clean file passes both phases",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --quiet >/dev/null 2>/dev/null; we=$?; mkdir -p t && cp pod.yaml t/pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root t 2>a.txt; ae=$?; printf 'name: ok\\n' > clean.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file clean.yaml --quiet >/dev/null 2>/dev/null; ce=$?; [ \"$we\" -eq 1 ] && [ \"$ae\" -eq 1 ] && grep -q 'status=red' a.txt && [ \"$ce\" -eq 0 ] && echo write-and-audit-agree 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "write-and-audit-agree"
+    ]
+  }
+}

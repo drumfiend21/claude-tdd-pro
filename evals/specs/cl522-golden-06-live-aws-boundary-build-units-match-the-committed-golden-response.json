@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the live AWS boundary on the committed handoff is validated and its build units match the golden response",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/aws-boundary.sh\" --handoff \"$CLAUDE_PLUGIN_ROOT/standards/golden/multicloud/aws-handoff.json\" --out resp.json --now 2026-06-08T00:00:00Z 2>/dev/null; node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"resp.json\",\"utf8\"));const g=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));process.exit(r.validated===true&&r.platform===\"aws\"&&JSON.stringify(r.build_units)===JSON.stringify(g.build_units)?0:1)' \"$CLAUDE_PLUGIN_ROOT/standards/golden/multicloud/aws-boundary-response.json\" && echo aws-boundary-oracle 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aws-boundary-oracle"
+    ]
+  }
+}

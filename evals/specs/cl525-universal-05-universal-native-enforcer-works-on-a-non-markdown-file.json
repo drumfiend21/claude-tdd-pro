@@ -1,0 +1,11 @@
+{
+  "name": "the native universal enforcer enforces a rule on a non-markdown file, not only architectural prose",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-no-secret' '    description: \"code must not embed plaintext cloud access keys\"' '    severity: P0' '    mode: forbid' '    token: \"AKIA\"' '    enforced_by: [{tool: gitleaks}]' > s.yaml && printf 'KEY=AKIAIOSFODNN7EXAMPLE\\n' > cfg.env && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file cfg.env --extra-rules s.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'rule=scraped-no-secret' e.txt && echo enforces-non-markdown 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "enforces-non-markdown"
+    ]
+  }
+}

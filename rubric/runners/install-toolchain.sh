@@ -63,7 +63,11 @@ while IFS='|' read -r tool installer pkg bin lic invoke url; do
     npm)    command -v npm  >/dev/null 2>&1 && cmd="npm install -g $pkg" ;;
     pipx)   if command -v pipx >/dev/null 2>&1; then cmd="pipx install $pkg";
             elif command -v pip >/dev/null 2>&1; then cmd="pip install --user $pkg"; fi ;;
+    cargo)  command -v cargo >/dev/null 2>&1 && cmd="cargo install $pkg" ;;
+    go)     command -v go    >/dev/null 2>&1 && cmd="go install $pkg@latest" ;;
+    gem)    command -v gem   >/dev/null 2>&1 && cmd="gem install $pkg" ;;
     binary) echo "toolchain tool=$tool license=$lic status=manual url=$url" >&2; man=$((man+1)); continue ;;
+    manual) echo "toolchain tool=$tool license=$lic status=manual url=$url" >&2; man=$((man+1)); continue ;;
   esac
   if [ -z "$cmd" ]; then
     echo "toolchain tool=$tool license=$lic status=failed reason=no-installer" >&2; f=$((f+1)); continue

@@ -1,0 +1,11 @@
+{
+  "name": "an alias map ties a tool reporting id up to a CTP rule so its findings bubble up under that CTP rule",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"checkov\"}},\"results\":[{\"ruleId\":\"CKV_K8S_16\",\"level\":\"error\",\"message\":{\"text\":\"x\"}},{\"ruleId\":\"CKV_K8S_16\",\"level\":\"error\",\"message\":{\"text\":\"y\"}}]}]}' > a.sarif && printf '%s' '{\"checkov/CKV_K8S_16\":\"g-k8s-no-privileged-container\"}' > al.json && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . --alias al.json --json 2>/dev/null | node -e 'const j=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));const g=j.rules[\"g-k8s-no-privileged-container\"];process.exit(g&&g.count===2&&g.reporting_ids.includes(\"checkov/CKV_K8S_16\")?0:1)' && echo alias-rolls-up-to-ctp-rule 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "alias-rolls-up-to-ctp-rule"
+    ]
+  }
+}

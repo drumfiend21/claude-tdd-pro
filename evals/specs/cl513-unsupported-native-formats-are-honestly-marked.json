@@ -1,0 +1,11 @@
+{
+  "name": "tools whose native config uses an unsupported format (xml, neon, hcl, editorconfig, cli-only) are marked supported:false rather than given a fake emission",
+  "command": "ruby -ryaml -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; unsup=c.select{|k,v| v[\"render\"] && v[\"render\"][\"supported\"]==false}.keys; ok = unsup.include?(\"pmd\") && unsup.include?(\"phpstan\") && unsup.include?(\"tflint\") && unsup.size>=8; STDERR.puts(\"unsupported=#{unsup.size}\"); exit(ok ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo unsupported-honestly-marked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unsupported-honestly-marked"
+    ]
+  }
+}

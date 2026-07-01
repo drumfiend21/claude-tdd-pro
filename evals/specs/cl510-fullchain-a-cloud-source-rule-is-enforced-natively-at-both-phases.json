@@ -1,0 +1,11 @@
+{
+  "name": "from a ctp.config.yaml repo, a k8s source rule (no privileged container) is enforced natively at write-time and flagged at audit-time",
+  "command": "mkdir -p repo && printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > repo/pod.yaml && printf 'name: c\\nextends: [standard]\\n' > repo/ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file repo/pod.yaml 2>w.txt; wc=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-audit.sh\" --root repo 2>a.txt; ac=$?; [ \"$wc\" -eq 1 ] && grep -q 'g-k8s-no-privileged-container' w.txt && [ \"$ac\" -eq 1 ] && grep -q 'status=red' a.txt && echo cloud-rule-both-phases 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cloud-rule-both-phases"
+    ]
+  }
+}

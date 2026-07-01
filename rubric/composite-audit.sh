@@ -14,18 +14,23 @@
 # Exit: 0 green | 1 red (zero-violation gate) | 3 incomplete | 2 usage.
 
 set -uo pipefail
-ROOT=""; STRICT=0; JSON=0
+ROOT=""; STRICT=0; JSON=0; PROFILE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --root) ROOT="${2-}"; shift 2 ;;
     --strict) STRICT=1; shift ;;
+    --profile) PROFILE="${2-}"; shift 2 ;;
     --json) JSON=1; shift ;;
-    -h|--help) echo "Usage: composite-audit.sh --root <dir> [--strict] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: composite-audit.sh --root <dir> [--strict] [--profile <profile.yaml>] [--json]" >&2; exit 0 ;;
     *) echo "composite-audit: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
 [ -z "$ROOT" ] && { echo "composite-audit: --root required" >&2; exit 2; }
 [ -d "$ROOT" ] || { echo "composite-audit: not a directory: $ROOT" >&2; exit 2; }
+
+# Auto-discover the single config surface (ctp.config.yaml) at the audit root when no --profile was
+# given. Default-preserving: none found => no config applied.
+[ -z "$PROFILE" ] && [ -f "$ROOT/ctp.config.yaml" ] && PROFILE="$ROOT/ctp.config.yaml"
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 DISPATCH="$PLUGIN_ROOT/rubric/composite-dispatch.sh"
@@ -45,27 +50,35 @@ FILES="$(ROOT="$ROOT" node -e '
 sa="$STRICT"; nred=0; ninc=0; nfiles=0
 while IFS= read -r f; do
   [ -z "$f" ] && continue
-  v=""
-  # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic)
-  bash "$ENFORCER" --file "$f" --quiet >/dev/null 2>/dev/null
+  # A file is RED on any violation; GREEN once it has been VERIFIED (the always-present in-repo
+  # detectors ran clean, or any present routed tool ran clean) — absent OPTIONAL tools do not make
+  # it incomplete; INCOMPLETE only when nothing could verify it. (Never a vacuous green: the
+  # dependency-free in-repo detectors always run and give a real verdict.)
+  red=0; verified=0
+  # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic).
+  # The §16 config plane is threaded through: --profile resolves effective per-file severity /
+  # enable-disable / overrides before enforcement (no-op when --profile is absent).
+  ea=(--file "$f" --quiet); [ -n "$PROFILE" ] && ea+=(--profile "$PROFILE")
+  bash "$ENFORCER" "${ea[@]}" >/dev/null 2>/dev/null
   estat=$?
-  case "$estat" in 1) v=red ;; 3) [ -z "$v" ] && v=incomplete ;; esac
-  # routed FOSS tools (composite-dispatch resolves + routes + runs)
-  da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict)
+  case "$estat" in 1) red=1 ;; 0) verified=1 ;; esac
+  # routed FOSS tools (composite-dispatch resolves + routes + runs). The §16 config plane is
+  # threaded here too: --profile drops disabled rules / regrades by severity on the routed path.
+  da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict); [ -n "$PROFILE" ] && da+=(--profile "$PROFILE")
   bash "$DISPATCH" "${da[@]}" >/dev/null 2>/tmp/_ca.$$ || true
   dstat=$(grep -oE 'status=[a-z]+' /tmp/_ca.$$ 2>/dev/null | tail -1 | cut -d= -f2)
-  case "$dstat" in red) v=red ;; incomplete) [ "$v" != "red" ] && v=incomplete ;; esac
+  case "$dstat" in red) red=1 ;; green) verified=1 ;; esac
   # architectural-content bundle for Markdown
   case "$f" in
     *.md|*.markdown)
       ba=(--file "$f"); [ "$sa" -eq 1 ] && ba+=(--strict)
       bash "$BUNDLE" "${ba[@]}" >/dev/null 2>/tmp/_cb.$$ || true
       bstat=$(grep -oE 'status=[a-z]+' /tmp/_cb.$$ 2>/dev/null | tail -1 | cut -d= -f2)
-      case "$bstat" in red) v=red ;; incomplete) [ "$v" != "red" ] && v=incomplete ;; esac
+      case "$bstat" in red) red=1 ;; green) verified=1 ;; esac
       rm -f /tmp/_cb.$$ ;;
   esac
   rm -f /tmp/_ca.$$
-  [ -z "$v" ] && v=na
+  if [ "$red" -eq 1 ]; then v=red; elif [ "$verified" -eq 1 ]; then v=green; else v=incomplete; fi
   case "$v" in
     red) nred=$((nred+1)); nfiles=$((nfiles+1)); echo "audit file=$f verdict=red" >&2 ;;
     incomplete) ninc=$((ninc+1)); nfiles=$((nfiles+1)); echo "audit file=$f verdict=incomplete" >&2 ;;

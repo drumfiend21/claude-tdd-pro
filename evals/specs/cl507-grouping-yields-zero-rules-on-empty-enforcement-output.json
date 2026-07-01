@@ -1,0 +1,11 @@
+{
+  "name": "the grouping yields zero rules and succeeds when enforcement produced no findings",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"ruff\"}},\"results\":[]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'group-by-rule rules=0 findings=0' e.txt && echo empty-yields-zero-rules 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "empty-yields-zero-rules"
+    ]
+  }
+}

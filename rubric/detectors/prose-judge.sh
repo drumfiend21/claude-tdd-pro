@@ -17,18 +17,27 @@
 # Output: SARIF 2.1.0 (--json). Exit: 0 green | 1 red (>=1 YES) | 3 incomplete
 # (not_enforced, no YES) | 2 usage.
 #
-# CLI: --rule <id> [--paths <glob>] [--root <dir>] [--json] [--llm-judge]
+# CLI: --rule <id> [--body <text>] [--forbid <csv>] [--paths <glob>] [--root <dir>] [--json] [--llm-judge]
+#
+# §28.57 universal native enforcer: with --body <text> the rule body is supplied INLINE (and --forbid
+# <csv> supplies literal forbidden tokens for the deterministic tier) instead of resolving the id from
+# the catalog. This lets the native enforcer judge ANY software-engineering / software-architecture
+# rule — including a scraped rule whose only enforcer is an absent 3rd-party tool and which carries no
+# bespoke detector — so no rule is ever left unenforced. Without --body, behaviour is unchanged
+# (the id is resolved from the catalog + manifests, exactly as before).
 
 set -uo pipefail
-RULE=""; PATHS=""; ROOT="."; JSON=0; LLMJ="${LLM_JUDGE:-0}"
+RULE=""; PATHS=""; ROOT="."; JSON=0; LLMJ="${LLM_JUDGE:-0}"; BODY=""; FORBID=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --rule)      RULE="${2-}";  shift 2 ;;
+    --body)      BODY="${2-}";  shift 2 ;;
+    --forbid)    FORBID="${2-}"; shift 2 ;;
     --paths)     PATHS="${2-}"; shift 2 ;;
     --root)      ROOT="${2-}";  shift 2 ;;
     --json)      JSON=1; shift ;;
     --llm-judge) LLMJ=1; shift ;;
-    -h|--help) echo "Usage: prose-judge.sh --rule <id> [--paths <glob>] [--root <dir>] [--json] [--llm-judge]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: prose-judge.sh --rule <id> [--body <text>] [--forbid <csv>] [--paths <glob>] [--root <dir>] [--json] [--llm-judge]" >&2; exit 0 ;;
     *) echo "prose-judge: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -37,31 +46,42 @@ done
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
 export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
 
-RULE="$RULE" PATHS="$PATHS" ROOT="$ROOT" JSON="$JSON" LLMJ="$LLMJ" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -rdigest -e '
+RULE="$RULE" PATHS="$PATHS" ROOT="$ROOT" JSON="$JSON" LLMJ="$LLMJ" BODY="$BODY" FORBID="$FORBID" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -rdigest -e '
   Encoding.default_external = Encoding::UTF_8
   rule=ENV["RULE"]; root=ENV["ROOT"]; plugin=ENV["PLUGIN_ROOT"]; want_json=ENV["JSON"]=="1"; llmj=ENV["LLMJ"]=="1"
 
   # --- resolve the rule: body (description) + forbidden literal tokens ----------------
-  body=nil; forbid_tokens=[]
-  Dir[File.join(plugin,"generated-code-quality-standards","*","*.yaml")].each do |f|
-    d=(YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
-    (d["rules"]||[]).each { |r| body=r["description"].to_s if r.is_a?(Hash) && r["id"]==rule }
-  end
-  %w[cloud-guidance-rules.json config-guidance-rules.json universal-pattern-rules.json].each do |mfn|
-    mp=File.join(plugin,"rubric","detectors",mfn); next unless File.exist?(mp)
-    s=(JSON.parse(File.read(mp))["rules"]||{})[rule]
-    next unless s
-    if s["mode"]=="forbid"
-      forbid_tokens.concat(Array(s["token"])) if s["token"]
-      forbid_tokens.concat(Array(s["patterns"])) if s["patterns"]
+  body=nil; forbid_tokens=[]; inline_literals=[]
+  inline_body=ENV["BODY"].to_s; inline_forbid=ENV["FORBID"].to_s
+  if !inline_body.empty?
+    # §28.57 universal native enforcer: judge an INLINE rule body (any SE / architecture rule), so a
+    # rule with no catalog detector and no available 3rd-party tool is still enforced natively. Inline
+    # --forbid tokens are operator-supplied LITERALS -> matched as substrings even when they contain
+    # regex metacharacters (e.g. "eval(").
+    body = inline_body
+    inline_literals = inline_forbid.split(",").map { |t| t.strip }.reject { |t| t.empty? } unless inline_forbid.empty?
+  else
+    Dir[File.join(plugin,"generated-code-quality-standards","*","*.yaml")].each do |f|
+      d=(YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
+      (d["rules"]||[]).each { |r| body=r["description"].to_s if r.is_a?(Hash) && r["id"]==rule }
     end
-    body ||= s["message"].to_s
+    %w[cloud-guidance-rules.json config-guidance-rules.json universal-pattern-rules.json].each do |mfn|
+      mp=File.join(plugin,"rubric","detectors",mfn); next unless File.exist?(mp)
+      s=(JSON.parse(File.read(mp))["rules"]||{})[rule]
+      next unless s
+      if s["mode"]=="forbid"
+        forbid_tokens.concat(Array(s["token"])) if s["token"]
+        forbid_tokens.concat(Array(s["patterns"])) if s["patterns"]
+      end
+      body ||= s["message"].to_s
+    end
   end
-  if body.nil?
+  if body.nil? || body.strip.empty?
     STDERR.puts "prose-judge: unknown rule #{rule}"; exit 2
   end
-  # literal tokens only (skip regex metachar patterns) for the deterministic keyword tier
-  literals = forbid_tokens.reject { |t| t =~ /[\\(\[{|+*?^$]/ }
+  # literal tokens only (skip regex metachar patterns) for the deterministic keyword tier; inline
+  # --forbid literals are always matched as substrings (even with metacharacters).
+  literals = forbid_tokens.reject { |t| t =~ /[\\(\[{|+*?^$]/ } + inline_literals
 
   globs = ENV["PATHS"].to_s.empty? ? [File.join(root,"**","*.md")] : ENV["PATHS"].split(",")
   files = globs.flat_map { |g| Dir.glob(g) }.uniq.select { |f| File.file?(f) }

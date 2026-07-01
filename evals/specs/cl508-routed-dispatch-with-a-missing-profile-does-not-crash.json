@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch with an unreadable profile path does not crash; it still produces a routed verdict",
+  "command": "printf 'import os\\n' > x.py && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file x.py --profile /no/such/p.yaml 2>e.txt; ec=$?; { [ \"$ec\" -eq 0 ] || [ \"$ec\" -eq 1 ] || [ \"$ec\" -eq 3 ]; } && grep -q 'dispatch file=' e.txt && echo missing-profile-no-crash 1>&2; else echo missing-profile-no-crash 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "missing-profile-no-crash"
+    ]
+  }
+}

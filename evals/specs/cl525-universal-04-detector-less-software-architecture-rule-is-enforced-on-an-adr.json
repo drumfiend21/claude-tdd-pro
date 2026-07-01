@@ -1,0 +1,11 @@
+{
+  "name": "a software-architecture rule with no detector is enforced on an ADR through the native universal enforcer",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-no-open-ingress' '    description: \"Architecture must not expose unrestricted ingress to the public internet\"' '    severity: P0' '    mode: forbid' '    applies: \"*.md\"' '    token: \"0.0.0.0/0\"' '    enforced_by: [{tool: checkov}]' > a.yaml && printf '# ADR\\nWe expose the API with ingress 0.0.0.0/0 for simplicity.\\n' > adr.md && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file adr.md --extra-rules a.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'rule=scraped-no-open-ingress severity=P0 detector=prose-judge.sh verdict=fail' e.txt && echo architecture-rule-enforced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "architecture-rule-enforced"
+    ]
+  }
+}

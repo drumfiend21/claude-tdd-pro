@@ -1,0 +1,11 @@
+{
+  "name": "E2E: the routing table is bijective with the manifest — every tool is reachable from a kind and every routed tool resolves to a real manifest entry (no orphans, no ghosts)",
+  "command": "ruby -ryaml -rjson -e 'man=JSON.parse(File.read(ARGV[0]))[\"tools\"].map{|t| t[\"tool\"]}; r=YAML.unsafe_load_file(ARGV[1]); routed=[]; [\"linguist_aliases\",\"iac_dialects\",\"purl_uses\",\"cross_cutting\"].each{|a| (r[a]||{}).each{|k,v| Array(v).each{|e| routed<<e[\"tool\"] if e[\"tool\"]}}}; (r[\"bundles\"]||{}).each{|k,v| Array(v).each{|e| routed<<e[\"tool\"] if e[\"tool\"]}}; routed.uniq!; ign=[\"prose-judge.sh\"]; orphan=man-routed-ign; ghost=routed-man-ign; STDERR.puts(\"orphan=\"+orphan.inspect+\" ghost=\"+ghost.inspect); exit((orphan.empty? && ghost.empty?) ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" \"$CLAUDE_PLUGIN_ROOT/standards/kind-to-tool-routing.yaml\" && echo every-tool-bijectively-routed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-tool-bijectively-routed"
+    ]
+  }
+}

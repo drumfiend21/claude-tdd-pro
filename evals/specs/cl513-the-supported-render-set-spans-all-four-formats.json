@@ -1,0 +1,11 @@
+{
+  "name": "the supported render mappings span all four serialization formats the emitter implements: json, yaml, toml and ini",
+  "command": "ruby -ryaml -rset -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; f=c.values.map{|v| v[\"render\"]}.compact.select{|r| r[\"supported\"]!=false}.map{|r| r[\"fmt\"]}.to_set; need=[\"json\",\"yaml\",\"toml\",\"ini\"].to_set; exit((need-f).empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo supported-spans-four-formats 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "supported-spans-four-formats"
+    ]
+  }
+}

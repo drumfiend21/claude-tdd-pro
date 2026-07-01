@@ -1,0 +1,11 @@
+{
+  "name": "native enforcement passes a clean file when the routed tool is absent (a real verdict, not incomplete)",
+  "command": "printf 'resource \"x\" \"y\" {}\\n' > ok.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file ok.tf --tools checkov 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'status=green' e.txt && grep -q 'fallback=native' e.txt && echo native-passes-clean 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "native-passes-clean"
+    ]
+  }
+}

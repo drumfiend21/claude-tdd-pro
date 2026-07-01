@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval marks the checklist voluntary and advisory, emitting no determination or threshold",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit json 2>e.txt >o.json; grep -q 'voluntary=true' e.txt && node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(j.voluntary===true&&!(\"determination\" in j)&&!(\"threshold\" in j)?0:1)' && echo h16-voluntary 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-voluntary"
+    ]
+  }
+}

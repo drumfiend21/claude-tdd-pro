@@ -1,0 +1,11 @@
+{
+  "name": "the rule schema lets each enforcement binding carry a structured tool-native options object, the single-layer per-(rule,tool) config",
+  "command": "node -e 'const s=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));const o=s.properties.enforced_by.items.properties.options;process.exit(o&&o.type===\"object\"?0:1)' \"$CLAUDE_PLUGIN_ROOT/schemas/rubric-rule.schema.json\" && echo binding-carries-options 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "binding-carries-options"
+    ]
+  }
+}

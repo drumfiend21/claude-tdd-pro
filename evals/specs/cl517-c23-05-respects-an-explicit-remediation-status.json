@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record respects an explicit remediation_status on a finding when it is a valid enum value",
+  "command": "printf '%s' '[{\"component\":\"x\",\"severity\":\"high\",\"fixed_in\":\"2.0\",\"advisory_id\":\"A\",\"source\":\"s\",\"remediation_status\":\"in_progress\"}]' > g.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings g.json 2>e.txt; grep -q 'status=in_progress' e.txt && echo c23-explicit-status 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-explicit-status"
+    ]
+  }
+}

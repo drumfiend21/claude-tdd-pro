@@ -1,0 +1,11 @@
+{
+  "name": "a user configuration extending the standard profile can disable a rule only for files matching an overrides glob, leaving other files enforced",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: my\\nextends:\\n  - standard\\noverrides:\\n  - files: [\"**/pod.yaml\"]\\n    rules:\\n      g-k8s-no-privileged-container: off\\n' > ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile ctp.config.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'disabled=1' e.txt && echo config-override-glob-scopes 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config-override-glob-scopes"
+    ]
+  }
+}

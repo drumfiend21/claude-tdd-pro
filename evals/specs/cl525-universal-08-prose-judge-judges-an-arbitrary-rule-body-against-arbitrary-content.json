@@ -1,0 +1,11 @@
+{
+  "name": "the universal semantic detector judges an arbitrary inline rule body against arbitrary content as a violation",
+  "command": "printf 'const r = eval(x);\\n' > app.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/prose-judge.sh\" --rule any-rule --body \"code must never call eval\" --forbid \"eval(\" --paths app.js 2>e.txt; grep -q 'status=red violations=1' e.txt && echo prose-judge-inline-violates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "prose-judge-inline-violates"
+    ]
+  }
+}

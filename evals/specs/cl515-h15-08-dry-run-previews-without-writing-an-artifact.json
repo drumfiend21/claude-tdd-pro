@@ -1,0 +1,11 @@
+{
+  "name": "sbom --dry-run previews the bill of materials without writing an artifact",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . --dry-run 2>e.txt; grep -q 'dry-run=1' e.txt && echo h15-dry-run 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-dry-run"
+    ]
+  }
+}

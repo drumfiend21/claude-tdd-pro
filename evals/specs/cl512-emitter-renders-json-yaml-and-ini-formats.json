@@ -1,0 +1,11 @@
+{
+  "name": "the emitter renders json, yaml and ini native configs for tools whose option surface uses those formats",
+  "command": "j=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool eslint --options '{\"rules\":{\"no-eval\":\"error\"}}' --out c 2>/dev/null); y=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool rubocop --options '{\"Style/StringLiterals\":{\"EnforcedStyle\":\"single_quotes\"}}' --out c 2>/dev/null); i=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool mypy --options '{\"strict\":true}' --out c 2>/dev/null); grep -q 'no-eval' \"$j\" && grep -q 'EnforcedStyle' \"$y\" && grep -q 'strict = true' \"$i\" && echo emitter-renders-json-yaml-ini 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emitter-renders-json-yaml-ini"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "sbom grounds its SLSA-level claim in the slsa-framework source rather than asserting it ungrounded",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . 2>e.txt; grep -qE 'slsa_level=[0-9]+ cite=slsa-framework' e.txt && echo h15-slsa-cited 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-slsa-cited"
+    ]
+  }
+}

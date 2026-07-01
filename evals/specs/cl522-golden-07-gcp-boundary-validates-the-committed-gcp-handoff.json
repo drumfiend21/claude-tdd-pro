@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the GCP boundary validates the committed GCP handoff and tags the platform gcp",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/gcp-boundary.sh\" --handoff \"$CLAUDE_PLUGIN_ROOT/standards/golden/multicloud/gcp-handoff.json\" --out resp.json --now 2026-06-08T00:00:00Z 2>/dev/null; node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"resp.json\",\"utf8\"));process.exit(r.validated===true&&r.platform===\"gcp\"?0:1)' && echo gcp-boundary-validated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gcp-boundary-validated"
+    ]
+  }
+}

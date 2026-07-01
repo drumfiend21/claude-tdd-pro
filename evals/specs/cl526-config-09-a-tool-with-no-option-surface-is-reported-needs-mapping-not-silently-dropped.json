@@ -1,0 +1,11 @@
+{
+  "name": "config-sync reports a tool with no projectable option surface as needs_mapping rather than dropping it silently",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --rule-id r-x --enforced-by \"faketool-xyz\" 2>e.txt; grep -q 'config-sync rule=r-x tools=1 options=0 needs_mapping=1' e.txt && echo needs-mapping-surfaced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "needs-mapping-surfaced"
+    ]
+  }
+}

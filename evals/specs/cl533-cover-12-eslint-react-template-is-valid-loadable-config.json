@@ -1,0 +1,11 @@
+{
+  "name": "templates/eslint.config.flat.react.js is a valid, loadable ESLint React flat config",
+  "command": "node --check \"$CLAUDE_PLUGIN_ROOT/templates/eslint.config.flat.react.js\" && echo eslint-react-valid 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "eslint-react-valid"
+    ]
+  }
+}

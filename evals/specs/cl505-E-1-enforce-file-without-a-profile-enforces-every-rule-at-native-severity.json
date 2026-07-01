@@ -1,0 +1,11 @@
+{
+  "name": "the write-time enforcer without a profile enforces every rule at its native severity (the config plane is purely additive)",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && ! grep -q 'profile=' e.txt && echo native-baseline-unchanged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "native-baseline-unchanged"
+    ]
+  }
+}

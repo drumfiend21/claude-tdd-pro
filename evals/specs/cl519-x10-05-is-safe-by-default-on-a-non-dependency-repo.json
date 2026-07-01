@@ -1,0 +1,11 @@
+{
+  "name": "the X-10 gate is safe-by-default: a repo with neither dependencies nor IaC cannot be turned red",
+  "command": "mkdir -p empty && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root empty 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && echo x10-safe-default 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-safe-default"
+    ]
+  }
+}

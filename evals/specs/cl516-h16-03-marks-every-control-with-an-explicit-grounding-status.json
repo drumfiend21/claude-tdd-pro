@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval honors cite-or-decline: every control carries an explicit grounded status and source, none silently ungrounded",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(j.controls.every(c=>(c.status===\"ok\"&&c.source)||(c.status===\"needs_grounding\"&&!c.source))?0:1)' && echo h16-cite-or-decline 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-cite-or-decline"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "a detector-less rule violation blocks at write time through the native universal enforcer",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-no-eval' '    description: \"JavaScript code must never call eval() because it enables code injection\"' '    severity: P0' '    mode: forbid' '    applies: \"*.js\"' '    token: \"eval(\"' '    enforced_by: [{tool: semgrep}]' > x.yaml && printf 'const r = eval(userInput);\\n' > app.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file app.js --extra-rules x.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -qE 'status=red rules_checked=[0-9]+ blocking=1' e.txt && echo blocks-at-write-time 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "blocks-at-write-time"
+    ]
+  }
+}

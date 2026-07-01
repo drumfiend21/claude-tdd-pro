@@ -1,0 +1,11 @@
+{
+  "name": "security-posture computes the percent of findings whose known fix has been applied",
+  "command": "printf '%s' '[{\"component\":\"lodash\",\"severity\":\"critical\",\"fixed_in\":\"4.17.21\",\"remediation_status\":\"fixed\",\"source\":\"cisa-kev\",\"disclosed_at\":\"2026-01-01T00:00:00Z\",\"remediated_at\":\"2026-01-03T00:00:00Z\"},{\"component\":\"left-pad\",\"severity\":\"medium\",\"remediation_status\":\"open\",\"source\":\"osv\"}]' > f.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/security-posture.sh\" --findings f.json --deps 500 2>e.txt; grep -q 'percent_fixed=50' e.txt && echo q13-percent-fixed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "q13-percent-fixed"
+    ]
+  }
+}

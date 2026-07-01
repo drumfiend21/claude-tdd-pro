@@ -45,10 +45,18 @@ if [[ "${1-}" == "--__worker" ]]; then
   : > "$out"
   : > "$err"
 
-  # Compute cache key (only when caching enabled)
+  # Compute cache key (only when caching enabled). §28.53: key on the spec's own dependency-closure
+  # hash (scoped) rather than the whole-tree hash, falling back to TREE_SHA when the spec has no
+  # resolvable substrate reference ("GLOBAL") or the dep map is unavailable.
   if [[ "$USE_CACHE" == "1" ]]; then
-    spec_sha=$(sha256sum "$spec_file" | cut -d' ' -f1)
-    cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$TREE_SHA" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
+    # Prefer the prepass-computed key (O(1) cat). Fall back to recomputing with the whole-tree hash
+    # when the dep map is unavailable.
+    cache_key=""
+    [[ -n "${DEPMAP:-}" && -f "${DEPMAP:-}/$spec_name" ]] && cache_key=$(cat "$DEPMAP/$spec_name" 2>/dev/null)
+    if [[ -z "$cache_key" || "$cache_key" == "GLOBAL" ]]; then
+      spec_sha=$(sha256sum "$spec_file" | cut -d' ' -f1)
+      cache_key=$(printf '%s\n%s\n%s\n' "$spec_sha" "$TREE_SHA" "$RUNNER_SHA" | sha256sum | cut -d' ' -f1)
+    fi
     echo "$cache_key" > "$keyfile"
     marker="$CACHE_DIR/$cache_key.passed"
     if [[ -f "$marker" ]]; then
@@ -222,17 +230,37 @@ fi
 # user-data dirs (.claude-tdd-pro, .git, node_modules, evals) excluded.
 TREE_SHA="no-cache"
 if [[ "$USE_CACHE" -eq 1 ]]; then
-  TREE_SHA=$(cd "$PLUGIN_ROOT" && find \
+  # Hash git-TRACKED substrate only (respects .gitignore) so generated/ignored ledgers rewritten
+  # every run (e.g. standards/universal-coverage-ledger.jsonl) don't churn the hash and defeat the
+  # cache. Falls back to find if git is unavailable.
+  TREE_SHA=$(cd "$PLUGIN_ROOT" && { git ls-files -z -- \
       rubric commands agents skills hooks profiles schemas compliance \
       generated-code-quality-standards templates scripts space seed \
       migrations standards design-tokens prompts pr-corpus lsp scaffolds \
-      vscode-tdd-pro community community-shared \
-      -type f 2>/dev/null \
-    | LC_ALL=C sort \
-    | xargs -d '\n' sha256sum 2>/dev/null \
+      vscode-tdd-pro community community-shared 2>/dev/null \
+      || find rubric commands agents skills hooks profiles schemas compliance \
+         generated-code-quality-standards templates scripts space seed migrations \
+         standards design-tokens prompts pr-corpus lsp scaffolds vscode-tdd-pro \
+         community community-shared -type f -print0 2>/dev/null; } \
+    | LC_ALL=C sort -z \
+    | xargs -0 sha256sum 2>/dev/null \
     | sha256sum | cut -d' ' -f1)
 fi
-RUNNER_SHA=$(sha256sum "${BASH_SOURCE[0]}" | cut -d' ' -f1)
+RUNNER_SHA=$(cat "${BASH_SOURCE[0]}" "$SCRIPT_DIR/dep-hash.js" 2>/dev/null | sha256sum | cut -d' ' -f1)
+
+# §28.53 scoped cache: compute a per-spec dependency hash over the TRANSITIVE substrate closure each
+# spec exercises. A unit test stays cached unless a function it (transitively) tests changes; an
+# integration test (broad closure) invalidates widely. Specs with no resolvable substrate ref get
+# "GLOBAL" and fall back to TREE_SHA below (conservative). Failure to build the map => TREE_SHA for all.
+DEPMAP=""
+if [[ "$USE_CACHE" -eq 1 ]]; then
+  DEPMAP=$(mktemp -d -t claude-tdd-pro-depmap.XXXXXX 2>/dev/null || echo "")
+  if [[ -n "$DEPMAP" ]]; then
+    # Pass the cache args so the prepass also computes the exact per-spec cache KEY and pre-marks
+    # already-passing specs (<name>.hit) -> the runner skips them without spawning a worker.
+    node "$SCRIPT_DIR/dep-hash.js" "$PLUGIN_ROOT" "$SPECS_DIR" "$DEPMAP" "$RUNNER_SHA" "$TREE_SHA" "$CACHE_DIR" 2>/dev/null || DEPMAP=""
+  fi
+fi
 
 # Worker count
 if [[ "$NO_PARALLEL" -eq 1 ]]; then
@@ -266,9 +294,9 @@ fi
 fi
 
 OUTDIR=$(mktemp -d -t claude-tdd-pro-runner.XXXXXX)
-trap 'rm -rf "$OUTDIR"' EXIT
+trap 'rm -rf "$OUTDIR" "${DEPMAP:-}"' EXIT
 
-export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA
+export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA DEPMAP
 
 # Partition specs into parallel-safe vs timing-sensitive.
 # Timing-sensitive specs (those that assert wall-time bounds via `date +%s`
@@ -277,7 +305,18 @@ export OUTDIR CACHE_DIR USE_CACHE VERBOSE RUNNER_SHA TREE_SHA
 # they false-fail. Detection is content-based (no schema change needed).
 parallel_specs=()
 serial_specs=()
+cached_n=0
 for spec in "${specs[@]}"; do
+  name=$(basename "$spec" .json)
+  # §28.53: a spec the prepass already found cached (<name>.hit) is tallied as PASS WITHOUT spawning
+  # a worker — this is what makes a warm full-suite run fast (no per-spec subprocess for cache hits).
+  if [[ "$USE_CACHE" == "1" && -n "${DEPMAP:-}" && -f "$DEPMAP/$name.hit" ]]; then
+    echo "  ✓ $name" > "$OUTDIR/$name.out"
+    echo "PASS" > "$OUTDIR/$name.status"
+    : > "$OUTDIR/$name.cachehit"
+    cached_n=$((cached_n+1))
+    continue
+  fi
   # Detect timing-sensitive specs: those using `date +%s` for epoch
   # arithmetic to assert a wall-time bound on a substrate call. These
   # must run with full CPU; under parallel contention they false-fail.

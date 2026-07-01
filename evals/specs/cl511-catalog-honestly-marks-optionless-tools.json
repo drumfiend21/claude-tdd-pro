@@ -1,0 +1,11 @@
+{
+  "name": "vuln scanners and formatters that have no per-rule options are honestly marked per_rule_options none rather than given a fabricated option surface",
+  "command": "ruby -ryaml -e 't=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; ok = t[\"trivy\"][\"per_rule_options\"]==\"none\" && t[\"prettier\"][\"per_rule_options\"]==\"none\" && t[\"gitleaks\"][\"per_rule_options\"]==\"none\"; exit(ok ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo optionless-tools-marked 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "optionless-tools-marked"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the dependency closure is transitive: changing toolB (which toolA calls) invalidates a spec that references only toolA",
+  "command": "mkdir -p r/rubric/runners r/rubric/detectors r/generated-code-quality-standards/x s && printf 'echo A; bash \"$PLUGIN_ROOT/rubric/runners/toolB.sh\"\\n' > r/rubric/runners/toolA.sh && printf 'echo B\\n' > r/rubric/runners/toolB.sh && printf 'echo unrelated\\n' > r/rubric/detectors/unrelated.sh && printf 'echo enforce; reads generated-code-quality-standards rules\\n' > r/rubric/runners/enforceX.sh && printf 'id: r1\\n' > r/generated-code-quality-standards/x/r.yaml && printf '%s' '{\"command\":\"x $CLAUDE_PLUGIN_ROOT/rubric/runners/toolA.sh\"}' > s/unit-a.json && printf '%s' '{\"command\":\"x $CLAUDE_PLUGIN_ROOT/rubric/runners/enforceX.sh\"}' > s/enforce.json && printf '%s' '{\"command\":\"echo hi with no substrate ref\"}' > s/noref.json && node \"$CLAUDE_PLUGIN_ROOT/evals/dep-hash.js\" r s od 2>/dev/null; g(){ cat \"od/$1\" 2>/dev/null; }; h0=$(g unit-a); printf 'echo B changed\\n' > r/rubric/runners/toolB.sh; node \"$CLAUDE_PLUGIN_ROOT/evals/dep-hash.js\" r s od2 2>/dev/null; h1=$(cat od2/unit-a 2>/dev/null); [ \"$h0\" != \"$h1\" ] && echo follows-transitive-closure 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "follows-transitive-closure"
+    ]
+  }
+}

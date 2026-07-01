@@ -1,0 +1,11 @@
+{
+  "name": "the grouping preserves each tool's own reporting id, namespaced as tool/reporting-id, as the rule key",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"ruff\"}},\"results\":[{\"ruleId\":\"F401\",\"level\":\"error\",\"message\":{\"text\":\"unused\"}}]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . --json 2>/dev/null | node -e 'const j=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));process.exit(j.rules[\"ruff/F401\"]?0:1)' && echo reporting-id-preserved 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reporting-id-preserved"
+    ]
+  }
+}

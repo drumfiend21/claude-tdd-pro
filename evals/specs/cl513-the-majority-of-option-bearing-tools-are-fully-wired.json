@@ -1,0 +1,11 @@
+{
+  "name": "the majority of option-bearing tools have a fully-supported render mapping wired into the emitter",
+  "command": "ruby -ryaml -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; ob=c.select{|k,v| v[\"option_form\"]}; sup=ob.count{|k,v| v[\"render\"] && v[\"render\"][\"supported\"]!=false}; STDERR.puts(\"supported=#{sup}/#{ob.size}\"); exit(sup >= (ob.size/2) ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo majority-fully-wired 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "majority-fully-wired"
+    ]
+  }
+}

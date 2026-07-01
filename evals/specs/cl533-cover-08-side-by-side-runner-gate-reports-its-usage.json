@@ -1,0 +1,11 @@
+{
+  "name": "scripts/side-by-side.sh reports its usage on --help (entry exercised)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/scripts/side-by-side.sh\" --help 2>&1 | grep -qi 'usage' && echo side-by-side-usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "side-by-side-usage"
+    ]
+  }
+}

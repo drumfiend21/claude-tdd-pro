@@ -1,0 +1,11 @@
+{
+  "name": "sbom produces a deterministic digest: the same component set yields the same digest across runs",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && a=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . 2>&1 | grep -oE 'digest=[^ ]+'); b=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . 2>&1 | grep -oE 'digest=[^ ]+'); [ -n \"$a\" ] && [ \"$a\" = \"$b\" ] && echo h15-deterministic 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-deterministic"
+    ]
+  }
+}

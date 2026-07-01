@@ -1,0 +1,11 @@
+{
+  "name": "a profile that sets a rule to off disables that rule at write-time enforcement, so a file it would have blocked no longer blocks",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: t\\nextends: []\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > prof.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile prof.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'disabled=1' e.txt && ! grep -q 'verdict=fail' e.txt && echo off-rule-disabled 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "off-rule-disabled"
+    ]
+  }
+}

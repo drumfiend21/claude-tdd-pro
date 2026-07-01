@@ -1,0 +1,11 @@
+{
+  "name": "the catalog represents every configuration paradigm from the research: eslint-semantics, config-toggle, policy-as-code, vuln-scanner, formatter, binary-validator",
+  "command": "ruby -ryaml -rset -e 'p=YAML.unsafe_load_file(ARGV[0])[\"tools\"].values.map{|v| v[\"paradigm\"]}.to_set; need=[\"eslint_semantics\",\"config_toggle\",\"policy_as_code\",\"vuln_scanner\",\"formatter\",\"binary_validator\"].to_set; exit((need-p).empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo all-paradigms-represented 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "all-paradigms-represented"
+    ]
+  }
+}

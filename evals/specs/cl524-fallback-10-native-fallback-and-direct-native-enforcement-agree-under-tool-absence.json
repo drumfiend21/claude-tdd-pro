@@ -1,0 +1,11 @@
+{
+  "name": "the dispatch native fallback and direct native enforcement agree on a violation when tools are absent",
+  "command": "printf 'resource \"aws_security_group\" \"b\" {\\n  ingress { cidr_blocks = [\"0.0.0.0/0\"] }\\n}\\n' > bad.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file bad.tf 2>d.txt; drc=$?; bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file bad.tf >/dev/null 2>n.txt; nrc=$?; [ \"$drc\" -eq 1 ] && grep -q 'status=red' n.txt && echo two-phase-agree 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "two-phase-agree"
+    ]
+  }
+}

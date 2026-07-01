@@ -1,0 +1,11 @@
+{
+  "name": "checkov per-rule options provided in the single config project to a native .checkov.yaml file",
+  "command": "p=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool checkov --options '{\"soft-fail-on\":[\"LOW\"],\"skip-check\":[\"CKV_AWS_20\"]}' --out . 2>/dev/null); [ -f \"$p\" ] && grep -q 'soft-fail-on' \"$p\" && grep -q 'CKV_AWS_20' \"$p\" && echo checkov-projects 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "checkov-projects"
+    ]
+  }
+}

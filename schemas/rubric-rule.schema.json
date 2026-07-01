@@ -228,7 +228,8 @@
         "properties": {
           "tool": { "type": "string", "description": "Tool runner id (e.g. semgrep, eslint, checkov) or a detector path." },
           "bundle": { "type": "string", "description": "Bundle id (e.g. architectural-content) auto-attached when applies_to_prose is true." },
-          "config": { "type": "string", "description": "Tool config / ruleset reference." },
+          "config": { "type": "string", "description": "Tool config / ruleset reference (a named preset/ruleset, e.g. eslint:recommended, p/typescript, a .rubocop.yml path)." },
+          "options": { "type": "object", "description": "§28.50 tool-NATIVE options for THIS binding -- the single-layer, tool-specific config (no transformer). Keys + values are the tool's own option vocabulary, drawn from standards/tool-option-surfaces.yaml for that tool (e.g. eslint {complexity:[error,{max:10}]}, ruff {mccabe.max-complexity:10}, rubocop {Max:15}, stylelint {severity:warning}). Overridable per (rule,tool) from the single config surface (ctp.config.yaml). Absent => the tool runs with its defaults.", "additionalProperties": true },
           "required": { "type": "boolean", "description": "When true a missing tool HARD-FAILS (blocks) per the ADR-0008 operator policy; when false/absent the tool is optional and degrades to not_enforced (§28.17)." }
         }
       }

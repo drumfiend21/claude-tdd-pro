@@ -1,0 +1,11 @@
+{
+  "name": "the SARIF bus normalizes a routed tool's output into a single merged SARIF 2.1.0 log",
+  "command": "printf 'resource \"aws_s3_bucket\" \"b\" {}\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool checkov --file main.tf --json 2>/dev/null > t.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in t.sarif --json 2>/dev/null > merged.json; node -e 'process.exit(JSON.parse(require(\"fs\").readFileSync(\"merged.json\",\"utf8\")).version===\"2.1.0\"?0:1)' && echo bus-single-sarif-log 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bus-single-sarif-log"
+    ]
+  }
+}

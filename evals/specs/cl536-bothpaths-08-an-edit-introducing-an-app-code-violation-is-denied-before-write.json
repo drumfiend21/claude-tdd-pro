@@ -1,0 +1,11 @@
+{
+  "name": "an Edit introducing an app-code violation is denied before write (reconstruction + full-stack rules)",
+  "command": "printf 'const y: number = 1;\n' > app.ts && printf '%s' '{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"app.ts\",\"old_string\":\"number\",\"new_string\":\"any\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'g-ts-001' e.txt && echo edit-app-violation-denied 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "edit-app-violation-denied"
+    ]
+  }
+}

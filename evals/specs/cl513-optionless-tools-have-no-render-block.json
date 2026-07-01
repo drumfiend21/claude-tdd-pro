@@ -1,0 +1,11 @@
+{
+  "name": "tools with no per-rule options (vuln scanners, formatters) have no render block, since there are no options to emit",
+  "command": "ruby -ryaml -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; bad=c.select{|k,v| v[\"per_rule_options\"]==\"none\" && v[\"render\"] && v[\"render\"][\"method\"]!=\"cli\"}.keys; STDERR.puts(\"optionless_with_file_render=#{bad.inspect}\"); exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo optionless-have-no-render 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "optionless-have-no-render"
+    ]
+  }
+}

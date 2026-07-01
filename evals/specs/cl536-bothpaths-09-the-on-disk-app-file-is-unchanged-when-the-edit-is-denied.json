@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor denies the app-code edit before save, leaving the on-disk file unchanged",
+  "command": "printf 'const y: number = 1;\n' > app.ts && printf '%s' '{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"app.ts\",\"old_string\":\"number\",\"new_string\":\"any\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" >/dev/null 2>&1; grep -q 'number' app.ts && ! grep -q ': any' app.ts && echo app-file-unchanged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "app-file-unchanged"
+    ]
+  }
+}

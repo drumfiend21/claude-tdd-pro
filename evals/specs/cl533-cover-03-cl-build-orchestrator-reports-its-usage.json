@@ -1,0 +1,11 @@
+{
+  "name": "scripts/cl-build.sh reports its usage on --help (entry exercised)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/scripts/cl-build.sh\" --help 2>&1 | grep -qi 'usage' && echo cl-build-usage 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cl-build-usage"
+    ]
+  }
+}

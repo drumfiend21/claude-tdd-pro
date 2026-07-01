@@ -1,0 +1,11 @@
+{
+  "name": "E2E: all 118 corpus rules map to a runnable enforcement tool or bundle with the original detector preserved as the first required binding — no rule is unrouted and no enforcement was dropped in the axis migration",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/audit-applies-to-parity.sh\" 2>p.txt; pe=$?; [ \"$pe\" -eq 0 ] && grep -q 'status=green rules=118 parity_fail=0 unrouted=0' p.txt && echo every-rule-routable-parity 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-rule-routable-parity"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "a Python rule is classified to the full-stack development path (not only Node/React)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-python-no-eval --applies-to '{\"linguist_aliases\":[\"python\"]}' 2>e.txt; grep -q 'development_paths=fullstack' e.txt && echo python-fullstack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "python-fullstack"
+    ]
+  }
+}

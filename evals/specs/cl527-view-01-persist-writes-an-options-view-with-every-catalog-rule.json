@@ -1,0 +1,11 @@
+{
+  "name": "config-sync --persist writes an options-view file containing a config object for every catalog rule",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>e.txt; grep -qE 'persisted=.* total=[0-9]+ .* wrote=1' e.txt && ruby -ryaml -e 'exit(YAML.unsafe_load_file(\"view.yaml\")[\"rules\"].size>=118 ? 0 : 1)' && echo view-persisted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "view-persisted"
+    ]
+  }
+}

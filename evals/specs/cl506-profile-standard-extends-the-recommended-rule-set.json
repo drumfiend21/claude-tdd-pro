@@ -1,0 +1,11 @@
+{
+  "name": "the standard profile extends the rubric:recommended rule set, the cross-cutting recommended subset",
+  "command": "grep -A4 -E '^extends:' \"$CLAUDE_PLUGIN_ROOT/profiles/standard.yaml\" | grep -q 'rubric:recommended' && echo standard-extends-recommended 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "standard-extends-recommended"
+    ]
+  }
+}

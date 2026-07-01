@@ -1,0 +1,11 @@
+{
+  "name": "the Layer-2 emitter renders a tool's native TOML config (ruff.toml) from the tool-native options",
+  "command": "p=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/emit-tool-config.sh\" --tool ruff --options '{\"lint.ignore\":[\"F401\"]}' --out cfg 2>/dev/null); [ -f \"$p\" ] && grep -q 'lint.ignore = \\[\"F401\"\\]' \"$p\" && echo emitter-renders-toml 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emitter-renders-toml"
+    ]
+  }
+}

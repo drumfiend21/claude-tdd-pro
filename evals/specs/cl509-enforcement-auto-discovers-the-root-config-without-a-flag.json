@@ -1,0 +1,11 @@
+{
+  "name": "the write-time enforcer auto-discovers ctp.config.yaml beside the file and applies it without an explicit --profile flag",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: my\\nextends:\\n  - standard\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'profile=ctp.config.yaml' e.txt && grep -q 'disabled=1' e.txt && echo auto-discovers-config 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "auto-discovers-config"
+    ]
+  }
+}

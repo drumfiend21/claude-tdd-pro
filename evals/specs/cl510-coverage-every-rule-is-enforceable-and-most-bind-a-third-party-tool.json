@@ -1,0 +1,11 @@
+{
+  "name": "every source rule is enforceable (binds a native detector) and at least 90% also bind a routed 3rd-party library, the rest being native-only structural detectors",
+  "command": "ruby -ryaml -rjson -rset -e 'man=JSON.parse(File.read(ARGV[1]))[\"tools\"].map{|t| t[\"tool\"]}.to_set; total=0; routed=0; Dir[ARGV[0]+\"/*/*.yaml\"].each{|f| d=YAML.unsafe_load_file(f) rescue next; next unless d.is_a?(Hash); (d[\"rules\"]||[]).each{|r| total+=1; eb=r[\"enforced_by\"]||[]; routed+=1 if eb.any?{|b| (b[\"tool\"] && man.include?(b[\"tool\"])) || b[\"bundle\"]}}}; STDERR.puts(\"total=#{total} routed=#{routed}\"); exit((total>0 && routed>=(total*90/100)) ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\" \"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" && echo most-rules-bind-thirdparty 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "most-rules-bind-thirdparty"
+    ]
+  }
+}

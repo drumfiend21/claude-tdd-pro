@@ -1,0 +1,11 @@
+{
+  "name": "doctor --check vuln-scan requires a --root argument",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'requires --root' e.txt && echo x10-requires-root 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-requires-root"
+    ]
+  }
+}

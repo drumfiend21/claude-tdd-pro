@@ -1,0 +1,11 @@
+{
+  "name": "every rule in the corpus is tagged with at least one development path (no rule is left unpathed)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --audit 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -qE 'classify-path total=[0-9]+ iac=[0-9]+ fullstack=[0-9]+ both=[0-9]+ unpathed=0' e.txt && echo every-rule-pathed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-rule-pathed"
+    ]
+  }
+}

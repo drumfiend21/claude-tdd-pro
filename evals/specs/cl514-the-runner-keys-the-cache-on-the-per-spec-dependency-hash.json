@@ -1,0 +1,11 @@
+{
+  "name": "the eval runner builds the dependency map and keys each spec's cache on its dependency hash, falling back to the whole-tree hash",
+  "command": "R=\"$CLAUDE_PLUGIN_ROOT/evals/runner.sh\"; grep -q 'dep-hash.js' \"$R\" && grep -q 'DEPMAP' \"$R\" && grep -q 'cache_key' \"$R\" && echo runner-keys-on-dep-hash 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runner-keys-on-dep-hash"
+    ]
+  }
+}

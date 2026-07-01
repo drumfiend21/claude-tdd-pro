@@ -1,0 +1,11 @@
+{
+  "name": "the GCTP handoff names govern-before-write and both-paths pre-write enforcement",
+  "command": "grep -q '§28.60 govern-before-write' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q '§28.68 both-paths pre-write' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'enforce-standards-pre-write.sh' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo handoff-prewrite 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "handoff-prewrite"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the single-config options container accepts arbitrary tool-native option keys (additionalProperties true)",
+  "command": "node -e 'const s=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));function f(o,k){if(o&&typeof o==\"object\"){if(o.properties&&o.properties.options)return o.properties.options;for(const v of Object.values(o)){const r=f(v,k);if(r)return r}}return null}const opt=f(s);process.exit(opt&&opt.additionalProperties===true?0:1)' \"$CLAUDE_PLUGIN_ROOT/schemas/rubric-rule.schema.json\" && echo universal-container 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "universal-container"
+    ]
+  }
+}

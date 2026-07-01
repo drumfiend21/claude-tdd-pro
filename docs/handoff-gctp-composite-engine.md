@@ -237,3 +237,50 @@ CTP does **not** edit GCTP and GCTP does **not** edit CTP. The only surface that
 `active.json` + `rubric/detectors/` + the enforcement entrypoints. The paired GCTP-side ADRs
 (**0068** composite-engine wiring, **0069** auto-classification wiring) are GCTP's to author —
 ADR-0068 is the gate for adopting the §4 hard-require semantics.
+
+---
+
+## 9. v1.18 capabilities to adopt (§28.56–§28.68) — guaranteed enforcement + two co-equal build flows
+
+This wave makes enforcement **total** and the build **two-flow**. GCTP wires the same entrypoints; the
+new behavior is in them. Each item cites its architecture section + the verifying spec family.
+
+**Enforcement is now guaranteed — no rule unenforced, on any file type, at every phase:**
+- **§28.56 native fallback** — when a routed 3rd-party tool can't be found, `composite-dispatch.sh` falls
+  back to native enforcement; `--required` tools still hard-fail (the §4 / ADR-0068 semantics).
+  (`cl524-fallback-*`)
+- **§28.57 universal native enforcer** — the native enforcer can enforce ANY SE/architecture rule on ANY
+  file type via `prose-judge.sh --body/--forbid` (a scraped tool-only rule with no bespoke detector is
+  still enforced). (`cl525-universal-*`)
+- **§28.60 govern-before-write** — `hooks/scripts/enforce-standards-pre-write.sh` (PreToolUse) evaluates
+  proposed content IN MEMORY and denies a violating write before save. (`cl528-prewrite-*`)
+- **§28.68 both-paths pre-write** — both rule sets (IaC + full-stack) govern in memory before write:
+  `enforce-file.sh --include-app-code --single-file-gate` natively enforces the full-stack set on app
+  code (any language, derived from `linguist_aliases`); tree-context rules (coverage) are audit-time
+  only. So enforcement holds at **design → in-memory-before-write → write → audit**. (`cl536-bothpaths-*`)
+
+**The single config surface is complete and persisted:**
+- **§28.58 universal config object** — every rule has a config object with options for its tool; all 9
+  3rd-party tools project their proprietary options from the single config (checkov via file,
+  semgrep/trivy via `render.method:cli`); `commands/config-sync.sh --check` is the nothing-missing gate
+  (`needs_mapping=0` over the corpus). (`cl526-config-*`)
+- **§28.59 persisted, cached options-view** — `config-sync --persist` writes `standards/config-options-view.yaml`,
+  re-materializing only rules whose source/mapping changed (cache-if-no-change). (`cl527-view-*`)
+
+**Two co-equal, coupled, language-agnostic build flows:**
+- **§28.62/§28.67 co-design** — `commands/codesign-build.sh` derives a full distributed system (FE, BE/REST,
+  message-queue, **SQL + NoSQL**, IaC) from one decision; app units declare required infra and infra
+  units declare served app (reconciled). Platform-native (aws/gcp/azure). (`cl530-codesign-*`, `cl534-bothflows-*`)
+- **§28.63 development-path tagging** — `commands/classify-path.sh` tags every rule `iac` / `fullstack` /
+  `both` (cross-cutting rules → both), so the two rule sets are explicit and complete; every rule pathed.
+  (`cl531-path-*`)
+- **§28.64 language/framework agnosticism** — no Node/React preference; the stack is `toolchain-selected`
+  (any language honored via `--toolchain`); the four-axis registry admits all languages. (`cl532-agnostic-*`)
+
+**Verification GCTP can mirror:** 100% file coverage (`coverage-gap.js` → 0 uncovered, §28.65); 50
+both-flow/full-flow integration tests; full distributed-system assertions across 20 domains × 3 clouds ×
+10 agnostic toolchains. Adopt these by re-vendoring the moved surface (`commands/codesign-build.sh`,
+`commands/classify-path.sh`, `commands/config-sync.sh`, `hooks/scripts/enforce-standards-pre-write.sh`,
+the `enforce-file.sh` flags) and wiring the PreToolUse govern-before-write hook alongside the existing
+write-time/audit-time entrypoints. Epoch-aware adoption per §4a still applies. **No CTP→GCTP edit; GCTP
+authors ADR-0068/0069.**

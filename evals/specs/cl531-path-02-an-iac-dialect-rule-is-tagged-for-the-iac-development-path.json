@@ -1,0 +1,11 @@
+{
+  "name": "a rule applying to an IaC dialect is tagged for the IaC development path",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-hashicorp-pin --applies-to '{\"iac_dialects\":[\"terraform\"],\"linguist_aliases\":[\"hcl\"]}' 2>e.txt; grep -q 'development_paths=iac' e.txt && echo iac-rule-tagged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac-rule-tagged"
+    ]
+  }
+}

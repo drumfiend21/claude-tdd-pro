@@ -1,0 +1,11 @@
+{
+  "name": "sbom emits a valid JSON sidecar carrying the bill of materials and its digest",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . --json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(j.sbom&&j.digest&&(j.sbom.components||j.sbom.packages).length===2?0:1)' && echo h15-json-sidecar 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-json-sidecar"
+    ]
+  }
+}

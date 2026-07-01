@@ -1,0 +1,11 @@
+{
+  "name": "EO Sec. 2 maps to the find-and-fix controls (H-14, H-15) and Sec. 4 to the misuse-resistant audit (C-4, L-14)",
+  "command": "ruby -ryaml -e 'd=YAML.unsafe_load_file(ARGV[0]); s2=d[\"controls\"].find{|c| c[\"section\"]==2}[\"maps_to\"]; s4=d[\"controls\"].find{|c| c[\"section\"]==4}[\"maps_to\"]; exit((s2 & [\"H-14\",\"H-15\"]).size==2 && (s4 & [\"C-4\",\"L-14\"]).size==2 ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/compliance/eo-control-mapping.yaml\" && echo c22-sec2-sec4-bind 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-sec2-sec4-bind"
+    ]
+  }
+}

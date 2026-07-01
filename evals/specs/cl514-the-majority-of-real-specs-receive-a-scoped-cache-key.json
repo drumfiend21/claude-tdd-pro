@@ -1,0 +1,11 @@
+{
+  "name": "across the real spec corpus the majority of specs receive a scoped dependency hash rather than the whole-tree fallback",
+  "command": "node \"$CLAUDE_PLUGIN_ROOT/evals/dep-hash.js\" \"$CLAUDE_PLUGIN_ROOT\" \"$CLAUDE_PLUGIN_ROOT/evals/specs\" rod 2>/dev/null; total=$(ls rod | wc -l); scoped=$(grep -Lx GLOBAL rod/* 2>/dev/null | wc -l); [ \"$scoped\" -gt $((total/2)) ] && echo majority-specs-scoped 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "majority-specs-scoped"
+    ]
+  }
+}

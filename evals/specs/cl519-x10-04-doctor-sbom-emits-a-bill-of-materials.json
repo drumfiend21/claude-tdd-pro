@@ -1,0 +1,11 @@
+{
+  "name": "doctor --check sbom emits a software bill of materials for the root and stays green",
+  "command": "printf '{\"dependencies\":{\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check sbom --root . 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'sbom format=cyclonedx' e.txt && echo x10-sbom-check 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-sbom-check"
+    ]
+  }
+}

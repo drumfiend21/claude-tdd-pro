@@ -1,0 +1,11 @@
+{
+  "name": "every catalog entry either declares a native option_form (the tool's own vocabulary) or is explicitly marked optionless (per_rule_options none)",
+  "command": "ruby -ryaml -e 'bad=[]; YAML.unsafe_load_file(ARGV[0])[\"tools\"].each{|k,v| bad<<k unless v[\"option_form\"] || v[\"per_rule_options\"]==\"none\" || v[\"per_rule_options\"]==\"limited\"}; STDERR.puts(\"undeclared=#{bad.inspect}\"); exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo every-tool-option-form-declared 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-tool-option-form-declared"
+    ]
+  }
+}

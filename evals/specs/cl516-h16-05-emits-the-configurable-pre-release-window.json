@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval emits the up-to-30-day pre-release window and honors a window override",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit md --window-days 14 2>e.txt; grep -q 'window_days=14' e.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit md 2>e2.txt; grep -q 'window_days=30' e2.txt && echo h16-window 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-window"
+    ]
+  }
+}

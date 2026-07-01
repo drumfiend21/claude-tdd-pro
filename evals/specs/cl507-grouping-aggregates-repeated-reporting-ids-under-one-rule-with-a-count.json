@@ -1,0 +1,11 @@
+{
+  "name": "the per-rule grouping aggregates repeated occurrences of the same tool reporting id under one rule with a summed count",
+  "command": "printf '%s' '{\"version\":\"2.1.0\",\"runs\":[{\"tool\":{\"driver\":{\"name\":\"checkov\"}},\"results\":[{\"ruleId\":\"CKV_K8S_16\",\"level\":\"error\",\"message\":{\"text\":\"x\"}},{\"ruleId\":\"CKV_K8S_16\",\"level\":\"error\",\"message\":{\"text\":\"y\"}}]}]}' > a.sarif && bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" --dir . 2>e.txt; grep -q 'rule=checkov/CKV_K8S_16 tools=checkov count=2' e.txt && echo grouping-aggregates-by-rule 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "grouping-aggregates-by-rule"
+    ]
+  }
+}

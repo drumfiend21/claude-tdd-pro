@@ -1,0 +1,11 @@
+{
+  "name": "config init --force overwrites an existing ctp.config.yaml",
+  "command": "printf 'old\\n' > ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/config.sh\" init --force 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'extends:' ctp.config.yaml && echo init-force-overwrites 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "init-force-overwrites"
+    ]
+  }
+}

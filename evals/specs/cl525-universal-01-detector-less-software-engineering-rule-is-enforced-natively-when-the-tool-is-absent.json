@@ -1,0 +1,11 @@
+{
+  "name": "a software-engineering rule whose only enforcer is an absent third-party tool is enforced natively and caught",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-no-eval' '    description: \"JavaScript code must never call eval() because it enables code injection\"' '    severity: P0' '    mode: forbid' '    applies: \"*.js\"' '    token: \"eval(\"' '    enforced_by: [{tool: semgrep}]' > x.yaml && printf 'const r = eval(userInput);\\n' > app.js && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file app.js --extra-rules x.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'rule=scraped-no-eval severity=P0 detector=prose-judge.sh verdict=fail' e.txt && echo se-rule-enforced-natively 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "se-rule-enforced-natively"
+    ]
+  }
+}

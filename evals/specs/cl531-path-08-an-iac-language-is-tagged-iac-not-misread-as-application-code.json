@@ -1,0 +1,11 @@
+{
+  "name": "an IaC language (HCL) is tagged for the IaC path, not misread as application code",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-tf-rule --applies-to '{\"linguist_aliases\":[\"hcl\"]}' 2>e.txt; grep -qE 'development_paths=iac$' e.txt && echo hcl-is-iac 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "hcl-is-iac"
+    ]
+  }
+}

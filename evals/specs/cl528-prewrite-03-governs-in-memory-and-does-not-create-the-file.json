@@ -1,0 +1,11 @@
+{
+  "name": "the pre-write governor evaluates the proposed content in memory and does not itself write the target file",
+  "command": "printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"nope.tf\",\"content\":\"resource \\\"aws_security_group\\\" \\\"b\\\" {\\n  ingress { cidr_blocks = [\\\"0.0.0.0/0\\\"] }\\n}\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" >/dev/null 2>&1; [ ! -f nope.tf ] && echo governed-in-memory 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "governed-in-memory"
+    ]
+  }
+}

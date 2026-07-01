@@ -1,0 +1,6 @@
+{
+  "name": "the full tool inventory stays commercially sellable with every copyleft tool marked invoke_only",
+  "command": "MAN=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.env.MAN,\"utf8\"));const cl=/GPL|AGPL|LGPL/;const leak=m.tools.filter(t=>cl.test(t.license)&&!t.invoke_only);if(leak.length){console.error(\"copyleft-bundled:\",leak.map(t=>t.tool).join(\",\"));process.exit(1)}console.error(\"all-copyleft-invoke-only count=\"+m.tools.length)'",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["all-copyleft-invoke-only count="] }
+}

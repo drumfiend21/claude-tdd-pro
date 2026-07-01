@@ -1,0 +1,11 @@
+{
+  "name": "the red-team pack feeds the H-16 frontier pre-release readiness checklist",
+  "command": "printf 'resource x {}\\n' > a.tf && bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --artifact a.tf --emit json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));process.exit(j.feeds&&j.feeds.h16?0:1)' && echo w13-feeds-h16 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "w13-feeds-h16"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the CI closed-loop workflow has the vulnerability + SBOM gate step wired",
+  "command": "grep -q 'Vulnerability + SBOM gate' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && grep -q 'doctor.sh --check vuln-scan --root' \"$CLAUDE_PLUGIN_ROOT/.github/workflows/closed-loop.yml\" && echo x10-ci-step 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-ci-step"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record produces zero records when there are no findings",
+  "command": "printf '[]' > e.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings e.json 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'records=0' e.txt && echo c23-empty-noop 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-empty-noop"
+    ]
+  }
+}

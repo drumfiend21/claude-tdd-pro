@@ -1,0 +1,11 @@
+{
+  "name": "the GCTP handoff names guaranteed enforcement: native fallback and the universal native enforcer",
+  "command": "grep -q '§28.56 native fallback' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q '§28.57 universal native enforcer' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo handoff-guaranteed-enforcement 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "handoff-guaranteed-enforcement"
+    ]
+  }
+}

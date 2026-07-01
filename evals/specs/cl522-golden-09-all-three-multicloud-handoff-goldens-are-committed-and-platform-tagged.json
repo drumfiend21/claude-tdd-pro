@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: all three multicloud handoff goldens are committed and platform-tagged aws, gcp, and azure",
+  "command": "node -e 'const fs=require(\"fs\");const base=process.argv[1];const want={aws:\"aws-handoff.json\",gcp:\"gcp-handoff.json\",azure:\"azure-handoff.json\"};let ok=true;for(const[p,f]of Object.entries(want)){const j=JSON.parse(fs.readFileSync(base+\"/\"+f,\"utf8\"));const plat=j.platform||(j.handoff&&j.handoff.target_platform);if(plat!==p)ok=false;}process.exit(ok?0:1)' \"$CLAUDE_PLUGIN_ROOT/standards/golden/multicloud\" && echo multicloud-handoff-goldens 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "multicloud-handoff-goldens"
+    ]
+  }
+}

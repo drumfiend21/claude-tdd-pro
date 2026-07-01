@@ -1,0 +1,11 @@
+{
+  "name": "a profile that configures only unrelated rules leaves the target rule enforced at its native severity (still blocks)",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: t\\nextends: []\\nrules:\\n  some-unrelated-rule: warn\\n' > prof.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile prof.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && grep -q 'disabled=0' e.txt && echo omitted-rule-still-enforced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "omitted-rule-still-enforced"
+    ]
+  }
+}

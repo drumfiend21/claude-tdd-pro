@@ -1,0 +1,11 @@
+{
+  "name": "one design yields a reconciled co-design plan coupling application build units and cloud infrastructure units",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\",\"workload\":\"a full-stack SaaS application\"}}' > p.json\nbash $CLAUDE_PLUGIN_ROOT/commands/architect-session.sh --vision \"a full-stack SaaS application\" --profile p.json --out-dir s --now 2026-06-08T00:00:00Z 2>/dev/null\nbash $CLAUDE_PLUGIN_ROOT/commands/codesign-build.sh --requirements s/technical-requirements.json --platform aws 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -qE 'codesign platform=aws app_units=[0-9]+ infra_units=[0-9]+ reconciled=true' e.txt && echo codesign-reconciled 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "codesign-reconciled"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "doctor --check vuln-scan is a green no-op on a repo with no declared dependencies",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/doctor.sh\" --check vuln-scan --root . 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -qE 'status=skipped|vulnerabilities=0' e.txt && echo x10-clean-noop 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "x10-clean-noop"
+    ]
+  }
+}

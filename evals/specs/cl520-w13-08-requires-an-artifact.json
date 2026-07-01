@@ -1,0 +1,11 @@
+{
+  "name": "redteam-review requires an artifact to review",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/redteam-review.sh\" --emit json 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'artifact' e.txt && echo w13-requires-artifact 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "w13-requires-artifact"
+    ]
+  }
+}

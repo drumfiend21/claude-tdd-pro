@@ -1,0 +1,11 @@
+{
+  "name": "config init refuses to overwrite an existing ctp.config.yaml unless --force is given",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config.sh\" init >/dev/null 2>&1 && bash \"$CLAUDE_PLUGIN_ROOT/commands/config.sh\" init 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'use --force' e.txt && echo init-refuses-overwrite 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "init-refuses-overwrite"
+    ]
+  }
+}

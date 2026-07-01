@@ -1,0 +1,11 @@
+{
+  "name": "the tool-option-surfaces catalog declares the per-rule option surface for every tool in the toolchain",
+  "command": "ruby -ryaml -rjson -rset -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"].keys.to_set; m=JSON.parse(File.read(ARGV[1]))[\"tools\"].map{|t| t[\"tool\"]}.to_set; miss=(m-c); STDERR.puts(\"missing=#{miss.to_a.inspect} catalog=#{c.size} toolchain=#{m.size}\"); exit(miss.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" \"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\" && echo catalog-covers-every-tool 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "catalog-covers-every-tool"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval grounds each control family in the NIST AI RMF source rather than asserting it ungrounded",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit md 2>e.txt; [ \"$(grep -c 'grounded=nist-ai-rmf' e.txt)\" -eq 4 ] && echo h16-grounded-nist 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-grounded-nist"
+    ]
+  }
+}

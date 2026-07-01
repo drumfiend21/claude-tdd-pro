@@ -1,0 +1,11 @@
+{
+  "name": "E2E: every axis-scoped rule is tagged using only canonical four-axis vocabulary drawn from the Linguist / IaC / PURL authority mirrors — no rule invents a language, dialect, or package-type kind",
+  "command": "ruby -ryaml -rjson -rset -e 'ling=JSON.parse(File.read(ARGV[1])); known=Set.new; src=ling.is_a?(Hash) ? ling : {}; (src[\"languages\"]||src).each{|k,v| known<<k.to_s.downcase; (v.is_a?(Hash) ? Array(v[\"aliases\"]) : []).each{|a| known<<a.to_s.downcase}}; (src[\"by_extension\"]||{}).each{|e,ls| Array(ls).each{|l| known<<l.to_s.downcase}}; r=YAML.unsafe_load_file(ARGV[2]); iac=(r[\"iac_dialects\"]||{}).keys.map(&:downcase).to_set; purl=(r[\"purl_uses\"]||{}).keys.map(&:downcase).to_set; bad=[]; scoped=0; Dir[File.join(ARGV[0],\"generated-code-quality-standards\",\"*\",\"*.yaml\")].each{|f| d=(YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash); (d[\"rules\"]||[]).each{|ru| at=ru[\"applies_to\"]; next unless at.is_a?(Hash); scoped+=1; Array(at[\"linguist_aliases\"]).each{|v| bad<<\"#{ru[\"id\"]}:ling:#{v}\" unless known.include?(v.to_s.downcase)}; Array(at[\"iac_dialects\"]).each{|v| bad<<\"#{ru[\"id\"]}:iac:#{v}\" unless iac.include?(v.to_s.downcase)}; Array(at[\"purl_uses\"]).each{|v| bad<<\"#{ru[\"id\"]}:purl:#{v}\" unless purl.include?(v.to_s.downcase)}}}; STDERR.puts(\"axis_scoped=#{scoped} invented=#{bad.size} #{bad.first(5).inspect}\"); exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT\" \"$CLAUDE_PLUGIN_ROOT/vendor/canonical-vocabulary/linguist-languages.json\" \"$CLAUDE_PLUGIN_ROOT/standards/kind-to-tool-routing.yaml\" && echo every-rule-vocab-canonical 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-rule-vocab-canonical"
+    ]
+  }
+}

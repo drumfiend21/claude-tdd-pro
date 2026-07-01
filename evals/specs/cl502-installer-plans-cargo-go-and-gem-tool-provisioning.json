@@ -1,0 +1,6 @@
+{
+  "name": "the installer plans cargo, go and gem tool provisioning without dropping them as uninstallable",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/install-toolchain.sh\" --dry-run 2>e.txt; ok=1; for tc in cargo go gem; do if command -v \"$tc\" >/dev/null 2>&1; then grep -q \"$tc install\" e.txt || ok=0; fi; done; [ \"$ok\" -eq 1 ] && echo installer-covers-cargo-go-gem 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["installer-covers-cargo-go-gem"] }
+}

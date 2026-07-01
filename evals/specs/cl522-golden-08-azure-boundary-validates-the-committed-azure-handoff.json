@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the Azure boundary validates the committed Azure handoff and tags the platform azure",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/azure-boundary.sh\" --handoff \"$CLAUDE_PLUGIN_ROOT/standards/golden/multicloud/azure-handoff.json\" --out resp.json --now 2026-06-08T00:00:00Z 2>/dev/null; node -e 'const r=JSON.parse(require(\"fs\").readFileSync(\"resp.json\",\"utf8\"));process.exit(r.validated===true&&r.platform===\"azure\"?0:1)' && echo azure-boundary-validated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-boundary-validated"
+    ]
+  }
+}

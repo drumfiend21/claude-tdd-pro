@@ -1,0 +1,11 @@
+{
+  "name": "a representative tool from each supported format is wired: eslint (json), ruff (toml), rubocop (yaml), mypy (ini)",
+  "command": "ruby -ryaml -e 't=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; ok = t[\"eslint\"][\"render\"][\"fmt\"]==\"json\" && t[\"ruff\"][\"render\"][\"fmt\"]==\"toml\" && t[\"rubocop\"][\"render\"][\"fmt\"]==\"yaml\" && t[\"mypy\"][\"render\"][\"fmt\"]==\"ini\"; exit(ok ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo representative-per-format-wired 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "representative-per-format-wired"
+    ]
+  }
+}

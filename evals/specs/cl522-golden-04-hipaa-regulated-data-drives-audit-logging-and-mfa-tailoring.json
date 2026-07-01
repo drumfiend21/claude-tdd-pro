@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the HIPAA regulated-data scenario tailors the design with audit logging, MFA, and strong consistency",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/standards/golden/healthcare-booking-hipaa-profile.json\" --out req.json --now 2026-06-08T00:00:00Z 2>/dev/null; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"req.json\",\"utf8\"));const s=new Set(Object.values(j.pillars).flat().map(c=>c.concern));process.exit(s.has(\"audit_logging\")&&s.has(\"mfa\")&&s.has(\"strong_consistency\")?0:1)' && echo hipaa-tailored 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "hipaa-tailored"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "sbom rejects an unknown output format with a usage error",
+  "command": "printf '%s' '{\"dependencies\":{\"lodash\":\"4.17.21\",\"express\":\"4.18.0\"}}' > package.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/sbom.sh\" --root . --format bogus 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'unknown format' e.txt && echo h15-rejects-format 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h15-rejects-format"
+    ]
+  }
+}

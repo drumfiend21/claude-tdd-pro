@@ -1,0 +1,11 @@
+{
+  "name": "the GCTP handoff names the universal config object and the persisted, cached options-view",
+  "command": "grep -q '§28.58 universal config object' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q '§28.59 persisted, cached options-view' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && grep -q 'config-sync.sh' \"$CLAUDE_PLUGIN_ROOT/docs/handoff-gctp-composite-engine.md\" && echo handoff-config 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "handoff-config"
+    ]
+  }
+}

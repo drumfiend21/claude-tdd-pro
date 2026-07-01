@@ -1,0 +1,11 @@
+{
+  "name": "on a re-run the unchanged rules are served from the persisted cache rather than re-materialized",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/config-sync.sh\" --persist --out view.yaml 2>e.txt; ruby -e 'm=File.read(\"e.txt\").match(/unchanged=(\\d+)/); exit((m && m[1].to_i>=118) ? 0 : 1)' && echo unchanged-from-cache 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unchanged-from-cache"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "an untagged Node rule falls back to the full-stack path by its namespace (never unpathed)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-node-008 --applies-to '{}' 2>e.txt; grep -q 'development_paths=fullstack' e.txt && echo node-fallback-fullstack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "node-fallback-fullstack"
+    ]
+  }
+}

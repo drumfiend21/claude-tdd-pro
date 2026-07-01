@@ -1,0 +1,11 @@
+{
+  "name": "frontier-eval scaffolds all four EO Sec. 3 pre-release control families",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/frontier-eval.sh\" --emit json 2>/dev/null >o.json; node -e 'const j=JSON.parse(require(\"fs\").readFileSync(\"o.json\",\"utf8\"));const n=j.controls.map(c=>c.control);process.exit([\"confidentiality\",\"cybersecurity\",\"insider_risk\",\"ip_protection\"].every(x=>n.includes(x))?0:1)' && echo h16-four-families 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "h16-four-families"
+    ]
+  }
+}

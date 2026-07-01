@@ -1,0 +1,11 @@
+{
+  "name": "a profile that does not mention the tool-native rule leaves the tool's red verdict intact on the routed path",
+  "command": "printf 'import os\\n' > x.py && printf 'name: t\\nextends: []\\nrules:\\n  some-other: off\\n' > q.yaml && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file x.py --profile q.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && grep -q 'disabled=0' e.txt && echo routed-omit-keeps-red 1>&2; else echo routed-omit-keeps-red 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-omit-keeps-red"
+    ]
+  }
+}

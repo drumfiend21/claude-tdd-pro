@@ -1,0 +1,6 @@
+{
+  "name": "the routing table binds json to a formatter and typescript to several linters",
+  "command": "R=\"$CLAUDE_PLUGIN_ROOT/standards/kind-to-tool-routing.yaml\"; grep -A4 '^  json:' \"$R\" | grep -q 'tool: prettier' && grep -A8 '^  typescript:' \"$R\" | grep -q 'tool: eslint' && grep -A8 '^  typescript:' \"$R\" | grep -q 'tool: semgrep' && echo routing-expanded-across-axes 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["routing-expanded-across-axes"] }
+}

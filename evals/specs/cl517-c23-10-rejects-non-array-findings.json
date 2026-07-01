@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record rejects findings that are not a JSON array with a usage error",
+  "command": "printf '{\"not\":\"array\"}' > bad.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings bad.json 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'array' e.txt && echo c23-rejects-nonarray 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-rejects-nonarray"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "a single file is enforced by BOTH the native detector (secret) and a 3rd-party tool (ruff), both governed by the config surface",
+  "command": "printf 'import os\\nAPI_KEY = \"AKIAIOSFODNN7EXAMPLE\"\\n' > app.py && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file app.py 2>w.txt; wc=$?; [ \"$wc\" -eq 1 ] && grep -q 'g-universal-no-hardcoded-secrets' w.txt && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file app.py 2>d.txt; grep -q 'tool=ruff verdict=red' d.txt && echo dual-path-native-and-thirdparty 1>&2; else echo dual-path-native-and-thirdparty 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dual-path-native-and-thirdparty"
+    ]
+  }
+}

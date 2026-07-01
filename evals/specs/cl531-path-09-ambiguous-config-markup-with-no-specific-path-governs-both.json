@@ -1,0 +1,11 @@
+{
+  "name": "an ambiguous config/markup rule (yaml/json) with no specific path governs both development paths",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/classify-path.sh\" --rule-id g-yaml-well-formed --applies-to '{\"linguist_aliases\":[\"yaml\"]}' 2>e.txt; grep -q 'development_paths=fullstack,iac' e.txt && echo ambiguous-config-both 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ambiguous-config-both"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the grouping reports a usage error when neither a directory nor an input document is provided",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/group-findings-by-rule.sh\" 2>e.txt; ec=$?; [ \"$ec\" -eq 2 ] && grep -q 'required' e.txt && echo usage-error-on-no-input 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "usage-error-on-no-input"
+    ]
+  }
+}

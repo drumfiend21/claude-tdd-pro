@@ -1,0 +1,112 @@
+# standards/tool-option-surfaces.yaml -- the standardized catalog of per-rule OPTION surfaces for
+# every enforcement tool (§28.50). The single config layer carries tool-NATIVE options per
+# (rule, tool) in `enforced_by[].options` (schema) and overridable from `ctp.config.yaml`. This
+# catalog declares each tool's own option vocabulary (`option_form`) + how CTP emits it to the
+# tool's native config (`emit`). NO TRANSFORMER: the options written in the single file ARE the
+# tool's real options; this file says where they go and what shape they take.
+#
+# Derived from docs/design/v1.18-eslint-config-to-tool-config-map.md (the per-tool option research).
+# `per_rule_options: none` = the tool has no per-rule option payload (only enable/disable/severity);
+# config for those is purely C1/C2/C5 (severity / disable / preset), not C3 options.
+version: 1
+
+paradigms:
+  eslint_semantics:   { c3_options: rule-keyed object/array, inline: native }
+  config_toggle:      { c3_options: per-rule keys in TOML/YAML, inline: native }
+  policy_as_code:     { c3_options: per-check vars (limited), inline: native skip-comment }
+  vuln_scanner:       { c3_options: none (severity-threshold + allowlist only) }
+  formatter:          { c3_options: none (whole-file style options only, not per-rule) }
+  binary_validator:   { c3_options: none (pass/fail) }
+
+tools:
+  # ---- A. ESLint-semantics linters: per-rule [severity, options] ----
+  eslint: { paradigm: eslint_semantics, option_form: "{ <ruleId>: [severity, <options>] }", emit: "eslint flat-config rules[ruleId]", examples: { complexity: ["error", { max: 10 }], "max-len": ["error", { code: 100, tabWidth: 2 }] } , render: { fmt: json, file: ".eslintrc.json", flag: "--config" } }
+  oxlint: { paradigm: eslint_semantics, option_form: "{ rules: { <ruleId>: [severity, <options>] } }", emit: ".oxlintrc.json rules", examples: { "no-console": ["error", { allow: ["warn"] }] } , render: { fmt: json, file: ".oxlintrc.json", flag: "--config" } }
+  biome: { paradigm: eslint_semantics, option_form: "{ linter.rules.<group>.<rule>: { level, options } }", emit: "biome.json linter.rules", examples: { "complexity.noExcessiveCognitiveComplexity": { level: "error", options: { maxAllowedComplexity: 15 } } } , render: { fmt: json, file: "biome.json", flag: "--config-path" } }
+  stylelint: { paradigm: eslint_semantics, option_form: "{ <rule>: [primary, { secondary }] }", emit: ".stylelintrc rules", examples: { "max-nesting-depth": [3, { severity: "warning" }] } , render: { fmt: json, file: ".stylelintrc.json", flag: "--config" } }
+  htmlhint: { paradigm: eslint_semantics, option_form: "{ <ruleId>: <value> }", emit: ".htmlhintrc", examples: { "attr-value-double-quotes": true } , render: { fmt: json, file: ".htmlhintrc", flag: "--config" } }
+  html-validate: { paradigm: eslint_semantics, option_form: "{ rules: { <ruleId>: [severity, <options>] } }", emit: ".htmlvalidate.json", examples: { "element-permitted-content": "error" } , render: { fmt: json, file: ".htmlvalidate.json", flag: "--config" } }
+  markdownlint: { paradigm: eslint_semantics, option_form: "{ <MDxxx>: <bool|object> }", emit: ".markdownlint.json", examples: { MD013: { line_length: 100 }, MD033: false } , render: { fmt: json, file: ".markdownlint.json", flag: "--config" } }
+  cspell: { paradigm: eslint_semantics, option_form: "{ words: [...], ignoreRegExpList: [...] }", emit: "cspell.json", examples: { words: ["CTP", "rubric"] } , render: { fmt: json, file: "cspell.json", flag: "--config" } }
+  textlint: { paradigm: eslint_semantics, option_form: "{ rules: { <rule>: <options> } }", emit: ".textlintrc", examples: { "sentence-length": { max: 120 } } , render: { fmt: json, file: ".textlintrc.json", flag: "--config" } }
+  remark: { paradigm: eslint_semantics, option_form: "{ plugins: [[<plugin>, <options>]] }", emit: ".remarkrc", examples: { "remark-lint-maximum-line-length": 100 } , render: { fmt: json, file: ".remarkrc.json", flag: "--rc-path" } }
+  alex: { paradigm: eslint_semantics, option_form: "{ allow: [...], deny: [...] }", emit: ".alexrc", examples: { allow: ["host-hostess"] } , render: { fmt: json, file: ".alexrc", supported: false } }
+  write-good: { paradigm: eslint_semantics, option_form: "{ <check>: <bool> }", emit: "cli flags", examples: { passive: false, weasel: true } , render: { fmt: flags, supported: false } }
+  solhint: { paradigm: eslint_semantics, option_form: "{ rules: { <rule>: [severity, <opts>] } }", emit: ".solhint.json", examples: { "max-line-length": ["error", 120] } , render: { fmt: json, file: ".solhint.json", flag: "--config" } }
+  graphql-schema-linter: { paradigm: eslint_semantics, option_form: "{ rules: [...], schemaPaths: [...] }", emit: ".graphql-schema-linterrc" , render: { fmt: json, file: ".graphql-schema-linterrc", flag: "--config-file" } }
+
+  # ---- B. Config-file toggle linters: per-rule keys in TOML/YAML ----
+  ruff: { paradigm: config_toggle, option_form: "[tool.ruff.lint.<plugin>] <key> = <value>", emit: "pyproject.toml [tool.ruff.lint.*]", examples: { "mccabe.max-complexity": 10, "pylint.max-args": 5, "isort.known-first-party": ["myapp"] } , render: { fmt: toml, file: "ruff.toml", flag: "--config" } }
+  rubocop: { paradigm: config_toggle, option_form: "{ <Dept/Cop>: { <Option>: <value> } }", emit: ".rubocop.yml", examples: { "Metrics/MethodLength": { Max: 15 }, "Style/StringLiterals": { EnforcedStyle: "single_quotes" } } , render: { fmt: yaml, file: ".rubocop.yml", flag: "--config" } }
+  clippy: { paradigm: config_toggle, option_form: "clippy.toml <key> = <value>", emit: "clippy.toml", examples: { cognitive-complexity-threshold: 30, too-many-arguments-threshold: 8 } , render: { fmt: toml, file: "clippy.toml", supported: false } }
+  golangci-lint: { paradigm: config_toggle, option_form: "{ linters-settings.<linter>.<key> }", emit: ".golangci.yml linters-settings", examples: { "gocyclo.min-complexity": 15, "lll.line-length": 120 } , render: { fmt: yaml, file: ".golangci.yml", flag: "-c" } }
+  yamllint: { paradigm: config_toggle, option_form: "{ rules: { <rule>: { level, <opts> } } }", emit: ".yamllint", examples: { "line-length": { max: 120, level: "warning" } } , render: { fmt: yaml, file: ".yamllint.yml", flag: "-c" } }
+  vale: { paradigm: config_toggle, option_form: "{ <Style.Rule>: <severity|opts> }", emit: ".vale.ini + styles", examples: { "Vale.Spelling": "error" } , render: { fmt: ini, file: ".vale.ini", flag: "--config" } }
+  swiftlint: { paradigm: config_toggle, option_form: "{ <rule>: { severity, <opts> } }", emit: ".swiftlint.yml", examples: { line_length: { warning: 120, error: 200 } } , render: { fmt: yaml, file: ".swiftlint.yml", flag: "--config" } }
+  shellcheck: { paradigm: config_toggle, option_form: "enable/disable + severity (-S)", emit: ".shellcheckrc / flags", examples: { enable: ["all"], "disable": ["SC2034"] } , render: { fmt: rc, file: ".shellcheckrc", supported: false } }
+  detekt: { paradigm: config_toggle, option_form: "{ <Ruleset>.<Rule>: { active, <opts> } }", emit: "detekt.yml", examples: { "complexity.LongMethod": { threshold: 60 } } , render: { fmt: yaml, file: "detekt.yml", flag: "--config" } }
+  ktlint: { paradigm: config_toggle, option_form: ".editorconfig ktlint_* keys", emit: ".editorconfig", examples: { max_line_length: 120 } , render: { fmt: editorconfig, file: ".editorconfig", flag: "--editorconfig", supported: false } }
+  phpstan: { paradigm: config_toggle, option_form: "{ parameters.<key> }", emit: "phpstan.neon", examples: { level: 8 } , render: { fmt: neon, file: "phpstan.neon", flag: "--configuration", supported: false } }
+  psalm: { paradigm: config_toggle, option_form: "psalm.xml attributes", emit: "psalm.xml", examples: { errorLevel: 2 } , render: { fmt: xml, file: "psalm.xml", flag: "--config", supported: false } }
+  sqlfluff: { paradigm: config_toggle, option_form: "[sqlfluff:rules:<rule>] <key>", emit: ".sqlfluff", examples: { "L010.capitalisation_policy": "upper" } , render: { fmt: ini, file: ".sqlfluff", flag: "--config" } }
+  mypy: { paradigm: config_toggle, option_form: "[mypy] <key> = <value>", emit: "mypy.ini / pyproject", examples: { disallow_untyped_defs: true, strict: true } , render: { fmt: ini, file: "mypy.ini", flag: "--config-file" } }
+  bandit: { paradigm: config_toggle, option_form: "{ <check>: { <param> } }", emit: ".bandit / pyproject", examples: { "B101.skips": [] } , render: { fmt: yaml, file: "bandit.yaml", flag: "-c" } }
+  semgrep: { paradigm: config_toggle, option_form: "CLI flags: --severity --exclude --timeout --max-target-bytes (+ rule-body severity at draft time)", emit: "semgrep CLI flags", examples: { severity: "ERROR", exclude: ["vendor"] } , render: { method: cli, map: { severity: "--severity", exclude: "--exclude", timeout: "--timeout", max_target_bytes: "--max-target-bytes" } } }
+  brakeman: { paradigm: config_toggle, option_form: "{ <key>: <value> } (brakeman.yml)", emit: "config/brakeman.yml", examples: { min_confidence: 2, skip_checks: ["CheckExecute"] } , render: { fmt: yaml, file: "brakeman.yml", flag: "-c" } }
+  tflint: { paradigm: config_toggle, option_form: "{ rule \"<id>\" { enabled, <opts> } }", emit: ".tflint.hcl", examples: { "terraform_naming_convention": { format: "snake_case" } } , render: { fmt: hcl, file: ".tflint.hcl", flag: "--config", supported: false } }
+  staticcheck: { paradigm: config_toggle, option_form: "staticcheck.conf checks", emit: "staticcheck.conf", examples: { checks: ["all", "-ST1000"] } , render: { fmt: conf, file: "staticcheck.conf", supported: false } }
+  gosec: { paradigm: config_toggle, option_form: "-include/-exclude + config json", emit: "gosec config", examples: { "G101.pattern": "(?i)passwd" } , render: { fmt: json, file: "gosec.json", flag: "-conf" } }
+  pmd: { paradigm: config_toggle, option_form: "ruleset.xml <property>", emit: "pmd-ruleset.xml", examples: { "CyclomaticComplexity.reportLevel": 10 } , render: { fmt: xml, file: "ruleset.xml", flag: "--rulesets", supported: false } }
+  spotbugs: { paradigm: config_toggle, option_form: "filter.xml + effort/threshold", emit: "spotbugs-exclude.xml", examples: { effort: "max" } , render: { fmt: xml, file: "spotbugs-exclude.xml", flag: "--exclude", supported: false } }
+  credo: { paradigm: config_toggle, option_form: "{ checks: [{<Check>, <opts>}] }", emit: ".credo.exs", examples: { "Credo.Check.Readability.MaxLineLength": { max_length: 120 } } , render: { fmt: exs, file: ".credo.exs", flag: "--config-name", supported: false } }
+  protolint: { paradigm: config_toggle, option_form: "{ rules: { <rule>: <opts> } }", emit: ".protolint.yaml", examples: { "MAX_LINE_LENGTH": { max_chars: 120 } } , render: { fmt: yaml, file: ".protolint.yaml", flag: "--config" } }
+  buf: { paradigm: config_toggle, option_form: "{ lint: { use: [...], except: [...] } }", emit: "buf.yaml", examples: { lint: { use: ["DEFAULT"] } } , render: { fmt: yaml, file: "buf.yaml", flag: "--config" } }
+  spectral: { paradigm: config_toggle, option_form: "{ rules: { <rule>: <severity|object> } }", emit: ".spectral.yaml", examples: { "operation-description": "warn" } , render: { fmt: yaml, file: ".spectral.yaml", flag: "--ruleset" } }
+  vacuum: { paradigm: config_toggle, option_form: "{ rules: { <rule>: <object> } }", emit: "vacuum ruleset", examples: {} , render: { fmt: yaml, file: "vacuum.yaml", flag: "-r" } }
+  redocly: { paradigm: config_toggle, option_form: "{ rules: { <rule>: <severity|object> } }", emit: "redocly.yaml", examples: { "no-empty-servers": "error" } , render: { fmt: yaml, file: "redocly.yaml", flag: "--config" } }
+  regal: { paradigm: config_toggle, option_form: "{ rules: { <category>: { <rule>: { level } } } }", emit: ".regal/config.yaml", examples: {} , render: { fmt: yaml, file: "regal.yaml", flag: "--config" } }
+  cfn-lint: { paradigm: config_toggle, option_form: "{ rules.configure.<rule>: <opts> }", emit: ".cfnlintrc", examples: {} , render: { fmt: yaml, file: ".cfnlintrc", flag: "--config-file" } }
+  actionlint: { paradigm: config_toggle, option_form: "actionlint.yaml config", emit: ".github/actionlint.yaml", examples: {} , render: { fmt: yaml, file: "actionlint.yaml", flag: "-config-file" } }
+  zizmor: { paradigm: config_toggle, option_form: "{ rules.<rule>.config }", emit: "zizmor.yml", examples: {} , render: { fmt: yaml, file: "zizmor.yml", flag: "--config" } }
+
+  # ---- C. Policy-as-code scanners: skip-list + (limited) per-check vars ----
+  checkov: { paradigm: policy_as_code, option_form: "{ skip-check: [...], soft-fail-on: [...], severity, framework: [...] }", emit: ".checkov.yaml", examples: { soft-fail-on: ["LOW"], skip-check: ["CKV_AWS_20"] }, per_rule_options: limited , render: { fmt: yaml, file: ".checkov.yaml", flag: "--config-file" } }
+  conftest: { paradigm: policy_as_code, option_form: "rego input + --data", emit: "conftest.toml / --data", per_rule_options: limited , render: { fmt: toml, file: "conftest.toml", flag: "--config" } }
+  tfsec: { paradigm: policy_as_code, option_form: "{ minimum_severity, exclude }", emit: ".tfsec config", per_rule_options: limited , render: { fmt: json, file: "tfsec.json", flag: "--config-file" } }
+  terrascan: { paradigm: policy_as_code, option_form: "{ severity, rules.skip-rules }", emit: "terrascan config", per_rule_options: limited , render: { fmt: yaml, file: "terrascan.yaml", flag: "--config-path" } }
+  kubescape: { paradigm: policy_as_code, option_form: "--severity-threshold + controls config", emit: "kubescape config", per_rule_options: limited , render: { fmt: yaml, file: "controls.yaml", flag: "--controls-config" } }
+  kube-linter: { paradigm: policy_as_code, option_form: "{ checks: { include/exclude }, customChecks }", emit: ".kube-linter.yaml", per_rule_options: limited , render: { fmt: yaml, file: ".kube-linter.yaml", flag: "--config" } }
+  polaris: { paradigm: policy_as_code, option_form: "{ checks: { <check>: <severity> } }", emit: "polaris config.yaml", examples: { checks: { hostIPCSet: "danger" } } , render: { fmt: yaml, file: "polaris.yaml", flag: "--config" } }
+  hadolint: { paradigm: policy_as_code, option_form: "{ ignored: [...], override: { <level>: [...] } }", emit: ".hadolint.yaml", examples: { ignored: ["DL3008"] } , render: { fmt: yaml, file: ".hadolint.yaml", flag: "--config" } }
+  slither: { paradigm: policy_as_code, option_form: "--detect/--exclude + config json", emit: "slither.config.json", per_rule_options: limited , render: { fmt: json, file: "slither.config.json", flag: "--config-file" } }
+
+  # ---- D. Vuln / secret scanners: severity threshold + allowlist, NO per-rule options ----
+  trivy:         { paradigm: vuln_scanner, per_rule_options: none, knobs: { severity_threshold: "--severity", ignore: ".trivyignore" }, examples: { severity: "CRITICAL,HIGH", ignore_unfixed: true } , render: { method: cli, map: { severity: "--severity", ignore_unfixed: "--ignore-unfixed", exit_code: "--exit-code" } } }
+  grype:         { paradigm: vuln_scanner, per_rule_options: none, knobs: { fail_on: "--fail-on", ignore: ".grype.yaml" } }
+  osv-scanner:   { paradigm: vuln_scanner, per_rule_options: none, knobs: { ignore: "osv-scanner.toml" } }
+  pip-audit:     { paradigm: vuln_scanner, per_rule_options: none, knobs: { ignore: "--ignore-vuln" } }
+  cargo-audit:   { paradigm: vuln_scanner, per_rule_options: none, knobs: { ignore: "audit.toml" } }
+  cargo-deny:    { paradigm: vuln_scanner, per_rule_options: none, knobs: { config: "deny.toml" } }
+  govulncheck:   { paradigm: vuln_scanner, per_rule_options: none }
+  gitleaks:      { paradigm: vuln_scanner, per_rule_options: none, knobs: { allowlist: ".gitleaks.toml" } }
+  detect-secrets: { paradigm: vuln_scanner, per_rule_options: none, knobs: { baseline: ".secrets.baseline" } }
+  trufflehog:    { paradigm: vuln_scanner, per_rule_options: none }
+  scorecard:     { paradigm: vuln_scanner, per_rule_options: none }
+  pa11y:         { paradigm: vuln_scanner, per_rule_options: limited, knobs: { standard: "WCAG2AA", ignore: [] } }
+  lighthouse:    { paradigm: vuln_scanner, per_rule_options: limited, knobs: { onlyCategories: [], thresholds: {} } }
+
+  # ---- E. Formatters: whole-file style options only, NOT per-rule ----
+  prettier:      { paradigm: formatter, per_rule_options: none, knobs: { printWidth: 80, semi: true, singleQuote: false }, note: "style options are file-wide, not per-rule; advisory" }
+  shfmt:         { paradigm: formatter, per_rule_options: none, knobs: { indent: 2, binary_next_line: false } }
+
+  # ---- F. Binary validators / producers: pass-fail, no per-rule option ----
+  ajv:           { paradigm: binary_validator, per_rule_options: none }
+  kubeconform:   { paradigm: binary_validator, per_rule_options: none }
+  syft:          { paradigm: binary_validator, per_rule_options: none }
+  lychee:        { paradigm: binary_validator, per_rule_options: none, knobs: { exclude: [], timeout: 20 } }
+  markdown-link-check: { paradigm: binary_validator, per_rule_options: none, knobs: { ignorePatterns: [] } }
+  codespell:     { paradigm: binary_validator, per_rule_options: none, knobs: { ignore_words: [] } }
+  commitlint:    { paradigm: binary_validator, per_rule_options: limited, knobs: { rules: {} } }
+  reuse:         { paradigm: binary_validator, per_rule_options: none }
+  mmdc:          { paradigm: binary_validator, per_rule_options: none }
+  adr-tools:     { paradigm: binary_validator, per_rule_options: none }

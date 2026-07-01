@@ -1,0 +1,11 @@
+{
+  "name": "cvd-record appends each disclosure record to the C-4 audit log when one is given",
+  "command": "printf '%s' '[{\"component\":\"lodash\",\"severity\":\"critical\",\"fixed_in\":\"4.17.21\",\"advisory_id\":\"GHSA-x\",\"source\":\"cisa-kev\"},{\"component\":\"left-pad\",\"severity\":\"medium\",\"advisory_id\":\"GHSA-y\",\"source\":\"osv\"}]' > f.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/cvd-record.sh\" --findings f.json --audit-log a.jsonl 2>e.txt; grep -q 'audit_logged=1' e.txt && [ \"$(wc -l < a.jsonl)\" -eq 2 ] && echo c23-audit-log 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c23-audit-log"
+    ]
+  }
+}

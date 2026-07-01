@@ -1,0 +1,11 @@
+{
+  "name": "every supported render mapping declares the complete triple needed to emit and inject: format, target file, and the tool's config flag",
+  "command": "ruby -ryaml -e 'c=YAML.unsafe_load_file(ARGV[0])[\"tools\"]; bad=[]; c.each{|k,v| r=v[\"render\"]; next unless r; next if r[\"supported\"]==false; ok=(r[\"fmt\"] && r[\"file\"] && r[\"flag\"]) || (r[\"method\"]==\"cli\" && r[\"map\"]); bad<<k unless ok}; STDERR.puts(\"incomplete=#{bad.inspect}\"); exit(bad.empty? ? 0 : 1)' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo supported-render-complete-triple 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "supported-render-complete-triple"
+    ]
+  }
+}

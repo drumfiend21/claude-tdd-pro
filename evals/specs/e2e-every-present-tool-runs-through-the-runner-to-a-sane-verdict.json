@@ -1,0 +1,11 @@
+{
+  "name": "E2E: every tool that is actually installed in the environment runs through the runner to a terminal verdict (clean, findings, or not_enforced) and never a usage error — proving the adapter wiring",
+  "command": "TD=\"$(mktemp -d)\"; printf 'print(1)\\n' > \"$TD/s.py\"; bad=0; ran=0; while IFS='|' read -r tool bin; do [ -z \"$tool\" ] && continue; command -v \"$bin\" >/dev/null 2>&1 || continue; ran=$((ran+1)); timeout 25 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool \"$tool\" --file \"$TD/s.py\" --json >/dev/null 2>/dev/null; ec=$?; [ \"$ec\" -eq 2 ] && bad=$((bad+1)); done < <(node -e 'const m=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));process.stdout.write(m.tools.map(x=>x.tool+\"|\"+(x.bin||x.tool)).join(\"\\n\"))' \"$CLAUDE_PLUGIN_ROOT/rubric/runners/toolchain.json\"); rm -rf \"$TD\"; [ \"$bad\" -eq 0 ] && echo present-tools-run-sane ran=$ran 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "present-tools-run-sane"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "when a profile is supplied the enforcer summary line surfaces the profile name and the count of rules it disabled for the file",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: t\\nextends: []\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > prof.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile prof.yaml 2>e.txt; grep -qE 'profile=prof.yaml disabled=1' e.txt && echo summary-surfaces-profile 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "summary-surfaces-profile"
+    ]
+  }
+}

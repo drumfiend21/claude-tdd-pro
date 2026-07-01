@@ -1,0 +1,11 @@
+{
+  "name": "both rule sets govern: an IaC artifact and an app-code artifact are each denied by their path's rules pre-write",
+  "command": "printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"main.tf\",\"content\":\"resource \\\"aws_security_group\\\" \\\"b\\\" { ingress { cidr_blocks = [\\\"0.0.0.0/0\\\"] } }\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" >/dev/null 2>&1; tf=$?; printf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"app.ts\",\"content\":\"const x: any = 1;\\n\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" >/dev/null 2>&1; ts=$?; [ \"$tf\" -eq 2 ] && [ \"$ts\" -eq 2 ] && echo both-paths-govern 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "both-paths-govern"
+    ]
+  }
+}

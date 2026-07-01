@@ -1,0 +1,11 @@
+{
+  "name": "golden oracle: the committed AWS boundary-response artifact is validated and every normalized recommendation is grounded",
+  "command": "node -e 'const g=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));const recs=(g.normalized&&g.normalized.recommendations)||[];process.exit(g.validated===true&&Array.isArray(g.build_units)&&g.build_units.length>0&&recs.every(r=>r.grounding===\"grounded\")?0:1)' \"$CLAUDE_PLUGIN_ROOT/standards/golden/multicloud/aws-boundary-response.json\" && echo aws-resp-golden-grounded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aws-resp-golden-grounded"
+    ]
+  }
+}

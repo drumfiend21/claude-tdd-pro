@@ -1,0 +1,11 @@
+{
+  "name": "app-code enforcement is opt-in: without --include-app-code the full-stack rules do not fire (no regression)",
+  "command": "printf 'const x: any = 1;\n' > a.ts && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file a.ts 2>e.txt; grep -qE 'status=(green|advisory) ' e.txt && ! grep -q 'g-ts-001' e.txt && echo opt-in-default-unchanged 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "opt-in-default-unchanged"
+    ]
+  }
+}

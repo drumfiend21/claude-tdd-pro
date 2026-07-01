@@ -1,0 +1,11 @@
+{
+  "name": "an unreadable or missing profile path does not crash the enforcer; it falls back to native enforcement so the violation still blocks",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile /no/such/profile.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && echo missing-profile-safe-fallback 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "missing-profile-safe-fallback"
+    ]
+  }
+}

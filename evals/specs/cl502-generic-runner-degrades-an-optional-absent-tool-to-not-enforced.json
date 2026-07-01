@@ -1,0 +1,6 @@
+{
+  "name": "the generic runner degrades an optional absent non-bespoke tool to not_enforced, never a vacuous green",
+  "command": "printf 'x\\n' > f.txt && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" --tool ruff --file f.txt --json >/dev/null 2>e.txt; ec=$?; [ \"$ec\" -eq 3 ] && grep -q 'status=not_enforced' e.txt && echo generic-optional-absent-not-enforced 1>&2",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["generic-optional-absent-not-enforced"] }
+}

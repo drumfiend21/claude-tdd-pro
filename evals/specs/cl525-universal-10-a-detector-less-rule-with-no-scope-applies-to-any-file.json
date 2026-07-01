@@ -1,0 +1,11 @@
+{
+  "name": "a detector-less rule with no scope glob is enforced universally on any file, never silently skipped",
+  "command": "printf '%s\\n' 'rules:' '  - id: scraped-no-secret' '    description: \"code must not embed plaintext cloud access keys\"' '    severity: P0' '    mode: forbid' '    token: \"AKIA\"' '    enforced_by: [{tool: gitleaks}]' > s.yaml && printf 'token = AKIAIOSFODNN7EXAMPLE\\n' > random.conf && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file random.conf --extra-rules s.yaml >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'rule=scraped-no-secret severity=P0 detector=prose-judge.sh verdict=fail' e.txt && echo no-scope-applies-universally 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-scope-applies-universally"
+    ]
+  }
+}

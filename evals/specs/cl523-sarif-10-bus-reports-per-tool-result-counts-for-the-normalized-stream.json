@@ -1,0 +1,11 @@
+{
+  "name": "the SARIF bus reports per-tool result counts so the normalized stream can feed dashboards",
+  "command": "node -e 'process.stdout.write(JSON.stringify({version:\"2.1.0\",runs:[{tool:{driver:{name:\"checkov\"}},results:[{ruleId:\"CKV_AWS_18\",level:\"error\",message:{text:\"S3 access logging disabled\"},locations:[{physicalLocation:{artifactLocation:{uri:\"main.tf\"},region:{startLine:1}}}]}]}]}))' > red.sarif; bash \"$CLAUDE_PLUGIN_ROOT/rubric/sarif-aggregate.sh\" --in red.sarif 2>e.txt; grep -q 'sarif-aggregate tool=checkov results=1' e.txt && grep -qE 'sarif-aggregate status=red tools=1' e.txt && echo bus-per-tool-counts 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bus-per-tool-counts"
+    ]
+  }
+}

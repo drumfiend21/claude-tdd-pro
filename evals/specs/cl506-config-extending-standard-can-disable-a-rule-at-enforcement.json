@@ -1,0 +1,11 @@
+{
+  "name": "a user configuration that extends the standard profile and sets a rule to off disables that rule at enforcement (the single-config layering)",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && printf 'name: my\\nextends:\\n  - standard\\nrules:\\n  g-k8s-no-privileged-container: off\\n' > ctp.config.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile ctp.config.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'disabled=1' e.txt && echo config-extends-and-disables 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config-extends-and-disables"
+    ]
+  }
+}

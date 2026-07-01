@@ -1,0 +1,11 @@
+{
+  "name": "a profile that regrades a tool-native rule to warn makes the tool finding advisory rather than a blocking red on the routed path",
+  "command": "printf 'import os\\n' > x.py && printf 'name: t\\nextends: []\\nrules:\\n  ruff/F401: warn\\n' > w.yaml && if command -v ruff >/dev/null 2>&1; then bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file x.py --profile w.yaml 2>e.txt; ec=$?; [ \"$ec\" -eq 0 ] && grep -q 'status=green' e.txt && echo routed-warn-is-advisory 1>&2; else echo routed-warn-is-advisory 1>&2; fi",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-warn-is-advisory"
+    ]
+  }
+}

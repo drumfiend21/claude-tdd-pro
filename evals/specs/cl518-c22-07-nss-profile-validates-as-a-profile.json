@@ -1,0 +1,11 @@
+{
+  "name": "the national-security-systems profile is a valid §2.5 profile",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/rubric/validate-profile.sh\" --profile \"$CLAUDE_PLUGIN_ROOT/profiles/national-security-systems.yaml\" >/dev/null 2>&1 && echo c22-nss-valid 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "c22-nss-valid"
+    ]
+  }
+}

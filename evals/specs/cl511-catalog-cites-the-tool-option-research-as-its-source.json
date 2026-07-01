@@ -1,0 +1,11 @@
+{
+  "name": "the catalog cites the per-tool option research design doc as its provenance, keeping the standardization traceable",
+  "command": "grep -q 'v1.18-eslint-config-to-tool-config-map' \"$CLAUDE_PLUGIN_ROOT/standards/tool-option-surfaces.yaml\" && echo catalog-cites-research 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "catalog-cites-research"
+    ]
+  }
+}

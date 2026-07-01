@@ -1,0 +1,11 @@
+{
+  "name": "using the shipped standard profile as the enforcement config preserves the native baseline: a privileged pod still blocks with nothing disabled",
+  "command": "printf 'apiVersion: v1\\nkind: Pod\\nspec:\\n  containers:\\n  - securityContext:\\n      privileged: true\\n' > pod.yaml && bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file pod.yaml --profile \"$CLAUDE_PLUGIN_ROOT/profiles/standard.yaml\" 2>e.txt; ec=$?; [ \"$ec\" -eq 1 ] && grep -q 'status=red' e.txt && grep -q 'disabled=0' e.txt && echo standard-is-default-preserving 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "standard-is-default-preserving"
+    ]
+  }
+}
