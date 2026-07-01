@@ -2292,3 +2292,14 @@ Updates `docs/handoff-gctp-composite-engine.md` with a new **§9** naming the v1
 - **Verification GCTP mirrors:** 100% file coverage (§28.65), 50 both-flow integration tests. Epoch-aware adoption (§4a) + the ADR-0068/0069 boundary unchanged.
 
 5 specs (`cl537-handoff-01..05`): guaranteed-enforcement / prewrite / config / two-flows / distributed-coverage — assert the handoff names each capability + entrypoint. **§20 note:** doc handoff; preserves §21 dod. Suite 4865→4870.
+
+### §28.70 bash-3.2 portability fix — composite-dispatch empty-array crash (GCTP P-10 inbound) (2026-07-01)
+
+Fixes a **bash-3.2 (macOS default) crash** in `rubric/composite-dispatch.sh` reported inbound by GCTP (its handoff `docs/handoff-ctp-p10-composite-dispatch-crash.md`, P-10). **No new feature ID, no new §2.X contract** (portability correctness fix).
+
+- **The bug.** The per-tool routing loop expanded EMPTY arrays `"${ra[@]}"`/`"${toa[@]}"` (empty in the common case: tool not `--required`, no tool-options). Under `set -uo pipefail` on **bash 3.2**, expanding an empty array throws `ra[@]: unbound variable` and aborts before any verdict — so the entire ~80-tool routed-FOSS-tool path is **inert on bash 3.2** (native enforcement unaffected). This is bash32-portability-checklist gotcha #5; bash ≥4.4 does not exhibit it (this Linux CI runs bash 5.2, so it was invisible here).
+- **The fix.** Empty-safe expansion `${ra[@]+"${ra[@]}"}` / `${toa[@]+"${toa[@]}"}` (expands to nothing when empty; passes the args when present) — the documented pattern. Swept the routing engine + siblings (`run-tool.sh`, `composite-audit.sh`, `sarif-aggregate.sh`): the `ra`/`toa` pair in `composite-dispatch.sh` was the only empty-then-expanded array (all others are seeded or use `:-`/`+=`).
+- **GCTP coordination.** GCTP re-pins to the fixed CTP SHA (ADR-gated pin bump); its already-wired routed-tool paths (pre-write/on-save/audit-time) activate automatically once dispatch emits real verdicts. Precedent: P-1 (same class, §28.16).
+- **§25 fidelity vocabulary additions:** `bash-3.2`, `empty-array`, `unbound-variable`, `empty-safe-expansion`, `portability`, `set-u`, `routed-tool-inert`.
+
+5 specs (`cl538-bash32-01..05`): empty-safe-expansion-present / pattern-set-u-safe / routed-verdict-no-crash(common case) / required-path-intact / safe-form-in-loop. **§20 note:** portability fix; preserves §21 dod. Suite 4870→4875.

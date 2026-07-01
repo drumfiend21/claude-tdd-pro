@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch still passes the --required and --tool-options args when they are present (non-empty path unchanged)",
+  "command": "printf 'resource \"aws_security_group\" \"b\" {}\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file main.tf --required-tools checkov 2>e.txt; grep -qE 'dispatch file=.* status=' e.txt && ! grep -q 'unbound variable' e.txt && echo required-path-intact 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "required-path-intact"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the routing loop no longer expands a bare empty array (the vulnerable pattern is replaced by the safe form)",
+  "command": "node -e 'const s=require(\"fs\").readFileSync(process.argv[1],\"utf8\");const line=s.split(\"\\n\").find(l=>l.includes(\"$RUNNER\")&&l.includes(\"--tool\"));process.exit(line&&line.includes(\"ra[@]+\")&&line.includes(\"toa[@]+\")?0:1)' \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" && echo safe-form-in-loop 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "safe-form-in-loop"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "composite-dispatch emits a routing verdict in the common case (tool not --required, no tool-options) with no unbound-variable crash",
+  "command": "printf 'resource \"aws_security_group\" \"b\" { ingress { cidr_blocks=[\"0.0.0.0/0\"] } }\\n' > main.tf && RUN_TOOL_FORCE_ABSENT=1 bash \"$CLAUDE_PLUGIN_ROOT/rubric/composite-dispatch.sh\" --file main.tf 2>e.txt; grep -qE 'dispatch file=.* status=(green|red|incomplete)' e.txt && ! grep -q 'unbound variable' e.txt && echo routed-verdict-no-crash 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "routed-verdict-no-crash"
+    ]
+  }
+}
