@@ -82,3 +82,24 @@ array is seeded non-empty (`ea`/`da`/`ba`/`EA`/`AGG_ARGS`/`_tlist`) or uses `:-`
 CTP did not edit GCTP; GCTP does not edit CTP. The only surface that moved is
 `rubric/composite-dispatch.sh` + the new `cl538` specs + the §28.70 note. Precedent for this class:
 P-1 (adopted in CTP CL-476 / §28.16).
+
+---
+
+## 7. Adoption confirmed (GCTP, 2026-07-01)
+
+GCTP re-pinned `4668c2e → 127804b` (their ADR-0079 / TICKET-107, resolved at GCTP `d5f16b1`) and ran
+the **decisive check on `/bin/bash` 3.2.57** — the run CTP CI (bash 5.2) cannot reproduce:
+
+```
+before (4668c2e):  composite-dispatch --file  →  "line 119: ra[@]: unbound variable"  (no verdict)
+after  (127804b):  composite-dispatch --file  →  "dispatch … status=green|red"        (real verdict)
+```
+
+- **Bad file** (`0.0.0.0/0` + `Action:"*"`) → `status=red` via native fallback (correct).
+- **Clean file** (.yaml/.md) → `status=green` (native fallback handles absent tools, finds nothing) —
+  so the now-live governors **allow clean writes and deny real violations, no false-reds.**
+- GCTP suite **41/41** (activating composite-dispatch regressed nothing).
+
+**§P-10 → ✅ ADOPTED.** Both native and the ~80 routed FOSS tools now enforce across GCTP's pre-write
+(ADR-0075), on-save (ADR-0076), and audit-time (ADR-0077) surfaces on the default macOS shell. The
+honest caveat in §4 is now closed by live bash-3.2 evidence.
