@@ -49,15 +49,12 @@ SCRATCH_FILE="$(printf '%s' "$INPUT" | SCRATCH="$SCRATCH" node -e '
 [ -z "$SCRATCH_FILE" ] && exit 0
 [ -f "$SCRATCH_FILE" ] || exit 0
 
-# §28.68 both-paths governance: app-code kinds enforce the full-stack rule set natively in memory
-# (--include-app-code); config/markup/IaC/prose kinds enforce the IaC+cross-cutting set as before.
-# So BOTH development-path rule sets govern the proposed content before it is written.
-EA=(--file "$SCRATCH_FILE" --single-file-gate)   # pre-write is single-file in memory: skip tree-context rules
-case "$SCRATCH_FILE" in
-  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.py|*.go|*.rb|*.rs|*.java|*.kt|*.php|*.cs|*.swift|*.scala|*.ex) EA+=(--include-app-code) ;;
-esac
+# §29.6: BOTH development write-time (here) and consult (architect-session) call the SAME shared
+# primitive rubric/enforce-write-time.sh for native enforcement of the entire ruleset — so the native
+# enforcement is byte-identical across both by construction (one code path; the write-time flag set —
+# the single-file gate plus app-code inclusion — is decided in that one script, not duplicated here).
 set +e
-OUTPUT=$(bash "$ENFORCER" "${EA[@]}" 2>&1)
+OUTPUT=$(bash "$PLUGIN_ROOT/rubric/enforce-write-time.sh" "$SCRATCH_FILE" 2>&1)
 EC=$?
 set -e
 

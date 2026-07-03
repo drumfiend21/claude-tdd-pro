@@ -1,0 +1,11 @@
+{
+  "name": "the write-time flag selection lives only in the shared primitive and is not duplicated in either caller",
+  "command": "grep -q -- '--single-file-gate' \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" && grep -q -- '--include-app-code' \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" && ! grep -q -- '--single-file-gate' \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" && ! grep -q -- '--single-file-gate' \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" && echo flags-only-in-primitive 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "flags-only-in-primitive"
+    ]
+  }
+}

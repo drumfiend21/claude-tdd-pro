@@ -1,0 +1,11 @@
+{
+  "name": "the shared write-time primitive returns the same native verdict on repeated independent runs of the same file",
+  "command": "printf 'const x: any = 1;' > a.ts\nA=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" a.ts 2>&1 | grep -oE 'status=[a-z]+ rules_checked=[0-9]+ blocking=[0-9]+')\nB=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" a.ts 2>&1 | grep -oE 'status=[a-z]+ rules_checked=[0-9]+ blocking=[0-9]+')\n[ -n \"$A\" ] && [ \"$A\" = \"$B\" ] && echo deterministic-verdict 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "deterministic-verdict"
+    ]
+  }
+}

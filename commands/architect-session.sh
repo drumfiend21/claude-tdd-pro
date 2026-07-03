@@ -136,22 +136,20 @@ if [ -f "$_FSC" ]; then
   bash "$_FSC" --emit-grounding > "$OUT_DIR/full-surface-grounding.json" 2>/dev/null || true
   _FSNS="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).grounded_namespaces.length)}catch(e){console.log(0)}' "$OUT_DIR/full-surface-grounding.json" 2>/dev/null || echo 0)"
   echo "full_surface_grounding=$OUT_DIR/full-surface-grounding.json namespaces=$_FSNS" >&2
-  # §29.4/§29.5: the architectural design (consult) is FORMALLY ENFORCED against the entire repo ruleset
-  # via the SAME engines development uses. WRITE-TIME parity: rubric/enforce-file.sh with the SAME flags
-  # the pre-write governor uses (--single-file-gate, and --include-app-code for app-code artifacts). A
-  # P0/P1 violation in any produced artifact is RED. Fast + tool-independent.
-  _EF="$(dirname "$0")/../rubric/enforce-file.sh"
+  # §29.4/§29.6: the architectural design (consult) is FORMALLY ENFORCED against the entire repo ruleset
+  # via the SAME shared write-time primitive development uses — rubric/enforce-write-time.sh. The native
+  # enforcement is BYTE-IDENTICAL to development's write-time by construction (one code path). A P0/P1
+  # violation in any produced artifact is RED. Fast + tool-independent.
+  _EWT="$(dirname "$0")/../rubric/enforce-write-time.sh"
   _design_enf="green"
-  if [ -f "$_EF" ]; then
+  if [ -f "$_EWT" ]; then
     for _af in "$OUT_DIR"/*.md "$OUT_DIR"/*.json "$OUT_DIR"/*.ts "$OUT_DIR"/*.tsx "$OUT_DIR"/*.js "$OUT_DIR"/*.py "$OUT_DIR"/*.tf; do
       [ -f "$_af" ] || continue
-      _efa=(--file "$_af" --single-file-gate)
-      case "$_af" in *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.py|*.go|*.rb|*.rs|*.java|*.kt|*.php|*.cs) _efa+=(--include-app-code) ;; esac
-      bash "$_EF" "${_efa[@]}" >/dev/null 2>&1; _rc=$?
+      bash "$_EWT" "$_af" >/dev/null 2>&1; _rc=$?
       [ "$_rc" -eq 1 ] && _design_enf="red"
     done
   fi
-  echo "design_enforcement=$_design_enf engine=enforce-file rules_total=118" >&2
+  echo "design_enforcement=$_design_enf engine=enforce-write-time rules_total=118" >&2
   # §29.5 AUDIT-TIME parity (opt-in; ignore-time): route the produced design through the ~80 3rd-party
   # tools + native detectors via composite-audit.sh — the SAME engine development uses at audit-time.
   # Enabled with ARCHITECT_ENFORCE_ROUTED=1 (default off to keep the hot path fast).

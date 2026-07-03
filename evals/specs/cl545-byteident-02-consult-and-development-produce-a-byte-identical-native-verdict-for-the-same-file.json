@@ -1,0 +1,11 @@
+{
+  "name": "the same file yields a byte-identical native verdict from the consult path and the development write path",
+  "command": "printf 'const x: any = 1;' > a.ts\nV1=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" a.ts 2>&1 | grep -oE 'status=[a-z]+ rules_checked=[0-9]+ blocking=[0-9]+')\nprintf '%s' '{\"tool_name\":\"Write\",\"tool_input\":{\"file_path\":\"a.ts\",\"content\":\"const x: any = 1;\"}}' | bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" 2>gov.txt\nV2=$(grep -oE 'status=[a-z]+ rules_checked=[0-9]+ blocking=[0-9]+' gov.txt)\n[ -n \"$V1\" ] && [ \"$V1\" = \"$V2\" ] && echo \"byte-identical-verdict $V1\" 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "byte-identical-verdict status=red rules_checked=22 blocking=2"
+    ]
+  }
+}

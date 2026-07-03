@@ -1,0 +1,11 @@
+{
+  "name": "a clean file yields a green native verdict and exit zero from the shared primitive both callers use",
+  "command": "printf '# Title\\n\\nHello world.\\n' > ok.md\nbash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" ok.md 2>o.txt; rc=$?\n[ \"$rc\" -eq 0 ] && grep -qE 'status=green rules_checked=[0-9]+ blocking=0' o.txt && echo clean-green-verdict 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "clean-green-verdict"
+    ]
+  }
+}

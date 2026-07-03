@@ -2352,3 +2352,13 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `enforcement-parity`, `write-time-native`, `audit-time-routed`, `include-app-code`, `same-flags`, `routed-consult`, `80-tools`.
 
 4 specs (`cl544-parity-01..04`): same-write-time-engine(flags) / consult-routed-80-tools(opt-in) / default-fast-native / routed-same-as-dev. **§20 note:** enforcement parity; preserves §21 dod. Suite 4901→4905.
+
+### §29.6 Byte-identical native enforcement — one shared write-time primitive (operator-directed, 2026-07-03)
+
+**STANDING INVARIANT: the native enforcement of all rules in the repo during consult is BYTE-IDENTICAL to the native enforcement during development at write time — by construction, one code path, not hand-maintained agreement.** Closes the §29.5 gap where "byte-identical flags" was achieved by duplicating the `enforce-file --single-file-gate [--include-app-code]` invocation in both callers (two copies can silently drift). **No new feature ID / §2.X contract** (composes §28.56–68 + S-56 + §29.4/29.5). Detail: [docs/design/v1.21-byte-identical-native-enforcement.md](design/v1.21-byte-identical-native-enforcement.md).
+
+- **The one shared primitive:** `rubric/enforce-write-time.sh <file>` owns the canonical write-time flag set in exactly one place (`--single-file-gate` always; `--include-app-code` for app-code kinds `.ts/.tsx/.js/.jsx/.mjs/.cjs/.py/.go/.rb/.rs/.java/.kt/.php/.cs/.swift/.scala/.ex`) and runs `rubric/enforce-file.sh`. Exit `0` clean/advisory · `1` blocking (P0/P1) · `3` not_enforced · `2` usage.
+- **Both callers invoke it:** development write-time (`hooks/scripts/enforce-standards-pre-write.sh` → deny on exit `1`) and consult (`commands/architect-session.sh` → `design_enforcement=green|red engine=enforce-write-time rules_total=118`). Neither caller duplicates the flag logic. Same file → same `status= rules_checked= blocking=` verdict, character-for-character (verified: `a.ts` = `const x: any = 1;` → `status=red rules_checked=22 blocking=2` from both paths).
+- **§25 fidelity vocabulary additions:** `byte-identical`, `shared-primitive`, `one-code-path`, `enforce-write-time`, `write-time-primitive`, `flags-only-in-primitive`, `deterministic-verdict`.
+
+6 specs (`cl545-byteident-01..06`): one-shared-primitive / byte-identical-verdict / deterministic / fullstack-native-enforced / flags-only-in-primitive / clean-green. Reconciled `cl543-abide-08`, `cl544-parity-01/03` (marker `engine=enforce-file`→`enforce-write-time`; flags moved into the primitive). **§20 note:** enforcement single-source-of-truth refactor; preserves §21 dod. Suite 4905→4911.
