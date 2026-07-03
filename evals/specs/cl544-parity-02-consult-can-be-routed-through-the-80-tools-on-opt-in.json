@@ -1,0 +1,11 @@
+{
+  "name": "on opt-in, consult routes the produced design through the ~80 3rd-party tools via composite-audit (audit-time engine)",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"x\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json\nARCHITECT_ENFORCE_ROUTED=1 bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" --vision x --profile p.json --out-dir s --now 2026-06-08T00:00:00Z 2>se.txt\ngrep -qE 'design_enforcement_routed=[a-z]+ engine=composite-audit tools=80' se.txt && echo consult-routed-80-tools 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "consult-routed-80-tools"
+    ]
+  }
+}
