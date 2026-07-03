@@ -1,0 +1,11 @@
+{
+  "name": "development write-time governor and consult both invoke the single shared enforce-write-time primitive",
+  "command": "grep -q 'rubric/enforce-write-time.sh' \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" && grep -q 'enforce-write-time.sh' \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" && test -f \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-write-time.sh\" && echo one-shared-primitive 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "one-shared-primitive"
+    ]
+  }
+}
