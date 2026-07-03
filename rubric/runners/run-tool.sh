@@ -117,7 +117,11 @@ if [ "$BESPOKE" -eq 1 ]; then
       OUT="$(cspell --no-progress --no-summary "$FILE" 2>/dev/null || true)"; N=$(printf '%s' "$OUT" | grep -c . || true)
       FILE="$FILE" OUT="$OUT" node -e 'const l=(process.env.OUT||"").split("\n").filter(Boolean);process.stdout.write(JSON.stringify({version:"2.1.0",runs:[{tool:{driver:{name:"cspell",version:"runner"}},results:l.map(x=>({ruleId:"cspell-unknown-word",level:"warning",message:{text:x},locations:[{physicalLocation:{artifactLocation:{uri:process.env.FILE},region:{startLine:1}}}]}))}]}))' > "$TMP_SARIF" ;;
     markdownlint)
-      OUT="$(markdownlint-cli2 "$FILE" 2>&1 || true)"; N=$(printf '%s' "$OUT" | grep -cE "MD[0-9]+/" || true)
+      # §29.4: apply the project markdownlint ruleset (plugin-root .markdownlint.json) so enforcement
+      # matches the repo's actual convention (long-line prose) uniformly in consult + development.
+      MDL_CFG=""; [ -f "$PLUGIN_ROOT/.markdownlint.json" ] && MDL_CFG="--config $PLUGIN_ROOT/.markdownlint.json"
+      # shellcheck disable=SC2086
+      OUT="$(markdownlint-cli2 $MDL_CFG "$FILE" 2>&1 || true)"; N=$(printf '%s' "$OUT" | grep -cE "MD[0-9]+/" || true)
       FILE="$FILE" OUT="$OUT" node -e 'const l=(process.env.OUT||"").split("\n").filter(x=>/MD\d+\//.test(x));process.stdout.write(JSON.stringify({version:"2.1.0",runs:[{tool:{driver:{name:"markdownlint",version:"runner"}},results:l.map(x=>{const m=x.match(/(MD\d+)/),ln=x.match(/:(\d+)/);return {ruleId:(m?m[1]:"markdownlint"),level:"warning",message:{text:x.trim()},locations:[{physicalLocation:{artifactLocation:{uri:process.env.FILE},region:{startLine:(ln?+ln[1]:1)}}}]}})}]}))' > "$TMP_SARIF" ;;
     eslint)
       OUT="$(eslint --format json "$FILE" 2>/dev/null || true)"; [ -z "$OUT" ] && RAN=0

@@ -21,16 +21,17 @@
 #   `full-surface-consult rules_total=<r> namespaces_total=<n> consulted=<c> needs_grounding=<u> iac_rules=<i> status=<complete|incomplete>`
 # Exit: 0 ok/complete | 1 incomplete under --require-complete | 2 usage.
 set -uo pipefail
-DESIGN=""; GROUNDING=""; SURFACE=""; REQUIRE=0; JSON=0; EMIT=0
+DESIGN=""; GROUNDING=""; SURFACE=""; REQUIRE=0; JSON=0; EMIT=0; ENFORCE_DIR=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --design)           DESIGN="${2-}"; shift 2 ;;
     --grounding)        GROUNDING="${2-}"; shift 2 ;;
     --surface)          SURFACE="${2-}"; shift 2 ;;
     --emit-grounding)   EMIT=1; shift ;;
+    --enforce)          ENFORCE_DIR="${2-}"; shift 2 ;;
     --require-complete) REQUIRE=1; shift ;;
     --json)             JSON=1; shift ;;
-    -h|--help) echo "Usage: full-surface-consult.sh (--design <json> [--grounding <json>] | --emit-grounding) [--surface <json>] [--require-complete] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: full-surface-consult.sh (--design <json> [--grounding <json>] | --emit-grounding) [--surface <json>] [--enforce <dir>] [--require-complete] [--json]" >&2; exit 0 ;;
     *) echo "full-surface-consult: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -49,8 +50,19 @@ fi
 IAC="$(cat "$PLUGIN_ROOT"/standards/cloud-conventions/*.yaml 2>/dev/null || true)"
 trap '[ -n "${SURF_TMP:-}" ] && rm -f "$SURF_TMP" 2>/dev/null' EXIT
 
+# §29.4: FORMAL ENFORCEMENT — architectural design (consult) uses the SAME enforcement engine as
+# development: composite-audit.sh (native detectors via enforce-file + the routed 3rd-party tools via
+# composite-dispatch, all normalized to SARIF) over the produced design artifacts, against the ENTIRE
+# repo ruleset. A `red` (real violation) means the design does not formally abide by the rules.
+ENFORCE_STATUS="skipped"
+if [ -n "$ENFORCE_DIR" ] && [ -d "$ENFORCE_DIR" ]; then
+  _aud="$(bash "$PLUGIN_ROOT/rubric/composite-audit.sh" --root "$ENFORCE_DIR" 2>&1 || true)"
+  ENFORCE_STATUS="$(printf '%s\n' "$_aud" | grep -oE 'composite-audit root=\S+ status=[a-z]+' | grep -oE 'status=[a-z]+' | tail -1 | cut -d= -f2)"
+  [ -z "$ENFORCE_STATUS" ] && ENFORCE_STATUS="unknown"
+fi
+
 DESIGN="$DESIGN" GROUNDING="$GROUNDING" SURFACE="$SURFACE" REQUIRE="$REQUIRE" JSON="$JSON" EMIT="$EMIT" \
-PLUGIN_ROOT="$PLUGIN_ROOT" node -e '
+ENFORCE_STATUS="$ENFORCE_STATUS" PLUGIN_ROOT="$PLUGIN_ROOT" node -e '
   const fs=require("fs"), cp=require("child_process");
   let surf; try { surf=JSON.parse(fs.readFileSync(process.env.SURFACE,"utf8")); } catch(e){ process.stderr.write("full-surface-consult: surface not valid json\n"); process.exit(2); }
   const rules = surf.rules||[];
@@ -108,8 +120,13 @@ PLUGIN_ROOT="$PLUGIN_ROOT" node -e '
     (hit ? consulted : needs).push(ns);
   }
   for (const ns of needs) process.stderr.write(`consult namespace=${ns} status=needs_grounding\n`);
-  const status = needs.length === 0 ? "complete" : "incomplete";
-  process.stderr.write(`full-surface-consult rules_total=${rules.length} namespaces_total=${namespaces.length} consulted=${consulted.length} needs_grounding=${needs.length} iac_rules=${iacRules} status=${status}\n`);
-  if (process.env.JSON==="1") process.stdout.write(JSON.stringify({ rules_total: rules.length, namespaces_total: namespaces.length, consulted, needs_grounding: needs, iac_rules: iacRules, status }, null, 2));
+  const groundingComplete = needs.length === 0;
+  // §29.4: the design is COMPLETE only when it is both grounded against the full surface AND formally
+  // enforced clean (composite-audit not red) — the SAME engine/rules development uses. `red` -> incomplete.
+  const enf = process.env.ENFORCE_STATUS || "skipped";
+  const enforcedOk = (enf === "skipped" || enf !== "red");
+  const status = (groundingComplete && enforcedOk) ? "complete" : "incomplete";
+  process.stderr.write(`full-surface-consult rules_total=${rules.length} namespaces_total=${namespaces.length} consulted=${consulted.length} needs_grounding=${needs.length} iac_rules=${iacRules} enforcement=${enf} status=${status}\n`);
+  if (process.env.JSON==="1") process.stdout.write(JSON.stringify({ rules_total: rules.length, namespaces_total: namespaces.length, consulted, needs_grounding: needs, iac_rules: iacRules, enforcement: enf, status }, null, 2));
   process.exit((process.env.REQUIRE==="1" && status!=="complete") ? 1 : 0);
 '

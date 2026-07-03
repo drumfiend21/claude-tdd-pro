@@ -1,6 +1,6 @@
 {
   "name": "a produced design with the attached full-surface grounding is complete against the full surface (needs_grounding=0)",
-  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --emit-grounding 2>/dev/null > g.json; printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]}}' > d.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --grounding g.json --require-complete 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'needs_grounding=0 iac_rules=22 status=complete' e.txt && echo design-complete 1>&2",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --emit-grounding 2>/dev/null > g.json; printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]}}' > d.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --grounding g.json --require-complete 2>e.txt; rc=$?; [ \"$rc\" -eq 0 ] && grep -q 'needs_grounding=0 iac_rules=22 enforcement=skipped status=complete' e.txt && echo design-complete 1>&2",
   "setup": [],
   "expect": {
     "exit_code": 0,

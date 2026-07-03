@@ -1,0 +1,11 @@
+{
+  "name": "the project markdownlint ruleset is committed and encodes the repo prose convention (MD013 off)",
+  "command": "node -e 'const c=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));process.exit(c.MD013===false?0:1)' \"$CLAUDE_PLUGIN_ROOT/.markdownlint.json\" && echo project-markdownlint-committed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "project-markdownlint-committed"
+    ]
+  }
+}

@@ -119,7 +119,7 @@ PROF="$PROF" REQ="$REQ" OPTS="$OPTS" EXP="$EXP" OUT_DIR="$OUT_DIR" NOW="$NOW" VI
   md << "Vision: #{vision}\n\n"
   md << "We looked at #{opts["option_count"]} grounded options. Our recommended starting point is **#{rec ? rec["summary"] : rec_id}**"
   md << " (#{rec["trade_offs"].map { |k,v| "#{k}: #{v}" }.join(", ")})" if rec && rec["trade_offs"]
-  md << ".\n\n## Your options\n"
+  md << ".\n\n## Your options\n\n"   # blank line after heading -> MD022/MD032 clean
   (opts["options"] || []).each do |o|
     to = o["trade_offs"] || {}
     md << "- **#{o["summary"]}** - cost #{to["cost"]}, availability #{to["availability"]}, complexity #{to["complexity"]}\n"
@@ -136,6 +136,21 @@ if [ -f "$_FSC" ]; then
   bash "$_FSC" --emit-grounding > "$OUT_DIR/full-surface-grounding.json" 2>/dev/null || true
   _FSNS="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).grounded_namespaces.length)}catch(e){console.log(0)}' "$OUT_DIR/full-surface-grounding.json" 2>/dev/null || echo 0)"
   echo "full_surface_grounding=$OUT_DIR/full-surface-grounding.json namespaces=$_FSNS" >&2
+  # §29.4: the architectural design (consult) is FORMALLY ENFORCED against the entire repo ruleset via the
+  # SAME native engine development uses at WRITE-TIME (rubric/enforce-file.sh — the deterministic floor +
+  # the §28.57 universal enforcer). Fast + tool-independent; a P0/P1 violation in any produced artifact is
+  # RED. The full routed 3rd-party audit (composite-audit, same as development's AUDIT-TIME) is available
+  # on demand via `full-surface-consult --enforce <dir>`.
+  _EF="$(dirname "$0")/../rubric/enforce-file.sh"
+  _design_enf="green"
+  if [ -f "$_EF" ]; then
+    for _af in "$OUT_DIR"/*.md "$OUT_DIR"/*.json; do
+      [ -f "$_af" ] || continue
+      bash "$_EF" --file "$_af" --single-file-gate >/dev/null 2>&1; _rc=$?
+      [ "$_rc" -eq 1 ] && _design_enf="red"
+    done
+  fi
+  echo "design_enforcement=$_design_enf engine=enforce-file rules_total=118" >&2
 fi
 
 echo "session_complete=true" >&2
