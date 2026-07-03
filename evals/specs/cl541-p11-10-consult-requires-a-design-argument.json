@@ -1,0 +1,11 @@
+{
+  "name": "the consult engine requires a --design argument",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" 2>e.txt; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'design' e.txt && echo requires-design 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "requires-design"
+    ]
+  }
+}

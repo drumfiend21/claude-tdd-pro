@@ -1,0 +1,11 @@
+{
+  "name": "the consult engine reports the full surface namespace count (>=40 of the 43-namespace corpus)",
+  "command": "printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --json 2>/dev/null > out.json; node -e 'const j=require(\"./out.json\");process.exit(j.namespaces_total>=40?0:1)' && echo namespaces-total-full 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "namespaces-total-full"
+    ]
+  }
+}

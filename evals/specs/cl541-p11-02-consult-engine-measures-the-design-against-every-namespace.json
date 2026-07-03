@@ -1,0 +1,11 @@
+{
+  "name": "the consult engine partitions every namespace of the full surface into consulted or needs_grounding",
+  "command": "printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --json 2>/dev/null > out.json; node -e 'const j=require(\"./out.json\");process.exit(j.namespaces_total>=40 && (j.consulted.length + j.needs_grounding.length)===j.namespaces_total ?0:1)' && echo every-namespace-measured 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-namespace-measured"
+    ]
+  }
+}

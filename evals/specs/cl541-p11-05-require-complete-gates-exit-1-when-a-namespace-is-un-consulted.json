@@ -1,0 +1,11 @@
+{
+  "name": "the --require-complete gate exits 1 when any namespace is un-consulted (the Stage-5 verdict-completeness check)",
+  "command": "printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --require-complete >/dev/null 2>e.txt; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'status=incomplete' e.txt && echo require-complete-gates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "require-complete-gates"
+    ]
+  }
+}
