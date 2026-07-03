@@ -1,0 +1,11 @@
+{
+  "name": "the consult engine ingests the full aggregated surface of 118 rules (not the 18-source subset)",
+  "command": "printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json 2>e.txt; grep -qE 'full-surface-consult rules_total=118 ' e.txt && echo ingests-118-rules 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ingests-118-rules"
+    ]
+  }
+}

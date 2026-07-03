@@ -1,0 +1,11 @@
+{
+  "name": "the consult engine auto-composes rubric/aggregator.sh to build the full surface when --surface is omitted",
+  "command": "printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json 2>e.txt; grep -qE 'rules_total=118 namespaces_total=[0-9]+' e.txt && echo auto-composes-aggregator 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "auto-composes-aggregator"
+    ]
+  }
+}

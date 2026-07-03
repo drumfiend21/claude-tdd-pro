@@ -1,0 +1,11 @@
+{
+  "name": "the design produced by the real translate chain is incomplete against the full surface (the P-11 gap)",
+  "command": "printf '%s' '{\"complete\":true,\"answers\":{\"motivation\":\"revenue\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"budget_posture\":\"balanced\",\"data_volume\":\"large\",\"read_write_pattern\":\"balanced\",\"data_cadence\":\"real-time\",\"workload\":\"x\",\"criticality\":\"mission-critical\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"none\",\"scale\":\"large\",\"consistency_need\":\"strong\",\"communication_style\":\"event-driven\",\"integration_scope\":\"public\"}}' > p.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile p.json --out req.json --now 2026-06-08T00:00:00Z 2>/dev/null && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design req.json 2>e.txt; grep -qE 'namespaces_total=[0-9]+ consulted=[0-9]+ needs_grounding=[1-9][0-9]* status=incomplete' e.txt && echo real-design-incomplete 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "real-design-incomplete"
+    ]
+  }
+}

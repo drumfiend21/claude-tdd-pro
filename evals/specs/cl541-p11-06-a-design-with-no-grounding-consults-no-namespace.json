@@ -1,0 +1,11 @@
+{
+  "name": "a design that grounds against nothing consults zero namespaces (every namespace needs_grounding)",
+  "command": "printf '%s' '{\"pillars\":{},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --json 2>/dev/null > out.json; node -e 'const j=require(\"./out.json\");process.exit(j.consulted.length===0 && j.needs_grounding.length===j.namespaces_total ?0:1)' && echo empty-consults-none 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "empty-consults-none"
+    ]
+  }
+}

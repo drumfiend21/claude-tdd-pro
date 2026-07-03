@@ -2303,3 +2303,20 @@ Fixes a **bash-3.2 (macOS default) crash** in `rubric/composite-dispatch.sh` rep
 - **§25 fidelity vocabulary additions:** `bash-3.2`, `empty-array`, `unbound-variable`, `empty-safe-expansion`, `portability`, `set-u`, `routed-tool-inert`.
 
 5 specs (`cl538-bash32-01..05`): empty-safe-expansion-present / pattern-set-u-safe / routed-verdict-no-crash(common case) / required-path-intact / safe-form-in-loop. **§20 note:** portability fix; preserves §21 dod. Suite 4870→4875.
+
+## §29. Full-surface architecture-production grounding (v1.20 amendment — GCTP P-11)
+
+Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-surface-grounding-consult.md). Append-only — no §1–§28.70 content altered. This is a NEW top-level amendment section (first outside the §28 cluster) per the append-only / amend-by-reference discipline.
+
+### §29.1 The invariant + the gap (assessed CONFIRMED at pin `a69f380`)
+
+**STANDING INVARIANT (contract §2.34): everything CTP produces for a consumer MUST be reasoned against the FULL rule/namespace surface (118 rules / ~42–43 namespaces) at architecture-production time — not the ~18-source cloud subset the production chain used.** `rubric/aggregator.sh` (G-5) already builds the full surface (118 rules; each rule carries `source_namespace` + `provenance[]`), but the production chain `commands/business-translate.sh` → `commands/architect-recommend.sh` never references it — `business-translate.sh` grounds against a hardcoded 18-source set. Measured: a produced design consults **6 of 42 namespaces, 36 un-consulted**.
+
+### §29.2 The additive fix — S-56 / §2.34
+
+- **S-56** `commands/full-surface-consult.sh` — full-surface architecture-production grounding consult. INGESTS the aggregator's full surface (the composition the chain lacked) and measures a produced design against EVERY namespace: a namespace whose rules the design grounds against is `consulted`; else it is surfaced as `needs_grounding` (cite-or-decline, never silently omitted). `--design <technical-requirements.json>` [`--surface <aggregator.json>`] [`--require-complete`] [`--json`]. Marker `full-surface-consult rules_total=<r> namespaces_total=<n> consulted=<c> needs_grounding=<u> status=<complete|incomplete>`; `--require-complete` exits 1 when any namespace is un-consulted (the Stage-5 verdict-completeness gate, GCTP TICKET-113). Composes G-5 aggregator + the S-33/S-34 chain; next free feature after S-54 (S-55 soft-reserved per §28.7).
+- **§2.34 Full-surface production-grounding contract.** Every architecture/design CTP produces MUST be reasoned against the full aggregated rule surface at production time; an un-reasoned namespace is `needs_grounding` (cite-or-decline), never silently omitted. Enforced by `commands/full-surface-consult.sh` (deterministic; exit 0 complete / 1 incomplete under `--require-complete` / 2 usage).
+- **Scope note.** This CL closes the COMPOSITION gap (the chain now ingests + measures against the full surface) and provides the gate; driving `needs_grounding → 0` (broadening `business-translate`/`architect-recommend` to emit concerns grounded across all namespaces) is the follow-on the §2.34 contract now mandates.
+- **§25 fidelity vocabulary additions:** `full-surface-consult`, `full-surface`, `production-grounding`, `namespaces_total`, `consulted`, `needs_grounding`, `cite-or-decline`, `verdict-completeness`, `aggregator-ingest`, `43-namespace`.
+
+10 specs (`cl541-p11-01..10`): ingests-118-rules / every-namespace-measured / unconsulted-surfaced / real-design-incomplete(P-11) / require-complete-gates / empty-consults-none / auto-composes-aggregator / namespaces-total-full / positive-consult / requires-design. Deterministic + tool-independent. **§20 note:** production-grounding hardening over S-32..S-53; preserves §21 dod. Suite 4875→4885.

@@ -1,0 +1,11 @@
+{
+  "name": "un-consulted namespaces are surfaced as needs_grounding (cite-or-decline), never silently omitted",
+  "command": "printf '%s' '{\"pillars\":{\"security\":[{\"concern\":\"c\",\"source_id\":\"owasp-asvs\",\"grounding\":\"grounded\"}]},\"needs_grounding\":[]}' > d.json && bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json 2>e.txt; grep -qE 'consult namespace=[a-z0-9-]+ status=needs_grounding' e.txt && echo unconsulted-surfaced 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unconsulted-surfaced"
+    ]
+  }
+}
