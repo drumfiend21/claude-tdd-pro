@@ -1,0 +1,11 @@
+{
+  "name": "the markdownlint runner applies the project markdownlint config so enforcement matches the repo convention",
+  "command": "grep -q 'markdownlint.json' \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" && grep -q -- '--config' \"$CLAUDE_PLUGIN_ROOT/rubric/runners/run-tool.sh\" && echo runner-applies-config 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "runner-applies-config"
+    ]
+  }
+}

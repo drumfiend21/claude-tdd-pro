@@ -1,0 +1,11 @@
+{
+  "name": "the design phase enforces via composite-audit — the same whole-tree engine development uses at audit time",
+  "command": "grep -q 'composite-audit.sh' \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" && echo same-engine 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "same-engine"
+    ]
+  }
+}
