@@ -1,0 +1,11 @@
+{
+  "name": "the IaC convention rule set (22 rules) is ingested and its count carried in the completeness verdict",
+  "command": "printf '%s' '{\"pillars\":{}}' > d.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json 2>e.txt; grep -qE 'iac_rules=22' e.txt && echo iac-rules-ingested 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac-rules-ingested"
+    ]
+  }
+}
