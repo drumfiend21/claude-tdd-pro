@@ -1,0 +1,11 @@
+{
+  "name": "the full-surface grounding CTP emits covers every namespace (42 code + cloud-conventions) and the IaC rules",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --emit-grounding 2>/dev/null > g.json; node -e 'const g=require(\"./g.json\");process.exit(g.grounded_namespaces.length>=43 && g.grounded_namespaces.includes(\"cloud-conventions\") && g.iac_rules>=22 ?0:1)' && echo grounding-covers-all 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "grounding-covers-all"
+    ]
+  }
+}

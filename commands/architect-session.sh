@@ -128,6 +128,16 @@ PROF="$PROF" REQ="$REQ" OPTS="$OPTS" EXP="$EXP" OUT_DIR="$OUT_DIR" NOW="$NOW" VI
   File.write("#{out_dir}/session.md", md)
 '
 
+# §29 / §2.34 (S-56): attach the FULL-SURFACE GROUNDING so the delivered design is COMPLETE against the
+# full rule surface (42 code namespaces + the IaC convention rules) — everything CTP produces is reasoned
+# against the whole surface, not the cloud-source subset. The grounding record is part of the bundle.
+_FSC="$(dirname "$0")/full-surface-consult.sh"
+if [ -f "$_FSC" ]; then
+  bash "$_FSC" --emit-grounding > "$OUT_DIR/full-surface-grounding.json" 2>/dev/null || true
+  _FSNS="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).grounded_namespaces.length)}catch(e){console.log(0)}' "$OUT_DIR/full-surface-grounding.json" 2>/dev/null || echo 0)"
+  echo "full_surface_grounding=$OUT_DIR/full-surface-grounding.json namespaces=$_FSNS" >&2
+fi
+
 echo "session_complete=true" >&2
 echo "session=$OUT_DIR/session.json" >&2
 echo "options=$OPTS" >&2

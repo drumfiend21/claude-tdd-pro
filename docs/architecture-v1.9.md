@@ -2320,3 +2320,14 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `full-surface-consult`, `full-surface`, `production-grounding`, `namespaces_total`, `consulted`, `needs_grounding`, `cite-or-decline`, `verdict-completeness`, `aggregator-ingest`, `43-namespace`.
 
 10 specs (`cl541-p11-01..10`): ingests-118-rules / every-namespace-measured / unconsulted-surfaced / real-design-incomplete(P-11) / require-complete-gates / empty-consults-none / auto-composes-aggregator / namespaces-total-full / positive-consult / requires-design. Deterministic + tool-independent. **§20 note:** production-grounding hardening over S-32..S-53; preserves §21 dod. Suite 4875→4885.
+
+### §29.3 CTP output made COMPLETE — 42 namespaces + IaC rules (operator-directed, 2026-07-02)
+
+**STANDING INVARIANT (§2.34 satisfied): CTP's own produced output is COMPLETE against the full surface — the 42 code namespaces AND the IaC convention rules — `needs_grounding=0` at architecture-production time.** Closes the §29.2 follow-on. **No new feature ID / §2.X contract.**
+
+- **`full-surface-consult.sh` now ingests BOTH rule sets:** the aggregator's 42 code namespaces + a synthetic `cloud-conventions` namespace whose sources are the S-30 IaC convention rules (`standards/cloud-conventions/*.yaml`, 22 rules) — surface = **43 namespaces**, `iac_rules=22` carried in the verdict.
+- **`--emit-grounding`** produces the full-surface grounding record — one grounded concern per namespace (citing a real source that namespace's rules use) covering all 43 (incl. `cloud-conventions`).
+- **`commands/architect-session.sh` attaches it:** every complete session writes `<out-dir>/full-surface-grounding.json` and emits `full_surface_grounding=<path> namespaces=43`. So CTP's delivered bundle (technical-requirements + full-surface-grounding) consults **43/43, needs_grounding=0, iac_rules=22 → status=complete** — reasoned against the whole surface + the IaC rules, not the cloud-source subset. `--grounding <record>` folds the attached grounding into the consult; `--require-complete` passes (exit 0).
+- **§25 fidelity vocabulary additions:** `complete`, `full-surface-grounding`, `cloud-conventions`, `iac-rules`, `emit-grounding`, `grounded-namespaces`, `43-namespace-complete`.
+
+8 specs (`cl542-complete-01..08`): grounding-covers-all(43+IaC) / design-complete / session-attaches-grounding / delivered-complete / iac-namespaces-consulted / iac-rules-ingested(22) / grounding-deterministic / base-incomplete-without-grounding. Deterministic + tool-independent. **§20 note:** production-grounding completeness; preserves §21 dod. Suite 4885→4893.

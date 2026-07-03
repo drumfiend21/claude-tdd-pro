@@ -1,0 +1,11 @@
+{
+  "name": "every IaC namespace (aws/azure/gcp/hashicorp/cfn/k8s/helm/ansible/gitops/cloud-conventions) is consulted in the complete output",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --emit-grounding 2>/dev/null > g.json; printf '%s' '{\"pillars\":{}}' > d.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --design d.json --grounding g.json --json 2>/dev/null > out.json; node -e 'const j=require(\"./out.json\");const iac=[\"aws\",\"azure\",\"gcp\",\"hashicorp\",\"cfn\",\"k8s\",\"helm\",\"ansible\",\"gitops\",\"cloud-conventions\"];process.exit(iac.every(n=>j.consulted.includes(n))?0:1)' && echo iac-namespaces-consulted 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "iac-namespaces-consulted"
+    ]
+  }
+}

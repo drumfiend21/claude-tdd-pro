@@ -1,0 +1,11 @@
+{
+  "name": "the emitted full-surface grounding is deterministic (same namespaces across runs)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --emit-grounding 2>/dev/null > g1.json; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-consult.sh\" --emit-grounding 2>/dev/null > g2.json; node -e 'const a=require(\"./g1.json\").grounded_namespaces.join(\",\");const b=require(\"./g2.json\").grounded_namespaces.join(\",\");process.exit(a===b?0:1)' && echo grounding-deterministic 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "grounding-deterministic"
+    ]
+  }
+}
