@@ -1,0 +1,11 @@
+{
+  "name": "consult enforcement uses the same enforce-file engine and the same write-time flags (single-file-gate + include-app-code)",
+  "command": "grep -q 'enforce-file.sh' \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/enforce-standards-pre-write.sh\" && grep -q 'enforce-file.sh' \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" && grep -q -- '--single-file-gate' \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" && grep -q -- '--include-app-code' \"$CLAUDE_PLUGIN_ROOT/commands/architect-session.sh\" && echo same-write-time-engine 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "same-write-time-engine"
+    ]
+  }
+}

@@ -2342,3 +2342,13 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `same-engine`, `formally-abide`, `design-enforcement`, `project-markdownlint`, `md013`, `enforce-during-consult`, `write-time-native`, `audit-time-routed`, `rule-abiding`.
 
 8 specs (`cl543-abide-01..08`): design-abides(grounded+enforced) / consult-enforce-complete / violation-fails-enforcement / project-markdownlint-committed / runner-applies-config / markdown-structurally-clean / same-engine / design-enforcement-marker. **§20 note:** enforcement-during-production; preserves §21 dod (write-time native inline, routed audit on demand). Suite 4893→4901.
+
+### §29.5 Enforcement parity — consult uses the SAME engines as development (write-time + routed audit) (operator-directed, 2026-07-02)
+
+**Consult's enforcement is the SAME as development's, both phases: write-time native (byte-identical flags) always, and audit-time routed (the ~80 3rd-party tools) on opt-in.** Answers the two parity questions. **No new feature ID / §2.X contract.**
+
+- **Write-time parity (default, always on):** `architect-session.sh` enforces every produced artifact with the identical entrypoint + flags the pre-write governor uses — `rubric/enforce-file.sh --single-file-gate`, plus `--include-app-code` for app-code artifacts (`.ts/.py/…`). So the native enforcement of a produced design is the same engine, same flags, same rules as development's write-time. Emits `design_enforcement=green|red engine=enforce-file`.
+- **Audit-time routed parity (opt-in, `ARCHITECT_ENFORCE_ROUTED=1`):** consult routes the produced design through the **~80 3rd-party tools + native detectors** via `rubric/composite-audit.sh` (which fans out to `composite-dispatch` → the routed FOSS tools → SARIF) — the same routed engine development uses. Emits `design_enforcement_routed=<status> engine=composite-audit tools=80`. Default OFF only for hot-path speed; the routed audit is always available (also via `full-surface-consult --enforce`). Ignoring time, the consult can be — and on the flag is — routed through all 80 tools.
+- **§25 fidelity vocabulary additions:** `enforcement-parity`, `write-time-native`, `audit-time-routed`, `include-app-code`, `same-flags`, `routed-consult`, `80-tools`.
+
+4 specs (`cl544-parity-01..04`): same-write-time-engine(flags) / consult-routed-80-tools(opt-in) / default-fast-native / routed-same-as-dev. **§20 note:** enforcement parity; preserves §21 dod. Suite 4901→4905.
