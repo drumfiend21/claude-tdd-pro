@@ -1,0 +1,13 @@
+{
+  "name": "still fails loud on an invalid universal answer by delegating validation to the S-32 intake",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload x --answers bad.json --partial --out x.json --now 2026-07-04T00:00:00Z 2>e.err; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid=motivation' e.err && echo universal-validated 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"x\",\"motivation\":\"NOPE\"}' > bad.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "universal-validated"
+    ]
+  }
+}

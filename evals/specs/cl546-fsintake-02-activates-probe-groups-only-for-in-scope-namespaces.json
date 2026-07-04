@@ -1,0 +1,11 @@
+{
+  "name": "activates per-namespace probe groups only for the namespaces the workload puts in scope",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a simple React website UI dashboard\" --classify 2>c.err); echo \"$OUT\" | grep -q '\"react\"' && ! echo \"$OUT\" | grep -q '\"k8s\"' && echo frontend-scoped-not-k8s 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "frontend-scoped-not-k8s"
+    ]
+  }
+}

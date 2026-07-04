@@ -1,0 +1,13 @@
+{
+  "name": "the v1.1 profile grounded_in is a strict superset of the v1.0 universal profile grounded_in",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answers p.json --partial --out v10.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA on Kubernetes\" --answers p.json --probe-answer react_rendering_model=spa --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1; ruby -rjson -e 'a=JSON.parse(File.read(\"v10.json\"))[\"grounded_in\"]||[]; b=JSON.parse(File.read(\"v11.json\"))[\"grounded_in\"]||[]; exit((a-b).empty? && b.length>a.length ? 0:1)' && echo strict-superset 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "strict-superset"
+    ]
+  }
+}

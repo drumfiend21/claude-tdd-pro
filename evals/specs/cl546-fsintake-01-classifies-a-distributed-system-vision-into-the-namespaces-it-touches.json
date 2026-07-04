@@ -1,0 +1,11 @@
+{
+  "name": "classifies a distributed-system vision into the full-surface namespaces it touches",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA REST API Kafka queue Kubernetes Terraform SQL database\" --classify 2>c.err; grep -qE 'workload_types=.*iac-cloud' c.err && grep -qE 'activated_probes=[1-9]' c.err && echo classified-distributed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "classified-distributed"
+    ]
+  }
+}

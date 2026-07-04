@@ -1,0 +1,61 @@
+# business-intake-workload-classifier.yaml — S-57 full-surface intake (v1.14 §30 / §2.35).
+#
+# Classifies a founder's plain-language workload/vision into workload_types, each of which puts a set
+# of the full-surface NAMESPACES in scope. The in-scope namespaces determine which per-namespace PROBE
+# GROUPS (see business-intake-question-bank.yaml) the intake activates — so intake gathers facts across
+# the whole rule surface, not just the universal 9. Namespace names are the literal aggregator namespaces
+# (folders under generated-code-quality-standards/); each maps to real rules via source_namespace.
+#
+# Matching is signal-substring over the lowercased workload text (+ universal answers). A workload_type
+# fires if ANY of its signals is present. `always: true` types fire for every workload (cross-cutting).
+#
+# Shape (consumed by commands/full-surface-intake.sh):
+#   - workload_type: <slug>
+#     signals: [<substring>, ...]      # any-match; omit when always:true
+#     namespaces: [<ns>, ...]          # literal aggregator namespaces put in scope
+#     always: true                     # optional; fires unconditionally
+
+- workload_type: web-frontend
+  signals: [ui, frontend, front-end, spa, website, web app, web-app, dashboard, portal, react, page, browser]
+  namespaces: [react, typescript, node, owasp, web-vitals, md]
+
+- workload_type: rest-api
+  signals: [api, rest, endpoint, backend, back-end, server, service, microservice, graphql]
+  namespaces: [node, typescript, oas, owasp, jwt, iam]
+
+- workload_type: relational-data
+  signals: [sql, postgres, postgresql, mysql, relational, transaction, rdbms, aurora]
+  namespaces: [aws, azure, gcp, observability]
+
+- workload_type: nosql-data
+  signals: [nosql, mongo, mongodb, dynamo, dynamodb, document db, key-value, cassandra, firestore, redis]
+  namespaces: [aws, azure, gcp, observability]
+
+- workload_type: messaging
+  signals: [queue, message, event, kafka, pubsub, pub/sub, streaming, sqs, sns, rabbitmq, broker]
+  namespaces: [node, observability, arch]
+
+- workload_type: container-orchestration
+  signals: [kubernetes, k8s, container, docker, pod, orchestration, cluster, eks, aks, gke]
+  namespaces: [k8s, helm, compose, mesh, gitops]
+
+- workload_type: iac-cloud
+  signals: [terraform, infrastructure, iac, provision, cloud, deploy, vpc, network, ec2, s3, bucket]
+  namespaces: [hashicorp, aws, azure, gcp, cfn, ansible, iam, security-governance]
+
+- workload_type: ci-cd
+  signals: [pipeline, ci, cd, ci/cd, build, release, deploy, github action, gitlab, jenkins, supply chain]
+  namespaces: [gha, circleci, jenkins, glci, azdo, slsa, sbom]
+
+- workload_type: ai-governed
+  signals: [ai, ml, machine learning, model, llm, inference, genai, neural, agent]
+  namespaces: [security-governance, european-union, us-government, industry-self-regulatory]
+
+- workload_type: regulated
+  signals: [compliance, hipaa, pci, fedramp, regulated, government, finance, banking, healthcare, gdpr]
+  namespaces: [security-governance, us-government, finance-industry, european-union, owasp, iam]
+
+# Cross-cutting: every workload is documented, tested, and observable.
+- workload_type: baseline-quality
+  always: true
+  namespaces: [documentation, observability, owasp]

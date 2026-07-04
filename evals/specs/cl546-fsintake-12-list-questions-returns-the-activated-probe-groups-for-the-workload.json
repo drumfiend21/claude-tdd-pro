@@ -1,0 +1,11 @@
+{
+  "name": "list-questions returns the activated per-namespace probe groups for the classified workload",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA on Kubernetes with Terraform\" --list-questions 2>l.err); echo \"$OUT\" | grep -q 'probe_groups' && echo \"$OUT\" | grep -q 'react_rendering_model' && grep -qE 'activated_probes=[1-9]' l.err && echo list-questions-probes 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "list-questions-probes"
+    ]
+  }
+}

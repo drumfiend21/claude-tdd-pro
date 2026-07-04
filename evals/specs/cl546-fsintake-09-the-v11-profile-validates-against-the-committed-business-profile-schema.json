@@ -1,0 +1,13 @@
+{
+  "name": "the produced v1.1 profile validates against the committed business-profile JSON schema",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA on Kubernetes\" --answers p.json --probe-answer react_rendering_model=spa --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1; node \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/lib/validate-json-schema.js\" \"$CLAUDE_PLUGIN_ROOT/schemas/business-profile.schema.json\" v11.json && echo v11-schema-valid 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "v11-schema-valid"
+    ]
+  }
+}
