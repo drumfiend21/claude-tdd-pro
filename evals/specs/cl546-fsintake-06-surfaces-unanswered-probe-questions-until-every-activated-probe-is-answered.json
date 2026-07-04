@@ -1,0 +1,13 @@
+{
+  "name": "surfaces unanswered probe questions and stays incomplete until every activated probe is answered",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA on Kubernetes\" --answers p.json --out v11.json --now 2026-07-04T00:00:00Z 2>u.err; rc=$?; [ \"$rc\" -eq 1 ] && grep -q 'complete=false' u.err && grep -qE 'unanswered=.*react_rendering_model' u.err && echo probes-incomplete 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "probes-incomplete"
+    ]
+  }
+}

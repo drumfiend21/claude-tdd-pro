@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-tdd-pro/schemas/business-profile.schema.json",
+  "title": "business-profile.json",
+  "description": "S-32 / S-57 business-language requirements intake profile. schema_version 1.0 (universal 9) and 1.1 (S-57 full-surface intake) are BOTH valid: 1.1 is a strict additive superset — the universal-9 fields are unchanged and the classifier/probe/namespace-grounding fields are additive, so every v1.0 profile validates unchanged (§2.35 additivity invariant). The oneOf discriminates on schema_version: a 1.1 profile additionally requires workload_classification + probes + grounded_in_namespaces.",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "complete", "answers"],
+  "properties": {
+    "schema_version": { "type": "string", "enum": ["1.0", "1.1"] },
+    "generated_at": { "type": "string" },
+    "complete": { "type": "boolean" },
+    "answers": {
+      "type": "object",
+      "description": "The universal-9 (and optional S-38 data) answers — the source of truth in commands/business-intake.sh. Mirrored UNCHANGED into a v1.1 profile (universal-stays-universal)."
+    },
+    "grounded_in": {
+      "type": "array",
+      "description": "Catalog source_ids the answered questions cite. In a v1.1 profile this is a STRICT SUPERSET of the v1.0 value (universal sources + answered-probe sources).",
+      "items": { "type": "string" }
+    },
+    "unanswered": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "workload_classification": {
+      "type": "object",
+      "description": "S-57 only. The classifier output: which workload_types fired, which full-surface namespaces they put in scope, and which of those have an activated probe group.",
+      "required": ["workload_types", "namespaces", "activated_probe_namespaces"],
+      "properties": {
+        "workload_types": { "type": "array", "items": { "type": "string" } },
+        "namespaces": { "type": "array", "items": { "type": "string" } },
+        "activated_probe_namespaces": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "probes": {
+      "type": "object",
+      "description": "S-57 only. Per-namespace probe answers: probes.<namespace>.<probe_key> = answer. Every key here belongs to an activated_probe_namespace."
+    },
+    "grounded_in_namespaces": {
+      "type": "array",
+      "description": "S-57 only. The full-surface namespaces grounded from a gathered probe answer (not a default). Each must appear in workload_classification.activated_probe_namespaces.",
+      "items": { "type": "string" }
+    }
+  },
+  "oneOf": [
+    {
+      "properties": { "schema_version": { "enum": ["1.0"] } },
+      "required": ["schema_version"]
+    },
+    {
+      "properties": { "schema_version": { "enum": ["1.1"] } },
+      "required": ["schema_version", "workload_classification", "probes", "grounded_in_namespaces"]
+    }
+  ]
+}

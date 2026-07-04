@@ -1,0 +1,88 @@
+# business-intake-question-bank.yaml — S-57 full-surface intake (v1.14 §30 / §2.35).
+#
+# Per-namespace PROBE GROUPS: the targeted, still-business-language follow-ups the intake activates for
+# each namespace the classifier puts in scope. Each probe gathers a fact needed to GROUND that namespace's
+# rules from an answer rather than a default — closing the input-side gap (P-12) that mirrors P-11's
+# output-side full-surface grounding. Every probe cites an EXISTING catalog source_id (grounding is real).
+#
+# The universal 9 are NOT duplicated here — they remain the source of truth in commands/business-intake.sh
+# and are mirrored into the v1.1 profile unchanged (universal-stays-universal invariant).
+#
+# Shape (consumed by commands/full-surface-intake.sh):
+#   probe_groups:
+#     <namespace>:                       # literal aggregator namespace
+#       - key: <namespace>_<slug>        # namespaced so probe answers never collide with the universal 9
+#         type: enum|free
+#         allowed: [...]                 # for enum
+#         prompt: "<business-language question>"
+#         source_id: <existing catalog id>
+
+probe_groups:
+  react:
+    - {key: react_rendering_model, type: enum, allowed: [spa, ssr, ssg, hybrid], prompt: "Should pages render in the browser (SPA), on the server (SSR), be pre-built (SSG), or a mix?", source_id: react-docs}
+    - {key: react_accessibility_target, type: enum, allowed: [none, wcag-a, wcag-aa, wcag-aaa], prompt: "What accessibility standard must the UI meet?", source_id: wcag-2-2}
+    - {key: react_perf_budget, type: enum, allowed: [relaxed, standard, strict], prompt: "How strict is the page-load/interaction speed requirement?", source_id: web-vitals}
+
+  typescript:
+    - {key: typescript_strictness, type: enum, allowed: [loose, standard, strict], prompt: "How strictly should the codebase be type-checked?", source_id: typescript-handbook}
+
+  node:
+    - {key: node_runtime_posture, type: enum, allowed: [lts-only, current-ok], prompt: "Must the runtime stay on long-term-support versions only, or can it track current?", source_id: node-best-practices}
+
+  owasp:
+    - {key: owasp_threat_posture, type: enum, allowed: [baseline, hardened, adversarial], prompt: "How aggressive must the application-security posture be?", source_id: owasp-asvs}
+    - {key: owasp_input_exposure, type: enum, allowed: [trusted, semi-trusted, hostile], prompt: "How much do you trust the input the system receives?", source_id: owasp-top10}
+
+  jwt:
+    - {key: jwt_token_lifetime, type: enum, allowed: [short, medium, long], prompt: "How long should a login session stay valid before re-authentication?", source_id: oauth2-oidc}
+    - {key: jwt_refresh_strategy, type: enum, allowed: [none, rotating, sliding], prompt: "How should sessions be renewed — not at all, rotating tokens, or sliding expiry?", source_id: oauth2-oidc}
+
+  iam:
+    - {key: iam_access_model, type: enum, allowed: [rbac, abac, mixed], prompt: "Should access be by role, by attribute/policy, or a mix?", source_id: nist-800-53}
+    - {key: iam_privilege_posture, type: enum, allowed: [standard, least-privilege], prompt: "Is standard access acceptable, or is strict least-privilege required?", source_id: owasp-asvs}
+
+  oas:
+    - {key: oas_contract_first, type: enum, allowed: [contract-first, code-first], prompt: "Should the API contract be designed first, or generated from code?", source_id: microsoft-rest-api-guidelines}
+    - {key: oas_versioning, type: enum, allowed: [none, uri, header], prompt: "How should API versions be exposed to callers?", source_id: microsoft-rest-api-guidelines}
+
+  k8s:
+    - {key: k8s_multitenancy, type: enum, allowed: [single-tenant, multi-tenant], prompt: "Will the cluster serve one tenant or several isolated tenants?", source_id: cncf-cloud-native}
+    - {key: k8s_workload_criticality, type: enum, allowed: [best-effort, guaranteed], prompt: "Do workloads need guaranteed resources or is best-effort acceptable?", source_id: cncf-cloud-native}
+
+  helm:
+    - {key: helm_release_strategy, type: enum, allowed: [rolling, blue-green, canary], prompt: "How should new versions roll out to the cluster?", source_id: cncf-cloud-native}
+
+  gitops:
+    - {key: gitops_reconcile_model, type: enum, allowed: [push, pull], prompt: "Should deployments be pushed by CI, or pulled by an in-cluster reconciler?", source_id: argocd-gitops}
+
+  hashicorp:
+    - {key: hashicorp_state_backend, type: enum, allowed: [local, remote, remote-locked], prompt: "Where should infrastructure state live — locally, remote, or remote with locking?", source_id: hashicorp-terraform-style-guide}
+    - {key: hashicorp_module_strategy, type: enum, allowed: [inline, shared-modules], prompt: "Should infrastructure be written inline or as reusable shared modules?", source_id: terraform-recommended-practices}
+
+  aws:
+    - {key: aws_region_strategy, type: enum, allowed: [single-region, multi-region], prompt: "Should the system run in one region or several for resilience?", source_id: aws-well-architected}
+    - {key: aws_cost_guardrails, type: enum, allowed: [none, budgets, hard-caps], prompt: "What cost guardrails should be enforced on the cloud account?", source_id: finops-framework}
+
+  slsa:
+    - {key: slsa_build_level, type: enum, allowed: [l1, l2, l3], prompt: "How tamper-resistant must the build/supply chain be?", source_id: slsa-framework}
+
+  sbom:
+    - {key: sbom_generation, type: enum, allowed: [none, on-release, every-build], prompt: "How often should a software bill-of-materials be produced?", source_id: slsa-framework}
+
+  observability:
+    - {key: observability_signal_depth, type: enum, allowed: [logs, logs-metrics, full-tracing], prompt: "How deep must observability go — logs, logs+metrics, or full distributed tracing?", source_id: opentelemetry-docs}
+
+  security-governance:
+    - {key: security_governance_ai_risk, type: enum, allowed: [none, limited, high-risk], prompt: "Does the system make automated decisions that carry regulatory risk?", source_id: nist-ai-rmf}
+
+  european-union:
+    - {key: european_union_ai_act_tier, type: enum, allowed: [none, limited, high, prohibited], prompt: "Under the EU AI Act, what risk tier does the system fall in?", source_id: nist-ai-rmf}
+
+  documentation:
+    - {key: documentation_audience, type: enum, allowed: [internal, external, both], prompt: "Who reads the docs — internal engineers, external users, or both?", source_id: google-eng-practices}
+
+  finance-industry:
+    - {key: finance_industry_data_residency, type: enum, allowed: [any, regional, sovereign], prompt: "Where must financial data physically reside?", source_id: nist-800-53}
+
+  us-government:
+    - {key: us_government_impact_level, type: enum, allowed: [il2, il4, il5], prompt: "What Department-of-Defense impact level must the system meet?", source_id: aws-dod-scca-prescriptive}

@@ -1,0 +1,13 @@
+{
+  "name": "rejects an out-of-enum probe answer with a usage error and names the allowed values",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA\" --answers p.json --probe-answer react_rendering_model=WRONG --partial --out x.json --now 2026-07-04T00:00:00Z 2>e.err; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid=react_rendering_model' e.err && echo bad-probe-rejected 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "bad-probe-rejected"
+    ]
+  }
+}

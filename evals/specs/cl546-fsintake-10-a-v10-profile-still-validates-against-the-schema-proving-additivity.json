@@ -1,0 +1,13 @@
+{
+  "name": "a v1.0 universal profile still validates against the same schema, proving the bump is additive",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answers p.json --partial --out v10.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1; node \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/lib/validate-json-schema.js\" \"$CLAUDE_PLUGIN_ROOT/schemas/business-profile.schema.json\" v10.json && echo v10-still-valid 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "v10-still-valid"
+    ]
+  }
+}
