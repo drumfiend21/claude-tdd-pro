@@ -246,6 +246,52 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
     add.call("distributed", "event_sourcing", "event-driven+mission-critical", "fowler-event-sourcing")
   end
 
+  # §30.1 — CONSUME the S-57 per-namespace probe COMMITMENTS (v1.1 profile). Each committed posture adds a
+  # GROUNDED concern (cited by the probe source_id, already grounded) so the stated founder commitments
+  # steer the produced options — closing the input->design half of the full-surface loop. Fires only when a
+  # v1.1 profile carries `probes` (v1.0 profiles have none -> behavior unchanged, back-compat by construction).
+  probes = prof["probes"] || {}
+  pget = lambda { |ns, key| (probes[ns] || {})[key] }
+  probe_driven = 0
+  padd = lambda { |pillar, concern, driver, src| add.call(pillar, concern, driver, src); probe_driven += 1 }
+  case pget.call("owasp", "owasp_threat_posture")
+  when "hardened", "adversarial"
+    padd.call("security", "threat_modeling",     "owasp_threat_posture=#{pget.call("owasp","owasp_threat_posture")}", "owasp-asvs")
+    padd.call("security", "penetration_testing", "owasp_threat_posture=#{pget.call("owasp","owasp_threat_posture")}", "owasp-asvs")
+  end
+  case pget.call("slsa", "slsa_build_level")
+  when "l2", "l3"
+    padd.call("security", "provenance_attestation", "slsa_build_level=#{pget.call("slsa","slsa_build_level")}", "slsa-framework")
+  end
+  case pget.call("sbom", "sbom_generation")
+  when "on-release", "every-build"
+    padd.call("security", "sbom_generation", "sbom_generation=#{pget.call("sbom","sbom_generation")}", "slsa-framework")
+  end
+  case pget.call("react", "react_accessibility_target")
+  when "wcag-aa", "wcag-aaa"
+    padd.call("frontend", "accessibility_conformance", "react_accessibility_target=#{pget.call("react","react_accessibility_target")}", "wcag-2-2")
+  end
+  if pget.call("aws", "aws_region_strategy") == "multi-region"
+    padd.call("reliability", "multi_region", "aws_region_strategy=multi-region", "aws-well-architected")
+  end
+  case pget.call("aws", "aws_cost_guardrails")
+  when "budgets", "hard-caps"
+    padd.call("cost-optimization", "cost_guardrails", "aws_cost_guardrails=#{pget.call("aws","aws_cost_guardrails")}", "finops-framework")
+  end
+  if pget.call("k8s", "k8s_multitenancy") == "multi-tenant"
+    padd.call("security", "namespace_isolation", "k8s_multitenancy=multi-tenant", "cncf-cloud-native")
+  end
+  case pget.call("hashicorp", "hashicorp_state_backend")
+  when "remote", "remote-locked"
+    padd.call("operational-excellence", "remote_state_locking", "hashicorp_state_backend=#{pget.call("hashicorp","hashicorp_state_backend")}", "hashicorp-terraform-style-guide")
+  end
+  if pget.call("jwt", "jwt_token_lifetime") == "short" || pget.call("jwt", "jwt_refresh_strategy") == "rotating"
+    padd.call("identity", "short_lived_tokens", "jwt_commitment", "oauth2-oidc")
+  end
+  if pget.call("observability", "observability_signal_depth") == "full-tracing"
+    padd.call("operational-excellence", "distributed_tracing", "observability_signal_depth=full-tracing", "opentelemetry-docs")
+  end
+
   # Dedupe by (pillar, concern); first driver/source wins.
   seen = {}; deduped = []
   concerns.each do |c|
@@ -255,10 +301,14 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
   end
 
   # Grounding verification (cite-or-decline): a concern whose source is in no
-  # catalog is marked needs_grounding.
+  # catalog is marked needs_grounding. §30.1: also load the EO-security + universal
+  # source catalogs so probe commitments citing e.g. slsa-framework / wcag-2-2 are
+  # recognized as grounded (additive — can only reduce needs_grounding, never raise it).
   grounded = {}
   sdir = File.dirname(catalog)
-  [catalog, eng, File.join(sdir, "data-architecture-sources.yaml"), File.join(sdir, "distributed-systems-sources.yaml")].each do |cf|
+  [catalog, eng,
+   File.join(sdir, "data-architecture-sources.yaml"), File.join(sdir, "distributed-systems-sources.yaml"),
+   File.join(sdir, "eo-security-sources.yaml"), File.join(sdir, "sources.yaml")].each do |cf|
     next unless File.exist?(cf)
     d = begin; YAML.unsafe_load_file(cf); rescue; nil; end
     next unless d.is_a?(Array)
@@ -281,6 +331,7 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
     "generated_at"   => now,
     "concerns_total" => deduped.length,
     "needs_grounding"=> needs.uniq,
+    "probes_consumed"=> probe_driven,
     "pillars"        => by_pillar
   }
 
@@ -297,5 +348,6 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
   STDERR.puts "reliability_concerns=#{(by_pillar["reliability"]||[]).length}"
   STDERR.puts "security_concerns=#{(by_pillar["security"]||[]).length}"
   STDERR.puts "needs_grounding=#{needs.uniq.length}"
+  STDERR.puts "probes_consumed=#{probe_driven}"
 '
 exit $?

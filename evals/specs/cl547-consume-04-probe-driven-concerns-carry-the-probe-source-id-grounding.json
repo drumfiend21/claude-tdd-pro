@@ -1,0 +1,14 @@
+{
+  "name": "a probe-driven concern carries the probe source_id so it is grounded, not invented",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>/dev/null; ruby -rjson -e 'p=JSON.parse(File.read(\"req.json\")); mr=p[\"pillars\"].values.flatten.find{|x|x[\"concern\"]==\"multi_region\"}; exit(mr && mr[\"source_id\"]==\"aws-well-architected\" && mr[\"grounding\"]==\"grounded\" ? 0:1)' && echo probe-concern-grounded 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\" --answers p.json --probe-answer aws:aws_region_strategy=multi-region --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "probe-concern-grounded"
+    ]
+  }
+}
