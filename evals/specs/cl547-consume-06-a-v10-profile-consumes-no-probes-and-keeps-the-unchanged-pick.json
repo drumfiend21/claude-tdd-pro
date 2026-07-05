@@ -1,0 +1,13 @@
+{
+  "name": "a v1.0 profile with no probes consumes zero probes and keeps the unchanged budget-based pick (back-compat)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-intake.sh\" --answers p.json --partial --out v10.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v10.json --out req.json --now 2026-07-04T00:00:00Z 2>tt.err; bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-recommend.sh\" --requirements req.json --profile v10.json --out opt.json --now 2026-07-04T00:00:00Z 2>rr.err; grep -q 'probes_consumed=0' tt.err && grep -q 'recommended=opt-balanced' rr.err && echo v10-backcompat-unchanged 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "v10-backcompat-unchanged"
+    ]
+  }
+}

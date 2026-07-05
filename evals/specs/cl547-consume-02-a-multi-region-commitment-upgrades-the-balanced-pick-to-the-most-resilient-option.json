@@ -1,0 +1,14 @@
+{
+  "name": "a committed multi-region posture upgrades the balanced default to the most-resilient option",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-recommend.sh\" --requirements req.json --profile v11.json --out opt.json --now 2026-07-04T00:00:00Z 2>rr.err; grep -q 'recommended=opt-max' rr.err && echo multiregion-upgraded-pick 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\" --answers p.json --probe-answer aws:aws_region_strategy=multi-region --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "multiregion-upgraded-pick"
+    ]
+  }
+}

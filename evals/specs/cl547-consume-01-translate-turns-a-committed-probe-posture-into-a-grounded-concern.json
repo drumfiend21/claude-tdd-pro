@@ -1,0 +1,14 @@
+{
+  "name": "business-translate turns a committed per-namespace probe posture into a grounded technical concern",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>/dev/null; ruby -rjson -e 'p=JSON.parse(File.read(\"req.json\")); c=p[\"pillars\"].values.flatten.map{|x|x[\"concern\"]}; exit(([\"threat_modeling\",\"provenance_attestation\",\"accessibility_conformance\",\"multi_region\",\"namespace_isolation\"]-c).empty? ? 0:1)' && echo commitments-became-concerns 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\" --answers p.json --probe-answer owasp:owasp_threat_posture=adversarial --probe-answer slsa:slsa_build_level=l3 --probe-answer react:react_accessibility_target=wcag-aa --probe-answer aws:aws_region_strategy=multi-region --probe-answer k8s:k8s_multitenancy=multi-tenant --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "commitments-became-concerns"
+    ]
+  }
+}

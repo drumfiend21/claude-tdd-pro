@@ -1,0 +1,14 @@
+{
+  "name": "a committed probe posture appears in the produced option build_requirements, steering option content",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-recommend.sh\" --requirements req.json --profile v11.json --out opt.json --now 2026-07-04T00:00:00Z 2>/dev/null; ruby -rjson -e 'o=JSON.parse(File.read(\"opt.json\")); rec=o[\"options\"].find{|x|x[\"option_id\"]==o[\"recommended_option_id\"]}; exit(rec[\"build_requirements\"].include?(\"multi_region\") ? 0:1)' && echo commitment-in-option 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"React SPA with REST API on Kubernetes via Terraform on AWS with a CI/CD pipeline\" --answers p.json --probe-answer aws:aws_region_strategy=multi-region --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "commitment-in-option"
+    ]
+  }
+}

@@ -125,6 +125,19 @@ EMIT_REQ="$EMIT_REQ" NOW="$NOW" DRY_RUN="$DRY_RUN" ruby -rjson -e '
     else "opt-balanced" end
   recommended = options.first["option_id"] unless options.any? { |o| o["option_id"] == recommended }
 
+  # §30.1 — let a decisive S-57 probe COMMITMENT steer the pick (only when a v1.1 profile carries probes;
+  # v0 profiles have none -> pick unchanged, back-compat). A committed multi-region posture upgrades a
+  # balanced default to the most resilient available option; a hard cost cap pulls toward cost-optimized.
+  probes = (prof && prof["probes"]) || {}
+  region = (probes["aws"] || {})["aws_region_strategy"]
+  guard  = (probes["aws"] || {})["aws_cost_guardrails"]
+  have = lambda { |id| options.any? { |o| o["option_id"] == id } }
+  if region == "multi-region" && recommended == "opt-balanced"
+    recommended = have.call("opt-max") ? "opt-max" : (have.call("opt-resilient") ? "opt-resilient" : recommended)
+  elsif guard == "hard-caps" && recommended == "opt-balanced" && have.call("opt-cost")
+    recommended = "opt-cost"
+  end
+
   by_id = {}; options.each { |o| by_id[o["option_id"]] = o }
 
   # Integration emitters (no file write).
@@ -164,5 +177,6 @@ EMIT_REQ="$EMIT_REQ" NOW="$NOW" DRY_RUN="$DRY_RUN" ruby -rjson -e '
   STDERR.puts "option_count=#{options.length}"
   STDERR.puts "recommended=#{recommended}"
   STDERR.puts "needs_grounding=#{needs.length}"
+  STDERR.puts "probes_consumed=#{reqs["probes_consumed"] || 0}"
 '
 exit $?
