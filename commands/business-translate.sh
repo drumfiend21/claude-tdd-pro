@@ -274,6 +274,15 @@ PROFILE="$PROFILE" OUT="$OUT" CATALOG="$CATALOG" ENG="$ENG" NOW="$NOW" DRY_RUN="
   if pget.call("aws", "aws_region_strategy") == "multi-region"
     padd.call("reliability", "multi_region", "aws_region_strategy=multi-region", "aws-well-architected")
   end
+  if pget.call("azure", "azure_region_strategy") == "multi-region"
+    padd.call("reliability", "multi_region", "azure_region_strategy=multi-region", "azure-well-architected")
+  end
+  if pget.call("gcp", "gcp_region_strategy") == "multi-region"
+    padd.call("reliability", "multi_region", "gcp_region_strategy=multi-region", "gcp-architecture-framework")
+  end
+  if pget.call("cfn", "cfn_stack_policy") == "protected"
+    padd.call("operational-excellence", "stack_protection", "cfn_stack_policy=protected", "aws-cloudformation-best-practices")
+  end
   case pget.call("aws", "aws_cost_guardrails")
   when "budgets", "hard-caps"
     padd.call("cost-optimization", "cost_guardrails", "aws_cost_guardrails=#{pget.call("aws","aws_cost_guardrails")}", "finops-framework")

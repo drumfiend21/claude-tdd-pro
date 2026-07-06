@@ -1,0 +1,11 @@
+{
+  "name": "an AWS + CloudFormation vision activates the aws and cfn probe groups",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"REST API on AWS with CloudFormation and Terraform\" --classify 2>/dev/null); echo \"$OUT\" | ruby -rjson -e 'a=JSON.parse(STDIN.read)[\"workload_classification\"][\"activated_probe_namespaces\"]; exit(a.include?(\"aws\") && a.include?(\"cfn\") ? 0:1)' && echo aws-cfn-activated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aws-cfn-activated"
+    ]
+  }
+}

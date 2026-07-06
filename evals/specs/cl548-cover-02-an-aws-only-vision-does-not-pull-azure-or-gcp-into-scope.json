@@ -1,0 +1,11 @@
+{
+  "name": "an AWS-only vision does not pull Azure or GCP namespaces into scope (precise classification)",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"REST API on AWS with CloudFormation, EKS and Terraform, DynamoDB\" --classify 2>/dev/null); echo \"$OUT\" | ruby -rjson -e 'ns=JSON.parse(STDIN.read)[\"workload_classification\"][\"namespaces\"]; exit(!ns.include?(\"azure\") && !ns.include?(\"gcp\") ? 0:1)' && echo aws-only-precise 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aws-only-precise"
+    ]
+  }
+}

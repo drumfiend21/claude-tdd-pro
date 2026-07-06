@@ -25,11 +25,11 @@
 
 - workload_type: relational-data
   signals: [sql, postgres, postgresql, mysql, relational, transaction, rdbms, aurora]
-  namespaces: [aws, azure, gcp, observability]
+  namespaces: [observability]
 
 - workload_type: nosql-data
   signals: [nosql, mongo, mongodb, dynamo, dynamodb, document db, key-value, cassandra, firestore, redis]
-  namespaces: [aws, azure, gcp, observability]
+  namespaces: [observability]
 
 - workload_type: messaging
   signals: [queue, message, event, kafka, pubsub, pub/sub, streaming, sqs, sns, rabbitmq, broker]
@@ -39,9 +39,31 @@
   signals: [kubernetes, k8s, container, docker, pod, orchestration, cluster, eks, aks, gke]
   namespaces: [k8s, helm, compose, mesh, gitops]
 
+# Generic IaC (tool/provider-agnostic). The specific CLOUD namespaces fire on cloud-specific
+# signals below, so an AWS-only workload is not probed for Azure/GCP (precise classification).
 - workload_type: iac-cloud
-  signals: [terraform, infrastructure, iac, provision, cloud, deploy, vpc, network, ec2, s3, bucket]
-  namespaces: [hashicorp, aws, azure, gcp, cfn, ansible, iam, security-governance]
+  signals: [terraform, infrastructure, iac, provision, deploy, vpc, network, bucket]
+  namespaces: [hashicorp, iam, security-governance]
+
+- workload_type: aws-platform
+  signals: [aws, "amazon web services", ec2, s3, lambda, dynamodb, aurora, eks, rds]
+  namespaces: [aws]
+
+- workload_type: azure-platform
+  signals: [azure, aks, "cosmos db", "azure functions", "blob storage"]
+  namespaces: [azure]
+
+- workload_type: gcp-platform
+  signals: [gcp, "google cloud", gke, bigquery, firestore, "cloud run"]
+  namespaces: [gcp]
+
+- workload_type: cloudformation
+  signals: [cloudformation, cfn, sam]
+  namespaces: [cfn]
+
+- workload_type: config-management
+  signals: [ansible, playbook, "configuration management", provisioning]
+  namespaces: [ansible]
 
 - workload_type: ci-cd
   signals: [pipeline, ci, cd, ci/cd, build, release, deploy, github action, gitlab, jenkins, supply chain]

@@ -1,0 +1,14 @@
+{
+  "name": "the new azure/gcp/cfn probe answers are grounded (no ungrounded concern added)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>tt.err; grep -qE 'probes_consumed=[1-9]' tt.err && grep -q 'needs_grounding=0' tt.err && echo cloud-probes-grounded 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"x\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"AWS with CloudFormation, Azure, and Google Cloud\" --answers p.json --probe-answer cfn:cfn_stack_policy=protected --probe-answer azure:azure_region_strategy=multi-region --probe-answer gcp:gcp_region_strategy=multi-region --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cloud-probes-grounded"
+    ]
+  }
+}

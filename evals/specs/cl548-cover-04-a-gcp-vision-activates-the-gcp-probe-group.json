@@ -1,0 +1,11 @@
+{
+  "name": "a Google Cloud vision activates the gcp probe group",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"A data pipeline on Google Cloud with GKE and BigQuery\" --classify 2>/dev/null); echo \"$OUT\" | ruby -rjson -e 'a=JSON.parse(STDIN.read)[\"workload_classification\"][\"activated_probe_namespaces\"]; exit(a.include?(\"gcp\") ? 0:1)' && echo gcp-activated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "gcp-activated"
+    ]
+  }
+}

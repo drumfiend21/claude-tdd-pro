@@ -1,0 +1,14 @@
+{
+  "name": "a committed CloudFormation stack-policy posture is consumed into a grounded design concern",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>/dev/null; ruby -rjson -e 'p=JSON.parse(File.read(\"req.json\")); c=p[\"pillars\"].values.flatten; sp=c.find{|x|x[\"concern\"]==\"stack_protection\"}; exit(sp && sp[\"source_id\"]==\"aws-cloudformation-best-practices\" && sp[\"grounding\"]==\"grounded\" ? 0:1)' && echo cfn-commitment-steers 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"x\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"AWS with CloudFormation and Terraform\" --answers p.json --probe-answer cfn:cfn_stack_policy=protected --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cfn-commitment-steers"
+    ]
+  }
+}
