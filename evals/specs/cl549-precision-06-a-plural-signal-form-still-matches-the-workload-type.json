@@ -1,0 +1,11 @@
+{
+  "name": "a pluralized signal form such as microservices still matches its workload type",
+  "command": "T=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a fleet of independent microservices\" --classify 2>/dev/null | ruby -rjson -e 'puts (JSON.parse(STDIN.read)[\"workload_classification\"][\"workload_types\"]).join(\",\")'); echo \"$T\" | grep -qE 'rest-api' && echo plural-signal-matches 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "plural-signal-matches"
+    ]
+  }
+}

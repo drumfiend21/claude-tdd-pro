@@ -1,0 +1,11 @@
+{
+  "name": "the short signal aks does not match inside the word leaks so Azure/K8s do not misfire on it",
+  "command": "T=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"prevent content leaks and data leaks\" --classify 2>/dev/null | ruby -rjson -e 'puts (JSON.parse(STDIN.read)[\"workload_classification\"][\"workload_types\"]).join(\",\")'); echo \"$T\" | grep -qvE 'azure-platform|container-orchestration' && ! echo \"$T\" | grep -qE 'azure-platform|container-orchestration' && echo aks-not-in-leaks 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aks-not-in-leaks"
+    ]
+  }
+}

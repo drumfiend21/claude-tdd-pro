@@ -1,0 +1,11 @@
+{
+  "name": "a cloud-agnostic vision does not invent a specific cloud platform type from incidental substrings",
+  "command": "T=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform that assesses skills and issues credentials\" --classify 2>/dev/null | ruby -rjson -e 'puts (JSON.parse(STDIN.read)[\"workload_classification\"][\"workload_types\"]).join(\",\")'); ! echo \"$T\" | grep -qE 'aws-platform|azure-platform|gcp-platform' && echo no-phantom-cloud 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-phantom-cloud"
+    ]
+  }
+}
