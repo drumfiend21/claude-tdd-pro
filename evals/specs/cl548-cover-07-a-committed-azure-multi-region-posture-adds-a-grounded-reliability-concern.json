@@ -1,0 +1,14 @@
+{
+  "name": "a committed Azure multi-region posture adds a grounded multi_region reliability concern",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile v11.json --out req.json --now 2026-07-04T00:00:00Z 2>/dev/null; ruby -rjson -e 'p=JSON.parse(File.read(\"req.json\")); mr=p[\"pillars\"].values.flatten.find{|x|x[\"concern\"]==\"multi_region\"}; exit(mr && mr[\"source_id\"]==\"azure-well-architected\" && mr[\"grounding\"]==\"grounded\" ? 0:1)' && echo azure-multiregion-grounded 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"x\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"API on Azure with AKS\" --answers p.json --probe-answer azure:azure_region_strategy=multi-region --partial --out v11.json --now 2026-07-04T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-multiregion-grounded"
+    ]
+  }
+}

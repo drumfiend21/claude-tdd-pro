@@ -63,6 +63,18 @@ probe_groups:
     - {key: aws_region_strategy, type: enum, allowed: [single-region, multi-region], prompt: "Should the system run in one region or several for resilience?", source_id: aws-well-architected}
     - {key: aws_cost_guardrails, type: enum, allowed: [none, budgets, hard-caps], prompt: "What cost guardrails should be enforced on the cloud account?", source_id: finops-framework}
 
+  azure:
+    - {key: azure_region_strategy, type: enum, allowed: [single-region, paired-region, multi-region], prompt: "Across how many Azure regions should the system run for resilience?", source_id: azure-well-architected}
+    - {key: azure_landing_zone, type: enum, allowed: [none, enterprise-scale], prompt: "Should the system sit inside an enterprise-scale landing zone or stand alone?", source_id: azure-architecture-center}
+
+  gcp:
+    - {key: gcp_region_strategy, type: enum, allowed: [single-region, multi-region], prompt: "Should the system run in one Google Cloud region or several for resilience?", source_id: gcp-architecture-framework}
+    - {key: gcp_project_structure, type: enum, allowed: [single-project, folder-hierarchy], prompt: "Should resources live in one project or a folder hierarchy of projects?", source_id: gcp-architecture-center}
+
+  cfn:
+    - {key: cfn_stack_policy, type: enum, allowed: [none, protected], prompt: "Should critical stack resources be protected from accidental replacement?", source_id: aws-cloudformation-best-practices}
+    - {key: cfn_drift_detection, type: enum, allowed: [off, scheduled], prompt: "Should infrastructure drift be detected on a schedule?", source_id: aws-cloudformation-best-practices}
+
   slsa:
     - {key: slsa_build_level, type: enum, allowed: [l1, l2, l3], prompt: "How tamper-resistant must the build/supply chain be?", source_id: slsa-framework}
 

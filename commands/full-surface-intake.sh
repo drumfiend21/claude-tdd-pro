@@ -128,18 +128,23 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
   workload_types = fired.map { |t| t["workload_type"] }.compact
   # Activated probe namespaces = in-scope namespaces that actually have a probe group.
   activated = namespaces.select { |ns| groups.key?(ns) }.sort
+  # §30.2 coverage TRANSPARENCY: in-scope namespaces with no probe group. Reported explicitly (never
+  # silent) so a coverage gap is visible — the intake mirror of "no rule silently unenforced".
+  unprobed = (namespaces - activated).sort
 
   if classify
     STDOUT.puts JSON.pretty_generate({
       "workload_classification" => {
         "workload_types" => workload_types,
         "namespaces" => namespaces,
-        "activated_probe_namespaces" => activated
+        "activated_probe_namespaces" => activated,
+        "unprobed_in_scope" => unprobed
       }
     })
     STDERR.puts "workload_types=#{workload_types.join(",")}"
     STDERR.puts "namespaces=#{namespaces.length}"
     STDERR.puts "activated_probes=#{activated.length}"
+    STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
     exit 0
   end
 
@@ -213,7 +218,8 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
     "workload_classification" => {
       "workload_types" => workload_types,
       "namespaces" => namespaces,
-      "activated_probe_namespaces" => activated
+      "activated_probe_namespaces" => activated,
+      "unprobed_in_scope" => unprobed              # §30.2 explicit coverage transparency
     },
     "probes"         => probe_answers,                   # per-namespace probe answers
     "grounded_in"    => grounded_in,                     # strict superset of v1.0
@@ -234,6 +240,7 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
   STDERR.puts "workload_types=#{workload_types.join(",")}"
   STDERR.puts "grounded_in=#{grounded_in.join(",")}"
   STDERR.puts "grounded_in_namespaces=#{grounded_in_namespaces.join(",")}"
+  STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
   STDERR.puts "unanswered=#{unanswered.join(",")}" unless unanswered.empty?
   exit 0
 '

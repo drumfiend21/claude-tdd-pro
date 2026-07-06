@@ -1,0 +1,11 @@
+{
+  "name": "an Azure vision activates the azure probe group",
+  "command": "OUT=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"A .NET API on Azure with AKS and Cosmos DB\" --classify 2>/dev/null); echo \"$OUT\" | ruby -rjson -e 'a=JSON.parse(STDIN.read)[\"workload_classification\"][\"activated_probe_namespaces\"]; exit(a.include?(\"azure\") ? 0:1)' && echo azure-activated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-activated"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "the intake reports in-scope-but-unprobed namespaces explicitly so coverage gaps are never silent",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"REST API on AWS with a CI/CD pipeline on GitHub Actions and Jenkins\" --classify 2>c.err; grep -qE 'unprobed_in_scope=' c.err && echo unprobed-reported 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unprobed-reported"
+    ]
+  }
+}
