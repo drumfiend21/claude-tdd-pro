@@ -1,0 +1,11 @@
+{
+  "name": "a real standalone AKS token still activates the azure-platform workload type (whole-token match)",
+  "command": "T=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a .NET API on Azure with AKS\" --classify 2>/dev/null | ruby -rjson -e 'puts (JSON.parse(STDIN.read)[\"workload_classification\"][\"workload_types\"]).join(\",\")'); echo \"$T\" | grep -qE 'azure-platform' && echo aks-token-fires 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aks-token-fires"
+    ]
+  }
+}

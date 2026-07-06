@@ -1,0 +1,11 @@
+{
+  "name": "the short signal ci does not match inside certification or accreditation so CI/CD does not misfire",
+  "command": "T=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI certification and accreditation platform\" --classify 2>/dev/null | ruby -rjson -e 'puts (JSON.parse(STDIN.read)[\"workload_classification\"][\"workload_types\"]).join(\",\")'); ! echo \"$T\" | grep -qE 'ci-cd' && echo ci-not-in-certification 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ci-not-in-certification"
+    ]
+  }
+}

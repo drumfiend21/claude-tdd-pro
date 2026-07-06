@@ -2396,3 +2396,13 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `precise-classification`, `platform-signal`, `coverage-transparency`, `unprobed-in-scope`, `iac-probe-coverage`.
 
 8 specs (`cl548-cover-01..08`): aws-cfn-activated / aws-only-precise / azure-activated / gcp-activated / unprobed-reported / cfn-commitment-steers / azure-multiregion-grounded / cloud-probes-grounded. **§20 note:** refines §30 coverage; preserves §21 dod. Suite 4931→4939.
+
+### §30.3 Word-boundary signal matching — classifier precision fix (GCTP kata pre-flight, 2026-07-05)
+
+**STANDING INVARIANT: a classifier signal fires only as a WHOLE TOKEN (optionally pluralized), never as a substring inside a longer word.** Fixes a real bug GCTP's kata pre-flight caught: `full-surface-intake` matched signals by substring, so short signals collided with domain-neutral English — `aks` matched inside "le**aks**" (→ spurious `azure-platform` + `container-orchestration`), `ci` matched inside "**ci**rtification"/"certifi**c**ation"/"a**cc**reditation" (→ spurious `ci-cd`), `spa` matched inside "**spa**ce". §30.2 fixed the dispatch (right types on right signals); §30.3 fixes the matcher. **No new feature ID / §2.X contract** (single-line matcher change in S-57; §30.3 refines §30.2). Detail: [docs/design/v1.14-full-surface-intake.md](design/v1.14-full-surface-intake.md).
+
+- **The fix:** signal matching changed from `hay.include?(sig)` to a word-boundary regex `(?<![a-z0-9])<sig>s?(?![a-z0-9])` (alphanumeric boundaries, so multi-word phrases and internal punctuation like `ci/cd` still match; optional trailing `s` so plurals like `microservices` still match). Can only TIGHTEN the classifier (fewer false-positive types), never loosen — additive per the anti-drift discipline.
+- **Verified on the real kata prose:** an AI-credentialing vision ("certification", "accreditation", "content leaks") now classifies to `ai-governed` + `baseline-quality` only — no `azure-platform`/`container-orchestration`/`ci-cd` noise — while real `AKS` / `CI/CD` tokens still fire.
+- **§25 fidelity vocabulary additions:** `word-boundary-match`, `whole-token-signal`, `substring-collision`, `classifier-precision`.
+
+8 specs (`cl549-precision-01..08`): aks-not-in-leaks / ci-not-in-certification / spa-not-in-space / aks-token-fires / cicd-token-fires / plural-signal-matches / kata-classifies-clean / no-phantom-cloud. **§20 note:** matcher precision fix; preserves §21 dod. Suite 4939→4947.

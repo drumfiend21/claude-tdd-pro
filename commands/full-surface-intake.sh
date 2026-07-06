@@ -121,7 +121,16 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
       fired << t
     else
       sigs = (t["signals"] || [])
-      fired << t if sigs.any? { |s| !s.to_s.empty? && hay.include?(s.to_s.downcase) }
+      # §30.3 WORD-BOUNDARY signal matching. A signal fires only as a whole token (optionally pluralized),
+      # not as a substring inside a longer word — so `aks` does NOT match "le<aks>", `ci` does NOT match
+      # "<ci>rtifiable"/"certifi<c>ation", `spa` does NOT match "<spa>ce". Boundaries are alphanumeric
+      # (so multi-word phrases and internal punctuation like "ci/cd" still match). §30.2 fixed the dispatch
+      # (right types on right signals); §30.3 fixes the matcher (whole-token, not substring).
+      fired << t if sigs.any? do |s|
+        ss = s.to_s.downcase
+        next false if ss.empty?
+        hay.match?(Regexp.new("(?<![a-z0-9])" + Regexp.escape(ss) + "s?(?![a-z0-9])"))
+      end
     end
   end
   namespaces = fired.flat_map { |t| t["namespaces"] || [] }.uniq.sort

@@ -1,0 +1,11 @@
+{
+  "name": "the short signal spa does not match inside the word space so a storage workload is not a web frontend",
+  "command": "T=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a storage space for archived files\" --classify 2>/dev/null | ruby -rjson -e 'puts (JSON.parse(STDIN.read)[\"workload_classification\"][\"workload_types\"]).join(\",\")'); ! echo \"$T\" | grep -qE 'web-frontend' && echo spa-not-in-space 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "spa-not-in-space"
+    ]
+  }
+}
