@@ -24,9 +24,11 @@ adds an `unprobed_in_scope` transparency marker so no in-scope namespace is ever
 |---|---|---|---|
 | CL-546 | §30 / S-57 / §2.35 | full-surface intake (classifier + probe groups + v1.1 profile) | `829a284` |
 | CL-547 | §30.1 | design engines consume probe commitments (translate + recommend) | `c23e5fe` |
-| CL-548 | §30.2 | precise cloud classification + azure/gcp/cfn probes + `unprobed_in_scope` | **`43ea692`** |
+| CL-548 | §30.2 | precise cloud classification + azure/gcp/cfn probes + `unprobed_in_scope` | `43ea692` |
+| CL-549 | §30.3 | word-boundary classifier matching (kata-precision fix) | **`f39fcdc`** |
 
-Latest `main` HEAD is **`43ea692`** — pinning there adopts all three.
+Latest `main` HEAD is **`f39fcdc`** — pinning there adopts all four (+ the submission-isolation `.gitignore`
+guard). To resume the kata, see the companion **`docs/handoff-ctp-to-gctp-resume-kata.md`**.
 
 ## 1. Coordinate correction (READ FIRST)
 
@@ -47,7 +49,7 @@ P-12 landed at CTP-correct coordinates:
 | | |
 |---|---|
 | Repo | `drumfiend21/claude-tdd-pro` (CTP) · Branch `main` |
-| Re-pin target SHA | **`43ea692`** — `43ea6926a0478a0d00cb4f1ad381670261162d84` (adopts CL-546+547+548) |
+| Re-pin target SHA | **`f39fcdc`** — `f39fcdc6a8a450a087389f22a95ed17f9cfec7d1` (adopts CL-546+547+548+549) |
 | Changes | `CL-546` (S-57 / §2.35 / §30) · `CL-547` (§30.1) · `CL-548` (§30.2) |
 | New command | `commands/full-surface-intake.sh` |
 | New corpora | `standards/business-intake-workload-classifier.yaml`, `standards/business-intake-question-bank.yaml` |
