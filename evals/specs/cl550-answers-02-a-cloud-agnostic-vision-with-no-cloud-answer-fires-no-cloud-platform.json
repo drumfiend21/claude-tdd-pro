@@ -1,0 +1,11 @@
+{
+  "name": "a cloud-agnostic vision with no cloud stated anywhere fires no cloud platform type",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform that assesses skills and issues credentials\" --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit([\"aws-platform\",\"azure-platform\",\"gcp-platform\"].any?{|t|c[\"workload_types\"].include?(t)} ? 1:0)' && echo no-cloud-without-signal 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-cloud-without-signal"
+    ]
+  }
+}

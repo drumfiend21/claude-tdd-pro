@@ -1,0 +1,11 @@
+{
+  "name": "cite-or-decline rejects a stack-add of a namespace that is not in the rule surface",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload x --stack-add bogusns --classify 2>e.err; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid=bogusns reason=unknown-namespace' e.err && echo unknown-ns-rejected 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unknown-ns-rejected"
+    ]
+  }
+}

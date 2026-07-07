@@ -1,0 +1,11 @@
+{
+  "name": "a cloud named in a business answer fires its platform workload type even when the vision prose is cloud-agnostic",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform that assesses skills and issues credentials\" --answer \"cloud=we deploy on AWS\" --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"workload_types\"].include?(\"aws-platform\") ? 0:1)' && echo cloud-from-answer 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cloud-from-answer"
+    ]
+  }
+}

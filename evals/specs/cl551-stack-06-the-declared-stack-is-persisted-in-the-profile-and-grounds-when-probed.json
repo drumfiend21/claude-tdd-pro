@@ -1,0 +1,13 @@
+{
+  "name": "the declared stack is persisted in the profile and grounds its namespace when its probe is answered",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answers p.json --stack-add aws --probe-answer aws:aws_region_strategy=multi-region --partial --out prof.json --now 2026-07-05T00:00:00Z >/dev/null 2>&1; ruby -rjson -e 'p=JSON.parse(File.read(\"prof.json\")); exit(p[\"stack\"]==[\"aws\"] && p[\"grounded_in_namespaces\"].include?(\"aws\") ? 0:1)' && echo stack-persisted-grounded 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"a credentialing platform\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-persisted-grounded"
+    ]
+  }
+}

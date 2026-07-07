@@ -1,0 +1,11 @@
+{
+  "name": "stack-add forces a real rule-surface namespace into the in-scope set regardless of classifier inference",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add aws --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"namespaces\"].include?(\"aws\") ? 0:1)' && echo stack-forces-scope 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-forces-scope"
+    ]
+  }
+}

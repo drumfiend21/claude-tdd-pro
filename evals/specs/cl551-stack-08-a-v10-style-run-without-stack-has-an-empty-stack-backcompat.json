@@ -1,0 +1,13 @@
+{
+  "name": "a run with no stack-add records an empty stack so back-compat holds",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answers p.json --partial --out prof.json --now 2026-07-05T00:00:00Z >/dev/null 2>&1; ruby -rjson -e 'p=JSON.parse(File.read(\"prof.json\")); exit(p[\"stack\"]==[] ? 0:1)' && echo empty-stack-backcompat 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"a credentialing platform\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "empty-stack-backcompat"
+    ]
+  }
+}
