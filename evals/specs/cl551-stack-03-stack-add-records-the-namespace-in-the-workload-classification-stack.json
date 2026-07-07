@@ -1,0 +1,11 @@
+{
+  "name": "stack-add records the declared namespace in the workload_classification stack list",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add aws --stack-add react --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"stack\"]==[\"aws\",\"react\"] ? 0:1)' && echo stack-recorded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-recorded"
+    ]
+  }
+}

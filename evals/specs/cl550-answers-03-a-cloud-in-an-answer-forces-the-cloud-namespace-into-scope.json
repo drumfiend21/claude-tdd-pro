@@ -1,0 +1,11 @@
+{
+  "name": "a cloud named in a business answer forces its namespace into the in-scope set",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answer \"hosting=runs on Microsoft Azure with AKS\" --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"namespaces\"].include?(\"azure\") ? 0:1)' && echo azure-from-answer-in-scope 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "azure-from-answer-in-scope"
+    ]
+  }
+}

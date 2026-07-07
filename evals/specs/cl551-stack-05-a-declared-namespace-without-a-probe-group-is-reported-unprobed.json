@@ -1,0 +1,11 @@
+{
+  "name": "a declared stack namespace with no probe group is reported in unprobed_in_scope, not silently dropped",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add sarif --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"unprobed_in_scope\"].include?(\"sarif\") ? 0:1)' && echo declared-noprobe-reported 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "declared-noprobe-reported"
+    ]
+  }
+}

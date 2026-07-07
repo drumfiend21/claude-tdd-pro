@@ -1,0 +1,11 @@
+{
+  "name": "a declared stack namespace that has a probe group activates its probes",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add react --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"activated_probe_namespaces\"].include?(\"react\") ? 0:1)' && echo stack-activates-probes 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-activates-probes"
+    ]
+  }
+}

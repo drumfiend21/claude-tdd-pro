@@ -2406,3 +2406,23 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `word-boundary-match`, `whole-token-signal`, `substring-collision`, `classifier-precision`.
 
 8 specs (`cl549-precision-01..08`): aks-not-in-leaks / ci-not-in-certification / spa-not-in-space / aks-token-fires / cicd-token-fires / plural-signal-matches / kata-classifies-clean / no-phantom-cloud. **§20 note:** matcher precision fix; preserves §21 dod. Suite 4939→4947.
+
+### §30.4 Classify from answers — whole-profile haystack (GCTP P-13 Tier A, 2026-07-05)
+
+**STANDING INVARIANT: classification is sourced from the WHOLE profile — the vision prose AND the business answers — not the vision alone.** A technology the operator STATES in an answer (e.g. "we deploy on AWS") fires its platform type, closing the gap where a cloud-agnostic vision left the cloud unclassified. **No new feature ID / §2.X contract** (one-line haystack union in S-57; §30.4 extends §30). Detail: [docs/design/v1.14-full-surface-intake.md](design/v1.14-full-surface-intake.md).
+
+- **The change:** the classification haystack is now `vision + all business-answer values` (raw `--answers`/`--answer` parsed directly so it also works in `--classify` mode where the S-32 universal layer is not run). Word-boundary matching (§30.3) keeps the wider haystack from over-firing.
+- **§25 fidelity vocabulary additions:** `classify-from-answers`, `whole-profile-haystack`, `answer-sourced-classification`.
+
+4 specs (`cl550-answers-01..04`): cloud-from-answer / no-cloud-without-signal / cloud-forces-scope / answers-boundary-safe. Suite 4947→4951.
+
+### §30.5 Explicit stack declaration — `stack[]` + `--stack-add` + cite-or-decline (GCTP P-13 Tier B, 2026-07-05)
+
+**STANDING INVARIANT: the operator can DECLARE the technology stack explicitly, forcing real rule-surface namespaces into scope regardless of classifier inference — and an unknown namespace is REJECTED (cite-or-decline), never silently accepted.** The durable mechanism for sourcing the cloud/stack when the vision is agnostic and no answer states it. **No new feature ID / §2.X contract** (adds `stack[]` to the S-57 profile + a CLI; §30.5 extends §30). Detail: [docs/design/v1.14-full-surface-intake.md](design/v1.14-full-surface-intake.md).
+
+- **`--stack-add <ns>`** (repeatable) declares a namespace. Cite-or-decline validates each against the real rule surface (folders under `generated-code-quality-standards/`); an unknown namespace → `invalid=<ns> reason=unknown-namespace` + exit 2.
+- **Five append sites:** (1) declared stack ∪ classifier namespaces → in-scope; (2) a declared ns with a probe group activates; (3) a declared ns without one is reported in `unprobed_in_scope`; (4) `workload_classification.stack`; (5) top-level `profile.stack`. The declared ns then flows through the existing §30.1 consumption + §30.2 grounding + §29 output surface unchanged.
+- **Back-compat:** no `--stack-add` → `stack: []`; profile otherwise byte-for-byte unchanged.
+- **§25 fidelity vocabulary additions:** `explicit-stack`, `stack-add`, `declared-namespace`, `unknown-namespace`, `stack-forces-scope`.
+
+8 specs (`cl551-stack-01..08`): stack-forces-scope / stack-activates-probes / stack-recorded / unknown-ns-rejected / declared-noprobe-reported / stack-persisted-grounded / stack-dedupes / empty-stack-backcompat. **§20 note:** input-surface extension; preserves §21 dod. Suite 4951→4959.

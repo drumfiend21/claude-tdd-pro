@@ -1,0 +1,11 @@
+{
+  "name": "classification from answer text is word-boundary safe so an answer word does not misfire a short signal",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answer \"notes=we prevent content leaks and value accreditation\" --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit([\"azure-platform\",\"container-orchestration\",\"ci-cd\"].any?{|t|c[\"workload_types\"].include?(t)} ? 1:0)' && echo answers-boundary-safe 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "answers-boundary-safe"
+    ]
+  }
+}

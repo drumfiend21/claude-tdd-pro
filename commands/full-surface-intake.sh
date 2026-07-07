@@ -34,7 +34,7 @@
 set -uo pipefail
 
 WORKLOAD=""; CLASSIFY=0; LIST=0; OUT=""; NOW=""; PARTIAL=0; DRY_RUN=0; WITH_DATA=0
-ANSWERS_JSON=""; ANSWERS_KV=""; PROBE_KV=""; CLASSIFIER=""; QBANK=""
+ANSWERS_JSON=""; ANSWERS_KV=""; PROBE_KV=""; CLASSIFIER=""; QBANK=""; STACK_KV=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -44,6 +44,7 @@ while [ $# -gt 0 ]; do
     --answer)        ANSWERS_KV="${ANSWERS_KV}${2-}"$'\n'; shift 2 ;;
     --answers)       ANSWERS_JSON="${2-}"; shift 2 ;;
     --probe-answer)  PROBE_KV="${PROBE_KV}${2-}"$'\n'; shift 2 ;;
+    --stack-add)     STACK_KV="${STACK_KV}${2-}"$'\n'; shift 2 ;;
     --with-data)     WITH_DATA=1; shift ;;
     --out)           OUT="${2-}"; shift 2 ;;
     --classifier)    CLASSIFIER="${2-}"; shift 2 ;;
@@ -51,7 +52,7 @@ while [ $# -gt 0 ]; do
     --now)           NOW="${2-}"; shift 2 ;;
     --partial)       PARTIAL=1; shift ;;
     --dry-run)       DRY_RUN=1; shift ;;
-    -h|--help) echo "Usage: full-surface-intake.sh --workload <text> [--classify|--list-questions] [--answer k=v]... [--probe-answer ns:k=v]... [--out <path>]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: full-surface-intake.sh --workload <text> [--classify|--list-questions] [--answer k=v]... [--probe-answer ns:k=v]... [--stack-add <ns>]... [--out <path>]" >&2; exit 0 ;;
     *) echo "full-surface-intake: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -94,7 +95,8 @@ fi
 
 CLASSIFIER="$CLASSIFIER" QBANK="$QBANK" WORKLOAD="$WORKLOAD" CLASSIFY="$CLASSIFY" LIST="$LIST" \
 OUT="$OUT" NOW="$NOW" PARTIAL="$PARTIAL" DRY_RUN="$DRY_RUN" WITH_DATA="$WITH_DATA" \
-PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson -e '
+PROBE_KV="$PROBE_KV" STACK_KV="$STACK_KV" PLUGIN_ROOT="$PLUGIN_ROOT" ANSWERS_KV="$ANSWERS_KV" \
+UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
   classifier_f=ENV["CLASSIFIER"]; qbank_f=ENV["QBANK"]
@@ -111,7 +113,45 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
   # Workload text: --workload else answers.workload.
   wl = ENV["WORKLOAD"].to_s.strip
   wl = u_answers["workload"].to_s if wl.empty?
-  hay = wl.downcase
+  # §30.4 classify from the WHOLE profile: union the business ANSWER values into the classification
+  # haystack, so a technology the operator STATES in an answer (e.g. "AWS") fires its platform type —
+  # not only what the vision prose mentions. Word-boundary matching (§30.3) keeps this from over-firing.
+  # The raw --answers/--answer inputs are parsed here so this also works in --classify mode (where the
+  # universal S-32 layer, and thus u_answers, is not populated).
+  raw_answers = {}
+  aj = ENV["ANSWERS_JSON"].to_s
+  unless aj.empty?
+    txt = File.exist?(aj) ? (File.read(aj) rescue "") : aj
+    h = (JSON.parse(txt) rescue nil)
+    raw_answers.merge!(h) if h.is_a?(Hash)
+  end
+  ENV["ANSWERS_KV"].to_s.split("\n").each do |line|
+    next if line.strip.empty?
+    k, _, v = line.partition("=")
+    raw_answers[k.strip] = v.strip
+  end
+  answer_text = (u_answers.values.map(&:to_s) + raw_answers.values.map(&:to_s)).join(" ")
+  hay = (wl + " " + answer_text).downcase
+
+  # §30.5 explicit STACK declaration: --stack-add <ns> forces a real rule-surface namespace into scope
+  # regardless of what the classifier infers. CITE-OR-DECLINE — an unknown namespace (not a folder under
+  # generated-code-quality-standards/) is REJECTED, never silently accepted.
+  valid_ns = Dir.glob(File.join(ENV["PLUGIN_ROOT"].to_s, "generated-code-quality-standards", "*"))
+               .select { |p| File.directory?(p) }
+               .map { |p| File.basename(p) }
+               .reject { |n| n.start_with?("_") }
+  declared_stack = []
+  ENV["STACK_KV"].to_s.split("\n").each do |ns|
+    ns = ns.strip.downcase
+    next if ns.empty?
+    unless valid_ns.include?(ns)
+      STDERR.puts "invalid=#{ns} reason=unknown-namespace"
+      STDERR.puts "stack-add: unknown namespace \"#{ns}\" is not in the rule surface (cite-or-decline)"
+      exit 2
+    end
+    declared_stack << ns
+  end
+  declared_stack = declared_stack.uniq.sort
 
   # Classify: a type fires if always:true or any signal is a substring of the workload text.
   fired = []
@@ -133,9 +173,11 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
       end
     end
   end
-  namespaces = fired.flat_map { |t| t["namespaces"] || [] }.uniq.sort
+  # §30.5 append site 1/5: the declared stack is UNIONED into the in-scope namespaces (forced in scope).
+  namespaces = (fired.flat_map { |t| t["namespaces"] || [] } + declared_stack).uniq.sort
   workload_types = fired.map { |t| t["workload_type"] }.compact
-  # Activated probe namespaces = in-scope namespaces that actually have a probe group.
+  # Activated probe namespaces = in-scope namespaces that actually have a probe group. §30.5 append site
+  # 2/5: a declared-stack ns with a probe group activates; 3/5: one without a group is reported unprobed.
   activated = namespaces.select { |ns| groups.key?(ns) }.sort
   # §30.2 coverage TRANSPARENCY: in-scope namespaces with no probe group. Reported explicitly (never
   # silent) so a coverage gap is visible — the intake mirror of "no rule silently unenforced".
@@ -147,13 +189,15 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
         "workload_types" => workload_types,
         "namespaces" => namespaces,
         "activated_probe_namespaces" => activated,
-        "unprobed_in_scope" => unprobed
+        "unprobed_in_scope" => unprobed,
+        "stack" => declared_stack           # §30.5 append site 4/5: the declared stack is recorded
       }
     })
     STDERR.puts "workload_types=#{workload_types.join(",")}"
     STDERR.puts "namespaces=#{namespaces.length}"
     STDERR.puts "activated_probes=#{activated.length}"
     STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
+    STDERR.puts "stack=#{declared_stack.join(",")}"
     exit 0
   end
 
@@ -228,11 +272,13 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
       "workload_types" => workload_types,
       "namespaces" => namespaces,
       "activated_probe_namespaces" => activated,
-      "unprobed_in_scope" => unprobed              # §30.2 explicit coverage transparency
+      "unprobed_in_scope" => unprobed,             # §30.2 explicit coverage transparency
+      "stack" => declared_stack                    # §30.5 append site 4/5: declared stack recorded
     },
     "probes"         => probe_answers,                   # per-namespace probe answers
     "grounded_in"    => grounded_in,                     # strict superset of v1.0
     "grounded_in_namespaces" => grounded_in_namespaces,
+    "stack"          => declared_stack,                  # §30.5 append site 5/5: top-level declared stack
     "unanswered"     => unanswered
   }
 
@@ -250,6 +296,7 @@ PROBE_KV="$PROBE_KV" UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSO
   STDERR.puts "grounded_in=#{grounded_in.join(",")}"
   STDERR.puts "grounded_in_namespaces=#{grounded_in_namespaces.join(",")}"
   STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
+  STDERR.puts "stack=#{declared_stack.join(",")}"
   STDERR.puts "unanswered=#{unanswered.join(",")}" unless unanswered.empty?
   exit 0
 '
