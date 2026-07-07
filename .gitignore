@@ -37,3 +37,20 @@ standards/universal-coverage-ledger.jsonl
 .claude-tdd-pro/FETCH-FREQUENCIES.yaml
 results.sarif
 results_sarif.sarif
+
+# Consult / architect-session OUTPUT artifacts (a KATA SUBMISSION, not plugin code).
+# The consult chain (business-intake / full-surface-intake / business-translate /
+# architect-recommend / explain / architect-session) DEFAULTS its output into standards/
+# when run in-repo without --out. That output is the operator's design deliverable — it
+# belongs in the operator's OWN submission tree (e.g. a sibling repo), never committed into
+# the plugin. Ignore the default output paths so a submission can never leak into the plugin.
+# (Persisted plugin artifacts like standards/config-options-view.yaml and the golden/*
+# test fixtures are NOT output — they remain tracked and are unaffected by these globs.)
+standards/business-profile.json
+standards/technical-requirements.json
+standards/architecture-options.json
+standards/explanation.md
+standards/session.json
+standards/session.md
+standards/full-surface-grounding.json
+standards/architect-session/
