@@ -23,7 +23,7 @@ cloud is architectural, not a vision fact. P-13 sources the cloud/stack from the
 | | |
 |---|---|
 | Repo | `drumfiend21/claude-tdd-pro` (CTP) · Branch `main` |
-| Re-pin target SHA | **`<MAIN_HEAD>`** (this doc's merge; see the commit that adds it) |
+| Re-pin target SHA | **`a2d05d4`** — `a2d05d4c0831d70d88c0a66c55223102101b90c0` (adopts CL-550+551) |
 | Change | `CL-550` (§30.4 Tier A) + `CL-551` (§30.5 Tier B) |
 | Files | `commands/full-surface-intake.sh` (classifier haystack + `--stack-add`) |
 | Design | `docs/design/v1.14-full-surface-intake.md` · Architecture §30.4 / §30.5 |
