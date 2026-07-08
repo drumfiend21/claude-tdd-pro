@@ -59,11 +59,18 @@ exit code 2
     "namespaces": [...],
     "activated_probe_namespaces": [...],
     "unprobed_in_scope": [...],
-    "stack": ["aws", "react"]          // §30.5 — declared, sorted, deduped (empty [] when none)
+    "stack": [                          // §30.5/§30.6 — provenance objects, sorted by namespace, [] when none
+      { "namespace": "aws",   "source": "stack-add", "trigger": "--stack-add aws",   "added_at": "<iso-8601 utc>" },
+      { "namespace": "react", "source": "stack-add", "trigger": "--stack-add react", "added_at": "<iso-8601 utc>" }
+    ]
   },
-  "stack": ["aws", "react"]            // §30.5 — same list, top-level
+  "stack": [ /* …same array of provenance objects, top-level… */ ]
 }
 ```
+
+**§30.6 acceptance-test alignment (built per operator directive — the 19 assertions are the spec):**
+- **T-B.2 entry shape:** each `stack` entry is an object with exactly the four keys `{added_at, namespace, source, trigger}` (sorted-keys check passes). `source="stack-add"` (CLI provenance; `vision`/`answer` reserved for future haystack-inferred stack). `trigger` = the CLI invocation. `added_at` = ISO-8601 UTC (`--now` or current).
+- **T-B.3 idempotency:** repeated `--stack-add <ns>` collapses to ONE entry (dedupe by namespace, first-write wins).
 
 **Markers (stderr):** `--classify` and the run both add `stack=<csv>`. §30.4 adds no new marker (behavioral).
 
@@ -71,14 +78,15 @@ exit code 2
 (if it has a probe group); (3) `unprobed_in_scope` (if it doesn't); (4) `workload_classification.stack`;
 (5) top-level `profile.stack`.
 
-**Where your pre-wired patterns differ from the above,** reconcile to these strings — CTP's shipped shape is
-authoritative (as with P-12). If you'd prefer CTP match your acceptance-test's exact rejection wording instead,
-send `docs/handoff-ctp-p13-acceptance-test.sh` and I'll align the human message in a fast follow-up (the machine
-marker `invalid=<ns> reason=unknown-namespace` follows the existing probe-rejection convention and should stay).
+**Alignment status:** per the operator directive, CTP built §30.6 to your acceptance test (the 19 assertions
+are the spec) — the `stack` entry-object shape (T-B.2) and idempotency (T-B.3) now match. The rejection surface
+(`invalid=<ns> reason=unknown-namespace`, exit 2) follows the existing probe-rejection convention; if your test
+asserts a different *human* rejection wording, that's the one remaining string to confirm — tell me the expected
+line and I'll align it. Everything else in §3 is the shipped shape.
 
 ## 4. Verification (CTP side)
 
-- Full suite **4,959 / 0** (4947 → 4951 → 4959 across CL-550/551).
+- Full suite **4,960 / 0** (4947 → 4951 → 4959 → 4960 across CL-550/551/552; §30.6 alignment last).
 - Tier A `cl550-answers-01..04`: cloud-from-answer / no-cloud-without-signal / cloud-forces-scope /
   answers-boundary-safe. Tier B `cl551-stack-01..08`: stack-forces-scope / stack-activates-probes /
   stack-recorded / unknown-ns-rejected / declared-noprobe-reported / stack-persisted-grounded / stack-dedupes /

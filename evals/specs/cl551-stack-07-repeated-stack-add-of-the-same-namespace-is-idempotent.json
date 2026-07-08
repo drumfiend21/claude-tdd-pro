@@ -1,0 +1,11 @@
+{
+  "name": "a repeated stack-add of the same namespace collapses to a single entry (idempotent)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add react --stack-add react --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"stack\"].count{|e|e[\"namespace\"]==\"react\"}==1 ? 0:1)' && echo stack-idempotent 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-idempotent"
+    ]
+  }
+}
