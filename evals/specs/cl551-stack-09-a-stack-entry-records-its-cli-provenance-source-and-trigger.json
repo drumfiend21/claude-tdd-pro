@@ -1,0 +1,11 @@
+{
+  "name": "a stack entry records its provenance — source stack-add and a trigger matching the CLI invocation",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add aws --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; e=c[\"stack\"].find{|x|x[\"namespace\"]==\"aws\"}; exit(e && e[\"source\"]==\"stack-add\" && e[\"trigger\"]==\"--stack-add aws\" ? 0:1)' && echo stack-provenance 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-provenance"
+    ]
+  }
+}

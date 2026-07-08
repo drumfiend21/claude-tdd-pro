@@ -2426,3 +2426,13 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `explicit-stack`, `stack-add`, `declared-namespace`, `unknown-namespace`, `stack-forces-scope`.
 
 8 specs (`cl551-stack-01..08`): stack-forces-scope / stack-activates-probes / stack-recorded / unknown-ns-rejected / declared-noprobe-reported / stack-persisted-grounded / stack-dedupes / empty-stack-backcompat. **§20 note:** input-surface extension; preserves §21 dod. Suite 4951→4959.
+
+### §30.6 Stack entry shape + idempotency — P-13 acceptance alignment (GCTP acceptance test, 2026-07-05)
+
+**STANDING INVARIANT: each declared `stack` entry is a PROVENANCE OBJECT `{namespace, source, trigger, added_at}`, and `--stack-add` is IDEMPOTENT (a repeated declaration of the same namespace collapses to one entry, first-write wins).** Aligns §30.5's `stack` to GCTP's pre-wired acceptance test (T-B.2 sorted-keys shape, T-B.3 idempotency) — the operator's directive was to treat the 19-assertion acceptance test as the spec, not reconcile downstream. **No new feature ID / §2.X contract** (same-CL shape refinement of §30.5 `stack`). Detail: [docs/design/v1.14-full-surface-intake.md](design/v1.14-full-surface-intake.md).
+
+- **Entry shape:** `stack[i] = { "namespace": <ns>, "source": "stack-add", "trigger": "--stack-add <ns>", "added_at": <iso-8601 utc> }`. `source` carries provenance (`stack-add` for CLI; reserved `vision`/`answer` for future haystack-inferred stack). Emitted in both `workload_classification.stack` and top-level `profile.stack`, sorted by namespace.
+- **Idempotency:** dedupe by `namespace`; the first `--stack-add <ns>` wins its `trigger`/`added_at`.
+- **§25 fidelity vocabulary additions:** `stack-entry`, `provenance-object`, `stack-idempotent`, `added-at`, `stack-source`, `stack-trigger`.
+
+5 specs (`cl551-stack-03/06/07/09` reshaped + new): stack-entry-shape(4-keys) / stack-persisted-grounded(ns) / stack-idempotent / stack-provenance(source+trigger). **§20 note:** acceptance-test alignment; preserves §21 dod. Suite 4959→4960.

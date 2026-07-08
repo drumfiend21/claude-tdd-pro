@@ -1,0 +1,11 @@
+{
+  "name": "each stack entry is a provenance object carrying the four required keys added_at, namespace, source, trigger",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add aws --stack-add react --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; s=c[\"stack\"]; exit(s.map{|e|e[\"namespace\"]}==[\"aws\",\"react\"] && s.all?{|e|e.keys.sort==[\"added_at\",\"namespace\",\"source\",\"trigger\"]} ? 0:1)' && echo stack-entry-shape 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-entry-shape"
+    ]
+  }
+}

@@ -140,18 +140,25 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
                .select { |p| File.directory?(p) }
                .map { |p| File.basename(p) }
                .reject { |n| n.start_with?("_") }
-  declared_stack = []
-  ENV["STACK_KV"].to_s.split("\n").each do |ns|
-    ns = ns.strip.downcase
+  # §30.6: each declared namespace is a STACK ENTRY object carrying provenance —
+  # {namespace, source, trigger, added_at}. IDEMPOTENT: a repeated --stack-add of the same namespace
+  # collapses to ONE entry (dedupe by namespace, first-write wins on trigger/added_at).
+  stack_entries = []
+  seen_stack_ns = {}
+  ENV["STACK_KV"].to_s.split("\n").each do |raw|
+    ns = raw.strip.downcase
     next if ns.empty?
     unless valid_ns.include?(ns)
       STDERR.puts "invalid=#{ns} reason=unknown-namespace"
       STDERR.puts "stack-add: unknown namespace \"#{ns}\" is not in the rule surface (cite-or-decline)"
       exit 2
     end
-    declared_stack << ns
+    next if seen_stack_ns[ns]
+    seen_stack_ns[ns] = true
+    stack_entries << {"namespace"=>ns, "source"=>"stack-add", "trigger"=>"--stack-add #{ns}", "added_at"=>now}
   end
-  declared_stack = declared_stack.uniq.sort
+  stack_entries = stack_entries.sort_by { |e| e["namespace"] }
+  declared_stack = stack_entries.map { |e| e["namespace"] }   # plain ns list for the scope union
 
   # Classify: a type fires if always:true or any signal is a substring of the workload text.
   fired = []
@@ -190,7 +197,7 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
         "namespaces" => namespaces,
         "activated_probe_namespaces" => activated,
         "unprobed_in_scope" => unprobed,
-        "stack" => declared_stack           # §30.5 append site 4/5: the declared stack is recorded
+        "stack" => stack_entries            # §30.5 append site 4/5: declared stack (provenance objects)
       }
     })
     STDERR.puts "workload_types=#{workload_types.join(",")}"
@@ -273,12 +280,12 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
       "namespaces" => namespaces,
       "activated_probe_namespaces" => activated,
       "unprobed_in_scope" => unprobed,             # §30.2 explicit coverage transparency
-      "stack" => declared_stack                    # §30.5 append site 4/5: declared stack recorded
+      "stack" => stack_entries                     # §30.5 append site 4/5: declared stack (provenance objects)
     },
     "probes"         => probe_answers,                   # per-namespace probe answers
     "grounded_in"    => grounded_in,                     # strict superset of v1.0
     "grounded_in_namespaces" => grounded_in_namespaces,
-    "stack"          => declared_stack,                  # §30.5 append site 5/5: top-level declared stack
+    "stack"          => stack_entries,                   # §30.5 append site 5/5: top-level declared stack
     "unanswered"     => unanswered
   }
 
