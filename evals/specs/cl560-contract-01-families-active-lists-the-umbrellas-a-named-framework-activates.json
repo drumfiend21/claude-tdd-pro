@@ -1,0 +1,11 @@
+{
+  "name": "families_active lists the umbrella families a named framework activates, distinct from the technology list",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a dashboard with Vue\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); exit(d[\"families_active\"]==[\"frontend\"] && d[\"workload_classification\"][\"family_activated\"]==[\"vue\"] ? 0:1)' && echo families-active-umbrellas 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "families-active-umbrellas"
+    ]
+  }
+}

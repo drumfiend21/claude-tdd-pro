@@ -1,0 +1,13 @@
+{
+  "name": "the --project flag brings the project working-overlay namespaces into scope and reports them",
+  "command": "ID=FEAT-560C; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id sid --now 2026-07-05T00:00:00Z >/dev/null 2>&1; R=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform\" --project $ID --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); puts(d[\"project_overlay_namespaces\"]==[\"vue\"] && d[\"workload_classification\"][\"namespaces\"].include?(\"vue\") ? \"ok\":\"no\")'); rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; [ \"$R\" = ok ] && echo overlay-namespaces-in-scope 1>&2",
+  "setup": [
+    "printf '%s\\n' 'Always bind a unique key to v-for.' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "overlay-namespaces-in-scope"
+    ]
+  }
+}
