@@ -1,0 +1,11 @@
+{
+  "name": "a React vision does put the React-specific namespace in the consult scope via family activation",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a dashboard built with React\" --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"family_activated\"].include?(\"react\") && c[\"namespaces\"].include?(\"react\") ? 0:1)' && echo react-vision-react 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "react-vision-react"
+    ]
+  }
+}

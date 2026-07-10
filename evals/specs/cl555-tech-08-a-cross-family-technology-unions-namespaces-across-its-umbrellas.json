@@ -1,0 +1,11 @@
+{
+  "name": "a technology in multiple umbrellas activates the union of all its umbrellas' namespaces",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" TypeScript 2>/dev/null | ruby -rjson -e 'r=JSON.parse(STDIN.read); exit(r[\"umbrellas\"].length>=2 && r[\"activated_namespaces\"].include?(\"oas\") && r[\"activated_namespaces\"].include?(\"web-vitals\") ? 0:1)' && echo cross-family-union 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cross-family-union"
+    ]
+  }
+}

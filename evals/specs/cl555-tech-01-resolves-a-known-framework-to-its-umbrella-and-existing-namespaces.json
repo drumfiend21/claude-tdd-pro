@@ -1,0 +1,11 @@
+{
+  "name": "the resolver maps a known framework to its umbrella and the existing namespaces naming it activates",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" Vue 2>/dev/null | ruby -rjson -e 'r=JSON.parse(STDIN.read); exit(r[\"umbrellas\"]==[\"frontend\"] && r[\"activated_namespaces\"].include?(\"owasp\") && r[\"activated_namespaces\"].include?(\"web-vitals\") ? 0:1)' && echo resolves-umbrella 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resolves-umbrella"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "a framework that has its own namespace resolves as present and activates that namespace",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" React 2>/dev/null | ruby -rjson -e 'r=JSON.parse(STDIN.read); exit(r[\"specific\"][\"status\"]==\"present\" && r[\"specific\"][\"namespace\"]==\"react\" && r[\"activated_namespaces\"].include?(\"react\") ? 0:1)' && echo present-activates-specific 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "present-activates-specific"
+    ]
+  }
+}

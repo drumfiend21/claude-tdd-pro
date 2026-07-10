@@ -1,0 +1,11 @@
+{
+  "name": "a framework with no namespace of its own resolves as needs_source but still activates its umbrella",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" Angular 2>/dev/null | ruby -rjson -e 'r=JSON.parse(STDIN.read); exit(r[\"specific\"][\"status\"]==\"needs_source\" && r[\"specific\"][\"namespace\"].nil? && !r[\"activated_namespaces\"].empty? ? 0:1)' && echo needs-source-still-activates 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "needs-source-still-activates"
+    ]
+  }
+}
