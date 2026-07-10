@@ -1,0 +1,13 @@
+{
+  "name": "a foreign project's overlay is not included when aggregating for a different project (blast-radius scoping)",
+  "command": "ID=P556A03; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id sid --now 2026-07-05T00:00:00Z >/dev/null 2>&1; NN=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --project OTHER-556 --format json 2>/dev/null | ruby -rjson -e 'puts JSON.parse(STDIN.read)[\"rules\"].select{|x|x[\"origin\"]==\"project\"}.length'); rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; [ \"$NN\" = 0 ] && echo foreign-project-excluded 1>&2",
+  "setup": [
+    "printf '%s\\n' 'Always bind a unique key to every loop element.' 'Never combine conditional and loop on one element.' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "foreign-project-excluded"
+    ]
+  }
+}

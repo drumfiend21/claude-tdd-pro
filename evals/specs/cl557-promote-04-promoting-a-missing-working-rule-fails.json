@@ -1,0 +1,11 @@
+{
+  "name": "promoting a rule that has no working overlay fails rather than succeeding silently",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-project-rule.sh\" --project NOPE-557 --namespace vue --plan 2>/dev/null; [ $? -eq 3 ] && echo promote-missing-fails 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "promote-missing-fails"
+    ]
+  }
+}

@@ -54,3 +54,10 @@ standards/session.json
 standards/session.md
 standards/full-surface-grounding.json
 standards/architect-session/
+
+# §31 S-63 per-project WORKING rule overlay (acquired tech-specific rules, origin: project).
+# Never part of the committed core — a rule becomes official ONLY via an approved promotion PR
+# that MOVES it into generated-code-quality-standards/<ns>/ (§31.2). Acquisition writes here;
+# the aggregator/enforcer include it only under --project <id>. Gitignored so acquisition can
+# never dirty the core, and preserved across a plugin-cache rebuild by the cache-sync (B2).
+generated-code-quality-standards/_project/

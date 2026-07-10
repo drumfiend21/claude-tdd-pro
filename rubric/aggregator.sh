@@ -54,6 +54,7 @@ EMIT_LOAD_ORDER=0
 PIN_COMMUNITY=""
 VALIDATE_COMMUNITY_STRUCTURE=0
 OVERRIDE_MODE=""
+PROJECT_ID=""   # §31 S-63: --project <id> includes _project/<id>/ (origin: project), scoped to that id
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -124,6 +125,14 @@ while [[ $# -gt 0 ]]; do
     --validate-community-structure)
       VALIDATE_COMMUNITY_STRUCTURE=1
       shift
+      ;;
+    --project)
+      if [[ $# -lt 2 ]]; then
+        echo "aggregator: --project requires an argument" >&2
+        exit 1
+      fi
+      PROJECT_ID="$2"
+      shift 2
       ;;
     --override-mode)
       if [[ $# -lt 2 ]]; then
@@ -229,7 +238,7 @@ fi
 # Implementation lives inline so the aggregator is a single script.
 ROOT_ABS=$(cd "$ROOT" && pwd -P)
 
-AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VALIDATE_COMMUNITY="$VALIDATE_COMMUNITY_STRUCTURE" AGG_OVERRIDE_MODE="$OVERRIDE_MODE" AGG_EMIT_AUDIT="$EMIT_AUDIT" ruby -ryaml -rjson -e '
+AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VALIDATE_COMMUNITY="$VALIDATE_COMMUNITY_STRUCTURE" AGG_OVERRIDE_MODE="$OVERRIDE_MODE" AGG_EMIT_AUDIT="$EMIT_AUDIT" AGG_PROJECT="$PROJECT_ID" ruby -ryaml -rjson -e '
   require "find"
   require "pathname"
   require "set"
@@ -372,6 +381,15 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
   operator_dir = File.join(root, "_operator")
   walk_namespace.call(operator_dir, "_operator", 4)
 
+  # 5. §31 S-63: _project/<project-id>/<ns>/*.yaml — the per-project working overlay. Included ONLY when
+  # --project <id> is given, and ONLY that id'"'"'s folder (blast-radius scoping, §31.4 B4). Without --project
+  # the whole _project/ tree is skipped, so the default/official surface is byte-identical.
+  project_id_arg = ENV["AGG_PROJECT"].to_s.strip
+  unless project_id_arg.empty?
+    proj_dir = File.join(root, "_project", project_id_arg)
+    walk_namespace.call(proj_dir, "_project", 5) if File.directory?(proj_dir)
+  end
+
   # Sort by (order_index, relpath) to make alphabetical-within-folder + order-across-folders stable.
   collected.sort_by! { |entry| [entry[0], entry[1]] }
 
@@ -424,8 +442,16 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
     origin = case ns_name
              when "_operator" then "operator"
              when "_community" then "community"
+             when "_project" then "project"
              else "plugin"
              end
+
+    # §31 S-63: for a project rule, extract <project-id> from relpath "_project/<id>/<ns>/file.yaml".
+    project_scope = nil
+    if origin == "project"
+      pp = relpath.split("/")
+      project_scope = pp[1] if pp[0] == "_project" && pp.length >= 3
+    end
 
     # For community plugins, extract <plugin-id> from path
     # relpath looks like "_community/<plugin-id>/<plugin-namespace>/file.yaml"
@@ -486,6 +512,13 @@ AGG_PIN_COMMUNITY="$PIN_COMMUNITY" AGG_EMIT_LOAD_ORDER="$EMIT_LOAD_ORDER" AGG_VA
       annotated["origin"] = origin
       if origin == "community" && plugin_id
         annotated["community_plugin"] = plugin_id
+      end
+      # §31 S-63: a project rule carries its scoping project_id; source_namespace is the real
+      # namespace (e.g. "vue"), the folder under _project/<id>/, so it groups with its family.
+      if origin == "project" && project_scope
+        annotated["project_id"] = project_scope
+        pp = relpath.split("/")
+        annotated["source_namespace"] = pp[2] if pp.length >= 4
       end
       annotated["superseded_by_operator"] = false
 

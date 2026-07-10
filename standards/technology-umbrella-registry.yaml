@@ -22,13 +22,13 @@ umbrellas:
   ai-governance:       { activates: [security-governance, european-union, us-government, industry-self-regulatory] }
 
 technologies:
-  # --- frontend frameworks (umbrella: frontend) ---
-  - { technology: react,    aliases: [reactjs, "react.js"],   coordinate: { linguist: [JSX, TSX], purl: "pkg:npm/react" },     umbrellas: [frontend], specific_namespace: react }
-  - { technology: vue,      aliases: [vuejs, "vue.js"],       coordinate: { linguist: [Vue], purl: "pkg:npm/vue" },            umbrellas: [frontend], specific_namespace: null }
-  - { technology: angular,  aliases: [angularjs],             coordinate: { linguist: [TypeScript], purl: "pkg:npm/@angular/core" }, umbrellas: [frontend], specific_namespace: null }
-  - { technology: ember,    aliases: [emberjs, "ember.js"],   coordinate: { linguist: [JavaScript], purl: "pkg:npm/ember-source" }, umbrellas: [frontend], specific_namespace: null }
-  - { technology: svelte,   aliases: [sveltekit],             coordinate: { linguist: [Svelte], purl: "pkg:npm/svelte" },      umbrellas: [frontend], specific_namespace: null }
-  - { technology: solid,    aliases: [solidjs],               coordinate: { linguist: [TypeScript], purl: "pkg:npm/solid-js" }, umbrellas: [frontend], specific_namespace: null }
+  # --- frontend frameworks (umbrella: frontend) --- `fitness` tags feed the S-61 technology-fitness recommender.
+  - { technology: react,    aliases: [reactjs, "react.js"],   coordinate: { linguist: [JSX, TSX], purl: "pkg:npm/react" },     umbrellas: [frontend], specific_namespace: react, fitness: [spa, large-ecosystem, hiring-pool, flexible] }
+  - { technology: vue,      aliases: [vuejs, "vue.js"],       coordinate: { linguist: [Vue], purl: "pkg:npm/vue" },            umbrellas: [frontend], specific_namespace: null,  fitness: [spa, gentle-learning, progressive] }
+  - { technology: angular,  aliases: [angularjs],             coordinate: { linguist: [TypeScript], purl: "pkg:npm/@angular/core" }, umbrellas: [frontend], specific_namespace: null,  fitness: [enterprise, opinionated, typescript-first, batteries-included] }
+  - { technology: ember,    aliases: [emberjs, "ember.js"],   coordinate: { linguist: [JavaScript], purl: "pkg:npm/ember-source" }, umbrellas: [frontend], specific_namespace: null,  fitness: [enterprise, convention, stability] }
+  - { technology: svelte,   aliases: [sveltekit],             coordinate: { linguist: [Svelte], purl: "pkg:npm/svelte" },      umbrellas: [frontend], specific_namespace: null,  fitness: [performance, small-bundle, spa] }
+  - { technology: solid,    aliases: [solidjs],               coordinate: { linguist: [TypeScript], purl: "pkg:npm/solid-js" }, umbrellas: [frontend], specific_namespace: null,  fitness: [performance, spa, fine-grained-reactivity] }
   # --- languages that are themselves namespaces (umbrella: frontend/backend) ---
   - { technology: typescript, aliases: [ts],                  coordinate: { linguist: [TypeScript], purl: "pkg:npm/typescript" }, umbrellas: [frontend, backend-web], specific_namespace: typescript }
   - { technology: node,     aliases: [nodejs, "node.js"],     coordinate: { linguist: [JavaScript], purl: "pkg:npm/node" },    umbrellas: [backend-web], specific_namespace: node }

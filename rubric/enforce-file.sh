@@ -34,13 +34,14 @@
 # Exit: 0 clean / 1 >=1 fail / 3 no fail but >=1 not_enforced / 2 usage.
 
 set -uo pipefail
-FILE=""; ROOT=""; QUIET=0; PROFILE=""; EXTRA=""; APPCODE=0; SINGLEFILE=0
+FILE=""; ROOT=""; QUIET=0; PROFILE=""; EXTRA=""; APPCODE=0; SINGLEFILE=0; PROJECT=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --file)             FILE="${2-}"; shift 2 ;;
     --root)             ROOT="${2-}"; shift 2 ;;
     --profile)          PROFILE="${2-}"; shift 2 ;;
     --extra-rules)      EXTRA="${2-}"; shift 2 ;;
+    --project)          PROJECT="${2-}"; shift 2 ;;
     --include-app-code) APPCODE=1; shift ;;
     --single-file-gate) SINGLEFILE=1; shift ;;
     --quiet)            QUIET=1; shift ;;
@@ -67,7 +68,7 @@ if [ -z "$PROFILE" ]; then
   done
 fi
 
-FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCODE="$APPCODE" SINGLEFILE="$SINGLEFILE" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
+FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCODE="$APPCODE" SINGLEFILE="$SINGLEFILE" PLUGIN_ROOT="$PLUGIN_ROOT" ENF_PROJECT="$PROJECT" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   file = ENV["FILE"]; plugin = ENV["PLUGIN_ROOT"]; quiet = ENV["QUIET"] == "1"
   profile = ENV["PROFILE"].to_s
@@ -83,7 +84,8 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCO
   LING2EXT = {
     "typescript"=>"*.ts","tsx"=>"*.tsx","javascript"=>"*.js","jsx"=>"*.jsx","python"=>"*.py","go"=>"*.go",
     "java"=>"*.java","ruby"=>"*.rb","rust"=>"*.rs","php"=>"*.php","csharp"=>"*.cs","c#"=>"*.cs",
-    "kotlin"=>"*.kt","swift"=>"*.swift","scala"=>"*.scala","groovy"=>"*.groovy","elixir"=>"*.ex","c"=>"*.c","cpp"=>"*.cpp"
+    "kotlin"=>"*.kt","swift"=>"*.swift","scala"=>"*.scala","groovy"=>"*.groovy","elixir"=>"*.ex","c"=>"*.c","cpp"=>"*.cpp",
+    "vue"=>"*.vue","svelte"=>"*.svelte"
   }
   aliases_to_glob = lambda { |als| Array(als).map { |a| LING2EXT[a.to_s] }.compact.uniq.join(",") }
 
@@ -111,6 +113,16 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCO
   Dir[File.join(plugin, "generated-code-quality-standards", "*", "*.yaml")].each do |f|
     d = (YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
     (d["rules"] || []).each { |r| load_rule.call(r) }
+  end
+  # §31 S-62: first-class enforcement of the per-project WORKING overlay, scoped to --project <id>.
+  # Loads ONLY _project/<id>/, never another project (blast-radius scoping, §31.4 B4). Without --project,
+  # no project rules are loaded (official enforcement is unchanged).
+  proj = ENV["ENF_PROJECT"].to_s.strip
+  unless proj.empty?
+    Dir[File.join(plugin, "generated-code-quality-standards", "_project", proj, "*", "*.yaml")].each do |f|
+      d = (YAML.unsafe_load_file(f) rescue nil); next unless d.is_a?(Hash)
+      (d["rules"] || []).each { |r| load_rule.call(r) }
+    end
   end
   # operator/test affordance: extra ad-hoc rules (including detector-less / tool-only rules).
   unless ENV["EXTRA"].to_s.empty?

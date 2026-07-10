@@ -1,0 +1,13 @@
+{
+  "name": "acquisition caps at --max-rules and flags budget_exhausted rather than silently truncating",
+  "command": "ID=P556Q04; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id sid --max-rules 2 --now 2026-07-05T00:00:00Z 2>e.err; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; grep -qE 'acquired=2 .*budget_exhausted=true' e.err && echo acquire-budget-capped 1>&2",
+  "setup": [
+    "printf '%s\\n' a b c d e f > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "acquire-budget-capped"
+    ]
+  }
+}

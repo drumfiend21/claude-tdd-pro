@@ -1,0 +1,13 @@
+{
+  "name": "the aggregator with --project includes the per-project overlay tagged origin project and scoped by project_id",
+  "command": "ID=P556A01; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id sid --now 2026-07-05T00:00:00Z >/dev/null 2>&1; R=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --project $ID --format json 2>/dev/null | ruby -rjson -e 'r=JSON.parse(STDIN.read)[\"rules\"].select{|x|x[\"origin\"]==\"project\"}; puts(r.length>=1 && r.all?{|x|x[\"project_id\"]==\"'$ID'\"} ? \"ok\":\"no\")'); rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; [ \"$R\" = ok ] && echo project-overlay-included 1>&2",
+  "setup": [
+    "printf '%s\\n' 'Always bind a unique key to every loop element.' 'Never combine conditional and loop on one element.' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "project-overlay-included"
+    ]
+  }
+}

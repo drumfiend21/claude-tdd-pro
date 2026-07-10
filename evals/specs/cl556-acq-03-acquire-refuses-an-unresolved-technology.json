@@ -1,0 +1,13 @@
+{
+  "name": "acquisition refuses an unresolved technology rather than fabricating rules (cite-or-decline)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Cobol --project P556Q03 --source-file g.txt --source-id sid 2>e.err; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'status=unresolved' e.err && echo acquire-declines-unknown 1>&2",
+  "setup": [
+    "printf '%s\\n' 'Always bind a unique key to every loop element.' 'Never combine conditional and loop on one element.' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "acquire-declines-unknown"
+    ]
+  }
+}

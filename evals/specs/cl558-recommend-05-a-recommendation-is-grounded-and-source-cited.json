@@ -1,0 +1,11 @@
+{
+  "name": "a recommendation carries a grounded flag and a rationale citing the fitness it stood on",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/recommend-technology.sh\" --umbrella frontend --need enterprise 2>/dev/null | ruby -rjson -e 'r=JSON.parse(STDIN.read); exit(r[\"grounded\"]==true && r[\"rationale\"].to_s.length>10 ? 0:1)' && echo recommendation-grounded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "recommendation-grounded"
+    ]
+  }
+}

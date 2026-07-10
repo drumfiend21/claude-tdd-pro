@@ -1,0 +1,11 @@
+{
+  "name": "the recommender proposes a performance-focused framework when the workload needs performance",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/recommend-technology.sh\" --umbrella frontend --need performance --need small-bundle 2>&1 >/dev/null | grep -qE 'recommended=(svelte|solid)' && echo performance-framework 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "performance-framework"
+    ]
+  }
+}
