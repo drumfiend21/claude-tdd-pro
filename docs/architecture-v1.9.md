@@ -2484,3 +2484,19 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **The official directory changes only via reviewed PR.** No command, acquisition, or automation writes into an official namespace; the working store is the ONLY place automation may write — preserving the constitutional guarantee that the official ruleset stays curated + reviewed. `promote-project-rule` (S-64) does not accept a rule; it opens the PR that requests the move — acceptance is the human code review + merge.
 - **Promotion is a move, not a copy.** A merged promotion PR removes the rule from `_project/` (now official under `<ns>/`, origin `plugin`); an un-merged/closed PR leaves it working-only.
 - **§25 fidelity vocabulary additions:** `working-rules-directory`, `official-rules-directory`, `pr-gated-acceptance`, `promotion-is-a-move`, `used-not-accepted`.
+
+### §31.3 Resolved shared-design decisions (CTP-authoritative; proposed to GCTP, 2026-07-05)
+
+**STATUS: DESIGN — CTP-side decisions resolved; boundary items pending GCTP.** Consolidates §31/§31.1/§31.2 with GCTP's §30.8/§30.9/§30.10 into one system and fixes the five open points on CTP's terms (CTP owns its surface). Proposal: [docs/handoff-ctp-to-gctp-p15-shared-design-proposal.md](handoff-ctp-to-gctp-p15-shared-design-proposal.md). No new feature ID (resolves S-58…S-64 details + adds S-61 technology-fitness reference).
+
+- **Decomposition (canonical):** GCTP §30.8 ↔ S-58/S-59; §30.9 ↔ S-60/S-63; §30.10 ↔ S-64/§2.38. GCTP's §30.8–10 are GCTP-side labels; CTP-canonical IDs are §31 / S-58…S-64.
+- **D1 Registry ownership:** `standards/technology-umbrella-registry.yaml` is OFFICIAL (PR-gated); projects add *working* registry entries under `_project/<id>/`, promotable by the same gate.
+- **D2 Fetcher hint:** reuse the existing four fetchers per source; optional `fetcher:` source field disambiguates; the chosen fetcher is recorded in each acquired rule's provenance.
+- **D3 Budget:** acquisition searches ONLY umbrella-matched sources, bounded by `--max-sources` (default 8); over-budget → `budget_exhausted=true` + tech stays `needs_source` (partial, non-silent).
+- **D4 Cross-family union:** a technology resolving to multiple umbrellas activates the DEDUPED UNION of all matched umbrellas' namespaces (§2.36 extends "umbrella" → "all matched umbrellas").
+- **D5 Deprecation:** working rules expire via the §2.6 freshness gate; official removal is symmetric to promotion — a reviewed removal PR (§31.2 governs removal); explicit `deprecated: true` honored at both layers.
+- **S-61** Technology-fitness recommender (extends S-34): grounded best-fit per umbrella (e.g. Angular over React); operator override; chosen tech's ruleset then applied. Cite-or-decline.
+- **Canonical shapes** (both sides bind these): umbrella-registry entry (`technology`/`aliases`/`coordinate{linguist,purl}`/`umbrellas[]`/`specific_namespace`), working overlay rule (`origin: project` + `applies_to` 4-axis + `provenance{source,url,fetched_at,tier,fetcher}`), CLIs `resolve-technology.sh` / `acquire-technology-rules.sh --project-id` / `promote-project-rule.sh`.
+- **Boundary items pending GCTP:** project-id contract, working-store home, promotion-PR governance, origin-awareness in GCTP validators, growing-surface handling (proposal §6 B1–B5).
+- **§25 fidelity vocabulary additions:** `umbrella-registry`, `cross-family-union`, `budget-exhausted`, `fetcher-hint`, `removal-pr`, `technology-fitness`, `resolved-shared-design`.
+- **§20 note:** build S-63 → S-58/S-59 → S-60 → S-62 → S-64 → S-61; starts once GCTP answers B1–B5 + sends its acceptance assertions. Fully additive; preserves §21 dod + the §31.2 PR-gated invariant.
