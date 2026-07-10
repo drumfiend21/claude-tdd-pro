@@ -1,0 +1,11 @@
+{
+  "name": "the reveal marker reports how many namespaces were revealed and how many are activated",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI credentialing platform\" --classify 2>m.err >/dev/null; grep -qE 'full_surface_revealed=[0-9]+ activated=[0-9]+' m.err && echo reveal-marker 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reveal-marker"
+    ]
+  }
+}

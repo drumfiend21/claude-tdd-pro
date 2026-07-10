@@ -1,0 +1,11 @@
+{
+  "name": "a namespace not in scope is revealed as activated false with a null via",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); fs=d[\"full_surface\"]; e=fs.find{|x|x[\"namespace\"]==\"helm\"}; exit(e && e[\"activated\"]==false && e[\"via\"].nil? ? 0:1)' && echo unactivated-null-via 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unactivated-null-via"
+    ]
+  }
+}

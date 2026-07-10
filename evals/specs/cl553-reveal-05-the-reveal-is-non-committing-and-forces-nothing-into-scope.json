@@ -1,0 +1,11 @@
+{
+  "name": "the reveal is non-committing: an un-activated namespace is not in scope, not activated, and not reported unprobed",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); c=d[\"workload_classification\"]; nonact=d[\"full_surface\"].reject{|e|e[\"activated\"]}.map{|e|e[\"namespace\"]}; leaked=nonact.select{|n|c[\"namespaces\"].include?(n)||c[\"activated_probe_namespaces\"].include?(n)||c[\"unprobed_in_scope\"].include?(n)}; exit(leaked.empty? ? 0:1)' && echo reveal-non-committing 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reveal-non-committing"
+    ]
+  }
+}

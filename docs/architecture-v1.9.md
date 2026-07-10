@@ -2436,3 +2436,13 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `stack-entry`, `provenance-object`, `stack-idempotent`, `added-at`, `stack-source`, `stack-trigger`.
 
 5 specs (`cl551-stack-03/06/07/09` reshaped + new): stack-entry-shape(4-keys) / stack-persisted-grounded(ns) / stack-idempotent / stack-provenance(source+trigger). **§20 note:** acceptance-test alignment; preserves §21 dod. Suite 4959→4960.
+
+### §30.7 Stage-0 full-surface reveal — non-committing menu (GCTP P-14, 2026-07-05)
+
+**STANDING INVARIANT: Stage-0 (`--classify`) reveals the WHOLE rule surface — every namespace the operator could opt into — each annotated `activated` (in-scope or declared) and `via` (the workload_type, "stack", or null). The reveal is NON-COMMITTING: an un-activated namespace is not forced into scope, does not activate probes, and is not reported in `unprobed_in_scope` — it is a menu, not a commitment.** Closes the gap where Stage-0 revealed only the classified in-scope subset (e.g. 7 of 44 for the kata vision), leaving the operator blind to the rest of the surface. **No new feature ID / §2.X contract** (adds `full_surface[]` to the S-57 classify output + profile; §30.7 extends §30). Built on CTP's anticipated shape pending reconciliation to GCTP's §4 acceptance assertions. Detail: [docs/design/v1.14-full-surface-intake.md](design/v1.14-full-surface-intake.md).
+
+- **`full_surface[]`** — one entry per real namespace (folders under `generated-code-quality-standards/`): `{ "namespace": <ns>, "activated": <bool>, "via": <workload_type|"stack"|null> }`, sorted by namespace. Emitted on `--classify` (sibling to `workload_classification`) and persisted top-level in the profile. Marker `full_surface_revealed=<n> activated=<m>`.
+- **Non-committing:** promoting a revealed namespace is done explicitly with `--stack-add` (§30.5); the reveal itself changes nothing in scope/probes/grounding.
+- **§25 fidelity vocabulary additions:** `full-surface-reveal`, `non-committing`, `activated-annotation`, `stage-0-reveal`, `revealed-menu`.
+
+8 specs (`cl553-reveal-01..08`): reveals-full-surface / reveal-annotated / activated-has-via / unactivated-null-via / reveal-non-committing / stack-promotes-reveal / reveal-persisted / reveal-marker. Reconciled `cl546-fsintake-02` (in-scope check now parses `activated_probe_namespaces` rather than grepping raw JSON, which now includes the reveal menu). **§20 note:** Stage-0 surface extension; preserves §21 dod. Suite 4960→4968.
