@@ -18,12 +18,13 @@
 
 set -uo pipefail
 
-UMB=""; REGISTRY=""; NEEDS=""
+UMB=""; REGISTRY=""; NEEDS=""; EXPLAIN=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --umbrella) UMB="${2-}"; shift 2 ;;
     --need)     NEEDS="${NEEDS}${2-}"$'\n'; shift 2 ;;
     --registry) REGISTRY="${2-}"; shift 2 ;;
+    --explain)  EXPLAIN=1; shift ;;
     -h|--help) echo "Usage: recommend-technology.sh --umbrella <name> [--need <tag>]..." >&2; exit 0 ;;
     *) echo "recommend-technology: unknown arg: $1" >&2; exit 2 ;;
   esac
@@ -36,7 +37,7 @@ resolve() { if [ -f "$1" ]; then printf '%s' "$1"; elif [ -f "$PLUGIN_ROOT/$1" ]
 REGISTRY=$(resolve "$REGISTRY")
 [ -f "$REGISTRY" ] || { echo "recommend-technology: registry not found: $REGISTRY" >&2; exit 2; }
 
-UMB="$UMB" REGISTRY="$REGISTRY" NEEDS="$NEEDS" ruby -ryaml -rjson -e '
+UMB="$UMB" REGISTRY="$REGISTRY" NEEDS="$NEEDS" EXPLAIN="$EXPLAIN" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   reg = YAML.unsafe_load_file(ENV["REGISTRY"]) || {}
   umb = ENV["UMB"].to_s.downcase
@@ -77,5 +78,6 @@ UMB="$UMB" REGISTRY="$REGISTRY" NEEDS="$NEEDS" ruby -ryaml -rjson -e '
     "recommended" => best["technology"], "grounded" => grounded, "rationale" => rationale
   })
   STDERR.puts "recommended=#{best["technology"]} umbrella=#{umb} score=#{best["score"]} candidates=#{ranked.map{|s|s["technology"]}.join(",")} grounded=#{grounded}"
+  STDERR.puts "EXPLAIN: #{rationale}" if ENV["EXPLAIN"] == "1"
 '
 exit $?

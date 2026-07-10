@@ -1,0 +1,13 @@
+{
+  "name": "the live wrapper declines an unresolved technology (cite-or-decline)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Cobol --project L561A03 --cache fc 2>e.err; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'status=unresolved' e.err && echo live-declines-unknown 1>&2",
+  "setup": [
+    "mkdir -p fc && printf '%s\\n' 'Type Vue props explicitly.' 'Prefer plain TypeScript functions for Vue composables.' 'A line with no framework mention.' > fc/typescript-handbook.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "live-declines-unknown"
+    ]
+  }
+}

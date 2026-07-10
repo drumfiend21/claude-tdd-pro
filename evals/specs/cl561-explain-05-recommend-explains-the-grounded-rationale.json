@@ -1,0 +1,11 @@
+{
+  "name": "recommend --explain gives the plain-language grounded rationale for its technology choice",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/recommend-technology.sh\" --umbrella frontend --need enterprise --explain 2>&1 >/dev/null | grep -qE 'EXPLAIN:.*angular.*enterprise' && echo recommend-explains-rationale 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "recommend-explains-rationale"
+    ]
+  }
+}

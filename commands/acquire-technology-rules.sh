@@ -29,12 +29,14 @@
 set -uo pipefail
 
 TECH=""; PROJECT=""; SRC_FILE=""; SRC_ID=""; SRC_URL=""; TIER="2"; FETCHER="markdown-headers"
-MAX_RULES="20"; ROOT_OVERRIDE=""; NOW=""
+MAX_RULES="20"; ROOT_OVERRIDE=""; NOW=""; ONLY_MENTION=0; EXPLAIN=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --technology) TECH="${2-}"; shift 2 ;;
     --project)    PROJECT="${2-}"; shift 2 ;;
     --source-file) SRC_FILE="${2-}"; shift 2 ;;
+    --only-mentioning) ONLY_MENTION=1; shift ;;   # extract only guidance lines that mention the technology
+    --explain)    EXPLAIN=1; shift ;;
     --source-id)  SRC_ID="${2-}"; shift 2 ;;
     --source-url) SRC_URL="${2-}"; shift 2 ;;
     --tier)       TIER="${2-}"; shift 2 ;;
@@ -63,7 +65,7 @@ if [ "$STATUS" = "unresolved" ] || [ -z "$STATUS" ]; then
 fi
 
 TECH="$TECH" PROJECT="$PROJECT" SRC_FILE="$SRC_FILE" SRC_ID="$SRC_ID" SRC_URL="$SRC_URL" TIER="$TIER" \
-FETCHER="$FETCHER" MAX_RULES="$MAX_RULES" ROOT="$ROOT" NOW="$NOW" RES="$RES" ruby -ryaml -rjson -e '
+FETCHER="$FETCHER" MAX_RULES="$MAX_RULES" ROOT="$ROOT" NOW="$NOW" RES="$RES" ONLY_MENTION="$ONLY_MENTION" EXPLAIN="$EXPLAIN" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
   tech = ENV["TECH"].to_s.downcase; project = ENV["PROJECT"]; root = ENV["ROOT"]; now = ENV["NOW"]
@@ -76,9 +78,13 @@ FETCHER="$FETCHER" MAX_RULES="$MAX_RULES" ROOT="$ROOT" NOW="$NOW" RES="$RES" rub
   lines = []
   sf = ENV["SRC_FILE"].to_s
   if !sf.empty? && File.exist?(sf)
+    only = ENV["ONLY_MENTION"] == "1"
+    tre = Regexp.new("(?<![a-z0-9])" + Regexp.escape(tech) + "s?(?![a-z0-9])")
     File.readlines(sf).each do |ln|
       s = ln.strip
       next if s.empty? || s.start_with?("#")
+      # --only-mentioning: keep only guidance that actually names the technology (searching a general source).
+      next if only && !s.downcase.match?(tre)
       lines << s
     end
   end
@@ -131,5 +137,8 @@ FETCHER="$FETCHER" MAX_RULES="$MAX_RULES" ROOT="$ROOT" NOW="$NOW" RES="$RES" rub
   out = File.join(ns_dir, "#{doc["source"]["id"]}.yaml")
   File.write(out, YAML.dump(doc))
   STDERR.puts "acquired=#{rules.length} technology=#{tech} project=#{project} namespace=#{tech} source=#{doc["source"]["id"]} budget_exhausted=#{budget_exhausted}"
+  if ENV["EXPLAIN"] == "1"
+    STDERR.puts "EXPLAIN: Pulled #{rules.length} #{tech} rule(s) from #{doc["source"]["id"]} into project #{project}'"'"'s working set. These apply to #{project} only and are NOT official plugin rules until a person approves them through a promotion pull request."
+  end
 '
 exit $?

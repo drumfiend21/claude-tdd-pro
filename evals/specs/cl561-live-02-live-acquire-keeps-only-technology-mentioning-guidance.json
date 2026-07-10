@@ -1,0 +1,13 @@
+{
+  "name": "the live wrapper keeps only guidance that mentions the technology, dropping unrelated lines from a general source",
+  "command": "ID=L561A02; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Vue --project $ID --cache fc --now 2026-07-05T00:00:00Z >/dev/null 2>&1; DESCS=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --project $ID --format json 2>/dev/null | ruby -rjson -e 'puts JSON.parse(STDIN.read)[\"rules\"].select{|x|x[\"origin\"]==\"project\"}.map{|x|x[\"description\"]}.join(\"|\")'); rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; echo \"$DESCS\" | grep -qi vue && ! echo \"$DESCS\" | grep -qi 'no framework mention' && echo live-filters-mentions 1>&2",
+  "setup": [
+    "mkdir -p fc && printf '%s\\n' 'Type Vue props explicitly.' 'Prefer plain TypeScript functions for Vue composables.' 'A line with no framework mention.' > fc/typescript-handbook.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "live-filters-mentions"
+    ]
+  }
+}
