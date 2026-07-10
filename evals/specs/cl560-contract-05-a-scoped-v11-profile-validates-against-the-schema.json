@@ -1,0 +1,14 @@
+{
+  "name": "a scoped v1.1 profile carrying families_active, project_id and project_overlay_namespaces validates against the schema",
+  "command": "ID=FEAT-560E; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id sid --now 2026-07-05T00:00:00Z >/dev/null 2>&1; bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a dashboard with Vue\" --answers p.json --project $ID --partial --out prof.json --now 2026-07-05T00:00:00Z >/dev/null 2>&1; node \"$CLAUDE_PLUGIN_ROOT/rubric/detectors/lib/validate-json-schema.js\" \"$CLAUDE_PLUGIN_ROOT/schemas/business-profile.schema.json\" prof.json && ruby -rjson -e 'p=JSON.parse(File.read(\"prof.json\")); exit(p[\"families_active\"]==[\"frontend\"] && p[\"project_id\"]==\"'$ID'\" && p[\"project_overlay_namespaces\"]==[\"vue\"] ? 0:1)' < prof.json && rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID && echo scoped-profile-valid 1>&2 || { rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; false; }",
+  "setup": [
+    "printf '%s' '{\"workload\":\"a dashboard with Vue\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json",
+    "printf '%s\\n' 'Always bind a unique key to v-for.' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "scoped-profile-valid"
+    ]
+  }
+}

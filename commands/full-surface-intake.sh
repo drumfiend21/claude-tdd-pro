@@ -34,7 +34,7 @@
 set -uo pipefail
 
 WORKLOAD=""; CLASSIFY=0; LIST=0; OUT=""; NOW=""; PARTIAL=0; DRY_RUN=0; WITH_DATA=0
-ANSWERS_JSON=""; ANSWERS_KV=""; PROBE_KV=""; CLASSIFIER=""; QBANK=""; STACK_KV=""
+ANSWERS_JSON=""; ANSWERS_KV=""; PROBE_KV=""; CLASSIFIER=""; QBANK=""; STACK_KV=""; PROJECT_ARG=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -45,6 +45,7 @@ while [ $# -gt 0 ]; do
     --answers)       ANSWERS_JSON="${2-}"; shift 2 ;;
     --probe-answer)  PROBE_KV="${PROBE_KV}${2-}"$'\n'; shift 2 ;;
     --stack-add)     STACK_KV="${STACK_KV}${2-}"$'\n'; shift 2 ;;
+    --project)       PROJECT_ARG="${2-}"; shift 2 ;;
     --with-data)     WITH_DATA=1; shift ;;
     --out)           OUT="${2-}"; shift 2 ;;
     --classifier)    CLASSIFIER="${2-}"; shift 2 ;;
@@ -97,7 +98,7 @@ fi
 CLASSIFIER="$CLASSIFIER" QBANK="$QBANK" WORKLOAD="$WORKLOAD" CLASSIFY="$CLASSIFY" LIST="$LIST" \
 OUT="$OUT" NOW="$NOW" PARTIAL="$PARTIAL" DRY_RUN="$DRY_RUN" WITH_DATA="$WITH_DATA" \
 PROBE_KV="$PROBE_KV" STACK_KV="$STACK_KV" PLUGIN_ROOT="$PLUGIN_ROOT" ANSWERS_KV="$ANSWERS_KV" \
-TECH_REGISTRY="$TECH_REGISTRY" \
+TECH_REGISTRY="$TECH_REGISTRY" FSI_PROJECT="$PROJECT_ARG" \
 UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
@@ -188,7 +189,7 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
   # §31 Phase 1 FAMILY ACTIVATION: a technology named in the haystack (React/Vue/Angular/Ember…) activates
   # the EXISTING namespaces of its umbrella (+ its own namespace if present). Word-boundary match (§30.3);
   # existing namespaces only. So "Vue" activates the already-scraped frontend rules with no vue namespace.
-  family_activated = []
+  family_activated = []; families_active = []
   reg_f = ENV["TECH_REGISTRY"].to_s
   if !reg_f.empty? && File.exist?(reg_f)
     treg = (YAML.unsafe_load_file(reg_f) rescue {}) || {}
@@ -201,8 +202,22 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
       acts += [t["specific_namespace"]] if t["specific_namespace"]
       namespaces += acts.select { |ns| valid_ns.include?(ns) }
       family_activated << t["technology"]
+      families_active += (t["umbrellas"] || [])   # the FAMILIES (umbrellas) that fired — GCTP contract field
     end
     family_activated = family_activated.uniq.sort
+    families_active = families_active.uniq.sort
+  end
+
+  # §31 S-63 consult scoping: --project <id> brings that project'"'"'s WORKING-overlay namespaces
+  # (folders under _project/<id>/) into scope and records them for the consumer (project_overlay_namespaces).
+  project_id = ENV["FSI_PROJECT"].to_s.strip
+  project_overlay_namespaces = []
+  unless project_id.empty?
+    pdir = File.join(ENV["PLUGIN_ROOT"].to_s, "generated-code-quality-standards", "_project", project_id)
+    if File.directory?(pdir)
+      project_overlay_namespaces = Dir.children(pdir).select { |c| File.directory?(File.join(pdir, c)) }.sort
+      namespaces += project_overlay_namespaces
+    end
   end
   namespaces = namespaces.uniq.sort
 
@@ -238,6 +253,9 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
         "stack" => stack_entries,           # §30.5 append site 4/5: declared stack (provenance objects)
         "family_activated" => family_activated   # §31 Phase 1: technologies whose umbrella rules were activated
       },
+      "families_active" => families_active,           # §31: the FAMILIES (umbrellas) active (GCTP contract)
+      "project_id" => (project_id.empty? ? nil : project_id),          # §31 S-63 consult scoping
+      "project_overlay_namespaces" => project_overlay_namespaces,      # §31 S-63 project working namespaces in scope
       "full_surface" => full_surface        # §30.7 Stage-0 reveal (non-committing): the whole menu
     })
     STDERR.puts "workload_types=#{workload_types.join(",")}"
@@ -246,6 +264,9 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
     STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
     STDERR.puts "stack=#{declared_stack.join(",")}"
     STDERR.puts "family_activated=#{family_activated.join(",")}"
+    STDERR.puts "families_active=#{families_active.join(",")}"
+    STDERR.puts "project_id=#{project_id}"
+    STDERR.puts "project_overlay_namespaces=#{project_overlay_namespaces.join(",")}"
     STDERR.puts "full_surface_revealed=#{full_surface.length} activated=#{activated_count}"
     exit 0
   end
@@ -325,6 +346,9 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
       "stack" => stack_entries,                    # §30.5 append site 4/5: declared stack (provenance objects)
       "family_activated" => family_activated       # §31 Phase 1: technologies whose umbrella rules activated
     },
+    "families_active" => families_active,                # §31: active families/umbrellas (GCTP contract field)
+    "project_id" => (project_id.empty? ? nil : project_id),           # §31 S-63 consult scoping
+    "project_overlay_namespaces" => project_overlay_namespaces,       # §31 S-63 project working namespaces
     "probes"         => probe_answers,                   # per-namespace probe answers
     "grounded_in"    => grounded_in,                     # strict superset of v1.0
     "grounded_in_namespaces" => grounded_in_namespaces,

@@ -99,7 +99,10 @@
               "activated": { "type": "boolean" }
             }
           }
-        }
+        },
+        "families_active": { "type": "array", "items": { "type": "string" } },
+        "project_id": { "type": ["string", "null"] },
+        "project_overlay_namespaces": { "type": "array", "items": { "type": "string" } }
       },
       "required": ["schema_version", "workload_classification", "probes", "grounded_in_namespaces"]
     }

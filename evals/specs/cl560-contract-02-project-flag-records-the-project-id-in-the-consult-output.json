@@ -1,0 +1,11 @@
+{
+  "name": "the --project flag records the project_id in the consult output",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload x --project FEAT-560B --classify 2>/dev/null | ruby -rjson -e 'exit(JSON.parse(STDIN.read)[\"project_id\"]==\"FEAT-560B\" ? 0:1)' && echo project-id-recorded 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "project-id-recorded"
+    ]
+  }
+}

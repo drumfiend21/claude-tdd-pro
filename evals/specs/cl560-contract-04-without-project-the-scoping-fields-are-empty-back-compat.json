@@ -1,0 +1,11 @@
+{
+  "name": "without --project the project scoping fields are empty/null so unscoped profiles are back-compatible",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); exit(d[\"project_id\"].nil? && d[\"project_overlay_namespaces\"]==[] && d[\"families_active\"]==[] ? 0:1)' && echo unscoped-fields-empty 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unscoped-fields-empty"
+    ]
+  }
+}

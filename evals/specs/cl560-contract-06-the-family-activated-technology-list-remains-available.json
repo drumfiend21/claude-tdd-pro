@@ -1,0 +1,11 @@
+{
+  "name": "the technology-level family_activated list remains available alongside the family-level families_active",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"migrate from Angular to Ember\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); exit(d[\"workload_classification\"][\"family_activated\"]==[\"angular\",\"ember\"] && d[\"families_active\"]==[\"frontend\"] ? 0:1)' && echo tech-and-family-lists 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "tech-and-family-lists"
+    ]
+  }
+}
