@@ -1,0 +1,13 @@
+{
+  "name": "the full-surface reveal is persisted in the produced profile so downstream stages can read the menu",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answers p.json --partial --out prof.json --now 2026-07-08T00:00:00Z >/dev/null 2>&1; ruby -rjson -e 'p=JSON.parse(File.read(\"prof.json\")); fs=p[\"full_surface\"]; exit(fs.is_a?(Array) && fs.length>=40 && fs.all?{|e|e.key?(\"activated\")} ? 0:1)' && echo reveal-persisted 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"a credentialing platform\",\"motivation\":\"revenue\",\"criticality\":\"important\",\"availability_tolerance\":\"hours\",\"data_loss_tolerance\":\"hours\",\"data_sensitivity\":\"internal\",\"compliance_regime\":\"none\",\"scale\":\"medium\",\"budget_posture\":\"balanced\"}' > p.json"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reveal-persisted"
+    ]
+  }
+}

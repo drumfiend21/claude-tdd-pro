@@ -1,0 +1,11 @@
+{
+  "name": "stage-zero classify reveals the whole rule surface — far more namespaces than the in-scope subset",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); fs=d[\"full_surface\"]; inscope=d[\"workload_classification\"][\"namespaces\"].length; exit(fs.length>=40 && fs.length>inscope ? 0:1)' && echo reveals-full-surface 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reveals-full-surface"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "a namespace promoted with stack-add is revealed as activated true via stack",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI credentialing platform\" --stack-add helm --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); fs=d[\"full_surface\"]; e=fs.find{|x|x[\"namespace\"]==\"helm\"}; exit(e && e[\"activated\"]==true && e[\"via\"]==\"stack\" ? 0:1)' && echo stack-promotes-reveal 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-promotes-reveal"
+    ]
+  }
+}

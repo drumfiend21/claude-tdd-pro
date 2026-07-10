@@ -190,6 +190,20 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
   # silent) so a coverage gap is visible — the intake mirror of "no rule silently unenforced".
   unprobed = (namespaces - activated).sort
 
+  # §30.7 STAGE-0 FULL-SURFACE REVEAL (NON-COMMITTING). Reveal the WHOLE rule surface — every namespace
+  # the operator COULD opt into — annotated by whether it is `activated` (classified in-scope or declared)
+  # and `via` what (a workload_type, "stack", or nil). Non-committing: an un-activated namespace is NOT
+  # forced into `namespaces`, does NOT activate probes, and does NOT appear in `unprobed_in_scope` — it is
+  # a menu, not a commitment. The operator can promote any revealed namespace with --stack-add.
+  ns_via = {}
+  fired.each { |t| (t["namespaces"] || []).each { |n| ns_via[n] ||= t["workload_type"] } }
+  full_surface = valid_ns.sort.map do |ns|
+    act = namespaces.include?(ns)
+    via = declared_stack.include?(ns) ? "stack" : (act ? ns_via[ns] : nil)
+    {"namespace" => ns, "activated" => act, "via" => via}
+  end
+  activated_count = full_surface.count { |e| e["activated"] }
+
   if classify
     STDOUT.puts JSON.pretty_generate({
       "workload_classification" => {
@@ -198,13 +212,15 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
         "activated_probe_namespaces" => activated,
         "unprobed_in_scope" => unprobed,
         "stack" => stack_entries            # §30.5 append site 4/5: declared stack (provenance objects)
-      }
+      },
+      "full_surface" => full_surface        # §30.7 Stage-0 reveal (non-committing): the whole menu
     })
     STDERR.puts "workload_types=#{workload_types.join(",")}"
     STDERR.puts "namespaces=#{namespaces.length}"
     STDERR.puts "activated_probes=#{activated.length}"
     STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
     STDERR.puts "stack=#{declared_stack.join(",")}"
+    STDERR.puts "full_surface_revealed=#{full_surface.length} activated=#{activated_count}"
     exit 0
   end
 
@@ -286,6 +302,7 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
     "grounded_in"    => grounded_in,                     # strict superset of v1.0
     "grounded_in_namespaces" => grounded_in_namespaces,
     "stack"          => stack_entries,                   # §30.5 append site 5/5: top-level declared stack
+    "full_surface"   => full_surface,                    # §30.7 Stage-0 reveal (non-committing)
     "unanswered"     => unanswered
   }
 
@@ -304,6 +321,7 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
   STDERR.puts "grounded_in_namespaces=#{grounded_in_namespaces.join(",")}"
   STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
   STDERR.puts "stack=#{declared_stack.join(",")}"
+  STDERR.puts "full_surface_revealed=#{full_surface.length} activated=#{activated_count}"
   STDERR.puts "unanswered=#{unanswered.join(",")}" unless unanswered.empty?
   exit 0
 '

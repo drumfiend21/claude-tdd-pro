@@ -1,0 +1,11 @@
+{
+  "name": "each revealed namespace is annotated with an activated flag and a via provenance field",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"an AI credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'd=JSON.parse(STDIN.read); fs=d[\"full_surface\"]; exit(fs.all?{|e|e.key?(\"namespace\") && (e[\"activated\"]==true||e[\"activated\"]==false) && e.key?(\"via\")} ? 0:1)' && echo reveal-annotated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reveal-annotated"
+    ]
+  }
+}
