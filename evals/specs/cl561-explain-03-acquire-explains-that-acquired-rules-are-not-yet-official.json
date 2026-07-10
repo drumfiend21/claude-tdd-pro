@@ -1,0 +1,13 @@
+{
+  "name": "acquire --explain tells the operator the acquired rules are project-scoped and not official until a promotion PR",
+  "command": "ID=L561E03; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id s --now 2026-07-05T00:00:00Z --explain 2>&1 | grep -qE 'EXPLAIN:.*NOT official.*promotion pull request'; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID && echo acquire-explains-nonofficial 1>&2",
+  "setup": [
+    "printf 'Type Vue props explicitly.\\n' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "acquire-explains-nonofficial"
+    ]
+  }
+}

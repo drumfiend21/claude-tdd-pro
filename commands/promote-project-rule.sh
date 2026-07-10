@@ -25,7 +25,7 @@
 
 set -uo pipefail
 
-PROJECT=""; NS=""; SRC=""; ROOT_OVERRIDE=""; MODE="plan"
+PROJECT=""; NS=""; SRC=""; ROOT_OVERRIDE=""; MODE="plan"; EXPLAIN=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --project)   PROJECT="${2-}"; shift 2 ;;
@@ -35,6 +35,7 @@ while [ $# -gt 0 ]; do
     --plan)      MODE="plan"; shift ;;
     --apply)     MODE="apply"; shift ;;
     --release)   MODE="release"; shift ;;
+    --explain)   EXPLAIN=1; shift ;;
     -h|--help) echo "Usage: promote-project-rule.sh --project <id> --namespace <ns> [--source <id>] [--plan|--apply|--release]" >&2; exit 0 ;;
     *) echo "promote-project-rule: unknown arg: $1" >&2; exit 2 ;;
   esac
@@ -67,6 +68,7 @@ case "$MODE" in
     echo "  \"action\": \"move (working -> official), via reviewed PR; origin project -> plugin\""  >> /dev/stdout
     echo "}"                                              >> /dev/stdout
     echo "promotion=$NS/${BASE%.yaml} from=_project/$PROJECT/$NS/$BASE to=$NS/$BASE mode=plan moved=false" >&2
+    [ "$EXPLAIN" = 1 ] && echo "EXPLAIN: This would open a pull request to move the $NS rule from project $PROJECT's working set into the official plugin rules. Nothing changes until a reviewer approves and merges that PR. (Run with --apply to stage the move on a branch.)" >&2
     ;;
   apply)
     mkdir -p "$ROOT/$NS"
@@ -78,11 +80,13 @@ case "$MODE" in
     fi
     rmdir "$WORK_DIR" 2>/dev/null || true
     echo "promotion=$NS/${BASE%.yaml} from=_project/$PROJECT/$NS/$BASE to=$NS/$BASE mode=apply moved=true" >&2
+    [ "$EXPLAIN" = 1 ] && echo "EXPLAIN: Moved the $NS rule from project $PROJECT's working set into the official rules folder on this branch — ready for a review pull request. It is not shared globally until that PR merges." >&2
     ;;
   release)
     rm -f "$FROM"
     rmdir "$WORK_DIR" 2>/dev/null || true
     echo "promotion=$NS/${BASE%.yaml} from=_project/$PROJECT/$NS/$BASE to= mode=release moved=true" >&2
+    [ "$EXPLAIN" = 1 ] && echo "EXPLAIN: Removed the $NS rule from project $PROJECT's working set. It was never official, so nothing global is affected." >&2
     ;;
 esac
 exit 0

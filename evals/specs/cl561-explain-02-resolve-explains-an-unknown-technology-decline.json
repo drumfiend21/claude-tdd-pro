@@ -1,0 +1,11 @@
+{
+  "name": "resolve --explain explains, in plain language, why an unknown technology cannot have rules applied",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" Cobol --explain 2>&1 >/dev/null | grep -qE 'EXPLAIN:.*not a technology the plugin recognizes' && echo resolve-explains-decline 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "resolve-explains-decline"
+    ]
+  }
+}

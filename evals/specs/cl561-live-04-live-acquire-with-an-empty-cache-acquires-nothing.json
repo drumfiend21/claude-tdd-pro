@@ -1,0 +1,13 @@
+{
+  "name": "the live wrapper matches sources but acquires nothing when the fetch cache is empty (honest, non-fabricating)",
+  "command": "ID=L561A04; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Vue --project $ID --cache emptyfc --now 2026-07-05T00:00:00Z 2>e.err; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; grep -qE 'sources_matched=[1-9].* sources_fetched=0 acquired_total=0' e.err && echo live-empty-cache-nothing 1>&2",
+  "setup": [
+    "mkdir -p emptyfc"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "live-empty-cache-nothing"
+    ]
+  }
+}

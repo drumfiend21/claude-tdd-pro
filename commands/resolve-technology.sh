@@ -21,10 +21,11 @@
 
 set -uo pipefail
 
-NAME=""; REGISTRY=""
+NAME=""; REGISTRY=""; EXPLAIN=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --registry) REGISTRY="${2-}"; shift 2 ;;
+    --explain)  EXPLAIN=1; shift ;;
     --json)     shift ;;
     -h|--help)  echo "Usage: resolve-technology.sh <name> [--registry <yaml>]" >&2; exit 0 ;;
     -*)         echo "resolve-technology: unknown arg: $1" >&2; exit 2 ;;
@@ -39,7 +40,7 @@ resolve() { if [ -f "$1" ]; then printf '%s' "$1"; elif [ -f "$PLUGIN_ROOT/$1" ]
 REGISTRY=$(resolve "$REGISTRY")
 [ -f "$REGISTRY" ] || { echo "resolve-technology: registry not found: $REGISTRY" >&2; exit 2; }
 
-NAME="$NAME" REGISTRY="$REGISTRY" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson -e '
+NAME="$NAME" REGISTRY="$REGISTRY" PLUGIN_ROOT="$PLUGIN_ROOT" EXPLAIN="$EXPLAIN" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
   reg = YAML.unsafe_load_file(ENV["REGISTRY"]) || {}
@@ -57,9 +58,11 @@ NAME="$NAME" REGISTRY="$REGISTRY" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson 
     ([e["technology"].to_s.downcase] + (e["aliases"] || []).map { |a| a.to_s.downcase }).include?(name)
   end
 
+  explain = ENV["EXPLAIN"] == "1"
   if t.nil?
     STDOUT.puts JSON.pretty_generate({ "technology" => name, "status" => "unresolved" })
     STDERR.puts "resolve=#{name} umbrellas= activated= status=unresolved"
+    STDERR.puts "EXPLAIN: \"#{name}\" is not a technology the plugin recognizes, so no rules can be applied for it. You can map it with a registry PR, or add its namespaces directly with --stack-add." if explain
     exit 0
   end
 
@@ -81,5 +84,13 @@ NAME="$NAME" REGISTRY="$REGISTRY" PLUGIN_ROOT="$PLUGIN_ROOT" ruby -ryaml -rjson 
   }
   STDOUT.puts JSON.pretty_generate(out)
   STDERR.puts "resolve=#{t["technology"]} umbrellas=#{umb.join(",")} activated=#{activated.join(",")} status=#{status}"
+  if explain
+    fam = umb.join(" and ")
+    if status == "present"
+      STDERR.puts "EXPLAIN: #{t["technology"]} is a #{fam} technology with its own ruleset (the \"#{specific}\" namespace), plus the shared #{fam} rules: #{(activated - [specific]).join(", ")}. Naming it turns all of those on."
+    else
+      STDERR.puts "EXPLAIN: #{t["technology"]} is a #{fam} technology. It has no rules of its own yet, so naming it turns on the shared #{fam} rules (#{activated.join(", ")}); its own rules can be acquired from your sources into a per-project set."
+    end
+  end
 '
 exit $?
