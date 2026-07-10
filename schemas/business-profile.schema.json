@@ -40,6 +40,32 @@
       "type": "array",
       "description": "S-57 only. The full-surface namespaces grounded from a gathered probe answer (not a default). Each must appear in workload_classification.activated_probe_namespaces.",
       "items": { "type": "string" }
+    },
+    "stack": {
+      "type": "array",
+      "description": "§30.5/§30.6 — explicitly declared stack (via --stack-add). Each entry is a provenance object; idempotent by namespace.",
+      "items": {
+        "type": "object",
+        "required": ["namespace", "source", "trigger", "added_at"],
+        "properties": {
+          "namespace": { "type": "string" },
+          "source":    { "type": "string" },
+          "trigger":   { "type": "string" },
+          "added_at":  { "type": "string" }
+        }
+      }
+    },
+    "full_surface": {
+      "type": "array",
+      "description": "§30.7 — Stage-0 non-committing reveal of the whole rule surface. One entry per namespace, annotated activated + via.",
+      "items": {
+        "type": "object",
+        "required": ["namespace", "activated"],
+        "properties": {
+          "namespace": { "type": "string" },
+          "activated": { "type": "boolean" }
+        }
+      }
     }
   },
   "oneOf": [
@@ -48,7 +74,33 @@
       "required": ["schema_version"]
     },
     {
-      "properties": { "schema_version": { "enum": ["1.1"] } },
+      "properties": {
+        "schema_version": { "enum": ["1.1"] },
+        "stack": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["namespace", "source", "trigger", "added_at"],
+            "properties": {
+              "namespace": { "type": "string" },
+              "source":    { "type": "string" },
+              "trigger":   { "type": "string" },
+              "added_at":  { "type": "string" }
+            }
+          }
+        },
+        "full_surface": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["namespace", "activated"],
+            "properties": {
+              "namespace": { "type": "string" },
+              "activated": { "type": "boolean" }
+            }
+          }
+        }
+      },
       "required": ["schema_version", "workload_classification", "probes", "grounded_in_namespaces"]
     }
   ]

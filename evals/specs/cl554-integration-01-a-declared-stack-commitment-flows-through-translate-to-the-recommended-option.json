@@ -1,0 +1,16 @@
+{
+  "name": "a stack-declared namespace with a committed posture flows end-to-end through translate into the recommended option",
+  "command": "grep -qE 'probes_consumed=[1-9]' t.err && grep -q 'recommended=opt-max' r.err && ruby -rjson -e 'exit(JSON.parse(File.read(\"req.json\"))[\"pillars\"].values.flatten.map{|x|x[\"concern\"]}.include?(\"multi_region\") ? 0:1)' && echo stack-flows-end-to-end 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"a credentialing platform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answers p.json --stack-add aws --probe-answer aws:aws_region_strategy=multi-region --partial --out prof.json --now 2026-07-08T00:00:00Z >/dev/null 2>&1",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/business-translate.sh\" --profile prof.json --out req.json --now 2026-07-08T00:00:00Z 2>t.err",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/architect-recommend.sh\" --requirements req.json --profile prof.json --out opt.json --now 2026-07-08T00:00:00Z 2>r.err"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-flows-end-to-end"
+    ]
+  }
+}

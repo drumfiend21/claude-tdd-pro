@@ -1,0 +1,14 @@
+{
+  "name": "an answer-sourced classification (event-driven communication) puts its namespace in scope in the persisted profile",
+  "command": "ruby -rjson -e 'p=JSON.parse(File.read(\"prof.json\")); exit(p[\"workload_classification\"][\"namespaces\"].include?(\"node\") && p[\"workload_classification\"][\"workload_types\"].include?(\"messaging\") ? 0:1)' && echo answer-classification-persists 1>&2",
+  "setup": [
+    "printf '%s' '{\"workload\":\"a credentialing platform\",\"motivation\":\"revenue\",\"criticality\":\"mission-critical\",\"availability_tolerance\":\"minutes\",\"data_loss_tolerance\":\"minutes\",\"data_sensitivity\":\"confidential\",\"compliance_regime\":\"soc2\",\"scale\":\"large\",\"budget_posture\":\"balanced\"}' > p.json",
+    "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --answers p.json --with-data --answer \"communication_style=event-driven\" --partial --out prof.json --now 2026-07-08T00:00:00Z >/dev/null 2>&1"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "answer-classification-persists"
+    ]
+  }
+}

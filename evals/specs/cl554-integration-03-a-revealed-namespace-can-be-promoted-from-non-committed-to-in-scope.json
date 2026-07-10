@@ -1,0 +1,11 @@
+{
+  "name": "a namespace revealed as non-committed at stage zero can be promoted to in-scope via stack-add",
+  "command": "B=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'puts JSON.parse(STDIN.read)[\"full_surface\"].find{|e|e[\"namespace\"]==\"helm\"}[\"activated\"]'); A=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --stack-add helm --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read); e=c[\"full_surface\"].find{|x|x[\"namespace\"]==\"helm\"}; puts (e[\"activated\"]==true && e[\"via\"]==\"stack\" && c[\"workload_classification\"][\"namespaces\"].include?(\"helm\")).to_s'); [ \"$B\" = \"false\" ] && [ \"$A\" = \"true\" ] && echo reveal-then-promote 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "reveal-then-promote"
+    ]
+  }
+}
