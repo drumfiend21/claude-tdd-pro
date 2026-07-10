@@ -1,0 +1,11 @@
+{
+  "name": "an unknown technology resolves as unresolved rather than being guessed (cite-or-decline)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" Cobol 2>e.err >/dev/null; grep -q 'status=unresolved' e.err && echo unknown-declined 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unknown-declined"
+    ]
+  }
+}

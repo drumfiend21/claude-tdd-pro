@@ -1,0 +1,11 @@
+{
+  "name": "the resolver activates only namespaces that actually exist on the rule surface",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" Django 2>/dev/null | ruby -rjson -e 'ns=JSON.parse(STDIN.read)[\"activated_namespaces\"]; real=Dir.glob(\"'\"/home/user/claude-tdd-pro\"'/generated-code-quality-standards/*\").select{|p|File.directory?(p)}.map{|p|File.basename(p)}; exit((ns-real).empty? && !ns.empty? ? 0:1)' && echo activates-existing-only 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "activates-existing-only"
+    ]
+  }
+}

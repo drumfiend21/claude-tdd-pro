@@ -1,0 +1,11 @@
+{
+  "name": "a non-React frontend framework does not activate the React-specific namespace",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" Vue 2>/dev/null | ruby -rjson -e 'exit(JSON.parse(STDIN.read)[\"activated_namespaces\"].include?(\"react\") ? 1:0)' && echo vue-not-react 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "vue-not-react"
+    ]
+  }
+}

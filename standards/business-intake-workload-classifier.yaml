@@ -15,9 +15,12 @@
 #     namespaces: [<ns>, ...]          # literal aggregator namespaces put in scope
 #     always: true                     # optional; fires unconditionally
 
+# NOTE (§31 Phase 1): web-frontend activates only framework-AGNOSTIC namespaces. The framework-specific
+# `react` namespace is NOT listed here — it is activated by NAMING React (family activation, S-58/S-59) or
+# `--stack-add react`, so a Vue/Angular/Ember app does not inherit React's rules.
 - workload_type: web-frontend
   signals: [ui, frontend, front-end, spa, website, web app, web-app, dashboard, portal, react, page, browser]
-  namespaces: [react, typescript, node, owasp, web-vitals, md]
+  namespaces: [typescript, node, owasp, web-vitals, md]
 
 - workload_type: rest-api
   signals: [api, rest, endpoint, backend, back-end, server, service, microservice, graphql]

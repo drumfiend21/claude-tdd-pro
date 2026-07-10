@@ -1,0 +1,11 @@
+{
+  "name": "naming a framework in the vision activates its umbrella namespaces in the consult scope",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a dashboard built with Vue\" --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"family_activated\"].include?(\"vue\") && c[\"namespaces\"].include?(\"owasp\") && c[\"namespaces\"].include?(\"web-vitals\") ? 0:1)' && echo vision-family-activated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "vision-family-activated"
+    ]
+  }
+}

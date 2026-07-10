@@ -62,6 +62,7 @@ resolve() { if [ -f "$1" ]; then printf '%s' "$1"; elif [ -f "$PLUGIN_ROOT/$1" ]
 [ -z "$CLASSIFIER" ] && CLASSIFIER="standards/business-intake-workload-classifier.yaml"
 [ -z "$QBANK" ]      && QBANK="standards/business-intake-question-bank.yaml"
 CLASSIFIER=$(resolve "$CLASSIFIER"); QBANK=$(resolve "$QBANK")
+TECH_REGISTRY=$(resolve "standards/technology-umbrella-registry.yaml")   # §31 Phase 1 family activation
 [ -z "$OUT" ] && OUT="standards/business-profile.json"
 [ -z "$NOW" ] && NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 [ -f "$CLASSIFIER" ] || { echo "full-surface-intake: classifier not found: $CLASSIFIER" >&2; exit 2; }
@@ -96,6 +97,7 @@ fi
 CLASSIFIER="$CLASSIFIER" QBANK="$QBANK" WORKLOAD="$WORKLOAD" CLASSIFY="$CLASSIFY" LIST="$LIST" \
 OUT="$OUT" NOW="$NOW" PARTIAL="$PARTIAL" DRY_RUN="$DRY_RUN" WITH_DATA="$WITH_DATA" \
 PROBE_KV="$PROBE_KV" STACK_KV="$STACK_KV" PLUGIN_ROOT="$PLUGIN_ROOT" ANSWERS_KV="$ANSWERS_KV" \
+TECH_REGISTRY="$TECH_REGISTRY" \
 UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson -e '
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
@@ -181,7 +183,29 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
     end
   end
   # §30.5 append site 1/5: the declared stack is UNIONED into the in-scope namespaces (forced in scope).
-  namespaces = (fired.flat_map { |t| t["namespaces"] || [] } + declared_stack).uniq.sort
+  namespaces = (fired.flat_map { |t| t["namespaces"] || [] } + declared_stack).uniq
+
+  # §31 Phase 1 FAMILY ACTIVATION: a technology named in the haystack (React/Vue/Angular/Ember…) activates
+  # the EXISTING namespaces of its umbrella (+ its own namespace if present). Word-boundary match (§30.3);
+  # existing namespaces only. So "Vue" activates the already-scraped frontend rules with no vue namespace.
+  family_activated = []
+  reg_f = ENV["TECH_REGISTRY"].to_s
+  if !reg_f.empty? && File.exist?(reg_f)
+    treg = (YAML.unsafe_load_file(reg_f) rescue {}) || {}
+    umb_r = treg["umbrellas"] || {}
+    (treg["technologies"] || []).each do |t|
+      next unless t.is_a?(Hash)
+      names = ([t["technology"]] + (t["aliases"] || [])).compact.map { |s| s.to_s.downcase }.reject(&:empty?)
+      next unless names.any? { |n| hay.match?(Regexp.new("(?<![a-z0-9])" + Regexp.escape(n) + "s?(?![a-z0-9])")) }
+      acts = (t["umbrellas"] || []).flat_map { |u| (umb_r[u] || {})["activates"] || [] }
+      acts += [t["specific_namespace"]] if t["specific_namespace"]
+      namespaces += acts.select { |ns| valid_ns.include?(ns) }
+      family_activated << t["technology"]
+    end
+    family_activated = family_activated.uniq.sort
+  end
+  namespaces = namespaces.uniq.sort
+
   workload_types = fired.map { |t| t["workload_type"] }.compact
   # Activated probe namespaces = in-scope namespaces that actually have a probe group. §30.5 append site
   # 2/5: a declared-stack ns with a probe group activates; 3/5: one without a group is reported unprobed.
@@ -211,7 +235,8 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
         "namespaces" => namespaces,
         "activated_probe_namespaces" => activated,
         "unprobed_in_scope" => unprobed,
-        "stack" => stack_entries            # §30.5 append site 4/5: declared stack (provenance objects)
+        "stack" => stack_entries,           # §30.5 append site 4/5: declared stack (provenance objects)
+        "family_activated" => family_activated   # §31 Phase 1: technologies whose umbrella rules were activated
       },
       "full_surface" => full_surface        # §30.7 Stage-0 reveal (non-committing): the whole menu
     })
@@ -220,6 +245,7 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
     STDERR.puts "activated_probes=#{activated.length}"
     STDERR.puts "unprobed_in_scope=#{unprobed.join(",")}"
     STDERR.puts "stack=#{declared_stack.join(",")}"
+    STDERR.puts "family_activated=#{family_activated.join(",")}"
     STDERR.puts "full_surface_revealed=#{full_surface.length} activated=#{activated_count}"
     exit 0
   end
@@ -296,7 +322,8 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
       "namespaces" => namespaces,
       "activated_probe_namespaces" => activated,
       "unprobed_in_scope" => unprobed,             # §30.2 explicit coverage transparency
-      "stack" => stack_entries                     # §30.5 append site 4/5: declared stack (provenance objects)
+      "stack" => stack_entries,                    # §30.5 append site 4/5: declared stack (provenance objects)
+      "family_activated" => family_activated       # §31 Phase 1: technologies whose umbrella rules activated
     },
     "probes"         => probe_answers,                   # per-namespace probe answers
     "grounded_in"    => grounded_in,                     # strict superset of v1.0

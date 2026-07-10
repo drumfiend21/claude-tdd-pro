@@ -1,0 +1,11 @@
+{
+  "name": "a technology alias resolves the same as its canonical name",
+  "command": "A=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" nodejs 2>&1 >/dev/null | grep -oE 'resolve=[a-z]+'); B=$(bash \"$CLAUDE_PLUGIN_ROOT/commands/resolve-technology.sh\" node 2>&1 >/dev/null | grep -oE 'resolve=[a-z]+'); [ \"$A\" = \"$B\" ] && [ -n \"$A\" ] && echo alias-resolves-same 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "alias-resolves-same"
+    ]
+  }
+}

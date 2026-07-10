@@ -1,0 +1,11 @@
+{
+  "name": "a vision that names no known technology activates no family and stays back-compatible",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a credentialing platform\" --classify 2>/dev/null | ruby -rjson -e 'exit(JSON.parse(STDIN.read)[\"workload_classification\"][\"family_activated\"]==[] ? 0:1)' && echo no-tech-no-family 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-tech-no-family"
+    ]
+  }
+}

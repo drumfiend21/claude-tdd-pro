@@ -1,0 +1,44 @@
+# standards/technology-umbrella-registry.yaml — S-59 umbrella registry (v1.24 §31, Phase 1).
+#
+# Maps technologies -> canonical 4-axis coordinate + umbrella(s), and umbrellas -> the EXISTING rule
+# namespaces they activate. Phase 1 "family activation": naming a technology (React/Vue/Angular/Ember…)
+# activates its umbrella's already-scraped general rules; if the technology has its own namespace it is
+# added too, otherwise it is `needs_source` (Phase 2 acquisition). This registry is OFFICIAL and PR-only
+# (§31.4 delta 2): there is no per-project registry overlay — a technology the registry does not map is
+# `unresolved` (cite-or-decline), and the operator either PRs a mapping or --stack-adds namespaces directly.
+#
+# `umbrellas.<name>.activates` MUST list only namespaces that already exist under
+# generated-code-quality-standards/ — these are the framework-AGNOSTIC rules that apply to every member of
+# the family. Framework-SPECIFIC rules live in `technologies[].specific_namespace` (present or null).
+
+umbrellas:
+  frontend:            { activates: [owasp, web-vitals, w3c, md, typescript, node] }
+  backend-web:         { activates: [owasp, node, typescript, oas, jwt, iam] }
+  backend-language:    { activates: [owasp] }
+  data:                { activates: [observability] }
+  iac:                 { activates: [security-governance, hashicorp, iam] }
+  orchestration:       { activates: [k8s, helm, gitops, mesh, compose] }
+  cicd:                { activates: [gha, slsa, sbom] }
+  ai-governance:       { activates: [security-governance, european-union, us-government, industry-self-regulatory] }
+
+technologies:
+  # --- frontend frameworks (umbrella: frontend) ---
+  - { technology: react,    aliases: [reactjs, "react.js"],   coordinate: { linguist: [JSX, TSX], purl: "pkg:npm/react" },     umbrellas: [frontend], specific_namespace: react }
+  - { technology: vue,      aliases: [vuejs, "vue.js"],       coordinate: { linguist: [Vue], purl: "pkg:npm/vue" },            umbrellas: [frontend], specific_namespace: null }
+  - { technology: angular,  aliases: [angularjs],             coordinate: { linguist: [TypeScript], purl: "pkg:npm/@angular/core" }, umbrellas: [frontend], specific_namespace: null }
+  - { technology: ember,    aliases: [emberjs, "ember.js"],   coordinate: { linguist: [JavaScript], purl: "pkg:npm/ember-source" }, umbrellas: [frontend], specific_namespace: null }
+  - { technology: svelte,   aliases: [sveltekit],             coordinate: { linguist: [Svelte], purl: "pkg:npm/svelte" },      umbrellas: [frontend], specific_namespace: null }
+  - { technology: solid,    aliases: [solidjs],               coordinate: { linguist: [TypeScript], purl: "pkg:npm/solid-js" }, umbrellas: [frontend], specific_namespace: null }
+  # --- languages that are themselves namespaces (umbrella: frontend/backend) ---
+  - { technology: typescript, aliases: [ts],                  coordinate: { linguist: [TypeScript], purl: "pkg:npm/typescript" }, umbrellas: [frontend, backend-web], specific_namespace: typescript }
+  - { technology: node,     aliases: [nodejs, "node.js"],     coordinate: { linguist: [JavaScript], purl: "pkg:npm/node" },    umbrellas: [backend-web], specific_namespace: node }
+  # --- backend-web frameworks (umbrella: backend-web) ---
+  - { technology: express,  aliases: [expressjs],             coordinate: { linguist: [JavaScript], purl: "pkg:npm/express" }, umbrellas: [backend-web], specific_namespace: null }
+  - { technology: nestjs,   aliases: [nest],                  coordinate: { linguist: [TypeScript], purl: "pkg:npm/@nestjs/core" }, umbrellas: [backend-web], specific_namespace: null }
+  - { technology: django,   aliases: [],                      coordinate: { linguist: [Python], purl: "pkg:pypi/django" },     umbrellas: [backend-web], specific_namespace: null }
+  - { technology: rails,    aliases: ["ruby on rails"],       coordinate: { linguist: [Ruby], purl: "pkg:gem/rails" },         umbrellas: [backend-web], specific_namespace: null }
+  - { technology: spring,   aliases: ["spring boot"],         coordinate: { linguist: [Java], purl: "pkg:maven/org.springframework" }, umbrellas: [backend-web], specific_namespace: null }
+  # --- backend languages (umbrella: backend-language) ---
+  - { technology: go,       aliases: [golang],                coordinate: { linguist: [Go], purl: "pkg:golang" },             umbrellas: [backend-language], specific_namespace: null }
+  - { technology: rust,     aliases: [],                      coordinate: { linguist: [Rust], purl: "pkg:cargo" },            umbrellas: [backend-language], specific_namespace: null }
+  - { technology: python,   aliases: [py],                    coordinate: { linguist: [Python], purl: "pkg:pypi" },           umbrellas: [backend-language], specific_namespace: null }
