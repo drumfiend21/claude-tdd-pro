@@ -1,0 +1,13 @@
+{
+  "name": "a technology's rules flow acquire -> aggregate(origin project) -> enforce(scoped) -> promote(move to official)",
+  "command": "ID=P559I01; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-rules.sh\" --technology Vue --project $ID --source-file g.txt --source-id sg559i01 --now 2026-07-05T00:00:00Z >/dev/null 2>&1; agg=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --project $ID --format json 2>/dev/null | ruby -rjson -e 'puts JSON.parse(STDIN.read)[\"rules\"].any?{|x|x[\"origin\"]==\"project\"} ? \"y\":\"n\"'); printf '<template></template>\\n' > App.vue; enf=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file App.vue --include-app-code --project $ID 2>&1 | grep -oE 'rules_checked=[0-9]+' | grep -oE '[0-9]+'); bash \"$CLAUDE_PLUGIN_ROOT/commands/promote-project-rule.sh\" --project $ID --namespace vue --apply 2>/dev/null >/dev/null; prom=$([ -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/vue/sg559i01.yaml ] && echo y || echo n); rm -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/vue/sg559i01.yaml; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; [ \"$agg\" = y ] && [ \"$enf\" -gt 0 ] && [ \"$prom\" = y ] && echo end-to-end-chain 1>&2",
+  "setup": [
+    "printf '%s\\n' 'Always bind a unique key to every loop element.' 'Never combine conditional and loop on one element.' > g.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "end-to-end-chain"
+    ]
+  }
+}

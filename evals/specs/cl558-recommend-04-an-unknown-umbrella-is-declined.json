@@ -1,0 +1,11 @@
+{
+  "name": "the recommender declines to recommend for an unknown umbrella (cite-or-decline)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/recommend-technology.sh\" --umbrella nonesuch 2>&1 >/dev/null | grep -q 'recommended=none' && echo umbrella-declined 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "umbrella-declined"
+    ]
+  }
+}

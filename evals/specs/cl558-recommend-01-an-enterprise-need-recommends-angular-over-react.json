@@ -1,0 +1,11 @@
+{
+  "name": "the fitness recommender proposes Angular over React when the workload needs enterprise typescript-first traits",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/recommend-technology.sh\" --umbrella frontend --need enterprise --need typescript-first 2>&1 >/dev/null | grep -q 'recommended=angular' && echo angular-over-react 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "angular-over-react"
+    ]
+  }
+}
