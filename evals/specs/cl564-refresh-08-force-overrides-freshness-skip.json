@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh --force refreshes an entry regardless of freshness window",
+  "command": "OUT=/tmp/cl564-r08-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>x</h2><p>y</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r08-src\n  name: R08\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: weekly\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && mkdir -p .claude-tdd-pro/standards-last-fetch && echo '2026-07-10T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/r08-src.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --now 2026-07-11T00:00:00Z --force --out-dir $OUT/out 2>e.err; grep -q 'total=1 processed=1 skipped=0' e.err && [ -f $OUT/out/us-government/r08-src.yaml ] && echo force-overrides-skip 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "force-overrides-skip"
+    ]
+  }
+}

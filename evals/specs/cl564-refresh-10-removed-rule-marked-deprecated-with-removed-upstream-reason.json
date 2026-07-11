@@ -1,0 +1,11 @@
+{
+  "name": "a rule absent from a fresh fetch is marked deprecated:true with deprecated_at + deprecated_reason removed-upstream (no silent drop)",
+  "command": "OUT=/tmp/cl564-r10-$$; mkdir -p $OUT/out && cat > $OUT/v1.html <<'HTML'\n<html><body><h2>Rule alpha</h2><p>alpha.</p><h2>Rule beta</h2><p>beta.</p></body></html>\nHTML\ncat > $OUT/v2.html <<'HTML'\n<html><body><h2>Rule alpha</h2><p>alpha.</p></body></html>\nHTML\ncat > $OUT/reg1.yaml <<YAML\nsources:\n- id: r10-src\n  name: R10\n  jurisdiction: european-union\n  url: file://$OUT/v1.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncat > $OUT/reg2.yaml <<YAML\nsources:\n- id: r10-src\n  name: R10\n  jurisdiction: european-union\n  url: file://$OUT/v2.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg1.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg2.yaml --force --now 2026-08-15T00:00:00Z --out-dir $OUT/out 2>e.err; grep -q 'deprecated=1' e.err && grep -q 'deprecated_reason: removed-upstream' $OUT/out/european-union/r10-src.yaml && echo deprecated-at-on-removal 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "deprecated-at-on-removal"
+    ]
+  }
+}

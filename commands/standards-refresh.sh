@@ -1,0 +1,441 @@
+#!/usr/bin/env bash
+# commands/standards-refresh.sh — the ADR-0009 line 50 registry-walker orchestrator.
+#
+# What this script does (Option 3 hybrid — activates existing infrastructure, no new
+# architecture invented):
+#
+#   1. Reads a URL registry (`*-URLS.yaml` under `.claude-tdd-pro/` or `*sources*.yaml`
+#      under `standards/` and `pr-corpus/`).
+#   2. Per entry: freshness-skip via `<registry>-last-fetch/<source-id>.txt` vs
+#      `fetch_frequency` (per §17 S-15/S-16); `--force` overrides.
+#   3. Dispatches through `standards/fetcher.sh` (S-2) with `standards/fetchers/http-get.sh`
+#      as the upstream stub. Honors the entry's `fragility_tier` + `fragility_strategy`
+#      (§2.6). Cache preserved on upstream failure (§16 S-2 discipline).
+#   4. Feeds cached content into `commands/extract-rules-from-url.sh` (Stage 1) with
+#      shape inferred from the entry's `fetcher:` field (html-anchor.sh → html-sections,
+#      markdown-headers.sh → markdown-headings, pdf-section.sh → pdf-sections,
+#      rfc-style.sh → free-prose; other/absent → markdown-headings).
+#   5. Stages 2 + 3 + 4: classifies each segment (`classify-rule.sh`) + routes each
+#      classification (`route-rule.sh`) + auto-binds architectural-content bundle on
+#      `applies_to_prose:true` (§28.30).
+#   6. Assembles the composite rule YAML with the `introduced_in` epoch tag per §28.40
+#      Consumer Compatibility Contract, populates `source:` + `rules[]` + `recommended_set[]`
+#      + `all_set[]`.
+#   7. Merge (default) preserves rules whose `content_hash` matches (freezing their
+#      `introduced_in`); rules absent from the fresh fetch are marked `deprecated: true`
+#      with `deprecated_at: <NOW>` reason `removed-upstream`. `--replace` overwrites.
+#   8. Atomic write to `<out-dir>/<resolved-namespace>/<framework-id>.yaml`; updates
+#      `<registry>-last-fetch/<source-id>.txt`.
+#
+# Nothing here reimplements what already exists: `standards/fetcher.sh` dispatch,
+# per-source shape extractors, extract/classify/route stage commands, 4-axis binding,
+# aggregator, §28.40 epoch tag — all reused as-is.
+#
+# CLI:
+#   standards-refresh.sh --registry <path> [--force] [--now <iso>]
+#                        [--dry-run] [--out-dir <dir>] [--replace]
+#
+# Exit codes:
+#   0 ok (some entries may have been freshness-skipped)
+#   1 pipeline error (at least one entry failed extract/classify/route)
+#   2 usage error
+#   3 registry not found or unparseable
+
+set -uo pipefail
+
+REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --registry) REGISTRY="${2-}"; shift 2 ;;
+    --force)    FORCE=1;          shift   ;;
+    --now)      NOW_ISO="${2-}";  shift 2 ;;
+    --dry-run)  DRY_RUN=1;        shift   ;;
+    --out-dir)  OUT_DIR="${2-}";  shift 2 ;;
+    --replace)  MERGE_MODE="replace"; shift ;;
+    --merge)    MERGE_MODE="merge";   shift ;;
+    -h|--help)
+      sed -n '2,45p' "$0" | sed 's/^# \{0,1\}//' >&2
+      exit 0 ;;
+    *) echo "standards-refresh: unknown arg: $1" >&2; exit 2 ;;
+  esac
+done
+
+[ -n "$REGISTRY" ] || { echo "standards-refresh: --registry <path> required" >&2; exit 2; }
+[ -f "$REGISTRY" ] || { echo "standards-refresh: registry not found: $REGISTRY" >&2; exit 3; }
+
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
+[ -z "$OUT_DIR" ] && OUT_DIR="$PLUGIN_ROOT/generated-code-quality-standards"
+[ -z "$NOW_ISO" ] && NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+HERE="$(cd "$(dirname "$0")" && pwd -P)"
+
+# --- helpers ---
+
+# Parse fetch_frequency into seconds. Accepts daily|weekly|monthly|quarterly|on-demand
+# or numeric formats like 30m, 6h, 1d, 2w, 1mo.
+freq_to_seconds() {
+  local freq="$1"
+  case "$freq" in
+    daily)     echo 86400 ;;
+    weekly)    echo 604800 ;;
+    monthly)   echo 2592000 ;;
+    quarterly) echo 7776000 ;;
+    on-demand) echo 315360000 ;;
+    "")        echo 86400 ;;
+    *)
+      local n="${freq%[mhdwo]*}" unit="${freq#$n}"
+      case "$unit" in
+        m)  echo $((n * 60)) ;;
+        h)  echo $((n * 3600)) ;;
+        d)  echo $((n * 86400)) ;;
+        w)  echo $((n * 604800)) ;;
+        mo) echo $((n * 2592000)) ;;
+        *)  echo 86400 ;;
+      esac ;;
+  esac
+}
+
+# Compare epochs (bash 3.2 compatible; python3 for ISO parsing).
+iso_to_epoch() {
+  ISO="$1" python3 -c 'import os,datetime; s=os.environ["ISO"].replace("Z","+00:00"); print(int(datetime.datetime.fromisoformat(s).timestamp()))' 2>/dev/null
+}
+
+# freshness_due sid freq marker-dir now_iso -> 0 if due (or never fetched), 1 if within window.
+freshness_due() {
+  local sid="$1" freq="$2" dir="$3" now="$4"
+  local marker="$dir/$sid.txt"
+  [ -f "$marker" ] || return 0
+  local last; last=$(head -1 "$marker" 2>/dev/null)
+  [ -n "$last" ] || return 0
+  local now_e last_e
+  now_e=$(iso_to_epoch "$now"); last_e=$(iso_to_epoch "$last")
+  [ -n "$now_e" ] && [ -n "$last_e" ] || return 0
+  local age=$((now_e - last_e)) win; win=$(freq_to_seconds "$freq")
+  [ "$age" -ge "$win" ]
+}
+
+# Namespace resolution per §17 G-9. Compliance jurisdictions → jurisdictional namespace;
+# standards entries fall back to the entry's declared source_namespace or `_universal`.
+resolve_namespace() {
+  local juri="$1" src_class="$2" src_ns="$3"
+  if [ -n "$juri" ]; then
+    case "$juri" in
+      us-government|federal-financial-regulator)   echo "us-government"; return ;;
+      european-union)                              echo "european-union"; return ;;
+      international)                               echo "industry-self-regulatory"; return ;;
+      gold-standard-process)                       echo "linux-foundation"; return ;;
+    esac
+  fi
+  if [ -n "$src_class" ]; then
+    case "$src_class" in
+      financial-industry) echo "finance-industry"; return ;;
+      federal-financial-regulator) echo "us-government"; return ;;
+    esac
+  fi
+  if [ -n "$src_ns" ]; then echo "$src_ns"; return; fi
+  echo "_universal"
+}
+
+# Shape inference from the entry's fetcher: field. This is the mapping declared by
+# ADR-0009 line 51 combined with §17 S-2 per-source fetcher naming.
+shape_from_fetcher() {
+  case "$1" in
+    html-anchor.sh)      echo "html-sections" ;;
+    markdown-headers.sh) echo "markdown-headings" ;;
+    pdf-section.sh)      echo "pdf-sections" ;;
+    rfc-style.sh)        echo "free-prose" ;;
+    *)                   echo "markdown-headings" ;;
+  esac
+}
+
+# Fragility-tier defaults when the entry does not declare one.
+default_fragility_tier() { echo "${1:-medium}"; }
+default_fragility_strategy() {
+  case "${1:-}" in
+    high)   echo "silent-replace" ;;
+    low)    echo "manual-only" ;;
+    *)      echo "prompt-on-change" ;;
+  esac
+}
+
+# Marker dir per registry filename.
+last_fetch_dir() {
+  case "$(basename "$1")" in
+    COMPLIANCE-URLS.yaml)  echo ".claude-tdd-pro/compliance-last-fetch" ;;
+    STANDARDS-URLS.yaml)   echo ".claude-tdd-pro/standards-last-fetch"  ;;
+    PR-SOURCES.yaml)       echo ".claude-tdd-pro/pr-source-last-fetch"  ;;
+    *sources*.yaml)        echo ".claude-tdd-pro/standards-last-fetch"  ;;
+    *)                     echo ".claude-tdd-pro/generic-last-fetch"    ;;
+  esac
+}
+
+# --- Parse registry into a tab-separated stream (bash 3.2 friendly). ---
+
+REGISTRY="$REGISTRY" python3 <<'PY' > /tmp/standards-refresh-entries.$$
+import os, re, sys
+text = open(os.environ["REGISTRY"]).read()
+entries = []
+cur = None
+for line in text.splitlines():
+    m = re.match(r"^-\s*id:\s*(\S+)", line)
+    if m:
+        if cur: entries.append(cur)
+        cur = {"id": m.group(1)}
+        continue
+    if not cur: continue
+    for field in ("name","url","jurisdiction","source_class","source_namespace",
+                  "authoritative_publisher","fetch_frequency","fetcher",
+                  "fragility_tier","fragility_strategy","paywalled","document_url"):
+        m2 = re.match(r"^\s+" + field + r":\s*(.+)$", line)
+        if m2:
+            v = m2.group(1).strip().strip('"\'').rstrip()
+            cur[field] = v
+if cur: entries.append(cur)
+for e in entries:
+    sid = e.get("id",""); url = e.get("url","") or e.get("document_url","")
+    if not sid or not url: continue
+    print("|".join([
+        sid, url, e.get("jurisdiction",""), e.get("source_class",""),
+        e.get("source_namespace",""),
+        e.get("authoritative_publisher") or e.get("name","unknown"),
+        e.get("fetch_frequency","daily"), e.get("fetcher","markdown-headers.sh"),
+        e.get("fragility_tier","medium"), e.get("fragility_strategy",""),
+    ]))
+PY
+
+# --- Per-entry pipeline (invoked once per registry entry). ---
+
+process_entry() {
+  local sid="$1" url="$2" juri="$3" src_class="$4" src_ns="$5" pub="$6" freq="$7" fetcher="$8" ftier="$9" fstrat="${10}"
+
+  local target_ns; target_ns=$(resolve_namespace "$juri" "$src_class" "$src_ns")
+  local shape; shape=$(shape_from_fetcher "$fetcher")
+  [ -z "$ftier" ]  && ftier=$(default_fragility_tier "")
+  [ -z "$fstrat" ] && fstrat=$(default_fragility_strategy "$ftier")
+
+  # Layer 1: cache-preserving fetch via existing S-2 dispatch.
+  local cache_dir="$PLUGIN_ROOT/.claude-tdd-pro/standards-cache"
+  mkdir -p "$cache_dir"
+  local cache_file="$cache_dir/$sid.html"
+  local meta_file; meta_file=$(mktemp)
+
+  URL="$url" bash "$PLUGIN_ROOT/standards/fetcher.sh" \
+      --source-id "$sid" \
+      --fragility-tier "$ftier" \
+      --strategy "$fstrat" \
+      --upstream-stub "$PLUGIN_ROOT/standards/fetchers/http-get.sh" \
+      --cache "$cache_dir" \
+      --emit-metadata "$meta_file" \
+      --auto --no-confirm-default 2>/dev/null
+  local frc=$?
+  rm -f "$meta_file"
+
+  if [ "$frc" -ne 0 ] || [ ! -s "$cache_file" ]; then
+    echo "standards-refresh: SKIP sid=$sid (fetch failed or cache empty rc=$frc)" >&2
+    return 0   # cache-preserved skip is not a failure
+  fi
+
+  # Layer 2: extract via Stage 1 (extended to 5 shapes per ADR-0009 line 51).
+  local segments
+  segments=$(bash "$HERE/extract-rules-from-url.sh" --source "$cache_file" --shape "$shape" --source-id "$sid" --json 2>/dev/null)
+  local xrc=$?
+  if [ "$xrc" -ne 0 ]; then
+    echo "standards-refresh: FAIL sid=$sid (extract rc=$xrc)" >&2
+    return 1
+  fi
+
+  local target_file="$OUT_DIR/$target_ns/$sid.yaml"
+  mkdir -p "$OUT_DIR/$target_ns"
+
+  # Layer 3+4+5: classify + route + assemble YAML with §28.40 introduced_in epoch.
+  local composite_yaml
+  composite_yaml=$(SEGS="$segments" SID="$sid" PUB="$pub" URL="$url" \
+                   NS="$target_ns" NOW="$NOW_ISO" MERGE="$MERGE_MODE" \
+                   TARGET="$target_file" HERE="$HERE" FREQ="$freq" SHAPE="$shape" python3 <<'PY'
+import json, os, sys, subprocess, hashlib, re
+
+segs = json.loads(os.environ["SEGS"] or "[]")
+sid = os.environ["SID"]; pub = os.environ["PUB"]; url = os.environ["URL"]
+ns = os.environ["NS"]; now = os.environ["NOW"]; merge = os.environ["MERGE"]
+target = os.environ["TARGET"]; here = os.environ["HERE"]; freq = os.environ["FREQ"]
+
+def call_classify(title, prose):
+    try:
+        r = subprocess.run(["bash", os.path.join(here, "classify-rule.sh"),
+                            "--title", title, "--prose", prose, "--json"],
+                           capture_output=True, text=True, timeout=15)
+        return json.loads(r.stdout or "{}")
+    except Exception:
+        return {"applies_to": {}, "applies_to_prose": False, "confidence": "low"}
+
+def call_route(classified_json):
+    import tempfile
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+        json.dump(classified_json, f); tmp = f.name
+    try:
+        r = subprocess.run(["bash", os.path.join(here, "route-rule.sh"), "--in", tmp, "--json"],
+                           capture_output=True, text=True, timeout=15)
+        return json.loads(r.stdout or "{}")
+    except Exception:
+        return {"enforced_by": []}
+    finally:
+        os.unlink(tmp)
+
+def slugify(s):
+    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:60]
+
+# Read existing rules from target (bash-3.2 friendly: naive block scan; no yaml dep).
+existing = {}     # content_hash -> {"introduced_in": iso, "block": raw yaml block}
+if merge == "merge" and os.path.exists(target):
+    try:
+        old = open(target).read()
+        for m in re.finditer(r"^- id:\s*(\S+).*?(?=^- id:|^recommended_set:|\Z)", old, re.M | re.S):
+            block = m.group(0)
+            hm = re.search(r"content_hash:\s*(\S+)", block)
+            im = re.search(r"introduced_in:\s*['\"]?([^'\"\n]+)['\"]?", block)
+            if hm:
+                existing[hm.group(1)] = {"introduced_in": (im.group(1).strip() if im else now), "block": block}
+    except Exception:
+        pass
+
+rules = []
+for seg in segs:
+    title = seg.get("title","").strip(); prose = seg.get("prose","").strip()
+    if not title: continue
+    ch = "sha256:" + hashlib.sha256((title + "\n" + prose).encode()).hexdigest()
+    classification = call_classify(title, prose)
+    routing = call_route(classification)
+    # §28.40 Consumer Compatibility Contract: freeze introduced_in when content_hash matches.
+    intro = existing.get(ch, {}).get("introduced_in", now)
+    rid = ("g-" + ns + "-" + sid + "-" + slugify(title))[:100]
+    rule = {
+        "id": rid, "name": slugify(title),
+        "description": (prose[:500] or title),
+        "detector": "cloud-guidance-rule.sh", "type": "problem",
+        "recommended": True, "docs_url": url,
+        "provenance": [{"source": sid, "section": slugify(title)}],
+        "applies_to": classification.get("applies_to", {}),
+        "applies_to_prose": classification.get("applies_to_prose", False),
+        "enforced_by": routing.get("enforced_by", []),
+        "content_hash": ch,
+        "confidence": classification.get("confidence", "low"),
+        "introduced_in": intro,
+    }
+    if classification.get("confidence") == "low":
+        rule["needs_tier2_llm"] = True
+    rules.append(rule)
+
+# Deprecated: rules present in existing but absent from fresh fetch.
+new_hashes = {r["content_hash"] for r in rules}
+deprecated_blocks = []
+for ch, meta in existing.items():
+    if ch not in new_hashes:
+        b = meta["block"]
+        if "deprecated: true" not in b:
+            b = b.rstrip() + "\n  deprecated: true\n  deprecated_at: " + now + "\n  deprecated_reason: removed-upstream\n"
+        deprecated_blocks.append(b)
+
+# Compose YAML (bash-3.2 friendly; no PyYAML).
+out = ["---", "source:", "  id: " + sid,
+       "  authoritative_publisher: " + pub, "  authoritative_url: " + url,
+       "  registry_link: " + os.path.basename(os.environ.get("REGISTRY","")),
+       "  fetched_at: '" + now + "'",
+       "  content_hash: sha256:" + hashlib.sha256(url.encode()).hexdigest()[:32] + "-fresh",
+       "  fetch_frequency: " + (freq or "daily"),
+       "  fragility_tier: medium",
+       "  license_note: 'Reference/educational use - " + pub + "'",
+       "rules:"]
+for r in rules:
+    out.append("- id: " + r["id"])
+    out.append("  name: " + r["name"])
+    d = r["description"].replace("\n", " ").replace('"', "'")
+    out.append('  description: "' + d + '"')
+    out.append("  detector: " + r["detector"])
+    out.append("  type: " + r["type"])
+    out.append("  recommended: " + str(r["recommended"]).lower())
+    out.append("  docs_url: " + r["docs_url"])
+    out.append("  content_hash: " + r["content_hash"])
+    out.append("  confidence: " + r["confidence"])
+    out.append("  introduced_in: '" + r["introduced_in"] + "'")
+    if r.get("needs_tier2_llm"): out.append("  needs_tier2_llm: true")
+    out.append("  applies_to_prose: " + str(r["applies_to_prose"]).lower())
+    out.append("  provenance:")
+    for p in r["provenance"]:
+        out.append("  - source: " + p["source"])
+        out.append("    section: " + p["section"])
+    at = r.get("applies_to", {})
+    if at:
+        out.append("  applies_to:")
+        for k, v in at.items():
+            if isinstance(v, list) and v:
+                out.append("    " + k + ":")
+                for it in v: out.append("    - " + str(it))
+    eb = r.get("enforced_by", [])
+    if eb:
+        out.append("  enforced_by:")
+        for e in eb:
+            if "tool" in e:
+                out.append("  - tool: " + e["tool"])
+                if e.get("required"): out.append("    required: true")
+                if e.get("license"): out.append("    license: " + e["license"])
+            elif "bundle" in e:
+                out.append("  - bundle: " + e["bundle"])
+for db in deprecated_blocks:
+    out.append(db.rstrip())
+out.append("recommended_set:")
+for r in rules: out.append("- " + r["id"])
+out.append("all_set:")
+for r in rules: out.append("- " + r["id"])
+
+sys.stdout.write("\n".join(out) + "\n")
+sys.stderr.write("pipeline sid=" + sid + " ns=" + ns + " shape=" + os.environ.get("SHAPE","") + " segments=" + str(len(segs)) + " rules_new=" + str(len(rules)) + " deprecated=" + str(len(deprecated_blocks)) + "\n")
+PY
+)
+  local arc=$?
+  if [ "$arc" -ne 0 ]; then
+    echo "standards-refresh: FAIL sid=$sid (assemble rc=$arc)" >&2
+    return 1
+  fi
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    printf '%s\n' "$composite_yaml"
+    echo "standards-refresh: DRY-RUN sid=$sid target=$target_file" >&2
+    return 0
+  fi
+
+  local tmp; tmp=$(mktemp) || return 1
+  printf '%s' "$composite_yaml" > "$tmp"
+  mv "$tmp" "$target_file" || return 1
+
+  local mdir; mdir=$(last_fetch_dir "$REGISTRY")
+  mkdir -p "$mdir"
+  echo "$NOW_ISO" > "$mdir/$sid.txt"
+  echo "standards-refresh: WROTE sid=$sid ns=$target_ns file=$target_file" >&2
+  return 0
+}
+
+# --- Main loop: walk entries, freshness-skip, delegate. ---
+
+MARKER_DIR=$(last_fetch_dir "$REGISTRY")
+mkdir -p "$MARKER_DIR"
+
+TOTAL=0; PROCESSED=0; SKIPPED=0; FAILED=0
+export REGISTRY
+while IFS='|' read -r sid url juri src_class src_ns pub freq fetcher ftier fstrat; do
+  [ -n "$sid" ] || continue
+  TOTAL=$((TOTAL + 1))
+  if [ "$FORCE" -eq 0 ] && ! freshness_due "$sid" "$freq" "$MARKER_DIR" "$NOW_ISO"; then
+    echo "standards-refresh: SKIP sid=$sid (not due; freq=$freq)" >&2
+    SKIPPED=$((SKIPPED + 1))
+    continue
+  fi
+  if process_entry "$sid" "$url" "$juri" "$src_class" "$src_ns" "$pub" "$freq" "$fetcher" "$ftier" "$fstrat"; then
+    PROCESSED=$((PROCESSED + 1))
+  else
+    FAILED=$((FAILED + 1))
+  fi
+done < /tmp/standards-refresh-entries.$$
+rm -f /tmp/standards-refresh-entries.$$
+
+echo "standards-refresh: registry=$(basename "$REGISTRY") total=$TOTAL processed=$PROCESSED skipped=$SKIPPED failed=$FAILED" >&2
+[ "$FAILED" -eq 0 ] && exit 0 || exit 1

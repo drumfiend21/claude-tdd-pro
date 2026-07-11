@@ -1,0 +1,11 @@
+{
+  "name": "extract-rules-from-url.sh --shape free-prose segments blank-line-delimited paragraphs (ADR-0009 line 51)",
+  "command": "OUT=/tmp/cl564-r02-$$; mkdir -p $OUT && printf 'Data MUST be encrypted at rest.\\n\\nLogs SHALL be retained for 90 days.\\n\\nApps MAY use extra monitoring but SHOULD default to structured logs.\\n' > $OUT/s.txt; bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source $OUT/s.txt --shape free-prose --source-id r02 --json 2>e.err | python3 -c 'import json,sys; d=json.load(sys.stdin); print(len(d))' > n.out; N=$(cat n.out); grep -q 'shape=free-prose' e.err && [ \"$N\" = \"3\" ] && echo free-prose-yields-segments 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "free-prose-yields-segments"
+    ]
+  }
+}

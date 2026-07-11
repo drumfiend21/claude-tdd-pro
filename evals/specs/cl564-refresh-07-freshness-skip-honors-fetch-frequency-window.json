@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh skips an entry whose last-fetch marker is within the fetch_frequency window (freshness-skip)",
+  "command": "OUT=/tmp/cl564-r07-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>x</h2></body></html>\nHTML\ncat > $OUT/test-sources.yaml <<YAML\nsources:\n- id: r07-src\n  name: R07\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: weekly\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && mkdir -p .claude-tdd-pro/standards-last-fetch && echo '2026-07-10T00:00:00Z' > .claude-tdd-pro/standards-last-fetch/r07-src.txt && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/test-sources.yaml --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; grep -q 'SKIP sid=r07-src' e.err && grep -q 'total=1 processed=0 skipped=1' e.err && echo freshness-skip-honored 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "freshness-skip-honored"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "extract-rules-from-url.sh --shape pdf-sections segments pdftotext-style output by section labels (ADR-0009 line 51)",
+  "command": "OUT=/tmp/cl564-r03-$$; mkdir -p $OUT && printf 'V14.1 Data Protection\\nEncrypt data at rest.\\nV14.2 Access Control\\nEnforce least privilege.\\nV14.3 Audit Logging\\nLog all admin operations.\\n' > $OUT/s.txt; bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source $OUT/s.txt --shape pdf-sections --source-id r03 --json 2>e.err | python3 -c 'import json,sys; d=json.load(sys.stdin); print(len(d))' > n.out; N=$(cat n.out); grep -q 'shape=pdf-sections' e.err && [ \"$N\" = \"3\" ] && echo pdf-sections-yields-segments 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pdf-sections-yields-segments"
+    ]
+  }
+}

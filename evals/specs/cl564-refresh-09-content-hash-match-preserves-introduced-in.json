@@ -1,0 +1,11 @@
+{
+  "name": "re-run against unchanged URL keeps each rule's introduced_in frozen (§28.40 Consumer Compatibility Contract grandfathering)",
+  "command": "OUT=/tmp/cl564-r09-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>Encrypt at rest</h2><p>All data must be encrypted.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r09-src\n  name: R09\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; INTRO1=$(grep introduced_in $OUT/out/us-government/r09-src.yaml | head -1); bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-12-31T00:00:00Z --out-dir $OUT/out 2>/dev/null; INTRO2=$(grep introduced_in $OUT/out/us-government/r09-src.yaml | head -1); [ \"$INTRO1\" = \"$INTRO2\" ] && echo content-hash-preserves-introduced-in 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "content-hash-preserves-introduced-in"
+    ]
+  }
+}

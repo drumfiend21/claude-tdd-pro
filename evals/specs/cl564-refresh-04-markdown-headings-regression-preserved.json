@@ -1,0 +1,11 @@
+{
+  "name": "extract-rules-from-url.sh --shape markdown-headings behavior is byte-identical after adding 3 new shapes",
+  "command": "OUT=/tmp/cl564-r04-$$; mkdir -p $OUT && printf '# Doc\\n## A\\nprose a\\n## B\\nprose b\\n' > $OUT/s.md; bash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source $OUT/s.md --shape markdown-headings --source-id r04 --json 2>e.err | python3 -c 'import json,sys; d=json.load(sys.stdin); print(len(d))' > n.out; N=$(cat n.out); grep -q 'shape=markdown-headings' e.err && [ \"$N\" = \"2\" ] && echo markdown-headings-regression 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "markdown-headings-regression"
+    ]
+  }
+}

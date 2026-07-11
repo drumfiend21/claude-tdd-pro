@@ -1,0 +1,11 @@
+{
+  "name": "standards/fetchers/http-get.sh emits URL content to stdout (generic upstream stub for standards/fetcher.sh dispatch)",
+  "command": "OUT=/tmp/cl564-r05-$$; mkdir -p $OUT && printf 'hello world payload\\n' > $OUT/payload.txt; URL=\"file://$OUT/payload.txt\" bash \"$CLAUDE_PLUGIN_ROOT/standards/fetchers/http-get.sh\" > got.out 2>/dev/null; RC=$?; [ \"$RC\" = \"0\" ] && grep -q 'hello world payload' got.out && echo http-get-fetches-url 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "http-get-fetches-url"
+    ]
+  }
+}

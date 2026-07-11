@@ -1,0 +1,11 @@
+{
+  "name": "extract-rules-from-url.sh --shape html-sections yields one segment per h2..h6 heading (ADR-0009 line 51)",
+  "command": "OUT=/tmp/cl564-r01-$$; mkdir -p $OUT && cat > $OUT/s.html <<'HTML'\n<html><body><h1>Doc</h1><h2>Rule alpha</h2><p>alpha prose.</p><h2>Rule beta</h2><p>beta prose.</p><h2>Rule gamma</h2><p>gamma prose.</p></body></html>\nHTML\nbash \"$CLAUDE_PLUGIN_ROOT/commands/extract-rules-from-url.sh\" --source $OUT/s.html --shape html-sections --source-id r01 --json 2>e.err | python3 -c 'import json,sys; d=json.load(sys.stdin); print(len(d))' > n.out; N=$(cat n.out); grep -q 'shape=html-sections' e.err && [ \"$N\" = \"3\" ] && echo html-sections-yields-segments 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "html-sections-yields-segments"
+    ]
+  }
+}
