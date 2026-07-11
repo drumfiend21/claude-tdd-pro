@@ -2559,3 +2559,16 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `live-acquisition`, `fetch-cache`, `umbrella-matched-sources`, `only-mentioning`, `explain-mode`, `operator-facing-narrative`.
 
 9 specs (`cl561-live-01..04`, `cl561-explain-01..05`): live-acquires-from-cache / live-filters-mentions / live-declines-unknown / live-empty-cache-nothing / resolve-explains-present / resolve-explains-decline / acquire-explains-nonofficial / promote-explains-pr-gate / recommend-explains-rationale. **§20 note:** completes the §31 operator-facing surface; the harness-owned network fetch remains external. Suite 5013→5022 (after the §31 GCTP-contract reconciliation CL-560, 5007→5013).
+
+### §31.9 Acquisition sufficiency (≥30 rules/technology) + `--stack-add` tech bridge (GCTP P-18 + G-3/G-4, 2026-07-05)
+
+**STATUS: BUILT.** KA-2 showed mention-filtered general-source acquisition yields too few rules (3 for Vue) to design/build on. P-18 sets a ≥30-rules-per-technology sufficiency floor met by acquiring the technology's OWN canonical sources whole. CTP owns the capability; GCTP owns the enforcement gate.
+
+- **S-60 tech-canonical sources** (`standards/technology-source-registry.yaml`, OFFICIAL + PR-only): maps a technology → its authoritative canonical docs (`vue → vuejs.org/style-guide + guide`, …). Adding a source is a reviewed PR.
+- **Whole-source acquisition (§2.2):** `acquire-technology-live` acquires each canonical source WHOLE (every guidance statement → a rule, no `--only-mentioning` filter) with no artificial cap (`--max-rules 500`), because the entire source is tech-specific — this is the bulk of the ≥30 rules. Umbrella-general sources stay `--only-mentioning`.
+- **Sufficiency signal (§2.4):** the live summary emits `rule_count=<n> sufficiency=ok|below-threshold-<N>` (`--threshold`, default 30) — a technology below the floor fails loud, never silent. Rules are still cited + 4-axis tagged + written only to `_project/` (never official; never fabricated).
+- **G-3/G-4 `--stack-add` tech bridge:** `--stack-add <name>` now accepts a TECHNOLOGY name (not only a namespace) — a tech token bridges to the S-58 resolver and activates that technology's family (adds its umbrella namespaces, populates `family_activated` + `families_active`); a real namespace stays a stack entry; an unknown token is still rejected (cite-or-decline).
+- **G-2 clarification (recorded):** the `full_surface_revealed=<n>` marker is the shipped §30.7 Stage-0 reveal (announced there), not an unannounced P-14.
+- **§25 fidelity vocabulary additions:** `acquisition-sufficiency`, `canonical-source`, `whole-source`, `sufficiency-signal`, `rule-count`, `below-threshold`, `stack-add-tech-bridge`.
+
+9 specs (`cl562-suff-01..05`, `cl562-stacktech-01..04`): canonical-meets-floor / below-threshold-honest / rule-count-signal / whole-source-all-lines / threshold-configurable / stack-tech-activates-family / stack-tech-families-active / namespace-stays-stack / unknown-stack-rejected. **§20 note:** completes the §31 capability side of P-18; GCTP owns the sufficiency-gate audit. Suite 5022→5031.

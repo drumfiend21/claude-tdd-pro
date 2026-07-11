@@ -1,0 +1,11 @@
+{
+  "name": "stack-add of a real namespace remains a declared stack entry rather than being treated as a technology",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform\" --stack-add k8s --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"stack\"].map{|e|e[\"namespace\"]}==[\"k8s\"] && c[\"family_activated\"]==[] ? 0:1)' && echo namespace-stays-stack 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "namespace-stays-stack"
+    ]
+  }
+}

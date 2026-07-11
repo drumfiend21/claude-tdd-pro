@@ -1,0 +1,11 @@
+{
+  "name": "stack-add of a technology populates the families_active field for the consumer contract",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform\" --stack-add vue --classify 2>/dev/null | ruby -rjson -e 'exit(JSON.parse(STDIN.read)[\"families_active\"]==[\"frontend\"] ? 0:1)' && echo stack-tech-families-active 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-tech-families-active"
+    ]
+  }
+}

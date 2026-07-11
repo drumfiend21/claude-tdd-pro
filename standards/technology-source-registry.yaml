@@ -1,0 +1,49 @@
+# standards/technology-source-registry.yaml — S-60 tech-canonical sources (v1.27 §31, P-18).
+#
+# Maps a technology to its OWN authoritative canonical documentation sources — the ones that ARE about
+# that technology (e.g. vuejs.org for Vue). These are acquired WHOLE (every guidance statement becomes a
+# rule, no --only-mentioning filter), because the entire source is tech-specific. Combined with the
+# umbrella-general sources (searched with --only-mentioning), this is how acquisition reaches the operator's
+# ≥30-rules-per-technology sufficiency floor (P-18) using only real, cited, existing sources — never fabricated.
+#
+# OFFICIAL + PR-only (like the umbrella registry, §31.4): adding a canonical source is a reviewed PR. Each
+# entry needs the harness to fetch the URL into <cache>/<source_id>.txt for acquisition (the network download
+# stays harness-owned, §31.8).
+#
+# Shape (consumed by commands/acquire-technology-live.sh):
+#   technologies:
+#     <technology>:
+#       - { source_id: <id>, url: <canonical-docs-url>, tier: <n>, whole_source: true }
+
+technologies:
+  vue:
+    - { source_id: vuejs-style-guide, url: "https://vuejs.org/style-guide/", tier: 1, whole_source: true }
+    - { source_id: vuejs-guide,       url: "https://vuejs.org/guide/",       tier: 1, whole_source: true }
+  angular:
+    - { source_id: angular-style-guide, url: "https://angular.dev/style-guide", tier: 1, whole_source: true }
+    - { source_id: angular-guide,       url: "https://angular.dev/guide",       tier: 1, whole_source: true }
+  svelte:
+    - { source_id: svelte-docs, url: "https://svelte.dev/docs", tier: 1, whole_source: true }
+  ember:
+    - { source_id: ember-guides, url: "https://guides.emberjs.com/release/", tier: 1, whole_source: true }
+  solid:
+    - { source_id: solid-docs, url: "https://docs.solidjs.com/", tier: 1, whole_source: true }
+  express:
+    - { source_id: express-best-practices, url: "https://expressjs.com/en/advanced/best-practice-security.html", tier: 1, whole_source: true }
+  nestjs:
+    - { source_id: nestjs-docs, url: "https://docs.nestjs.com/", tier: 1, whole_source: true }
+  django:
+    - { source_id: django-docs, url: "https://docs.djangoproject.com/en/stable/misc/design-philosophies/", tier: 1, whole_source: true }
+    - { source_id: django-security, url: "https://docs.djangoproject.com/en/stable/topics/security/", tier: 1, whole_source: true }
+  rails:
+    - { source_id: rails-guides, url: "https://guides.rubyonrails.org/", tier: 1, whole_source: true }
+    - { source_id: rails-security, url: "https://guides.rubyonrails.org/security.html", tier: 1, whole_source: true }
+  spring:
+    - { source_id: spring-boot-docs, url: "https://docs.spring.io/spring-boot/reference/", tier: 1, whole_source: true }
+  go:
+    - { source_id: go-effective, url: "https://go.dev/doc/effective_go", tier: 1, whole_source: true }
+    - { source_id: go-codereview, url: "https://go.dev/wiki/CodeReviewComments", tier: 1, whole_source: true }
+  rust:
+    - { source_id: rust-api-guidelines, url: "https://rust-lang.github.io/api-guidelines/", tier: 1, whole_source: true }
+  python:
+    - { source_id: python-pep8, url: "https://peps.python.org/pep-0008/", tier: 1, whole_source: true }

@@ -1,0 +1,13 @@
+{
+  "name": "acquiring a technology's own canonical source whole reaches the operator's minimum rule floor (sufficiency ok)",
+  "command": "ID=P562S01; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Vue --project $ID --cache fc --now 2026-07-05T00:00:00Z 2>e.err; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; grep -qE 'rule_count=(3[0-9]|[4-9][0-9]|[0-9]{3,}) sufficiency=ok' e.err && echo canonical-meets-floor 1>&2",
+  "setup": [
+    "mkdir -p fc && for i in $(seq 1 32); do echo \"Vue guideline $i: prefer keyed lists and composition.\"; done > fc/vuejs-style-guide.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "canonical-meets-floor"
+    ]
+  }
+}

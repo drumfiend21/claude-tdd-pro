@@ -143,22 +143,39 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
                .select { |p| File.directory?(p) }
                .map { |p| File.basename(p) }
                .reject { |n| n.start_with?("_") }
+  # Preload the S-59 tech registry so --stack-add can accept a TECHNOLOGY name (G-3 bridge to S-58), not
+  # only a namespace. tech_by_name maps a technology/alias -> its registry entry.
+  treg_pre = {}; tech_by_name = {}
+  _reg_f = ENV["TECH_REGISTRY"].to_s
+  if !_reg_f.empty? && File.exist?(_reg_f)
+    treg_pre = (YAML.unsafe_load_file(_reg_f) rescue {}) || {}
+    (treg_pre["technologies"] || []).each do |t|
+      next unless t.is_a?(Hash)
+      ([t["technology"]] + (t["aliases"] || [])).compact.each { |nm| tech_by_name[nm.to_s.downcase] = t }
+    end
+  end
+
   # §30.6: each declared namespace is a STACK ENTRY object carrying provenance —
-  # {namespace, source, trigger, added_at}. IDEMPOTENT: a repeated --stack-add of the same namespace
-  # collapses to ONE entry (dedupe by namespace, first-write wins on trigger/added_at).
+  # {namespace, source, trigger, added_at}. IDEMPOTENT (dedupe by namespace). G-3: a --stack-add token that
+  # is a TECHNOLOGY (not a namespace) is bridged to the resolver — it activates that technology family
+  # (like naming it in the vision) instead of being rejected.
   stack_entries = []
   seen_stack_ns = {}
+  stack_techs = []
   ENV["STACK_KV"].to_s.split("\n").each do |raw|
     ns = raw.strip.downcase
     next if ns.empty?
-    unless valid_ns.include?(ns)
+    if valid_ns.include?(ns)
+      next if seen_stack_ns[ns]
+      seen_stack_ns[ns] = true
+      stack_entries << {"namespace"=>ns, "source"=>"stack-add", "trigger"=>"--stack-add #{ns}", "added_at"=>now}
+    elsif tech_by_name[ns]
+      stack_techs << tech_by_name[ns]                        # G-3: --stack-add <technology> -> family activation
+    else
       STDERR.puts "invalid=#{ns} reason=unknown-namespace"
-      STDERR.puts "stack-add: unknown namespace \"#{ns}\" is not in the rule surface (cite-or-decline)"
+      STDERR.puts "stack-add: \"#{ns}\" is neither a rule-surface namespace nor a known technology (cite-or-decline)"
       exit 2
     end
-    next if seen_stack_ns[ns]
-    seen_stack_ns[ns] = true
-    stack_entries << {"namespace"=>ns, "source"=>"stack-add", "trigger"=>"--stack-add #{ns}", "added_at"=>now}
   end
   stack_entries = stack_entries.sort_by { |e| e["namespace"] }
   declared_stack = stack_entries.map { |e| e["namespace"] }   # plain ns list for the scope union
@@ -190,23 +207,22 @@ UNIVERSAL_JSON="$UNIVERSAL_JSON" ANSWERS_JSON="$ANSWERS_JSON" ruby -ryaml -rjson
   # the EXISTING namespaces of its umbrella (+ its own namespace if present). Word-boundary match (§30.3);
   # existing namespaces only. So "Vue" activates the already-scraped frontend rules with no vue namespace.
   family_activated = []; families_active = []
-  reg_f = ENV["TECH_REGISTRY"].to_s
-  if !reg_f.empty? && File.exist?(reg_f)
-    treg = (YAML.unsafe_load_file(reg_f) rescue {}) || {}
-    umb_r = treg["umbrellas"] || {}
-    (treg["technologies"] || []).each do |t|
-      next unless t.is_a?(Hash)
-      names = ([t["technology"]] + (t["aliases"] || [])).compact.map { |s| s.to_s.downcase }.reject(&:empty?)
-      next unless names.any? { |n| hay.match?(Regexp.new("(?<![a-z0-9])" + Regexp.escape(n) + "s?(?![a-z0-9])")) }
-      acts = (t["umbrellas"] || []).flat_map { |u| (umb_r[u] || {})["activates"] || [] }
-      acts += [t["specific_namespace"]] if t["specific_namespace"]
-      namespaces += acts.select { |ns| valid_ns.include?(ns) }
-      family_activated << t["technology"]
-      families_active += (t["umbrellas"] || [])   # the FAMILIES (umbrellas) that fired — GCTP contract field
-    end
-    family_activated = family_activated.uniq.sort
-    families_active = families_active.uniq.sort
+  umb_r = treg_pre["umbrellas"] || {}
+  # Technologies to activate = those NAMED in the haystack + those DECLARED via --stack-add (G-3/G-4).
+  matched_techs = (treg_pre["technologies"] || []).select do |t|
+    next false unless t.is_a?(Hash)
+    names = ([t["technology"]] + (t["aliases"] || [])).compact.map { |s| s.to_s.downcase }.reject(&:empty?)
+    names.any? { |n| hay.match?(Regexp.new("(?<![a-z0-9])" + Regexp.escape(n) + "s?(?![a-z0-9])")) }
   end
+  (matched_techs + stack_techs).uniq.each do |t|
+    acts = (t["umbrellas"] || []).flat_map { |u| (umb_r[u] || {})["activates"] || [] }
+    acts += [t["specific_namespace"]] if t["specific_namespace"]
+    namespaces += acts.select { |ns| valid_ns.include?(ns) }
+    family_activated << t["technology"]
+    families_active += (t["umbrellas"] || [])   # the FAMILIES (umbrellas) that fired — GCTP contract field
+  end
+  family_activated = family_activated.uniq.sort
+  families_active = families_active.uniq.sort
 
   # §31 S-63 consult scoping: --project <id> brings that project'"'"'s WORKING-overlay namespaces
   # (folders under _project/<id>/) into scope and records them for the consumer (project_overlay_namespaces).

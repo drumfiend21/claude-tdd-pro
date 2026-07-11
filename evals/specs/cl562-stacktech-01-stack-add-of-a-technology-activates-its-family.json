@@ -1,0 +1,11 @@
+{
+  "name": "stack-add of a technology name (not a namespace) bridges to the resolver and activates its family",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload \"a platform\" --stack-add vue --classify 2>/dev/null | ruby -rjson -e 'c=JSON.parse(STDIN.read)[\"workload_classification\"]; exit(c[\"family_activated\"]==[\"vue\"] && c[\"namespaces\"].include?(\"web-vitals\") && !c[\"namespaces\"].include?(\"react\") ? 0:1)' && echo stack-tech-activates-family 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "stack-tech-activates-family"
+    ]
+  }
+}

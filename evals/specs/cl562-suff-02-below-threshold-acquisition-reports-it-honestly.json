@@ -1,0 +1,13 @@
+{
+  "name": "an acquisition that falls short of the floor reports sufficiency=below-threshold rather than passing silently",
+  "command": "ID=P562S02; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Vue --project $ID --cache fc --now 2026-07-05T00:00:00Z 2>e.err; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; grep -qE 'sufficiency=below-threshold-30' e.err && echo below-threshold-honest 1>&2",
+  "setup": [
+    "mkdir -p fc && printf 'Sanitize Vue v-html.\\n' > fc/typescript-handbook.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "below-threshold-honest"
+    ]
+  }
+}
