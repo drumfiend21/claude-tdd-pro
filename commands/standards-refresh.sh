@@ -190,13 +190,20 @@ for line in text.splitlines():
         if m2:
             v = m2.group(1).strip().strip('"\'').rstrip()
             cur[field] = v
+    # applies_to: [item, item] list — take first item as namespace hint.
+    m3 = re.match(r"^\s+applies_to:\s*\[(.+)\]", line)
+    if m3:
+        items = [x.strip().strip('"\'') for x in m3.group(1).split(",") if x.strip()]
+        if items: cur["applies_to_first"] = items[0]
 if cur: entries.append(cur)
 for e in entries:
     sid = e.get("id",""); url = e.get("url","") or e.get("document_url","")
     if not sid or not url: continue
+    # Prefer explicit source_namespace; else applies_to[0]; else empty (falls to _universal).
+    src_ns = e.get("source_namespace") or e.get("applies_to_first","")
     print("|".join([
         sid, url, e.get("jurisdiction",""), e.get("source_class",""),
-        e.get("source_namespace",""),
+        src_ns,
         e.get("authoritative_publisher") or e.get("name","unknown"),
         e.get("fetch_frequency","daily"), e.get("fetcher","markdown-headers.sh"),
         e.get("fragility_tier","medium"), e.get("fragility_strategy",""),

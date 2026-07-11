@@ -1,0 +1,11 @@
+{
+  "name": "each emitted rule carries the ADR-0008 4-axis applies_to tag populated by classify-rule.sh Stage 2 (linguist_aliases | iac_dialects | k8s_gvks | purl_uses)",
+  "command": "OUT=/tmp/cl564-r11-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>Prefer const over let in TypeScript</h2><p>All TypeScript variable declarations MUST prefer const unless reassignment is required.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r11-src\n  name: R11\n  source_namespace: typescript\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; python3 -c 'import re; t = open(\"'$OUT'/out/typescript/r11-src.yaml\").read(); m = re.search(r\"applies_to:\\s*\\n\\s*linguist_aliases:\\s*\\n\\s*- typescript\", t); exit(0 if m else 1)' && echo emitted-rules-carry-4-axis-tag 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emitted-rules-carry-4-axis-tag"
+    ]
+  }
+}

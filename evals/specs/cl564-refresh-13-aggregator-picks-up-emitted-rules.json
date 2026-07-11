@@ -1,0 +1,11 @@
+{
+  "name": "rubric/aggregator.sh picks up the orchestrator-emitted YAML and includes the new rules in active.json with source_namespace + origin annotations preserved",
+  "command": "OUT=/tmp/cl564-r13-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>Encrypt data at rest</h2><p>All Terraform resources MUST enable encryption.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r13-src\n  name: R13\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root $OUT/out --format json > $OUT/active.json 2>/dev/null; python3 -c 'import json; d=json.load(open(\"'$OUT'/active.json\")); rs=[r for r in d.get(\"rules\",[]) if \"r13-src\" in r.get(\"id\",\"\")]; exit(0 if rs and rs[0].get(\"source_namespace\")==\"us-government\" and rs[0].get(\"origin\")==\"plugin\" else 1)' && echo aggregator-picks-up-emitted-rules 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "aggregator-picks-up-emitted-rules"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "each emitted rule's enforced_by[] is populated by route-rule.sh Stage 3+4 with the appropriate FOSS tool(s) for its 4-axis kind",
+  "command": "OUT=/tmp/cl564-r12-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>Encrypt S3 buckets at rest in Terraform</h2><p>Every aws_s3_bucket terraform resource MUST configure server_side_encryption_configuration with AES256 or KMS.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r12-src\n  name: R12\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; python3 -c 'import re; t = open(\"'$OUT'/out/us-government/r12-src.yaml\").read(); tools = re.findall(r\"^\\s+- tool:\\s+(\\S+)\", t, re.M); exit(0 if \"checkov\" in tools and \"trivy\" in tools else 1)' && echo emitted-rules-routed-to-foss-tools 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emitted-rules-routed-to-foss-tools"
+    ]
+  }
+}

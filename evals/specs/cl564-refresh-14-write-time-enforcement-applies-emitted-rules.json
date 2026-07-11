@@ -1,0 +1,11 @@
+{
+  "name": "rubric/enforce-file.sh (§29.6 byte-identical write-time engine) applies orchestrator-emitted rules to files matching their linguist_aliases (proves URL→rule→enforcement chain end-to-end)",
+  "command": "OUT=/tmp/cl564-r14-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h2>Prefer const in TypeScript source</h2><p>All TypeScript files SHALL use const for variables not reassigned.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r14-src\n  name: R14\n  source_namespace: typescript\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; echo 'let x = 1;' > $OUT/sample.ts; bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file $OUT/sample.ts --root $OUT/out 2>e.err; grep -qE 'rules_checked=[1-9][0-9]*' e.err && echo write-time-enforcement-applies-emitted-rules 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "write-time-enforcement-applies-emitted-rules"
+    ]
+  }
+}

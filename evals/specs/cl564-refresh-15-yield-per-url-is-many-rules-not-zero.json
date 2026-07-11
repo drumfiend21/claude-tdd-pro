@@ -1,0 +1,11 @@
+{
+  "name": "a realistic HTML source with 30 headings yields at least 30 rules (proves the pre-CL empirical result of 0 rules per URL is fixed)",
+  "command": "OUT=/tmp/cl564-r15-$$; mkdir -p $OUT/out && python3 -c 'print(\"<html><body>\"); [print(f\"<h2>Rule number {i}</h2><p>prose for rule {i}. MUST be applied to typescript files.</p>\") for i in range(1,35)]; print(\"</body></html>\")' > $OUT/s.html; cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r15-src\n  name: R15\n  source_namespace: typescript\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; N=$(grep -c '^- id: g-' $OUT/out/typescript/r15-src.yaml 2>/dev/null || echo 0); [ \"$N\" -ge 30 ] && echo yield-per-url-many-rules 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "yield-per-url-many-rules"
+    ]
+  }
+}
