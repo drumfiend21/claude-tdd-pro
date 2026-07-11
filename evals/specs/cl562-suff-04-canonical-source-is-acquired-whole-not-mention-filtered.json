@@ -1,0 +1,13 @@
+{
+  "name": "a canonical source is acquired whole — every guideline becomes a rule, not only technology-mentioning lines",
+  "command": "ID=P562S04; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Vue --project $ID --cache fc --now 2026-07-05T00:00:00Z >/dev/null 2>&1; K=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --project $ID --format json 2>/dev/null | ruby -rjson -e 'puts JSON.parse(STDIN.read)[\"rules\"].select{|x|x[\"origin\"]==\"project\"}.length'); rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; [ \"$K\" -ge 3 ] && echo whole-source-all-lines 1>&2",
+  "setup": [
+    "mkdir -p fc && printf '%s\\n' 'A guideline with no framework name.' 'Another plain guideline.' 'Keep components small.' > fc/vuejs-style-guide.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "whole-source-all-lines"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "stack-add of a token that is neither a namespace nor a known technology is rejected (cite-or-decline)",
+  "command": "bash \"$CLAUDE_PLUGIN_ROOT/commands/full-surface-intake.sh\" --workload x --stack-add bogusxyz --classify 2>e.err; rc=$?; [ \"$rc\" -eq 2 ] && grep -q 'invalid=bogusxyz' e.err && echo unknown-stack-rejected 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unknown-stack-rejected"
+    ]
+  }
+}

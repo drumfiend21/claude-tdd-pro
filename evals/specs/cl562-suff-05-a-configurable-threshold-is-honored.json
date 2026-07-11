@@ -1,0 +1,13 @@
+{
+  "name": "the sufficiency threshold is configurable via --threshold",
+  "command": "ID=P562S05; bash \"$CLAUDE_PLUGIN_ROOT/commands/acquire-technology-live.sh\" --technology Vue --project $ID --cache fc --threshold 4 --now 2026-07-05T00:00:00Z 2>e.err; rm -rf \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards\"/_project/$ID; grep -qE 'rule_count=5 sufficiency=ok' e.err && echo threshold-configurable 1>&2",
+  "setup": [
+    "mkdir -p fc && for i in $(seq 1 5); do echo \"Vue guideline $i.\"; done > fc/vuejs-style-guide.txt"
+  ],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "threshold-configurable"
+    ]
+  }
+}

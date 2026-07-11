@@ -26,7 +26,7 @@
 
 set -uo pipefail
 
-TECH=""; PROJECT=""; CACHE=""; MAXS="8"; ROOT_OVERRIDE=""; NOW=""; SOURCES=()
+TECH=""; PROJECT=""; CACHE=""; MAXS="8"; ROOT_OVERRIDE=""; NOW=""; SOURCES=(); THRESHOLD="30"; TECH_SRC_REG=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --technology) TECH="${2-}"; shift 2 ;;
@@ -34,6 +34,8 @@ while [ $# -gt 0 ]; do
     --cache)      CACHE="${2-}"; shift 2 ;;
     --sources)    SOURCES+=("${2-}"); shift 2 ;;
     --max-sources) MAXS="${2-}"; shift 2 ;;
+    --threshold)  THRESHOLD="${2-}"; shift 2 ;;   # P-18 sufficiency floor (default 30)
+    --tech-source-registry) TECH_SRC_REG="${2-}"; shift 2 ;;
     --root)       ROOT_OVERRIDE="${2-}"; shift 2 ;;
     --now)        NOW="${2-}"; shift 2 ;;
     -h|--help) echo "Usage: acquire-technology-live.sh --technology <t> --project <id> --cache <dir> [--max-sources N]" >&2; exit 0 ;;
@@ -82,6 +84,32 @@ MATCHED="$(RES="$RES" SRCS="${SOURCES[*]}" MAXS="$MAXS" ruby -ryaml -rjson -e '
 ' 2>/dev/null)"
 
 MATCHED_N=0; FETCHED_N=0; ACQ_TOTAL=0
+
+# P-18 whole-source acquisition of the technology's OWN CANONICAL sources (tech-source-registry). The entire
+# source is tech-specific, so acquire it WHOLE (no --only-mentioning) with no artificial cap — this is the
+# bulk of the ≥threshold rules.
+[ -z "$TECH_SRC_REG" ] && TECH_SRC_REG="$PLUGIN_ROOT/standards/technology-source-registry.yaml"
+CANON="$(TECH="$TECH" REG="$TECH_SRC_REG" ruby -ryaml -e '
+  t=ENV["TECH"].downcase; reg=(YAML.unsafe_load_file(ENV["REG"]) rescue {}) || {}
+  ((reg["technologies"]||{})[t]||[]).each { |s| puts [s["source_id"], (s["url"]||""), (s["tier"]||1)].join("\t") }
+' 2>/dev/null)"
+if [ -n "$CANON" ]; then
+  while IFS=$'\t' read -r sid surl stier; do
+    [ -z "$sid" ] && continue
+    MATCHED_N=$((MATCHED_N+1))
+    content="$CACHE/$sid.txt"
+    [ -f "$content" ] || continue
+    FETCHED_N=$((FETCHED_N+1))
+    A_ARGS=(--technology "$TECH" --project "$PROJECT" --source-file "$content" --source-id "$sid" --source-url "$surl" --tier "$stier" --fetcher html-anchor --max-rules 500 --now "$NOW")   # WHOLE source, no --only-mentioning
+    [ -n "$ROOT_OVERRIDE" ] && A_ARGS+=(--root "$ROOT_OVERRIDE")
+    n="$(bash "$HERE/acquire-technology-rules.sh" "${A_ARGS[@]}" 2>&1 | grep -oE 'acquired=[0-9]+' | grep -oE '[0-9]+' | head -1)"
+    ACQ_TOTAL=$((ACQ_TOTAL + ${n:-0}))
+  done <<EOF
+$CANON
+EOF
+fi
+
+# Umbrella-general sources: searched with --only-mentioning (only tech-mentioning guidance becomes a rule).
 if [ -n "$MATCHED" ]; then
   while IFS=$'\t' read -r sid surl stier; do
     [ -z "$sid" ] && continue
@@ -89,7 +117,7 @@ if [ -n "$MATCHED" ]; then
     content="$CACHE/$sid.txt"
     [ -f "$content" ] || continue
     FETCHED_N=$((FETCHED_N+1))
-    A_ARGS=(--technology "$TECH" --project "$PROJECT" --source-file "$content" --source-id "$sid" --source-url "$surl" --tier "$stier" --fetcher html-anchor --only-mentioning --now "$NOW")
+    A_ARGS=(--technology "$TECH" --project "$PROJECT" --source-file "$content" --source-id "$sid" --source-url "$surl" --tier "$stier" --fetcher html-anchor --only-mentioning --max-rules 500 --now "$NOW")
     [ -n "$ROOT_OVERRIDE" ] && A_ARGS+=(--root "$ROOT_OVERRIDE")
     n="$(bash "$HERE/acquire-technology-rules.sh" "${A_ARGS[@]}" 2>&1 | grep -oE 'acquired=[0-9]+' | grep -oE '[0-9]+' | head -1)"
     ACQ_TOTAL=$((ACQ_TOTAL + ${n:-0}))
@@ -98,5 +126,7 @@ $MATCHED
 EOF
 fi
 
-echo "sources_matched=$MATCHED_N sources_fetched=$FETCHED_N acquired_total=$ACQ_TOTAL technology=$TECH project=$PROJECT" >&2
+# P-18 sufficiency signal: rule_count + whether it meets the operator's ≥threshold floor.
+if [ "$ACQ_TOTAL" -ge "$THRESHOLD" ]; then SUFF="ok"; else SUFF="below-threshold-$THRESHOLD"; fi
+echo "sources_matched=$MATCHED_N sources_fetched=$FETCHED_N acquired_total=$ACQ_TOTAL rule_count=$ACQ_TOTAL sufficiency=$SUFF technology=$TECH project=$PROJECT" >&2
 exit 0
