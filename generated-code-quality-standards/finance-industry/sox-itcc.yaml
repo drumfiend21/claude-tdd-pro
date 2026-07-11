@@ -1,0 +1,122 @@
+---
+source:
+  id: sox-itcc
+  authoritative_publisher: Public Company Accounting Oversight Board (PCAOB)
+  authoritative_url: https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201
+  registry_link: .claude-tdd-pro/COMPLIANCE-URLS.yaml
+  fetched_at: '2026-07-11T00:00:00Z'
+  content_hash: sha256:sox-itcc-as2201-baseline-content-hash
+  fetch_frequency: quarterly
+  fragility_tier: low
+  license_note: Reference/educational use — © PCAOB (AS 2201)
+rules:
+- id: g-finance-sox-change-management
+  name: sox-itcc-change-management
+  description: SOX ITGC change management (PCAOB AS 2201) requires that all changes
+    to financially-material systems be authorized, tested, and approved before deployment.
+    Architecture MUST document (a) the change-request process, (b) test evidence retention,
+    (c) approval sign-off + segregation from the developer, (d) the emergency-change
+    exception path + retroactive approval.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: sox-itcc
+    section: change-management
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-finance-sox-segregation-of-duties
+  name: sox-itcc-segregation-of-duties
+  description: SOX ITGC requires segregation of duties for financially-material systems
+    (PCAOB AS 2201). Architecture MUST document (a) the roles that CANNOT be held
+    by the same person (e.g. developer cannot also approve production release; whoever
+    provisions cannot also audit), (b) the compensating controls where segregation
+    is impractical, (c) the review cadence of role assignments.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: sox-itcc
+    section: segregation-of-duties
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-finance-sox-access-review
+  name: sox-itcc-access-review
+  description: SOX ITGC requires periodic access review of privileged accounts on
+    financially-material systems (PCAOB AS 2201). Architecture MUST document (a) the
+    access-review cadence (quarterly minimum for privileged access), (b) the reviewer
+    role (business owner, not IT admin), (c) evidence retention of the review outcome,
+    (d) the revocation SLA post-review.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: sox-itcc
+    section: access-review
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+recommended_set:
+- g-finance-sox-change-management
+- g-finance-sox-segregation-of-duties
+- g-finance-sox-access-review
+all_set:
+- g-finance-sox-change-management
+- g-finance-sox-segregation-of-duties
+- g-finance-sox-access-review

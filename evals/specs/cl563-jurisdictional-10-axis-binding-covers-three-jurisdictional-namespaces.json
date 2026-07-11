@@ -1,0 +1,11 @@
+{
+  "name": "the namespace-axis-binding.yaml file declares markdown linguist alias entries for the three jurisdictional-namespace additions from C-25",
+  "command": "grep -q '^  european-union: .*markdown' \"$CLAUDE_PLUGIN_ROOT/standards/namespace-axis-binding.yaml\" && grep -q '^  finance-industry: .*markdown' \"$CLAUDE_PLUGIN_ROOT/standards/namespace-axis-binding.yaml\" && grep -q '^  industry-self-regulatory: .*markdown' \"$CLAUDE_PLUGIN_ROOT/standards/namespace-axis-binding.yaml\" && echo axis-binding-jurisdictional-complete 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "axis-binding-jurisdictional-complete"
+    ]
+  }
+}

@@ -55,6 +55,10 @@ namespaces:
   md:                  { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [markdownlint] }
   arch:                { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [markdownlint] }
   documentation:       { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [markdownlint] }
+  # --- Jurisdictional compliance rules (v1.25 §32 — C-24/C-25; prose-enforced) ---
+  european-union:      { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [semgrep] }
+  finance-industry:    { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [semgrep] }
+  industry-self-regulatory: { linguist_aliases: [markdown], iac_dialects: [], foss_tools: [semgrep] }
   # --- TypeScript / JavaScript / React ---
   typescript:          { linguist_aliases: [typescript], iac_dialects: [], foss_tools: [eslint, semgrep] }
   google:              { linguist_aliases: [typescript, javascript], iac_dialects: [], foss_tools: [eslint, semgrep] }

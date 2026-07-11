@@ -1,0 +1,122 @@
+---
+source:
+  id: eu-ai-act-edpb-guidance
+  authoritative_publisher: European Data Protection Board
+  authoritative_url: https://edpb.europa.eu/our-work-tools/our-documents_en
+  registry_link: .claude-tdd-pro/COMPLIANCE-URLS.yaml
+  fetched_at: '2026-07-11T00:00:00Z'
+  content_hash: sha256:edpb-guidance-baseline-content-hash
+  fetch_frequency: quarterly
+  fragility_tier: low
+  license_note: Reference/educational use — © European Data Protection Board
+rules:
+- id: g-eu-edpb-transfer-guidance
+  name: edpb-transfer-guidance
+  description: The EDPB guidance on international transfers (Recommendations 01/2020)
+    requires a documented six-step methodology for any cross-border transfer of personal
+    data (know your transfer, verify transfer tool, assess third-country law, adopt
+    supplementary measures, take formal steps, re-evaluate). Architecture MUST document
+    the six-step methodology outcome per transfer flow.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://edpb.europa.eu/our-work-tools/our-documents_en
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act-edpb-guidance
+    section: recommendations-01-2020
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-edpb-consent-guidance
+  name: edpb-consent-guidance
+  description: The EDPB guidance on consent (Guidelines 05/2020) requires that consent
+    be freely given, specific, informed, and unambiguous, and that withdrawal be as
+    easy as giving consent. Architecture MUST document the consent-capture mechanism,
+    the withdrawal path, and the consent-record retention.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://edpb.europa.eu/our-work-tools/our-documents_en
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act-edpb-guidance
+    section: guidelines-05-2020
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-edpb-data-protection-by-design
+  name: edpb-data-protection-by-design
+  description: The EDPB guidance on data protection by design and by default (Guidelines
+    04/2019) requires embedding data-protection principles into the design of processing
+    activities. Architecture MUST document the seven foundational principles applied
+    (proactive not reactive, privacy as the default setting, privacy embedded into
+    design, full functionality, end-to-end security, visibility and transparency,
+    respect for user privacy).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://edpb.europa.eu/our-work-tools/our-documents_en
+  requires_type_checking: false
+  recommended: true
+  severity: P1
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act-edpb-guidance
+    section: guidelines-04-2019
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+recommended_set:
+- g-eu-edpb-transfer-guidance
+- g-eu-edpb-consent-guidance
+- g-eu-edpb-data-protection-by-design
+all_set:
+- g-eu-edpb-transfer-guidance
+- g-eu-edpb-consent-guidance
+- g-eu-edpb-data-protection-by-design

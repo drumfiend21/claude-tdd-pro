@@ -1,0 +1,157 @@
+---
+source:
+  id: eu-ai-act
+  authoritative_publisher: European Union
+  authoritative_url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+  registry_link: .claude-tdd-pro/COMPLIANCE-URLS.yaml
+  fetched_at: '2026-07-11T00:00:00Z'
+  content_hash: sha256:eu-ai-act-regulation-2024-1689-baseline-content-hash
+  fetch_frequency: quarterly
+  fragility_tier: low
+  license_note: Reference/educational use — © European Union (Regulation 2024/1689)
+rules:
+- id: g-eu-ai-act-transparency
+  name: eu-ai-act-transparency
+  description: Providers of high-risk AI systems MUST ensure the system is transparent
+    enough for users to interpret and use the output appropriately (EU AI Act Article
+    13 transparency). Architecture MUST document (a) the system's intended purpose,
+    (b) capabilities and limitations, (c) known biases, (d) instructions for use,
+    and (e) human-oversight measures.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act
+    section: article-13
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-ai-act-human-oversight
+  name: eu-ai-act-human-oversight
+  description: High-risk AI systems MUST be designed to allow effective oversight
+    by natural persons during the period of use (EU AI Act Article 14 human oversight).
+    Architecture MUST document the human-in-the-loop or human-on-the-loop measures,
+    when human intervention is required, and the training the operator receives.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act
+    section: article-14
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-ai-act-technical-documentation
+  name: eu-ai-act-technical-documentation
+  description: Providers MUST draw up technical documentation before placing a high-risk
+    AI system on the market (EU AI Act Article 11 technical documentation). Documentation
+    MUST include (a) general description of the system, (b) detailed description of
+    elements and development process, (c) monitoring/functioning/control, (d) performance
+    metrics, (e) risk management, (f) post-market monitoring plan.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act
+    section: article-11
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-ai-act-record-keeping
+  name: eu-ai-act-record-keeping
+  description: High-risk AI systems MUST technically allow for the automatic recording
+    of events (logs) over the duration of the lifetime of the system (EU AI Act Article
+    12 record-keeping). Logs MUST enable tracing of the system's functioning appropriate
+    to the intended purpose. Architecture MUST document the logging strategy, retention
+    period, and audit-log integrity approach.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: eu-ai-act
+    section: article-12
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+recommended_set:
+- g-eu-ai-act-transparency
+- g-eu-ai-act-human-oversight
+- g-eu-ai-act-technical-documentation
+- g-eu-ai-act-record-keeping
+all_set:
+- g-eu-ai-act-transparency
+- g-eu-ai-act-human-oversight
+- g-eu-ai-act-technical-documentation
+- g-eu-ai-act-record-keeping

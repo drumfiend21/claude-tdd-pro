@@ -1,0 +1,11 @@
+{
+  "name": "industry-self-regulatory namespace ships pre-authored rule YAMLs for SLSA + SOC 2 TSC frameworks",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/industry-self-regulatory/slsa.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/industry-self-regulatory/soc2.yaml\" && echo industry-self-regulatory-populated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "industry-self-regulatory-populated"
+    ]
+  }
+}

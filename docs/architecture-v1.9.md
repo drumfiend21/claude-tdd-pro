@@ -2572,3 +2572,23 @@ Detail: [docs/design/v1.20-full-surface-grounding-consult.md](design/v1.20-full-
 - **§25 fidelity vocabulary additions:** `acquisition-sufficiency`, `canonical-source`, `whole-source`, `sufficiency-signal`, `rule-count`, `below-threshold`, `stack-add-tech-bridge`.
 
 9 specs (`cl562-suff-01..05`, `cl562-stacktech-01..04`): canonical-meets-floor / below-threshold-honest / rule-count-signal / whole-source-all-lines / threshold-configurable / stack-tech-activates-family / stack-tech-families-active / namespace-stays-stack / unknown-stack-rejected. **§20 note:** completes the §31 capability side of P-18; GCTP owns the sufficiency-gate audit. Suite 5022→5031.
+
+## §32. Jurisdictional-namespace compliance rule authorship (v1.25 DESIGN amendment — GCTP P-21)
+
+**BUILT 2026-07-11.** Closes the two-gap seam surfaced by GCTP kata attempt KA-5 (P-21): the `.claude-tdd-pro/COMPLIANCE-URLS.yaml` registry (C-13) declares 24 authoritative compliance frameworks, the fetcher slots exist (as stubs), the target directories `generated-code-quality-standards/{european-union,finance-industry,industry-self-regulatory}/` exist per G-9.1 sync, and §5 line 432 mandates the mapping — but the directories were empty, so `active.json` carried **0 rules** for the jurisdictional namespaces even when the classifier activated them for `regulated` workloads. This amendment authorizes the plugin to SHIP pre-authored rule YAMLs under `generated-code-quality-standards/<jurisdiction-namespace>/` for the frameworks declared in the C-13 registry, cited to the registry's authoritative URLs, enforced via the same `cloud-guidance-rule.sh` prose-detector pattern already used by `us-government/us-government-iac-enforcement.yaml`. Detail: [docs/design/v1.25-jurisdictional-compliance-rule-authorship.md](design/v1.25-jurisdictional-compliance-rule-authorship.md).
+
+- **C-24** Jurisdictional pre-authored rule pattern — rule YAMLs at `generated-code-quality-standards/<jurisdiction-namespace>/<framework-id>.yaml` where `<jurisdiction-namespace>` matches the C-13 `jurisdiction:` field (`european-union`, `us-government`, `industry-self-regulatory` for `international`) and `<framework-id>` matches an entry's `id:` field; each rule carries `provenance.section` (article/clause) and `docs_url` matching the C-13 registry's `url:`.
+- **C-25** Namespace-axis-binding entries for the three jurisdictional namespaces (`european-union`, `finance-industry`, `industry-self-regulatory`) added at `standards/namespace-axis-binding.yaml` — all three bind `linguist_aliases: [markdown]` with `foss_tools: [semgrep]` polyglot fallback (rules enforce prose declarations in ADRs / architecture docs).
+
+Ships in v1.25: 9 rule YAML files delivering 28 rules — 15 EU (GDPR ×5, EU AI Act ×4, DORA ×3, EDPB Guidance ×3), 8 finance-industry (PCI-DSS v4 ×3, SOX ITCC ×3, HIPAA Security Rule ×2), 5 industry-self-regulatory (SLSA v1.0 ×3, SOC 2 TSC ×2).
+
+- **§25 fidelity vocabulary additions:** `jurisdictional-namespace`, `pre-authored`, `framework-id`, `provenance.section`, `jurisdiction-namespace-map`, `union`, `industry`, `regulatory`, `european`, `finance`, `self` (hyphen-tokenized components of the three shipped namespace names).
+
+- **Anti-drift folder map (v1.25):**
+  - `generated-code-quality-standards/european-union/{gdpr,eu-ai-act,dora,edpb-guidance}.yaml`
+  - `generated-code-quality-standards/finance-industry/{pci-dss,sox-itcc,hipaa-security-rule}.yaml`
+  - `generated-code-quality-standards/industry-self-regulatory/{slsa,soc2}.yaml`
+
+**§20 note:** stand-alone in v1.25. Composes with future CLs authorizing more frameworks (one CL per framework family). Composes forward with a future C-14/C-15 pipeline (fetched text confirms or supersedes pre-authored rules; §25 fidelity gate catches drift). No new §2.X contract; extends the existing C-1 / C-13 / C-14 registry-and-sync surface without altering any prior contract.
+
+10 pending specs (`cl563-jurisdictional-01..10`): european-union-namespace-populated / gdpr-rules-cite-eur-lex / eu-ai-act-rules-cite-eur-lex / dora-rules-cite-eur-lex / finance-industry-namespace-populated / pci-dss-rules-cite-pci / sox-itcc-rules-cite-pcaobus / industry-self-regulatory-namespace-populated / slsa-rules-cite-slsa-dev / axis-binding-covers-three-jurisdictional-namespaces. Suite 5031 → 5041.

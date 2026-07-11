@@ -1,0 +1,193 @@
+---
+source:
+  id: gdpr
+  authoritative_publisher: European Union
+  authoritative_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  registry_link: .claude-tdd-pro/COMPLIANCE-URLS.yaml
+  fetched_at: '2026-07-11T00:00:00Z'
+  content_hash: sha256:gdpr-regulation-2016-679-baseline-content-hash
+  fetch_frequency: quarterly
+  fragility_tier: low
+  license_note: Reference/educational use — © European Union (Regulation 2016/679)
+rules:
+- id: g-eu-gdpr-data-minimization
+  name: gdpr-data-minimization
+  description: Personal-data processing MUST be adequate, relevant, and limited to
+    what is necessary for the purpose (GDPR Article 5(1)(c) data minimization principle).
+    Architecture MUST document the specific personal-data fields collected + the purpose
+    for each field; storing fields "just in case" is a violation.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gdpr
+    section: article-5-1-c
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-gdpr-purpose-limitation
+  name: gdpr-purpose-limitation
+  description: Personal data MUST be collected for specified, explicit, and legitimate
+    purposes and not further processed in a manner incompatible with those purposes
+    (GDPR Article 5(1)(b) purpose limitation). Architecture MUST name the specific
+    purpose for each processing activity; reuse for a new purpose requires a fresh
+    legal basis + operator consent.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gdpr
+    section: article-5-1-b
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-gdpr-security-of-processing
+  name: gdpr-security-of-processing
+  description: Controllers and processors MUST implement appropriate technical and
+    organizational measures to ensure a level of security appropriate to the risk
+    (GDPR Article 32). Includes pseudonymization/encryption, ongoing confidentiality
+    /integrity/availability/resilience of systems, backup + restoration, and regular
+    testing. Architecture MUST document the encryption approach (at-rest + in-transit)
+    and backup/restore procedures.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gdpr
+    section: article-32
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-gdpr-accountability
+  name: gdpr-accountability
+  description: Controllers MUST be able to demonstrate compliance with the data-protection
+    principles (GDPR Article 5(2) accountability). Architecture MUST document (a) the
+    controller/processor identity for each data flow, (b) the legal basis for each
+    processing activity, (c) records-of-processing per Article 30, and (d) the DPIA
+    (Data Protection Impact Assessment) reference for high-risk processing.
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gdpr
+    section: article-5-2
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+- id: g-eu-gdpr-cross-border-transfer
+  name: gdpr-cross-border-transfer
+  description: Transfers of personal data to third countries require an adequacy decision,
+    appropriate safeguards, or derogations (GDPR Chapter V, Articles 44-50). Architecture
+    MUST name the mechanism used for any cross-border transfer (adequacy decision,
+    Standard Contractual Clauses, Binding Corporate Rules, Article 49 derogation).
+  detector: cloud-guidance-rule.sh
+  type: problem
+  fixable:
+  has_suggestions: false
+  deprecated: false
+  replaced_by: []
+  docs_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  requires_type_checking: false
+  recommended: true
+  severity: P0
+  version: 1.0.0
+  semver: 1.0.0
+  rule_state: stable
+  provenance:
+  - source: gdpr
+    section: chapter-v
+  applies_to_prose: true
+  applies_to_prose_kinds:
+  - architecture
+  - adr
+  applies_to:
+    linguist_aliases:
+    - markdown
+  enforced_by:
+  - tool: cloud-guidance-rule.sh
+    required: true
+  introduced_in: baseline
+recommended_set:
+- g-eu-gdpr-data-minimization
+- g-eu-gdpr-purpose-limitation
+- g-eu-gdpr-security-of-processing
+- g-eu-gdpr-accountability
+- g-eu-gdpr-cross-border-transfer
+all_set:
+- g-eu-gdpr-data-minimization
+- g-eu-gdpr-purpose-limitation
+- g-eu-gdpr-security-of-processing
+- g-eu-gdpr-accountability
+- g-eu-gdpr-cross-border-transfer

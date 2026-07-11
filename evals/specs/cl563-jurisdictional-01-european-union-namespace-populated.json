@@ -1,0 +1,11 @@
+{
+  "name": "european-union namespace ships pre-authored rule YAMLs for GDPR + EU AI Act + DORA + EDPB Guidance frameworks",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/european-union/gdpr.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/european-union/eu-ai-act.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/european-union/dora.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/european-union/edpb-guidance.yaml\" && echo eu-namespace-populated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "eu-namespace-populated"
+    ]
+  }
+}

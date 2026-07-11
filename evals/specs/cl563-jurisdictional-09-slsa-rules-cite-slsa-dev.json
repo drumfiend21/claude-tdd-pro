@@ -1,0 +1,11 @@
+{
+  "name": "every SLSA rule in the pre-authored industry-self-regulatory namespace cites the authoritative slsa.dev URL from the C-13 registry",
+  "command": "grep -c 'docs_url: https://slsa.dev/' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/industry-self-regulatory/slsa.yaml\" | awk '$1 >= 3 { exit 0 } { exit 1 }' && echo slsa-cites-slsa-dev 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "slsa-cites-slsa-dev"
+    ]
+  }
+}

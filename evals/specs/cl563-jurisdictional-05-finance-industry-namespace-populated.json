@@ -1,0 +1,11 @@
+{
+  "name": "finance-industry namespace ships pre-authored rule YAMLs for PCI-DSS + SOX ITCC + HIPAA Security Rule frameworks",
+  "command": "test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/finance-industry/pci-dss.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/finance-industry/sox-itcc.yaml\" && test -f \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/finance-industry/hipaa-security-rule.yaml\" && echo finance-namespace-populated 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "finance-namespace-populated"
+    ]
+  }
+}

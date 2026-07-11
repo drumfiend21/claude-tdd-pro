@@ -1,0 +1,11 @@
+{
+  "name": "every EU AI Act rule in the pre-authored european-union namespace cites the authoritative eur-lex URL from the C-13 registry",
+  "command": "grep -c 'docs_url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj' \"$CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/european-union/eu-ai-act.yaml\" | awk '$1 >= 4 { exit 0 } { exit 1 }' && echo eu-ai-act-cites-eur-lex 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "eu-ai-act-cites-eur-lex"
+    ]
+  }
+}
