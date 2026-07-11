@@ -1,0 +1,11 @@
+{
+  "name": "registry-mode skips a source whose last-fetch marker is inside the fetch_frequency window (freshness-skip)",
+  "command": "OUT=/tmp/cl564-o09-$$; mkdir -p $OUT && cat > $OUT/src.md <<'MD'\n# Framework\n\n## Rule x\nprose.\nMD\ncat > $OUT/COMPLIANCE-URLS.yaml <<YAML\nsources:\n- id: fresh-src\n  name: F\n  jurisdiction: us-government\n  url: $OUT/src.md\n  authoritative_publisher: Pub\n  fetch_frequency: weekly\nYAML\ncd $OUT && mkdir -p .claude-tdd-pro/compliance-last-fetch && echo '2026-07-10T00:00:00Z' > .claude-tdd-pro/compliance-last-fetch/fresh-src.txt && CLAUDE_PLUGIN_ROOT=\"$CLAUDE_PLUGIN_ROOT\" bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/COMPLIANCE-URLS.yaml --now 2026-07-11T00:00:00Z 2>e.err; grep -q 'SKIP sid=fresh-src' e.err && grep -q 'total=1 processed=0 skipped=1' e.err && echo registry-mode-freshness-skip 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "registry-mode-freshness-skip"
+    ]
+  }
+}

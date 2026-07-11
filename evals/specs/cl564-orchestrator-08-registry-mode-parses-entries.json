@@ -1,0 +1,11 @@
+{
+  "name": "registry-mode parses every entry in a *-URLS.yaml file and drives the per-URL pipeline once for each",
+  "command": "OUT=/tmp/cl564-o08-$$; mkdir -p $OUT && cat > $OUT/src.md <<'MD'\n# Framework\n\n## Rule x\nprose.\nMD\ncat > $OUT/COMPLIANCE-URLS.yaml <<YAML\nsources:\n- id: entry-alpha\n  name: A\n  jurisdiction: us-government\n  url: $OUT/src.md\n  authoritative_publisher: PubA\n  fetch_frequency: daily\n- id: entry-beta\n  name: B\n  jurisdiction: european-union\n  url: $OUT/src.md\n  authoritative_publisher: PubB\n  fetch_frequency: daily\nYAML\ncd $OUT && CLAUDE_PLUGIN_ROOT=\"$CLAUDE_PLUGIN_ROOT\" bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/COMPLIANCE-URLS.yaml --now 2026-07-11T00:00:00Z 2>e.err; grep -q 'total=2 processed=2' e.err && echo registry-mode-parses-entries 1>&2; rm -rf $OUT $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/us-government/entry-alpha.yaml $CLAUDE_PLUGIN_ROOT/generated-code-quality-standards/european-union/entry-beta.yaml",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "registry-mode-parses-entries"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "merge-mode marks a rule absent from a fresh fetch as deprecated with deprecated_at + removed-upstream reason",
+  "command": "OUT=/tmp/cl564-o07-$$; mkdir -p $OUT && cat > $OUT/v1.md <<'MD'\n# Framework\n\n## Encrypt at rest\nAll data must be encrypted.\n\n## Audit logging\nLogs required.\nMD\ncat > $OUT/v2.md <<'MD'\n# Framework\n\n## Encrypt at rest\nAll data must be encrypted.\nMD\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --url $OUT/v1.md --target-namespace us-government --framework-id o07 --source-id o07src --authoritative-publisher X --out-dir $OUT/out 2>/dev/null; bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --url $OUT/v2.md --target-namespace us-government --framework-id o07 --source-id o07src --authoritative-publisher X --out-dir $OUT/out 2>e.err; grep -q 'deprecated=1' e.err && grep -q 'deprecated_reason: removed-upstream' $OUT/out/us-government/o07.yaml && echo merge-marks-removed-deprecated 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "merge-marks-removed-deprecated"
+    ]
+  }
+}
