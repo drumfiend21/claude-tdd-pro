@@ -1,0 +1,11 @@
+{
+  "name": "audit time detection over an app tree exercises every scraped rule against every applicable file natively with none left unenforced",
+  "command": "OUT=/tmp/cl564-r48-$$; mkdir -p $OUT/out $OUT/app && printf '<html><body><h2>Prefer const in TypeScript source</h2><p>All TypeScript files SHALL use const for variables not reassigned.</p><h2>Never call eval in TypeScript</h2><p>TypeScript code MUST never invoke eval on any input.</p></body></html>' > $OUT/s.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r48-src\n  name: R48\n  source_namespace: typescript\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>/dev/null; printf 'let a = 1;\\n' > $OUT/app/one.ts; printf 'const b = 2;\\n' > $OUT/app/two.ts; PASS=1; for f in $OUT/app/one.ts $OUT/app/two.ts; do bash \"$CLAUDE_PLUGIN_ROOT/rubric/enforce-file.sh\" --file $f --root $OUT/out 2>>audit.err || PASS=0; done; [ $PASS -eq 1 ] && [ \"$(grep -c 'rules_checked=2' audit.err | tr -d ' ')\" = \"2\" ] && ! grep -qE 'not_enforced=[1-9]' audit.err && echo audit-detection-covers-every-scraped-rule 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-detection-covers-every-scraped-rule"
+    ]
+  }
+}

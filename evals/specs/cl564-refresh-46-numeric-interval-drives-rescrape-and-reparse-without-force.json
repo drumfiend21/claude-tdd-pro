@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh re-scrapes and re-parses a source purely on its numeric fetch interval picking up upstream changes with grandfathered epochs and no force flag",
+  "command": "OUT=/tmp/cl564-r46-$$; mkdir -p $OUT/out && printf '<html><body><h2>Encrypt data at rest</h2><p>All data MUST be encrypted at rest.</p></body></html>' > $OUT/s.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r46-src\n  name: R46\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: 30m\n  fetcher: html-anchor.sh\n  fragility_tier: high\n  fragility_strategy: silent-replace\nYAML\ncd $OUT && T=$OUT/out/us-government/r46-src.yaml && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e1.err && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --now 2026-07-11T00:10:00Z --out-dir $OUT/out 2>e2.err; printf '<html><body><h2>Encrypt data at rest</h2><p>All data MUST be encrypted at rest.</p><h2>Rotate credentials quarterly</h2><p>All credentials MUST rotate on a fixed schedule.</p></body></html>' > $OUT/s.html && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --now 2026-07-11T00:31:00Z --out-dir $OUT/out 2>e3.err; grep -q 'WROTE sid=r46-src' e1.err && grep -q 'SKIP sid=r46-src (not due; freq=30m)' e2.err && grep -q 'WROTE sid=r46-src' e3.err && grep -q 'rotate-credentials-quarterly' $T && grep -A12 'encrypt-data-at-rest' $T | grep -q \"introduced_in: '2026-07-11T00:00:00Z'\" && grep -A12 'rotate-credentials-quarterly' $T | grep -q \"introduced_in: '2026-07-11T00:31:00Z'\" && echo interval-driven-rescrape-reparses 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "interval-driven-rescrape-reparses"
+    ]
+  }
+}

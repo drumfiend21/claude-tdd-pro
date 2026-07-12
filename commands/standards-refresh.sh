@@ -131,7 +131,15 @@ freq_to_seconds() {
     on-demand) echo 315360000 ;;
     "")        echo 86400 ;;
     *)
-      local n="${freq%[mhdwo]*}" unit="${freq#$n}"
+      # Two stacked defects here originally, both caught by the
+      # interval-driven-rescrape spec: (1) a single % matches the empty suffix,
+      # so %% (longest match) is required to strip the unit; (2) $n inside a
+      # combined `local n=... unit=${freq#$n}` expands BEFORE n is assigned,
+      # so the assignments must be separate statements. Net effect was every
+      # numeric interval (30m/6h/1d/2w/1mo) silently fell back to daily.
+      local n unit
+      n="${freq%%[mhdwo]*}"
+      unit="${freq#$n}"
       case "$unit" in
         m)  echo $((n * 60)) ;;
         h)  echo $((n * 3600)) ;;

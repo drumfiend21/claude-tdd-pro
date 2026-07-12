@@ -1,0 +1,11 @@
+{
+  "name": "every rule emitted by standards-refresh.sh aligns with an enforcement surface as a third-party tool a semantic native fallback or an explicit operator sign-off flag",
+  "command": "OUT=/tmp/cl564-r47-$$; mkdir -p $OUT/out && printf '<html><body><h2>Encrypt S3 buckets at rest in Terraform</h2><p>Every aws_s3_bucket terraform resource MUST configure server_side_encryption_configuration with AES256 or KMS.</p><h2>Retain operational records</h2><p>Records must be retained for the mandated period.</p><h2>Module style preference</h2><p>You should prefer readable style in modules.</p></body></html>' > $OUT/s.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r47-src\n  name: R47\n  jurisdiction: us-government\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/us-government/r47-src.yaml; python3 -c \"\nimport re, sys\nt = open('$T').read()\nblocks = re.findall(r'^- id:.*?(?=^- id:|^recommended_set:)', t, re.M | re.S)\nassert len(blocks) == 3, 'expected 3 rules'\nfor b in blocks:\n    tooled = re.search(r'^  - tool: (?!prose-judge)', b, re.M)\n    native = '- tool: prose-judge.sh' in b or '- bundle: architectural-content' in b\n    signoff = 'needs_operator_signoff: true' in b\n    assert tooled or native or signoff, 'unaligned rule: ' + b[:60]\ns3 = [b for b in blocks if 'encrypt-s3-buckets' in b][0]\nassert re.search(r'^  - tool: (checkov|trivy)', s3, re.M), 's3 rule must route to a third-party tool'\nadvisory = [b for b in blocks if 'module-style-preference' in b][0]\nassert 'needs_operator_signoff: true' in advisory, 'advisory rule must be flagged for sign-off'\nretain = [b for b in blocks if 'retain-operational-records' in b][0]\nassert '- tool: prose-judge.sh' in retain, 'untooled rule must bind the semantic native fallback'\nprint('ok')\n\" && echo every-rule-enforcement-aligned 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-rule-enforcement-aligned"
+    ]
+  }
+}

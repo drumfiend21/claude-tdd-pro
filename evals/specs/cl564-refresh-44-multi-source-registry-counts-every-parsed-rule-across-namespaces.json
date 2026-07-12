@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh walks a multi-source registry and every rule parsed from every URL is counted per source and lands in its namespace file",
+  "command": "OUT=/tmp/cl564-r44-$$; mkdir -p $OUT/out && printf '<html><body><h2>Prefer const in TypeScript source</h2><p>All TypeScript files SHALL use const for variables not reassigned.</p><h2>Never call eval in TypeScript</h2><p>TypeScript code MUST never invoke eval on any input.</p></body></html>' > $OUT/a.html && printf '<html><body><h2>Encrypt data at rest</h2><p>All Terraform resources MUST enable encryption.</p><h2>Log administrative access</h2><p>Systems MUST log every administrative operation.</p></body></html>' > $OUT/b.html && printf '<html><body><h2>Close file descriptors deterministically</h2><p>Programs must close every descriptor they open.</p><h2>Set request timeouts explicitly</h2><p>Servers must configure explicit socket timeouts.</p></body></html>' > $OUT/c.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r44-ts\n  name: A\n  source_namespace: typescript\n  url: file://$OUT/a.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n- id: r44-gov\n  name: B\n  jurisdiction: us-government\n  url: file://$OUT/b.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n- id: r44-node\n  name: C\n  source_namespace: node\n  url: file://$OUT/c.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; grep -q 'total=3 processed=3 skipped=0 failed=0' e.err && [ \"$(grep -c 'rule_count=2' e.err | tr -d ' ')\" = \"3\" ] && N=$(cat $OUT/out/typescript/r44-ts.yaml $OUT/out/us-government/r44-gov.yaml $OUT/out/node/r44-node.yaml | grep -c '^- id:'); [ \"$N\" = \"6\" ] && echo every-parsed-rule-counted-and-filed 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "every-parsed-rule-counted-and-filed"
+    ]
+  }
+}

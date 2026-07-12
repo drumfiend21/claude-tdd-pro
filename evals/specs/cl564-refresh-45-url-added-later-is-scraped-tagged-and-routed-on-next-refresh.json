@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh picks up a URL added to the registry after earlier refreshes and runs the full scrape tag route chain on it while fresh entries skip",
+  "command": "OUT=/tmp/cl564-r45-$$; mkdir -p $OUT/out && printf '<html><body><h2>Encrypt data at rest</h2><p>All Terraform resources MUST enable encryption.</p></body></html>' > $OUT/a.html && printf '<html><body><h2>Prefer const in TypeScript source</h2><p>All TypeScript files SHALL use const for variables not reassigned.</p></body></html>' > $OUT/b.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r45-old\n  name: OLD\n  jurisdiction: us-government\n  url: file://$OUT/a.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e1.err && cat >> $OUT/reg.yaml <<YAML\n- id: r45-new\n  name: NEW\n  source_namespace: typescript\n  url: file://$OUT/b.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\nbash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --now 2026-07-11T01:00:00Z --out-dir $OUT/out 2>e2.err; T=$OUT/out/typescript/r45-new.yaml; grep -q 'WROTE sid=r45-old' e1.err && grep -q 'SKIP sid=r45-old (not due' e2.err && grep -q 'WROTE sid=r45-new' e2.err && grep -q 'linguist_aliases' $T && grep -q 'enforced_by:' $T && grep -q 'no_clause_dropped: true' $T && echo later-added-url-flows-full-chain 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "later-added-url-flows-full-chain"
+    ]
+  }
+}
