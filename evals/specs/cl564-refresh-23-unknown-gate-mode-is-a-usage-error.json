@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh rejects an unknown --gate mode with a usage error naming the supported review-queue mode",
+  "command": "OUT=/tmp/cl564-r23-$$; mkdir -p $OUT && printf 'sources: []\\n' > $OUT/reg.yaml && cd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --gate everything-goes 2>e.err; rc=$?; [ $rc -eq 2 ] && grep -q 'unknown --gate mode' e.err && grep -q 'review-queue' e.err && echo unknown-gate-mode-usage-error 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unknown-gate-mode-usage-error"
+    ]
+  }
+}

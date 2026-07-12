@@ -31,6 +31,15 @@
 #      with `deprecated_at: <NOW>` reason `removed-upstream`. `--replace` overwrites.
 #   8. Atomic write to `<out-dir>/<resolved-namespace>/<framework-id>.yaml`; updates
 #      `<registry>-last-fetch/<source-id>.txt`.
+#   8b. Stage 6 opt-in (`--gate review-queue`, §28.36): the source's YAML stages under
+#      `<out-dir>/_project/<crawl-id>/<resolved-namespace>/<framework-id>.yaml` instead
+#      of the official namespace, per-rule Stage 5 draft JSONs are saved alongside at
+#      `_project/<crawl-id>/drafts/<framework-id>/`, and `review-queue.sh --dir` routes
+#      them (auto-stage / coverage-review / side-by-side-review). Default is
+#      human-in-the-loop — nothing auto-staged, nothing touches the official namespace
+#      until the operator reviews and promotes. Without `--gate` the default auto-write
+#      behavior is byte-identical to before. Gated runs still update last-fetch markers
+#      (the fetch happened); use `--force` to re-run ungated inside a freshness window.
 #
 # Nothing here reimplements what already exists: `standards/fetcher.sh` dispatch,
 # per-source shape extractors, extract/classify/route stage commands, 4-axis binding,
@@ -39,6 +48,7 @@
 # CLI:
 #   standards-refresh.sh --registry <path> [--force] [--now <iso>]
 #                        [--dry-run] [--out-dir <dir>] [--replace]
+#                        [--gate review-queue]
 #
 # Exit codes:
 #   0 ok (some entries may have been freshness-skipped)
@@ -52,7 +62,7 @@
 
 set -uo pipefail
 
-REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"
+REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -63,8 +73,9 @@ while [ $# -gt 0 ]; do
     --out-dir)  OUT_DIR="${2-}";  shift 2 ;;
     --replace)  MERGE_MODE="replace"; shift ;;
     --merge)    MERGE_MODE="merge";   shift ;;
+    --gate)     GATE="${2-}";     shift 2 ;;
     -h|--help)
-      sed -n '2,55p' "$0" | sed 's/^# \{0,1\}//' >&2
+      sed -n '2,70p' "$0" | sed 's/^# \{0,1\}//' >&2
       exit 0 ;;
     *) echo "standards-refresh: unknown arg: $1" >&2; exit 2 ;;
   esac
@@ -72,11 +83,16 @@ done
 
 [ -n "$REGISTRY" ] || { echo "standards-refresh: --registry <path> required" >&2; exit 2; }
 [ -f "$REGISTRY" ] || { echo "standards-refresh: registry not found: $REGISTRY" >&2; exit 3; }
+if [ -n "$GATE" ] && [ "$GATE" != "review-queue" ]; then
+  echo "standards-refresh: unknown --gate mode: $GATE (supported: review-queue)" >&2; exit 2
+fi
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 [ -z "$OUT_DIR" ] && OUT_DIR="$PLUGIN_ROOT/generated-code-quality-standards"
 [ -z "$NOW_ISO" ] && NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 HERE="$(cd "$(dirname "$0")" && pwd -P)"
+# Crawl id for review-queue staging: registry basename + colon-free run timestamp.
+CRAWL_ID="$(basename "$REGISTRY" | sed 's/\.[^.]*$//')-$(printf '%s' "$NOW_ISO" | tr -d ':')"
 
 # --- helpers ---
 
@@ -260,14 +276,26 @@ process_entry() {
     return 1
   fi
 
-  local target_file="$OUT_DIR/$target_ns/$sid.yaml"
-  mkdir -p "$OUT_DIR/$target_ns"
+  # Stage 6 opt-in (§28.36): stage under _project/<crawl-id>/ instead of the
+  # official namespace; save per-rule Stage 5 drafts for review-queue routing.
+  local target_file drafts_dir=""
+  if [ "$GATE" = "review-queue" ]; then
+    target_file="$OUT_DIR/_project/$CRAWL_ID/$target_ns/$sid.yaml"
+    if [ "$DRY_RUN" -eq 0 ]; then
+      drafts_dir="$OUT_DIR/_project/$CRAWL_ID/drafts/$sid"
+      mkdir -p "$OUT_DIR/_project/$CRAWL_ID/$target_ns" "$drafts_dir"
+    fi
+  else
+    target_file="$OUT_DIR/$target_ns/$sid.yaml"
+    mkdir -p "$OUT_DIR/$target_ns"
+  fi
 
   # Layer 3+4+5: classify + route + assemble YAML with §28.40 introduced_in epoch.
   local composite_yaml
   composite_yaml=$(SEGS="$segments" SID="$sid" PUB="$pub" URL="$url" \
                    NS="$target_ns" NOW="$NOW_ISO" MERGE="$MERGE_MODE" \
-                   TARGET="$target_file" HERE="$HERE" FREQ="$freq" SHAPE="$shape" python3 <<'PY'
+                   TARGET="$target_file" HERE="$HERE" FREQ="$freq" SHAPE="$shape" \
+                   DRAFTS_DIR="$drafts_dir" python3 <<'PY'
 import json, os, sys, subprocess, hashlib, re
 
 segs = json.loads(os.environ["SEGS"] or "[]")
@@ -380,6 +408,7 @@ for seg in segs:
     if fid["clauses_fallback"] > 0 and not any(
             isinstance(e, dict) and e.get("tool") == "prose-judge.sh" for e in rule["enforced_by"]):
         rule["enforced_by"] = list(rule["enforced_by"]) + [{"tool": "prose-judge.sh"}]
+    rule["_draft"] = draft
     rules.append(rule)
 
 # THE CONTRACT (§28.34): no clause silently dropped, per rule, or the file is refused.
@@ -388,6 +417,14 @@ if fidelity_violations:
                      + " rules=" + ",".join(fidelity_violations)
                      + " no_clause_dropped=false — refusing to write " + target + "\n")
     sys.exit(1)
+
+# Stage 6 staging (§28.36): persist per-rule Stage 5 drafts for review-queue routing.
+drafts_dir = os.environ.get("DRAFTS_DIR", "")
+for r in rules:
+    d = r.pop("_draft", None)
+    if drafts_dir and d is not None:
+        with open(os.path.join(drafts_dir, r["id"] + ".json"), "w") as f:
+            json.dump(d, f)
 
 # Deprecated: rules present in existing but absent from fresh fetch.
 new_hashes = {r["content_hash"] for r in rules}
@@ -487,7 +524,15 @@ PY
   local mdir; mdir=$(last_fetch_dir "$REGISTRY")
   mkdir -p "$mdir"
   echo "$NOW_ISO" > "$mdir/$sid.txt"
-  echo "standards-refresh: WROTE sid=$sid ns=$target_ns file=$target_file" >&2
+
+  if [ "$GATE" = "review-queue" ]; then
+    # Stage 6 (§28.36): route the staged drafts. Default human-in-the-loop —
+    # no --auto-accept passed; nothing reaches the official namespace here.
+    bash "$HERE/review-queue.sh" --dir "$drafts_dir"
+    echo "standards-refresh: STAGED sid=$sid crawl=$CRAWL_ID ns=$target_ns file=$target_file (review-queue gate; promote after review)" >&2
+  else
+    echo "standards-refresh: WROTE sid=$sid ns=$target_ns file=$target_file" >&2
+  fi
   return 0
 }
 

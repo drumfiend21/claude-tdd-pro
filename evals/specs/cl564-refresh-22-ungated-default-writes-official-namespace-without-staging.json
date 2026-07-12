@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh without --gate keeps the default auto-write behavior — official namespace written, no _project staging dir created",
+  "command": "OUT=/tmp/cl564-r22-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h1>Doc</h1><h2>Rule one</h2><p>prose one.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r22-src\n  name: R22\n  jurisdiction: european-union\n  url: file://$OUT/s.html\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; [ -f $OUT/out/european-union/r22-src.yaml ] && [ ! -d $OUT/out/_project ] && grep -q 'WROTE sid=r22-src' e.err && echo ungated-default-auto-write-unchanged 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "ungated-default-auto-write-unchanged"
+    ]
+  }
+}
