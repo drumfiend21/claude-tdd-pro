@@ -47,3 +47,10 @@ technologies:
     - { source_id: rust-api-guidelines, url: "https://rust-lang.github.io/api-guidelines/", tier: 1, whole_source: true }
   python:
     - { source_id: python-pep8, url: "https://peps.python.org/pep-0008/", tier: 1, whole_source: true }
+  # node (operator choice (a), 2026-07-12): ONE canonical seed with a §33 domain-crawl
+  # path-prefix scope — the crawl captures every module page under nodejs.org/api/
+  # automatically, so new modules never require a registry edit. Crawl-capable consumers
+  # (commands/domain-crawl.sh via the §33 orchestrator) honor `scope:`; consumers that
+  # predate it (acquire-technology-live.sh) ignore the key and fetch the seed page only.
+  node:
+    - { source_id: nodejs-api-docs, url: "https://nodejs.org/api/", tier: 1, whole_source: true, scope: { strategy: path-prefix } }

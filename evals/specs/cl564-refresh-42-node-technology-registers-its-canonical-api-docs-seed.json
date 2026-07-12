@@ -1,0 +1,11 @@
+{
+  "name": "technology-source-registry maps node to its canonical nodejs.org api docs seed acquired whole with a path-prefix crawl scope",
+  "command": "ruby -ryaml -e 'reg = YAML.safe_load(File.read(ENV[\"CLAUDE_PLUGIN_ROOT\"] + \"/standards/technology-source-registry.yaml\")); e = (reg[\"technologies\"][\"node\"] || [])[0] or abort(\"no node entry\"); ok = e[\"source_id\"] == \"nodejs-api-docs\" && e[\"url\"] == \"https://nodejs.org/api/\" && e[\"whole_source\"] == true && e[\"tier\"] == 1 && e.dig(\"scope\", \"strategy\") == \"path-prefix\"; STDERR.puts \"node-canonical-seed-registered\" if ok; exit(ok ? 0 : 1)'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "node-canonical-seed-registered"
+    ]
+  }
+}

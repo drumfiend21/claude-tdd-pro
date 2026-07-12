@@ -1,0 +1,11 @@
+{
+  "name": "the node entry's crawl scope annotation is invisible to pre-crawl registry consumers which still read source_id url and tier",
+  "command": "ruby -ryaml -e 'reg = YAML.safe_load(File.read(ENV[\"CLAUDE_PLUGIN_ROOT\"] + \"/standards/technology-source-registry.yaml\")); rows = ((reg[\"technologies\"] || {})[\"node\"] || []).map { |s| [s[\"source_id\"], (s[\"url\"] || \"\"), (s[\"tier\"] || 1)].join(\"\\t\") }; ok = rows == [\"nodejs-api-docs\\thttps://nodejs.org/api/\\t1\"] && reg[\"technologies\"].size >= 14; STDERR.puts \"scope-invisible-to-pre-crawl-consumers\" if ok; exit(ok ? 0 : 1)'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "scope-invisible-to-pre-crawl-consumers"
+    ]
+  }
+}
