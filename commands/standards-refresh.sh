@@ -24,6 +24,12 @@
 #      routing — Stage 4 then auto-attaches the architectural-content bundle and
 #      the rules fire on ADRs/design prose at design time (§29.4). pdf-section.sh
 #      and other fetchers keep the classifier-derived flag.
+#   5a2. Sufficiency signal (§31.9 A9 pattern): per source, the summary emits
+#      `rule_count=<n> sufficiency=ok|below-threshold-<N>` (`--threshold`, default 30)
+#      — a source below the floor fails loud, never silent (signal only; the file is
+#      still written and the consuming harness owns the enforcement gate). A source
+#      yielding 0 usable rules is REFUSED outright: `INSUFFICIENT` on stderr, entry
+#      fails, nothing written (an existing target file from a prior fetch survives).
 #   5b. Stage 5 (§28.34 four-layer fidelity): runs `draft-custom-rule.sh` per emitted
 #      rule against its routed tool; asserts the `no_clause_dropped` contract; records
 #      the per-rule audit trail (`fidelity:` block) in the emitted YAML; binds
@@ -54,7 +60,7 @@
 # CLI:
 #   standards-refresh.sh --registry <path> [--force] [--now <iso>]
 #                        [--dry-run] [--out-dir <dir>] [--replace]
-#                        [--gate review-queue]
+#                        [--gate review-queue] [--threshold <n>]
 #
 # Exit codes:
 #   0 ok (some entries may have been freshness-skipped)
@@ -68,7 +74,7 @@
 
 set -uo pipefail
 
-REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""
+REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""; THRESHOLD=30
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -80,6 +86,7 @@ while [ $# -gt 0 ]; do
     --replace)  MERGE_MODE="replace"; shift ;;
     --merge)    MERGE_MODE="merge";   shift ;;
     --gate)     GATE="${2-}";     shift 2 ;;
+    --threshold) THRESHOLD="${2-}"; shift 2 ;;
     -h|--help)
       sed -n '2,70p' "$0" | sed 's/^# \{0,1\}//' >&2
       exit 0 ;;
@@ -92,6 +99,9 @@ done
 if [ -n "$GATE" ] && [ "$GATE" != "review-queue" ]; then
   echo "standards-refresh: unknown --gate mode: $GATE (supported: review-queue)" >&2; exit 2
 fi
+case "$THRESHOLD" in
+  ''|*[!0-9]*) echo "standards-refresh: --threshold must be a non-negative integer, got: $THRESHOLD" >&2; exit 2 ;;
+esac
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 [ -z "$OUT_DIR" ] && OUT_DIR="$PLUGIN_ROOT/generated-code-quality-standards"
@@ -301,7 +311,7 @@ process_entry() {
   composite_yaml=$(SEGS="$segments" SID="$sid" PUB="$pub" URL="$url" \
                    NS="$target_ns" NOW="$NOW_ISO" MERGE="$MERGE_MODE" \
                    TARGET="$target_file" HERE="$HERE" FREQ="$freq" SHAPE="$shape" \
-                   DRAFTS_DIR="$drafts_dir" FETCHER="$fetcher" python3 <<'PY'
+                   DRAFTS_DIR="$drafts_dir" FETCHER="$fetcher" THRESHOLD="$THRESHOLD" python3 <<'PY'
 import json, os, sys, subprocess, hashlib, re
 
 segs = json.loads(os.environ["SEGS"] or "[]")
@@ -427,6 +437,19 @@ if fidelity_violations:
                      + " rules=" + ",".join(fidelity_violations)
                      + " no_clause_dropped=false — refusing to write " + target + "\n")
     sys.exit(1)
+
+# Sufficiency signal (§31.9 A9 pattern): 0 usable rules ⇒ the file is refused
+# (existing target from a prior fetch survives); below the floor ⇒ fails loud
+# on stderr but the file is still written (the consuming harness owns the gate).
+threshold = int(os.environ.get("THRESHOLD", "30"))
+if not rules:
+    sys.stderr.write("standards-refresh: INSUFFICIENT sid=" + sid
+                     + " rule_count=0 sufficiency=below-threshold-" + str(threshold)
+                     + " — refusing to write " + target + "\n")
+    sys.exit(1)
+suff = "ok" if len(rules) >= threshold else "below-threshold-" + str(threshold)
+sys.stderr.write("standards-refresh: sufficiency sid=" + sid
+                 + " rule_count=" + str(len(rules)) + " sufficiency=" + suff + "\n")
 
 # Stage 6 staging (§28.36): persist per-rule Stage 5 drafts for review-queue routing.
 drafts_dir = os.environ.get("DRAFTS_DIR", "")

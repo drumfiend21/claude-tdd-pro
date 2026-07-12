@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh refuses to write a source's file when the fetch yields zero usable rules and fails the entry loud",
+  "command": "OUT=/tmp/cl564-r30-$$; mkdir -p $OUT/out && printf '<html><body><p>no headings here at all</p></body></html>' > $OUT/s.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r30-src\n  name: R30\n  jurisdiction: european-union\n  url: file://$OUT/s.html\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; rc=$?; [ $rc -eq 1 ] && [ ! -f $OUT/out/european-union/r30-src.yaml ] && grep -q 'INSUFFICIENT sid=r30-src rule_count=0' e.err && grep -q 'refusing to write' e.err && echo zero-rules-refuses-write 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "zero-rules-refuses-write"
+    ]
+  }
+}
