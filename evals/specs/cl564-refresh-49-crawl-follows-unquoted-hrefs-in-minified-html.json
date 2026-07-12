@@ -1,0 +1,11 @@
+{
+  "name": "domain-crawl follows unquoted href attributes in minified real-world HTML so module pages behind a bare index still contribute rules",
+  "command": "OUT=/tmp/cl564-r49-$$; mkdir -p $OUT/docs $OUT/out && printf '<!doctype html><html lang=en><body><h1>API</h1><h2>Index</h2><p>The module index links every documented module below.</p><ul><li><a href=fs.html>fs</a><li><a href=http.html class=mod>http</a></ul></body></html>' > $OUT/docs/index.html && printf '<html><body><h1>fs</h1><h2>Close file descriptors deterministically</h2><p>Programs must close every descriptor they open to avoid exhaustion.</p></body></html>' > $OUT/docs/fs.html && printf '<html><body><h1>http</h1><h2>Set request timeouts explicitly</h2><p>Servers must configure explicit socket timeouts for inbound requests.</p></body></html>' > $OUT/docs/http.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r49-src\n  name: R49\n  source_namespace: node\n  url: file://$OUT/docs/index.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/node/r49-src.yaml; grep -q 'pages_fetched=3' e.err && grep -q 'close-file-descriptors-deterministically' $T && grep -q 'set-request-timeouts-explicitly' $T && echo unquoted-hrefs-followed 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unquoted-hrefs-followed"
+    ]
+  }
+}

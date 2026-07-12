@@ -142,8 +142,15 @@ def fetch(url):
     return r.stdout
 
 def links_of(content, base_url):
+    # Quoted AND unquoted href values: minified real-world HTML (e.g. the
+    # nodejs.org/api/ index, 95 module links) omits attribute quotes entirely —
+    # a quoted-only pattern silently finds zero links there.
     out = []
-    for href in re.findall(r'href=["\']([^"\'#]+)["\']', content):
+    for m in re.finditer(r'''href=(?:"([^"]*)"|'([^']*)'|([^\s"'<>]+))''', content):
+        href = m.group(1) or m.group(2) or m.group(3) or ""
+        href = href.strip()
+        if not href or href.startswith("#"):
+            continue
         u, _ = urldefrag(urljoin(base_url, href))
         out.append(u)
     return out

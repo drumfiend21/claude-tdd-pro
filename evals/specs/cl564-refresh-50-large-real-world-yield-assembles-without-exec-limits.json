@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh assembles a source whose extracted segments exceed the kernel per-argument exec limit as real documentation-scale pages produce",
+  "command": "OUT=/tmp/cl564-r50-$$; mkdir -p $OUT/out && python3 -c \"\nbody = ''.join('<h2>Guidance rule number %d of many</h2><p>%s</p>' % (i, 'This documentation section states one mandatory guidance sentence. ' * 40) for i in range(80))\nopen('$OUT/s.html', 'w').write('<html><body><h1>Doc</h1>' + body + '</body></html>')\n\" && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r50-src\n  name: R50\n  source_namespace: node\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; rc=$?; T=$OUT/out/node/r50-src.yaml; [ $rc -eq 0 ] && [ -f $T ] && [ \"$(grep -c '^- id:' $T | tr -d ' ')\" = \"80\" ] && grep -q 'rule_count=80' e.err && echo large-yield-assembles-clean 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "large-yield-assembles-clean"
+    ]
+  }
+}

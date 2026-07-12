@@ -325,23 +325,26 @@ process_entry() {
   # Layer 2: extract via Stage 1 (extended to 5 shapes per ADR-0009 line 51).
   # Crawl-scoped entries (§33 domain-crawl) expand the seed into a guarded page set
   # first; single-page entries keep the original one-file extraction.
-  local segments xrc
+  # Segments travel via a temp FILE, never an env var: real documentation-scale
+  # pages (nodejs.org module docs) yield segment JSON past the kernel's per-argument
+  # exec limit (~128KB), which kills the assemble stage with rc=126.
+  local segs_file xrc; segs_file=$(mktemp) || return 1
   if [ -n "$strategy" ] && [ "$strategy" != "single-page" ]; then
     local crawl_manifest="$PLUGIN_ROOT/.claude-tdd-pro/crawls/$sid-$(printf '%s' "$NOW_ISO" | tr -d ':').jsonl"
-    segments=$(bash "$HERE/domain-crawl.sh" --seed-url "$url" --seed-file "$cache_file" \
-                    --sid "$sid" --shape "$shape" --scope-b64 "$scope_b64" \
-                    --pages-dir "$cache_dir/$sid-pages" --manifest "$crawl_manifest")
+    bash "$HERE/domain-crawl.sh" --seed-url "$url" --seed-file "$cache_file" \
+         --sid "$sid" --shape "$shape" --scope-b64 "$scope_b64" \
+         --pages-dir "$cache_dir/$sid-pages" --manifest "$crawl_manifest" > "$segs_file"
     xrc=$?
     if [ "$xrc" -ne 0 ]; then
       echo "standards-refresh: FAIL sid=$sid (domain-crawl rc=$xrc)" >&2
-      return 1
+      rm -f "$segs_file"; return 1
     fi
   else
-    segments=$(bash "$HERE/extract-rules-from-url.sh" --source "$cache_file" --shape "$shape" --source-id "$sid" --json 2>/dev/null)
+    bash "$HERE/extract-rules-from-url.sh" --source "$cache_file" --shape "$shape" --source-id "$sid" --json > "$segs_file" 2>/dev/null
     xrc=$?
     if [ "$xrc" -ne 0 ]; then
       echo "standards-refresh: FAIL sid=$sid (extract rc=$xrc)" >&2
-      return 1
+      rm -f "$segs_file"; return 1
     fi
   fi
 
@@ -361,13 +364,17 @@ process_entry() {
 
   # Layer 3+4+5: classify + route + assemble YAML with §28.40 introduced_in epoch.
   local composite_yaml
-  composite_yaml=$(SEGS="$segments" SID="$sid" PUB="$pub" URL="$url" \
+  composite_yaml=$(SEGS_FILE="$segs_file" SID="$sid" PUB="$pub" URL="$url" \
                    NS="$target_ns" NOW="$NOW_ISO" MERGE="$MERGE_MODE" \
                    TARGET="$target_file" HERE="$HERE" FREQ="$freq" SHAPE="$shape" \
                    DRAFTS_DIR="$drafts_dir" FETCHER="$fetcher" THRESHOLD="$THRESHOLD" python3 <<'PY'
 import json, os, sys, subprocess, hashlib, re
 
-segs = json.loads(os.environ["SEGS"] or "[]")
+try:
+    with open(os.environ["SEGS_FILE"]) as _sf:
+        segs = json.loads(_sf.read() or "[]")
+except Exception:
+    segs = []
 sid = os.environ["SID"]; pub = os.environ["PUB"]; url = os.environ["URL"]
 ns = os.environ["NS"]; now = os.environ["NOW"]; merge = os.environ["MERGE"]
 target = os.environ["TARGET"]; here = os.environ["HERE"]; freq = os.environ["FREQ"]
@@ -594,6 +601,7 @@ sys.stderr.write("pipeline sid=" + sid + " ns=" + ns + " shape=" + os.environ.ge
 PY
 )
   local arc=$?
+  rm -f "$segs_file"
   if [ "$arc" -ne 0 ]; then
     echo "standards-refresh: FAIL sid=$sid (assemble rc=$arc)" >&2
     return 1
