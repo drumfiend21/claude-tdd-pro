@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh path-prefix crawl follows same-prefix links and merges rules from every fetched page into one source YAML",
+  "command": "OUT=/tmp/cl564-r32-$$; mkdir -p $OUT/docs/api $OUT/out && cat > $OUT/docs/api/index.html <<'HTML'\n<html><body><h1>API</h1><h2>Use the stable API surface</h2><p>Consumers must depend only on documented stable interfaces.</p><a href=\"fs.html\">fs</a> <a href=\"http.html\">http</a></body></html>\nHTML\ncat > $OUT/docs/api/fs.html <<'HTML'\n<html><body><h1>fs</h1><h2>Close file descriptors deterministically</h2><p>Programs must close every descriptor they open to avoid exhaustion.</p></body></html>\nHTML\ncat > $OUT/docs/api/http.html <<'HTML'\n<html><body><h1>http</h1><h2>Set request timeouts explicitly</h2><p>Servers must configure explicit socket timeouts for inbound requests.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r32-src\n  name: R32\n  url: file://$OUT/docs/api/index.html\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/node/r32-src.yaml; [ -f $T ] && grep -q 'crawl sid=r32-src strategy=path-prefix pages_fetched=3' e.err && [ \"$(grep -c '^- id:' $T | tr -d ' ')\" = \"3\" ] && grep -q 'close-file-descriptors-deterministically' $T && grep -q 'set-request-timeouts-explicitly' $T && echo crawl-merges-linked-pages 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "crawl-merges-linked-pages"
+    ]
+  }
+}

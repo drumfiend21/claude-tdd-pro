@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh path-prefix crawl skips links outside the seed's path prefix and their rules never reach the YAML",
+  "command": "OUT=/tmp/cl564-r33-$$; mkdir -p $OUT/docs/api $OUT/out && cat > $OUT/docs/api/index.html <<'HTML'\n<html><body><h1>API</h1><h2>Use the stable API surface</h2><p>Consumers must depend only on documented stable interfaces.</p><a href=\"../outside.html\">outside</a></body></html>\nHTML\ncat > $OUT/docs/outside.html <<'HTML'\n<html><body><h1>Outside</h1><h2>Off prefix escape hatch rule</h2><p>This page is outside the crawl prefix and must not contribute rules.</p></body></html>\nHTML\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r33-src\n  name: R33\n  url: file://$OUT/docs/api/index.html\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/node/r33-src.yaml; M=$(ls \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/crawls/\"r33-src-*.jsonl | head -1); [ -f $T ] && grep -q 'outside-prefix' \"$M\" && ! grep -q 'off-prefix-escape-hatch-rule' $T && echo outside-prefix-links-skipped 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "outside-prefix-links-skipped"
+    ]
+  }
+}

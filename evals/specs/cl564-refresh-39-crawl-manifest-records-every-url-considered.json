@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh crawl writes a per-refresh manifest recording every URL considered with its status and skip reason including overlong URLs",
+  "command": "OUT=/tmp/cl564-r39-$$; mkdir -p $OUT/docs $OUT/out && LONG=$(printf 'x%.0s' $(seq 1 2100)); printf '<html><body><h1>Doc</h1><h2>Record the crawl trail</h2><p>Every refresh must leave an auditable manifest of the URLs it considered.</p><a href=\"p1.html\">p1</a> <a href=\"p1.html?q=%s\">long</a></body></html>' \"$LONG\" > $OUT/docs/index.html && printf '<html><body><h1>P1</h1><h2>Linked page guidance rule</h2><p>The linked page carries one distinct guidance statement.</p></body></html>' > $OUT/docs/p1.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r39-src\n  name: R39\n  url: file://$OUT/docs/index.html\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; M=$(ls \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/crawls/\"r39-src-*.jsonl | head -1); [ -f \"$M\" ] && grep -q '\"status\": \"fetched\"' \"$M\" && grep -q 'url-too-long' \"$M\" && grep -q 'manifest=' e.err && echo crawl-manifest-records-trail 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "crawl-manifest-records-trail"
+    ]
+  }
+}

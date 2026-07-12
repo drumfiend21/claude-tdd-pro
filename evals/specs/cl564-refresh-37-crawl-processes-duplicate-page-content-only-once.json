@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh crawl dedupes pages by content hash so mirrored URLs never double a source's rules",
+  "command": "OUT=/tmp/cl564-r37-$$; mkdir -p $OUT/docs $OUT/out && printf '<html><body><h1>Doc</h1><h2>Publish each rule once</h2><p>Mirrored pages must not duplicate the guidance they restate.</p><a href=\"a.html\">a</a> <a href=\"b.html\">b</a></body></html>' > $OUT/docs/index.html && printf '<html><body><h1>Mirror</h1><h2>Mirrored retention rule</h2><p>Retain operational records for the mandated period.</p></body></html>' > $OUT/docs/a.html && cp $OUT/docs/a.html $OUT/docs/b.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r37-src\n  name: R37\n  url: file://$OUT/docs/index.html\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/node/r37-src.yaml; M=$(ls \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/crawls/\"r37-src-*.jsonl | head -1); grep -q 'duplicate-content' \"$M\" && [ \"$(grep -c '^- id:.*mirrored-retention-rule' $T | tr -d ' ')\" = \"1\" ] && echo duplicate-content-processed-once 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "duplicate-content-processed-once"
+    ]
+  }
+}

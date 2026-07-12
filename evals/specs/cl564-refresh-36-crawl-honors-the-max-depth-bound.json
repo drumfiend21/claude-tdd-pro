@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh crawl stops following links past the entry's max_depth bound so deep chains never contribute rules",
+  "command": "OUT=/tmp/cl564-r36-$$; mkdir -p $OUT/docs $OUT/out && printf '<html><body><h1>D0</h1><h2>Depth zero guidance rule</h2><p>The seed page carries the first guidance statement of the chain.</p><a href=\"p1.html\">next</a></body></html>' > $OUT/docs/index.html && printf '<html><body><h1>D1</h1><h2>Depth one guidance rule</h2><p>The first hop carries the second guidance statement of the chain.</p><a href=\"p2.html\">next</a></body></html>' > $OUT/docs/p1.html && printf '<html><body><h1>D2</h1><h2>Depth two guidance rule</h2><p>The second hop carries the third guidance statement of the chain.</p><a href=\"p3.html\">next</a></body></html>' > $OUT/docs/p2.html && printf '<html><body><h1>D3</h1><h2>Depth three guidance rule</h2><p>The third hop is past the bound and must never contribute.</p></body></html>' > $OUT/docs/p3.html && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r36-src\n  name: R36\n  url: file://$OUT/docs/index.html\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\n    max_depth: 2\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/node/r36-src.yaml; grep -q 'pages_fetched=3' e.err && grep -q 'depth-two-guidance-rule' $T && ! grep -q 'depth-three-guidance-rule' $T && echo max-depth-bound-honored 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "max-depth-bound-honored"
+    ]
+  }
+}

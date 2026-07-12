@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh crawl stops fetching when the entry's max_pages budget is reached and records the overflow in the manifest",
+  "command": "OUT=/tmp/cl564-r35-$$; mkdir -p $OUT/docs $OUT/out && cat > $OUT/docs/index.html <<'HTML'\n<html><body><h1>Doc</h1><h2>Budget the crawl surface</h2><p>Crawl budgets must bound how many pages a refresh may fetch.</p><a href=\"p1.html\">p1</a> <a href=\"p2.html\">p2</a> <a href=\"p3.html\">p3</a></body></html>\nHTML\nfor i in 1 2 3; do printf '<html><body><h1>P%s</h1><h2>Numbered guidance rule %s</h2><p>Every page in this fixture carries one distinct guidance statement.</p></body></html>' $i $i > $OUT/docs/p$i.html; done\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r35-src\n  name: R35\n  url: file://$OUT/docs/index.html\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: path-prefix\n    max_pages: 2\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; M=$(ls \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/crawls/\"r35-src-*.jsonl | head -1); grep -q 'pages_fetched=2' e.err && grep -q 'max-pages' \"$M\" && echo max-pages-budget-honored 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "max-pages-budget-honored"
+    ]
+  }
+}

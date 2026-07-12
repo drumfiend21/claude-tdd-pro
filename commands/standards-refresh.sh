@@ -15,6 +15,13 @@
 #      shape inferred from the entry's `fetcher:` field (html-anchor.sh → html-sections,
 #      markdown-headers.sh → markdown-headings, pdf-section.sh → pdf-sections,
 #      rfc-style.sh → free-prose; other/absent → markdown-headings).
+#   4b. Domain-crawl (§33): an entry may declare a `scope:` block
+#      (strategy: single-page|path-prefix|sitemap|link-follow, max_pages, max_depth,
+#      respect_robots, rate_limit_ms, include_patterns, exclude_patterns). Non-single-page
+#      strategies expand the fetched seed through `commands/domain-crawl.sh` — bounded by
+#      the 8 universal guards + quality guards documented there, with a per-crawl manifest
+#      at `.claude-tdd-pro/crawls/<source-id>-<ts>.jsonl` — and the merged, deduped
+#      segments feed the same downstream pipeline. No `scope:` ⇒ single-page, unchanged.
 #   5. Stages 2 + 3 + 4: classifies each segment (`classify-rule.sh`) + routes each
 #      classification (`route-rule.sh`) + auto-binds architectural-content bundle on
 #      `applies_to_prose:true` (§28.30).
@@ -213,17 +220,38 @@ last_fetch_dir() {
 # --- Parse registry into a tab-separated stream (bash 3.2 friendly). ---
 
 REGISTRY="$REGISTRY" python3 <<'PY' > /tmp/standards-refresh-entries.$$
-import os, re, sys
+import base64, json, os, re, sys
 text = open(os.environ["REGISTRY"]).read()
 entries = []
 cur = None
+scope_indent = -1   # >=0 while inside the current entry's scope: block
 for line in text.splitlines():
     m = re.match(r"^-\s*id:\s*(\S+)", line)
     if m:
         if cur: entries.append(cur)
         cur = {"id": m.group(1)}
+        scope_indent = -1
         continue
     if not cur: continue
+    # scope: block (§33 domain-crawl) — nested keys under the entry's scope: line.
+    ms = re.match(r"^(\s+)scope:\s*$", line)
+    if ms:
+        scope_indent = len(ms.group(1)); cur["scope"] = {}
+        continue
+    if scope_indent >= 0:
+        mk = re.match(r"^(\s+)([A-Za-z_]+):\s*(.*)$", line)
+        if mk and len(mk.group(1)) > scope_indent:
+            k, v = mk.group(2), mk.group(3).strip().strip('"\'')
+            if v.startswith("[") and v.endswith("]"):
+                cur["scope"][k] = [x.strip().strip('"\'') for x in v[1:-1].split(",") if x.strip()]
+            elif v.lower() in ("true", "false"):
+                cur["scope"][k] = (v.lower() == "true")
+            elif v.isdigit():
+                cur["scope"][k] = int(v)
+            else:
+                cur["scope"][k] = v
+            continue
+        scope_indent = -1   # de-indented: scope block ended, fall through
     for field in ("name","url","jurisdiction","source_class","source_namespace",
                   "authoritative_publisher","fetch_frequency","fetcher",
                   "fragility_tier","fragility_strategy","paywalled","document_url"):
@@ -242,19 +270,22 @@ for e in entries:
     if not sid or not url: continue
     # Prefer explicit source_namespace; else applies_to[0]; else empty (falls to _universal).
     src_ns = e.get("source_namespace") or e.get("applies_to_first","")
+    scope = e.get("scope", {})
+    scope_b64 = base64.b64encode(json.dumps(scope).encode()).decode() if scope else ""
     print("|".join([
         sid, url, e.get("jurisdiction",""), e.get("source_class",""),
         src_ns,
         e.get("authoritative_publisher") or e.get("name","unknown"),
         e.get("fetch_frequency","daily"), e.get("fetcher","markdown-headers.sh"),
         e.get("fragility_tier","medium"), e.get("fragility_strategy",""),
+        scope_b64, scope.get("strategy", "single-page"),
     ]))
 PY
 
 # --- Per-entry pipeline (invoked once per registry entry). ---
 
 process_entry() {
-  local sid="$1" url="$2" juri="$3" src_class="$4" src_ns="$5" pub="$6" freq="$7" fetcher="$8" ftier="$9" fstrat="${10}"
+  local sid="$1" url="$2" juri="$3" src_class="$4" src_ns="$5" pub="$6" freq="$7" fetcher="$8" ftier="$9" fstrat="${10}" scope_b64="${11}" strategy="${12}"
 
   local target_ns; target_ns=$(resolve_namespace "$juri" "$src_class" "$src_ns")
   local shape; shape=$(shape_from_fetcher "$fetcher")
@@ -284,12 +315,26 @@ process_entry() {
   fi
 
   # Layer 2: extract via Stage 1 (extended to 5 shapes per ADR-0009 line 51).
-  local segments
-  segments=$(bash "$HERE/extract-rules-from-url.sh" --source "$cache_file" --shape "$shape" --source-id "$sid" --json 2>/dev/null)
-  local xrc=$?
-  if [ "$xrc" -ne 0 ]; then
-    echo "standards-refresh: FAIL sid=$sid (extract rc=$xrc)" >&2
-    return 1
+  # Crawl-scoped entries (§33 domain-crawl) expand the seed into a guarded page set
+  # first; single-page entries keep the original one-file extraction.
+  local segments xrc
+  if [ -n "$strategy" ] && [ "$strategy" != "single-page" ]; then
+    local crawl_manifest="$PLUGIN_ROOT/.claude-tdd-pro/crawls/$sid-$(printf '%s' "$NOW_ISO" | tr -d ':').jsonl"
+    segments=$(bash "$HERE/domain-crawl.sh" --seed-url "$url" --seed-file "$cache_file" \
+                    --sid "$sid" --shape "$shape" --scope-b64 "$scope_b64" \
+                    --pages-dir "$cache_dir/$sid-pages" --manifest "$crawl_manifest")
+    xrc=$?
+    if [ "$xrc" -ne 0 ]; then
+      echo "standards-refresh: FAIL sid=$sid (domain-crawl rc=$xrc)" >&2
+      return 1
+    fi
+  else
+    segments=$(bash "$HERE/extract-rules-from-url.sh" --source "$cache_file" --shape "$shape" --source-id "$sid" --json 2>/dev/null)
+    xrc=$?
+    if [ "$xrc" -ne 0 ]; then
+      echo "standards-refresh: FAIL sid=$sid (extract rc=$xrc)" >&2
+      return 1
+    fi
   fi
 
   # Stage 6 opt-in (§28.36): stage under _project/<crawl-id>/ instead of the
@@ -531,11 +576,13 @@ out.append("all_set:")
 for r in rules: out.append("- " + r["id"])
 
 sys.stdout.write("\n".join(out) + "\n")
+conf_density = sum(1 for r in rules if r.get("confidence") == "high") / float(len(rules))
 sys.stderr.write("pipeline sid=" + sid + " ns=" + ns + " shape=" + os.environ.get("SHAPE","") + " segments=" + str(len(segs)) + " rules_new=" + str(len(rules)) + " deprecated=" + str(len(deprecated_blocks))
                  + " stage5=ok clauses_total=" + str(fid_totals["clauses_total"])
                  + " covered=" + str(fid_totals["clauses_covered"])
                  + " fallback=" + str(fid_totals["clauses_fallback"])
-                 + " unenforceable=" + str(fid_totals["clauses_unenforceable"]) + "\n")
+                 + " unenforceable=" + str(fid_totals["clauses_unenforceable"])
+                 + " confidence_density=" + ("%.2f" % conf_density) + "\n")
 PY
 )
   local arc=$?
@@ -576,7 +623,7 @@ mkdir -p "$MARKER_DIR"
 
 TOTAL=0; PROCESSED=0; SKIPPED=0; FAILED=0
 export REGISTRY
-while IFS='|' read -r sid url juri src_class src_ns pub freq fetcher ftier fstrat; do
+while IFS='|' read -r sid url juri src_class src_ns pub freq fetcher ftier fstrat scope_b64 strategy; do
   [ -n "$sid" ] || continue
   TOTAL=$((TOTAL + 1))
   if [ "$FORCE" -eq 0 ] && ! freshness_due "$sid" "$freq" "$MARKER_DIR" "$NOW_ISO"; then
@@ -584,7 +631,7 @@ while IFS='|' read -r sid url juri src_class src_ns pub freq fetcher ftier fstra
     SKIPPED=$((SKIPPED + 1))
     continue
   fi
-  if process_entry "$sid" "$url" "$juri" "$src_class" "$src_ns" "$pub" "$freq" "$fetcher" "$ftier" "$fstrat"; then
+  if process_entry "$sid" "$url" "$juri" "$src_class" "$src_ns" "$pub" "$freq" "$fetcher" "$ftier" "$fstrat" "$scope_b64" "$strategy"; then
     PROCESSED=$((PROCESSED + 1))
   else
     FAILED=$((FAILED + 1))

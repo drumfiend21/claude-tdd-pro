@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh entries without a scope block keep the single-page path and produce no crawl summary or manifest artifacts",
+  "command": "OUT=/tmp/cl564-r41-$$; mkdir -p $OUT/out && cat > $OUT/s.html <<'HTML'\n<html><body><h1>Doc</h1><h2>Rule one</h2><p>prose one.</p><a href=\"other.html\">other</a></body></html>\nHTML\nprintf '<html><body><h1>Other</h1><h2>Linked page rule</h2><p>A linked page that a single-page entry must never fetch.</p></body></html>' > $OUT/other.html\ncat > $OUT/reg.yaml <<YAML\nsources:\n- id: r41-src\n  name: R41\n  jurisdiction: european-union\n  url: file://$OUT/s.html\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/european-union/r41-src.yaml; [ -f $T ] && ! grep -q 'crawl sid=' e.err && ! ls \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/crawls/\"r41-src-*.jsonl 2>/dev/null && ! grep -q 'linked-page-rule' $T && grep -q 'WROTE sid=r41-src' e.err && echo no-scope-stays-single-page 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "no-scope-stays-single-page"
+    ]
+  }
+}

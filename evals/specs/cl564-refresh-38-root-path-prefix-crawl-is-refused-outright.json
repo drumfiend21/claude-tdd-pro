@@ -1,0 +1,11 @@
+{
+  "name": "domain-crawl.sh refuses a path-prefix crawl whose seed sits at the root path so a whole-domain crawl can never happen by accident",
+  "command": "OUT=/tmp/cl564-r38-$$; mkdir -p $OUT && printf '<html><body><h1>Root</h1><p>seed content</p></body></html>' > $OUT/seed.html && SCOPE=$(printf '{\"strategy\": \"path-prefix\"}' | base64 | tr -d '\\n'); bash \"$CLAUDE_PLUGIN_ROOT/commands/domain-crawl.sh\" --seed-url file:///index.html --seed-file $OUT/seed.html --sid r38-src --shape html-sections --scope-b64 \"$SCOPE\" --pages-dir $OUT/pages --manifest $OUT/crawl.jsonl 2>e.err; rc=$?; [ $rc -eq 2 ] && grep -q 'REFUSED sid=r38-src strategy=path-prefix with root path prefix' e.err && echo root-path-crawl-refused 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "root-path-crawl-refused"
+    ]
+  }
+}

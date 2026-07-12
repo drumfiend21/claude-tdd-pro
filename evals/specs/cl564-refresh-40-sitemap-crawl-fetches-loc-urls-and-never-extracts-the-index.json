@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh sitemap crawl fetches the sitemap's loc URLs as leaves and never extracts rules from the index itself",
+  "command": "OUT=/tmp/cl564-r40-$$; mkdir -p $OUT/docs $OUT/out && printf '<html><body><h1>A</h1><h2>Sitemap leaf rule alpha</h2><p>The first mapped page carries one distinct guidance statement.</p><a href=\"c.html\">c</a></body></html>' > $OUT/docs/a.html && printf '<html><body><h1>B</h1><h2>Sitemap leaf rule beta</h2><p>The second mapped page carries one distinct guidance statement.</p></body></html>' > $OUT/docs/b.html && printf '<html><body><h1>C</h1><h2>Unmapped page rule</h2><p>This page is linked from a leaf but not mapped and must not contribute.</p></body></html>' > $OUT/docs/c.html && printf '<urlset><url><loc>file://%s/docs/a.html</loc></url><url><loc>file://%s/docs/b.html</loc></url></urlset>' \"$OUT\" \"$OUT\" > $OUT/docs/sitemap.xml && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r40-src\n  name: R40\n  url: file://$OUT/docs/sitemap.xml\n  source_namespace: node\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\n  scope:\n    strategy: sitemap\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/node/r40-src.yaml; M=$(ls \"$CLAUDE_PLUGIN_ROOT/.claude-tdd-pro/crawls/\"r40-src-*.jsonl | head -1); grep -q 'pages_fetched=2' e.err && grep -q '\"status\": \"index\"' \"$M\" && grep -q 'sitemap-leaf-rule-alpha' $T && grep -q 'sitemap-leaf-rule-beta' $T && ! grep -q 'unmapped-page-rule' $T && echo sitemap-fetches-mapped-leaves-only 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "sitemap-fetches-mapped-leaves-only"
+    ]
+  }
+}
