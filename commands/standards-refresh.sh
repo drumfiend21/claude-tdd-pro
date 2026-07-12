@@ -18,6 +18,11 @@
 #   5. Stages 2 + 3 + 4: classifies each segment (`classify-rule.sh`) + routes each
 #      classification (`route-rule.sh`) + auto-binds architectural-content bundle on
 #      `applies_to_prose:true` (§28.30).
+#   5b. Stage 5 (§28.34 four-layer fidelity): runs `draft-custom-rule.sh` per emitted
+#      rule against its routed tool; asserts the `no_clause_dropped` contract; records
+#      the per-rule audit trail (`fidelity:` block) in the emitted YAML; binds
+#      `prose-judge.sh` into `enforced_by` for fallback clauses. Any rule violating
+#      `no_clause_dropped` ⇒ the source's file is REFUSED (entry fails, nothing written).
 #   6. Assembles the composite rule YAML with the `introduced_in` epoch tag per §28.40
 #      Consumer Compatibility Contract, populates `source:` + `rules[]` + `recommended_set[]`
 #      + `all_set[]`.
@@ -37,9 +42,13 @@
 #
 # Exit codes:
 #   0 ok (some entries may have been freshness-skipped)
-#   1 pipeline error (at least one entry failed extract/classify/route)
+#   1 pipeline error (at least one entry failed extract/classify/route, or a rule
+#     violated the Stage 5 no_clause_dropped fidelity contract)
 #   2 usage error
 #   3 registry not found or unparseable
+#
+# Test affordance: CTP_STAGE5_DRAFT_CMD overrides the Stage 5 script path
+# (same CLI as draft-custom-rule.sh) so specs can exercise the refusal path.
 
 set -uo pipefail
 
@@ -55,7 +64,7 @@ while [ $# -gt 0 ]; do
     --replace)  MERGE_MODE="replace"; shift ;;
     --merge)    MERGE_MODE="merge";   shift ;;
     -h|--help)
-      sed -n '2,45p' "$0" | sed 's/^# \{0,1\}//' >&2
+      sed -n '2,55p' "$0" | sed 's/^# \{0,1\}//' >&2
       exit 0 ;;
     *) echo "standards-refresh: unknown arg: $1" >&2; exit 2 ;;
   esac
@@ -288,6 +297,21 @@ def call_route(classified_json):
     finally:
         os.unlink(tmp)
 
+# Stage 5 (§28.34): four-layer fidelity draft. Returns the draft JSON, or None
+# when Stage 5 itself is unavailable/crashed (treated as a contract violation —
+# fail closed; the no_clause_dropped assertion cannot be silently skipped).
+def call_draft(rule_id, prose, tool):
+    cmd = os.environ.get("CTP_STAGE5_DRAFT_CMD") or os.path.join(here, "draft-custom-rule.sh")
+    try:
+        r = subprocess.run(["bash", cmd, "--rule-id", rule_id, "--prose", prose,
+                            "--tool", tool, "--json"],
+                           capture_output=True, text=True, timeout=30)
+        if r.returncode not in (0, 1):
+            return None
+        return json.loads(r.stdout or "null")
+    except Exception:
+        return None
+
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:60]
 
@@ -306,6 +330,8 @@ if merge == "merge" and os.path.exists(target):
         pass
 
 rules = []
+fidelity_violations = []
+fid_totals = {"clauses_total": 0, "clauses_covered": 0, "clauses_fallback": 0, "clauses_unenforceable": 0}
 for seg in segs:
     title = seg.get("title","").strip(); prose = seg.get("prose","").strip()
     if not title: continue
@@ -330,7 +356,38 @@ for seg in segs:
     }
     if classification.get("confidence") == "low":
         rule["needs_tier2_llm"] = True
+    # Stage 5 (§28.34): four-layer fidelity against the rule's first routed tool
+    # (Layer D binds uncovered clauses to prose-judge.sh regardless of tool choice).
+    tool = "semgrep"
+    for e in rule["enforced_by"]:
+        if isinstance(e, dict) and e.get("tool"):
+            tool = e["tool"]; break
+    draft = call_draft(rid, prose or title, tool)
+    dropped = (draft is None) or (not draft.get("no_clause_dropped", False))
+    if dropped:
+        fidelity_violations.append(rid)
+    fid = {
+        "clauses_total": (draft or {}).get("clauses_total", 0),
+        "clauses_covered": (draft or {}).get("clauses_covered", 0),
+        "clauses_fallback": (draft or {}).get("clauses_fallback", 0),
+        "clauses_unenforceable": (draft or {}).get("clauses_unenforceable", 0),
+        "no_clause_dropped": not dropped,
+        "needs_operator_signoff": bool((draft or {}).get("needs_operator_signoff", False)),
+    }
+    for k in fid_totals: fid_totals[k] += fid[k]
+    rule["fidelity"] = fid
+    # Fallback clauses are semantically enforced via the prose-judge moat (§28.34 Layer D).
+    if fid["clauses_fallback"] > 0 and not any(
+            isinstance(e, dict) and e.get("tool") == "prose-judge.sh" for e in rule["enforced_by"]):
+        rule["enforced_by"] = list(rule["enforced_by"]) + [{"tool": "prose-judge.sh"}]
     rules.append(rule)
+
+# THE CONTRACT (§28.34): no clause silently dropped, per rule, or the file is refused.
+if fidelity_violations:
+    sys.stderr.write("standards-refresh: FIDELITY-VIOLATION sid=" + sid
+                     + " rules=" + ",".join(fidelity_violations)
+                     + " no_clause_dropped=false — refusing to write " + target + "\n")
+    sys.exit(1)
 
 # Deprecated: rules present in existing but absent from fresh fetch.
 new_hashes = {r["content_hash"] for r in rules}
@@ -365,6 +422,15 @@ for r in rules:
     out.append("  confidence: " + r["confidence"])
     out.append("  introduced_in: '" + r["introduced_in"] + "'")
     if r.get("needs_tier2_llm"): out.append("  needs_tier2_llm: true")
+    fid = r.get("fidelity")
+    if fid:
+        out.append("  fidelity:")
+        out.append("    clauses_total: " + str(fid["clauses_total"]))
+        out.append("    clauses_covered: " + str(fid["clauses_covered"]))
+        out.append("    clauses_fallback: " + str(fid["clauses_fallback"]))
+        out.append("    clauses_unenforceable: " + str(fid["clauses_unenforceable"]))
+        out.append("    no_clause_dropped: " + str(fid["no_clause_dropped"]).lower())
+        out.append("    needs_operator_signoff: " + str(fid["needs_operator_signoff"]).lower())
     out.append("  applies_to_prose: " + str(r["applies_to_prose"]).lower())
     out.append("  provenance:")
     for p in r["provenance"]:
@@ -395,7 +461,11 @@ out.append("all_set:")
 for r in rules: out.append("- " + r["id"])
 
 sys.stdout.write("\n".join(out) + "\n")
-sys.stderr.write("pipeline sid=" + sid + " ns=" + ns + " shape=" + os.environ.get("SHAPE","") + " segments=" + str(len(segs)) + " rules_new=" + str(len(rules)) + " deprecated=" + str(len(deprecated_blocks)) + "\n")
+sys.stderr.write("pipeline sid=" + sid + " ns=" + ns + " shape=" + os.environ.get("SHAPE","") + " segments=" + str(len(segs)) + " rules_new=" + str(len(rules)) + " deprecated=" + str(len(deprecated_blocks))
+                 + " stage5=ok clauses_total=" + str(fid_totals["clauses_total"])
+                 + " covered=" + str(fid_totals["clauses_covered"])
+                 + " fallback=" + str(fid_totals["clauses_fallback"])
+                 + " unenforceable=" + str(fid_totals["clauses_unenforceable"]) + "\n")
 PY
 )
   local arc=$?
