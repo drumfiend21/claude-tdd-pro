@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh forces applies_to_prose true on rules from a markdown-headers source so they fire on design prose",
+  "command": "OUT=/tmp/cl564-r26-$$; mkdir -p $OUT/out && printf '# Guide\\n## Pin dependency versions\\nAlways pin versions in lockfiles.\\n' > $OUT/s.md && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r26-src\n  name: R26\n  jurisdiction: european-union\n  url: file://$OUT/s.md\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: markdown-headers.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/european-union/r26-src.yaml; [ -f $T ] && grep -q 'shape=markdown-headings' e.err && grep -q 'applies_to_prose: true' $T && echo markdown-source-yields-prose-rules 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "markdown-source-yields-prose-rules"
+    ]
+  }
+}

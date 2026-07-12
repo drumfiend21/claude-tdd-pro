@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh forces applies_to_prose true on rules from an rfc-style free-prose source so they fire on design prose",
+  "command": "OUT=/tmp/cl564-r25-$$; mkdir -p $OUT/out && printf 'Systems MUST validate all inbound payloads before processing.\\n\\nOperators MUST rotate credentials on a fixed schedule.\\n' > $OUT/s.txt && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r25-src\n  name: R25\n  jurisdiction: european-union\n  url: file://$OUT/s.txt\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: rfc-style.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/european-union/r25-src.yaml; [ -f $T ] && grep -q 'shape=free-prose' e.err && [ \"$(grep -c 'applies_to_prose: true' $T | tr -d ' ')\" = \"2\" ] && echo rfc-style-source-yields-prose-rules 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "rfc-style-source-yields-prose-rules"
+    ]
+  }
+}

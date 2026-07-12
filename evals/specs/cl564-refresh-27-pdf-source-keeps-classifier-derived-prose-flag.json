@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh keeps the classifier-derived prose flag for pdf-section sources instead of forcing prose semantics on document rules",
+  "command": "OUT=/tmp/cl564-r27-$$; mkdir -p $OUT/out && printf 'V14.1 Data Protection\\nEncrypt data at rest.\\n' > $OUT/s.txt && cat > $OUT/reg.yaml <<YAML\nsources:\n- id: r27-src\n  name: R27\n  jurisdiction: european-union\n  url: file://$OUT/s.txt\n  authoritative_publisher: Test Pub\n  fetch_frequency: daily\n  fetcher: pdf-section.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>e.err; T=$OUT/out/european-union/r27-src.yaml; [ -f $T ] && grep -q 'shape=pdf-sections' e.err && grep -q 'applies_to_prose: false' $T && echo pdf-source-keeps-classifier-flag 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "pdf-source-keeps-classifier-flag"
+    ]
+  }
+}

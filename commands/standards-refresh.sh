@@ -18,6 +18,12 @@
 #   5. Stages 2 + 3 + 4: classifies each segment (`classify-rule.sh`) + routes each
 #      classification (`route-rule.sh`) + auto-binds architectural-content bundle on
 #      `applies_to_prose:true` (§28.30).
+#   5a. Prose-shape sources (§28.30/§29.4): entries whose `fetcher:` is one of
+#      html-anchor.sh / markdown-headers.sh / rfc-style.sh yield PROSE rules, so
+#      `applies_to_prose: true` is forced on every rule from that source BEFORE
+#      routing — Stage 4 then auto-attaches the architectural-content bundle and
+#      the rules fire on ADRs/design prose at design time (§29.4). pdf-section.sh
+#      and other fetchers keep the classifier-derived flag.
 #   5b. Stage 5 (§28.34 four-layer fidelity): runs `draft-custom-rule.sh` per emitted
 #      rule against its routed tool; asserts the `no_clause_dropped` contract; records
 #      the per-rule audit trail (`fidelity:` block) in the emitted YAML; binds
@@ -295,7 +301,7 @@ process_entry() {
   composite_yaml=$(SEGS="$segments" SID="$sid" PUB="$pub" URL="$url" \
                    NS="$target_ns" NOW="$NOW_ISO" MERGE="$MERGE_MODE" \
                    TARGET="$target_file" HERE="$HERE" FREQ="$freq" SHAPE="$shape" \
-                   DRAFTS_DIR="$drafts_dir" python3 <<'PY'
+                   DRAFTS_DIR="$drafts_dir" FETCHER="$fetcher" python3 <<'PY'
 import json, os, sys, subprocess, hashlib, re
 
 segs = json.loads(os.environ["SEGS"] or "[]")
@@ -365,6 +371,10 @@ for seg in segs:
     if not title: continue
     ch = "sha256:" + hashlib.sha256((title + "\n" + prose).encode()).hexdigest()
     classification = call_classify(title, prose)
+    # §28.30/§29.4: prose-shape sources yield prose rules — force the flag BEFORE
+    # routing so Stage 4 auto-attaches the architectural-content bundle.
+    if os.environ.get("FETCHER", "") in ("html-anchor.sh", "markdown-headers.sh", "rfc-style.sh"):
+        classification["applies_to_prose"] = True
     routing = call_route(classification)
     # §28.40 Consumer Compatibility Contract: freeze introduced_in when content_hash matches.
     intro = existing.get(ch, {}).get("introduced_in", now)
