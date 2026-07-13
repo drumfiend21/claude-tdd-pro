@@ -1,0 +1,11 @@
+{
+  "name": "the cloud refresh workflow runs the registry walker on a daily schedule and on manual dispatch so consumers without egress receive current rules from git",
+  "command": "ruby -ryaml -e 'w = YAML.safe_load(File.read(ENV[\"CLAUDE_PLUGIN_ROOT\"] + \"/.github/workflows/standards-refresh-cloud.yml\"), aliases: true); on = w[\"on\"] || w[true]; steps = w[\"jobs\"][\"refresh\"][\"steps\"]; runs = steps.map { |s| s[\"run\"].to_s }.join(\"\\n\"); ok = on[\"schedule\"][0][\"cron\"].to_s.strip == \"0 6 * * *\" && on.key?(\"workflow_dispatch\") && runs.include?(\"commands/standards-refresh.sh\") && runs.include?(\"--registry\"); STDERR.puts \"cloud-refresh-scheduled-and-dispatchable\" if ok; exit(ok ? 0 : 1)'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cloud-refresh-scheduled-and-dispatchable"
+    ]
+  }
+}

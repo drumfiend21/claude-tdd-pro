@@ -1,0 +1,72 @@
+name: standards-refresh-cloud
+
+# §33 CL-564.j: the cloud scrape plane. Runs the ADR-0009 line 50 registry-walker
+# (commands/standards-refresh.sh) on a schedule from GitHub's runners — which have
+# open egress — so every consumer WITHOUT network at session time (cloud sandboxes,
+# phone-driven sessions, restricted proxies) still receives current rules FROM GIT.
+# One polite scrape serves all consumers; sessions with egress can still refresh live,
+# and sessions without it keep the last committed rules per the §16 S-2
+# cache-preservation discipline.
+#
+# Review-first per §31.2 (the official ruleset is PR-gated): refreshed rule YAMLs are
+# pushed to a standards-refresh/* branch and opened as a pull request — this workflow
+# NEVER commits to main. Tier-low manual-only sources (owasp-asvs, owasp-top10,
+# wcag-2-2, slsa, semver) refuse --auto by design (§16 S-2) and remain operator-run;
+# their entries SKIP with cache preserved, which is not a failure.
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # daily 06:00 UTC; freshness windows still apply per entry
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Ignore per-entry freshness windows (--force)"
+        type: boolean
+        default: false
+      registry:
+        description: "Registry file to walk"
+        type: string
+        default: "standards/sources.yaml"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      LC_ALL: C.UTF-8   # ruby -e inline scripts fail to parse UTF-8 under a C/ASCII locale
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain (ruby for Stage 1/5; node + python3 ship on the runner)
+        run: sudo apt-get update && sudo apt-get install -y ruby
+
+      - name: Run registry-walker refresh
+        run: |
+          FORCE=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+            FORCE="--force"
+          fi
+          REGISTRY="${{ github.event_name == 'workflow_dispatch' && inputs.registry || 'standards/sources.yaml' }}"
+          bash commands/standards-refresh.sh --registry "$REGISTRY" $FORCE
+
+      - name: Open review PR with refreshed rules (never commits to main)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain generated-code-quality-standards)" ]; then
+            echo "no rule changes this run — nothing to review"
+            exit 0
+          fi
+          BRANCH="standards-refresh/$(date -u +%Y-%m-%d-%H%M)"
+          git config user.name "standards-refresh"
+          git config user.email "standards-refresh@claude-tdd-pro"
+          git checkout -b "$BRANCH"
+          git add generated-code-quality-standards
+          git commit -m "standards-refresh: scheduled registry re-scrape ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "standards-refresh: scheduled registry re-scrape" \
+            --body "Automated §33 registry-walker run from the cloud scrape plane (standards-refresh-cloud.yml). Official ruleset stays PR-gated per §31.2 — review the per-source sufficiency + fidelity signals in the job log, then merge to publish these rules to every consumer."

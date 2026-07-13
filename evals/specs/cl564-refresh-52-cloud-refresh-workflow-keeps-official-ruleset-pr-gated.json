@@ -1,0 +1,11 @@
+{
+  "name": "the cloud refresh workflow pushes refreshed rules to a review branch and opens a pull request never committing the official ruleset to main directly",
+  "command": "ruby -ryaml -e 'w = YAML.safe_load(File.read(ENV[\"CLAUDE_PLUGIN_ROOT\"] + \"/.github/workflows/standards-refresh-cloud.yml\"), aliases: true); runs = w[\"jobs\"][\"refresh\"][\"steps\"].map { |s| s[\"run\"].to_s }.join(\"\\n\"); ok = runs.include?(\"BRANCH=\\\"standards-refresh/\") && runs.include?(\"gh pr create --base main\") && !runs.include?(\"git push origin main\") && w[\"jobs\"][\"refresh\"][\"steps\"].none? { |s| s[\"run\"].to_s.match(/push.*refs\\/heads\\/main/) }; STDERR.puts \"cloud-refresh-stays-pr-gated\" if ok; exit(ok ? 0 : 1)'",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "cloud-refresh-stays-pr-gated"
+    ]
+  }
+}
