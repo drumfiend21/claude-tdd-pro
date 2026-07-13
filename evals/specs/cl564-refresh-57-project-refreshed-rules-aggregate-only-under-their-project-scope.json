@@ -1,0 +1,11 @@
+{
+  "name": "rules refreshed into a project overlay aggregate only when that project is scoped and the official surface stays byte-identical without it",
+  "command": "OUT=/tmp/cl564-r57-$$; mkdir -p $OUT/rules && printf '<html><body><h2>Pin dependency versions in my app</h2><p>All dependencies MUST be pinned in the lockfile.</p></body></html>' > $OUT/team.html && cat > $OUT/MY-SOURCES.yaml <<YAML\nsources:\n- id: my-team-standards\n  name: Team standards\n  source_namespace: node\n  url: file://$OUT/team.html\n  authoritative_publisher: My Team\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\ncd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/MY-SOURCES.yaml --project my-app --force --now 2026-07-11T00:00:00Z --out-dir $OUT/rules 2>/dev/null; W=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root $OUT/rules --project my-app --format json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); print(sum(1 for r in d.get(\"rules\",[]) if \"my-team-standards\" in r.get(\"id\",\"\")))'); WO=$(bash \"$CLAUDE_PLUGIN_ROOT/rubric/aggregator.sh\" --root $OUT/rules --format json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); print(sum(1 for r in d.get(\"rules\",[]) if \"my-team-standards\" in r.get(\"id\",\"\")))'); [ \"$W\" = \"1\" ] && [ \"$WO\" = \"0\" ] && echo project-rules-scoped-to-their-project 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "project-rules-scoped-to-their-project"
+    ]
+  }
+}

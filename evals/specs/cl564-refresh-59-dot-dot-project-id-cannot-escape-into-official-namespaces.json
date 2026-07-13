@@ -1,0 +1,11 @@
+{
+  "name": "a dot-dot project id is rejected so a project overlay write can never traverse out into the official namespaces",
+  "command": "OUT=/tmp/cl564-r59-$$; mkdir -p $OUT && printf 'sources: []\\n' > $OUT/reg.yaml && cd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --project '..' 2>e.err; rc=$?; [ $rc -eq 2 ] && grep -q \"may not be '.' or '..'\" e.err && echo dot-dot-project-id-rejected 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "dot-dot-project-id-rejected"
+    ]
+  }
+}

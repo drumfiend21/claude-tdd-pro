@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh.sh rejects a project id carrying path separators or other unsafe characters with a usage error",
+  "command": "OUT=/tmp/cl564-r58-$$; mkdir -p $OUT && printf 'sources: []\\n' > $OUT/reg.yaml && cd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --project '../escape' 2>e.err; rc=$?; [ $rc -eq 2 ] && grep -q 'project id may only contain' e.err && echo unsafe-project-id-rejected 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "unsafe-project-id-rejected"
+    ]
+  }
+}

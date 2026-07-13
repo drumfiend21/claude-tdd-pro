@@ -50,6 +50,13 @@
 #      with `deprecated_at: <NOW>` reason `removed-upstream`. `--replace` overwrites.
 #   8. Atomic write to `<out-dir>/<resolved-namespace>/<framework-id>.yaml`; updates
 #      `<registry>-last-fetch/<source-id>.txt`.
+#   8a. Project scope (`--project <id>`, §31.1/S-63 — plugin-as-library, the ESLint
+#      model): rules write to `<out-dir>/_project/<id>/<namespace>/<source-id>.yaml`
+#      instead of the official namespaces. A consumer keeps their OWN registry file in
+#      their OWN repo, refreshes into their project overlay, and aggregates with
+#      `rubric/aggregator.sh --project <id>` — the plugin's official rules and the
+#      plugin author's repos are never touched, no branch, no PR, no CI trigger.
+#      Contributing a source to the OFFICIAL registries remains a reviewed PR (§31.2).
 #   8b. Stage 6 opt-in (`--gate review-queue`, §28.36): the source's YAML stages under
 #      `<out-dir>/_project/<crawl-id>/<resolved-namespace>/<framework-id>.yaml` instead
 #      of the official namespace, per-rule Stage 5 draft JSONs are saved alongside at
@@ -67,7 +74,7 @@
 # CLI:
 #   standards-refresh.sh --registry <path> [--force] [--now <iso>]
 #                        [--dry-run] [--out-dir <dir>] [--replace]
-#                        [--gate review-queue] [--threshold <n>]
+#                        [--gate review-queue] [--threshold <n>] [--project <id>]
 #
 # Exit codes:
 #   0 ok (some entries may have been freshness-skipped)
@@ -81,7 +88,7 @@
 
 set -uo pipefail
 
-REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""; THRESHOLD=30
+REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""; THRESHOLD=30; PROJECT=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -94,6 +101,7 @@ while [ $# -gt 0 ]; do
     --merge)    MERGE_MODE="merge";   shift ;;
     --gate)     GATE="${2-}";     shift 2 ;;
     --threshold) THRESHOLD="${2-}"; shift 2 ;;
+    --project)  PROJECT="${2-}";  shift 2 ;;
     -h|--help)
       sed -n '2,70p' "$0" | sed 's/^# \{0,1\}//' >&2
       exit 0 ;;
@@ -109,6 +117,11 @@ fi
 case "$THRESHOLD" in
   ''|*[!0-9]*) echo "standards-refresh: --threshold must be a non-negative integer, got: $THRESHOLD" >&2; exit 2 ;;
 esac
+if [ -n "$PROJECT" ]; then
+  case "$PROJECT" in
+    *[!A-Za-z0-9._-]*|.|..) echo "standards-refresh: --project id may only contain [A-Za-z0-9._-] and may not be '.' or '..', got: $PROJECT" >&2; exit 2 ;;
+  esac
+fi
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 [ -z "$OUT_DIR" ] && OUT_DIR="$PLUGIN_ROOT/generated-code-quality-standards"
@@ -350,6 +363,9 @@ process_entry() {
 
   # Stage 6 opt-in (§28.36): stage under _project/<crawl-id>/ instead of the
   # official namespace; save per-rule Stage 5 drafts for review-queue routing.
+  # Project scope (§31.1/S-63): route to the per-project working overlay —
+  # plugin-as-library; the official namespaces are never touched. The gate,
+  # when also given, takes precedence (staging is upstream of any overlay).
   local target_file drafts_dir=""
   if [ "$GATE" = "review-queue" ]; then
     target_file="$OUT_DIR/_project/$CRAWL_ID/$target_ns/$sid.yaml"
@@ -357,6 +373,9 @@ process_entry() {
       drafts_dir="$OUT_DIR/_project/$CRAWL_ID/drafts/$sid"
       mkdir -p "$OUT_DIR/_project/$CRAWL_ID/$target_ns" "$drafts_dir"
     fi
+  elif [ -n "$PROJECT" ]; then
+    target_file="$OUT_DIR/_project/$PROJECT/$target_ns/$sid.yaml"
+    mkdir -p "$OUT_DIR/_project/$PROJECT/$target_ns"
   else
     target_file="$OUT_DIR/$target_ns/$sid.yaml"
     mkdir -p "$OUT_DIR/$target_ns"
