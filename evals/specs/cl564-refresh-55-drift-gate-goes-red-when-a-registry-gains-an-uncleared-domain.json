@@ -1,0 +1,11 @@
+{
+  "name": "the allowlist drift gate exits red when a registry gains a URL whose domain the committed allowlist does not yet carry",
+  "command": "OUT=/tmp/cl564-r55-$$; mkdir -p $OUT/standards && cat > $OUT/standards/sources.yaml <<'YAML'\nsources:\n- id: first-src\n  url: \"https://first.example/docs/\"\n  fetcher: html-anchor.sh\nYAML\nbash \"$CLAUDE_PLUGIN_ROOT/standards/registry-domains.sh\" --root $OUT >/dev/null 2>&1 && cat >> $OUT/standards/sources.yaml <<'YAML'\n- id: second-src\n  url: \"https://second.example/docs/\"\n  fetcher: html-anchor.sh\nYAML\nbash \"$CLAUDE_PLUGIN_ROOT/standards/registry-domains.sh\" --root $OUT --check >/dev/null 2>$OUT/check.err; rc=$?; [ $rc -eq 1 ] && grep -q 'drift=DRIFT' $OUT/check.err && grep -q 'second.example' $OUT/check.err && echo drift-gate-red-on-uncleared-domain 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "drift-gate-red-on-uncleared-domain"
+    ]
+  }
+}

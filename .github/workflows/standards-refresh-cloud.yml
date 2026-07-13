@@ -43,6 +43,9 @@ jobs:
       - name: Toolchain (ruby for Stage 1/5; node + python3 ship on the runner)
         run: sudo apt-get update && sudo apt-get install -y ruby
 
+      - name: Egress allowlist in sync (every registered URL's domain is cleared)
+        run: bash standards/registry-domains.sh --check
+
       - name: Run registry-walker refresh
         run: |
           FORCE=""

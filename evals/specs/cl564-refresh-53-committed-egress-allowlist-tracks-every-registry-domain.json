@@ -1,0 +1,11 @@
+{
+  "name": "the committed egress allowlist is in sync with every URL registry and carries the domains of the registered rules sources",
+  "command": "cd \"$CLAUDE_PLUGIN_ROOT\" && bash standards/registry-domains.sh --check > /tmp/cl564-r53-$$.out 2>/tmp/cl564-r53-$$.err; rc=$?; grep -q 'drift=none' /tmp/cl564-r53-$$.err && [ $rc -eq 0 ] && grep -qx 'nodejs.org' /tmp/cl564-r53-$$.out && grep -qx 'owasp.org' /tmp/cl564-r53-$$.out && grep -qx 'www.w3.org' /tmp/cl564-r53-$$.out && echo committed-allowlist-in-sync 1>&2; rm -f /tmp/cl564-r53-$$.out /tmp/cl564-r53-$$.err",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "committed-allowlist-in-sync"
+    ]
+  }
+}

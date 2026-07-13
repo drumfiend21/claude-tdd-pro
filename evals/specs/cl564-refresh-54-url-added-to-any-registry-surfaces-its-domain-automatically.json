@@ -1,0 +1,11 @@
+{
+  "name": "adding a rules-source URL to any registry surfaces its domain in the regenerated egress allowlist with no manual list maintenance",
+  "command": "OUT=/tmp/cl564-r54-$$; mkdir -p $OUT/standards && cat > $OUT/standards/sources.yaml <<'YAML'\nsources:\n- id: fresh-src\n  name: Fresh\n  url: \"https://docs.brand-new-standards-body.example/guide/\"\n  fetcher: html-anchor.sh\nYAML\nbash \"$CLAUDE_PLUGIN_ROOT/standards/registry-domains.sh\" --root $OUT > $OUT/domains.out 2>$OUT/domains.err; rc=$?; [ $rc -eq 0 ] && grep -qx 'docs.brand-new-standards-body.example' $OUT/domains.out && grep -qx 'docs.brand-new-standards-body.example' $OUT/standards/EGRESS-ALLOWLIST.txt && grep -q 'registries=1 domains=1' $OUT/domains.err && echo added-url-domain-surfaces-automatically 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "added-url-domain-surfaces-automatically"
+    ]
+  }
+}
