@@ -1,0 +1,11 @@
+{
+  "name": "a consumer config with no sources block runs clean processing nothing and writing nothing",
+  "command": "APP=/tmp/cl564-r62-$$; mkdir -p $APP/rules && printf 'extends: [standard]\\n' > $APP/ctp.config.yaml && cd $APP && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --config $APP --force --now 2026-07-11T00:00:00Z --out-dir $APP/rules 2>e.err; rc=$?; [ $rc -eq 0 ] && grep -q 'total=0 processed=0' e.err && [ ! -d $APP/rules/_project ] && echo empty-sources-config-runs-clean 1>&2; rm -rf $APP",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "empty-sources-config-runs-clean"
+    ]
+  }
+}

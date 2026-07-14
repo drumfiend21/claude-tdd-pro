@@ -1,0 +1,11 @@
+{
+  "name": "sources declared in a consumer's ctp.config.yaml refresh into the project overlay it names with crawl scope passing through",
+  "command": "APP=/tmp/cl564-r60-$$; mkdir -p $APP/docs $APP/rules && printf '<html><body><h1>T</h1><h2>Team rule one</h2><p>Services must expose health endpoints.</p><a href=page2.html>next</a></body></html>' > $APP/docs/index.html && printf '<html><body><h1>P2</h1><h2>Team rule two</h2><p>Deployments must be reversible within five minutes.</p></body></html>' > $APP/docs/page2.html && cat > $APP/ctp.config.yaml <<YAML\nextends: [standard]\nproject: acme-storefront\nsources:\n  - id: acme-eng-standards\n    url: \"file://$APP/docs/index.html\"\n    authoritative_publisher: Acme Engineering\n    fetch_frequency: weekly\n    fetcher: html-anchor.sh\n    scope:\n      strategy: path-prefix\nYAML\ncd $APP && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --config $APP --force --now 2026-07-11T00:00:00Z --out-dir $APP/rules 2>e.err; T=$APP/rules/_project/acme-storefront/_universal/acme-eng-standards.yaml; [ -f $T ] && grep -q 'pages_fetched=2' e.err && grep -q 'team-rule-two' $T && [ ! -d $APP/rules/_universal ] && echo config-sources-refresh-into-named-overlay 1>&2; rm -rf $APP",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "config-sources-refresh-into-named-overlay"
+    ]
+  }
+}

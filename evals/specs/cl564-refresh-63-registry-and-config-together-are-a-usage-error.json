@@ -1,0 +1,11 @@
+{
+  "name": "passing both a registry file and a consumer config is rejected as a usage error naming the exclusivity",
+  "command": "OUT=/tmp/cl564-r63-$$; mkdir -p $OUT && printf 'sources: []\\n' > $OUT/reg.yaml && printf 'extends: [standard]\\n' > $OUT/ctp.config.yaml && cd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/reg.yaml --config $OUT/ctp.config.yaml 2>e.err; rc=$?; [ $rc -eq 2 ] && grep -q 'mutually exclusive' e.err && echo registry-config-exclusive 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "registry-config-exclusive"
+    ]
+  }
+}

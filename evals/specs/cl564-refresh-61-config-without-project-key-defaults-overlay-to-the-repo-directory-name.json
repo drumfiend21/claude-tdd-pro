@@ -1,0 +1,11 @@
+{
+  "name": "a consumer config without a project key defaults the overlay id to the config directory's sanitized name",
+  "command": "APP=/tmp/cl564-r61-repo.name$$; mkdir -p $APP/rules && printf '<html><body><h2>Solo team rule</h2><p>Every service must publish an owner.</p></body></html>' > $APP/s.html && cat > $APP/ctp.config.yaml <<YAML\nsources:\n  - id: solo-src\n    url: \"file://$APP/s.html\"\n    fetcher: html-anchor.sh\nYAML\ncd $APP && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --config $APP/ctp.config.yaml --force --now 2026-07-11T00:00:00Z --out-dir $APP/rules 2>e.err; D=$(basename $APP); [ -f $APP/rules/_project/$D/_universal/solo-src.yaml ] && grep -q \"WROTE sid=solo-src\" e.err && echo overlay-defaults-to-directory-name 1>&2; rm -rf $APP",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "overlay-defaults-to-directory-name"
+    ]
+  }
+}

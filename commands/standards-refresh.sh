@@ -72,9 +72,17 @@
 # aggregator, §28.40 epoch tag — all reused as-is.
 #
 # CLI:
-#   standards-refresh.sh --registry <path> [--force] [--now <iso>]
+#   standards-refresh.sh (--registry <path> | --config <ctp.config.yaml|dir>)
+#                        [--force] [--now <iso>]
 #                        [--dry-run] [--out-dir <dir>] [--replace]
 #                        [--gate review-queue] [--threshold <n>] [--project <id>]
+#
+#   --config (§28.48 + §31.1 — the npm/ESLint consumption surface): read the consumer's
+#   ctp.config.yaml `sources:` list (same entry fields as a registry, scope: included)
+#   and refresh them into the per-project overlay. `project:` in the config names the
+#   overlay id (default: the config directory's name, sanitized). Registering a URL is
+#   therefore one declarative block in the consumer's own config file — the engine
+#   distribution is never edited, no code from the consumer repo executes here.
 #
 # Exit codes:
 #   0 ok (some entries may have been freshness-skipped)
@@ -88,11 +96,12 @@
 
 set -uo pipefail
 
-REGISTRY=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""; THRESHOLD=30; PROJECT=""
+REGISTRY=""; CONFIG=""; FORCE=0; NOW_ISO=""; DRY_RUN=0; OUT_DIR=""; MERGE_MODE="merge"; GATE=""; THRESHOLD=30; PROJECT=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --registry) REGISTRY="${2-}"; shift 2 ;;
+    --config)   CONFIG="${2-}";   shift 2 ;;
     --force)    FORCE=1;          shift   ;;
     --now)      NOW_ISO="${2-}";  shift 2 ;;
     --dry-run)  DRY_RUN=1;        shift   ;;
@@ -109,7 +118,46 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-[ -n "$REGISTRY" ] || { echo "standards-refresh: --registry <path> required" >&2; exit 2; }
+if [ -n "$REGISTRY" ] && [ -n "$CONFIG" ]; then
+  echo "standards-refresh: --registry and --config are mutually exclusive" >&2; exit 2
+fi
+SYNTH_REGISTRY=""
+if [ -n "$CONFIG" ]; then
+  [ -d "$CONFIG" ] && CONFIG="$CONFIG/ctp.config.yaml"
+  [ -f "$CONFIG" ] || { echo "standards-refresh: config not found: $CONFIG" >&2; exit 3; }
+  # Synthesize a registry from the config's `sources:` list (ruby: real YAML parse —
+  # the config also carries rule overrides etc. that a line scanner would trip on).
+  # The synthesized basename contains "sources" so last-fetch markers land in the
+  # standard standards-last-fetch dir, keyed per source id (stable across runs).
+  SYNTH_REGISTRY="${TMPDIR:-/tmp}/ctp-config-sources.$$.yaml"
+  CONFIG_PROJECT=$(CFG="$CONFIG" SYNTH="$SYNTH_REGISTRY" ruby -ryaml -e '
+    Encoding.default_external = Encoding::UTF_8
+    cfg = YAML.safe_load(File.read(ENV["CFG"])) || {}
+    srcs = cfg["sources"] || []
+    out = ["sources:"]
+    srcs.each do |s|
+      next unless s.is_a?(Hash) && s["id"] && (s["url"] || s["document_url"])
+      out << "- id: #{s["id"]}"
+      %w[name url document_url jurisdiction source_class source_namespace
+         authoritative_publisher fetch_frequency fetcher fragility_tier
+         fragility_strategy].each do |k|
+        out << "  #{k}: \"#{s[k]}\"" if s[k]
+      end
+      if s["scope"].is_a?(Hash)
+        out << "  scope:"
+        s["scope"].each do |k, v|
+          v.is_a?(Array) ? out << "    #{k}: [#{v.join(", ")}]" : out << "    #{k}: #{v}"
+        end
+      end
+    end
+    File.write(ENV["SYNTH"], out.join("\n") + "\n")
+    proj = (cfg["project"] || File.basename(File.dirname(File.expand_path(ENV["CFG"])))).to_s
+    puts proj.gsub(/[^A-Za-z0-9._-]/, "-")
+  ') || { echo "standards-refresh: could not parse config: $CONFIG" >&2; exit 3; }
+  [ -z "$PROJECT" ] && PROJECT="$CONFIG_PROJECT"
+  REGISTRY="$SYNTH_REGISTRY"
+fi
+[ -n "$REGISTRY" ] || { echo "standards-refresh: --registry <path> or --config <ctp.config.yaml> required" >&2; exit 2; }
 [ -f "$REGISTRY" ] || { echo "standards-refresh: registry not found: $REGISTRY" >&2; exit 3; }
 if [ -n "$GATE" ] && [ "$GATE" != "review-queue" ]; then
   echo "standards-refresh: unknown --gate mode: $GATE (supported: review-queue)" >&2; exit 2
@@ -673,6 +721,7 @@ while IFS='|' read -r sid url juri src_class src_ns pub freq fetcher ftier fstra
   fi
 done < /tmp/standards-refresh-entries.$$
 rm -f /tmp/standards-refresh-entries.$$
+[ -n "$SYNTH_REGISTRY" ] && rm -f "$SYNTH_REGISTRY"
 
 echo "standards-refresh: registry=$(basename "$REGISTRY") total=$TOTAL processed=$PROCESSED skipped=$SKIPPED failed=$FAILED" >&2
 [ "$FAILED" -eq 0 ] && exit 0 || exit 1
