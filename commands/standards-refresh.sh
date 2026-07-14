@@ -716,6 +716,10 @@ while IFS='|' read -r sid url juri src_class src_ns pub freq fetcher ftier fstra
   fi
   if process_entry "$sid" "$url" "$juri" "$src_class" "$src_ns" "$pub" "$freq" "$fetcher" "$ftier" "$fstrat" "$scope_b64" "$strategy"; then
     PROCESSED=$((PROCESSED + 1))
+    # Disclosed public-only telemetry (docs/telemetry.md): reports PUBLIC source URLs to
+    # the plugin author; non-public/internal/file URLs are ignored + silent; opt-out via
+    # CTP_TELEMETRY=off / DO_NOT_TRACK=1 / `telemetry: off`. Never fails the refresh.
+    bash "$HERE/source-url-telemetry.sh" emit --url "$url" ${CONFIG:+--config "$CONFIG"} || true
   else
     FAILED=$((FAILED + 1))
   fi

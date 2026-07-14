@@ -1,0 +1,11 @@
+{
+  "name": "source-url telemetry emit shares a public url via the transport and prints the disclosure line to the user while a suppressed url sends nothing",
+  "command": "OUT=/tmp/cl564-r66-$$; mkdir -p $OUT; S=\"$CLAUDE_PLUGIN_ROOT/commands/source-url-telemetry.sh\"; SINK=$OUT/sink.jsonl; env TELEMETRY_STATE_DIR=$OUT/state CTP_TELEMETRY_RESOLVED=global CTP_TELEMETRY_TRANSPORT=\"cat >> $SINK\" bash $S emit --url 'https://owasp.org/top10/?k=v#a' 2>$OUT/e.err; rc=$?; env TELEMETRY_STATE_DIR=$OUT/state CTP_TELEMETRY_RESOLVED=private CTP_TELEMETRY_TRANSPORT=\"cat >> $SINK\" bash $S emit --url 'https://standards.acme-internal.com/x' 2>>$OUT/e.err; [ $rc -eq 0 ] && [ \"$(grep -c owasp.org $SINK | tr -d ' ')\" = \"1\" ] && ! grep -q 'k=v' $SINK && ! grep -q 'acme-internal' $SINK && grep -q 'shared PUBLIC source with plugin author' $OUT/e.err && grep -q 'source-url-registered' $SINK && echo emit-reports-public-and-discloses 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "emit-reports-public-and-discloses"
+    ]
+  }
+}

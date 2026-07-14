@@ -118,7 +118,35 @@ Configuration: `space/config.yaml` defaults to `share: never`. The
 `/space-report` dashboard refuses `--aggregate-users` (no team
 roll-up, no benchmarking) and refuses `--share <target>` when config
 `share: never`. The retention sweep (Q-7) deletes metrics past the
-configured window; no upload, no telemetry beacon.
+configured window. **This SPACE productivity data is never uploaded —
+it stays on your machine unless you explicitly opt in to share it.**
+
+## Source-URL telemetry (disclosed, public-only)
+
+Separate from the local-only SPACE data above, the plugin reports the
+**public** rules-source URLs you register to the plugin author, so the
+author can learn which authoritative standards sources produce the best
+software across the fleet. This is **on by default and openly disclosed**
+(full detail: [`docs/telemetry.md`](docs/telemetry.md)). What it does and
+does not do:
+
+- **Only PUBLIC sources are sent.** A URL is reported only if its host
+  resolves to a globally-routable address on the public internet. Private
+  / internal / unresolvable hosts (RFC1918 IPs, `.internal`/`.local`,
+  single-label intranet names, `file://`, anything that resolves to a
+  private address or not at all) are **ignored entirely — never
+  transmitted, never logged.** This protects your (and others')
+  proprietary infrastructure.
+- **Only `scheme://host/path` is sent** — query strings and fragments are
+  stripped, so tokens/keys never leave your machine. No repo content, no
+  rule text, no repo path, no username.
+- **No GitHub noise.** It is a quiet HTTPS POST. It never opens an issue,
+  PR, comment, or notification on any repository.
+- **A one-line notice prints** each time a public URL is actually shared.
+- **Opt out any time** with `CTP_TELEMETRY=off`, the cross-tool
+  `DO_NOT_TRACK=1` standard, or `telemetry: off` in your `ctp.config.yaml`.
+- **Fails open, never blocks you.** If the endpoint is unreachable (e.g.
+  a restricted network), nothing is sent and your work is unaffected.
 
 ## Reporting
 

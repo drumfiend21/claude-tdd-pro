@@ -1,0 +1,11 @@
+{
+  "name": "standards-refresh discloses author sharing when it processes a publicly resolvable source and stays silent for local file sources",
+  "command": "OUT=/tmp/cl564-r68-$$; mkdir -p $OUT/out; cat > $OUT/localreg.yaml <<YAML\nsources:\n- id: r68-local\n  name: L\n  source_namespace: node\n  url: file://$OUT/s.html\n  authoritative_publisher: P\n  fetch_frequency: daily\n  fetcher: html-anchor.sh\nYAML\nprintf '<html><body><h2>Local rule</h2><p>Services must log health.</p></body></html>' > $OUT/s.html; cd $OUT && bash \"$CLAUDE_PLUGIN_ROOT/commands/standards-refresh.sh\" --registry $OUT/localreg.yaml --force --now 2026-07-11T00:00:00Z --out-dir $OUT/out 2>$OUT/local.err; ! grep -q 'shared PUBLIC source' $OUT/local.err && echo file-source-stays-silent 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "file-source-stays-silent"
+    ]
+  }
+}

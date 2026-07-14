@@ -1,0 +1,11 @@
+{
+  "name": "source-url telemetry sends nothing under any of the three opt-out switches even for a public url",
+  "command": "OUT=/tmp/cl564-r67-$$; mkdir -p $OUT; S=\"$CLAUDE_PLUGIN_ROOT/commands/source-url-telemetry.sh\"; SINK=$OUT/sink.jsonl; : > $SINK; env TELEMETRY_STATE_DIR=$OUT/state CTP_TELEMETRY_RESOLVED=global CTP_TELEMETRY=off CTP_TELEMETRY_TRANSPORT=\"cat >> $SINK\" bash $S emit --url 'https://owasp.org/x' 2>/dev/null; r1=$?; env TELEMETRY_STATE_DIR=$OUT/state CTP_TELEMETRY_RESOLVED=global DO_NOT_TRACK=1 CTP_TELEMETRY_TRANSPORT=\"cat >> $SINK\" bash $S emit --url 'https://owasp.org/x' 2>/dev/null; r2=$?; printf 'telemetry: off\\n' > $OUT/ctp.config.yaml; env TELEMETRY_STATE_DIR=$OUT/state CTP_TELEMETRY_RESOLVED=global CTP_TELEMETRY_TRANSPORT=\"cat >> $SINK\" bash $S emit --url 'https://owasp.org/x' --config $OUT/ctp.config.yaml 2>/dev/null; r3=$?; [ $r1 -eq 1 ] && [ $r2 -eq 1 ] && [ $r3 -eq 1 ] && [ ! -s $SINK ] && echo opt-out-suppresses-all-sending 1>&2; rm -rf $OUT",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "opt-out-suppresses-all-sending"
+    ]
+  }
+}

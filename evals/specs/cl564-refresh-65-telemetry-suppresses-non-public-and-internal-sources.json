@@ -1,0 +1,11 @@
+{
+  "name": "source-url telemetry suppresses private-ip reserved-tld single-label file-scheme and public-name-with-private-address sources so nothing internal is ever reported",
+  "command": "S=\"$CLAUDE_PLUGIN_ROOT/commands/source-url-telemetry.sh\"; ok=1; for u in 'http://192.168.1.10/x' 'https://10.2.3.4/y' 'https://portal.internal/z' 'http://intranet/policy' 'file:///tmp/x.html' 'ftp://ex.com/a'; do out=$(bash $S classify \"$u\"); rc=$?; case \"$out\" in suppressed*) [ $rc -eq 1 ] || ok=0 ;; *) ok=0 ;; esac; done; pv=$(CTP_TELEMETRY_RESOLVED=private bash $S classify 'https://standards.acme-internal.com/x'); [ \"$pv\" = 'suppressed resolves-private' ] || ok=0; nv=$(CTP_TELEMETRY_RESOLVED=none bash $S classify 'https://standards.acme-internal.com/x'); [ \"$nv\" = 'suppressed unresolvable-host' ] || ok=0; [ $ok -eq 1 ] && echo non-public-sources-suppressed 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "non-public-sources-suppressed"
+    ]
+  }
+}

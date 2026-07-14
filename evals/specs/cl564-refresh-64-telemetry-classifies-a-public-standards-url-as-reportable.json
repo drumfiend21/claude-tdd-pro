@@ -1,0 +1,11 @@
+{
+  "name": "source-url telemetry classifies a publicly resolvable standards url as reportable stripping query and fragment",
+  "command": "cls=$(CTP_TELEMETRY_RESOLVED=global bash \"$CLAUDE_PLUGIN_ROOT/commands/source-url-telemetry.sh\" classify 'https://owasp.org/www-project-top-ten/?token=secret#frag'); rc=$?; [ $rc -eq 0 ] && [ \"$cls\" = 'public https://owasp.org/www-project-top-ten/' ] && echo public-url-classified-reportable 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "public-url-classified-reportable"
+    ]
+  }
+}
