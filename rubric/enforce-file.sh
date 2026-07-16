@@ -85,14 +85,25 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCO
     "typescript"=>"*.ts","tsx"=>"*.tsx","javascript"=>"*.js","jsx"=>"*.jsx","python"=>"*.py","go"=>"*.go",
     "java"=>"*.java","ruby"=>"*.rb","rust"=>"*.rs","php"=>"*.php","csharp"=>"*.cs","c#"=>"*.cs",
     "kotlin"=>"*.kt","swift"=>"*.swift","scala"=>"*.scala","groovy"=>"*.groovy","elixir"=>"*.ex","c"=>"*.c","cpp"=>"*.cpp",
-    "vue"=>"*.vue","svelte"=>"*.svelte"
+    "vue"=>"*.vue","svelte"=>"*.svelte","hcl"=>"*.tf,*.tfvars"
   }
   aliases_to_glob = lambda { |als| Array(als).map { |a| LING2EXT[a.to_s] }.compact.uniq.join(",") }
+  # §35 / CL1: IaC-dialect axis -> file glob, so a rule tagged by iac_dialects (cloud architecture /
+  # deployment / DevOps content: terraform, kubernetes, cloudformation, dockerfile, ...) is natively
+  # selectable when --include-app-code is set. Closes the gap where IaC rules had NO native glob path
+  # and were enforced ONLY by a 3rd-party tool (silently unenforced when that tool was absent).
+  IAC2EXT = {
+    "terraform"=>"*.tf,*.tfvars","opentofu"=>"*.tf,*.tfvars","bicep"=>"*.bicep",
+    "cloudformation"=>"*.yaml,*.yml,*.json,*.template","kubernetes"=>"*.yaml,*.yml",
+    "helm"=>"*.yaml,*.yml,*.tpl","ansible"=>"*.yml,*.yaml","openapi"=>"*.yaml,*.yml,*.json",
+    "github_actions"=>"*.yml,*.yaml","dockerfile"=>"Dockerfile,*.dockerfile","arm"=>"*.json"
+  }
+  iac_to_glob = lambda { |dls| Array(dls).map { |d| IAC2EXT[d.to_s] }.compact.uniq.join(",") }
 
   # --- catalog: id -> detector, severity, prose-bound set; plus the detector-LESS (universal) set ----
   # A rule with a runnable deterministic detector goes in `catalog`. A rule WITHOUT one (e.g. enforced
   # only by a 3rd-party tool) goes in `universal` -> §28.57 universal native enforcer (prose-judge).
-  catalog = {}; prose = {}; sev = {}; mode = {}; desc = {}; tok = {}; universal = {}; lings = {}
+  catalog = {}; prose = {}; sev = {}; mode = {}; desc = {}; tok = {}; universal = {}; lings = {}; iacs = {}
   load_rule = lambda do |r|
     return unless r.is_a?(Hash) && r["id"]
     id = r["id"]
@@ -102,6 +113,7 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCO
     prose[id] = true if r["applies_to_prose"] == true
     at = r["applies_to"]
     lings[id] = at["linguist_aliases"] if at.is_a?(Hash) && at["linguist_aliases"].is_a?(Array)
+    iacs[id]  = at["iac_dialects"]     if at.is_a?(Hash) && at["iac_dialects"].is_a?(Array)
     if r["detector"] && !r["detector"].to_s.empty?
       catalog[id] = r["detector"]
     else
@@ -207,6 +219,9 @@ FILE="$FILE" ROOT="$ROOT" QUIET="$QUIET" PROFILE="$PROFILE" EXTRA="$EXTRA" APPCO
     # §28.68: when --include-app-code is set, a full-stack rule with no manifest glob derives its glob
     # from its linguist_aliases (any language), so app code (.ts/.py/.go/...) is enforced natively.
     g = aliases_to_glob.call(lings[id]) if (g.nil? || g.to_s.empty?) && appcode && lings[id]
+    # §35 / CL1: same for the IaC-dialect axis (cloud/deploy/DevOps content) — natively selectable
+    # under --include-app-code so IaC rules are enforced even when the routed IaC tool is absent.
+    g = iac_to_glob.call(iacs[id]) if (g.nil? || g.to_s.empty?) && appcode && iacs[id]
     next if g.nil? || g.empty?
     next if singlefile && TREE_LEVEL.include?(det.to_s)   # tree-context rule -> not decidable per-file
     applicable << [id, det] if matches?(file, base, g)

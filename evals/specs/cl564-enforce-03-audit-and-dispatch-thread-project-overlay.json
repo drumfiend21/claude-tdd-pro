@@ -1,0 +1,11 @@
+{
+  "name": "composite-audit and composite-dispatch accept a project id and thread it to enforce-file so a consumer's project-overlay scraped rules are enforced at audit-time and in the tool-absent fallback",
+  "command": "R=\"$CLAUDE_PLUGIN_ROOT/rubric\"; audit_arg=$(grep -c -- '--project) PROJECT=' \"$R/composite-audit.sh\"); audit_thread=$(grep -c 'PROJECT.*--project \"\\$PROJECT\"' \"$R/composite-audit.sh\"); disp_arg=$(grep -c -- '--project) PROJECT=' \"$R/composite-dispatch.sh\"); disp_thread=$(awk '/native_fallback\\(\\)/,/^}/' \"$R/composite-dispatch.sh\" | grep -c -- '--project'); [ \"$audit_arg\" -ge 1 ] && [ \"$audit_thread\" -ge 1 ] && [ \"$disp_arg\" -ge 1 ] && [ \"$disp_thread\" -ge 1 ] && echo audit-dispatch-thread-project 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "audit-dispatch-thread-project"
+    ]
+  }
+}

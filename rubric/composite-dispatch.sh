@@ -23,16 +23,17 @@
 # Exit: 0 green | 1 red | 3 incomplete | 2 usage.
 
 set -uo pipefail
-FILE=""; TOOLS=""; REQ=""; STRICT=0; JSON=0; PROFILE=""
+FILE=""; TOOLS=""; REQ=""; STRICT=0; JSON=0; PROFILE=""; PROJECT=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --file) FILE="${2-}"; shift 2 ;;
     --tools) TOOLS="${2-}"; shift 2 ;;
     --required-tools) REQ="${2-}"; shift 2 ;;
     --profile) PROFILE="${2-}"; shift 2 ;;
+    --project) PROJECT="${2-}"; shift 2 ;;
     --strict) STRICT=1; shift ;;
     --json) JSON=1; shift ;;
-    -h|--help) echo "Usage: composite-dispatch.sh --file <path> [--tools <csv>] [--required-tools <csv>] [--profile <profile.yaml>] [--strict] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: composite-dispatch.sh --file <path> [--tools <csv>] [--required-tools <csv>] [--profile <profile.yaml>] [--project <id>] [--strict] [--json]" >&2; exit 0 ;;
     *) echo "composite-dispatch: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -57,8 +58,12 @@ ENFORCER="$PLUGIN_ROOT/rubric/enforce-file.sh"
 # preserved: an explicitly --required tool that is absent still hard-fails to red before any fallback.
 NF_STATUS=""; NF_RC=0; NF_RULES=0
 native_fallback() {
-  local ea=(--file "$FILE") sumf estat
+  # §35 / CL1: --include-app-code so app-code AND IaC rules are natively enforced in the
+  # tool-absent fallback (§28.56/§28.57 made total for the language + iac_dialects axes);
+  # --project threads the per-project overlay so a consumer's scraped rules fall back too.
+  local ea=(--file "$FILE" --include-app-code) sumf estat
   [ -n "$PROFILE" ] && ea+=(--profile "$PROFILE")
+  [ -n "$PROJECT" ] && ea+=(--project "$PROJECT")
   sumf="$(mktemp)"
   # capture enforce-file's per-rule + summary stderr to the temp (not surfaced); the summary carries
   # the real rules_checked count. --quiet is intentionally NOT passed (it suppresses the summary).

@@ -67,7 +67,9 @@ ENFORCER="$PLUGIN_ROOT/rubric/enforce-file.sh"
 [[ -x "$ENFORCER" || -f "$ENFORCER" ]] || exit 0
 
 set +e
-OUTPUT=$(bash "$ENFORCER" --file "$REAL_FILE" 2>&1)
+# §35 / CL1: --include-app-code so app-code AND IaC rules are natively enforced on save even
+# when the routed 3rd-party tool is absent (parity with the pre-write gate's enforce-write-time.sh).
+OUTPUT=$(bash "$ENFORCER" --file "$REAL_FILE" --include-app-code 2>&1)
 EC=$?
 set -e
 

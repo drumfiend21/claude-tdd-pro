@@ -14,14 +14,15 @@
 # Exit: 0 green | 1 red (zero-violation gate) | 3 incomplete | 2 usage.
 
 set -uo pipefail
-ROOT=""; STRICT=0; JSON=0; PROFILE=""
+ROOT=""; STRICT=0; JSON=0; PROFILE=""; PROJECT=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --root) ROOT="${2-}"; shift 2 ;;
     --strict) STRICT=1; shift ;;
     --profile) PROFILE="${2-}"; shift 2 ;;
+    --project) PROJECT="${2-}"; shift 2 ;;
     --json) JSON=1; shift ;;
-    -h|--help) echo "Usage: composite-audit.sh --root <dir> [--strict] [--profile <profile.yaml>] [--json]" >&2; exit 0 ;;
+    -h|--help) echo "Usage: composite-audit.sh --root <dir> [--strict] [--profile <profile.yaml>] [--project <id>] [--json]" >&2; exit 0 ;;
     *) echo "composite-audit: unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -58,13 +59,16 @@ while IFS= read -r f; do
   # in-repo rule detectors + prose-as-code (enforce-file; dependency-free, deterministic).
   # The §16 config plane is threaded through: --profile resolves effective per-file severity /
   # enable-disable / overrides before enforcement (no-op when --profile is absent).
-  ea=(--file "$f" --quiet); [ -n "$PROFILE" ] && ea+=(--profile "$PROFILE")
+  # §35 / CL1: --include-app-code so app-code AND IaC rules (language / iac_dialects axes) are
+  # natively enforced at audit-time even when the routed 3rd-party tool is absent (§28.57 made
+  # total). --project threads the per-project overlay so a consumer's scraped rules audit too.
+  ea=(--file "$f" --quiet --include-app-code); [ -n "$PROFILE" ] && ea+=(--profile "$PROFILE"); [ -n "$PROJECT" ] && ea+=(--project "$PROJECT")
   bash "$ENFORCER" "${ea[@]}" >/dev/null 2>/dev/null
   estat=$?
   case "$estat" in 1) red=1 ;; 0) verified=1 ;; esac
   # routed FOSS tools (composite-dispatch resolves + routes + runs). The §16 config plane is
   # threaded here too: --profile drops disabled rules / regrades by severity on the routed path.
-  da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict); [ -n "$PROFILE" ] && da+=(--profile "$PROFILE")
+  da=(--file "$f"); [ "$sa" -eq 1 ] && da+=(--strict); [ -n "$PROFILE" ] && da+=(--profile "$PROFILE"); [ -n "$PROJECT" ] && da+=(--project "$PROJECT")
   bash "$DISPATCH" "${da[@]}" >/dev/null 2>/tmp/_ca.$$ || true
   dstat=$(grep -oE 'status=[a-z]+' /tmp/_ca.$$ 2>/dev/null | tail -1 | cut -d= -f2)
   case "$dstat" in red) red=1 ;; green) verified=1 ;; esac

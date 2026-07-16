@@ -1,0 +1,11 @@
+{
+  "name": "the three native enforcement call sites on-save composite-audit and composite-dispatch fallback all pass include-app-code so no app-code or IaC rule is left natively unenforced when the routed tool is absent",
+  "command": "R=\"$CLAUDE_PLUGIN_ROOT/rubric\"; H=\"$CLAUDE_PLUGIN_ROOT/hooks/scripts\"; onsave=$(grep -c -- '--include-app-code' \"$H/enforce-standards-on-save.sh\"); audit=$(grep -E 'ENFORCER|enforce-file|\\$\\{ea\\[@\\]\\}|ea=\\(' \"$R/composite-audit.sh\" | grep -c -- '--include-app-code'); disp=$(awk '/native_fallback\\(\\)/,/^}/' \"$R/composite-dispatch.sh\" | grep -c -- '--include-app-code'); [ \"$onsave\" -ge 1 ] && [ \"$audit\" -ge 1 ] && [ \"$disp\" -ge 1 ] && echo three-native-paths-include-app-code 1>&2",
+  "setup": [],
+  "expect": {
+    "exit_code": 0,
+    "stderr_contains": [
+      "three-native-paths-include-app-code"
+    ]
+  }
+}
