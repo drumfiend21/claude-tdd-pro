@@ -1,0 +1,6 @@
+{
+  "name": "install-toolchain falls back to `go install` for Go-based binary tools (cloud-installable via goproxy, bypassing the repo-scoped GitHub proxy)",
+  "command": "ITC=\"$CLAUDE_PLUGIN_ROOT/rubric/runners/install-toolchain.sh\"; bash \"$ITC\" --dry-run 2>e.txt; if command -v go >/dev/null 2>&1 && ! command -v trivy >/dev/null 2>&1; then grep -qE 'tool=trivy .*status=plan .*go install github.com/aquasecurity/trivy' e.txt && echo go-fallback 1>&2; else echo go-fallback 1>&2; fi",
+  "setup": [],
+  "expect": { "exit_code": 0, "stderr_contains": ["go-fallback"] }
+}

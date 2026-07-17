@@ -10,8 +10,11 @@
 # install is logged, never fatal — the engine degrades that tool per the missing-tool policy).
 # License posture: permissive tools install by default; GPL/LGPL (invoke_only) tools also
 # install unless --permissive-only is given (their commercial USE is unrestricted; CTP never
-# bundles/redistributes them). Binary-installer tools are not auto-installed (platform-specific);
-# their upstream URL is printed.
+# bundles/redistributes them). Binary-installer tools that ship as a Go module (a `go_module`
+# in the manifest) fall back to `go install <module>@latest` when `go` is present -- this fetches
+# through proxy.golang.org (egress-allowlisted) and so provisions them in cloud sessions where the
+# GitHub release page is repo-scoped (403). Non-Go binaries (Haskell/JVM/Rust/Swift/shell) are not
+# auto-installed (platform-specific); their upstream URL is printed.
 #
 # CLI: [--dry-run] [--verify] [--permissive-only] [--manifest <path>]
 #   --dry-run         print the plan, install nothing
@@ -38,15 +41,15 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
 [ -f "$MANIFEST" ] || { echo "install-toolchain: manifest missing: $MANIFEST" >&2; exit 2; }
 command -v node >/dev/null 2>&1 || { echo "install-toolchain: node required to read manifest" >&2; exit 2; }
 
-# Read the manifest into newline records: tool|installer|package|bin|license|invoke_only|install_url
+# Read the manifest into newline records: tool|installer|package|bin|license|invoke_only|install_url|go_module
 RECORDS="$(MANIFEST="$MANIFEST" node -e '
   const m=JSON.parse(require("fs").readFileSync(process.env.MANIFEST,"utf8"));
-  for(const t of (m.tools||[])) process.stdout.write([t.tool,t.installer,t.package,(t.bin||t.tool),t.license,(t.invoke_only?"1":"0"),(t.install_url||"")].join("|")+"\n");
+  for(const t of (m.tools||[])) process.stdout.write([t.tool,t.installer,t.package,(t.bin||t.tool),t.license,(t.invoke_only?"1":"0"),(t.install_url||""),(t.go_module||"")].join("|")+"\n");
 ')"
 [ -z "$RECORDS" ] && { echo "install-toolchain: no tools in manifest" >&2; exit 2; }
 
 p=0; i=0; man=0; f=0; sk=0
-while IFS='|' read -r tool installer pkg bin lic invoke url; do
+while IFS='|' read -r tool installer pkg bin lic invoke url gomod; do
   [ -z "$tool" ] && continue
   if [ "$PERMISSIVE_ONLY" -eq 1 ] && [ "$invoke" = "1" ]; then
     echo "toolchain tool=$tool license=$lic status=skipped reason=permissive-only" >&2; sk=$((sk+1)); continue
@@ -66,7 +69,16 @@ while IFS='|' read -r tool installer pkg bin lic invoke url; do
     cargo)  command -v cargo >/dev/null 2>&1 && cmd="cargo install $pkg" ;;
     go)     command -v go    >/dev/null 2>&1 && cmd="go install $pkg@latest" ;;
     gem)    command -v gem   >/dev/null 2>&1 && cmd="gem install $pkg" ;;
-    binary) echo "toolchain tool=$tool license=$lic status=manual url=$url" >&2; man=$((man+1)); continue ;;
+    binary)
+            # A Go-distributed binary tool falls back to `go install <module>@latest`, which
+            # fetches through proxy.golang.org (egress-allowlisted) rather than the tool's GitHub
+            # release page (repo-scoped 403 in cloud sessions). Non-Go binaries (Haskell/JVM/Rust/
+            # Swift/shell) carry no go_module and stay manual with their upstream URL as before.
+            if [ -n "$gomod" ] && command -v go >/dev/null 2>&1; then
+              cmd="go install ${gomod}@latest"
+            else
+              echo "toolchain tool=$tool license=$lic status=manual url=$url" >&2; man=$((man+1)); continue
+            fi ;;
     manual) echo "toolchain tool=$tool license=$lic status=manual url=$url" >&2; man=$((man+1)); continue ;;
   esac
   if [ -z "$cmd" ]; then

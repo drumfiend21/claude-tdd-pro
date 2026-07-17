@@ -46,7 +46,8 @@
         "mode": "sarif",
         "args": "fs --format sarif --quiet"
       },
-      "install_url": "https://github.com/aquasecurity/trivy/releases"
+      "install_url": "https://github.com/aquasecurity/trivy/releases",
+      "go_module": "github.com/aquasecurity/trivy/cmd/trivy"
     },
     {
       "tool": "osv-scanner",
@@ -66,7 +67,8 @@
         "mode": "exit",
         "args": "--lockfile"
       },
-      "install_url": "https://github.com/google/osv-scanner/releases"
+      "install_url": "https://github.com/google/osv-scanner/releases",
+      "go_module": "github.com/google/osv-scanner/cmd/osv-scanner"
     },
     {
       "tool": "syft",
@@ -82,7 +84,8 @@
         "mode": "exit",
         "args": "scan"
       },
-      "install_url": "https://github.com/anchore/syft/releases"
+      "install_url": "https://github.com/anchore/syft/releases",
+      "go_module": "github.com/anchore/syft/cmd/syft"
     },
     {
       "tool": "grype",
@@ -101,7 +104,8 @@
         "mode": "sarif",
         "args": "-o sarif"
       },
-      "install_url": "https://github.com/anchore/grype/releases"
+      "install_url": "https://github.com/anchore/grype/releases",
+      "go_module": "github.com/anchore/grype/cmd/grype"
     },
     {
       "tool": "gitleaks",
@@ -117,7 +121,8 @@
         "mode": "exit",
         "args": "detect --no-git --source"
       },
-      "install_url": "https://github.com/gitleaks/gitleaks/releases"
+      "install_url": "https://github.com/gitleaks/gitleaks/releases",
+      "go_module": "github.com/gitleaks/gitleaks/v8"
     },
     {
       "tool": "detect-secrets",
@@ -166,7 +171,8 @@
         "mode": "exit",
         "args": "test"
       },
-      "install_url": "https://github.com/open-policy-agent/conftest/releases"
+      "install_url": "https://github.com/open-policy-agent/conftest/releases",
+      "go_module": "github.com/open-policy-agent/conftest"
     },
     {
       "tool": "regal",
@@ -182,7 +188,8 @@
         "mode": "exit",
         "args": "lint"
       },
-      "install_url": "https://github.com/open-policy-agent/regal/releases"
+      "install_url": "https://github.com/open-policy-agent/regal/releases",
+      "go_module": "github.com/open-policy-agent/regal"
     },
     {
       "tool": "scorecard",
@@ -401,7 +408,8 @@
         "mode": "sarif",
         "args": "--format sarif"
       },
-      "install_url": "https://github.com/aquasecurity/tfsec/releases"
+      "install_url": "https://github.com/aquasecurity/tfsec/releases",
+      "go_module": "github.com/aquasecurity/tfsec/cmd/tfsec"
     },
     {
       "tool": "terrascan",
@@ -434,7 +442,8 @@
         "mode": "exit",
         "args": ""
       },
-      "install_url": "https://github.com/terraform-linters/tflint/releases"
+      "install_url": "https://github.com/terraform-linters/tflint/releases",
+      "go_module": "github.com/terraform-linters/tflint"
     },
     {
       "tool": "cfn-lint",
@@ -481,7 +490,8 @@
         "mode": "sarif",
         "args": "lint --format sarif"
       },
-      "install_url": "https://github.com/stackrox/kube-linter/releases"
+      "install_url": "https://github.com/stackrox/kube-linter/releases",
+      "go_module": "golang.stackrox.io/kube-linter/cmd/kube-linter"
     },
     {
       "tool": "kubeconform",
@@ -497,7 +507,8 @@
         "mode": "exit",
         "args": ""
       },
-      "install_url": "https://github.com/yannh/kubeconform/releases"
+      "install_url": "https://github.com/yannh/kubeconform/releases",
+      "go_module": "github.com/yannh/kubeconform/cmd/kubeconform"
     },
     {
       "tool": "polaris",
@@ -590,7 +601,8 @@
         "mode": "exit",
         "args": ""
       },
-      "install_url": "https://github.com/rhysd/actionlint/releases"
+      "install_url": "https://github.com/rhysd/actionlint/releases",
+      "go_module": "github.com/rhysd/actionlint/cmd/actionlint"
     },
     {
       "tool": "hadolint",
@@ -699,7 +711,8 @@
         "mode": "sarif",
         "args": "run --out-format sarif"
       },
-      "install_url": "https://github.com/golangci/golangci-lint/releases"
+      "install_url": "https://github.com/golangci/golangci-lint/releases",
+      "go_module": "github.com/golangci/golangci-lint/cmd/golangci-lint"
     },
     {
       "tool": "govulncheck",
@@ -1026,7 +1039,8 @@
         "args": "-d"
       },
       "advisory": true,
-      "install_url": "https://github.com/mvdan/sh/releases"
+      "install_url": "https://github.com/mvdan/sh/releases",
+      "go_module": "mvdan.cc/sh/v3/cmd/shfmt"
     },
     {
       "tool": "sqlfluff",
@@ -1057,7 +1071,8 @@
         "mode": "exit",
         "args": "lint"
       },
-      "install_url": "https://github.com/bufbuild/buf/releases"
+      "install_url": "https://github.com/bufbuild/buf/releases",
+      "go_module": "github.com/bufbuild/buf/cmd/buf"
     },
     {
       "tool": "protolint",
@@ -1073,7 +1088,8 @@
         "mode": "exit",
         "args": "lint"
       },
-      "install_url": "https://github.com/yoheimuta/protolint/releases"
+      "install_url": "https://github.com/yoheimuta/protolint/releases",
+      "go_module": "github.com/yoheimuta/protolint/cmd/protolint"
     },
     {
       "tool": "markdownlint",
@@ -1122,7 +1138,8 @@
         "mode": "exit",
         "args": ""
       },
-      "install_url": "https://github.com/errata-ai/vale/releases"
+      "install_url": "https://github.com/errata-ai/vale/releases",
+      "go_module": "github.com/errata-ai/vale/v3"
     },
     {
       "tool": "textlint",
